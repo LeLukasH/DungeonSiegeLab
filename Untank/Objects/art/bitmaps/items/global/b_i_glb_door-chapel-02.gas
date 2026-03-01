@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_door-chapel-02]
+{
+	layer1texture1 = b_i_glb_door-chapel-02;
+  i texturedetail = 1;
+}

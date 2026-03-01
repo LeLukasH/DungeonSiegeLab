@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_ice_tree-pine]
+{
+	layer1texture1 = b_i_ice_tree-pine;
+  i texturedetail = 2;
+}

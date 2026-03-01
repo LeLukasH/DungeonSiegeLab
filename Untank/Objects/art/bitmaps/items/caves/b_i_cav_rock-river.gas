@@ -1,0 +1,6 @@
+[t:tsd,n:b_i_cav_rock-river]
+{
+  b hasalpha = true;
+	layer1texture1 = b_i_cav_rock-river;
+  i texturedetail = 1;
+}

@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_cmn_button_down_template]
+{
+	layer1texture1 = b_gui_cmn_button_down_template;
+  i texturedetail = 0;
+}

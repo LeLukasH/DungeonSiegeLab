@@ -1,0 +1,7 @@
+[t:tsd,n:b_gui_ig_i_a_gntl_089]
+{
+  b dither = true;
+  b hasalpha = true;
+	layer1texture1 = b_gui_ig_i_a_gntl_089;
+  i texturedetail = 0;
+}

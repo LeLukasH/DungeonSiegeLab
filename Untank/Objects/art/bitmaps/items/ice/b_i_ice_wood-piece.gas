@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_ice_wood-piece]
+{
+	layer1texture1 = b_i_ice_wood-piece;
+  i texturedetail = 1;
+}

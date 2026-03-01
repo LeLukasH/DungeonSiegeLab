@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_csl_trunk-golden]
+{
+	layer1texture1 = b_i_csl_trunk-golden;
+  i texturedetail = 2;
+}

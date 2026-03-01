@@ -1,0 +1,60 @@
+// Animation Skrit: rotate_object2
+//
+// History:
+//		VERSION 1.0:	Initial implementation
+//
+// $$$ THIS IS A WORKAROUD. I can't have multiple instances of the same skrit with different properties, they will share properties. -ET
+//
+
+property int MAJORVERSION$ = 1;
+property int MINORVERSION$ = 0;
+
+owner = Aspect;
+
+
+
+property float angle_x$	= 0.0   doc = "Initial rotation in X"; 
+property float angle_y$	= 0.0   doc = "Initial rotation in Y"; 
+property float angle_z$	= 0.0   doc = "Initial rotation in Z"; 
+
+property float rpm_x$	= 0.0   doc = "Revolutions Per Minute"; 
+property float rpm_y$	= 0.0	doc = "Revolutions Per Minute"; 
+property float rpm_z$	= 0.0   doc = "Revolutions Per Minute"; 
+property int   bone$ 	= 0     doc = "Index of bone that we rotate";
+
+float anglex$;
+float angley$;
+float anglez$;
+
+startup state Animating$ 
+{
+	event OnStartChore$ ( int /*subanim$*/, int /*flags$*/ )
+	{
+		anglex$=0;
+		angley$=0;
+		anglez$=0;
+	}
+
+	event OnUpdate$( float delta_t$ )
+	{
+		// PI/30 == CLOCKWISE Radians/Second at 1 RPM
+		anglex$ += delta_t$ * rpm_x$ * (3.14159/30.0);
+		if ( anglex$ > 6.283185 )
+		{
+			anglex$ -= 6.283185;
+		}
+	  	angley$ += delta_t$ * rpm_y$ * (3.14159/30.0);
+		if ( angley$ > 6.283185 )
+		{
+			angley$ -= 6.283185;
+		}
+	  	anglez$ += delta_t$ * rpm_z$ * (3.14159/30.0);
+		if ( anglez$ > 6.283185 )
+		{
+			anglez$ -= 6.283185;
+		}
+	  	owner.RotateIndexedBoneX(bone$, angle_x$ + anglex$ ) ;
+	  	owner.RotateIndexedBoneY(bone$, angle_y$ + angley$ ) ;
+	  	owner.RotateIndexedBoneZ(bone$, angle_z$ + anglez$ ) ;
+	}
+}

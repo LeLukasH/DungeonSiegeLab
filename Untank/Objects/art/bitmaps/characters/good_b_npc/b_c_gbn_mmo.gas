@@ -1,0 +1,5 @@
+[t:tsd,n:b_c_gbn_mmo]
+{
+	layer1texture1 = b_c_gbn_mmo;
+  i texturedetail = 1;
+}

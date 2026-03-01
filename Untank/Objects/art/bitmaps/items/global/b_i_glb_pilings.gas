@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_pilings]
+{
+	layer1texture1 = b_i_glb_pilings;
+  i texturedetail = 2;
+}

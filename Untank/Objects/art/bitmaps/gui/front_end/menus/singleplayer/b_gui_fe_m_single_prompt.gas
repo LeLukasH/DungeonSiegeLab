@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_fe_m_single_prompt]
+{
+	layer1texture1 = b_gui_fe_m_single_prompt;
+  i texturedetail = 0;
+}

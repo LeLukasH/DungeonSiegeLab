@@ -1,0 +1,5 @@
+[t:tsd,n:b_w_stf_super-gom]
+{
+	layer1texture1 = b_w_stf_super-gom;
+  i texturedetail = 2;
+}

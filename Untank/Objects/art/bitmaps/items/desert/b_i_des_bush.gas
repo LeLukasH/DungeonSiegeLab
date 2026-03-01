@@ -1,0 +1,6 @@
+[t:tsd,n:b_i_des_bush]
+{
+  b hasalpha = true;
+	layer1texture1 = b_i_des_bush;
+  i texturedetail = 2;
+}

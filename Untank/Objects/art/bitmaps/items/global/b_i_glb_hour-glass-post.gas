@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_hour-glass-post]
+{
+	layer1texture1 = b_i_glb_hour-glass-post;
+  i texturedetail = 2;
+}

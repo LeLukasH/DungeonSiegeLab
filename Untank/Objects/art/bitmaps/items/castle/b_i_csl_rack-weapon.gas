@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_csl_rack-weapon]
+{
+	layer1texture1 = b_i_csl_rack-weapon;
+  i texturedetail = 2;
+}

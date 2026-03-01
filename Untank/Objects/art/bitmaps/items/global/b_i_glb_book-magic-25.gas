@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_book-magic-25]
+{
+	layer1texture1 = b_i_glb_book-magic-25;
+  i texturedetail = 2;
+}

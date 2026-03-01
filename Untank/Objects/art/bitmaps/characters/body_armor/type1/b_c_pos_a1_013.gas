@@ -1,0 +1,6 @@
+[t:tsd,n:b_c_pos_a1_013]
+{
+  b hasalpha = false;
+	layer1texture1 = b_c_pos_a1_013;
+  i texturedetail = 2;
+}

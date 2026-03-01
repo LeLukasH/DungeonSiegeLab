@@ -1,0 +1,5 @@
+[t:tsd,n:b_d_rug-peach]
+{
+	layer1texture1 = b_d_rug-peach;
+  i texturedetail = 1;
+}

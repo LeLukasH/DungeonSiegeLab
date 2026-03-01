@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_ice_logs]
+{
+	layer1texture1 = b_i_ice_logs;
+  i texturedetail = 2;
+}

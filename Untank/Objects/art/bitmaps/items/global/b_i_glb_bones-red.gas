@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_bones-red]
+{
+	layer1texture1 = b_i_glb_bones-red;
+  i texturedetail = 1;
+}

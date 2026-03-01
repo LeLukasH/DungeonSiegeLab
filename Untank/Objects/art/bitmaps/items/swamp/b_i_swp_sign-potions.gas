@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_swp_sign-potions]
+{
+	layer1texture1 = b_i_swp_sign-potions;
+  i texturedetail = 2;
+}

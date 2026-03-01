@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_fe_m_mp_background_02]
+{
+	layer1texture1 = b_gui_fe_m_mp_background_02;
+  i texturedetail = 0;
+}

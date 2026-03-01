@@ -1,0 +1,5 @@
+[t:tsd,n:b_sfx_fly]
+{
+	layer1texture1 = b_sfx_fly;
+  i texturedetail = 1;
+}

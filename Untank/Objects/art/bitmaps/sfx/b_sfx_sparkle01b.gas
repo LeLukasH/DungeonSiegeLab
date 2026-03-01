@@ -1,0 +1,5 @@
+[t:tsd,n:b_sfx_sparkle01b]
+{
+	layer1texture1 = b_sfx_sparkle01b;
+  i texturedetail = 1;
+}

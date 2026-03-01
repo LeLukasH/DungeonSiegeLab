@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_gob_barrel-exp]
+{
+	layer1texture1 = b_i_gob_barrel-exp;
+  i texturedetail = 2;
+}

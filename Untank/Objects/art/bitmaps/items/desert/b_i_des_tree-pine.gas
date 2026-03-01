@@ -1,0 +1,6 @@
+[t:tsd,n:b_i_des_tree-pine]
+{
+  b hasalpha = true;
+	layer1texture1 = b_i_des_tree-pine;
+  i texturedetail = 2;
+}

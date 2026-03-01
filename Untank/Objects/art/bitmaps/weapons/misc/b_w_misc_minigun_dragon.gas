@@ -1,0 +1,5 @@
+[t:tsd,n:b_w_misc_minigun_dragon]
+{
+	layer1texture1 = b_w_misc_minigun_dragon;
+  i texturedetail = 2;
+}

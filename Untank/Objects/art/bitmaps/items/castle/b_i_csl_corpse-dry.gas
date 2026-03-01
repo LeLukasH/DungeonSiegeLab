@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_csl_corpse-dry]
+{
+	layer1texture1 = b_i_csl_corpse-dry;
+  i texturedetail = 3;
+}

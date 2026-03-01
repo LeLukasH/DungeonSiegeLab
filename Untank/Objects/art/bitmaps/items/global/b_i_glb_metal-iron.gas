@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_metal-iron]
+{
+	layer1texture1 = b_i_glb_metal-iron;
+  i texturedetail = 1;
+}

@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_cav_table-work]
+{
+	layer1texture1 = b_i_cav_table-work;
+  i texturedetail = 2;
+}

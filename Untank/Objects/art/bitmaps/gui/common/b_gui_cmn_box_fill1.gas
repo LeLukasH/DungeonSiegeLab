@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_cmn_box_fill1]
+{
+	layer1texture1 = b_gui_cmn_box_fill1;
+  i texturedetail = 0;
+}

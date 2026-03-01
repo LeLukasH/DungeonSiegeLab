@@ -1,0 +1,6 @@
+[t:tsd,n:b_i_grs_tree-madrona]
+{
+  b hasalpha = true;
+	layer1texture1 = b_i_grs_tree-madrona;
+  i texturedetail = 2;
+}

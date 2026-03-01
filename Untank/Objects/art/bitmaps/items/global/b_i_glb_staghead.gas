@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_staghead]
+{
+	layer1texture1 = b_i_glb_staghead;
+  i texturedetail = 2;
+}

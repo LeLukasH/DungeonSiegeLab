@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_des_pole-skull]
+{
+	layer1texture1 = b_i_des_pole-skull;
+  i texturedetail = 2;
+}

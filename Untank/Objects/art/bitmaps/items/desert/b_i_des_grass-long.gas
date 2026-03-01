@@ -1,0 +1,6 @@
+[t:tsd,n:b_i_des_grass-long]
+{
+  b hasalpha = true;
+	layer1texture1 = b_i_des_grass-long;
+  i texturedetail = 2;
+}

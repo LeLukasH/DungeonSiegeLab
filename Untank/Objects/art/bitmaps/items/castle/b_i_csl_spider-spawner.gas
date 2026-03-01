@@ -1,0 +1,6 @@
+[t:tsd,n:b_i_csl_spider-spawner]
+{
+  b hasalpha = true;
+	layer1texture1 = b_i_csl_spider-spawner;
+  i texturedetail = 2;
+}

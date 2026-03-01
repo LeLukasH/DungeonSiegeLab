@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_cav_rack-equip]
+{
+	layer1texture1 = b_i_cav_rack-equip;
+  i texturedetail = 1;
+}

@@ -1,0 +1,5 @@
+[t:tsd,n:b_d_grs01-burnt-side]
+{
+	layer1texture1 = b_d_grs01-burnt-side;
+  i texturedetail = 2;
+}

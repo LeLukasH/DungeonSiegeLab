@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_bones]
+{
+	layer1texture1 = b_i_glb_bones;
+  i texturedetail = 2;
+}

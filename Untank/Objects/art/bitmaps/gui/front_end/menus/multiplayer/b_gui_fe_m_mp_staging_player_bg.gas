@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_fe_m_mp_staging_player_bg]
+{
+	layer1texture1 = b_gui_fe_m_mp_staging_player_bg;
+  i texturedetail = 0;
+}

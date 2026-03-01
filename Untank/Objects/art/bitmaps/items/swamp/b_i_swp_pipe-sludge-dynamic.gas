@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_swp_pipe-sludge-dynamic]
+{
+	layer1texture1 = b_i_swp_pipe-sludge-dynamic;
+  i texturedetail = 2;
+}

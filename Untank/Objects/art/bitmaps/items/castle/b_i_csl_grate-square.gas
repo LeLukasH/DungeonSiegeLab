@@ -1,0 +1,6 @@
+[t:tsd,n:b_i_csl_grate-square]
+{
+  b hasalpha = true;
+	layer1texture1 = b_i_csl_grate-square;
+  i texturedetail = 1;
+}

@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_nis_ms_02]
+{
+	layer1texture1 = b_gui_nis_ms_02;
+  i texturedetail = 0;
+}

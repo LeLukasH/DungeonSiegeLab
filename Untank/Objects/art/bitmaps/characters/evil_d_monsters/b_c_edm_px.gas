@@ -1,0 +1,7 @@
+[t:tsd,n:b_c_edm_px]
+{
+  b hasalpha = true;
+	hasalpha = true;
+	layer1texture1 = b_c_edm_px;
+  i texturedetail = 3;
+}

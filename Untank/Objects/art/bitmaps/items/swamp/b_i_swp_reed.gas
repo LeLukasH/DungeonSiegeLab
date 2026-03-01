@@ -1,0 +1,6 @@
+[t:tsd,n:b_i_swp_reed]
+{
+  b hasalpha = true;
+	layer1texture1 = b_i_swp_reed;
+  i texturedetail = 1;
+}

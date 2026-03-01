@@ -1,0 +1,6 @@
+[t:tsd,n:b_i_ice_log-split]
+{
+  b hasalpha = true;
+	layer1texture1 = b_i_ice_log-split;
+  i texturedetail = 2;
+}

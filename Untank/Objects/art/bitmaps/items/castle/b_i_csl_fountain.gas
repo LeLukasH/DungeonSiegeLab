@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_csl_fountain]
+{
+	layer1texture1 = b_i_csl_fountain;
+  i texturedetail = 2;
+}

@@ -1,0 +1,5 @@
+[t:tsd,n:b_sfx_fireball-02]
+{
+	layer1texture1 = b_sfx_fireball-02;
+  i texturedetail = 2;
+}

@@ -1,0 +1,7 @@
+[t:tsd,n:b_sfx_blood_006]
+{
+  b hasalpha = true;
+	layer1texture1 = b_sfx_blood_006;
+  i numlayers = 1;
+  i texturedetail = 1;
+}

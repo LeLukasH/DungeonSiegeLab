@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_cmn_header_seperator]
+{
+	layer1texture1 = b_gui_cmn_header_seperator;
+  i texturedetail = 0;
+}

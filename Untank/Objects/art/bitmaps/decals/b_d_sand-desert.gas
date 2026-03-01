@@ -1,0 +1,5 @@
+[t:tsd,n:b_d_sand-desert]
+{
+	layer1texture1 = b_d_sand-desert;
+  i texturedetail = 2;
+}

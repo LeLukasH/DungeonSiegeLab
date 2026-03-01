@@ -1,0 +1,7 @@
+[t:tsd,n:b_gui_ig_mnu_tip_pointer_use]
+{
+  b dither = true;
+  b hasalpha = true;
+	layer1texture1 = b_gui_ig_mnu_tip_pointer_use;
+  i texturedetail = 0;
+}

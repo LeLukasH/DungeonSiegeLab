@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_star-chamber-device]
+{
+	layer1texture1 = b_i_glb_star-chamber-device;
+  i texturedetail = 2;
+}

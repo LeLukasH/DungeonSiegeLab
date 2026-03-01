@@ -1,0 +1,82 @@
+// Animation Skrit: Infinite_Loop_with_bias
+//
+// History:
+//		VERSION 1.0:	Initial implementation
+//		VERSION 2.0:	Converted to WorldMessages 
+//						Added SFX event tests
+//						Uses owner, rather than ASPECT arg
+//		VERSION 3.0:	Customized into new skrit for
+//						Gob Inv fans.
+
+property int MAJORVERSION$ = 3;
+property int MINORVERSION$ = 0;
+
+owner = Aspect;
+
+
+property	float	speed$ = 1.0;
+
+float time$;
+bool  shot$ = false;
+
+/////////////////////////////////////////////////////////////////////////////
+// Utilities
+
+/////////////////////////////////////////////////////////////////////////////
+// States
+
+//----------------------------
+
+startup state Init$ 
+{
+	event OnEnterState$
+	{
+		SetState LoopForever$;
+	}
+}
+
+state LoopForever$ 
+{
+	event OnStartChore$ ( int subanim$, int /*flags$*/ )
+	{
+		int bg$ = owner.blender.OpenBlendGroup();
+		owner.blender.AddAnimToBlendGroup(subanim$,1);
+		owner.blender.CloseBlendGroup();
+		owner.blender.SetBlendGroupWeight(bg$,1);
+		
+		time$ = 0.0;
+		shot$ = false;
+	}
+
+	event OnUpdate$( float delta_t$ )
+	{ 
+		if( delta_t$ > 0.0 )
+		{
+			time$ += delta_t$*speed$;
+			
+			if( ( time$ > 3.1416 ) && !shot$ )
+			{
+				shot$ = true;
+				PostWorldMessage( WE_ANIM_WEAPON_FIRE, owner.goid, owner.goid, owner.CurrentReqBlock, 0 );
+			}
+			
+			float rotate$ = 0.0;
+			
+			if( speed$ > 0.0 )
+			{
+				rotate$ = 0.0275 * ( 1 - Math.cos( time$ ) );
+	 		}
+			
+			int events$ = owner.UpdateBlender( rotate$ );
+			
+			
+			if( time$ > 6.283 )
+			{
+				time$ = 0.0;
+				shot$ = false;
+				
+				PostWorldMessage( WE_ANIM_DONE, owner.goid, owner.goid, owner.CurrentReqBlock, 0 );
+			}
+		}
+	}
+}

@@ -1,0 +1,6 @@
+[t:tsd,n:b_i_csl_cobweb-11]
+{
+  b hasalpha = true;
+	layer1texture1 = b_i_csl_cobweb-11;
+  i texturedetail = 2;
+}

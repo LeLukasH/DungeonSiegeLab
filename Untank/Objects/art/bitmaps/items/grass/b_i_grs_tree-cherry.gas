@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_grs_tree-cherry]
+{
+	layer1texture1 = b_i_grs_tree-cherry;
+  i texturedetail = 2;
+}

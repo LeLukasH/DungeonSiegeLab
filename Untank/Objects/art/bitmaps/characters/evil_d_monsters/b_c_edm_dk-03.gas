@@ -1,0 +1,6 @@
+[t:tsd,n:b_c_edm_dk-03]
+{
+  b hasalpha = true;
+	layer1texture1 = b_c_edm_dk-03;
+  i texturedetail = 3;
+}

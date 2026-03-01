@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_bottle-blue]
+{
+	layer1texture1 = b_i_glb_bottle-blue;
+  i texturedetail = 1;
+}
