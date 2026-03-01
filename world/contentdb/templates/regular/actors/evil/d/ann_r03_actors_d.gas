@@ -1,6 +1,6 @@
 [t:template,n:ann_r03_toreck]
 {
-	category_name = "1W_evil_c";
+	category_name = "1W_evil_d";
 	doc = "ann_r03_toreck";
 	specializes = actor_evil;
 	[actor]
@@ -27,6 +27,10 @@
 			[hit_critical]	{ priority = low; * = s_e_hit_toreck_SED; }
 			[hit_glance]	{ priority = low; * = s_e_hit_toreck_SED; }
 			[hit_solid]		{ priority = low; * = s_e_hit_toreck_SED; }
+		}
+		[textures]
+		{
+			0 = b_c_ecm_ann_toreck;
 		}
 	}
 	[attack]
@@ -146,5 +150,576 @@
 		personal_space_range = 0.7;
 		ranged_engage_range = 14.0;
 		sight_range = 14.0;
+	}
+}
+
+[t:template,n:ann_r03_vampire]
+{
+	category_name = "1W_evil_d";
+	doc = "ann_r03_vampire";
+	specializes = actor_evil;
+	[actor]
+	{
+		[skills]
+		{
+			dexterity 		= 0.51, 0, 10;
+			intelligence 	= 2.1, 0, 10;
+			strength 		= 0.39, 0, 10;
+			nature_magic 	= 3,0,0;
+			uber 			= 3,0,0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 44;
+		life = 27;
+		max_life = 27;
+		mana = 14;
+		max_mana = 14;
+		model = m_c_gah_fb_pos_a1;
+		[textures]
+		{
+			0 = b_c_gah_fb_vampire_skin;
+			1 = b_c_pos_a7_vampire_armor;
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 20;
+		damage_min = 12;
+	}
+	[common]
+	{
+		screen_name = "Vlad";
+	}
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[equipment]
+		{
+			es_chest = bd_ro_m_d_c_003;
+			es_feet = #boots/-no_mod/4-8;
+		}
+		[other]
+		{
+			il_active_primary_spell = spell_zap;
+			il_main = spell_healing_hands;
+			il_main = spell_resurrect;
+			il_main = #staff/-no_mod/7-10;
+		}
+	}
+}
+
+
+
+
+[t:template,n:ann_r03_item_base]
+{
+	category_name = "1W_evil_d";
+	doc = "ann_r03_helmet";
+	specializes = dsx_zepheryl_base;
+
+	aspect:	model		= <none>;
+	aspect:	material	= steel;
+
+	[common]
+	{
+		membership = gargoyle,monster;
+	}
+	[aspect]
+	{
+		experience_value = 37;
+		force_no_render = true;
+		life = 13;
+		max_life = 13;
+		mana = 8;
+		max_mana = 8;
+		draw_shadow = false;
+		scale_base = 1;	 
+
+		model = m_c_edm_ga_pos_1;
+
+		[voice]
+		{
+			[die]			{ priority = high;	* = s_e_die_zepheryl_SED;		}
+			[enemy_spotted]	{ priority = high; * = s_e_call_zepheryl_SED; }
+			[hit_critical]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+			[hit_glance]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+			[hit_solid]		{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+		}
+	}
+	[actor]
+	{
+		[skills]
+		{
+			strength 		=	2, 0;
+			intelligence 	=	 2, 0;
+			dexterity 		=	2, 0;
+			combat_magic 	=	2, 0;
+			nature_magic 	=	2, 0;
+				
+		}
+	}
+	[attack]
+	{
+		attack_range = .5;
+		damage_max = 10;
+		damage_min = 3;
+	}
+	[common]
+	{
+		screen_name="Headseeker";
+		membership = gargoyle, monster, immune_polymorph;
+		[template_triggers]
+			{
+				[*]
+					{
+						action* = call_sfx_script("zepheryl_fire");
+						condition* = receive_world_message("WE_ENTERED_WORLD");
+						single_shot = true;
+					}
+			}
+	}
+	[defend] { 
+		armor_style = 023;
+		armor_type = type23;
+		defense=14; 
+	}
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=spell_zepheryl_zap; }
+	}
+	[mind]
+	{
+		actor_weapon_preference		= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+		actor_auto_switches_to_karate	= false;
+		actor_auto_switches_to_melee	= false;
+	}
+}
+
+
+[t:template,n:ann_r03_helmet]
+{
+	category_name = "1W_evil_d";
+	doc = "ann_r03_helmet";
+	specializes = base_helm;
+	[common]
+	{
+		pcontent_special_type = rare, unique;
+		screen_name = "Headseeker";
+	}
+	[defend]
+	{
+		armor_style = 023;
+		armor_type = type23;
+	  f defense = 21.000000;
+	}
+	[gui]
+	{
+		equip_requirements = strength:27;
+		inventory_icon = b_gui_ig_i_a_hlmt_023;
+	}
+	[pcontent]
+	{
+		[base]
+		{
+		  f modifier_max = 6.000000;
+		  f modifier_min = 2.000000;
+		}
+	}
+}
+
+[t:template,n:ann_r03_shield_2]
+{
+	category_name = "1W_evil_d";
+	doc = "t:template,n:ann_r03_shield_2";
+	specializes = base_shield;
+	[aspect]
+	{
+		model = m_a_shd_18;
+		[textures]
+		{
+			0 = b_a_shd_065;
+		}
+	}
+	[common]
+	{
+		pcontent_special_type = rare,unique;
+		screen_name = "Mysterious Shield";
+	}
+	[defend]
+	{
+	  f defense = 32.000000;
+	}
+	[gui]
+	{
+		equip_requirements = strength:28;
+		inventory_height = 2;
+		inventory_icon = b_gui_ig_i_a_shd_065;
+		inventory_width = 2;
+	}
+	[magic]
+	{
+		[enchantments]
+		{
+			[*]
+			{
+				alteration = alter_chance_to_block_melee_damage;
+				description = "5% Chance to Block Melee Attack";
+				duration = #infinite;
+				innate_enchantment = true;
+				is_permanent = true;
+				is_single_instance = false;
+				value = 5;
+			}
+			[*]
+			{
+				alteration = alter_chance_to_block_ranged_damage;
+				description = "5% Chance to Block Ranged Attack";
+				duration = #infinite;
+				innate_enchantment = true;
+				is_permanent = true;
+				is_single_instance = false;
+				value = 5;
+			}
+		}
+	}
+	[pcontent]
+	{
+		[base]
+		{
+		  f modifier_max = 18.000000;
+		  f modifier_min = 3.000000;
+		}
+	}
+}
+
+[t:template,n:ann_r03_shield_1]
+{
+	category_name = "1W_evil_d";
+	doc = "ann_r03_shield_1";
+	specializes = base_shield;
+	[aspect]
+	{
+		model = m_a_shd_10;
+		scale_base = 0.6;
+		[textures]
+		{
+			0 = b_a_shd_072;
+		}
+	}
+	[common]
+	{
+		allow_modifiers = false;
+		screen_name = "Haunted Shield";
+	}
+	[defend]
+	{
+		defense = 2;
+	}
+	[gui]
+	{
+		inventory_height = 2;
+		inventory_icon = b_gui_ig_i_a_shd_072;
+		inventory_width = 2;
+	}
+}
+
+[t:template,n:ann_r03_sword]
+{
+	category_name = "1W_evil_d";
+	doc = "ann_r03_sword";
+	specializes = base_sword;
+	[aspect]
+	{
+		model = m_w_swd_038;
+	}
+	[attack]
+	{
+	  f damage_max = 113.000000;
+	  f damage_min = 83.000000;
+	}
+	[common]
+	{
+		pcontent_special_type = unique;
+		screen_name = "Cursed Sword";
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_swd_005;
+		equip_requirements = strength:31;
+		inventory_height = 3;
+		inventory_icon = b_gui_ig_i_w_swd_069;
+		inventory_width = 1;
+	}
+	[pcontent]
+	{
+		[base]
+		{
+		  f modifier_max = 23.000000;
+		  f modifier_min = 7.000000;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+[t:template,n:ann_r03_skeleton_range]
+{
+	category_name = "1W_evil_d";
+	doc = "ann_r03_skeleton_range";
+	specializes = base_skeleton;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  3, 0;
+			intelligence =  3, 0;
+			dexterity =  3, 0;
+			ranged =  3,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 40;
+		life = 21;
+		max_life = 21;
+		mana = 4;
+		max_mana = 6;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 17;
+		damage_min = 11;
+	}
+	[common]
+	{
+		screen_name= "Bones";
+		membership = monster, party_skeleton_mercenary_archer;
+	}
+	[defend] { defense=36; }
+
+   	[mind]
+	{
+		sight_origin_height	= 1.3;
+		melee_engage_range = 14.0;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+		jat_brain							= world\ai\jobs\common\brain_hero.skrit
+			?actor_creates_own_party		= true
+			&actor_joins_existing_party		= true
+			&party_template					= "party_skeleton_mercenary_archer";
+
+		jat_fidget							= world\ai\jobs\common\job_fidget.skrit
+			?meander						= false
+			&still							= false;
+	}
+
+	[inventory]
+	{
+		selected_active_location = IL_ACTIVE_RANGED_WEAPON;
+
+		[pcontent]
+		{
+			[all*]
+			{
+				es_shield_hand = bw_g_c_c_l_4_avg;
+				es_chest = #body,r/-no_mod/12-16;
+			}
+
+			[oneof*]
+			{
+				[oneof*]
+				{
+					chance = 0.25;
+					il_main = #*/8-17;
+					il_main = #armor/5-18;
+        	        il_main = #nmagic/15-29;
+            	    il_main = #cmagic/15-28;
+				}
+                [oneof*]
+				{
+	            	chance = 0.004;
+	                il_main = #weapon/-rare(1)/15-18;
+	                il_main = #armor/-rare(1)/20-30;
+                    il_main = #*/-rare(1)/10-13;
+                }
+				[gold*]
+				{
+					chance = 0.125;
+					max = 36;
+					min = 26;
+				}
+			}
+		}
+	}
+}
+
+[t:template,n:ann_r03_skeleton_melee]
+{
+	category_name = "1W_evil_d";
+	doc = "ann_r03_skeleton_melee";
+	specializes = base_skeleton;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  4, 0;
+			intelligence =  3, 0;
+			dexterity =  3, 0;
+			melee =  4,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 45;
+		life = 28;
+		max_life = 28;
+		mana = 12;
+		max_mana = 12;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 19;
+		damage_min = 12;
+	}
+	[common]
+	{
+		screen_name="Boner";
+		membership = monster, party_skeleton_mercenary_archer;
+	}
+	[defend] { defense=51; }
+
+   	[mind]
+	{
+		jat_fidget		= world\ai\jobs\common\job_fidget.skrit
+			?curious		= 0.65
+			&interest		= interest
+			&still			= false;
+
+		jat_brain						 = world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party		 = true;
+
+		sight_origin_height	= 1.3;
+		melee_engage_range = 14.0;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+
+	[inventory]
+	{
+		[pcontent]
+		{
+			[all*]
+			{
+				[oneof*]
+				{
+    				es_weapon_hand = sd_g_c_st_1h_avg;
+					es_weapon_hand = ss_g_c_sd_1h_avg;
+				}
+				es_shield_hand = #shield/-no_mod/15-18;
+				es_chest = #body,f/-no_mod/15-18;
+			}
+			[oneof*]
+			{
+				[oneof*]
+				{
+					chance = 0.25;
+					il_main = #*/8-10;
+					il_main = #armor/5-26;
+        	        il_main = #nmagic/15-29;
+            	    il_main = #cmagic/15-28;
+				}
+				[oneof*]
+				{
+	            	chance = 0.004;
+	                il_main = #weapon/-rare(1)/9-13;
+	                il_main = #armor/-rare(1)/25-28;
+                    il_main = #*/-rare(1)/9-11;
+                }
+				[oneof*]
+				{
+                	chance = 0.002;
+	                il_main = #weapon/-unique(2)/18-25;
+	                il_main = #armor/-unique(2)/18-28;
+                    il_main = #*/-unique(2)/20-30;
+	            }
+				[gold*]
+				{
+					chance = 0.125;
+					max = 38;
+					min = 18;
+				}
+			}
+		}
+	}
+}
+
+[t:template,n:ann_r03_skeleton_dog]
+{
+	category_name = "1W_evil_d";
+	doc = "ann_r03_skeleton_dog";
+	specializes = base_krug_dog;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  3, 0;
+			intelligence =  4, 0;
+			dexterity =  4, 0;
+			melee =  4,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 53;
+		life = 53;
+		max_life = 53;
+		mana = 24;
+		max_mana = 24;
+		model = m_c_edm_kd_pos_sk;
+		[textures] { 0=b_c_edm_kd-sk; }
+	}
+	[attack]
+	{
+		damage_max = 28;
+		damage_min = 14;
+	}
+	[common] { screen_name="Boney"; }
+	[defend] { defense=50; }
+	[mind]
+	{
+		jat_brain = world\ai\jobs\common\brain_hero.skrit
+			?guard = true
+			&friends = krug_guard;
+
+
+		melee_engage_range = 10.0;
+		outer_comfort_zone_range = 4.0;
+		personal_space_range = 0.7;
+		ranged_engage_range = 10.0;
+		sight_range = 14.0;
+	}
+	[physics]
+	{
+		explode_when_killed = true
+		break_sound = s_e_die_skeleton;
+		[break_particulate]
+		{
+			frag_glb_bone_02 = 1;
+			frag_glb_bone_04 = 5;
+			frag_glb_bone_05 = 3;
+		}
 	}
 }
