@@ -157,7 +157,7 @@
 {
 	category_name = "1W_evil_d";
 	doc = "ann_r03_vampire";
-	specializes = actor_evil;
+	specializes = base_bandit;
 	[actor]
 	{
 		[skills]
@@ -165,8 +165,7 @@
 			dexterity 		= 0.51, 0, 10;
 			intelligence 	= 2.1, 0, 10;
 			strength 		= 0.39, 0, 10;
-			nature_magic 	= 3,0,0;
-			uber 			= 3,0,0;
+			melee 	= 4,0,0;
 		}
 	}
 	[aspect]
@@ -176,11 +175,67 @@
 		max_life = 27;
 		mana = 14;
 		max_mana = 14;
-		model = m_c_gah_fb_pos_a1;
+		model = m_c_gah_fb_pos_a7;
 		[textures]
 		{
 			0 = b_c_gah_fb_vampire_skin;
 			1 = b_c_pos_a7_vampire_armor;
+		}
+	}
+	[common]
+	{
+		membership = monster, party_bandit_ranged, bandit;
+		screen_name = "Vlad";
+	}
+	[inventory]
+	{
+		[pcontent]
+		{
+			[all*]
+			{
+				es_feet = bo_bo_le_light;
+                es_weapon_hand = sd_g_c_gl_1h_avg;
+			}
+			[oneof*]
+			{
+				[oneof*]
+				{
+				   chance = 0.05;
+				   il_main = potion_health_medium;
+				   il_main = potion_mana_medium;
+				}
+				[all*]
+				{
+       				chance = 0.02;
+	                il_main = #spell/8-12;
+				}
+				[oneof*]
+				{
+					chance = 0.22;
+					il_main = #*/12-24;
+					il_main = #armor/15-19;
+				}
+                [oneof*]
+				{
+	            	chance = 0.004;
+	                il_main = #weapon/-rare(1)/34-40;
+	                il_main = #armor/-rare(1)/30-42;
+                    il_main = #*/-rare(1)/34-40;
+                }
+				[oneof*]
+				{
+                	chance = 0.002;
+	                il_main = #weapon/-unique(2)/30-40;
+	                il_main = #armor/-unique(2)/30-40;
+                    il_main = #*/-unique(2)/30-40;
+	            }
+				[gold*]
+				{
+					chance = 0.125;
+					max = 40;
+					min = 20;
+				}
+			}
 		}
 	}
 	[attack]
@@ -189,289 +244,18 @@
 		damage_max = 20;
 		damage_min = 12;
 	}
-	[common]
-	{
-		screen_name = "Vlad";
-	}
-	[inventory]
-	{
-		selected_active_location = il_active_primary_spell;
-		[equipment]
-		{
-			es_chest = bd_ro_m_d_c_003;
-			es_feet = #boots/-no_mod/4-8;
-		}
-		[other]
-		{
-			il_active_primary_spell = spell_zap;
-			il_main = spell_healing_hands;
-			il_main = spell_resurrect;
-			il_main = #staff/-no_mod/7-10;
-		}
+   	[defend] { defense=40; }
+   	[mind]
+   	{
+		jat_brain						= world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party	= true;
+		jat_fidget		= world\ai\jobs\common\job_fidget.skrit
+			?curious		= 0.75
+			&interest		= interest
+			&meander		= true
+			&still			= false;
 	}
 }
-
-
-
-
-[t:template,n:ann_r03_item_base]
-{
-	category_name = "1W_evil_d";
-	doc = "ann_r03_helmet";
-	specializes = dsx_zepheryl_base;
-
-	aspect:	model		= <none>;
-	aspect:	material	= steel;
-
-	[common]
-	{
-		membership = gargoyle,monster;
-	}
-	[aspect]
-	{
-		experience_value = 37;
-		force_no_render = true;
-		life = 13;
-		max_life = 13;
-		mana = 8;
-		max_mana = 8;
-		draw_shadow = false;
-		scale_base = 1;	 
-
-		model = m_c_edm_ga_pos_1;
-
-		[voice]
-		{
-			[die]			{ priority = high;	* = s_e_die_zepheryl_SED;		}
-			[enemy_spotted]	{ priority = high; * = s_e_call_zepheryl_SED; }
-			[hit_critical]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
-			[hit_glance]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
-			[hit_solid]		{ priority = low;	* = s_e_hit_zepheryl_SED;		}
-		}
-	}
-	[actor]
-	{
-		[skills]
-		{
-			strength 		=	2, 0;
-			intelligence 	=	 2, 0;
-			dexterity 		=	2, 0;
-			combat_magic 	=	2, 0;
-			nature_magic 	=	2, 0;
-				
-		}
-	}
-	[attack]
-	{
-		attack_range = .5;
-		damage_max = 10;
-		damage_min = 3;
-	}
-	[common]
-	{
-		screen_name="Headseeker";
-		membership = gargoyle, monster, immune_polymorph;
-		[template_triggers]
-			{
-				[*]
-					{
-						action* = call_sfx_script("zepheryl_fire");
-						condition* = receive_world_message("WE_ENTERED_WORLD");
-						single_shot = true;
-					}
-			}
-	}
-	[defend] { 
-		armor_style = 023;
-		armor_type = type23;
-		defense=14; 
-	}
-	[inventory]
-	{
-		selected_active_location = il_active_primary_spell;
-		[other] { il_active_primary_spell=spell_zepheryl_zap; }
-	}
-	[mind]
-	{
-		actor_weapon_preference		= WP_MAGIC;
-		actor_auto_switches_to_magic	= true;
-		actor_auto_switches_to_karate	= false;
-		actor_auto_switches_to_melee	= false;
-	}
-}
-
-
-[t:template,n:ann_r03_helmet]
-{
-	category_name = "1W_evil_d";
-	doc = "ann_r03_helmet";
-	specializes = base_helm;
-	[common]
-	{
-		pcontent_special_type = rare, unique;
-		screen_name = "Headseeker";
-	}
-	[defend]
-	{
-		armor_style = 023;
-		armor_type = type23;
-	  f defense = 21.000000;
-	}
-	[gui]
-	{
-		equip_requirements = strength:27;
-		inventory_icon = b_gui_ig_i_a_hlmt_023;
-	}
-	[pcontent]
-	{
-		[base]
-		{
-		  f modifier_max = 6.000000;
-		  f modifier_min = 2.000000;
-		}
-	}
-}
-
-[t:template,n:ann_r03_shield_2]
-{
-	category_name = "1W_evil_d";
-	doc = "t:template,n:ann_r03_shield_2";
-	specializes = base_shield;
-	[aspect]
-	{
-		model = m_a_shd_18;
-		[textures]
-		{
-			0 = b_a_shd_065;
-		}
-	}
-	[common]
-	{
-		pcontent_special_type = rare,unique;
-		screen_name = "Mysterious Shield";
-	}
-	[defend]
-	{
-	  f defense = 32.000000;
-	}
-	[gui]
-	{
-		equip_requirements = strength:28;
-		inventory_height = 2;
-		inventory_icon = b_gui_ig_i_a_shd_065;
-		inventory_width = 2;
-	}
-	[magic]
-	{
-		[enchantments]
-		{
-			[*]
-			{
-				alteration = alter_chance_to_block_melee_damage;
-				description = "5% Chance to Block Melee Attack";
-				duration = #infinite;
-				innate_enchantment = true;
-				is_permanent = true;
-				is_single_instance = false;
-				value = 5;
-			}
-			[*]
-			{
-				alteration = alter_chance_to_block_ranged_damage;
-				description = "5% Chance to Block Ranged Attack";
-				duration = #infinite;
-				innate_enchantment = true;
-				is_permanent = true;
-				is_single_instance = false;
-				value = 5;
-			}
-		}
-	}
-	[pcontent]
-	{
-		[base]
-		{
-		  f modifier_max = 18.000000;
-		  f modifier_min = 3.000000;
-		}
-	}
-}
-
-[t:template,n:ann_r03_shield_1]
-{
-	category_name = "1W_evil_d";
-	doc = "ann_r03_shield_1";
-	specializes = base_shield;
-	[aspect]
-	{
-		model = m_a_shd_10;
-		scale_base = 0.6;
-		[textures]
-		{
-			0 = b_a_shd_072;
-		}
-	}
-	[common]
-	{
-		allow_modifiers = false;
-		screen_name = "Haunted Shield";
-	}
-	[defend]
-	{
-		defense = 2;
-	}
-	[gui]
-	{
-		inventory_height = 2;
-		inventory_icon = b_gui_ig_i_a_shd_072;
-		inventory_width = 2;
-	}
-}
-
-[t:template,n:ann_r03_sword]
-{
-	category_name = "1W_evil_d";
-	doc = "ann_r03_sword";
-	specializes = base_sword;
-	[aspect]
-	{
-		model = m_w_swd_038;
-	}
-	[attack]
-	{
-	  f damage_max = 113.000000;
-	  f damage_min = 83.000000;
-	}
-	[common]
-	{
-		pcontent_special_type = unique;
-		screen_name = "Cursed Sword";
-	}
-	[gui]
-	{
-		active_icon = b_gui_ig_i_ic_swd_005;
-		equip_requirements = strength:31;
-		inventory_height = 3;
-		inventory_icon = b_gui_ig_i_w_swd_069;
-		inventory_width = 1;
-	}
-	[pcontent]
-	{
-		[base]
-		{
-		  f modifier_max = 23.000000;
-		  f modifier_min = 7.000000;
-		}
-	}
-}
-
-
-
-
-
-
-
-
 
 [t:template,n:ann_r03_skeleton_range]
 {
