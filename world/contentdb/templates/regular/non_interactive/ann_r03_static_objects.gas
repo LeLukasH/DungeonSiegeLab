@@ -1,0 +1,13 @@
+[t:template,n:ann_r03_cup]
+{
+	category_name = "indoor";
+	doc = "ann_r03_cup";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		scale_base = 0.75;
+		lodfi_lower = 0.5;
+		lodfi_upper = 0.7;
+		model = m_i_csl_bowl;
+	}
+}
