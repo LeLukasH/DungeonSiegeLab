@@ -1,7 +1,7 @@
-[t:template,n:ann_r03_cup]
+[t:template,n:ann_r03_bowl]
 {
 	category_name = "indoor";
-	doc = "ann_r03_cup";
+	doc = "ann_r03_bowl";
 	specializes = non_interactive_nonblocking;
 	[aspect]
 	{
@@ -9,5 +9,26 @@
 		lodfi_lower = 0.5;
 		lodfi_upper = 0.7;
 		model = m_i_csl_bowl;
+		[textures]
+		{
+			0 = b_i_glb_plate;
+		}
+	}
+}
+
+[t:template,n:ann_r03_mug]
+{
+	category_name = "indoor";
+	doc = "ann_r03_mug";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		lodfi_lower = 0.2;
+		lodfi_upper = 0.65;
+		model = m_i_glb_mug;
+		[textures]
+		{
+			0 = b_i_glb_plate;
+		}
 	}
 }
