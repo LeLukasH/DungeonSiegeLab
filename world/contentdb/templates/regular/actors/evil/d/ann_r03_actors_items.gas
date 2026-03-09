@@ -4,6 +4,7 @@
 	specializes = non_interactive_nonblocking;
 	[aspect]
 	{
+		is_selectable = false;
 		model = m_a_hlmt_type23;
         [textures]
         {
@@ -18,6 +19,7 @@
 	specializes = non_interactive_nonblocking;
 	[aspect]
 	{
+		is_selectable = false;
 		model = m_a_shd_18;
 		[textures]
 		{
@@ -32,9 +34,47 @@
 	specializes = non_interactive_nonblocking;
     [aspect]
 	{
+		is_selectable = false;
 		model = m_w_swd_038;
 	}
 }
+
+
+[effect_script*]
+{
+	name	=ann_flying_effect_base;
+	script	=[[
+			sfx create orbiter #TARGET
+				"must_update()color0(.1,.3,.1)model([0])radius(0)";
+			sfx start #POP;
+	]];
+}
+
+[effect_script*]
+{
+	name	=ann_flying_effect_helmet;
+	script	=[[
+			call ann_demo_effect_base s<ann_r03_helmet_static>;
+	]];
+}
+
+[effect_script*]
+{
+	name	=ann_flying_effect_shield;
+	script	=[[
+			call ann_demo_effect_base s<ann_r03_shield_static>;
+	]];
+}
+
+
+[effect_script*]
+{
+	name	=ann_flying_effect_sword;
+	script	=[[
+			call ann_demo_effect_base s<ann_r03_sword_static>;
+	]];
+}
+
 
 
 [t:template,n:ann_r03_item_base]
@@ -121,6 +161,10 @@
 	}
 }
 
+
+
+
+
 [t:template,n:ann_r03_possessed_helmet]
 {
 	category_name = "1W_evil_d";
@@ -133,7 +177,7 @@
 		{
 			[*]
 				{
-					action* = call_sfx_script("zepheryl_fire");
+					action* = call_sfx_script("ann_flying_effect_helmet");
 					condition* = receive_world_message("WE_ENTERED_WORLD");
 					single_shot = true;
 				}
@@ -153,7 +197,7 @@
 		{
 			[*]
 				{
-					action* = call_sfx_script("zepheryl_fire");
+					action* = call_sfx_script("ann_flying_effect_shield");
 					condition* = receive_world_message("WE_ENTERED_WORLD");
 					single_shot = true;
 				}
@@ -173,7 +217,7 @@
 		{
 			[*]
 				{
-					action* = call_sfx_script("zepheryl_fire");
+					action* = call_sfx_script("ann_flying_effect_sword");
 					condition* = receive_world_message("WE_ENTERED_WORLD");
 					single_shot = true;
 				}
