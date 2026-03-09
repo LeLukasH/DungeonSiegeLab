@@ -1,6 +1,6 @@
 [t:region,n:region]
 {
-	created = DESKTOP-G3QE6A5,elisk;
+	created = desktop-g3qe6a5,elisk;
 	description = none;
   x guid = 0x00000003;
 	lastmodified = DESKTOP-G3QE6A5,elisk;
