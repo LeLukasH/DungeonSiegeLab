@@ -740,10 +740,6 @@
 }
 [t:blocking_object,n:0x00100019]
 {
-	[aspect]
-	{
-	  f scale_multiplier = 1;
-	}
 	[placement]
 	{
 	  q orientation = -2.23238e-024,0.707107,8.36713e-031,0.707107;
@@ -752,10 +748,6 @@
 }
 [t:blocking_object,n:0x0010034f]
 {
-	[aspect]
-	{
-	  f scale_multiplier = 1;
-	}
 	[placement]
 	{
 	  q orientation = 0,1,0,8.9407e-008;
