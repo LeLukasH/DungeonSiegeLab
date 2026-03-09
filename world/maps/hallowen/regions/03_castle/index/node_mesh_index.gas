@@ -1,0 +1,7 @@
+[node_mesh_index]
+{
+	0x00300657 = t_xxx_dgn_zportal-base-a;
+	0x00300760 = t_xxx_keep_flr_dgn-portal-top-a;
+	0x003007a2 = t_xxx_keep_wall_doorway-tx-a;
+	0x003007c4 = t_xxx_keep_wall_thick-a;
+}
