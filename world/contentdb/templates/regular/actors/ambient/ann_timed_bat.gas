@@ -9,11 +9,11 @@
 		draw_shadow = false;
 		model = m_c_na_bt_pos_1;
 		is_selectable = false;
-		scale_base = 0.5;
+		scale_base = 0.35;
 	}
 	[body]
 	{
-		avg_move_velocity = 1.000000;
+		avg_move_velocity = 3.000000;
 		[bone_translator]
 		{
 			body_anterior = root_bone;

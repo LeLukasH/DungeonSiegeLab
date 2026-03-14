@@ -296,7 +296,7 @@
 	[common]
 	{
 		membership = monster, party_bandit_ranged, bandit;
-		screen_name = "Vlad";
+		screen_name = "Lilith";
 	}
 	[inventory]
 	{
