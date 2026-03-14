@@ -255,6 +255,13 @@
 			&meander		= true
 			&still			= false;
 	}
+	[ann_spawn_on_death]
+	{
+		spawn_template = ann_bat_volatile;
+		spawn_count = 8;
+		minDistance = 0.1;
+		maxDistance = 0.3;
+	}
 }
 
 [t:template,n:ann_r03_vampire_female]
@@ -358,6 +365,13 @@
 			&interest		= interest
 			&meander		= true
 			&still			= false;
+	}
+	[ann_spawn_on_death]
+	{
+		spawn_template = ann_bat_volatile;
+		spawn_count = 8;
+		minDistance = 0.1;
+		maxDistance = 0.3;
 	}
 }
 
