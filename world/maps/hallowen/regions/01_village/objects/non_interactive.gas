@@ -16813,14 +16813,6 @@
 	  p position = -1.18568,0,-1.5416,0xb36ffc46;
 	}
 }
-[t:tree_grs_deciduous_sway_07,n:0x0010089f]
-{
-	[placement]
-	{
-	  q orientation = 0,1,0,0;
-	  p position = -7.57813,-4.65,-5.43902,0xa6e1a876;
-	}
-}
 [t:tree_grs_maple_yellow_01,n:0x00100920]
 {
 	[placement]
@@ -16937,6 +16929,14 @@
 	{
 	  q orientation = 0,1,0,-5.96046e-008;
 	  p position = -7.96617,-4.65,1.24026,0xa6e1a876;
+	}
+}
+[t:tree_grs_deciduous_sway_07,n:0x0010089f]
+{
+	[placement]
+	{
+	  q orientation = 0,1,0,0;
+	  p position = -7.57813,-4.65,-5.43902,0xa6e1a876;
 	}
 }
 [t:tree_grs_deciduous_sway_07,n:0x001008a3]
