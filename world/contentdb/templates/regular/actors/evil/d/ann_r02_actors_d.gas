@@ -420,7 +420,7 @@
 	}
 	[attack]
 	{
-		attack_range = 2;
+		attack_range = 0.5s;
 		damage_max = 10;
 		damage_min = 10;
 	}
@@ -437,8 +437,8 @@
 	/* // TODO - uncomment this when you have the googore_grub template ready
 	[dsx_krakbone_spawn_monitor]
 	{
-		meleeTemplate = ""; // place the googore grub template name here into the double quotes
-		rangedTemplate = ""; // place the googore grub template name here into the double quotes
+		meleeTemplate = googore_grub_weak; // place the googore grub template name here into the double quotes
+		rangedTemplate = googore_grub_weak; // place the googore grub template name here into the double quotes
 		summonRatio1to2 = 0.5;
 		maxTotalSummons = 4;
 		maxSummons = 2;
