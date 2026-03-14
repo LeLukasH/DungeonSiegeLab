@@ -5,28 +5,6 @@
 	  p position = 2.67098,0,-0.542629,0x24838136;
 	}
 }
-[t:dsx_disco_bench,n:0x00300015]
-{
-	[placement]
-	{
-	  q orientation = 0,1,0,-2.98023e-008;
-	  p position = -1.22151,-2,-0.690178,0xa42dd019;
-	}
-}
-[t:dsx_disco_bench,n:0x00300016]
-{
-	[placement]
-	{
-	  p position = -0.915656,-2,-0.676208,0x3f4aab18;
-	}
-}
-[t:dsx_disco_bench,n:0x00300017]
-{
-	[placement]
-	{
-	  p position = -0.531963,-2,-0.515312,0x24fa141f;
-	}
-}
 [t:dsx_disco_bench,n:0x00300018]
 {
 	[placement]
@@ -46,5 +24,27 @@
 	[placement]
 	{
 	  p position = 0.527575,0,-3.25463,0x82689865;
+	}
+}
+[t:dsx_disco_bench,n:0x00300016]
+{
+	[placement]
+	{
+	  p position = -0.915656,-2,-0.676208,0x3f4aab18;
+	}
+}
+[t:dsx_disco_bench,n:0x00300017]
+{
+	[placement]
+	{
+	  p position = -0.531963,-2,-0.515312,0x24fa141f;
+	}
+}
+[t:dsx_disco_bench,n:0x00300015]
+{
+	[placement]
+	{
+	  q orientation = 0,1,0,-2.98023e-008;
+	  p position = -1.22151,-2,-0.690178,0xa42dd019;
 	}
 }

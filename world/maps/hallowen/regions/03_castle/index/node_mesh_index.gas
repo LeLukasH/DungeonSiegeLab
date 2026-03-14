@@ -9,6 +9,8 @@
 	0x00300745 = t_xxx_keep_flr_04x04-a;
 	0x00300747 = t_xxx_keep_flr_08x04-a;
 	0x00300748 = t_xxx_keep_flr_08x08-a;
+	0x00300749 = t_xxx_keep_flr_16x08-a;
+	0x0030074a = t_xxx_keep_flr_16x16-a;
 	0x00300760 = t_xxx_keep_flr_dgn-portal-top-a;
 	0x003007a1 = t_xxx_keep_wall_doorway-a;
 	0x003007a2 = t_xxx_keep_wall_doorway-tx-a;
