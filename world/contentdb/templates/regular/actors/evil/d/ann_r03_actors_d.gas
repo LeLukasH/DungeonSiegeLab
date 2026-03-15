@@ -103,7 +103,7 @@
 		{
 			[oneof*]
 			{
-				es_weapon_hand = st_un_toreck;
+				es_weapon_hand = ann_weapon_toreck;
 			}
 			[oneof*]
 			{
@@ -194,7 +194,7 @@
 			[all*]
 			{
 				es_feet = bo_bo_le_light;
-                es_weapon_hand = sd_g_c_gl_1h_avg;
+                es_weapon_hand = ann_weapon_vampire;
 			}
 			[oneof*]
 			{
@@ -305,7 +305,7 @@
 			[all*]
 			{
 				es_feet = bo_bo_le_light;
-                es_weapon_hand = sd_g_c_gl_1h_avg;
+                es_weapon_hand = ann_weapon_vampire;
 			}
 			[oneof*]
 			{
@@ -372,6 +372,26 @@
 		spawn_count = 8;
 		minDistance = 0.1;
 		maxDistance = 0.3;
+	}
+	[body]
+	{
+		armor_version = gah_fg;
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_gah_fg_fs;
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				[anim_files]
+				{
+					drnk = a_c_gah_fg_fs1_dk;
+					gtup = a_c_gah_fg_fs0_up;
+					look = a_c_gah_fg_fs0_dsf;
+					wyme = a_c_gah_fg_fs0_dsf-02;
+				}
+			}
+		}
 	}
 }
 
