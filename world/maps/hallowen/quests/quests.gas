@@ -1,0 +1,144 @@
+///////////////////////////////////////////////////////////////
+// MAP QUESTS FILE (Halloween Mod)
+///////////////////////////////////////////////////////////////
+
+//////////////
+// CHAPTERS //
+//////////////
+
+[chapters]
+{
+	[chapter_1]
+	{
+		screen_name = "Chapter 1: The Halloween Night";
+		chapter_image = b_gui_ig_mnu_jnl_chapter_01;
+		
+		[*]
+		{
+			order = 0; 
+			description = "A mysterious gray mist has engulfed the village.";
+		}
+	}
+}
+
+////////////
+// QUESTS //
+////////////
+
+[quests]
+{
+	// ==========================================
+	// HLAVNÁ LINKA (Main Quest) - Vstup do podzemia
+	// ==========================================
+	[quest_main_story]
+	{
+		chapter         = chapter_1;
+		screen_name     = "Main Quest: Into the Darkness";
+		victory_sample  = s_e_level_up_quest;
+		quest_image     = b_gui_ig_mnu_jnl_quest_01;
+
+		// krok 0 posli ma za innkeeper
+		[*]
+		{
+			order       = 0;
+			speaker     = "Village innkeeper";
+			description = "Talk to the village innkeeper about the strange gray mist.";
+			address     = 01_village:conversations:conversation_innkeeper;
+		}
+
+		// krok 1 najdi dungeon
+		[*]
+		{
+			order       = 1;
+			description = "Find the entrance to the old catacombs.";
+			// voliteľné: address na marker pri vchode, ak ho máš
+			// address  = 01_village:world:catacombs_entrance;
+		}
+
+		// krok 2 vojdi do dungeon
+		[*]
+		{
+			order       = 2;
+			description = "Enter the catacombs and investigate the source of the mist.";
+			required    = true;
+			is_complete = true;
+		}
+	}
+
+	// ==========================================
+	// VEDĽAJŠÍ QUEST 1 (Pumpkin Sniffers)
+	// ==========================================
+	[quest_pumpkin_sniffers]
+	{		
+		chapter			= chapter_1;
+		screen_name		= "Side Quest: The Pumpkin Sniffers"; 
+		victory_sample	= s_e_level_up_quest;
+		quest_image 	= b_gui_ig_mnu_jnl_quest_02;              
+				
+		// STAV 0 (Nárazenie na monštrá)
+		[*]
+		{
+			order		    = 0;
+			description     = "I need to find the owner of this farmhouse to figure out how to get past these weird sniffing creatures.";
+		}
+
+		// STAV 1 (Rozhovor s farmárom)
+		[*]
+		{
+			order		    = 1;
+			speaker         = "Angry Farmer";
+			address		    = 01_village:conversations:conversation_farmer;
+			description     = "The farmer told me to distract the Pumpkin Sniffers by throwing a large pumpkin away from the door.";
+		}
+
+		// STAV 2 (Tekvica hodená)
+		[*]
+		{
+			order		    = 2;
+			description     = "The creatures rushed to sniff the thrown pumpkin, leaving the path to the house completely clear.";
+		}
+
+		// STAV 3 (Cesta voľná)
+		[*]
+		{
+			order		    = 3;
+			description     = "I must now enter the house and retrieve the farmer's item while the monsters are distracted.";
+		}
+
+		// STAV 4 (Hotovo)
+		[*]
+		{
+			order		    = 4;
+			description     = "I successfully recovered the item from the house and solved the farmer's problem.";
+			is_complete     = true; 
+		}
+	}
+
+	// ==========================================
+	// VEDĽAJŠÍ QUEST 2 (Candy Snatcher)
+	// ==========================================
+	[quest_candy_snatcher]
+	{
+		chapter			= chapter_1;		
+		screen_name		= "Side Quest: The Candy Snatcher";
+		victory_sample	= s_e_level_up_quest;
+		quest_image 	= b_gui_ig_mnu_jnl_quest_03;              
+		
+		// STAV 0 (Zadanie)
+		[*]
+		{
+			order			= 0;
+			speaker         = "Crying Child";			
+			description     = "I must track down the Candy Snatcher and retrieve the stolen Halloween sweets for the child.";
+			address			= 01_village:conversations:conversation_child;	
+		}
+		
+		// STAV 1 (Dokončenie - cukríky boli odovzdané dieťaťu)
+		[*]
+		{
+			order			= 1;		
+			description     = "I have defeated the monster and returned the stolen candy to the grateful child.";
+			is_complete     = true; 
+		}
+	}
+}

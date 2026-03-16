@@ -1,3 +1,34 @@
+[conversation_child]
+{
+	[text*]
+	{
+		activate_quest* = quest_candy_snatcher,0;
+	  b quest_dialog = true;
+		screen_text = "A big, ugly monster called the Candy Snatcher stole my entire Halloween stash! Do you know what happens when I don't get my sugar? I become the REAL monster! Go smash that thief and bring back my sweets before I start biting people's ankles!";
+	  f scroll_rate = 10.000000;
+	}
+}
+[conversation_farmer]
+{
+	[text*]
+	{
+		activate_quest* = quest_pumpkin_sniffers,0;
+		activate_quest* = quest_pumpkin_sniffers,1;
+	  b quest_dialog = true;
+		screen_text = "Listen here, hero! A foul beast known as the 'Pumpkin Sniffer' is terrorizing my patch. It doesn't even eat them! It just... aggressively sniffs my prize-winning gourds! It's unnatural, it's creepy, and it's ruining the Halloween vibe! Track down that weirdo, kill it, and bring back its loot as proof!";
+	  f scroll_rate = 10.000000;
+	}
+}
+[conversation_innkeeper]
+{
+	[text*]
+	{
+		activate_quest* = quest_main_story,0;
+	  b quest_dialog = true;
+		screen_text = "Look at this gray mist creeping from the catacombs! It’s an absolute disaster... it doesn't drink, it doesn't tip, and it's scaring away all my paying customers! I can't run a tavern if the only thing at the bar is an evil fog. Please, find the entrance to the underground and punch the source of this evil right in the face! Oh, and if you need supplies before you go... just ask. I'll even give you regular prices!";
+	  f scroll_rate = 10.000000;
+	}
+}
 [r01_companion]
 {
 	[text*]
@@ -50,7 +81,7 @@ Gold first, magic after.";
 	[text*]
 	{
 		choice = shop;
-		screen_text = "My name is Tender ...Bat Tender! You can buy some juice here.";
+		screen_text = "My name is Tender... Bat Tender! Whether you're about to face that cursed fog, or you just survived it, you look like you need a strong drink. I've got health 'juice' and mana tonics. Gold first, heroism later!";
 	  f scroll_rate = 10.000000;
 	}
 }

@@ -14214,7 +14214,7 @@
 {
 	[placement]
 	{
-	  p position = -3.75807,7.62939e-006,-0.674652,0xa27489da;
+	  p position = -3.6664,0,0.48848,0xa27489da;
 	}
 }
 [t:tree_grs_maple_yellow_01,n:0x00100937]
@@ -14256,6 +14256,13 @@
 	  p position = 0.853001,3.8147e-006,1.61374,0x33284a00;
 	}
 }
+[t:dsx_banner_glb_zaurask,n:0x001003a0]
+{
+	[placement]
+	{
+	  p position = 1.85971,-0.463631,-5.66574,0xcdd497ab;
+	}
+}
 [t:tree_grs_maple_burgandy_04,n:0x001008f1]
 {
 	[placement]
@@ -14283,7 +14290,7 @@
 {
 	[placement]
 	{
-	  p position = 3.01351,6.27843e-024,0.994347,0x9f9a0621;
+	  p position = 3.03614,0,1.6379,0x9f9a0621;
 	}
 }
 [t:tree_grs_maple_yellow_01,n:0x00100933]
@@ -16813,14 +16820,6 @@
 	  p position = -1.18568,0,-1.5416,0xb36ffc46;
 	}
 }
-[t:tree_grs_deciduous_sway_07,n:0x0010089f]
-{
-	[placement]
-	{
-	  q orientation = 0,1,0,0;
-	  p position = -7.57813,-4.65,-5.43902,0xa6e1a876;
-	}
-}
 [t:tree_grs_maple_yellow_01,n:0x00100920]
 {
 	[placement]
@@ -16937,6 +16936,14 @@
 	{
 	  q orientation = 0,1,0,-5.96046e-008;
 	  p position = -7.96617,-4.65,1.24026,0xa6e1a876;
+	}
+}
+[t:tree_grs_deciduous_sway_07,n:0x0010089f]
+{
+	[placement]
+	{
+	  q orientation = 0,1,0,0;
+	  p position = -7.57813,-4.65,-5.43902,0xa6e1a876;
 	}
 }
 [t:tree_grs_deciduous_sway_07,n:0x001008a3]
@@ -17243,7 +17250,7 @@
 	[placement]
 	{
 	  q orientation = 0,0.707107,0,0.707107;
-	  p position = -1.94097,0,-2.20099,0x9f576b40;
+	  p position = -1.77186,0,-1.93637,0x9f576b40;
 	}
 }
 [t:tree_grs_maple_burgandy_01,n:0x001009c0]

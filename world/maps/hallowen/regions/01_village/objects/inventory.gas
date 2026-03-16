@@ -67,6 +67,36 @@
 	  p position = 6.47345,-1.9,-5.64169,0x892f7f32;
 	}
 }
+[t:ann_item_pumpkin,n:0x00100393]
+{
+	[common]
+	{
+		[instance_triggers]
+		{
+			[*]
+			{
+				action* = change_quest_state("quest_pumpkin_sniffers","active",0);
+				action* = change_quest_state("quest_pumpkin_sniffers","active",1);
+				action* = change_quest_state("quest_pumpkin_sniffers","active",2);
+			  b can_self_destruct = true;
+				condition* = has_go_in_inventory("local",0x00000000,"");
+			  f delay = 0.000000;
+			  b flip_flop = false;
+			  b multi_player = true;
+			  b no_trig_bits = false;
+				occupants_group = ;
+			  f reset_duration = 0.000000;
+			  b single_player = true;
+			  b single_shot = false;
+			  b start_active = true;
+			}
+		}
+	}
+	[placement]
+	{
+	  p position = -6.28874,-1.9,2.10247,0x892f7f32;
+	}
+}
 [t:gold,n:0x00100a69]
 {
 	[aspect]
@@ -145,6 +175,18 @@
 	[placement]
 	{
 	  p position = -0.211838,-3.34392e-025,-2.68972,0xcdd497ab;
+	}
+}
+[t:ann_item_pumpkin,n:0x0010039b]
+{
+	[aspect]
+	{
+	  b is_selectable = false;
+	}
+	[placement]
+	{
+	  q orientation = 0,1,0,0;
+	  p position = 0.825348,0,0.221031,0xc7707318;
 	}
 }
 [t:potion_mana_small,n:0x00100398]

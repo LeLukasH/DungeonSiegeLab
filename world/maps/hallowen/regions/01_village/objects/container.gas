@@ -81,6 +81,28 @@
 }
 [t:ann_r01_chest_1,n:0x00100a87]
 {
+	[common]
+	{
+		[instance_triggers]
+		{
+			[*]
+			{
+				action* = change_quest_state("quest_pumpkin_sniffers","active",3);
+				action* = change_quest_state("quest_pumpkin_sniffers","active",4);
+			  b can_self_destruct = true;
+				condition* = receive_world_message("we_req_use",0,"on_first_message");
+			  f delay = 0.000000;
+			  b flip_flop = false;
+			  b multi_player = true;
+			  b no_trig_bits = false;
+				occupants_group = ;
+			  f reset_duration = 0.000000;
+			  b single_player = true;
+			  b single_shot = true;
+			  b start_active = true;
+			}
+		}
+	}
 	[inventory]
 	{
 	  b drop_at_use_point = true;

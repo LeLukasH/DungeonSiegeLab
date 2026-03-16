@@ -32,3 +32,31 @@
 		}
 	}
 }
+[t:template,n:ann_item_pumpkin]
+{
+	specializes			= treasure;
+	doc					= "Pumpkin Quest Item";
+	category_name       = "quest";
+
+	[aspect]
+	{
+		
+		model		= m_i_glb_frag-fury-eye;
+		
+		textures:0	= b_i_glb_pumpkin;
+		
+	}
+
+	// Meno, ktoré hráč uvidí v hre, keď na to ukáže myšou
+	common:screen_name	= "Prize-Winning Pumpkin";
+
+	[gui]
+	{
+		inventory_icon		= b_gui_ig_i_it_pumpkin;
+		inventory_width		= 2;
+		inventory_height	= 2;
+		
+		// PRIDANÉ podľa návodu: Hráč tekvicu nemôže omylom predať v obchode
+		can_sell			= false; 
+	}
+}

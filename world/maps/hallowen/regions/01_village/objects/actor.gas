@@ -91,6 +91,20 @@
 	  p position = 1.63428,0,0.489647,0xd06775d4;
 	}
 }
+[t:ann_r01_farmer_male_old,n:0x00100391]
+{
+	[conversation]
+	{
+		[conversations]
+		{
+			* = conversation_farmer;
+		}
+	}
+	[placement]
+	{
+	  p position = -1.37004,-1.9,2.22578,0x892f7f32;
+	}
+}
 [t:ann_r01_spider,n:0x0010035c]
 {
 	[placement]
@@ -144,12 +158,17 @@
 	{
 		[conversations]
 		{
+			* = conversation_innkeeper;
 			* = shop_potions;
 		}
 	}
+	[mind]
+	{
+		jat_talk = world\ai\jobs\actors\good\job_talk_my_npc.skrit;
+	}
 	[placement]
 	{
-	  p position = -8.66191,-1.5,-3.85974,0xc2748e33;
+	  p position = -8.58388,-1.5,-3.86833,0xc2748e33;
 		use_point_scids = 0x00100aa5;
 	}
 }
@@ -184,6 +203,46 @@
 	{
 	  q orientation = 0,0.707107,0,0.707107;
 	  p position = 0.132481,0,-1.58104,0xc181cf39;
+	}
+}
+[t:hein,n:0x00100392]
+{
+	[aspect]
+	{
+	  f scale_base = 0.5;
+	}
+	[common]
+	{
+		[instance_triggers]
+		{
+			[*]
+			{
+				action* = change_quest_state("quest_candy_snatcher","active",1);
+			  b can_self_destruct = true;
+				condition* = has_go_in_inventory("local",0x00000000,"");
+			  f delay = 0.000000;
+			  b flip_flop = false;
+			  b multi_player = true;
+			  b no_trig_bits = false;
+				occupants_group = ;
+			  f reset_duration = 0.000000;
+			  b single_player = true;
+			  b single_shot = false;
+			  b start_active = true;
+			}
+		}
+	}
+	[conversation]
+	{
+		[conversations]
+		{
+			* = conversation_child;
+		}
+	}
+	[placement]
+	{
+	  q orientation = 0,-0.707107,0,0.707107;
+	  p position = -0.526886,0,-1.41364,0xc0e3edbd;
 	}
 }
 [t:ann_r01_wolf,n:0x00100362]
@@ -256,6 +315,38 @@
 	  p position = -0.104065,-2.23859e-023,-3.54537,0x9f9a0621;
 	}
 }
+[t:ann_r01_spider,n:0x00100013]
+{
+	[placement]
+	{
+	  q orientation = 0,-0.707107,0,0.707107;
+	  p position = -2.45894,0,1.33131,0x6ff60851;
+	}
+}
+[t:ann_r01_spider,n:0x00100015]
+{
+	[placement]
+	{
+	  q orientation = 0,-0.707107,0,0.707107;
+	  p position = -2.32939,0,0.144419,0x6ff60851;
+	}
+}
+[t:ann_r01_spider,n:0x00100016]
+{
+	[placement]
+	{
+	  q orientation = 0,0.707107,0,0.707107;
+	  p position = -2.10712,0,-0.974152,0x6ff60851;
+	}
+}
+[t:ann_r01_spider,n:0x00100350]
+{
+	[placement]
+	{
+	  q orientation = 0,-0.707107,0,0.707107;
+	  p position = 0.0614471,0,0.474152,0x6ff60851;
+	}
+}
 [t:ann_r01_spider,n:0x00100360]
 {
 	[placement]
@@ -284,6 +375,13 @@
 	[placement]
 	{
 	  p position = -5.64085,-4.65,0.312746,0xa6e1a876;
+	}
+}
+[t:ann_r01_spider,n:0x00100012]
+{
+	[placement]
+	{
+	  p position = 0.356258,-0.25,-0.871437,0xd5cc0cb6;
 	}
 }
 [t:ann_r01_wolf,n:0x00100363]
@@ -316,44 +414,5 @@
 	{
 	  q orientation = 0,-0.707107,0,0.707107;
 	  p position = -3.39138,0,0.132192,0xa71277b0;
-	}
-}
-[t:ann_r01_spider,n:0x00100012]
-{
-	[placement]
-	{
-	  p position = 0.356258,-0.25,-0.871437,0xd5cc0cb6;
-	}
-}
-[t:ann_r01_spider,n:0x00100013]
-{
-	[placement]
-	{
-	  q orientation = 0,-0.707107,0,0.707107;
-	  p position = -2.45894,0,1.33131,0x6ff60851;
-	}
-}
-[t:ann_r01_spider,n:0x00100015]
-{
-	[placement]
-	{
-	  q orientation = 0,-0.707107,0,0.707107;
-	  p position = -2.32939,0,0.144419,0x6ff60851;
-	}
-}
-[t:ann_r01_spider,n:0x00100016]
-{
-	[placement]
-	{
-	  q orientation = 0,0.707107,0,0.707107;
-	  p position = -2.10712,0,-0.974152,0x6ff60851;
-	}
-}
-[t:ann_r01_spider,n:0x00100350]
-{
-	[placement]
-	{
-	  q orientation = 0,-0.707107,0,0.707107;
-	  p position = 0.0614471,0,0.474152,0x6ff60851;
 	}
 }

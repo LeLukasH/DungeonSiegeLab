@@ -581,6 +581,36 @@
 	  p position = 1.63677,0,-2.86026,0x9c1cecfd;
 	}
 }
+[t:trigger_generic,n:0x0010038f]
+{
+	[common]
+	{
+		[instance_triggers]
+		{
+			[*]
+			{
+				action* = change_quest_state("quest_main_story","active",0);
+				action* = change_quest_state("quest_main_story","active",1);
+			  b can_self_destruct = true;
+				condition* = party_member_within_bounding_box(2.000000,0.500000,2.000000,"on_first_enter");
+			  f delay = 0.000000;
+			  b flip_flop = false;
+			  b multi_player = true;
+			  b no_trig_bits = false;
+				occupants_group = ;
+			  f reset_duration = 0.000000;
+			  b single_player = true;
+			  b single_shot = false;
+			  b start_active = true;
+			}
+		}
+	}
+	[placement]
+	{
+	  q orientation = 0,0.707107,0,0.707107;
+	  p position = 1.72969,0,-1.97833,0x9c1cecfd;
+	}
+}
 [t:trigger_fade_nodes_box,n:0x00100005]
 {
 	[common]
@@ -731,6 +761,35 @@
 	  p position = 0.661255,-1,-0.0275688,0x422f9007;
 	}
 }
+[t:trigger_generic,n:0x00100390]
+{
+	[common]
+	{
+		[instance_triggers]
+		{
+			[*]
+			{
+				action* = change_quest_state("quest_main_story","active",2);
+			  b can_self_destruct = true;
+				condition* = party_member_within_bounding_box(2.000000,0.500000,2.000000,"on_first_enter");
+			  f delay = 0.000000;
+			  b flip_flop = false;
+			  b multi_player = true;
+			  b no_trig_bits = false;
+				occupants_group = ;
+			  f reset_duration = 0.000000;
+			  b single_player = true;
+			  b single_shot = false;
+			  b start_active = true;
+			}
+		}
+	}
+	[placement]
+	{
+	  q orientation = 0,1,0,5.96046e-008;
+	  p position = -5.31606,-2,0.0360909,0x422f9007;
+	}
+}
 [t:use_point,n:0x00100a88]
 {
 	[placement]
@@ -738,12 +797,75 @@
 	  p position = -0.392181,-6.1907e-025,0.967377,0xcdd497ab;
 	}
 }
+[t:trigger_generic,n:0x00100351]
+{
+	[common]
+	{
+		[instance_triggers]
+		{
+			[*]
+			{
+				action* = send_world_message("we_req_activate",0x0010039A,0f,"default","every",0);
+				action* = send_world_message("we_req_deactivate",0x0010039C,0f,"default","every",0);
+				action* = send_world_message("we_req_activate",0x001003A3,0f,"default","every",0);
+				action* = send_world_message("we_req_activate",0x00100396,0f,"default","every",0);
+				action* = send_world_message("we_req_activate",0x001003A2,0f,"default","every",0);
+				action* = send_world_message("we_req_activate",0x001003A7,0f,"default","every",0);
+				action* = send_world_message("we_req_activate",0x001003A5,0f,"default","every",0);
+				action* = send_world_message("we_req_activate",0x001003A6,0f,"default","every",0);
+				action* = send_world_message("we_req_deactivate",0x001003A9,0f,"default","every",0);
+				action* = change_quest_state("quest_pumpkin_sniffers","active",2);
+			  b can_self_destruct = true;
+				condition* = go_within_bounding_box(5.000000,5.500000,5.000000,0x00100393,"","on_first_enter");
+			  f delay = 0.000000;
+			  b flip_flop = false;
+			  b multi_player = true;
+			  b no_trig_bits = false;
+				occupants_group = ;
+			  f reset_duration = 0.000000;
+			  b single_player = true;
+			  b single_shot = true;
+			  b start_active = true;
+			}
+		}
+	}
+	[placement]
+	{
+	  q orientation = 0,-0.707107,0,0.707107;
+	  p position = 0.841278,0,-0.553162,0xcfdcb4c7;
+	}
+}
+[t:trigger_generic,n:0x00100399]
+{
+	[common]
+	{
+		[instance_triggers]
+		{
+			[*]
+			{
+				action* = change_quest_state("quest_pumpkin_sniffers","active",0);
+			  b can_self_destruct = true;
+				condition* = party_member_within_bounding_box(4.000000,0.500000,1.000000,"on_first_enter");
+			  f delay = 0.000000;
+			  b flip_flop = false;
+			  b multi_player = true;
+			  b no_trig_bits = false;
+				occupants_group = ;
+			  f reset_duration = 0.000000;
+			  b single_player = true;
+			  b single_shot = false;
+			  b start_active = true;
+			}
+		}
+	}
+	[placement]
+	{
+	  q orientation = 0,-0.707107,0,0.707107;
+	  p position = -0.454433,0,-0.626457,0x280257ac;
+	}
+}
 [t:blocking_object,n:0x00100019]
 {
-	[aspect]
-	{
-	  f scale_multiplier = 1;
-	}
 	[placement]
 	{
 	  q orientation = -2.23238e-024,0.707107,8.36713e-031,0.707107;
@@ -752,10 +874,6 @@
 }
 [t:blocking_object,n:0x0010034f]
 {
-	[aspect]
-	{
-	  f scale_multiplier = 1;
-	}
 	[placement]
 	{
 	  q orientation = 0,1,0,8.9407e-008;

@@ -282,3 +282,25 @@
         }
 	}
 }
+[t:template,n:ann_r01_farmer_male_old]
+{
+	category_name = "1W_character";
+	doc = "farmer_old";
+	specializes = base_npc_fb;
+	[aspect]
+	{
+		[textures]
+		{
+			0 = b_c_gah_fb_skin_12;
+			1 = b_c_pos_a1_051;
+		}
+	}
+	[common]
+	{
+		screen_name = "Farmer";
+	}
+	[conversation]
+	{
+
+	}
+}
