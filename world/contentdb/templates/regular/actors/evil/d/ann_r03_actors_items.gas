@@ -109,7 +109,7 @@
 	[inventory]
 	{
 		selected_active_location = il_active_primary_spell;
-		[other] { il_active_primary_spell=spell_zepheryl_zap; }
+		[other] { il_active_primary_spell=ann_flying_item_spell; }
 	}
 	[mind]
 	{
