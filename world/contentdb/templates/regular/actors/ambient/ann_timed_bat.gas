@@ -9,7 +9,7 @@
 		draw_shadow = false;
 		model = m_c_na_bt_pos_1;
 		is_selectable = false;
-		scale_base = 0.35;
+		scale_base = 0.4;
 	}
 	[body]
 	{

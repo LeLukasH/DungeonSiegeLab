@@ -5,24 +5,24 @@
 	specializes = base_staff;
 	[aspect]
 	{
-		model = m_w_misc_rake;
+		model = m_w_stf_012;
 	}
 	[attack]
 	{
-	  f damage_max = 15.000000;
-	  f damage_min = 9.000000;
+		damage_max = 17;
+		damage_min = 10;
 	}
 	[common]
 	{
-        is_pcontent_allowed = false;
-        allow_modifiers = false;
-		screen_name = "Rake";
+		is_pcontent_allowed = false;
+		screen_name = "Sickle Staff";
 	}
 	[gui]
 	{
-		active_icon = b_gui_ig_i_ic_msc_006;
+		active_icon = b_gui_ig_i_ic_stf_004;
+		equip_requirements = strength:4;
 		inventory_height = 4;
-		inventory_icon = b_gui_ig_i_w_msc_004;
+		inventory_icon = b_gui_ig_i_w_stf_010;
 		inventory_width = 1;
 	}
 }

@@ -98,7 +98,7 @@
 		}
 	}
 	[common]
-	{	screen_name="Snack Snatcher";
+	{	screen_name="Candy Snatcher";
 		membership = rat, monster;
 	}
 	[defend] { defense=10; }
