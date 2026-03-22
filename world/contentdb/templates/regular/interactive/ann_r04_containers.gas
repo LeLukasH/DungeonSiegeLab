@@ -1,12 +1,3 @@
-[t:template,n:ann_r04_crate_empty]
-{
-	specializes		= base_container_wood;
-	doc				= "ann_r04_crate_empty";
-	category_name	= "container";
-
-	aspect:model	= m_i_glb_crate;
-}
-
 [t:template,n:ann_r04_crate_broken]
 {
 	specializes			= non_interactive_nonblocking;
@@ -20,13 +11,20 @@
 	}
 }
 
-[t:template,n:ann_r04_crate_spider]
+[t:template,n:ann_r04_crate_empty]
 {
 	specializes		= base_container_wood;
-	doc				= "ann_r04_crate_spider";
+	doc				= "ann_r04_crate_empty";
 	category_name	= "container";
 
 	aspect:model	= m_i_glb_crate;
+}
+
+[t:template,n:ann_r04_crate_spider]
+{
+	specializes		= ann_r04_crate_empty;
+	doc				= "ann_r04_crate_spider";
+	category_name	= "container";
 
 	[generator_in_object]
 	{
@@ -36,11 +34,9 @@
 
 [t:template,n:ann_r04_crate_loot]
 {
-	specializes		= base_container_wood;
+	specializes		= ann_r04_crate_empty;
 	doc				= "ann_r04_crate_loot";
 	category_name	= "container";
-
-	aspect:model	= m_i_glb_crate;
 
 	[inventory]
 	{
@@ -52,6 +48,7 @@
 				{
           chance = 0.2;
 					il_main = #weapon/16-26;
+					il_main = #boots/20-30;
 					il_main = #armor/20-30;
 				}
 				[oneof*]
@@ -63,10 +60,54 @@
 				[gold*]
 				{
 					chance = 0.5;
-					max = 5;
+					max = 10;
 					min = 1;
 				}
 			}
 		}
+	}
+}
+
+[t:template,n:ann_r04_skull_empty]
+{
+	specializes		= base_container_wood;
+	doc				= "ann_r04_skull_empty";
+	category_name	= "container";
+
+	[aspect]
+  {
+    model = m_i_glb_skull-01;
+    scale_base = 3;
+    material = claw;
+    voice:die:	* =	s_e_env_break_container_clay;
+    [textures] { 0=b_i_glb_frag-bones; }
+  }
+  [common]
+  {
+    screen_name = "Skull";
+  }
+  [physics]
+	{
+    [break_particulate]
+    {
+      ann_r04_skull_frag_01	= 1;
+      ann_r04_skull_frag_02	= 1;
+      ann_r04_skull_frag_03	= 1;
+    }
+	}
+}
+
+[t:template,n:ann_r04_skull_spider]
+{
+	specializes		= ann_r04_skull_empty;
+	doc				= "ann_r04_skull_spider";
+	category_name	= "container";
+
+  [ann_spawn_on_death]
+	{
+		spawn_template = ann_r04_spider_small;
+		spawn_count = 1;
+		minDistance = 0;
+		maxDistance = 0;
 	}
 }
