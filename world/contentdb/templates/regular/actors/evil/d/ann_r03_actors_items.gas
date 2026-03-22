@@ -131,7 +131,7 @@
 	specializes = ann_r03_item_base;
 	[common]
 	{
-		screen_name = "Vornhelm’s Helmet";
+		screen_name = "Vornhelm's Helmet";
 		[template_triggers]
 		{
 			[*]
@@ -151,7 +151,7 @@
 	specializes = ann_r03_item_base;
 	[common]
 	{
-		screen_name = "Vornhelm’s Shield";
+		screen_name = "Vornhelm's Shield;
 		[template_triggers]
 		{
 			[*]
@@ -171,7 +171,7 @@
 	specializes = ann_r03_item_base;
     [common]
 	{
-		screen_name = "Vornhelm’s Sword";
+		screen_name = "Vornhelm's Sword";
 		[template_triggers]
 		{
 			[*]
