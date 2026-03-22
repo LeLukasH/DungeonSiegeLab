@@ -4,6 +4,7 @@
 	specializes = non_interactive_nonblocking;
 	[aspect]
 	{
+		is_selectable = false;
 		model = m_a_hlmt_type23;
         [textures]
         {
@@ -18,11 +19,16 @@
 	specializes = non_interactive_nonblocking;
 	[aspect]
 	{
+		is_selectable = false;
 		model = m_a_shd_18;
 		[textures]
 		{
 			0 = b_a_shd_065;
 		}
+	}
+	[placement]
+	{
+	  q orientation = -0.707106,0,0,0.707106;
 	}
 }
 
@@ -32,9 +38,11 @@
 	specializes = non_interactive_nonblocking;
     [aspect]
 	{
+		is_selectable = false;
 		model = m_w_swd_038;
 	}
 }
+
 
 
 [t:template,n:ann_r03_item_base]
@@ -94,15 +102,6 @@
 	{
 		screen_name="Headseeker";
 		membership = gargoyle, monster, immune_polymorph;
-		[template_triggers]
-			{
-				[*]
-					{
-						action* = call_sfx_script("zepheryl_fire");
-						condition* = receive_world_message("WE_ENTERED_WORLD");
-						single_shot = true;
-					}
-			}
 	}
 	[defend] { 
 		defense=14; 
@@ -110,7 +109,7 @@
 	[inventory]
 	{
 		selected_active_location = il_active_primary_spell;
-		[other] { il_active_primary_spell=spell_zepheryl_zap; }
+		[other] { il_active_primary_spell=ann_flying_item_spell; }
 	}
 	[mind]
 	{
@@ -121,6 +120,10 @@
 	}
 }
 
+
+
+
+
 [t:template,n:ann_r03_possessed_helmet]
 {
 	category_name = "1W_evil_d";
@@ -128,12 +131,12 @@
 	specializes = ann_r03_item_base;
 	[common]
 	{
-		screen_name = "Vornhelm’s Helmet";
+		screen_name = "Vornhelm's Helmet";
 		[template_triggers]
 		{
 			[*]
 				{
-					action* = call_sfx_script("zepheryl_fire");
+					action* = call_sfx_script("ann_flying_effect_helmet");
 					condition* = receive_world_message("WE_ENTERED_WORLD");
 					single_shot = true;
 				}
@@ -148,12 +151,12 @@
 	specializes = ann_r03_item_base;
 	[common]
 	{
-		screen_name = "Vornhelm’s Shield";
+		screen_name = "Vornhelm's Shield;
 		[template_triggers]
 		{
 			[*]
 				{
-					action* = call_sfx_script("zepheryl_fire");
+					action* = call_sfx_script("ann_flying_effect_shield");
 					condition* = receive_world_message("WE_ENTERED_WORLD");
 					single_shot = true;
 				}
@@ -168,12 +171,12 @@
 	specializes = ann_r03_item_base;
     [common]
 	{
-		screen_name = "Vornhelm’s Sword";
+		screen_name = "Vornhelm's Sword";
 		[template_triggers]
 		{
 			[*]
 				{
-					action* = call_sfx_script("zepheryl_fire");
+					action* = call_sfx_script("ann_flying_effect_sword");
 					condition* = receive_world_message("WE_ENTERED_WORLD");
 					single_shot = true;
 				}

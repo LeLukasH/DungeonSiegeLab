@@ -1,7 +1,22 @@
 [node_mesh_index]
 {
 	0x00300657 = t_xxx_dgn_zportal-base-a;
+	0x00300735 = t_xxx_keep_cnr_cncv-a;
+	0x00300737 = t_xxx_keep_cnr_cnvx-a;
+	0x00300741 = t_xxx_keep_flr_02x02-a;
+	0x00300743 = t_xxx_keep_flr_04x02-a;
+	0x00300744 = t_xxx_keep_flr_04x02-b;
+	0x00300745 = t_xxx_keep_flr_04x04-a;
+	0x00300747 = t_xxx_keep_flr_08x04-a;
+	0x00300748 = t_xxx_keep_flr_08x08-a;
+	0x00300749 = t_xxx_keep_flr_16x08-a;
+	0x0030074a = t_xxx_keep_flr_16x16-a;
 	0x00300760 = t_xxx_keep_flr_dgn-portal-top-a;
+	0x003007a1 = t_xxx_keep_wall_doorway-a;
 	0x003007a2 = t_xxx_keep_wall_doorway-tx-a;
 	0x003007c4 = t_xxx_keep_wall_thick-a;
+	0x003007c8 = t_xxx_keep_wall_thin-a;
+	0x003007df = t_xxx_keep_spiral-center-a;
+	0x003007e1 = t_xxx_keep_spiral-floor-base-a;
+	0x003007e5 = t_xxx_keep_spiral-stairs-a;
 }

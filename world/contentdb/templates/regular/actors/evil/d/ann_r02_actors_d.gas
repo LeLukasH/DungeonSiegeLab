@@ -98,7 +98,7 @@
 		}
 	}
 	[common]
-	{	screen_name="Snack Snatcher";
+	{	screen_name="Candy Snatcher";
 		membership = rat, monster;
 	}
 	[defend] { defense=10; }
@@ -144,6 +144,16 @@
 		}
 	}
 	[water_effects] {}
+	[inventory]
+	{
+		[pcontent]
+		{
+			[all*]
+			{
+				il_main = ann_item_candy;
+			}
+		}
+	}
 }
 [t:template,n:ann_r02_snapper]
 {
@@ -420,7 +430,7 @@
 	}
 	[attack]
 	{
-		attack_range = 2;
+		attack_range = 0.5s;
 		damage_max = 10;
 		damage_min = 10;
 	}
@@ -437,8 +447,8 @@
 	/* // TODO - uncomment this when you have the googore_grub template ready
 	[dsx_krakbone_spawn_monitor]
 	{
-		meleeTemplate = ""; // place the googore grub template name here into the double quotes
-		rangedTemplate = ""; // place the googore grub template name here into the double quotes
+		meleeTemplate = googore_grub_weak; // place the googore grub template name here into the double quotes
+		rangedTemplate = googore_grub_weak; // place the googore grub template name here into the double quotes
 		summonRatio1to2 = 0.5;
 		maxTotalSummons = 4;
 		maxSummons = 2;
