@@ -1,0 +1,70 @@
+[t:template,n:ann_r04_book_1]
+{
+	category_name = "lorebook";
+	doc = "ann_r04_book_1";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Pumpkin Cookbook";
+	}
+	[gui]
+	{
+		lore_key = lore_crypt;
+	}
+}
+[t:template,n:ann_r04_book_2]
+{
+	category_name = "lorebook";
+	doc = "ann_r04_book_2";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Ghost Stories";
+	}
+	[gui]
+	{
+		lore_key = lore_dragon;
+	}
+}
+[t:template,n:ann_r04_book_3]
+{
+	category_name = "lorebook";
+	doc = "ann_r04_book_3";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Vampire Chronicles";
+	}
+	[gui]
+	{
+		lore_key = lore_droog;
+	}
+}
+[t:template,n:ann_r04_book_4]
+{
+	category_name = "lorebook";
+	doc = "ann_r04_book_4";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "The Witch's Guide";
+	}
+	[gui]
+	{
+		lore_key = lore_droog_2;
+	}
+}
+[t:template,n:ann_r04_book_5]
+{
+	category_name = "lorebook";
+	doc = "ann_r04_book_5";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "The Potion Brewer's Handbook";
+	}
+	[gui]
+	{
+		lore_key = lore_edvard_1;
+	}
+}

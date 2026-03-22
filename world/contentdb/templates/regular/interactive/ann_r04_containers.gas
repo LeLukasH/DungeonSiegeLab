@@ -1,0 +1,72 @@
+[t:template,n:ann_r04_crate_empty]
+{
+	specializes		= base_container_wood;
+	doc				= "ann_r04_crate_empty";
+	category_name	= "container";
+
+	aspect:model	= m_i_glb_crate;
+}
+
+[t:template,n:ann_r04_crate_broken]
+{
+	specializes			= non_interactive_nonblocking;
+	doc					= "ann_r04_crate_broken";
+	category_name		= "container";
+
+	[aspect]
+	{
+		model		= m_i_glb_crate-break;
+		[textures]	{0=b_i_glb_crate;}
+	}
+}
+
+[t:template,n:ann_r04_crate_spider]
+{
+	specializes		= base_container_wood;
+	doc				= "ann_r04_crate_spider";
+	category_name	= "container";
+
+	aspect:model	= m_i_glb_crate;
+
+	[generator_in_object]
+	{
+		child_template_name	= ann_r04_spider_small;
+	}
+}
+
+[t:template,n:ann_r04_crate_loot]
+{
+	specializes		= base_container_wood;
+	doc				= "ann_r04_crate_loot";
+	category_name	= "container";
+
+	aspect:model	= m_i_glb_crate;
+
+	[inventory]
+	{
+		[pcontent]
+		{
+			[all*]
+			{
+				[oneof*]
+				{
+          chance = 0.2;
+					il_main = #weapon/16-26;
+					il_main = #armor/20-30;
+				}
+				[oneof*]
+				{
+					chance = 0.3;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[gold*]
+				{
+					chance = 0.5;
+					max = 5;
+					min = 1;
+				}
+			}
+		}
+	}
+}
