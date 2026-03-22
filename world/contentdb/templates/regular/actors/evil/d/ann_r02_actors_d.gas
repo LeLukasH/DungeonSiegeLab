@@ -144,6 +144,16 @@
 		}
 	}
 	[water_effects] {}
+	[inventory]
+	{
+		[pcontent]
+		{
+			[all*]
+			{
+				il_main = ann_item_candy;
+			}
+		}
+	}
 }
 [t:template,n:ann_r02_snapper]
 {
