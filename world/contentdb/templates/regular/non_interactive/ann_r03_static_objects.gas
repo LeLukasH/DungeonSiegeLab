@@ -60,3 +60,22 @@
 		can_sell			= false; 
 	}
 }
+[t:template,n:ann_item_candy]
+{
+	specializes			= treasure;
+	doc					= "candy_sm_red"; 
+    category_name       = "treasure";
+
+	[aspect]
+	{
+		
+		model		= m_i_glb_jewel-01;
+		
+		textures:0	= b_i_glb_candy;
+		
+	} 
+
+	common:screen_name	= "Candy";
+
+	gui:inventory_icon	= b_gui_ig_i_it_candy;
+}

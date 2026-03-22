@@ -75,7 +75,7 @@ state Talk$
 		// ------------------------------------------------------------------
 		// LOGIKA PRE KRČMÁRA (Quest + Obchod)
 		// ------------------------------------------------------------------
-		if ( Victory.GetQuestOrder( "quest_main_story" ) >= 0 )
+		if ( Victory.GetQuestOrder( "quest_main_story" ) >= 1 )
 		{
 			// Ak hráč už quest prijal, ale ešte nebol v podzemí -> Otvorí obchod
 			m_Go$.GetConversation.RSSelectConversation( "shop_potions" );
