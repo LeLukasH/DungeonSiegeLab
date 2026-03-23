@@ -37,3 +37,51 @@
 		}
 	}
 }
+
+[t:template,n:ann_r04_candle_short_activate]
+{
+	category_name = "lighting";
+	doc = "ann_r04_candle_short_activate";
+	specializes = base_light;
+	[aspect]
+	{
+		model = m_i_glb_candle-01;
+	}
+
+  [generic_emitter_act]
+	{
+		other_effect = "candle_fire1";
+	}
+}
+
+[t:template,n:ann_r04_candle_tall_activate]
+{
+	category_name = "lighting";
+	doc = "ann_r04_candle_tall_activate";
+	specializes = base_light;
+	[aspect]
+	{
+		model = m_i_glb_candle-02;
+	}
+
+  [generic_emitter_act]
+	{
+		other_effect = "candle_fire1";
+	}
+}
+
+[t:template,n:ann_r04_candle_single_activate]
+{
+	category_name = "lighting";
+	doc = "ann_r04_candle_single_activate";
+	specializes = base_light;
+	[aspect]
+	{
+		model =  m_i_csl_candlestand-01;
+	}
+
+  [generic_emitter_act]
+	{
+		other_effect = "candle_fire1";
+	}
+}
