@@ -42,11 +42,14 @@
 {
 	[text*]
 	{
+		order = 0;
+		choice = more;
 		screen_text = "Long ago, there was a passage beneath this chapel that led down into the old tunnels. But in those depths, the priests discovered a terrible creature dwelling in the dark.";
 	  f scroll_rate = 20.000000;
 	}
 	[text*]
 	{
+		order = 1;
 		screen_text = "They sealed the entrance and blessed the stones above it. I only pray there is no other way down.";
 	  f scroll_rate = 20.000000;
 	}
