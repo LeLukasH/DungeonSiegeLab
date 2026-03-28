@@ -1,13 +1,3 @@
-[t:template,n:ann_ambient_item_base]
-{
-	category_name = "indoor";
-	doc = "ann Ambient Item Base";
-	specializes = treasure;
-	[aspect]
-	{
-		is_selectable = false;
-	}
-}
 [t:template,n:ann_ambient_minor_spider]
 {
 	category_name = "indoor";
