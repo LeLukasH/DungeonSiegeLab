@@ -1,70 +1,62 @@
 [t:template,n:ann_r04_spider_minor_base]
 {
-	category_name = "1W_evil_b";
-	doc = "ann_r04 giant_spider minor";
 	specializes = actor_evil;
 	[actor]
 	{
 		[skills]
 		{
-			strength =  40, 0;
-			intelligence =  6, 0;
-			dexterity =  35, 0;
-   			melee =  30,  0;
+			strength =  3, 0;
+			intelligence =  2, 0;
+			dexterity =  3, 0;
+			melee =  3, 0;
 		}
 	}
 	[aspect]
 	{
-		draw_shadow = false;
-		experience_value = 3500;
-		life = 617;
-		max_life = 617;
-		mana = 10;
-		max_mana = 10;
-		model = m_c_ebb_gs_pos_1;
-		scale_base = 0.4;
+		experience_value = 50;
+		life = 32;
+		max_life = 32;
+		mana = 4;
+		max_mana = 4;
+		model = m_c_edm_as_pos_1;
 		[voice]
 		{
-			[cast]			{ * = s_e_attack_giant_spider; }
-			[die]			{ priority = high; * = s_e_die_giant_spider; }
+			[die]			{ priority = high; * = s_e_die_spider; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_spider_SED; }
 		}
 	}
 	[attack]
 	{
-		attack_range = 1;
-		damage_max = 240;
-		damage_min = 225;
+		attack_range = 0.5;
+		damage_max = 17;
+		damage_min = 15;
 	}
 	[body]
 	{
-		avg_move_velocity = 3.9;
+		min_move_velocity = 1.85;
+		avg_move_velocity = 2.430000;
 		[bone_translator]
 		{
-			body_anterior = headbone;
+			body_anterior = bone01;
 			body_mid = bone01;
-			body_posterior = body3_abdomen;
+			body_posterior = bone01;
 			kill_bone = bone01;
-			shield_bone = rtmandible;
-			weapon_bone = ltmandible;
+			shield_bone = bone01;
+			weapon_bone = bone01;
 		}
 		[chore_dictionary]
 		{
-			chore_prefix = a_c_ebb_gs_fs;
+			chore_prefix = a_c_edm_as_fs;
 			[chore_attack]
 			{
 				chore_stances = 0;
 				skrit = select_attack;
 				[anim_files]
 				{
-					//00=at;
-					00=at-02;
+					00 = at;
+					01 = at-02;
+					02 = at-03;
 				}
-			}
-			[chore_magic]
-			{
-				chore_stances = 0;
-				skrit = select_attack;
-				[anim_files] { 00 = at; }
 			}
 			[chore_default]
 			{
@@ -76,18 +68,18 @@
 			{
 				chore_stances = 0;
 				skrit = select_transition;
-				[anim_files] { 00=di; }
+				[anim_files]
+				{
+					00 = di;
+					01 = di-02;
+					02 = di-03;
+				}
 			}
 			[chore_fidget]
 			{
 				chore_stances = 0;
 				skrit = select_fidget;
-				[anim_files]
-					{
-						00=dff;
-						00=dff-02;
-						00=dff-03;
-					}
+				[anim_files] { 00=dff; }
 			}
 			[chore_walk]
 			{
@@ -97,56 +89,33 @@
 			}
 		}
 	}
-	[common]
-	{
-		screen_name="Savage Spider Adolescent";
-		membership=monster;
-	}
-
-	[defend] { defense=360; }
-
+	[common] { screen_name="Dropper"; }
+	[defend] { defense=25; }
 	[mind]
 	{
-		actor_weapon_preference					= WP_MELEE;
-		actor_auto_switches_to_magic			= true;
+		jat_fidget						= world\ai\jobs\common\job_fidget.skrit
+			?social							= 0.45
+			&still							= false;
 
-		jat_die									= world\ai\jobs\actors\evil\job_die_explode.skrit;
-		jat_attack_object_melee					= world\ai\jobs\common\job_attack_object_melee.skrit
-			?hit_multiple						= true;
-
-		on_enemy_entered_icz_switch_to_melee	= true;
-		on_engaged_lost_consciousness_abort_attack = true;
-		movement_orders 						= mo_free;
-		melee_engage_range 						= 14.0;
-		personal_space_range 					= 1;
-		inner_comfort_zone_range 				= 14.0;
-		melee_engage_range 						= 14.0;
-		outer_comfort_zone_range				= 14.0; 
-		ranged_engage_range 					= 14.0;
-		sight_range 							= 14.0;
+		melee_engage_range = 14.0;
+		personal_space_range = 0.5;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
 	}
-
 	[physics]
 	{
-		bone_box_collision = true;
+		break_effect = spider_guts_pink;
+		break_sound = ;
+		explode_when_killed = true;
+		explosion_magnitude = 1.0;
 		gib_gore_good = true;
-	}
-}
-[t:template,n:ann_r04_spider_minor]
-{
-	category_name = "1W_evil_b";
-	doc = "ann_r04 giant_spider minor";
-	specializes = ann_r04_spider_minor_base;
-}
-[t:template,n:ann_r04_spider_minor_jump]
-{
-	category_name = "1W_evil_b";
-	doc = "ann_r04 giant_spider minor";
-	specializes = ann_r04_spider_minor_base;
-	[lyottia_revealing_actor]
-	{
-		activation_message = WE_REQ_ACTIVATE;
-		drop_sfx = "ann_effect_spider_minor_spawn";
-		spawn_delay = 1.5;
+		[break_particulate]
+		{
+			frag_glb_adolescent_spider_01 = 1;
+			frag_glb_adolescent_spider_02 = 1;
+			frag_glb_adolescent_spider_03 = 1;
+			frag_glb_adolescent_spider_04 = 2;
+			frag_glb_adolescent_spider_05 = 1;
+		}
 	}
 }
