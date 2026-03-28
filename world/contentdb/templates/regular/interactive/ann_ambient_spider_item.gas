@@ -1,0 +1,21 @@
+[t:template,n:ann_ambient_item_base]
+{
+	category_name = "indoor";
+	doc = "ann Ambient Item Base";
+	specializes = treasure;
+	[aspect]
+	{
+		is_selectable = false;
+	}
+}
+[t:template,n:ann_ambient_minor_spider]
+{
+	category_name = "indoor";
+	doc = "Ann Ambient Minor spider";
+	specializes = ann_ambient_item_base;
+	[aspect]
+	{
+		model = m_c_ebb_gs_pos_1;
+		scale_base = 0.4;
+	}
+}

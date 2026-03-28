@@ -1,0 +1,152 @@
+[t:template,n:ann_r04_spider_minor_base]
+{
+	category_name = "1W_evil_b";
+	doc = "ann_r04 giant_spider minor";
+	specializes = actor_evil;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  40, 0;
+			intelligence =  6, 0;
+			dexterity =  35, 0;
+   			melee =  30,  0;
+		}
+	}
+	[aspect]
+	{
+		draw_shadow = false;
+		experience_value = 3500;
+		life = 617;
+		max_life = 617;
+		mana = 10;
+		max_mana = 10;
+		model = m_c_ebb_gs_pos_1;
+		scale_base = 0.4;
+		[voice]
+		{
+			[cast]			{ * = s_e_attack_giant_spider; }
+			[die]			{ priority = high; * = s_e_die_giant_spider; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 1;
+		damage_max = 240;
+		damage_min = 225;
+	}
+	[body]
+	{
+		avg_move_velocity = 3.9;
+		[bone_translator]
+		{
+			body_anterior = headbone;
+			body_mid = bone01;
+			body_posterior = body3_abdomen;
+			kill_bone = bone01;
+			shield_bone = rtmandible;
+			weapon_bone = ltmandible;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ebb_gs_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+				{
+					//00=at;
+					00=at-02;
+				}
+			}
+			[chore_magic]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00 = at; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files]
+					{
+						00=dff;
+						00=dff-02;
+						00=dff-03;
+					}
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[common]
+	{
+		screen_name="Savage Spider Adolescent";
+		membership=monster;
+	}
+
+	[defend] { defense=360; }
+
+	[mind]
+	{
+		actor_weapon_preference					= WP_MELEE;
+		actor_auto_switches_to_magic			= true;
+
+		jat_die									= world\ai\jobs\actors\evil\job_die_explode.skrit;
+		jat_attack_object_melee					= world\ai\jobs\common\job_attack_object_melee.skrit
+			?hit_multiple						= true;
+
+		on_enemy_entered_icz_switch_to_melee	= true;
+		on_engaged_lost_consciousness_abort_attack = true;
+		movement_orders 						= mo_free;
+		melee_engage_range 						= 14.0;
+		personal_space_range 					= 1;
+		inner_comfort_zone_range 				= 14.0;
+		melee_engage_range 						= 14.0;
+		outer_comfort_zone_range				= 14.0; 
+		ranged_engage_range 					= 14.0;
+		sight_range 							= 14.0;
+	}
+
+	[physics]
+	{
+		bone_box_collision = true;
+		gib_gore_good = true;
+	}
+}
+[t:template,n:ann_r04_spider_minor]
+{
+	category_name = "1W_evil_b";
+	doc = "ann_r04 giant_spider minor";
+	specializes = ann_r04_spider_minor_base;
+}
+[t:template,n:ann_r04_spider_minor_jump]
+{
+	category_name = "1W_evil_b";
+	doc = "ann_r04 giant_spider minor";
+	specializes = ann_r04_spider_minor_base;
+	[lyottia_revealing_actor]
+	{
+		activation_message = WE_REQ_ACTIVATE;
+		drop_sfx = "ann_effect_spider_minor_spawn";
+		spawn_delay = 1.5;
+	}
+}
