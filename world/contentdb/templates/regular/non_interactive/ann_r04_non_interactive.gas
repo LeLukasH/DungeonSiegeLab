@@ -12,7 +12,7 @@
 		does_block_path = true;
 	}
 
-	[generator_object_pcontent]
+	[ann_generator_object_pcontent]
 	{
 		create_msg = WE_REQ_ACTIVATE;
 		one_shot = true;
@@ -33,6 +33,41 @@
         il_main	= ann_r04_book_3;
         il_main	= ann_r04_book_4;
         il_main	= ann_r04_book_5;
+			}
+		}
+	}
+}
+[t:template,n:ann_bookcase_bookworm]
+{
+  category_name = "indoor";
+	doc	= "ann_bookcase_shooting";
+	specializes	= prop;
+	[aspect]
+	{
+    is_selectable = false;
+		model = m_i_glb_bookcase-01;
+		lodfi_lower = -1;
+		lodfi_upper = -1;
+		does_block_path = true;
+	}
+
+	[ann_generator_object_pcontent]
+	{
+		create_msg = WE_REQ_ACTIVATE;
+		one_shot = true;
+	}
+	[common]
+	{
+		screen_name = "Bookcase";
+		rollover_display = true;
+	}
+  [inventory]
+	{
+		[delayed_pcontent]
+		{
+			[oneof*]
+			{
+        il_main	= ann_r04_bookworm_dropping_book;
 			}
 		}
 	}
