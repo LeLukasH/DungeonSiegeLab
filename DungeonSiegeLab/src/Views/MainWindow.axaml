@@ -1,0 +1,63 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DungeonSiegeLab.ViewModels"
+        xmlns:views="using:DungeonSiegeLab.Views"
+        x:Class="DungeonSiegeLab.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="DungeonSiegeLab"
+        Width="1200" Height="750"
+        MinWidth="900" MinHeight="600">
+
+    <Window.Styles>
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="16 8"/>
+        </Style>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#2a7adb"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="12 6"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="Button.secondary">
+            <Setter Property="Padding" Value="12 6"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+    </Window.Styles>
+
+    <DockPanel>
+
+        <!-- Header -->
+        <Border DockPanel.Dock="Top"
+                Background="#1e1e2e"
+                Padding="16 10">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="⚔" FontSize="22" VerticalAlignment="Center"/>
+                <TextBlock Text="DungeonSiegeLab"
+                           FontSize="18" FontWeight="Bold"
+                           Foreground="#cdd6f4"
+                           VerticalAlignment="Center"/>
+                <TextBlock Text="— Dungeon Siege Modding Tool"
+                           FontSize="13" Foreground="#6c7086"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main tabs -->
+        <TabControl SelectedIndex="{Binding SelectedTabIndex}">
+
+            <!-- Tab 1: Project Browser -->
+            <TabItem Header="📁  Project Browser">
+                <views:ProjectBrowserView DataContext="{Binding ProjectBrowser}"/>
+            </TabItem>
+
+            <!-- Tab 2: Texture Lab -->
+            <TabItem Header="🎨  Texture Lab">
+                <views:TextureLabView DataContext="{Binding TextureLab}"/>
+            </TabItem>
+
+        </TabControl>
+
+    </DockPanel>
+
+</Window>

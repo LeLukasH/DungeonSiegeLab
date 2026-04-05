@@ -1,0 +1,206 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DungeonSiegeLab.ViewModels"
+             x:Class="DungeonSiegeLab.Views.TextureLabView"
+             x:DataType="vm:TextureLabViewModel">
+
+    <DockPanel>
+
+        <!-- Toolbar -->
+        <Border DockPanel.Dock="Top"
+                Background="#181825"
+                Padding="10 8"
+                BorderBrush="#313244"
+                BorderThickness="0 0 0 1">
+            <WrapPanel Orientation="Horizontal">
+
+                <Button Content="← Späť do Project Browsera"
+                        Classes="secondary"
+                        Height="30"
+                        Margin="0 0 6 0"
+                        Command="{Binding GoBackCommand}"/>
+
+                <Separator Width="1" Height="24" Background="#45475a" Margin="0 0 10 0"/>
+
+                <Button Content="📂 Otvoriť textúru..."
+                        Classes="secondary"
+                        Height="30"
+                        Margin="0 0 6 0"
+                        Click="OnOpenTextureClicked"/>
+
+                <Separator Width="1" Height="24" Background="#45475a" Margin="0 0 10 0"/>
+
+                <!-- RawToPsd tool path -->
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBlock Text="RawToPsd:" VerticalAlignment="Center"
+                               Foreground="#6c7086" FontSize="12"/>
+                    <TextBox Text="{Binding RawToPsdToolPath}"
+                             Width="200" Height="28"
+                             Watermark="cesta k RawToPsd.exe"
+                             VerticalContentAlignment="Center"
+                             FontSize="12"/>
+                    <Button Content="..." Height="28" Width="32"
+                            Classes="secondary"
+                            Click="OnBrowseToolClicked"/>
+                </StackPanel>
+
+            </WrapPanel>
+        </Border>
+
+        <!-- Status bar -->
+        <Border DockPanel.Dock="Bottom"
+                Background="#11111b"
+                Padding="12 4"
+                BorderBrush="#313244"
+                BorderThickness="0 1 0 0">
+            <TextBlock Text="{Binding StatusMessage}"
+                       Foreground="#a6adc8" FontSize="12"/>
+        </Border>
+
+        <!-- Prázdny stav -->
+        <Panel IsVisible="{Binding OpenTabs.Count, Converter={x:Static ObjectConverters.IsNull}}">
+            <TextBlock Text="Kliknite 'Identify Textures' v Project Browseri,&#x0a;alebo otvorte textúru manuálne."
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="#6c7086"
+                       TextAlignment="Center"
+                       FontSize="15"/>
+        </Panel>
+
+        <!-- Záložky textúr -->
+        <TabControl ItemsSource="{Binding OpenTabs}"
+                    SelectedItem="{Binding SelectedTab}"
+                    IsVisible="{Binding OpenTabs.Count}">
+
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="vm:TextureTabViewModel">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <TextBlock Text="{Binding TextureName}" VerticalAlignment="Center"/>
+                        <Button Content="✕"
+                                Width="20" Height="20"
+                                Padding="0"
+                                FontSize="10"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                VerticalContentAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                Click="OnCloseTabClicked"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+
+            <TabControl.ContentTemplate>
+                <DataTemplate DataType="vm:TextureTabViewModel">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="4"/>
+                            <ColumnDefinition Width="220"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Náhľad textúry -->
+                        <Border Grid.Column="0"
+                                Background="#11111b"
+                                Margin="0">
+                            <Panel>
+                                <!-- Loading -->
+                                <StackPanel IsVisible="{Binding IsLoading}"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Spacing="10">
+                                    <ProgressBar IsIndeterminate="True" Width="200"/>
+                                    <TextBlock Text="Konvertujem textúru..."
+                                               HorizontalAlignment="Center"
+                                               Foreground="#6c7086"/>
+                                </StackPanel>
+
+                                <!-- Chyba -->
+                                <TextBlock IsVisible="{Binding ErrorMessage.Length}"
+                                           Text="{Binding ErrorMessage}"
+                                           Foreground="#f38ba8"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           Margin="20"/>
+
+                                <!-- Obrázok -->
+                                <ScrollViewer IsVisible="{Binding !IsLoading}"
+                                              HorizontalScrollBarVisibility="Auto"
+                                              VerticalScrollBarVisibility="Auto">
+                                    <Image Source="{Binding PreviewImage}"
+                                           Stretch="Uniform"
+                                           Margin="20"/>
+                                </ScrollViewer>
+                            </Panel>
+                        </Border>
+
+                        <!-- Splitter -->
+                        <GridSplitter Grid.Column="1" Background="#313244" ResizeDirection="Columns"/>
+
+                        <!-- Info panel -->
+                        <Border Grid.Column="2"
+                                Background="#1e1e2e"
+                                Padding="14"
+                                BorderBrush="#313244"
+                                BorderThickness="1 0 0 0">
+                            <StackPanel Spacing="14">
+
+                                <TextBlock Text="Informácie o textúre"
+                                           FontWeight="Bold"
+                                           Foreground="#cdd6f4"
+                                           FontSize="13"/>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Rozmery" Foreground="#6c7086" FontSize="11"/>
+                                    <TextBlock Text="{Binding Dimensions}"
+                                               FontFamily="Consolas,monospace"
+                                               Foreground="#cdd6f4"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Status" Foreground="#6c7086" FontSize="11"/>
+                                    <TextBlock Text="{Binding Status}"
+                                               Foreground="{Binding Status,
+                                                 Converter={StaticResource StatusToBrushConverter}}"/>
+                                </StackPanel>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Štandardné použitie" Foreground="#6c7086" FontSize="11"/>
+                                    <TextBlock Text="{Binding StandardUsage}"
+                                               Foreground="#a6e3a1"
+                                               TextWrapping="Wrap"
+                                               FontSize="12"/>
+                                </StackPanel>
+
+                                <Separator Background="#313244"/>
+
+                                <!-- Akcie -->
+                                <TextBlock Text="Akcie" Foreground="#6c7086" FontSize="11"/>
+
+                                <Button Content="💾 Save to project as..."
+                                        Classes="primary"
+                                        HorizontalAlignment="Stretch"
+                                        Click="OnSaveToProjectClicked"/>
+
+                                <Button Content="📤 Save to disk as..."
+                                        Classes="secondary"
+                                        HorizontalAlignment="Stretch"
+                                        Click="OnSaveToDiskClicked"/>
+
+                                <Button Content="📥 Import replacement"
+                                        Classes="secondary"
+                                        HorizontalAlignment="Stretch"
+                                        Click="OnImportReplacementClicked"/>
+
+                            </StackPanel>
+                        </Border>
+
+                    </Grid>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+
+        </TabControl>
+
+    </DockPanel>
+
+</UserControl>

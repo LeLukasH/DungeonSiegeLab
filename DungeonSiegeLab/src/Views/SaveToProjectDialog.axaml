@@ -1,0 +1,59 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DungeonSiegeLab.ViewModels"
+        x:Class="DungeonSiegeLab.Views.SaveToProjectDialog"
+        x:DataType="vm:SaveToProjectViewModel"
+        Title="Uložiť do projektu"
+        Width="480" Height="280"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        SystemDecorations="BorderOnly">
+
+    <Border Padding="24" Background="#1e1e2e">
+        <StackPanel Spacing="16">
+
+            <TextBlock Text="Uložiť textúru do projektu"
+                       FontSize="16" FontWeight="Bold"
+                       Foreground="#cdd6f4"/>
+
+            <!-- Relatívna cesta -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Relatívna cesta v /Bits:"
+                           Foreground="#a6adc8" FontSize="12"/>
+                <TextBox Text="{Binding RelativePath}"
+                         FontFamily="Consolas,monospace"/>
+            </StackPanel>
+
+            <!-- Meno súboru -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Meno textúry (bez prípony):"
+                           Foreground="#a6adc8" FontSize="12"/>
+                <TextBox Text="{Binding TextureName}"
+                         FontFamily="Consolas,monospace"/>
+            </StackPanel>
+
+            <!-- Status -->
+            <Border Background="#181825" CornerRadius="4" Padding="10 6">
+                <TextBlock Text="{Binding StatusMessage}"
+                           Foreground="{Binding IsStatusOk,
+                             Converter={StaticResource BoolToBrushConverter},
+                             ConverterParameter='#a6e3a1|#f38ba8'}"
+                           FontSize="12"
+                           TextWrapping="Wrap"/>
+            </Border>
+
+            <!-- Tlačidlá -->
+            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
+                <Button Content="Zrušiť"
+                        Classes="secondary"
+                        Command="{Binding CancelCommand}"/>
+                <Button Content="💾 Exportovať do projektu"
+                        Classes="primary"
+                        Command="{Binding ExportToProjectCommand}"
+                        IsEnabled="{Binding !IsSaving}"/>
+            </StackPanel>
+
+        </StackPanel>
+    </Border>
+
+</Window>

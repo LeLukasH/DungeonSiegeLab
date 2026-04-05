@@ -1,0 +1,148 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DungeonSiegeLab.ViewModels"
+             x:Class="DungeonSiegeLab.Views.ProjectBrowserView"
+             x:DataType="vm:ProjectBrowserViewModel">
+
+    <DockPanel>
+
+        <!-- Toolbar: načítanie priečinka + akcie -->
+        <Border DockPanel.Dock="Top"
+                Background="#181825"
+                Padding="10 8"
+                BorderBrush="#313244"
+                BorderThickness="0 0 0 1">
+            <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                <!-- Bits folder loader -->
+                <StackPanel Orientation="Horizontal" Spacing="6" Margin="0 0 16 0">
+                    <TextBlock Text="📂 /Bits:" VerticalAlignment="Center" Foreground="#a6adc8"/>
+                    <TextBox Text="{Binding BitsPath}"
+                             Width="300" Height="30"
+                             Watermark="Cesta k /Bits priečinku..."
+                             VerticalContentAlignment="Center"/>
+                    <Button Content="Prehľadávať..."
+                            Classes="secondary"
+                            Height="30"
+                            Click="OnBrowseClicked"/>
+                    <Button Content="Načítať"
+                            Classes="primary"
+                            Height="30"
+                            Command="{Binding LoadBitsFolderCommand}"
+                            CommandParameter="{Binding BitsPath}"/>
+                </StackPanel>
+
+                <!-- Separator -->
+                <Separator Width="1" Height="24" Background="#45475a" Margin="0 0 16 0"/>
+
+                <!-- Akčné tlačidlá -->
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <Button Content="🔍 Identify Textures"
+                            Classes="primary"
+                            Height="30"
+                            Command="{Binding IdentifyTexturesCommand}"
+                            ToolTip.Tip="Nájde všetky textúry v aktuálnom template a otvorí ich v Texture Lab"/>
+                    <Button Content="🔗 Identify Dependencies"
+                            Classes="secondary"
+                            Height="30"
+                            Command="{Binding IdentifyDependenciesCommand}"
+                            ToolTip.Tip="Nájde 'specializes' závislosti aktuálneho template"/>
+                </StackPanel>
+
+                <!-- Loading indicator -->
+                <ProgressBar IsIndeterminate="True"
+                             IsVisible="{Binding IsLoading}"
+                             Width="80" Height="4"
+                             Margin="16 0 0 0"
+                             VerticalAlignment="Center"/>
+            </WrapPanel>
+        </Border>
+
+        <!-- Status bar -->
+        <Border DockPanel.Dock="Bottom"
+                Background="#11111b"
+                Padding="12 4"
+                BorderBrush="#313244"
+                BorderThickness="0 1 0 0">
+            <TextBlock Text="{Binding StatusMessage}"
+                       Foreground="#a6adc8"
+                       FontSize="12"/>
+        </Border>
+
+        <!-- Hlavný obsah: strom | code viewer -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280" MinWidth="150"/>
+                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Strom súborov -->
+            <Border Grid.Column="0"
+                    Background="#1e1e2e"
+                    BorderBrush="#313244"
+                    BorderThickness="0 0 1 0">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="  Štruktúra projektu"
+                               Background="#181825"
+                               Padding="10 6"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="#6c7086"/>
+                    <ScrollViewer>
+                        <TreeView ItemsSource="{Binding RootNodes}"
+                                  SelectedItem="{Binding SelectedNode}"
+                                  Margin="4">
+                            <TreeView.ItemTemplate>
+                                <TreeDataTemplate DataType="vm:BitsNodeViewModel"
+                                                  ItemsSource="{Binding Children}">
+                                    <StackPanel Orientation="Horizontal" Spacing="5"
+                                                Margin="0 2">
+                                        <TextBlock Text="{Binding Icon}" FontSize="13"/>
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontSize="13"
+                                                   Foreground="{Binding IsTemplate,
+                                                     Converter={StaticResource BoolToBrushConverter},
+                                                     ConverterParameter='#cba6f7|#cdd6f4'}"/>
+                                    </StackPanel>
+                                </TreeDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+
+            <!-- Splitter -->
+            <GridSplitter Grid.Column="1"
+                          Background="#313244"
+                          ResizeDirection="Columns"/>
+
+            <!-- Code viewer -->
+            <Border Grid.Column="2" Background="#1e1e2e">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="  Zdrojový kód template"
+                               Background="#181825"
+                               Padding="10 6"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="#6c7086"/>
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                        <TextBox Text="{Binding SourceCode}"
+                                 IsReadOnly="True"
+                                 FontFamily="Cascadia Code,Consolas,monospace"
+                                 FontSize="13"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Padding="16"
+                                 TextWrapping="NoWrap"
+                                 AcceptsReturn="True"/>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+
+        </Grid>
+    </DockPanel>
+
+</UserControl>
