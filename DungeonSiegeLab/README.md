@@ -7,7 +7,7 @@ Postavená na **.NET 8 + Avalonia UI**.
 
 ## Požiadavky
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8)
+- [.NET SDK](https://aka.ms/dotnet/download)
 - (Voliteľné) `RawToPsd.exe` nástroj pre konverziu `.raw` → `.psd` textúr
 
 ---
@@ -93,7 +93,7 @@ src/
 
 ---
 
-## Závislostiach (NuGet)
+## Závislosti (NuGet)
 
 | Balíček | Verzia | Účel |
 |---|---|---|
