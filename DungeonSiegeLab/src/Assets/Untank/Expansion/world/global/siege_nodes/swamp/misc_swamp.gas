@@ -1,0 +1,90 @@
+
+[t:siege_nodes,n:*] {
+
+	[mesh_file*] { filename=t_swp_grs1toswp-04x04-a; guid=0xbd010001; }
+	[mesh_file*] { filename=t_swp_grs1toswp-04x04-b; guid=0xbd010002; }
+	[mesh_file*] { filename=t_swp_grs1toswp-08x04-a; guid=0xbd010003; }
+	[mesh_file*] { filename=t_swp_grs1toswp-04x04-c; guid=0xbd010004; }
+
+
+	
+	[mesh_file*] { filename=t_swp_h2o-mist-08x08-a; guid=0xbd030001; }
+	[mesh_file*] { filename=t_swp_h2o-mist-16x08-a; guid=0xbd030002; }
+	[mesh_file*] { filename=t_swp_h2o-mist-16x16-a; guid=0xbd030003; }
+	[mesh_file*] { filename=t_swp_h2o-mist-12x12-a; guid=0xbd030004; }
+
+
+	[mesh_file*] { filename=t_swp_brdwlk-broken-04x08-b; guid=0xbd040000; }
+	[mesh_file*] { filename=t_swp_brdwlk-broken-04x04-b; guid=0xbd040001; }
+	[mesh_file*] { filename=t_swp_brdwlk-broken-04x04-a; guid=0xbd040002; }
+	[mesh_file*] { filename=t_swp_brdwlk-broken-04x08-a; guid=0xbd040003; }
+	[mesh_file*] { filename=t_swp_brdwlk-dock-04x08-a; guid=0xbd040004; }
+	[mesh_file*] { filename=t_swp_brdwlk-04x08-a; guid=0xbd040005; }
+	[mesh_file*] { filename=t_swp_brdwlk-04x04-a; guid=0xbd040006; }
+	[mesh_file*] { filename=t_swp_brdwlk-4way-04x04-a; guid=0xbd040007; }
+	[mesh_file*] { filename=t_swp_brdwlk-3way-04x04-a; guid=0xbd040008; }
+	[mesh_file*] { filename=t_swp_brdwlk-2way-04x04-a; guid=0xbd040009; }
+	[mesh_file*] { filename=t_swp_brdwlk-dock-04x08-b; guid=0xbd040010; }
+
+	[mesh_file*] { filename=t_swp_chapel-1a; guid=0xbd050001; }
+	[mesh_file*] { filename=t_swp_chapel-1b; guid=0xbd050002; }
+
+	[mesh_file*] { filename=t_swp_grave-center; guid=0xbd050003; }
+	[mesh_file*] { filename=t_swp_grave-path; guid=0xbd050004; }
+	[mesh_file*] { filename=t_swp_grave-entrance; guid=0xbd050005; }
+	[mesh_file*] { filename=t_swp_grave-stones-03; guid=0xbd050006; }
+	[mesh_file*] { filename=t_swp_grave-stones-02; guid=0xbd050007; }
+	[mesh_file*] { filename=t_swp_grave-stones-01; guid=0xbd050008; }
+	[mesh_file*] { filename=t_swp_grave-wall-straight; guid=0xbd050009; }
+	[mesh_file*] { filename=t_swp_grave-wall-corner; guid=0xbd050010; }
+
+	[mesh_file*] { filename=t_swp_raft-dock; guid=0xbd050011; }
+	[mesh_file*] { filename=t_swp_raft; guid=0xbd050012; }
+	[mesh_file*] { filename=t_swp_shack-1a; guid=0xbd050013; }
+	[mesh_file*] { filename=t_swp_shack-1a-roof; guid=0xbd050014; }
+	[mesh_file*] { filename=t_swp_shack-1b; guid=0xbd050015; }
+	[mesh_file*] { filename=t_swp_shack-1b-roof; guid=0xbd050016; }
+	[mesh_file*] { filename=t_swp_shack-1c; guid=0xbd050017; }
+	[mesh_file*] { filename=t_swp_shack-1c-roof; guid=0xbd050018; }
+	[mesh_file*] { filename=t_swp_shack-1d; guid=0xbd050019; }
+	[mesh_file*] { filename=t_swp_shack-1d-roof; guid=0xbd050020; }
+
+	[mesh_file*] { filename=t_swp_brdwlk-break-flr; guid=0xbd050021; }
+	[mesh_file*] { filename=t_swp_brdwlk-break-a; guid=0xbd050022; }
+	[mesh_file*] { filename=t_swp_brdwlk-break-b; guid=0xbd050023; }
+
+	[mesh_file*] { filename=t_swp_h2o-32x32-a; guid=0xbd050024; }
+	[mesh_file*] { filename=t_swp_h2o-32x16-a; guid=0xbd050025; }
+	[mesh_file*] { filename=t_swp_h2o-16x16-a; guid=0xbd050026; }
+	[mesh_file*] { filename=t_swp_h2o-16x08-a; guid=0xbd050027; }
+
+	[mesh_file*] { filename=t_swp_shack-1d-water; guid=0xbd050028; }
+
+	[mesh_file*] { filename=t_swp_for-wal-cnr-concave-a; guid=0xbd050029; }
+	[mesh_file*] { filename=t_swp_for-wal-cnr-convex-a; guid=0xbd050030; }
+	[mesh_file*] { filename=t_swp_for-wal-straight-16-a; guid=0xbd050031; }
+	[mesh_file*] { filename=t_swp_for-wal-straight-08-a; guid=0xbd050032; }
+	[mesh_file*] { filename=t_swp_for-wal-straight-08-b; guid=0xbd050033; }
+	[mesh_file*] { filename=t_swp_for-wal-straight-04-a; guid=0xbd050034; }
+	[mesh_file*] { filename=t_swp_for-wal-diag-08-L; guid=0xbd050035; }
+	[mesh_file*] { filename=t_swp_for-wal-diag-08-R; guid=0xbd050036; }
+	[mesh_file*] { filename=t_swp_for-wal-diag-16-L; guid=0xbd050037; }
+	[mesh_file*] { filename=t_swp_for-wal-diag-16-R; guid=0xbd050038; }
+	[mesh_file*] { filename=t_swp_for-wal-tx-pine-L; guid=0xbd050039; }
+	[mesh_file*] { filename=t_swp_for-wal-tx-pine-R; guid=0xbd050040; }
+	
+	[mesh_file*] { filename=t_swp_flr-tx-pine-a; guid=0xbd050041; }
+	
+	[mesh_file*] { filename=t_swp_grave-path-cap; guid=0xbd050042; }
+
+	[mesh_file*] { filename=t_swp_brdwlk-h2o-04x08-a; guid=0xbd050043; }
+	[mesh_file*] { filename=t_swp_brdwlk-h2o-04x04-a; guid=0xbd050044; }
+
+	// These are new, and we have to always add to the end
+	[mesh_file*] { filename=t_swp_flr-tx-pine-b; guid=0xbd050045; }
+	[mesh_file*] { filename=t_swp_flr-tx-pine-c; guid=0xbd050046; }
+	[mesh_file*] { filename=t_swp_flr-tx-pine-d; guid=0xbd050047; }
+
+
+}
+

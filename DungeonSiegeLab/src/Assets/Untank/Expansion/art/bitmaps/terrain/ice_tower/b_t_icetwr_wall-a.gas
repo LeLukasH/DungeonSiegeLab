@@ -1,0 +1,6 @@
+[t:tsd,n:b_t_icetwr_wall-a]
+{
+  b hasalpha = false;
+	layer1texture1 = b_t_icetwr_wall-a;
+  i texturedetail = 2;
+}

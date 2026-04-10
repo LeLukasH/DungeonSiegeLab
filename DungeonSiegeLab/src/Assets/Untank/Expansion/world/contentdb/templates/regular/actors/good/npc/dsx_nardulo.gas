@@ -1,0 +1,130 @@
+[t:template,n:dsx_nardulo]
+{
+	category_name = "1W_character";
+	doc = "dsx_nardulo";
+	specializes = base_pm_fb;
+	[actor]
+	{
+		portrait_icon = b_gui_ig_i_ic_c_nardulo;
+		[skills]
+		{ 
+			strength 	= 1.25, 0, 10;
+			dexterity 	= 2.03, 0, 10;
+			intelligence 	= 5.13, 0, 10;
+			
+			ranged		= 3, 0, 0;
+			combat_magic	= 8, 0, 0;
+			uber		= 8.59, 0, 0;
+		}
+	}
+	[aspect]
+	{
+		model = m_c_gah_fb_pos_a1;
+		[textures]
+		{
+			0 = b_c_gan_utraean_skin_01;
+			1 = b_c_pos_a1_utraean-01;
+		}
+      [voice]
+	{
+	[die]		{ priority = high; * = s_v_nardulo_die; }
+//	[hit_critical]	{ priority = low; * = s_v_nardulo_hit_03_SED;  }
+//	[hit_glance]	{ priority = low; * = s_v_nardulo_hit_01_SED;  }
+//	[hit_solid]	{ priority = low; * = s_v_nardulo_hit_02_SED;  }
+}
+      [vo_voice]
+	{
+	  [select_char]
+	    { 
+	      priority = vo; 
+	      * = s_v_nardulo_select_01;
+	      * = s_v_nardulo_select_02;
+	      * = s_v_nardulo_select_03;
+	      * = s_v_nardulo_select_04;
+	      * = s_v_nardulo_select_05;
+	      * = s_v_nardulo_select_06;
+	      * = s_v_nardulo_select_07;
+	      * = s_v_nardulo_select_08;
+	      * = s_v_nardulo_select_09;
+	      * = s_v_nardulo_select_10;
+	      * = s_v_nardulo_select_11;
+	      * = s_v_nardulo_select_12;
+	      * = s_v_nardulo_select_13;
+	      * = s_v_nardulo_select_14;
+	      * = s_v_nardulo_select_15;
+	    }
+	  [order_move]
+	    {
+	      priority = vo; 
+	      * = s_v_nardulo_ack_01;
+	      * = s_v_nardulo_ack_02;
+	      * = s_v_nardulo_ack_03;
+	      * = s_v_nardulo_ack_04;
+	      * = s_v_nardulo_ack_05;
+	      * = s_v_nardulo_ack_06;
+	      * = s_v_nardulo_ack_07;
+	      * = s_v_nardulo_ack_08;
+	      * = s_v_nardulo_ack_09;
+	      * = s_v_nardulo_ack_10;
+	      * = s_v_nardulo_ack_11;
+	      * = s_v_nardulo_ack_12;
+	      * = s_v_nardulo_ack_13;
+	      * = s_v_nardulo_ack_14;
+	      * = s_v_nardulo_ack_15;
+	    }
+	  [order_attack]
+	    {
+	      priority = vo; 
+	      * = s_v_nardulo_attack_01;
+	      * = s_v_nardulo_attack_02;
+	      * = s_v_nardulo_attack_03;
+	      * = s_v_nardulo_attack_04;
+	      * = s_v_nardulo_attack_05;
+	      * = s_v_nardulo_attack_06;
+	      * = s_v_nardulo_attack_07;
+	      * = s_v_nardulo_attack_08;
+	      * = s_v_nardulo_attack_09;
+	      * = s_v_nardulo_attack_10;
+	      * = s_v_nardulo_attack_11;
+	      * = s_v_nardulo_attack_12;
+	      * = s_v_nardulo_attack_13;
+	      * = s_v_nardulo_attack_14;
+	      * = s_v_nardulo_attack_15;
+	    }
+	}
+    }
+	[common]
+	{
+		screen_name = "Nardulo";
+	}
+	
+	[conversation]{}
+	
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[equipment]
+		{
+			es_feet = #boots/-no_mod/10-20;
+			es_weapon_hand = #staff/10-20;
+			es_shield_hand = #bow/5-12;
+			es_chest = #body,m/30-40;
+			es_spellbook = #book_glb_magic_01/+oftheflame;
+		}
+		[other]
+		{
+			il_active_primary_spell = spell_firespray;
+			il_active_secondary_spell = spell_revive;
+			il_main = #cmagic/0-4;
+			il_main = #cmagic/3-5;
+			il_main = #cmagic/4-7;
+			il_main = #cmagic/5-8;			
+			il_main = #cmagic/7-9;			
+		}
+	}
+
+	[mind]
+	{
+        	jat_talk = world\ai\jobs\actors\good\job_talk_nardulo.skrit;
+	}	
+}

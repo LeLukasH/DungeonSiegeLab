@@ -1,0 +1,196 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: job_get.skrit
+
+	Author(s)	: Bartosz Kijanka
+
+	Purpose		: Get an item.
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+GoMind	m_Mind$;
+GoBody  m_Body$;
+Job		m_Job$;
+
+property	bool	auto_use$	= true		doc = "Try to use the object instead of just placing it in the inventory.";
+
+startup state Startup$
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.GetGo;
+	m_Mind$		= job$.GetGo.GetMind;
+	m_Body$		= job$.GetGo.GetBody;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+
+	SetState Approaching$;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	global events
+trigger OnWorldMessage$( WE_MCP_NODE_BLOCKED   ) 	{ SetState PathBlockedExiting$; }
+trigger OnWorldMessage$( WE_MCP_INVALIDATED   ) 	{ SetState Exiting$; 			}
+trigger OnWorldMessage$( WE_MCP_DEPENDANCY_BROKEN ) { SetState Exiting$; 			}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	
+state Approaching$
+{
+	transition
+	{
+		// This WAS waiting only for the warning, not for the actual section complete --biddle
+		->Getting$:	OnWorldMessage( WE_MCP_SECTION_COMPLETED );
+		// Check WE_ANIM_DONE for safety, if you finish playing an anim, you are NOT in a walk loop
+		->Getting$: OnWorldMessage( WE_ANIM_DONE );
+	}
+	
+	event OnEnterState$
+	{	
+		bool bTestSilent$;
+		if ( m_Job$.Origin == AO_REFLEX )
+		{
+			bTestSilent$ = true;
+		}
+		else
+		{
+			bTestSilent$ = false;
+		}
+	
+		if ( m_Go$.Inventory.GetForceGet() || m_Go$.Inventory.TestGet( m_Job$.GoalObject, bTestSilent$ ) )
+		{
+			float RangeToTarget$ = m_Go$.mind.PersonalSpaceRange;
+
+			// I would use the 'use range' here but it bails out WAAAY too soon --biddle
+
+			RangeToTarget$ += m_Job$.GoalObject.go.HasMind() ? m_Job$.GoalObject.go.mind.PersonalSpaceRange : m_Job$.GoalObject.go.aspect.BoundingSphereRadius;
+
+			eReqRetCode ret$ = MCPManager.MakeRequest(	m_Go$.Goid,
+														PL_APPROACH,
+														m_Job$.GoalObject,
+														0,			   	// no lookahead	
+														15,			   	// 15 seconds max travel time
+														RangeToTarget$ );
+
+			report.ReportF(	"aimove","[%s] GET (PL_APPROACH) [%s] returned [%s]\n",
+							m_Go$.TemplateName,
+							m_Job$.GoalObject.GetGo.TemplateName,//	 MakeSiegePosString(m_Job$.GoalPosition),
+							ToString(ret$) );
+
+			if( RequestFailed(ret$) )
+			{
+				Report.Genericf(	"[%s] GET - FAILED could not get to target [%s]. Aborting job.\n",
+									m_Go$.TemplateName, m_Job$.GoalObject.GetGo.TemplateName);
+				SetState( Exiting$ );
+			}
+			else if (ret$ == REQUEST_OK_IN_RANGE)
+			{
+				SetState( Getting$ );
+			}
+			else if ( (ret$ == REQUEST_OK) || (ret$ == REQUEST_OK_CROWDED) )
+			{
+				// just stay in this state we are going to make it to our goal in this move.
+			}
+			else // anything else we just want to try to get closer.
+			{
+				SetState( MovingCloser$ );
+			}
+		}
+		else
+		{
+			SetState Exiting$;
+		}		
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	
+state MovingCloser$
+{
+	transition
+	{
+		// For some reason we could not reach the target in one move request, will need to 
+		// approach again when we finish
+		-> Approaching$: 	OnWorldMessage( WE_MCP_SECTION_COMPLETED );
+		-> Approaching$: 	OnWorldMessage( WE_ANIM_DONE );
+
+		// Don't send a new request on a warning
+		//-> Approaching$: 	OnWorldMessage( WE_MCP_SECTION_COMPLETE_WARNING );
+		-> Approaching$: 	OnWorldMessage( WE_MCP_SECTION_COMPLETED );
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//	
+state Getting$
+{
+	event OnEnterState$
+	{
+		if( auto_use$ )
+		{
+			// use the item
+			m_Go$.Inventory.SAutoGet( m_Job$.GoalObject, m_Job$.Origin );
+		}
+		else
+		{
+			// get the item 
+			if (m_Job$.GoalObject.Go != NULL)
+			{
+				if( !m_Job$.GoalObject.Go.IsInsideInventory() )
+				{
+					if (!m_Go$.Inventory.Contains(m_Job$.GoalObject.Go) )
+					{
+						m_Go$.Inventory.RSAdd( m_Job$.GoalObject.Go, il_main, m_Job$.Origin, false);
+					}
+				}
+			}
+		}
+		SetState Exiting$;
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	
+state PathBlockedExiting$
+{
+	event OnEnterState$
+	{
+		report.reportf("aiskrit","%s:EXIT ATTACK, PATH BLOCKED!\n",m_Go$.TemplateName);
+		m_Job$.MarkForDeletion(JR_FAILED_NO_PATH);
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+state Exiting$
+{
+	event OnEnterState$
+	{
+		m_Job$.MarkForDeletion();
+	}
+}

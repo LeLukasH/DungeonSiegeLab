@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_chest_earth-dynamic]
+{
+	layer1texture1 = b_i_glb_chest_earth-dynamic;
+  i texturedetail = 1;
+}

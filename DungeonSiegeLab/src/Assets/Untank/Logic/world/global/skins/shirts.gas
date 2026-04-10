@@ -1,0 +1,38 @@
+[shirts]
+{
+	[common]
+	{
+        * = b_c_pos_a1_shrt_004;
+        * = b_c_pos_a1_shrt_005;
+		* = b_c_pos_a1_shrt_008;
+		* = b_c_pos_a1_shrt_009;
+		* = b_c_pos_a1_shrt_010;
+		* = b_c_pos_a1_shrt_011;
+       	* = b_c_pos_a1_shrt_013;
+		* = b_c_pos_a1_shrt_014;
+		* = b_c_pos_a1_shrt_017;
+		* = b_c_pos_a1_shrt_018;
+	}
+
+	[farmboy]
+	{
+		* = include_common;
+	}
+
+	[farmgirl]
+	{
+		* = include_common;	
+	}
+
+	[dwarf]
+	{
+		* = include_common;
+		* = b_c_pos_a1_shrt_012;
+	}
+
+	[skeleton_good]
+	{
+ 	}
+
+}
+

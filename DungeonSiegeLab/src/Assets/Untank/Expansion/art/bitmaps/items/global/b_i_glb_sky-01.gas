@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_sky-01]
+{
+	layer1texture1 = b_i_glb_sky-01;
+  i texturedetail = 0;
+}

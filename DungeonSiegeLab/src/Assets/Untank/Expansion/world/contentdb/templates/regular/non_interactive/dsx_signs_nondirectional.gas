@@ -1,0 +1,153 @@
+[t:template,n:statue_csl_69]
+{
+	category_name = "statue";
+	doc = "DSX hub_globe_marble";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_csl_statue-01;
+	}
+}
+[t:template,n:dsx_sign_glb_coldstorage]
+{
+	doc = "beware";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-wesrins-cross;
+	textures:0 = b_i_glb_sign-cold_storage;
+	}
+	[common]
+	{
+		screen_name = "Cold Storage";
+	}
+}
+[t:template,n:dsx_utraean_obj_01]
+{
+	category_name = "sign";
+	doc = "dsx_utraean_obj_01";
+	specializes = base_sign_nondirectional;
+	[aspect] { model=m_i_glb_utraean_obj; }
+	[common]
+	{
+		screen_name = "Utraean Displacer";
+	}
+
+}
+[t:template,n:dsx_sign_arhok_blacksmith]
+{
+	doc = "dsx_arhok_blacksmith";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-barn-01;
+		[textures]
+		{
+			0 = b_i_glb_sign-arhok_blacksmith;
+		}
+	}
+	[common]
+	{
+		screen_name = "Lharnob's Smithy";
+	}
+}
+[t:template,n:dsx_sign_arhok_mage]
+{
+	doc = "dsx_sign_arhok_mage";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-magicshop-01;
+		[textures]
+		{
+			0 = b_i_glb_sign-arhok_magicshop;
+		}
+	}
+	[common]
+	{
+		screen_name = "Arhok Mages' Guild";
+	}
+}
+[t:template,n:dsx_sign_arhok]
+{
+	doc = "dsx_sign_arhok";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_ice_sign-glacern;
+		[textures]
+		{
+			0 = b_i_glb_sign-arhok_gate;
+		}
+	}
+	[common]
+	{
+		screen_name = "Arhok";
+	}
+}
+
+[t:template,n:dsx_diagram-01]
+{
+	category_name = "sign";
+	doc = "dsx_lostqueen_diagram-01";
+	specializes = base_sign_nondirectional;
+	[aspect] 
+	{ 
+		model=m_i_glb_diagram-01;
+		scale_base = 2.0;
+  	}
+	[common]
+	{
+		screen_name = "Anatomy Diagram";
+	}
+}
+
+[t:template,n:dsx_diagram-02]
+{
+	category_name = "sign";
+	doc = "dsx_lostqueen_diagram-02";
+	specializes = base_sign_nondirectional;
+	[aspect] 
+	{ 
+		model=m_i_glb_diagram-02;
+		scale_base = 2.0;
+	}
+	[common]
+	{
+		screen_name = "Anatomy Diagram";
+	}
+}
+
+[t:template,n:dsx_diagram-03]
+{
+	category_name = "sign";
+	doc = "dsx_lostqueen_diagram-03";
+	specializes = base_sign_nondirectional;
+	[aspect] 
+	{ 
+		model=m_i_glb_diagram-03;
+		scale_base = 2.0;
+ 	}
+	[common]
+	{
+		screen_name = "The Known Elements";
+	}
+}
+
+[t:template,n:dsx_sign_neener_store]
+{
+	doc = "dsx_neener_store";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-neener;
+		[textures]
+		{
+			0 = b_i_glb_sign-neener;
+		}
+	}
+	[common]
+	{
+		screen_name = "Neener's Emporium";
+	}
+}

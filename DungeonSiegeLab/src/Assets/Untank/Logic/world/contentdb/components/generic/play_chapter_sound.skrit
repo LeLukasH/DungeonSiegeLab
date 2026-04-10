@@ -1,0 +1,35 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  play_chapter_sound.skrit
+// Author(s):  Chad Queen
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool			_server_only$			= true;
+property string			_doc$					= "Simple way to play a single 2D sound";
+
+owner = GoSkritComponent;
+
+// external properties
+property string			sample$;
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		#only( game )
+		[[
+			UIMenuManager.SPlayChapterSound( sample$, MakeGoid( msg$.Data1 ) );	
+		]]		
+	}
+}

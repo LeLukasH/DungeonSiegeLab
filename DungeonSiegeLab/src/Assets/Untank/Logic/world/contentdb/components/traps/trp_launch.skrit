@@ -1,0 +1,103 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  trp_launch.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property bool _server_only$ = true;
+
+property string	effect_script$		= ""	doc = "Effect script to call for effect";
+property float	max_range$			= 15.0	doc = "maxiumum range for the fireball trap";
+property float  velocity$			= 14.0	doc = "velocity of the projectile";
+
+owner = GoSkritComponent;
+
+float damage$;
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		damage$ = msg$.GetData1() / 1000.0;
+		
+		This.CreateTimer(1, .33);
+		This.SetTimerGlobal(1, true);	
+	}	
+}		
+		
+Trigger OnTimer$( 1 )
+{ 		
+	owner.Go.Attack.DamageMinNatural = damage$;
+	owner.Go.Attack.DamageMaxNatural = damage$;
+		
+	AIQuery.TempGopColl1.Clear;
+	AIQuery.TempGopColl2.Clear;
+	AIQuery.GetOccupantsInSphere( owner.Go.Placement.Position, max_range$, AIQuery.TempGopColl1 );
+	
+	AIQuery.TempQtColl1.Clear;
+	AIQuery.TempQtColl1.Add( QT_ACTOR );
+	AIQuery.TempQtColl1.Add( QT_ALIVE );
+	AIQuery.TempQtColl1.Add( QT_GOOD );
+
+	AIQuery.Get( owner.Go, AIQuery.TempQtColl1, AIQuery.TempGopColl1, AIQuery.TempGopColl2 );
+	
+	int i$ = 0;
+	int iend$ = AIQuery.TempGopColl2.Size();
+	Go temp_target$;
+	Goid Target$;
+	float current_range$ = max_range$;
+	
+	while( i$ < iend$ )
+	{
+		temp_target$ = AIQuery.TempGopColl2.Get( i$ );
+	
+		if( temp_target$ != NULL )
+		{
+			float temp_dist$ = AIQuery.GetDistance( temp_target$.Placement.Position, owner.Go.Placement.Position );
+			if( temp_dist$ < current_range$ )
+			{
+				Target$ = temp_target$.Goid;
+				current_range$ = temp_dist$;
+			}
+		}	
+		i$ += 1;
+	}
+	
+	if( Target$ != NULL )
+	{
+		if ( Target$.Go.HasAspect )
+		{
+			Goid ammo$ = owner.Go.Attack.SPrepareAmmo;
+
+			int target_pos$ = SiegeFx.AddVariable( owner.Go.Attack.ComputeTargetPos( Target$ ), ammo$ );
+			
+			SiegePos initial_pos$ = owner.Go.Attack.ComputeFiringPos;
+			int firing_pos$ = SiegeFx.AddVariable( initial_pos$, ammo$ );
+			
+			if( owner.Go.Attack.IsInProjectileRange( velocity$, SiegeFx.GetVariable( target_pos$, ammo$ ) ) )
+			{
+				owner.Go.Attack.ComputeAimingError;
+				float x_error$ = owner.Go.Attack.GetAimingErrorX;
+				float y_error$ = owner.Go.Attack.GetAimingErrorY;
+							
+				float aiming_angle$ = owner.Go.Attack.ComputeAimingAngle( SiegeFx.GetVariable( firing_pos$, ammo$ ), SiegeFx.GetVariable( target_pos$, ammo$ ), velocity$ );
+				owner.Go.Attack.SLaunchAmmo( velocity$, SiegeFx.GetVariable( firing_pos$, ammo$ ), SiegeFx.GetVariable( target_pos$, ammo$ ), x_error$, y_error$, goid.invalidgoid );
+				owner.Go.Attack.AlertRangedAttack( Target$ );
+			}
+			else
+			{
+				report.generic("Out of range for trp_launch.skrit\n");
+				owner.Go.Attack.SUnprepareAmmo;
+			}
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////

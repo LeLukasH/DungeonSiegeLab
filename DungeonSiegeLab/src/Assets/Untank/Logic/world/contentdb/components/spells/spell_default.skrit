@@ -1,0 +1,26 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_default.skrit
+// Author(s):  Rick Saenz
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+// This skrit waits for a world message to be sent from a SiegeFx Script and 
+// causes the spell to be deleted when it does
+
+
+property float timeout$ =	15.0		doc = "Number of seconds to wait before destroying the spell go";
+
+owner = GoSkritComponent;
+
+trigger OnGoHandleMessage$( WE_SPELL_SYNC_END )
+{
+	// Need to wait a little bit before deleting this spell for communication reasons
+	// dealing with transference of ownership for explosion experience from propagation
+	// by way of chain reaction
+	PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, timeout$ );
+}

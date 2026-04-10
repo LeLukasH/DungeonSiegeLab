@@ -1,0 +1,120 @@
+[t:template,n:2W_dsx_spiked_dweller]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_spiked_dweller";
+	specializes = base_maw;
+	material = flesh;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength = 		29.8, 0;
+			intelligence = 	9.4, 0;
+			dexterity = 	15.3, 0;
+			melee =         48, 0;
+			nature_magic =	49, 0;
+			combat_magic =  49, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 45344;
+		life 			= 974.7;
+		max_life 		= 974.7;
+		mana 			= 1479;
+		max_mana 		= 1479;
+		[voice]
+		{
+			[cast]		{	* = s_e_attack_spiker_SED;	}
+			[die]			{ priority = high; * = s_e_die_spiked_maw; }
+			[hit_critical]	{ priority = low; * = s_e_hit_spiked_maw_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_spiked_maw_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_spiked_maw_SED; }
+		}
+		
+
+		textures:0 = b_c_edm_sm-03;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 374;
+		damage_min = 229.5;
+		damage_bonus_min_cmagic = 231;
+		damage_bonus_max_cmagic = 359;
+	}
+	[common]
+	{
+		screen_name="Jungle Spiker";
+		membership = monster, party_spiked_dweller;
+	}
+	[defend] { defense=525.1; }
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=dsx_spell_spiked_dweller_spikes; }
+	}
+	[mind]
+	{
+		jat_brain						= world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party	= true
+			&actor_creates_own_party	= true
+			&party_template				= "party_spiked_dweller";
+	}
+	[physics]
+	{
+		explode_when_killed = true;
+		break_effect = blood_mist;
+		[break_particulate]
+		{
+			frag_glb_spiked_dweller_01 = 1;
+			frag_glb_spiked_dweller_02 = 1;
+			frag_glb_spiked_dweller_03 = 1;
+			frag_glb_spiked_dweller_04 = 6;
+			frag_glb_spiked_dweller_05 = 8;
+		}
+	}
+}
+
+[t:template,n:2W_dsx_spiker]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_spiker";
+	specializes = base_maw;
+	[actor]
+	{
+		[skills]
+		{
+			strength = 		38.8, 0;
+			intelligence = 	9.6, 0;
+			dexterity = 	16.8, 0;
+			melee =         48, 0;
+			nature_magic =	50, 0;
+			combat_magic =  50, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 48048;
+		life = 7396;
+		max_life = 7396;
+		mana = 11223;
+		max_mana = 11223;
+		textures:0 = b_c_edm_sm-03;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 1702.8;
+		damage_min = 1161;
+		reload_delay = 0;
+	}
+	[common] { screen_name="Jungle Spiker"; }
+	[defend] { defense = 3081.7; }
+	[physics]
+	{
+		break_effect = mine_worm_die_dust;
+	}
+}
+

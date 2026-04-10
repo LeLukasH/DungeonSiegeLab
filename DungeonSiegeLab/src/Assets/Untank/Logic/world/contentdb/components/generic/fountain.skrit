@@ -1,0 +1,163 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  fountain.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+//	Used for healing/mana fountains.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string 			effect_script$		= "health_fountain_charge"	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string 			effect_params$		= ""   						doc = "Parameters to send to SiegeFx script";
+                                                                	
+property string 			repeat_script$		= "health_fountain"			doc = "Name of the SiegeFx script that will be providing the visual.";
+property float  			repeat_freq$		= 1.0						doc = "how often to repeat the visual";
+                                                                	
+property eWorldEvent 		use_msg$			= WE_REQ_USE				doc = "message to send when empty";
+property bool  				use_data1$			= false						doc = "User data1 of message instead of the sender.";
+
+property float  			heal_freq$			= 2.0						doc = "how often to heal";
+                                                                	
+property bool  				heal_life$			= true						doc = "heal life if true, heal mana if false";
+property float  			heal_amount$		= 10.0						doc = "ammount per heal";
+                                                                	
+property float  			health_left$		= 50.0						doc = "how much to heal total";
+property float  			health_regen$		= 5.0						doc = "how much fountain regenerates per second";
+
+property float  			empty$				= -1.0						doc = "If the fountain has less health then this it is empty, and won't refil.";
+
+property scid 				msg_scid$ 										doc = "Scid to send message to when empty";
+property eWorldEvent 		msg_type$			= WE_REQ_ACTIVATE			doc = "message to send when empty";
+
+owner = GoSkritComponent;
+
+Goid			target$;
+float			health_remaining$;
+
+startup state Begin$ {
+ 	trigger OnGoHandleMessage$( WE_CONSTRUCTED ) {
+		health_remaining$ = health_left$;
+		if( repeat_freq$ > 0.0 )
+		{
+			this.CreateTimer(2,repeat_freq$);
+			this.SetTimerGlobal( 2, true );
+			this.SetTimerRepeatCount( 2, -1 );
+		}
+		SetState Wait$;
+	}
+}
+
+trigger OnTimer$( 2 )
+{
+	if( owner.go.placement.IsInVisibleNode )
+	{
+		string params$ = "[flamesize(";
+		float size$ = 2 * health_remaining$ / health_left$;
+		StringTool.AppendF(params$,"%g)]",size$);
+		SiegeFx.SRunScript( repeat_script$, owner.Goid, owner.Goid, params$, owner.Goid, WE_CONSTRUCTED );
+	}
+}
+
+state Wait$ 
+{	
+	event OnGoUpdate$( float delta_t$ )
+	{
+		// report.genericf("Health Left: %g\n", health_remaining$ );
+		health_remaining$ = Math.MinFloat( health_left$, health_remaining$ + ( health_regen$ * delta_t$ ) );
+	}
+	
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ ) 
+	{
+		if( e$ == use_msg$ ) 
+		{
+			if( use_data1$ )
+			{
+				target$ = MakeGoid( msg$.Data1 );
+			} else {
+				target$ = msg$.GetSendFrom();
+			}
+			SetState Heal$;
+		}
+	}
+	
+	event OnEnterState$
+	{
+		if ( health_remaining$ <= empty$ ) 
+		{
+			SetState Finish$;
+		}
+	}		
+}
+
+state Heal$
+{	
+	trigger OnTimer$( 1 ) {
+		Owner.Go.Aspect.SSetIsSelectable( true );
+		Owner.Go.Aspect.SSetIsUsable( true );
+		SetState Wait$;
+	}	
+	
+	event OnEnterState$
+	{	
+		
+		if(!target$.IsValid) {
+			SetState Wait$;
+			return;
+		} else if (target$.go.HasAspect()) {
+			
+			Owner.Go.Aspect.SSetIsSelectable( false );
+			Owner.Go.Aspect.SSetIsUsable( false );
+			
+			// Start the visual effect
+			
+			if ( effect_script$ != "" )
+			{
+				SiegeFx.SRunScript( effect_script$, target$, owner.Goid, effect_params$, owner.Goid, WE_REQ_USE );
+			}
+		
+			if ( !target$.Go.IsGhost() )
+			{
+				float amount_to_heal$ = Math.MinFloat( heal_amount$, health_remaining$);
+				if(heal_life$) {
+					amount_to_heal$ = Math.MinFloat( amount_to_heal$, target$.Go.Aspect.MaxLife - target$.Go.Aspect.CurrentLife);
+					Rules.ChangeLife( target$, amount_to_heal$ );
+			 	} else {
+			 		amount_to_heal$ = Math.MinFloat( amount_to_heal$, target$.Go.Aspect.MaxMana - target$.Go.Aspect.CurrentMana);
+					Rules.ChangeMana( target$, amount_to_heal$ );
+			 	}
+			 	health_remaining$ -= amount_to_heal$;
+			}
+		} else {
+			SetState Wait$;
+			return;
+		}
+		if( heal_freq$ < 0.0 )
+		{
+			SetState Wait$;
+			return;
+		} else {
+			this.CreateTimer( 1, heal_freq$ );
+		}
+	}
+}
+
+state Finish$
+{
+	event OnEnterState$
+	{
+		this.DestroyTimer( 2 );
+		
+		Owner.Go.Aspect.SSetIsSelectable( false );
+		Owner.Go.Aspect.SSetIsUsable( false );
+		
+		if ( msg_scid$.isvalid() )
+		{
+			SendWorldMessage( msg_type$, owner.Goid, msg_scid$ );
+		}
+	}
+}

@@ -1,0 +1,71 @@
+[t:interface,n:debug]
+{
+	intended_resolution_height = 480;
+	intended_resolution_width = 640;
+	[t:text,n:error_number]
+	{
+	  f alpha = 1.000000;
+		bottom_anchor = 100;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000000;
+	  x font_color = 0xFFFF0000;
+	  x font_size = 0xCDCDCDCD;
+		font_type = b_gui_fnt_30p-numbers;
+		is_bottom_anchor = true;
+		is_right_anchor = true;
+		justify = left;
+		rect = 550,380,640,410;
+		right_anchor = 90;
+		text = "000";
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oncreated = setvisible(false);
+			onlbuttondown = setvisible(false);
+		}
+	}
+	[t:text,n:text_polycount]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+	  x font_color = 0xFFFF0000;
+	  x font_size = 0x00000000;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = left;
+		rect = 152,22,496,54;
+		text = "Exceeding LOD Polycount:";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:warning_number]
+	{
+	  f alpha = 1.000000;
+		bottom_anchor = 70;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000001;
+	  x font_color = 0xFFFFFF00;
+	  x font_size = 0xCDCDCDCD;
+		font_type = b_gui_fnt_30p-numbers;
+		is_bottom_anchor = true;
+		is_right_anchor = true;
+		justify = left;
+		rect = 550,410,640,440;
+		right_anchor = 90;
+		text = "000";
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oncreated = setvisible(false);
+			onlbuttondown = setvisible(false);
+		}
+	}
+}

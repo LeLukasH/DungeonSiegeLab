@@ -1,0 +1,178 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  dsx_hold_manager.skrit
+// Author(s):  Eric Tams, Tara Teich
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+//	This is sneaky... dont try this at home kids.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+owner = GoSkritComponent;
+
+property string state_name$	= "Frozen"	doc = "Name of the state";
+property string description$	= "Petrified"	doc = "Screen name of the state";
+
+//string effect_script$ = "petrify_weapon_shot";
+string explode_script$ = "block_of_stone_explosion";
+string return_script$ = "block_of_stone_return";
+string freeze_texture$ = "b_i_glb_block_of_stone";	
+
+// texture of guy before putting stone look on
+string original_texture$;
+SFxSID m_effectID$ = 0;
+
+startup state Main$
+{ 	
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_ACTIVATE )
+		{			
+			Goid attacked$ = msg$.GetSendFrom();
+			
+			// need to unpack a freeze durration here
+			float freeze_time$ = msg$.GetData1() / 1000.0;
+			
+			if( attacked$.IsValidMp() )
+			{
+				if( ( freeze_time$ > 0.0 ) && attacked$.Go.HasActor && ( attacked$.Go.Player.Controller != PC_HUMAN ) )
+				{
+					if( AIQuery.Is( attacked$.Go, attacked$.Go, QT_ALIVE_CONSCIOUS ) )
+					{
+						if( !attacked$.Go.Actor.HasGenericState( state_name$ ) )
+						{
+							int timer$ = MakeInt( attacked$ );
+							This.CreateTimer( timer$, freeze_time$);
+							This.SetTimerGlobal ( timer$, true );
+							GoDb.StartWatching( owner.Goid, attacked$);
+							
+							// Add the effected state so this can only happen once
+							attacked$.Go.Actor.SAddGenericState( state_name$, description$, freeze_time$, owner.goid, owner.goid, 0 );			
+							
+							//Scale it based on the size of the target.
+							float targetObjectRadius$ = attacked$.Go.GetAspect.GetBoundingSphereRadius();
+				
+							string params$ = "";
+							StringTool.AppendF(params$, "[%g][%g]", freeze_time$, targetObjectRadius$);
+				
+							// Start the visual
+							// MRC 8/5/2003 Make the target the owner of the effect.
+							//m_effectID$ = SiegeFx.SRunMPScript( effect_script$, attacked$, attacked$, params$, attacked$, e$ );
+
+							//Freeze the target as is.
+							attacked$.Go.Aspect.SSetLockMeshFlag(true);
+
+							// MRC 9/19/2003 Stopping the target from receiving any more move
+							// commands.  I believe the party sometimes give movement commands even 
+							// when the brain is shut off for the target.
+							attacked$.Go.Mind.SetAllowNewMovementJobs( false );
+							
+							//Get the current texture of this m_target.  We'll need to
+							//reset it later.
+							original_texture$ = StringTool.GetFileNameOnly(attacked$.Go.Aspect.GetCurrentAspectTexture(0));
+							//And set it to the new texture for the m_target.
+							attacked$.Go.Aspect.SSetCurrentAspectTexture(0, freeze_texture$);
+							
+							//turn off brain so he wont try to attack any more.
+							MCPManager.MakeRequest( attacked$, PL_FACE );
+							attacked$.Go.Mind.Clear();
+							MCPManager.Flush( attacked$ );
+						}
+					} else {
+//						report.generic("not alive, so blow him up!!\n");
+						
+						// MRC 8/5/2003 Make the target the owner of the effect.
+						SiegeFx.SRunMPScript( explode_script$, attacked$, attacked$, "", attacked$, e$ );
+			
+						// MRC 7/7/2003 BUG 1556 Don't mark the frozen object for deletion... it will drop
+						// spellbooks and do other bad things.  Just make it invisible.
+						attacked$.go.Aspect.SSetIsVisible(false);
+					}
+				}
+			}
+		} 
+	}
+	
+	event OnGoHandleCCMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{	
+		goid frozen_guy$ = msg$.GetSendTo();
+		
+		if( e$ == WE_KILLED && frozen_guy$.IsValidMp() ) {
+			
+			GoDb.StopWatching( owner.Goid, frozen_guy$);
+				
+			//Reset to the original texture.
+			frozen_guy$.Go.Aspect.SSetCurrentAspectTexture(0, original_texture$);
+			
+			//Let the model move again.
+			frozen_guy$.Go.Aspect.SSetLockMeshFlag( false );
+			
+			// MRC 9/19/2003 Re-allowing the target to move.
+			frozen_guy$.Go.Mind.SetAllowNewMovementJobs( true );
+
+			frozen_guy$.Go.Actor.SRemoveGenericState( state_name$ );
+			
+			int timer$ = MakeInt( frozen_guy$ );
+							
+			This.DestroyTimer( timer$ );
+			
+			// Stop any effect we're playing on the target
+			if (m_effectID$ != 0)
+			{
+				SiegeFx.SStopScript( m_effectID$ );
+			}			
+
+			// MRC 8/5/2003 Make the target the owner of the effect.
+			SiegeFx.SRunMPScript( explode_script$, frozen_guy$, frozen_guy$, "", frozen_guy$, e$ );
+			
+			// MRC 7/7/2003 BUG 1556 Don't mark the frozen object for deletion... it will drop
+			// spellbooks and do other bad things.  Just make it invisible.
+			frozen_guy$.go.Aspect.SSetIsVisible(false);
+		}
+	}
+	
+	event OnTimer$( int id$, float /*off$*/ )
+	{
+//		report.generic("I'm trying to un-freeze someone special...\n");
+		goid frozen_guy$ = MakeGoid( id$ );
+		if (frozen_guy$.IsValid)
+		{
+			GoDb.StopWatching( owner.Goid, frozen_guy$);
+
+			// Stop any effect we're playing on the target
+			if (m_effectID$ != 0)
+			{
+				SiegeFx.SStopScript( m_effectID$ );
+			}						
+
+			//Play the unfreeze effect, if any.
+			if(!StringTool.IsEmpty(return_script$))
+			{
+				//Scale it based on the size of the target.
+				float targetObjectRadius$ = frozen_guy$.Go.GetAspect.GetBoundingSphereRadius();
+
+				string params$ = "";
+				StringTool.AppendF(params$, "[%g]", targetObjectRadius$);
+
+				SiegeFx.SRunMPScript( return_script$, frozen_guy$, frozen_guy$, params$, frozen_guy$, WE_REQ_CAST );				
+			}
+
+			//Reset to the original texture.
+			frozen_guy$.Go.Aspect.SSetCurrentAspectTexture(0, original_texture$);
+
+			// MRC 9/19/2003 Re-allowing the target to move.
+			frozen_guy$.Go.Mind.SetAllowNewMovementJobs( true );
+			
+			//Let the model move again.
+			frozen_guy$.Go.Aspect.SSetLockMeshFlag( false );
+			frozen_guy$.Go.Mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+			
+			// remove the state so this can be affected again
+			frozen_guy$.Go.Actor.SRemoveGenericState( state_name$ );
+		}
+	}
+}

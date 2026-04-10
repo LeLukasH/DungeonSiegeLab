@@ -1,0 +1,56 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  check_bool.skrit
+// Author(s):  David Tomandl
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool			_server_only$			= true;
+property string			_doc$					= "Checks boolean value upon receiving we_req_activate";
+
+// exported properties
+property string			bool_variable$								doc = "Name of the Bool variable";
+property scid      		send_to_scid$								doc = "Scid of object to receive message";
+property eWorldEvent	message_if_true$		= WE_REQ_ACTIVATE	doc = "Message to send if true";
+property eWorldEvent	message_if_false$		= WE_REQ_DEACTIVATE doc = "Message to send if false";
+property float			num_delay$				= 0					doc = "Number of seconds to delay sending the message";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+trigger OnGoDrawDebugHud$
+{
+	Goid goid$ = send_to_scid$.Goid;
+	if( goid$.IsValid )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 goid$.go.Placement.Position,
+									 MakeColor( 0.5, 1.0, 0, 0.5 ),
+									 ToString( message_if_true$ ) );
+	}
+}
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		if ( GameAuditor.GetDb.GetBool( bool_variable$ ) )	{
+			//changed to support delays
+			PostWorldMessage( message_if_true$, owner.Goid, send_to_scid$, num_delay$ );
+		}
+
+		if ( !GameAuditor.GetDb.GetBool( bool_variable$ ) )	{
+			//changed to support delays
+			PostWorldMessage( message_if_false$, owner.Goid, send_to_scid$, num_delay$ );
+		}
+	}
+}

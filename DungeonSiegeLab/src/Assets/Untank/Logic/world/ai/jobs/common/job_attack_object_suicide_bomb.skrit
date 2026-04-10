@@ -1,0 +1,113 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	job_attack_object_suicide_bomb.skrit
+
+	Author(s)	: 	Rick Saenz, Bartosz Kijanka
+
+	Purpose		: 	Walk over to target and explode.
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+Job		m_Job$;
+GoMind	m_Mind$;
+Goid	m_Target$;
+
+////////////////////////////////////////////////////////////////////////////////
+
+#include "k_job_c_mcp_path_utils" 
+
+////////////////////////////////////////////////////////////////////////////////
+startup state STARTUP$
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.GetGo;
+	m_Mind$		= job$.GetGo.GetMind;
+	m_Target$	= job$.GoalObject;
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+
+	ResetPathFindingParameters$();
+
+	SetState( RequestAction$ );
+}
+
+
+state RequestAction$
+{
+	// used to always just go to TargetMoved if the dependency was broken. 
+	// Now we are going to check to see if we are swinging before allowing our dependency to be broken.
+	trigger OnWorldMessage$( WE_MCP_DEPENDANCY_BROKEN )
+	{
+		//current chore...
+		eAnimChore ch$ = m_Go$.Aspect.AspectHandle.GetCurrentChore();
+				
+		if( ch$ != CHORE_ATTACK )
+		{
+//			report.generic("Target is moving trying to re-target!!\n");
+			setstate TargetMoved$;
+		}
+	}
+	transition
+	{
+		-> Exploding$:		OnWorldMessage( WE_ANIM_WEAPON_FIRE );
+  		-> Exiting$:		OnWorldMessage( WE_MCP_INVALIDATED );
+		-> Exiting$: 		OnWorldMessage( WE_ENGAGED_INVALID );	// target lost or unloaded
+		-> Exiting$:		OnWorldMessage( WE_ENGAGED_FLED );
+	}
+
+	event OnEnterState$
+	{
+		float m_RangeToTarget$ = m_Go$.mind.PersonalSpaceRange + m_Go$.Attack.AttackRange;
+		m_RangeToTarget$ += m_Target$.go.HasMind() ? m_Target$.go.mind.PersonalSpaceRange : m_Target$.go.aspect.BoundingSphereRadius;
+		
+		eReqRetCode ret$ = MCPManager.MakeRequest(	m_Go$.Goid,
+													PL_ATTACK_OBJECT_MELEE,
+													1.0,
+													m_Target$,
+													m_LookAhead$, 
+													m_MaxApproachTime$,
+													m_RangeToTarget$ );
+		if( RequestFailed(ret$) )
+		{
+			m_Job$.MarkForDeletion( JR_FAILED_NO_PATH );
+			SetState( Exiting$ );
+		}
+	}
+}
+
+
+state Exploding$
+{
+	event OnEnterState$
+	{
+		Physics.ExplodeGoWithDamage( m_Go$.Goid, m_Go$.Goid, m_Go$.Goid );
+	}
+}
+
+
+state Exiting$
+{
+	event OnEnterState$
+	{
+		m_Job$.MarkForDeletion();
+	}
+}

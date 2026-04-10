@@ -1,0 +1,188 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_fire.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Wraping fire damage into the attack component for a spell.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string	effect_script$		= ""	doc = "Effect script to call for effect";
+
+property float	particle_fit$		= -1.0	doc = "set this between 0 and 1 and fire damage will be passed as a parameter ot the FX script";
+property bool	ignite$				= true	doc = "fire can catch things on fire in adition to doing damage";
+property float	radius$				= -1.0	doc = "radius of attack to determine size of effect";
+property bool	pass_distance$		= false	doc = "pass distance to target to effect.";
+property string description$				doc = "Description of enchantment being applied";
+property bool	watch_caster$		= false	doc = "Stop the effect if the caster does anything else.";
+property bool	create_omni$		= false doc = "Create an omni version of the spell. Use for high durration spells.";
+
+owner = GoSkritComponent;
+#include "k_inc_spl_utils" 
+
+Goid 		target$;
+Goid 		caster$;
+float		duration$;
+SFxSID		active_effect$ = 0;   
+
+
+startup state Idle$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{	
+		if( e$ == WE_REQ_CAST )
+		{
+			////////////////////
+			// Normal Go
+			
+			caster$ = msg$.GetSendFrom();
+			
+			if( create_omni$ )
+			{
+				if( Owner.go.Parent != NULL )
+				{
+					// create Omni version of the spell.
+					GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.go.Parent.Goid, owner.goid );
+					cloneReq$.Omni = true;
+					Goid new_spell$ = GoDb.SCloneGo( cloneReq$ );
+					
+					// send Omni version an Activate to get it started.
+					PostWorldMessage( WE_REQ_ACTIVATE, caster$, new_spell$, msg$.GetData1(), 0 );
+				}
+				// delete normal version of the spell.
+				SetState Finished$;
+			}
+			else
+			{
+				target$ = MakeGoid( msg$.GetData1() );
+				SetState Cast$;
+			}
+		}
+		else if ( e$ == WE_REQ_ACTIVATE ) 
+		{
+			////////////////////
+			// Omni Go
+			
+			target$ 			= MakeGoid( msg$.GetData1() );
+			caster$ 			= msg$.GetSendFrom();
+
+			SetState Cast$;
+		}
+	}
+}
+
+state Cast$
+{
+	event OnEnterState$
+	{
+		if( !target$.IsValidMp() || !caster$.IsValidMp() )
+		{
+			SetState Finished$;
+			return;
+		}
+
+		duration$ = owner.Go.Magic.EvaluateEffectDuration(caster$.Go, target$.Go);
+		
+		if(!StringTool.IsEmpty (owner.Go.Magic.CasterStateName))
+		{
+			if( caster$.Go.Actor.HasGenericState( owner.Go.Magic.CasterStateName ) ) {
+				SetState( Abort$ );
+				return;
+			}
+			// Add the effected state so this can only happen once
+			target$.Go.Actor.SAddGenericState( owner.Go.Magic.CasterStateName, description$, duration$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+		}
+		
+		PackFire$( particle_fit$, ignite$, duration$, radius$, pass_distance$, caster$, target$);
+		
+//		report.genericf("%s\n",params$);
+		
+		if( create_omni$ )
+		{
+			active_effect$ = Siegefx.SRunMpScript(effect_script$,target$,caster$,params$,owner.Goid, WE_REQ_CAST );
+		}
+		else
+		{
+			active_effect$ = Siegefx.SRunScript(effect_script$,target$,caster$,params$,owner.Goid, WE_REQ_CAST );
+		}
+		
+		
+		if( watch_caster$ )
+		{
+			GoDb.StartWatching( owner.Goid, caster$);
+		}
+		SetState Finish$;
+	}
+}
+
+state Abort$
+{
+	////////////////////
+	// Omni Go
+			
+	event OnEnterState$
+	{
+		// Refund the players mana
+		Rules.ChangeMana( caster$, owner.go.getmagic.manacost );
+
+		SetState( Finished$ );
+	}
+}
+
+
+state Finish$
+{
+	////////////////////
+	// Omni Go
+	
+	trigger OnGoHandleCcMessage$( WE_MCP_CHORE_CHANGING )
+	{
+		if( active_effect$ != null )
+		{
+			SiegeFx.FinishScript( active_effect$ );	
+		}
+		SetState( Finished$ );
+	}
+	
+	event OnEnterState$
+	{
+		this.CreateTimer( 1, duration$ );
+	}
+	
+	trigger OnTimer$( 1 )
+	{	
+		SetState( Finished$ );
+	}
+	event OnExitState$
+	{
+		if( caster$.IsValid )
+		{
+			if ( watch_caster$ )
+			{
+				GoDb.StopWatching( owner.Goid, caster$);
+			}
+			
+			if( (!StringTool.IsEmpty (owner.Go.Magic.CasterStateName)) )
+			{
+				// remove the state so this can be affected again
+				caster$.Go.Actor.SRemoveGenericState( owner.Go.Magic.CasterStateName );	
+			}
+		}
+	}
+}
+
+state Finished$
+{
+	////////////////////
+	// Both Go
+	
+	event OnEnterState$
+	{	
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 5 );	
+	}
+}

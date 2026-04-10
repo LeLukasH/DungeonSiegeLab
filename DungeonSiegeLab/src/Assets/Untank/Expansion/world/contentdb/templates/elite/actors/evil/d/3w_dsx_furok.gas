@@ -1,0 +1,83 @@
+[t:template,n:3W_dsx_furok]
+{
+  category_name = "3W_evil_d";
+  doc = "3W_dsx_furok";
+  specializes = furok_base;
+  [actor]
+    {
+      [skills]
+	{
+	  strength =  39.8, 0;
+	  intelligence =  11.3, 0;
+	  dexterity =  19.6, 0;
+	  melee =  71,  0;
+	}
+    }
+  [aspect]
+  {
+      experience_value = 659568;
+      life = 1368;
+      max_life = 1368;
+      mana = 0;
+      max_mana = 0;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_furok; }
+			[hit_critical]	{ priority = low; * = s_e_hit_furok_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_furok_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_furok_SED; }
+		}
+    }
+  [attack]
+    {
+      attack_range = 0.5;
+      damage_max = 673.2;
+      damage_min = 226.8;
+    }
+  [common]
+    {
+      screen_name="Yeti";
+      membership = party_furok_boss, monster;
+    }
+  [defend] { defense = 732; }
+  [mind]
+    {
+      jat_brain							= world\ai\jobs\common\brain_hero.skrit
+	?actor_joins_existing_party			= true;
+    }
+
+	
+		[inventory] 
+		/* Generated: Fri Jun 13 18:10:39 2003 -- 1 of 4
+			 level:2 strength:medium */
+		{
+				drop_at_use_point = true;
+			[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 2, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 216583;
+				max = 415117;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/161;
+				il_main = #armor/0-216;
+				il_main = #*/161;
+			}
+		}
+	}	
+		}
+}

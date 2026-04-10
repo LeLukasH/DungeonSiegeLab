@@ -1,0 +1,193 @@
+[mood_setting*]
+{
+	// test mood #1
+	mood_name			= test_1;
+	transition_time			= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+			room_type	= rt_sewerpipe;
+	}
+}
+
+[mood_setting*]
+{
+	// test mood #2
+	mood_name			= test_2;
+	transition_time			= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+			room_type	= rt_mountains;
+	}
+}
+
+[mood_setting*]
+{
+	// test mood #3
+	mood_name			= test_3;
+	transition_time			= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+			room_type	= rt_carpetedhallway;
+	}
+}
+
+[mood_setting*]
+{
+	// test mood #4
+	mood_name			= test_4;
+	transition_time			= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+			room_type	= rt_stonecorridor;
+	}
+}
+
+[mood_setting*]
+{
+	// test mood #5
+	mood_name			= test_5;
+	transition_time			= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+			room_type	= rt_forest;
+	}
+}
+[mood_setting*]
+{
+	// test mood #6
+	mood_name			= test_6;
+	transition_time		= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+		room_type		= rt_bathroom;
+	}
+}
+[mood_setting*]
+{
+	// test mood #7
+	mood_name			= test_7;
+	transition_time		= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+		room_type		= rt_stoneroom;
+	}
+}
+[mood_setting*]
+{
+	// test mood #8
+	mood_name			= test_8;
+	transition_time		= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+		room_type		= rt_auditorium;
+	}
+}
+[mood_setting*]
+{
+	// test mood #9
+	mood_name			= test_9;
+	transition_time		= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+		room_type		= rt_concerthall;
+	}
+}
+[mood_setting*]
+{
+	// test mood #10
+	mood_name			= test_10;
+	transition_time		= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+		room_type		= rt_cave;
+	}
+}
+[mood_setting*]
+{
+	// test mood #11
+	mood_name			= test_11;
+	transition_time		= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+		room_type		= rt_stonecorridor;
+	}
+}
+[mood_setting*]
+{
+	// test mood #12
+	mood_name			= test_12;
+	transition_time		= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+		room_type		= rt_quarry;
+	}
+}
+[mood_setting*]
+{
+	// test mood #13
+	mood_name			= test_13;
+	transition_time		= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+		room_type		= rt_sewerpipe;
+	}
+}
+[mood_setting*]
+{
+	// test mood #14
+	mood_name			= test_14;
+	transition_time		= 1.0f;
+	interior			= true;
+
+	// Music settings
+	[music]
+	{
+		room_type		= rt_underwater;
+	}
+}
+[mood_setting*]
+{
+	// test mood #15
+	mood_name			= test_15;
+	transition_time		= 1.0f;
+	interior			= true;
+}

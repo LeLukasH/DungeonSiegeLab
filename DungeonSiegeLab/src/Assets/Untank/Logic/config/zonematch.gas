@@ -1,0 +1,10 @@
+[zonematch]
+{
+	zone_server = "dungeonsiege.zone.com";
+	zone_server_port = 2300;
+	news_server = "motd.dungeonsiege.zone.com";
+	news_server_port = 80;
+	news_server_file = "/news/news.txt";
+	autoupdate_server = "autoupdate.zone.com";
+	autoupdate_proxy = "autoupdate.zone.com";
+}

@@ -1,0 +1,34 @@
+
+/////////////////////////////////////////////
+// World Map Triggers
+//
+// TAT - 4/10/2003
+
+// updates state of a map marker
+[t:template,n:update_map_marker]
+{
+	specializes		= trigger;
+
+	doc				= update_map_marker;
+	category_name	= "zurb";
+
+	[update_map_marker] { }
+	common:auto_expiration_class = immediate;
+	common:forced_expiration_class = immediate;
+	[gizmo] { diffuse_color=0.300000,0.000000,0.800000; texture=; }
+}
+
+// TAT 4/29/2003
+// update the background of the world map
+[t:template,n:set_map_background]
+{
+	specializes		= trigger;
+
+	doc				= set_map_background;
+	category_name	= "zurb";
+
+	[set_map_background] { }
+	common:auto_expiration_class = immediate;
+	common:forced_expiration_class = immediate;
+	[gizmo] { diffuse_color=0.300000,0.000000,0.800000; texture=; }
+}

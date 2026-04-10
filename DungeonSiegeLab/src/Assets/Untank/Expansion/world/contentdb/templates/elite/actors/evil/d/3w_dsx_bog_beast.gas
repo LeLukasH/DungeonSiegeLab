@@ -1,0 +1,176 @@
+[t:template,n:3W_dsx_bog_beast_base]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_bog_beast_base";
+	specializes = actor_evil;
+	[aspect]
+	{
+		model = m_c_edm_BOGBEAST_pos_1;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_bog_beast_SED; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_gorack_SED; }
+			[hit_critical]	{ priority = low;  * = s_e_hit_bog_beast_SED; }
+			[hit_glance]	{ priority = low;  * = s_e_hit_bog_beast_SED; }
+			[hit_solid]		{ priority = low;  * = s_e_hit_bog_beast_SED; }
+		}		
+	}
+	[body]
+	{
+		avg_move_velocity = 2.580000;	 // 2.080
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine2;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_la_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=at; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_magic]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=at; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[common]
+	{
+		screen_name = "Bog Beast";
+		membership = monster;
+	}	
+	[mind]
+	{
+		jat_brain = world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party	= true;
+
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit;
+// Meander seems to set the melee engage range to a ridiculously small number,
+// which can't be overwritten with the specifier below. Go Figure
+//		?meander = false
+//		&still = false;
+		
+		melee_engage_range 		= 14;
+		personal_space_range 	= 1.0;
+		ranged_engage_range 	= 14.0;
+		sight_range 			= 14.0;
+	}
+}
+
+[t:template,n:3W_dsx_bog_beast]
+{
+// Balanced for level 12, medium melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_bog_beast";
+	specializes = 3W_dsx_bog_beast_base;
+	
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 42.4, 0;
+			intelligence 	= 12.5, 0;
+			dexterity		= 24.3, 0;
+			melee			= 79, 0;
+		}
+	}
+	
+	[aspect]
+	{
+		[textures]	{ 0 = b_c_edm_bog_beast; }
+		material = flesh;
+	
+		experience_value 	= 1070880;
+		life		 	= 1674.2;
+		max_life	 	= 1674.2;
+		mana			= 307.5;
+		max_mana	 	= 307.5;
+	}
+
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 428.5; 
+		damage_min = 295.2; 
+	}
+	[defend] { defense = 779; }
+	}
+	[common]
+	{
+		screen_name="Bog Beast";
+		membership = monster;
+	}
+	[inventory]
+	{
+		drop_at_use_point = true;
+		// @TODO - this is the wrong level $$$
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 12, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 123863;
+				max = 246900;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/163-215;
+				il_main = #armor/62-485;
+				il_main = #*/163-215;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/182-254;
+				il_main = #armor/-rare(1)/294-745;
+				il_main = #*/-rare(1)/182-254;
+			}	
+		}
+	}
+	}
+}

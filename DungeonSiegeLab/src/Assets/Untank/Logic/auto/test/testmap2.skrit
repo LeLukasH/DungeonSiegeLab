@@ -1,0 +1,285 @@
+//  skritbot=auto\test\TestMap2 map=Halo_test_map  teleport=start  Opponent=krug_scavenger  Invincible=true  template=spell_nova_strike specializes=base_spell_good damage_max=0 damage_min=0 is_one_shot=False mana_cost=0 required_level=70 screen_name=Nova Strike class=Nature  skrit_retry=true  
+
+//////////////////////////////////////////////////////////////////////////////
+owner = GoSkritComponent;
+
+#include "LogOut.skrit"
+
+property float	period$	= 5			doc = "Sample period, in seconds.";
+
+property Go member$;
+bool bResponse$;
+Go	m_Go$, m_Potion$;
+GoMind	m_Mind$;
+GoAspect m_Aspect$;
+GoActor m_Actor$;
+// Job	m_Job$;
+Job	    m_Jobtmp$;
+GoInventory m_GO_Inv$;
+SiegePos		heroPos$;    // initial placement of our hero
+string			m_statement$;
+GoId    PotionID$;
+
+string cBev$ = "potion_health_small";
+float  fHealth$;
+
+startup state S$ trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+{
+	if ( (WorldState.CurrentState == WS_SP_INGAME) || (WorldState.CurrentState == WS_MP_INGAME) )
+	{
+		bResponse$ = GpConsole.Execute( "report enable generic" );
+		debug.AssertF(bResponse$, "state S$ %s line %d", __NAME__, __LINE__);
+		bResponse$ = GpConsole.Execute( "report filelog generic" );
+		debug.AssertF(bResponse$, "state S$ %s line %d", __NAME__, __LINE__);
+		setstate SInGame2$;
+	}
+}
+
+bool bBetween$(float a$, float b$, float c$)
+{
+	return((a$ >= b$) && (a$ <= c$));
+}
+
+state SInGame2$
+{
+	FInGame$ at ( 5 frames )
+	{
+		Go party$ = Server.GetScreenParty();
+			
+		String  sResponse$;
+		
+//		int     i$;
+		float   fHMin$ = 45.0, fHMax$ = 51.0, fStrength$;
+				
+		sResponse$ = "";
+
+//		logState$("SInGame2$");
+		debug.AssertF(party$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+		
+		m_Go$ = party$.Children.Get( 0 );
+		
+		if (m_Go$ != NULL)
+		{
+			m_Mind$   = m_Go$.Mind;
+			m_Aspect$ = m_Go$.Aspect;
+			m_Actor$  = m_Go$.Actor;
+
+			heroPos$ = m_Go$.placement.position;
+			 // make clone req
+
+            GoCloneReq cloneReq$ = MakeGoCloneReq( cBev$ );
+			debug.AssertF(cloneReq$ != NULL, "state SInGame2$ %s line %d", __NAME__, __LINE__);		
+            cloneReq$.StartingPos = heroPos$;
+            cloneReq$.SnapToTerrain = true;
+
+			// get the spell directed by vb app:
+            PotionID$ = GoDb.SCloneGo( cloneReq$ );
+			debug.AssertF(PotionID$ != NULL, "state SInGame2$ %s line %d", __NAME__, __LINE__);		
+			if (PotionID$ == NULL) 
+			{
+				StringTool.AssignF(m_statement$, "cannot create potion %s", cBev$);
+				logout$(nINFO$, "AUTOMATION", m_statement$);
+			}
+			else
+			{
+				m_Potion$ = PotionID$.go;
+				debug.AssertF(m_Potion$   != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+			}
+			debug.AssertF(m_Mind$   != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+			debug.AssertF(m_Aspect$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+			debug.AssertF(m_Actor$  != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+
+			fHealth$ = m_Aspect$.CurrentLife; 
+
+			fStrength$ = m_Actor$.GetSkillLevel( "strength" );
+
+			if (bBetween$(fStrength$, 10.0, 10.2) )  // pass
+			{
+//				Report.MessageBoxF("Strength Initial value passed - Strength : Current %f Expected Value %f", fStrength$,  10.0);
+				report.WarningF("Strength Initial value passed - Strength : Current %f Expected Value %f", fStrength$,  10.0);
+			}
+			else
+			{
+//				Report.MessageBoxF("Strength Initial value failed - Strength : Current %f Expected Value %f", fStrength$,  10.0);
+				report.WarningF("Strength Initial value failed - Strength : Current %f Expected Value %f", fStrength$,  10.0);
+			}
+
+			if (! m_Aspect$.IsInvincible)
+			{
+//				Report.MessageBox("Invincibility Initial value passed - hero is not Invincible");
+				report.Warning("Invincibility Initial value passed - hero is not Invincible");
+			}
+			else
+			{
+//				Report.MessageBox("Invincibility Initial value failed - hero is Invincible and should not be.");
+				report.Warning("Invincibility Initial value failed - hero is Invincible and should not be.");
+			}
+
+			if (bBetween$(fHealth$, fHMin$, fHMax$) )  // (fHealth$ <  m_Aspect$.MaxLife)
+			{
+//				Report.MessageBoxF("Combat Test case passed - Health : Current %f Expected range [ %f .. %f ] MAX %f", fHealth$,  fHMin$, fHMax$, m_Aspect$.MaxLife);
+				report.WarningF("Combat Test case passed - Health : Current %f Expected range [ %f .. %f ] MAX %f", fHealth$,  fHMin$, fHMax$, m_Aspect$.MaxLife);
+			}
+			else
+			{
+//				Report.MessageBoxF("Combat Test case failed - Health : Current %f Expected range [ %f .. %f ] MAX %f", fHealth$,  fHMin$, fHMax$, m_Aspect$.MaxLife);
+				report.WarningF("Combat Test case failed - Health : Current %f Expected range [ %f .. %f ] MAX %f", fHealth$,  fHMin$, fHMax$, m_Aspect$.MaxLife);
+			}
+
+			m_GO_Inv$ = m_Go$.Inventory;    // Get  goinventory
+			debug.AssertF(m_GO_Inv$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);  // LocationContainsTemplate
+			if (! m_GO_Inv$.LocationContainsTemplate(il_all, cBev$) )
+			{
+//				Report.MessageBoxA("Potion Initial value passed - hero has no health potion");
+				report.Warning("Potion Initial value passed - hero has no health potion");
+			}
+			else
+			{
+//				Report.MessageBoxA("Potion Initial value failed - hero has no health potion and should not have.");
+				report.Warning("Potion Initial value failed - hero has no health potion and should not have.");
+			}
+		}
+		else
+		{
+			Report.Warning("ALL Test cases failed - go was NULL - could not evaluate health!");
+		}
+//		bResponse$ = GpConsole.Execute( "stats inv\n");      
+//		debug.AssertF(bResponse$, "state SInGame2 %s line %d", __NAME__, __LINE__);
+		m_Aspect$.SetIsInvincible( true );
+		logout$(nINFO$, "AUTOMATION", "Requested actor to become invincible.");
+		report.Warning("**** Just invoked \"stats inv\" so now expect hero to be invincible.... ****");
+		
+		if (m_Go$ != NULL)
+		{
+			if (m_Aspect$.IsInvincible)
+			{
+	//				Report.MessageBox("Invincibility Test case passed - hero is now Invincible");
+				report.Warning("Invincibility Test case passed - hero is now Invincible");
+			}
+			else
+			{
+	//				Report.MessageBox("Invincibility Test case failed - hero is NOT Invincible");
+				report.Warning("Invincibility Test case failed - hero is NOT Invincible");
+			}
+		}
+
+//		Report.MessageBoxA(sResponse$);    
+		bResponse$ = GpConsole.Execute( "stats str 4\n");        
+		debug.AssertF(bResponse$, "state SInGame2 %s line %d", __NAME__, __LINE__);
+//		m_Actor$.RCSetSkillLevels(14.000, 10.000, 10.000);
+		report.Warning("**** Just invoked \"stats str 4\" so now expect hero's strength to be 14.... ****");
+		
+		if (m_Go$ != NULL)
+		{
+			fStrength$ = m_Actor$.GetSkillLevel( "strength" );
+			
+			if (bBetween$(fStrength$, 14.0, 14.2) )  // pass
+			{
+//				Report.MessageBoxF("Strength Test case passed - Strength : Current %f Expected Value %f", fStrength$,  14.0);
+				report.WarningF("Strength Test case passed - Strength : Current %f Expected Value %f", fStrength$,  14.0);
+			}
+			else
+			{
+//				Report.MessageBoxF("Strength Test case failed - Strength : Current %f Expected Value %f", fStrength$,  14.0);
+				report.WarningF("Strength Test case failed - Strength : Current %f Expected Value %f", fStrength$,  14.0);
+			}
+		}
+
+		// on to timed action - because UI is not ready until this time has expired:
+		setstate wait$;
+	}
+}
+
+////////////////////////////////////////
+//	Wait$
+state Wait$
+{
+	transition -> TakeSample$ :  OnTimer( 1 );
+
+	event OnEnterState$
+	{
+		this.CreateTimer( 1, period$ );
+	}
+}
+
+state Wait2$
+{
+	event OnEnterState$
+	{
+		float   fExp$;
+	    float str$ = 0.0, int$ = 0.0, dex$ = 0.0;  // cannot seem to get meaningful values...		
+
+//		bResponse$ = GpConsole.Execute( "H");          // drink health potion 
+//		debug.AssertF(bResponse$ == false, "state Wait2$ %s line %d", __NAME__, __LINE__);
+
+
+		if (m_GO_Inv$ != NULL)
+		{
+			if (m_GO_Inv$.LocationContainsTemplate(il_all, cBev$) )
+			{
+//				Report.MessageBoxA("Potion Test case passed - hero has health potion");
+				report.Warning("Potion Test case passed - hero has health potion");
+			}
+			else
+			{
+//				Report.MessageBoxA("Potion Test case failed - hero has no health potion");
+				report.Warning("Potion Test case failed - hero has no health potion");
+			}
+
+			fExp$ = WorldTime.GetSecondsElapsed();
+			fHealth$ = m_Aspect$.CurrentLife; 
+//			Report.MessageBoxF("Hero should now be invulnerable with health %f - taking %0.3f seconds to get to this state!\n", fHealth$, fExp$ );		
+		}
+		str$ = m_Actor$.GetSkillLevel("strength");
+		int$ = m_Actor$.GetSkillLevel("intelligence");
+		dex$ =  m_Actor$.GetSkillLevel("dexterity") ;
+		StringTool.AssignF(m_statement$, "%s has int %g  str %g  dex %g at exit game.", m_Go$.GetTemplateName(), int$, str$, dex$);
+		logout$(nInfo$, "ATTRIBUTES", m_statement$);
+		
+			
+		bResponse$ = GpConsole.Execute( "exit\n");          // out of console mode
+		debug.AssertF(bResponse$, "state Wait2$ %s line %d", __NAME__, __LINE__);
+	}
+}
+
+
+////////////////////////////////////////
+//	TakeSample$
+state TakeSample$
+{
+	event OnEnterState$
+	{
+		string sCmd$;
+/*
+		GoID 	m_Beverage$;
+		int nValue$;
+		scid    mySCID$ = 1048578;
+
+//////////////////////////////////////
+		//	equip potion   FROM job_drink.skrit  on PlanetDungeonSiege - DOES NOT WORK!!
+
+		debug.AssertF(m_Go$ != NULL, "state TakeSample$ %s line %d", __NAME__, __LINE__);
+		m_Beverage$ = goDb.FindGoIDbySCID( mySCID$ );  // this scid value 0x00100002 from Siege Editor, decimal 1048578
+		nValue$ = m_Go$.Inventory.RCEquip(il_all, m_Beverage$, 0 );
+		debug.AssertF(nValue$ == 0, "state TakeSample$ %s line %d", __NAME__, __LINE__);
+ 
+testmap2.skrit(262,28) error: 'FindGoIDbySCID': ambiguous call to overloaded function
+testmap2.skrit(263,25) error: 'RCEquip': ambiguous call to overloaded function
+
+auto\test\testmap2.skrit - 0 fatals, 2 errors, 0 warnings
+
+auto\test\testmap2.skrit - 0 fatals, 3 errors, 0 warnings
+
+		StringTool.AssignF(sCmd$, "equip %s \n", cBev$);  // il_all
+//		bResponse$ = GpConsole.Execute(sCmd$); // "equipf  potion_health_small\n");  
+		debug.AssertF(bResponse$, "state TakeSample$ %s line %d", __NAME__, __LINE__);
+*/
+		m_Jobtmp$ = m_Mind$.SDoJob( MakeJobReq( JAT_GET,  JQ_ACTION, QP_FRONT, AO_HUMAN, PotionID$, es_any ) );
+	 	debug.AssertF(m_Jobtmp$ != NULL, "state TakeSample$ %s line %d", __NAME__, __LINE__);	
+		
+		report.genericF("**** Just invoked \"equip %s\" so expect health potion in inventory... ****\n", cBev$);
+		
+		SetState Wait2$;
+	}
+}
+

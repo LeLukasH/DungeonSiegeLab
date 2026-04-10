@@ -1,0 +1,220 @@
+[t:template,n:door_glb_gate]
+{
+	specializes 	= base_door;
+	doc 			= "gate";
+    category_name   = "doors";
+    extra_doc   = "door opens opposite direction of the arrow";
+	[aspect]
+	{
+		model 	= m_i_glb_door-gate-01;
+		[textures] { 0 = b_i_glb_door-gate;}
+	}
+	[body]
+	{
+		[chore_dictionary]
+		{
+        	chore_prefix = a_i_glb;
+
+			[chore_open]
+			{
+				skrit			= transition;
+				anim_files: 00	= door-chapel-01-open;
+			}
+			[chore_close]
+			{
+				skrit			= transition;
+				anim_files: 00	= door-chapel-01-close;
+			}
+		}
+	}
+	[door_basic]	{}
+}
+
+[t:template,n:dsx_ice_gate_right]
+{
+	specializes		= base_door;
+	doc				= "dsx_gate_arhok_rt";
+    category_name   = "doors";
+
+    aspect:model	= m_i_ice_dsx_gate-door-R;
+    aspect:material = town_gate_01;
+	[body]
+	{
+		[chore_dictionary]
+		{
+        	chore_prefix = a_i_ice;
+
+			[chore_open]
+			{
+				skrit			= transition;
+				anim_files: 00	= dsx_gate-door-R-open;
+			}
+			[chore_close]
+			{
+				skrit			= transition;
+				anim_files: 00	= gate-door-R-close;
+			}
+		}
+	}
+	
+	[messages]
+    {
+      [locked]
+      {
+         screen_text = "These gates have been locked by order of Mayor Hardison Dhon.";
+      }
+    }
+
+   [door_basic]
+   {
+      use_toggle= true;
+      oneshot = true;
+      delete_on_open= false;
+      open_sfx = "door_shake";
+   }
+}
+[t:template,n:dsx_ice_gate_left]
+{
+	specializes		= base_door;
+	doc				= "dsx_gate_arhok_left";
+    category_name   = "doors";
+
+    aspect:model	= m_i_ice_dsx_gate-door;
+    aspect:material = town_gate_02;
+	[body]
+	{
+		[chore_dictionary]
+		{
+        	chore_prefix = a_i_ice;
+
+			[chore_open]
+			{
+				skrit			= transition;
+				anim_files: 00	= dsx_gate-door-open;
+			}
+			[chore_close]
+			{
+				skrit			= transition;
+				anim_files: 00	= gate-door-close;
+			}
+		}
+	}
+	[messages]
+    {
+      [locked]
+      {
+         screen_text = "These gates have been locked by order of Mayor Hardison Dhon.";
+      }
+    }
+
+   [door_basic]
+   {
+      use_toggle= true;
+      oneshot = true;
+      delete_on_open= false;
+      open_sfx = "door_shake";
+   }
+}
+
+[t:template,n:dsx_gear_door]
+{
+	specializes		= base_door;
+	doc				= "dsx_gear_door";
+    category_name   = "doors";
+
+        aspect:model	= m_i_glb_door_gear;
+        aspect:material = gear;
+	[body]
+	{
+		[chore_dictionary]
+		{
+        	chore_prefix = a_i_glb;
+
+			[chore_open]
+			{
+				skrit			= transition;
+				anim_files: 00	= door_gear-turning;
+			}
+			[chore_close]
+			{
+				skrit			= transition;
+				anim_files: 00	= door_gear-turning;
+			}
+		}
+	}
+	[door_basic]
+	{
+	open_sfx = "door_shake";
+        oneshot = true;
+	}
+	[dsx_gear_door_skrit]
+	{
+	}
+}
+
+[t:template,n:dsx_nassirom_door]
+{
+	specializes		= base_door;
+	doc				= "dsx_nossirom_door";
+    category_name   = "doors";
+
+        aspect:model	= m_i_glb_gate_nossirom;
+    aspect:material = town_gate_01;
+	[body]
+	{
+		[chore_dictionary]
+		{
+        	chore_prefix = a_i_glb;
+
+			[chore_open]
+			{
+				skrit			= transition;
+				anim_files: 00	= gate_nossirom-open;
+			}
+			[chore_close]
+			{
+				skrit			= transition;
+				anim_files: 00	= gate_nossirom-close;
+			}
+		}
+	}
+	[door_basic]
+	{
+	open_sfx = "door_shake";
+        oneshot = true;
+	}
+}
+
+[t:template,n:dsx_nassirom_door_r]
+{
+	specializes		= base_door;
+	doc				= "dsx_nossirom_door_r";
+    category_name   = "doors";
+
+        aspect:model	= m_i_glb_gate_nossirom-r;
+    aspect:material = town_gate_02;
+	[body]
+	{
+		[chore_dictionary]
+		{
+        	chore_prefix = a_i_glb;
+
+			[chore_open]
+			{
+				skrit			= transition;
+				anim_files: 00	= gate_nossirom-r-open;
+			}
+			[chore_close]
+			{
+				skrit			= transition;
+				anim_files: 00	= gate_nossirom-r-close;
+			}
+		}
+	}
+	[door_basic]
+	{
+	open_sfx = "door_shake";
+        oneshot = true;
+	}
+}
+

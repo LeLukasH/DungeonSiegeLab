@@ -1,0 +1,280 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_launch.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property string	effect_script$			= ""	doc = "Effect script to call for effect";
+property string script_params$			= ""   	doc = "Parameters to send to SiegeFx script";
+property int 	number$					= 5   	doc = "how many to launch";
+property float	launch_freq_min$		= .1	doc = "Minimum amount of time to wait before spawning another projectile";
+property float	launch_freq_max$		= .1	doc = "Maxmimum amount of time to wait before spawning another projectile";
+property bool	delay_between_shots$	= true	doc = "use lauch frequency to delay between shots.";
+
+property bool	randomize_offsets$		= false	doc = "offset by a random amount between +- directional offsets.";
+property bool	use_offsets$			= false	doc = "offset by a random amount between +- directional offsets.";
+
+property float	x_offset$				= 0.0	doc = "launch offset in x direction";
+property float	y_offset$				= 0.0	doc = "launch offset in y direction";
+property float	z_offset$				= 0.0	doc = "launch offset in z direction";
+
+property float	freeze_time$			= 1.0	doc = "Time to freeze";
+property string freeze_description$ 	= ""	doc = "Description of enchantment being applied";
+property string freeze_state$ 			= ""	doc = "State name of enchantment being applied";
+property float	freeze_threshold$		= 1.0	doc = "Monster health must have his health/maxhealth ration under this to be frozen 0.5 would be 50% of the monsters normal health.";
+property float	freeze_chance$			= -1.0	doc = "Change to freeze the monster.";
+property string explode_script$			= ""	doc = "Name of the SiegeFx script that will be providing the visual when the frozen attacker explodes.";
+property string immunity$						doc = "If the attacker contains this membership then it is immune to the freeze from this spell.";
+
+
+
+owner = GoSkritComponent;
+#include "k_inc_spl_utils"
+
+Goid 		m_Target$;
+Goid 		m_Caster$;
+Goid		m_Weapon$;
+Goid		m_Ammo$;
+Goid 		go_hit$;
+
+startup state Idle$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{	
+		if( e$ == WE_REQ_CAST )
+		{
+			m_Target$ 			= MakeGoid( msg$.GetData1() );
+			m_Caster$ 			= msg$.GetSendFrom();
+			m_Weapon$			= owner.go.goid;
+			
+			if( !m_Target$.IsValid || !m_Caster$.IsValid || !m_Weapon$.IsValid )
+			{
+				SetState Finished$;
+				return;
+			}
+			SetState Launch$;
+		}
+	}
+}			
+
+
+state Launch$
+{		
+	event OnEnterState$
+	{
+		if( (number$ > 0) && ((m_Caster$.IsValidMp) && (m_Target$.IsValidMp)))
+		{
+			m_Ammo$ = m_Weapon$.Go.Attack.SPrepareAmmo;
+				
+			SiegePos initial_pos$ = m_Weapon$.Go.Attack.ComputeFiringPos;
+			
+			if (use_offsets$)
+			{
+				if (randomize_offsets$)
+				{
+					initial_pos$.Pos.X = initial_pos$.Pos.X + x_offset$*Math.RandomFloat( -1, 1 );
+					initial_pos$.Pos.Y = initial_pos$.Pos.Y + y_offset$*Math.RandomFloat( -1, 1 );;
+					initial_pos$.Pos.Z = initial_pos$.Pos.Z + z_offset$*Math.RandomFloat( -1, 1 );;
+				} else {
+					initial_pos$.Pos.X = initial_pos$.Pos.X + x_offset$;
+					initial_pos$.Pos.Y = initial_pos$.Pos.Y + y_offset$;
+					initial_pos$.Pos.Z = initial_pos$.Pos.Z + z_offset$;
+				}
+			}
+			
+			int firing_pos$ = SiegeFx.AddVariable( initial_pos$, m_Ammo$ );
+			
+			if ( m_Target$.Go.HasAspect && m_Target$.Go.IsGlobalGo )
+			{
+//				report.generic("Launching at a Go\n");
+				
+				int target_pos$ = SiegeFx.AddVariable( m_Weapon$.Go.Attack.ComputeTargetPos( m_Target$ ), m_Ammo$ );
+				
+				float velocity$ = m_Weapon$.Go.Physics.GetVelocity;
+
+				if( m_Weapon$.Go.Attack.IsInProjectileRange( velocity$, SiegeFx.GetVariable( target_pos$, m_Ammo$ ) ) )
+				{
+					m_Weapon$.Go.Attack.ComputeAimingError;
+					float x_error$ = m_Weapon$.Go.Attack.GetAimingErrorX;
+					float y_error$ = m_Weapon$.Go.Attack.GetAimingErrorY;
+								
+					float aiming_angle$ = m_Weapon$.Go.Attack.ComputeAimingAngle( SiegeFx.GetVariable( firing_pos$, m_Ammo$ ), SiegeFx.GetVariable( target_pos$, m_Ammo$ ), velocity$ );
+					m_Weapon$.Go.Attack.SLaunchAmmo( velocity$, SiegeFx.GetVariable( firing_pos$, m_Ammo$ ), SiegeFx.GetVariable( target_pos$, m_Ammo$ ), x_error$, y_error$, Goid.InvalidGoid );
+					m_Weapon$.Go.Attack.AlertRangedAttack( m_Target$ );
+				}
+				else
+				{
+					report.generic("Out of range for spell_launch.skrit\n");
+					m_Weapon$.Go.Attack.SUnprepareAmmo;
+				}			
+			} else {
+//				report.generic("Launching at a Point\n");
+				
+				m_Weapon$.Go.Attack.ComputeAimingError;
+				float x_error$ = m_Weapon$.Go.Attack.GetAimingErrorX;
+				float y_error$ = m_Weapon$.Go.Attack.GetAimingErrorY;
+		
+				float velocity$ = m_Weapon$.Go.Physics.GetVelocity;
+		
+				float aiming_angle$ = m_Weapon$.Go.Attack.ComputeAimingAngle( SiegeFx.GetVariable( firing_pos$, m_Ammo$ ), m_Target$.go.placement.position, velocity$ );
+		
+				m_Weapon$.Go.Attack.SLaunchAmmo( velocity$, SiegeFx.GetVariable( firing_pos$, m_Ammo$ ), m_Target$.go.placement.position, x_error$, y_error$, Goid.InvalidGoid );
+			}
+			number$ -= 1;
+			
+			// we need to watch the projectiles if we want to be able to freeze.
+			if( freeze_chance$ > 0.0 )
+			{
+				GoDb.StartWatching( owner.Goid, m_Ammo$);
+			}
+			
+			if ( effect_script$ != "" )
+			{
+				SiegeFx.SRunScript( effect_script$, m_Target$, m_Caster$, script_params$, owner.Goid, WE_REQ_CAST );
+			}
+			if (delay_between_shots$)
+			{
+				float random_delay$ = Math.RandomFloat( launch_freq_min$, launch_freq_max$ );
+				this.CreateTimer( 0x80000001, random_delay$ );
+			} else {
+				SetState Launch$;
+			}
+		} else {
+			SetState Finished$;
+		}
+	}
+}
+
+event OnTimer$( int id$, float /*off$*/)
+{
+	/////////////////////////////
+	// Omni Go
+	
+	if ( id$ == 0x80000001 )
+	{
+		SetState Launch$;
+	} 
+	else 
+	{
+		goid frozen_guy$ = MakeGoid( id$ );
+		if (frozen_guy$.IsValid)
+		{
+			TryThaw$( frozen_guy$ );
+			GoDb.StopWatching( owner.Goid, frozen_guy$);
+			
+			// remove the state so this can be affected again
+			frozen_guy$.Go.Actor.SRemoveGenericState( freeze_state$ );
+		}
+	}
+}
+
+event OnGoHandleCcMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( freeze_chance$ > 0.0 )
+	{
+		if( ( e$ == WE_COLLIDED ) && ( m_Ammo$ == msg$.GetSendTo() ) )
+		{
+			go_hit$ = MakeGoid( msg$.GetData1() );
+	
+			float freeze$ = Math.RandomFloat(1.0);
+		
+			if( !StringTool.IsEmpty( immunity$ ) )
+			{
+				if( go_hit$.Go.Common.Membership.Contains( immunity$ ) )
+				{
+					return;
+				}
+			}
+			
+			if( go_hit$.Go.Player.Controller != PC_COMPUTER  )
+			{
+				return;
+			}
+			
+			if( go_hit$.Go.Aspect.CurrentLife > 0.0 )
+			{
+				if( !( ((go_hit$.Go.Aspect.CurrentLife / go_hit$.Go.Aspect.MaxLife) > freeze_threshold$) || (freeze$ > freeze_chance$) ) )
+				{
+					if( ( freeze_time$ > 0.0 ) && go_hit$.Go.Hasactor )
+					{
+						if( !go_hit$.Go.Actor.HasGenericState( freeze_state$ ) )
+						{
+							TryFreeze$( go_hit$ );
+							int timer$ = MakeInt( go_hit$ );
+							This.CreateTimer( timer$, freeze_time$);
+							This.SetTimerGlobal ( timer$, true );
+							GoDb.StartWatching( owner.Goid, go_hit$);
+							// Add the effected state so this can only happen once
+							go_hit$.Go.Actor.SAddGenericState( freeze_state$, freeze_description$, freeze_time$, m_Caster$, owner.goid, owner.go.magic.GetMagicLevel( m_Caster$.go ) );
+						}
+					}
+				}
+			}	
+		} 
+		else 
+		{	
+			goid frozen_guy$ = msg$.GetSendTo();
+			
+			if( ( e$ == WE_KILLED ) && frozen_guy$.IsValidMp() ) 
+			{
+				if( !StringTool.IsEmpty( immunity$ ) )
+				{
+					if( frozen_guy$.Go.Common.Membership.Contains( immunity$ ) )
+					{
+						return;
+					}
+				}
+				
+				if( frozen_guy$.Go.Player.Controller != PC_COMPUTER  )
+				{
+					return;
+				}
+				
+				if(explode_script$ != "")
+				{
+//					report.generic("I'm trying to run the effect!!\n");
+					SiegeFx.SRunScript( explode_script$, frozen_guy$, m_Caster$, "", owner.Goid, WE_DAMAGED );
+				}
+				
+				PostWorldMessage( WE_REQ_DELETE, frozen_guy$, frozen_guy$, .1 );
+			}
+		}
+	}
+}       
+        
+state Finished$
+{       
+	event OnEnterState$
+	{   
+		// Get rid of any temporary storage
+		SiegeFx.ClearVariables( owner.goid );
+        
+		// Since this skrit is the component of a spell and all spells are cloned before being executed
+		// then it is safe to destroy ourself after finishing execution
+        
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 10 );			
+	}   
+}       
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        

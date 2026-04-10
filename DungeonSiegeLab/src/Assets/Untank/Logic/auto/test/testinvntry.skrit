@@ -1,0 +1,314 @@
+// purpose: test if inventory does not fill up until 53rd potion...  BW  9/13/2001
+
+/* use cmd line args - skritbot=auto\test\testInvntry  skrit_retry=true   
+  skritbot=auto\test\testInvntry   map=Halo_Test_Map  teleport=start skrit_retry=true  
+  
+  BW 11/27/01 make output less verbose!
+*/
+
+//////////////////////////////////////////////////////////////////////////////
+
+owner = GoSkritComponent;
+
+#include "LogOut.skrit"
+
+string			cBev$   =   "potion_health_small";
+property float	period$	=   0.03			doc = "Sample period, in seconds.";
+bool			bResponse$;
+bool			bExiting$ = false;
+bool			bHavePotion$ = false; // track potion in inventory 
+bool			bCreatePotion$ = false; // track potion existence
+goMind			m_Mind$;   // all these are global variables!!     \/
+goInventory		m_GO_Inv$;
+GoAspect		m_Aspect$;
+bool			bAskedForPotion$ = false;  // track requests for picking up potion ...
+int				i$, j$, potionCount$ = 0;        //                                      /\
+Go				m_Go$, temp$, m_Potion$;
+GoID			m_PotionGoID$;
+string			m_Size$;
+SiegePos		heroPos$;
+float			f_MAXTime$;
+string			m_statement$;
+bool			bPassFail$;
+
+startup state S$ trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+{
+	if ( (WorldState.CurrentState == WS_SP_INGAME) || (WorldState.CurrentState == WS_MP_INGAME) )
+	{
+		myinit$(__NAME__);
+
+		Go party$ = Server.GetScreenParty();
+
+		debug.AssertF(party$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+		
+		m_Go$ = party$.Children.Get( 0 );
+		if ( m_Go$ == NULL  )
+		{
+			report.generic("HERO returned NULL\n");
+			setstate ext$;
+		}
+		else
+		{
+			m_Mind$ = m_Go$.Mind;
+//			report.genericF("in skrit %s\n", __NAME__);
+			debug.AssertF(m_Mind$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+
+			m_GO_Inv$ = m_Go$.Inventory;    // Get  goinventory
+			debug.AssertF(m_GO_Inv$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+	
+			f_MAXTime$ = 700.0; // + fR_Skill$ / 2.0;
+			heroPos$ = m_Go$.placement.position; 
+			m_Aspect$ = m_Go$.Aspect;
+			bPassFail$ = false;
+			debug.AssertF(m_Aspect$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+			setstate wait0$;
+		}
+	}
+}
+
+
+////////////////////////////////////////
+//	Wait0$
+state Wait0$
+{
+	transition -> SInGame2$ :  OnTimer( 1 );
+
+	event OnEnterState$
+	{
+		if ( (WorldState.CurrentState == WS_SP_OUTRO ) || (WorldState.CurrentState == WS_MP_SESSION_LOST ) )
+		{	
+			bExiting$ = true;
+			setstate ext$;
+		}
+		else
+		{
+			this.CreateTimer( 1, period$ );
+			i$ += 1;
+		}
+	}
+}
+
+state SInGame2$
+{
+	event OnEnterState$
+	{
+	 	//I want to make this look at all nearby items, and choose the most powerful one.
+	 	//After picking it up, it's time to run away.  Get the loot and run!
+	 		
+	 	m_Mind$.TempGopColl1.Clear;
+//	 		m_Mind$.GetVisible( QT_ITEM, m_Mind$.TempGopColl1, 1000.0 );
+		bResponse$ = AIQuery.GetOccupantsInSphere(m_Go$.Placement.Position, 100.0, m_Mind$.TempGopColl1);
+		debug.AssertF(bResponse$, "SInGame2$ %s line %d", __NAME__, __LINE__);
+	 				
+		if (! bCreatePotion$ && !bAskedForPotion$ ) 
+		{
+			SiegePos SpawnPos$;
+			i$ = math.RandomInt(7);
+			j$ = i$ % 4;
+			if (j$ == 0)
+			{
+				m_Size$ = "small";
+			}
+			else
+			{
+				if (j$ == 2)
+				{
+					m_Size$ = "large";
+				}
+				else
+				{
+					if (j$ == 3)
+					{
+						m_Size$ = "medium";	
+					}
+					else
+					{
+						m_Size$ = "super";
+					}
+				}
+			}
+			if ((i$ / 4) > 0)
+			{
+				StringTool.AssignF(cBev$, "potion_health_%s", m_Size$);
+			}
+			else
+			{
+				StringTool.AssignF(cBev$, "potion_mana_%s", m_Size$);
+			}
+								
+			if( AIQuery.FindSpotRelativeToSource( m_Go$, 0.66, 1.33, 2.0, m_Mind$.TempPos1 ) )
+			{
+				SpawnPos$ = m_Mind$.TempPos1;
+			} else {
+				SpawnPos$ = heroPos$;
+			}
+
+			GoCloneReq cloneReq$ = MakeGoCloneReq( cBev$ );
+			debug.AssertF(cloneReq$ != NULL, "SInGame2$ %s line %d", __NAME__, __LINE__);		
+			cloneReq$.StartingPos = SpawnPos$;
+			cloneReq$.SnapToTerrain = true;
+
+			// get the opponent directed by vb app:
+			m_PotionGoID$ = GoDb.SCloneGo( cloneReq$ );
+			debug.AssertF(m_PotionGoID$ != NULL, "SInGame2$ %s line %d", __NAME__, __LINE__);		
+			m_Potion$ = m_PotionGoID$.go;
+			debug.AssertF(m_Potion$ != NULL, "SInGame2$ %s line %d", __NAME__, __LINE__);		
+			bCreatePotion$ = (m_Potion$ != NULL);
+			bAskedForPotion$ = false;
+			bHavePotion$ = false;
+		}
+			
+	 	//I need to get a list of all visible, and locate potion_health_small .
+	 	//Then, when one is found, run to it and get it
+	 	i$ = 0;
+			
+	 	while ( i$ < m_Mind$.TempGopColl1.Size() )
+	 	{
+	 		temp$ = m_Mind$.TempGopColl1.Get( i$ );
+
+//			Report.genericF("found item %s\n",  temp$.TemplateName);
+		
+	 		if ( temp$.TemplateName == cBev$ )
+	 		{
+				if ( ! bAskedForPotion$)
+				{
+//		 			report.genericF("trying to grab the %s.\n", cBev$);
+	 		
+					// Go run and get it
+	 				m_Mind$.SDoJob( MakeJobReq( JAT_MOVE, JQ_ACTION, QP_FRONT, AO_HUMAN, temp$.Placement.Position ) ); // was m_Go$...  not needed - already there
+	 				m_Mind$.SDoJob( MakeJobReq( JAT_GET, JQ_ACTION, QP_FRONT, AO_HUMAN, temp$.Goid ) );
+					bAskedForPotion$ = true;  // ask only once 
+				}
+	 		}
+			if (bAskedForPotion$) //  && bAskedForKrugDogInc$) // )  //
+			{
+				break;     // yes
+			}
+			else
+			{
+				i$ += 1;   // continue in loop
+			}
+	 	}
+		if (bAskedForPotion$) //  && bAskedForKrugDogInc$) // )  //
+		{
+			setstate Wait$;
+		}
+		else
+		{
+			setstate wait0$;
+		}
+	}
+}
+
+////////////////////////////////////////
+//	Wait$
+state Wait$
+{
+	transition -> TakeSample$ :  OnTimer( 1 );
+
+	event OnEnterState$
+	{
+		if ( (WorldState.CurrentState == WS_SP_OUTRO ) || (WorldState.CurrentState == WS_MP_SESSION_LOST ) )
+		{	
+			bExiting$ = true;
+			setstate ext$;
+		}
+		else
+		{
+			this.CreateTimer( 1, period$ );
+			i$ += 1;
+		}
+	}
+}
+
+////////////////////////////////////////
+//	TakeSample$
+state TakeSample$	
+{
+	trigger  OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+	{
+		if ( (WorldState.CurrentState == WS_SP_OUTRO ) || (WorldState.CurrentState == WS_MP_SESSION_LOST ) || ( WorldState.CurrentState == ws_main_menu ) )
+		{
+			bExiting$ = true;
+			setstate ext$;
+		}
+	}
+
+	event OnEnterState$
+	{
+		if (bExiting$)
+		{
+			setstate ext$;
+		}
+		else
+		{
+//			report.genericF("\t10 sec timer fired: Life is now at %f of %f.\n", m_Aspect$.CurrentLife, m_Aspect$.MaxLife);
+			if (! bHavePotion$)
+			{
+				if (m_GO_Inv$.Contains(m_Potion$) )
+				{
+					bHavePotion$ = true;
+					potionCount$ += 1;
+//					report.genericF("\thave the %i %s.\n", potionCount$, cBev$);
+				}
+				else
+				{
+//					report.genericF("\tfailed to grab the %ird %s.\n", potionCount$ + 1, cBev$);
+					if (potionCount$ == 52)
+					{
+						bPassFail$ = true;
+						setstate ext$;
+						return;
+					}
+				}
+			}
+			if (bHavePotion$)
+			{
+				if ( m_Mind$.IsLifeLow() )
+				{
+					m_Mind$.RSDrinkLifeHealingPotion( AO_REFLEX );	
+//					report.generic("\tLife is now considered low - grabbing a drink\n");				
+				}
+				if (potionCount$ < 53)
+				{
+					bCreatePotion$ = false;
+					bAskedForPotion$ = false;
+					setstate Wait0$;   // get another potion
+					return;
+				}
+			}
+			if (WorldTime.Time < f_MAXTime$)
+			{
+				setstate Wait$;   // continue looping
+			}
+			else
+			{
+				Stringtool.AssignF(m_statement$, "exiting because TIME exceeds %f seconds", f_MAXTime$ );
+				logout$(nINFO$, "AUTOMATION", m_statement$);
+				setstate ext$;
+			}
+		}
+	}
+}
+
+
+
+state ext$
+{
+	event OnEnterState$
+	{
+		StringTool.AssignF(m_statement$, "%i potions have filled the inventory.", potionCount$);
+		if (bPassFail$)
+		{
+			logout$(nPass$, "CRITERIA", m_statement$);
+		}
+		else
+		{
+			logout$(nFail$, "CRITERIA", m_statement$);
+		}
+		
+		mydeinit$(__NAME__);
+		bResponse$ = GpConsole.Execute( "exit\n");          // out of here
+		debug.AssertF(bResponse$, "state TakeSample$ %s line %d", __NAME__, __LINE__);		
+	}
+}

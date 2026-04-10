@@ -1,0 +1,2216 @@
+[t:template,n:base_zaurask]
+{
+	doc = "Generic Zaurask";
+	specializes = actor_evil;
+
+	[body]
+	{
+		min_move_velocity	= 2.2;
+		avg_move_velocity	= 2.500;
+		[bone_translator]
+		{
+			body_anterior = Bip01_Head;
+			body_mid = Bip01_Spine2;
+			body_posterior = Bip01_Pelvis;
+			kill_bone = Bip01_Spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_eam_zaurask_fs;
+			[chore_attack]
+			{
+				chore_stances = 0,1,2,5,6;
+				skrit = select_attack;
+				[anim_files]
+				{
+					0mid = at;
+					high = at-01;
+					loww = at-02;
+					extr = at-03;	
+					//qffg = qff;
+				}
+				[anim_durations]
+				{
+					fs0 = 1.5;			
+					//fs5 = 1.5;
+					fs1 = 1.5;
+					fs2 = 1.5;
+					fs6 = 1.0;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0,1,2,5,6;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0,1,2,5,6;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_misc]
+			{
+				chore_stances = 0,1,2,5,6;
+				skrit = select_transition;
+				[anim_files]
+				{
+					//00=dsf;
+				}
+			}
+				[chore_fidget]
+				{
+					chore_stances = 0,1,2,5,6;
+					skrit = select_fidget;
+					[anim_files] { 00=dsf; }
+				}
+				[chore_walk]
+				{
+					chore_stances = 0,1,2,5,6;
+					skrit = select_walk;
+					[anim_files] { 00=rl; }
+				}
+				[chore_magic]
+				{
+					chore_stances = 0,5;
+					skrit = select_attack;
+					[anim_files] { 00=mg; }
+				}
+		}
+	}
+	[common]
+	{
+		membership = zaurask, monster;
+	}
+	[guts_manager]
+	{
+		effect_name = melee_hit_2;
+	}
+	[mind]
+	{
+		jat_fidget				= world\ai\jobs\common\job_fidget.skrit
+		?curious				= 0.75
+		&wander					= 0.8
+		&social					= 0.1
+		&interest				= interest
+		&delay_min				= 6
+		&delay_max				= 16
+		&still					= false;
+		on_enemy_spotted_alert_friends 		= true;
+		jat_brain				= world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party		= true
+		&actor_creates_own_party		= true
+		&party_template				= "party_dsx_zaurask";
+		com_channels				= dyn_party, zaurask;
+		com_range				= 14.0;
+		melee_engage_range			= 13.2;
+		ranged_engage_range	 		= 13.5;
+		sight_range				= 14.0;
+		actor_life_ratio_low_threshold 		= 0.5;
+	}
+	[physics]{}
+}
+
+//	 -----MELEE------------------------------------------------
+[t:template,n:zaurask_melee_base]
+{
+	category_name = "1W_evil_a";
+	doc = "Generic Melee Zaurask";
+	specializes = base_zaurask;
+
+	[aspect]
+	{
+		model=m_c_eam_zmelee;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_zaurask_melee_SED;	 }
+			[enemy_spotted]	{ priority = high; * = s_e_call_zaurask_melee_SED; }
+			//[hit_critical]	{ priority = low; * = s_e_hit_zaurask_melee_SED;	}
+			//[hit_glance]	{ priority = low; * = s_e_hit_zaurask_melee_SED;	}
+			[hit_solid]		{ priority = low; * = s_e_hit_zaurask_melee_SED;	}
+		}
+
+	}
+}
+
+// weak melee variant (area 2)
+[t:template,n:dsx_zaurask_claw]
+{
+	category_name = "1W_evil_a";
+	doc = "dsx_zaurask_claw";
+	specializes = zaurask_melee_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 10, 0;
+			intelligence 	= 7, 0;
+			dexterity		= 8, 0;
+			melee			= 5, 0;
+		}
+	}
+	[aspect]
+	{
+		scale_base		 = 0.85;
+		experience_value = 120;
+		life			 = 219;
+		max_life		 = 219;
+		mana			 = 25;
+		max_mana		 = 25;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 60;
+		damage_min = 50;
+	}
+	[common] { screen_name="Zaurask Claw"; }
+	[defend] { defense=64; }
+	[inventory]
+	{
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 8, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 84;
+					max = 167;
+				}
+				[oneof*]
+				{
+					chance = 0.088888888888889;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/22-25;
+					il_main = #armor/10-62;
+					il_main = #*/22-25;
+				}
+				[oneof*]
+				{
+					chance = 0.02;
+					il_main = #weapon/-rare(1)/25-33;
+					il_main = #armor/-rare(1)/25-81;
+					il_main = #*/-rare(1)/25-33;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-unique(2)/25-33;
+					il_main = #armor/-unique(2)/25-81;
+					il_main = #*/-unique(2)/25-33;
+				}			
+			}
+		}
+	}
+}
+
+// weak melee variant
+[t:template,n:dsx_zaurask_fighter]
+//balanced to Level 23
+{
+	category_name = "1W_evil_a";
+	doc = "dsx_zaurask_fighter";
+	specializes = zaurask_melee_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 17, 0;
+			intelligence 	=  8, 0;
+			dexterity		= 11, 0;
+			melee			= 20, 0;
+		}
+	}
+
+	[aspect]
+	{
+		scale_base		 = 0.9;		
+		experience_value = 1473;
+		life		= 800;
+		max_life	= 800;
+		mana		= 150;
+		max_mana	= 150;
+	}
+
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 104;
+		damage_min = 95;
+
+	}
+
+	[common] { screen_name="Zaurask Fighter"; }
+
+	[defend] { defense=212; }
+
+	[inventory]
+	{
+		spew_equipped_kill_count = <ignore>;
+		[equipment]
+		{
+			es_weapon_hand=ss_g_c_bl_1h_fun_04_dsx;
+			es_shield_hand=sh_un_m_o_r_m_turtle_02_dsx; // adds 0 defense
+		}
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 24, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 1671;
+					max = 3318;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/49-66;
+					il_main = #armor/21-156;
+					il_main = #*/49-66;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/52-71;
+					il_main = #armor/-rare(1)/118-221;
+					il_main = #*/-rare(1)/52-71;
+				}
+				
+			}
+		}
+	}
+}
+
+// strong melee variant (area 5)
+[t:template,n:dsx_zaurask_fang]
+{
+// balanced to Level 16, medium melee
+	category_name = "1W_evil_a";
+	doc = "dsx_zaurask_fang";
+	specializes = zaurask_melee_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 14, 0;
+			intelligence	= 8, 0;
+			dexterity		= 10, 0;
+			melee			= 13, 0;
+		}
+	}
+
+	[aspect]
+	{
+		textures:0 = b_c_eam_zmelee-01;
+		experience_value 	 = 403;
+		life			 = 332;
+		max_life		 = 332;
+		mana			 = 54;
+		max_mana		 = 54;
+	}	
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 82;
+		damage_min = 74;
+	}
+	[common] { screen_name="Zaurask Fang"; }
+
+	[defend] { defense=138; }
+	[inventory]
+	{
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 16, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 331;
+					max = 658;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/33-44;
+					il_main = #armor/13-100;
+					il_main = #*/33-44;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/36-49;
+					il_main = #armor/-rare(1)/62-146;
+					il_main = #*/-rare(1)/36-49;
+				}
+				
+			}
+		}
+	}
+}
+
+// strong melee variant
+[t:template,n:dsx_zaurask_whacker]
+//balanced to Level 23
+{
+	category_name = "1W_evil_a";
+	doc = "dsx_zaurask_whacker";
+	specializes = zaurask_melee_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 17, 0;
+			intelligence 	= 8, 0;
+			dexterity		= 11, 0;
+			melee			= 18, 0;
+		}
+	}
+	[aspect]
+	{
+		textures:0 = b_c_eam_zmelee-01;
+		scale_base	 = 0.95;
+		experience_value = 982;
+		life			 = 482;
+		max_life		 = 482;
+		mana			 = 150;
+		max_mana		 = 150;
+	}
+
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 104;
+		damage_min = 95;
+	}
+	
+	[common] { screen_name="Zaurask Whacker"; }
+
+	[defend] { defense=210; }
+
+	[inventory]
+	{
+		// we may want to give them a percentage change of dropping
+		// their main spell or weapon.
+		spew_equipped_kill_count = <ignore>;
+		[equipment]
+		{
+			es_weapon_hand=ss_g_c_bl_1h_fun_03_dsx;
+		}
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 23, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 1412;
+					max = 2803;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/47-63;
+					il_main = #armor/19-146;
+					il_main = #*/47-63;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/49-68;
+					il_main = #armor/-rare(1)/118-212;
+					il_main = #*/-rare(1)/49-68;
+				}
+				
+			}			
+		}
+	}
+}
+
+// strong melee variant - MINIBOSS (area 5)
+[t:template,n:dsx_zaurask_commander]
+{
+// Balanced to level 16, hard melee
+	category_name = "1W_evil_a";
+	doc = "dsx_zaurask_commander";
+	specializes = zaurask_melee_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength	= 14, 0;
+			intelligence	= 8, 0;
+			dexterity	= 10, 0;
+			melee		= 11, 0;
+		}
+	}
+
+	[aspect]
+	{
+		experience_value = 514;
+		life		 = 470;
+		max_life	 = 470;
+		mana		 = 26;
+		max_mana	 = 26;
+		scale_base = 1.0;
+		model = m_c_eam_zcomm;
+		textures:0 = b_c_eam_zcomm;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_zaurask_mini_boss_SED;	 }
+			[enemy_spotted]	{ priority = high; * = s_e_call_zaurask_mini_boss; }
+			//[hit_critical]	{ priority = low; * = s_e_hit_zaurask_mini_boss_2_SED;	}
+			//[hit_glance]	{ priority = low; * = s_e_hit_zaurask_mini_boss_1_SED;	}
+			[hit_solid]		{ priority = low; * = s_e_hit_zaurask_mini_boss_2_SED;	}
+		}
+
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 100
+		damage_min = 82;
+	}
+	[defend] { defense=150; }
+
+	[common] { screen_name="Zaurask Slavemaster"; 	}
+
+	[inventory]
+	{
+		spew_equipped_kill_count = <ignore>;
+		[equipment]
+		{
+			es_weapon_hand=ss_g_c_bl_1h_fun_dsx;
+			es_shield_hand=sh_un_m_o_r_m_turtle_dsx;
+		}
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 17, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 413;
+					max = 821;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/36-49;
+					il_main = #armor/19-109;
+					il_main = #*/36-49;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/49-58;
+					il_main = #armor/-rare(1)/81-165;
+					il_main = #*/-rare(1)/49-58;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/49-58;
+					il_main = #armor/-unique(2)/81-165;
+					il_main = #*/-unique(2)/49-58;
+				}			
+			}
+		}
+	}
+}
+
+// uber melee variant (area 8)
+[t:template,n:dsx_zaurask_slasher]
+//balanced to Level 24
+{
+	category_name = "1W_evil_a";
+	doc = "dsx_zaurask_slasher";
+	specializes = zaurask_melee_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 18, 0;
+			intelligence 	= 8, 0;
+			dexterity		= 11, 0;
+			melee			= 20, 0;
+		}
+	}
+	[aspect]
+	{
+		textures:0 = b_c_eam_zmelee-02;
+		scale_base		 = 0.95;		
+		experience_value = 1213;
+		life			= 455;
+		max_life		= 455;
+		mana			= 150;
+		max_mana		= 150;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 88;
+		damage_min = 79;
+	}
+	[common] { screen_name="Zaurask Slasher"; }
+	[defend] { defense=238; }
+	[inventory]
+	{
+		// we may want to give them a percentage change of dropping
+		// their main spell or weapon.
+		spew_equipped_kill_count = <ignore>;
+		[equipment]
+		{
+			es_weapon_hand=ss_g_c_bl_1h_fun_05_dsx;
+		}
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 24, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 1671;
+					max = 3318;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/49-66;
+					il_main = #armor/21-156;
+					il_main = #*/49-66;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/52-71;
+					il_main = #armor/-rare(1)/118-221;
+					il_main = #*/-rare(1)/52-71;
+				}
+				
+			}
+		
+		}
+	}
+}
+
+// uber melee variant - BUFFED (area 7)
+[t:template,n:dsx_zaurask_chieftain]
+//balanced to Level 22
+{
+	category_name = "1W_evil_a";
+	doc = "dsx_zaurask_chieftain";
+	specializes = zaurask_melee_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength	= 17, 0;
+			intelligence = 8, 0;
+			dexterity	= 11, 0;
+			melee		= 18, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 1281;
+		life			= 623;
+		max_life		= 623;
+		mana			= 26;
+		max_mana		= 26;
+		scale_base = 1.2;
+		textures:0 = b_c_eam_zmelee-02;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 119;
+		damage_min = 102;
+	}
+	[defend] { defense = 222; }
+	[common] { screen_name="Zaurask Leader"; }
+	[inventory]
+	{
+		spew_equipped_kill_count = <ignore>;
+		[equipment]
+		{
+			es_weapon_hand=ss_g_c_bl_1h_fun_01_dsx;	
+			es_shield_hand=sh_un_m_o_r_m_turtle_01_dsx; // adds 0 defense
+		}
+		
+	}
+}
+
+//	 -----RANGED------------------------------------------------
+[t:template,n:zaurask_ranged_base]
+{
+	category_name = "1W_evil_a";
+	doc = "Base Zaurask Ranged";
+	specializes = base_zaurask;
+
+	[aspect]
+	{
+		model=m_c_eam_zaurask;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_zaurask_ranged_SED;	}
+			[enemy_spotted]	{ priority = high; * = s_e_call_zaurask_ranged_SED; }
+			//[hit_critical]	{ priority = low; * = s_e_hit_zaurask_ranged_SED;	 }
+			//[hit_glance]	{ priority = low; * = s_e_hit_zaurask_ranged_SED;	 }
+			[hit_solid]		{ priority = low; * = s_e_hit_zaurask_ranged_SED;	 }
+		}
+		textures:0 = b_c_eam_zaurask;
+	}
+
+	// body section copied form above, with addition of quick fighting fidget for archer class
+	[body]
+	{
+		min_move_velocity	= 2.2;
+		avg_move_velocity	= 2.500;
+		[bone_translator]
+		{
+			body_anterior = Bip01_Head;
+			body_mid = Bip01_Spine2;
+			body_posterior = Bip01_Pelvis;
+			kill_bone = Bip01_Spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_eam_zaurask_fs;
+			[chore_attack]
+			{
+				chore_stances = 0,1,2,5,6;
+				skrit = select_attack;
+				[anim_files]
+				{
+					0mid = at;
+					high = at-01;
+					loww = at-02;
+					extr = at-03;	
+					qffg = qff;
+				}
+				[anim_durations]
+				{
+					fs0 = 1.5;			
+					//fs5 = 1.5;
+					fs1 = 1.5;
+					fs2 = 1.5;
+					fs6 = 1.0;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0,1,2,5,6;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0,1,2,5,6;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_misc]
+			{
+				chore_stances = 0,1,2,5,6;
+				skrit = select_transition;
+				[anim_files]
+				{
+				//00=dsf;
+				}
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0,1,2,5,6;
+				skrit = select_fidget;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0,1,2,5,6;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+			[chore_magic]
+			{
+				chore_stances = 0,5;
+				skrit = select_attack;
+				[anim_files] { 00=mg; }
+			}
+		}
+	}
+}
+
+// weak ranged variant (area 2)
+[t:template,n:dsx_zaurask_spitter]
+{
+	category_name = "1W_evil_a";
+	doc = "dsx_zaurask_spitter";
+	specializes = zaurask_ranged_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength     = 10, 0;
+			intelligence = 7, 0;
+			dexterity    = 8, 0;
+			ranged	     = 5, 0;
+			combat_magic = 5, 0;
+			nature_magic = 5, 0;
+		}
+	}
+
+	[aspect]
+	{
+		scale_base		 = 0.8;		
+		experience_value = 120;
+		life			 = 211;
+		max_life		 = 211;
+		mana			 = 23;
+		max_mana		 = 23;
+	}
+
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 30;
+		damage_min = 22;
+	}
+
+	[common] {screen_name="Zaurask Archer"; }
+
+	[defend] { defense=50; }
+
+	[inventory]
+	{
+		// we may want to give them a percentage change of dropping
+		// their main spell or weapon.
+		spew_equipped_kill_count = <ignore>;
+		selected_active_location = IL_ACTIVE_RANGED_WEAPON;
+		[equipment]
+		{
+			es_shield_hand = bw_dsx_zau_2_a;
+		}
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 8, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 84;
+					max = 167;
+				}
+				[oneof*]
+				{
+					chance = 0.088888888888889;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/22-25;
+					il_main = #armor/10-62;
+					il_main = #*/22-25;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/25-33;
+					il_main = #armor/-rare(1)/25-81;
+					il_main = #*/-rare(1)/25-33;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/25-33;
+					il_main = #armor/-unique(2)/25-81;
+					il_main = #*/-unique(2)/25-33;
+				}			
+			}
+		}
+	}
+	[mind]
+	{
+		actor_auto_switches_to_melee				 = false;
+		actor_auto_switches_to_ranged				 = true;
+		actor_auto_uses_stored_items		 = false;
+		actor_weapon_preference				 = WP_RANGED;
+	}
+}
+
+// strong ranged variant (area 5) 
+[t:template,n:dsx_zaurask_spine]
+{
+// Balanced to level 16, medium ranged
+	category_name = "1W_evil_a";
+	doc = "dsx_zaurask_spine";
+	specializes = zaurask_ranged_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 14, 0;
+			intelligence 	= 8, 0;
+			dexterity		= 10, 0;
+			ranged			= 11, 0;
+		}
+	}
+
+	[aspect]
+	{
+		experience_value = 398;
+		life		 	= 298;
+		max_life	 	= 298;
+		mana		 	= 54;
+		max_mana	 	= 54;
+		scale_base	 	= 0.85;
+		textures:0 = b_c_eam_zaurask2;
+	}
+
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 57;
+		damage_min = 45;
+	}
+
+	[common] {screen_name="Zaurask Spine"; }
+
+	[defend] { defense=89; }
+
+	[inventory]
+	{
+		// we may want to give them a percentage change of dropping
+		// their main spell or weapon.
+		spew_equipped_kill_count = <ignore>;
+		selected_active_location = IL_ACTIVE_RANGED_WEAPON;
+		[equipment]
+		{
+			es_shield_hand = bw_dsx_zaurask_2_b;
+		}
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 17, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 413;
+					max = 821;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/33-47;
+					il_main = #armor/13-100;
+					il_main = #*/33-47;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/36-52;
+					il_main = #armor/-rare(1)/71-156;
+					il_main = #*/-rare(1)/36-52;
+				}
+				
+			}
+		}
+	}
+	[mind]
+	{
+		actor_auto_switches_to_melee				 = false;
+		actor_auto_switches_to_ranged				 = true;
+		actor_auto_uses_stored_items		 = false;
+		actor_weapon_preference			 = WP_RANGED;
+	}
+}
+
+// uber ranged variant (area 8)
+//balanced to Level 22
+[t:template,n:dsx_zaurask_archer]
+{
+	category_name = "1W_evil_a";
+	doc = "dsx_zaurask_archer";
+	specializes = zaurask_ranged_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength	 = 17, 0;
+			intelligence =  8, 0;
+			dexterity	 = 11, 0;
+			ranged		 = 16, 0;
+		}
+	}
+
+	[aspect]
+	{
+		experience_value = 655;
+		life			 = 208;
+		max_life		 = 208;
+		mana			 = 173;
+		max_mana		 = 173;
+		scale_base	 = 0.9;
+		textures:0 = b_c_eam_zaurask1;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 53;
+		damage_min = 44;
+	}
+	[common] {screen_name="Zaurask Lightning"; }
+	[defend] { defense = 91; }
+	[inventory]
+	{
+		// we may want to give them a percentage change of dropping
+		// their main spell or weapon.
+		spew_equipped_kill_count = <ignore>;
+		selected_active_location = IL_ACTIVE_RANGED_WEAPON;
+		[equipment]
+		{
+			es_shield_hand = bw_dsx_zau_2_c;
+		}
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 23, Weak */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 1412;
+					max = 2803;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.1;
+					il_main = #weapon/44-63;
+					il_main = #armor/19-146;
+					il_main = #*/44-63;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-rare(1)/41-66;
+					il_main = #armor/-rare(1)/100-146;
+					il_main = #*/-rare(1)/41-66;
+				}				
+			}
+		}			
+	}
+
+	[mind]
+	{
+		actor_auto_switches_to_melee				 = false;
+		actor_auto_switches_to_ranged				 = true;
+		actor_auto_uses_stored_items		 = false;
+
+		actor_weapon_preference				 = WP_RANGED;
+	}
+}
+
+
+[t:template,n:dsx_zaurask_ranger]
+//balanced for Level 18
+{
+	category_name = "1W_evil_a";
+	doc = "dsx_zaurask_ranger";
+	specializes = zaurask_ranged_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength	= 18, 0;
+			intelligence = 8, 0;
+			dexterity	= 11, 0;
+			melee		= 18, 0;
+			ranged 		= 20, 0;
+		}
+	}
+
+	[aspect]
+	{
+		experience_value = 1244;
+		life			= 478;
+		max_life		= 478;
+		mana			= 199;
+		max_mana		= 199;
+		textures:0 = b_c_eam_zaurask2;
+	}
+
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 90;
+		damage_min = 81;
+
+	}
+
+	[common] {screen_name="Zaurask Ranger"; }
+
+	[defend] { defense=150; }
+
+	[inventory]
+	{
+		// we may want to give them a percentage change of dropping
+		// their main spell or weapon.
+		spew_equipped_kill_count = <ignore>;
+		selected_active_location = IL_ACTIVE_RANGED_WEAPON;
+		[equipment]
+		{
+			es_shield_hand = bw_dsx_zau_2_d;
+		}
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 24, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 1671;
+					max = 3318;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/49-66;
+					il_main = #armor/21-156;
+					il_main = #*/49-66;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/52-71;
+					il_main = #armor/-rare(1)/118-221;
+					il_main = #*/-rare(1)/52-71;
+				}
+				
+			}
+		}
+	}
+
+	[mind]
+	{
+		actor_auto_switches_to_melee				 = false;
+		actor_auto_switches_to_ranged				 = true;
+		actor_auto_uses_stored_items		 = false;
+
+		actor_weapon_preference				 = WP_RANGED;
+	}
+}
+
+//	 -----MAGIC------------------------------------------------
+[t:template,n:zaurask_magic_base]
+{
+	category_name = "1w_evil_a";
+	doc = "Base Zaurask Magic";
+	specializes = base_zaurask;
+
+	[aspect]
+		{
+			model=m_c_eam_zcaster;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_zaurask_magic_SED;	 }
+					[enemy_spotted]	{ priority = high; * = s_e_call_zaurask_magic_SED; }
+					//[hit_critical]	{ priority = low; * = s_e_hit_zaurask_magic_SED;	}
+					//[hit_glance]	{ priority = low; * = s_e_hit_zaurask_magic_SED;	}
+					[hit_solid]		{ priority = low; * = s_e_hit_zaurask_magic_SED;	}
+				}
+
+		textures:0 = b_c_eam_zcaster;
+		}
+	[physics]
+		{
+			fire_effect = human_physics_fire;
+		}
+}
+
+// weak magic variant (area 2)
+[t:template,n:dsx_zaurask_apprentice]
+{
+	category_name = "1w_evil_a";
+	doc="dsx_zaurask_apprentice";
+	specializes = zaurask_magic_base;
+
+	[actor]
+		{
+			[skills]
+				{
+					strength     = 10, 0;
+					intelligence = 7, 0;
+					dexterity    = 8, 0;
+					melee	     = 5, 0;
+					combat_magic = 5, 0;
+					nature_magic = 5, 0;
+				}
+		}
+
+	[aspect]
+		{
+			experience_value = 120;
+			life						 = 180;
+			max_life				 = 180;
+			mana						 = 19;
+			max_mana				 = 19;
+			scale_base		 =0.77;
+		}
+
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 35;
+			damage_min = 30;
+
+		}
+
+	[common] {screen_name="Zaurask Incanter"; }
+
+	[defend] { defense = 50; }
+
+	[inventory]
+	{
+		// we may want to give them a percentage change of dropping
+		// their main spell or weapon.
+		spew_equipped_kill_count = <ignore>;
+		selected_active_location = il_active_primary_spell;
+		[other]
+		{
+			il_active_primary_spell		= dsx_spell_zaurask_apprentice;
+		}
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 8, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 84;
+					max = 167;
+				}
+				[oneof*]
+				{
+					chance = 0.088888888888889;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.3;
+					il_main = #weapon/22-25;
+					il_main = #armor/10-62;
+					il_main = #*/22-25;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/25-33;
+					il_main = #armor/-rare(1)/25-81;
+					il_main = #*/-rare(1)/25-33;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/25-33;
+					il_main = #armor/-unique(2)/25-81;
+					il_main = #*/-unique(2)/25-33;
+				}			
+			}
+		}
+	}
+
+	[mind]
+	{
+		actor_weapon_preference							 = WP_MAGIC;
+		actor_auto_switches_to_magic				 = true;
+	}
+
+}
+
+// strong magic variant (area 5)	
+[t:template,n:dsx_zaurask_adept]
+{
+// balanced to Level 17, medium ranged
+	category_name = "1w_evil_a";
+	doc="dsx_zaurask_adept";
+	specializes = zaurask_magic_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 14, 0;
+			intelligence 	= 8, 0;
+			dexterity		= 10, 0;
+			combat_magic	= 12, 0;
+			nature_magic	= 12, 0;
+		}
+	}
+
+	[aspect]
+		{
+		textures:0	= b_c_eam_zcaster-01;
+		scale_base	 = 0.82;
+		experience_value = 392;
+		life		= 278;
+		max_life	= 278;
+		mana		= 54;
+		max_mana	= 54;
+		}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 58;
+		damage_min = 48;
+
+	}
+	[common] {screen_name="Zaurask Adept"; }
+	[defend] { defense = 102; }
+	[mind]
+	{
+		actor_weapon_preference							 = WP_MAGIC;
+		actor_auto_switches_to_magic				 = true;
+	}
+	[inventory]
+	{   	
+		spew_equipped_kill_count = <ignore>;
+		selected_active_location = il_active_primary_spell;
+		[equipment]
+		{
+			es_weapon_hand=st_ra_g_o_r_puller;
+		}
+		[other]
+		{
+			il_active_primary_spell		= dsx_spell_zaurask_adept;
+		}
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 17, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 413;
+					max = 821;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/33-47;
+					il_main = #armor/13-100;
+					il_main = #*/33-47;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/36-52;
+					il_main = #armor/-rare(1)/71-156;
+					il_main = #*/-rare(1)/36-52;
+				}
+				
+			}
+		}
+	}
+}
+
+// uber magic variant
+[t:template,n:dsx_zaurask_caster]
+//balanced for Level 17
+{
+	category_name = "1w_evil_a";
+	doc="dsx_zaurask_caster";
+	specializes = zaurask_magic_base;
+
+	[actor]
+		{
+			[skills]
+				{
+					strength		= 17, 0;
+					intelligence 	= 8, 0;
+					dexterity		= 11, 0;
+					nature_magic	= 17, 0;
+					combat_magic	= 17, 0;
+				}
+		}
+
+	[aspect]
+	{
+		textures:0 = b_c_eam_zcaster-02;
+		scale_base	 = 0.87;
+		experience_value = 977;
+		life			= 401;
+		max_life		= 401;
+		mana			= 173;
+		max_mana		= 173;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 65;
+		damage_min = 56;
+
+	}
+	[common] {screen_name="Zaurask Seer"; }
+	[defend] { defense = 118; }
+	[inventory]
+	{
+		// we may want to give them a percentage change of dropping
+		// their main spell or weapon.
+		spew_equipped_kill_count = <ignore>;
+		selected_active_location = il_active_primary_spell;
+		[other]
+		{
+			il_active_primary_spell	= dsx_spell_zaurask_caster;
+		}
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 23, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 1412;
+					max = 2803;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/47-63;
+					il_main = #armor/19-146;
+					il_main = #*/47-63;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/49-68;
+					il_main = #armor/-rare(1)/118-212;
+					il_main = #*/-rare(1)/49-68;
+				}
+				
+			}
+		}			
+	}
+
+	[mind]
+	{
+		actor_weapon_preference		 = WP_MAGIC;
+		actor_auto_switches_to_magic = true;
+	}
+
+}
+
+
+[t:template,n:dsx_zaurask_mage]
+{
+	category_name = "1w_evil_a";
+	doc="dsx_zaurask_mage";
+	specializes = zaurask_magic_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength	= 18, 0;
+			intelligence = 8, 0;
+			dexterity	= 11, 0;
+			nature_magic = 20, 0;
+			combat_magic = 20, 0;
+		}
+	}
+	[aspect]
+	{
+		textures:0 = b_c_eam_zcaster-02;
+		experience_value = 1656;
+		life			= 717;
+		max_life		= 717;
+		mana			= 173;
+		max_mana		= 173;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 102;
+		damage_min = 93;
+	}
+	[common] {screen_name="Zaurask Mage"; }
+	[defend] { defense = 184; }
+	[inventory]
+	{
+		// we may want to give them a percentage change of dropping
+		// their main spell or weapon.
+		spew_equipped_kill_count = <ignore>;
+		selected_active_location = il_active_primary_spell;
+		[other]
+		{
+			il_active_primary_spell		= spell_zaurask_mage_dsx;
+		}
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 24, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 1671;
+					max = 3318;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/52-68;
+					il_main = #armor/30-165;
+					il_main = #*/52-68;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/68-77;
+					il_main = #armor/-rare(1)/128-230;
+					il_main = #*/-rare(1)/68-77;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/68-77;
+					il_main = #armor/-unique(2)/128-230;
+					il_main = #*/-unique(2)/68-77;
+				}			
+			}
+		}
+	}
+
+	[mind]
+	{
+		actor_weapon_preference			= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+	}
+
+}
+
+[t:template,n:dsx_zaurask_skeleton]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_zaurask_skeleton";
+	specializes = base_zaurask;
+	[actor]
+	{
+		[skills]
+		{
+			strength =		 70, 0;
+			intelligence = 70, 0;
+			dexterity =		 70, 0;
+			melee =				 70, 0;
+		}
+	}
+	[aspect]
+		{
+			experience_value = 173;
+			life						 = 173;
+			max_life				 = 173;
+			mana						 = 173;
+			max_mana				 = 173;
+			model = m_c_edm_iw_pos_1;
+		textures:0 = b_c_edm_ph_melee;
+			material = stone;
+			model=m_c_ecm_sk_pos_1;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_skeleton; }
+					[enemy_spotted]	{ priority = high; * = s_e_call_zaurask_skeleton_SED; }
+					//[hit_critical]	{ priority = low; * = s_e_hit_skeleton_SED; }
+					//[hit_glance]	{ priority = low; * = s_e_hit_skeleton_SED; }
+					[hit_solid]		{ priority = low; * = s_e_hit_skeleton_SED; }
+				}
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 80; 
+			damage_min = 80; 
+		}
+	[body]
+		{
+			avg_move_velocity = 2.5;
+			[bone_translator]
+				{
+					body_anterior = bip01_head;
+					body_mid = bip01_spine2;
+					body_posterior = bip01_pelvis;
+					kill_bone = bip01_spine2;
+					shield_bone = shield_grip;
+					weapon_bone = weapon_grip;
+				}
+			[weapon_scales]
+				{
+					as_single_melee = 1.5, 1.5, 1.5;
+				}
+			[chore_dictionary]
+				{
+					chore_prefix = a_c_edm_iw_fs;
+					[chore_attack]
+						{
+							chore_stances = 0,1;
+							skrit = select_attack;
+							[anim_files]
+								{
+									00 = at;
+									01 = at-02;
+								}
+						}
+					[chore_default]
+						{
+							chore_stances = 0,1;
+							skrit = infinite_loop;
+							[anim_files] { 00=ds; }
+						}
+					[chore_die]
+						{
+							chore_stances = 0,1;
+							skrit = select_transition;
+							[anim_files] { 00=di; }
+						}
+					[chore_fidget]
+						{
+							chore_stances = 0,1;
+							skrit = select_fidget;
+							[anim_files] { 00=dff; }
+						}
+					[chore_walk]
+						{
+							chore_stances = 0,1;
+							skrit = select_walk;
+							[anim_files] { 00=rl; }
+						}
+				}
+		}
+	[common]
+		{
+			screen_name = "Zaurask Skeleton"; //--
+			membership = monster; //--
+		}
+	[defend] { defense = 173; }
+
+	[mind]
+		{
+			jat_brain						= world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party	= true;
+
+			jat_fidget						= world\ai\jobs\common\job_fidget.skrit;
+
+			melee_engage_range = 14;
+			personal_space_range = 0.7;
+			ranged_engage_range = 14.0;
+			sight_range = 14.0;
+		}
+}
+
+[t:template,n:dsx_zaurask_zombie_karate]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_zaurask_zombie_karate";
+	specializes = base_zaurask;
+	[actor]
+		{
+			[skills]
+				{
+					strength =		 18, 0;
+					intelligence = 8, 0;
+					dexterity =		 12, 0;
+					melee =				 18, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value= 1568;
+			life			= 486;
+			max_life		= 486;
+			mana			= 173;
+			max_mana		= 173;
+			model = m_c_eam_zzomb;
+		textures:0 = b_c_eam_zzomb;
+			material = flesh;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_zaurask_zombie_01_SED;	 }
+					[enemy_spotted]	{ priority = high; * = s_e_call_zaurask_zombie_01_SED; }
+					//[hit_critical]	{ priority = low; * = s_e_hit_zaurask_melee_SED;	}
+					//[hit_glance]	{ priority = low; * = s_e_hit_zaurask_melee_SED;	}
+					[hit_solid]		{ priority = low; * = s_e_hit_zaurask_zombie_1_SED;	}
+				}
+			}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 93; //! Do by hand, on a curve.	For low values, ~==XP (6xp => 6damage; 90xp=> 50damage)
+			damage_min = 85; //! Same as damage_max
+		}
+	[body]
+		{
+			avg_move_velocity = 1.3;
+			[bone_translator]
+				{
+					body_anterior = bip01_head;
+					body_mid = bip01_spine2;
+					body_posterior = bip01_pelvis;
+					kill_bone = bip01_spine2;
+					shield_bone = shield_grip;
+					weapon_bone = weapon_grip;
+				}
+			[weapon_scales]
+				{
+					as_single_melee = 1.0, 1.0, 1.0;
+				}
+			[chore_dictionary]
+				{
+					chore_prefix = a_c_eam_zaurask_fs;
+					[chore_attack]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = select_attack;
+							[anim_files]
+								{
+									0mid = at;
+									high = at-01;
+									loww = at-02;
+									extr = at-03;	
+									//	qffg = qff;
+
+								}
+							[anim_durations]
+								{
+									fs0 = 1.5;			
+									//	fs5 = 1.5;
+									fs1 = 1.5;
+									fs2 = 1.5;
+									fs6 = 1.0;
+								}
+						}
+					[chore_default]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = infinite_loop;
+							[anim_files] { 00=ds; }
+						}
+					[chore_die]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = select_transition;
+							[anim_files] { 00=di; }
+						}
+					[chore_misc]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = select_transition;
+							[anim_files]
+								{
+									//		00=dsf;
+								}
+						}
+					[chore_fidget]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = select_fidget;
+							[anim_files] { 00=dsf; }
+						}
+					[chore_walk]
+						{
+							chore_stances = 0,1,6;
+							skrit = select_walk;
+							[anim_files] { 00=limp; }
+						}
+					[chore_magic]
+						{
+							chore_stances = 0,5;
+							skrit = select_attack;
+							[anim_files] { 00=mg; }
+						}
+				}
+		}
+	[common]
+		{
+			screen_name = "Zaurask Zombie"; //--
+			membership = monster; //--
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("zaurask_zombie");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+			}
+			[*]
+			{
+				action* = call_sfx_script("zaurask_zombie_karate_die");
+				condition* = receive_world_message("WE_KILLED");
+				single_shot = true;
+			}
+		}
+		}
+	[defend] { defense = 204; }
+
+	[mind]
+		{
+			jat_brain						= world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party	= true;
+
+			jat_fidget						= world\ai\jobs\common\job_fidget.skrit;
+
+			melee_engage_range = 14;
+			personal_space_range = 0.7;
+			ranged_engage_range = 14.0;
+			sight_range = 14.0;
+		}
+}
+
+[t:template,n:dsx_zaurask_zombie_archer]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_zaurask_zombie_archer";
+	specializes = base_zaurask;
+	[actor]
+		{
+			[skills]
+				{
+					strength =		 18, 0;
+					intelligence = 8, 0;
+					dexterity =		 12, 0;
+					ranged =				 18, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1568;
+			life					 = 486;
+			max_life				 = 486;
+			mana					 = 173;
+			max_mana				 = 173;
+			model = m_c_eam_zzomb;
+			scale_base		 = 0.75;
+		textures:0 = b_c_eam_zzomb;
+			material = flesh;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_zaurask_zombie_03_SED;	}
+					[enemy_spotted]	{ priority = high; * = s_e_call_zaurask_zombie_03_SED; }
+					//[hit_critical]	{ priority = low; * = s_e_hit_zaurask_ranged_SED;	 }
+					//[hit_glance]	{ priority = low; * = s_e_hit_zaurask_ranged_SED;	 }
+					[hit_solid]		{ priority = low; * = s_e_hit_zaurask_zombie_1_SED;	 }
+				}
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 70; //! Do by hand, on a curve.	For low values, ~==XP (6xp => 6damage; 90xp=> 50damage)
+			damage_min = 62; //! Same as damage_max
+		}
+	[body]
+		{
+			avg_move_velocity = 1.4;
+			[bone_translator]
+				{
+					body_anterior = bip01_head;
+					body_mid = bip01_spine2;
+					body_posterior = bip01_pelvis;
+					kill_bone = bip01_spine2;
+					shield_bone = shield_grip;
+					weapon_bone = weapon_grip;
+				}
+			[weapon_scales]
+				{
+					as_single_melee = 1.0, 1.0, 1.0;
+				}
+			[chore_dictionary]
+				{
+					chore_prefix = a_c_eam_zaurask_fs;
+					[chore_attack]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = select_attack;
+							[anim_files]
+								{
+									0mid = at;
+									high = at-01;
+									loww = at-02;
+									extr = at-03;	
+									//	qffg = qff;
+
+								}
+							[anim_durations]
+								{
+									fs0 = 1.5;			
+									//	fs5 = 1.5;
+									fs1 = 1.5;
+									fs2 = 1.5;
+									fs6 = 1.0;
+								}
+						}
+					[chore_default]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = infinite_loop;
+							[anim_files] { 00=ds; }
+						}
+					[chore_die]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = select_transition;
+							[anim_files] { 00=di; }
+						}
+					[chore_misc]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = select_transition;
+							[anim_files]
+								{
+									//		00=dsf;
+								}
+						}
+					[chore_fidget]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = select_fidget;
+							[anim_files] { 00=dsf; }
+						}
+					[chore_walk]
+						{
+							chore_stances = 0,1,6;
+							skrit = select_walk;
+							[anim_files] { 00=limp; }
+						}
+					[chore_magic]
+						{
+							chore_stances = 0,5;
+							skrit = select_attack;
+							[anim_files] { 00=mg; }
+						}
+				}
+		}
+	[common]
+		{
+			screen_name = "Zaurask Zombie Archer"; //--
+			membership = monster; //--
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("zaurask_zombie_archer");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+			}
+			[*]
+			{
+				action* = call_sfx_script("zaurask_zombie_archer_die");
+				condition* = receive_world_message("WE_KILLED");
+				single_shot = true;
+			}
+		}
+		}
+		
+	[defend] { defense = 156; }
+
+	[inventory]
+		{
+			// we may want to give them a percentage change of dropping
+			// their main spell or weapon.
+			spew_equipped_kill_count = <ignore>;
+			selected_active_location = IL_ACTIVE_RANGED_WEAPON;
+			[equipment]
+				{
+					es_shield_hand = bw_dsx_zau_2_a;
+				}
+				
+		}
+
+	[mind]
+		{
+			actor_auto_switches_to_melee				 = false;
+			actor_auto_switches_to_ranged				 = true;
+			actor_auto_uses_stored_items		 = false;
+
+			actor_weapon_preference				 = WP_RANGED;
+		}
+
+}
+
+[t:template,n:dsx_zaurask_zombie_sword]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_zaurask_zombie_sword";
+	specializes = base_zaurask;
+	[actor]
+		{
+			[skills]
+				{
+					strength 		= 18, 0;
+					intelligence 	= 8, 0;
+					dexterity 		= 12, 0;
+					melee 			= 18, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 2090;
+			life			 = 729;
+			max_life		 = 729;
+			mana			 = 173;
+			max_mana		 = 173;
+			model = m_c_eam_zzomb;
+			scale_base		 = 1.15;
+		textures:0 = b_c_eam_zzomb;
+			material = flesh;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_zaurask_zombie_02_SED;	 }
+					[enemy_spotted]	{ priority = high; * = s_e_call_zaurask_zombie_02_SED; }
+					//[hit_critical]	{ priority = low; * = s_e_hit_zaurask_melee_SED;	}
+					//[hit_glance]	{ priority = low; * = s_e_hit_zaurask_melee_SED;	}
+					[hit_solid]		{ priority = low; * = s_e_hit_zaurask_zombie_2_SED;	}
+				}	
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 115; //! Do by hand, on a curve.	For low values, ~==XP (6xp => 6damage; 90xp=> 50damage)
+			damage_min = 107; //! Same as damage_max
+		}
+	[body]
+		{
+			avg_move_velocity = 1.2;
+			[bone_translator]
+				{
+					body_anterior = bip01_head;
+					body_mid = bip01_spine2;
+					body_posterior = bip01_pelvis;
+					kill_bone = bip01_spine2;
+					shield_bone = shield_grip;
+					weapon_bone = weapon_grip;
+				}
+			[weapon_scales]
+				{
+					as_single_melee = 1.15, 1.15, 1.15;
+				}
+			[chore_dictionary]
+				{
+					chore_prefix = a_c_eam_zaurask_fs;
+					[chore_attack]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = select_attack;
+							[anim_files]
+								{
+									0mid = at;
+									high = at-01;
+									loww = at-02;
+									extr = at-03;	
+									//	qffg = qff;
+
+								}
+							[anim_durations]
+								{
+									fs0 = 1.5;			
+									//	fs5 = 1.5;
+									fs1 = 1.5;
+									fs2 = 1.5;
+									fs6 = 1.0;
+								}
+						}
+					[chore_default]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = infinite_loop;
+							[anim_files] { 00=ds; }
+						}
+					[chore_die]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = select_transition;
+							[anim_files] { 00=di; }
+						}
+					[chore_misc]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = select_transition;
+							[anim_files]
+								{
+									//		00=dsf;
+								}
+						}
+					[chore_fidget]
+						{
+							chore_stances = 0,1,2,5,6;
+							skrit = select_fidget;
+							[anim_files] { 00=dsf; }
+						}
+					[chore_walk]
+						{
+							chore_stances = 0,1,6;
+							skrit = select_walk;
+							[anim_files] { 00=limp; }
+						}
+					[chore_magic]
+						{
+							chore_stances = 0,5;
+							skrit = select_attack;
+							[anim_files] { 00=mg; }
+						}
+				}
+		}
+	[common]
+		{
+			screen_name = "Zaurask Zombie Stinger"; //--
+			membership = monster; //--
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("zaurask_zombie_sword");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+			}
+			[*]
+			{
+				action* = call_sfx_script("zaurask_zombie_sword_die");
+				condition* = receive_world_message("WE_KILLED");
+				single_shot = true;
+			}
+		}
+		}
+	[defend] { defense = 240; }
+	[inventory]
+		{
+			spew_equipped_kill_count = <ignore>;
+			[equipment]
+				{
+
+					es_weapon_hand=ss_g_c_bl_1h_fun_zaur_dsx;
+				}
+		}
+	[mind]
+		{
+			jat_brain						= world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party	= true;
+			
+			jat_fidget						= world\ai\jobs\common\job_fidget.skrit;
+			
+			melee_engage_range = 14;
+			personal_space_range = 0.7;
+			ranged_engage_range = 14.0;
+			sight_range = 14.0;
+		}
+}
+

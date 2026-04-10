@@ -1,0 +1,7 @@
+[t:tsd,n:b_gui_ig_i_ic_m_fire-ball]
+{
+  b dither = true;
+  b hasalpha = true;
+	layer1texture1 = b_gui_ig_i_ic_m_fire-ball;
+  i texturedetail = 0;
+}

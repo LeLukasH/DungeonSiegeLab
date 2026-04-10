@@ -1,0 +1,150 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  gremal_reward.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = true;
+property string _doc$                = "Rewards player for harvesting gremal souls";
+property string _required_component$ = "placement";
+
+property bool	good$				= false		doc = "Is this reward harvesting or saving gremals?";
+property SCID	retribution_point1$				doc = "Point to hit with holy flames when saving gremals";
+property SCID	retribution_point2$				doc = "Point to hit with holy flames when saving gremals";
+
+owner                                = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+#option -explicit_states
+
+startup state StartUp$
+{
+	transition -> Waiting$ : OnGoHandleMessage( WE_ENTERED_WORLD );
+}
+
+state Waiting$
+{
+	Trigger OnTimer$( 1 )
+	{
+		if( ( owner.go.children.size > 0 ) )
+		{
+			Go item$ = owner.go.children.get( 0 );
+			owner.go.inventory.RSRemove( item$, true );
+		}
+	}
+	
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_ACTIVATE )		
+		{
+			report.generic("Recieved Activate\n");
+			
+			Goid Recipient$;
+			
+			Recipient$ = MakeGoid( msg$.GetData1() );
+			
+			if( Recipient$.IsValid() ) 
+			{
+				if (Recipient$.Go.HasInventory() ) 
+				{
+					if ( Recipient$.Go.Inventory.LocationContainsTemplate( IL_MAIN, "gremal_soul" ) )
+					{	
+						Recipient$.Go.Mind.TempGopColl1.Clear;
+	
+						Recipient$.Go.Inventory.ListItems( IL_MAIN, Recipient$.Go.Mind.TempGopColl1 );
+						
+						Go temp$ = NULL;
+						bool found$ = false;
+						int i$ = 0;
+						
+						while ( i$ < Recipient$.Go.Mind.TempGopColl1.Size() && !found$ )
+						{
+							temp$ = Recipient$.Go.Mind.TempGopColl1.Get( i$ );
+							if ( StringTool.SameNoCase ( temp$.templatename, "gremal_soul" ) )
+							{
+								found$ = true;
+								Recipient$.Go.Inventory.RSRemove( temp$, false );
+								PostWorldMessage( WE_REQ_DELETE, temp$.goid, temp$.goid, 0 );
+							} 
+							i$ += 1;
+						}
+						
+						if( found$ )
+						{
+							if( good$ )
+							{
+								Siegefx.SRunScript("gremal_savior",owner.goid,owner.goid,"",owner.goid, e$ );
+								
+								if( retribution_point1$.IsValid )
+								{
+									Siegefx.SRunScript("gremal_retribution",retribution_point1$.goid,retribution_point1$.goid,"",owner.goid, e$ );
+									Physics.CreateExplosion( retribution_point1$.goid.Go.Placement.position, 10, 10, 500, owner.goid, owner.goid );
+								}
+								if( retribution_point2$.IsValid )
+								{
+									Siegefx.SRunScript("gremal_retribution",retribution_point2$.goid,retribution_point2$.goid,"",owner.goid, e$ );
+									Physics.CreateExplosion( retribution_point2$.goid.Go.Placement.position, 10, 10, 500, owner.goid, owner.goid );
+								}
+								if( owner.go.HasInventory )
+								{
+									// make a new child
+									owner.go.inventory.AddDelayedPcontent();
+						
+									if( ( owner.go.children.size > 0 ) )
+									{
+										This.CreateTimer(1,0);
+									}
+								}
+							} else {
+								Siegefx.SRunScript("gremal_sacrifice",owner.goid,owner.goid,"",owner.goid, e$ );
+								
+								Go Weapon$ = NULL;
+				 				if( Recipient$.Go.Inventory.IsMeleeWeaponSelected || Recipient$.Go.Inventory.IsRangedWeaponSelected )
+				 				{
+				 					Weapon$ = Recipient$.Go.Inventory.GetSelectedWeapon;
+				 				} else if ( Recipient$.Go.Inventory.IsSpellSelected ) {
+				 					Weapon$ = Recipient$.Go.Inventory.GetSelectedSpell;
+				 				}
+				 				
+				 				if (Weapon$ != NULL ) {
+				 					Rules.AwardExperience( Recipient$, Weapon$.goid, 100 );
+				 				} 
+				 			
+				 				
+				 				if( math.RandomFloat(1) < 0.25 )
+				 				{
+					 				SiegePos SpawnPos$;
+									
+									GoCloneReq cloneReq$ = MakeGoCloneReq( "potion_health_small" );
+									
+									SpawnPos$ = Recipient$.go.placement.position;
+									cloneReq$.StartingPos	= SpawnPos$;
+								    
+									If( Recipient$.Go.Hasmind )
+									{
+										if( AIQuery.FindSpotRelativeToSource( Recipient$.Go, 1, 1.5, 2.0, Recipient$.Go.Mind.TempPos1 ) )
+								   		{
+								   			cloneReq$.StartingPos = Recipient$.Go.Mind.TempPos1;
+								   		}
+								   	}	
+									cloneReq$.SnapToTerrain = true;
+									GoDb.SCloneGo( cloneReq$ );
+							    }
+							}
+						}
+				    }
+	 			}
+	 		}
+		}
+	}
+}

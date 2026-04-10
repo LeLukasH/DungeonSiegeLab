@@ -1,0 +1,842 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+//Go		m_Go$;
+//GoMind	m_Mind$;
+//GoParty m_Party$;
+//Job		m_Job$;
+//
+//property	int		min_party_size$			= 2			doc = "How many friends must be nearby to form a party";
+//property	int		max_party_size$			= 8			doc = "What is the larget size I will leat a party be to join, or add into my own.?";
+//
+//property	float	heal$					= 0.30		doc = "What ratio of the time will the party try to heal members";
+//property	int		heal_charges$			= 2			doc	= "How many times the party can heal before it must recharge";
+//property	float	heal_recharge$			= 15.00		doc = "Seconds before the party will try to heal members";
+//
+//property	float	reanimate$				= 0.30		doc = "What ratio of the time will the party try to re-animate dead members";
+//property	int		reanimate_charges$		= 2			doc	= "How many times the party can re-animate before it must recharge";
+//property	float	reanimate_recharge$		= 15.00		doc = "Seconds before the party will try to re-animate dead members";
+//
+//property	float	formation_change$		= 0.02		doc	= "Chance to change the formation shape each time it moves.";
+//property	int		formation_charges$		= 1			doc	= "How many times the party can move in formation before it must recharge";
+//property	float	formation_recharge$		= 5.00		doc = "Seconds before the party will try to move in formation again";
+//
+//property	float	approach_distance$		= 1.66		doc = "Meters to try to approach by when approaching in formation.";
+//property	float	min_approach_distance$	= 5.00		doc = "Minimum distance before the party will approach.";
+//
+//property	float	party_sight_distance$	= -1.0		doc	= "Set to a positive value to allow the party to see an enemy farther away (usefull for get friends) -1 to use sight range.";
+//
+//property	bool	free_move_on_enemy_enter_ICZ$	 	= true 	doc = "if enemy enters ICZ allow party to freely attack";
+//property	bool	free_move_on_enemy_enter_OCZ$	 	= false	doc = "if enemy enters OCZ allow party to freely attack";
+//property	bool	free_move_on_life_low$	 			= false	doc = "if a party reaches life low allow party to freely attack";
+//property	bool	free_move_if_cant_respond$ 			= true 	doc = "allow characters to move freely if the can't attack back when in formation.";
+//property	bool	move_ranged_in_formation$ 			= true 	doc = "move ranged attackers in formation even if they are allowed free movment.";
+//
+//property	bool	free_move$ 							= false doc = "allow free movement by default";
+//property	bool	use_loose_formation$ 				= false doc = "move in a disorganized formation (used for archers to prevent them from standing on each other)";
+//property	string	formation_list$ 							doc = "comma delimited list of possible formations to use (If empty will use default monster formations)";
+//
+//property	int		required_party_members_to_hold_formation$		= 2 	doc = "Number of party members required to approach in formation.";
+//property	int		required_ranged_attackers_to_hold_formation$	= 1 	doc = "Number of ranged attackers required in the party to approach in formation.";
+//property	int		required_ranged_attackers_to_hold_ground$		= 9 	doc = "Number of ranged attackers required in the party to hold ground in formation.";
+//property	int		required_members_for_all_out_attack$			= -1	doc = "Mumber of party members required for an all out attack. (useful for getting friends or pack attacks.";		
+//property	int		required_alive_members_for_all_out_attack$		= -1	doc = "Mumber of alive party members required for an all out attack. (useful for getting friends or pack attacks.";
+//
+//property	bool	flee_when_member_killed$						= false	doc = "Party members flee when a party member is killed.";
+
+
+//This file contains party AI information that is referenced inside specific actor templates
+[t:template,n:party_humanoid]
+{
+	specializes = party;
+	doc = "party_npc";
+	category_name = "zurb";
+	extra_doc = "Use this gizmo to configure mule-selling NPCs.";
+}
+
+[t:template,n:party_computer]
+{
+	specializes = party;
+	doc = "Party of computer people.";
+	
+
+	[common]
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+	}
+}
+[t:template,n:party_robo_suit] // $$$ hey Greg, don't touch this. :) -ET  Mmm, Ok. -G
+{
+	specializes = party_computer;
+	doc = "Party for the robo-suit encounter.";
+
+	[common]
+	{
+		membership = coil;
+	}
+
+	[mind]
+	{
+		jat_brain								= world\ai\jobs\common\brain_party.skrit
+			?rank_members						= false
+			&formation_charges					= 0
+			&free_move_if_cant_respond			= false
+			&heal_by_range						= true
+			&heal_charges						= 1
+			&heal_recharge						= 6.00;
+	}
+}
+[t:template,n:party_braak_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by giant braak boss";
+	[common]
+	{
+		membership = party_braak_boss;
+	}
+	[mind]
+	{
+		jat_brain								= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 6
+			&approach_distance								= 5
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_recharge								= 3;
+	}
+}
+[t:template,n:party_braak_desert_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by giant braak desert boss";
+	[common]
+	{
+		membership = party_braak_desert_boss;
+	}
+	[mind]
+	{
+		jat_brain								= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 11
+			&approach_distance								= 2
+			&required_ranged_attackers_to_hold_formation	= 1
+			&formation_recharge								= 4;
+	}
+}
+[t:template,n:party_dark_lunger_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by dark lunger boss";
+	[common]
+	{
+		membership = party_dark_lunger_boss;
+	}
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 5
+			&approach_distance								= 5
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_recharge								= 3;
+	}
+}
+[t:template,n:party_droog]
+{
+	specializes = party_computer;
+	doc = "Party of droog.";
+
+	[common]
+	{
+		membership = droog;
+	}
+
+	[mind]
+	{
+		jat_brain											= world\ai\jobs\common\brain_party.skrit
+			?min_approach_distance							= 10.0
+			&required_ranged_attackers_to_hold_formation	= 2
+			&formation_recharge								= 2.5;
+//			&free_move_on_enemy_enter_OCZ	= true;
+	}
+}
+[t:template,n:party_furok_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by furok boss";
+	[common]
+	{
+		membership = party_furok_boss;
+	}
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 6
+			&approach_distance								= 3.5
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_recharge								= 2;
+	}
+}
+[t:template,n:party_gargoyle]
+{
+	specializes = party_computer;
+	doc			= "Party of gargoyles.";
+	
+	[common]
+	{
+		membership = gargoyle_friend;
+	}
+	[mind]
+	{
+		jat_brain									= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation 						= true
+			&party_sight_distance						= 26
+			&formation_charges							= 3
+			&formation_recharge							= 2
+			&min_approach_distance						= 8
+			&required_members_for_all_out_attack 		= 3
+			&required_alive_members_for_all_out_attack	= 3;
+	}
+}
+
+[t:template,n:party_giant_rat_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by giant rat boss";
+	[common]
+	{
+		membership = rat;
+	}
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 6
+			&approach_distance								= 2.5
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_recharge								= 1.55;
+	}
+}
+[t:template,n:party_gobbot]
+{
+	specializes = party_computer;
+	doc = "Party of gobbots.";
+
+	[common]
+	{
+		membership = gobbot;
+	}
+
+	[mind]
+	{
+		jat_brain								= world\ai\jobs\common\brain_party.skrit
+			?min_approach_distance						= 10
+			&formation_change							= .15
+			&formation_recharge							= 7
+			&required_ranged_attackers_to_hold_formation = 2;
+	}
+}
+[t:template,n:party_gorack_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by gorack boss";
+	[common]
+	{
+		membership = party_gorack_boss;
+	}
+	[mind]
+	{
+		jat_brain					= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 5
+			&approach_distance								= 4
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_recharge								= 3;
+	}
+}
+[t:template,n:party_klaw_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by giant klaw boss";
+	[common]
+	{
+		membership = party_klaw_boss;
+	}
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 6
+			&approach_distance								= 2.8
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_recharge								= 2.3;
+	}
+}
+[t:template,n:party_krug]
+{
+	specializes = party_computer;
+	doc = "Party of krugs.";
+
+	[common]
+	{
+		membership = krug;
+	}
+
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges		= 0
+			&formation_recharge		= 2
+			&min_approach_distance	= 7
+			&approach_distance		= 2
+			&formation_recharge		= 3.00;
+	}
+}
+[t:template,n:party_krug_commander]
+{
+	specializes = party_computer;
+	doc = "Party formed by a krug commander.";
+	
+	[common]
+	{
+		membership = party_krug_commander;
+	}
+	[mind]
+	{
+		jat_brain									= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 5.0
+			&approach_distance								= 2.8
+			&reanimate_charges								= 0
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_recharge								= 2.7;
+	}
+}	
+[t:template,n:party_krug_grunt_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by a krug grunt boss.";
+
+	[common]
+	{
+		membership = party_krug_grunt_boss;
+	}
+	[mind]
+	{
+		jat_brain									= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 5.0
+			&approach_distance								= 3.7
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_recharge								= 2.2;
+	}
+}
+[t:template,n:party_krug_shaman]
+{
+	specializes = party_computer;
+	doc = "Party formed by a krug shaman.";
+
+	[common]
+	{
+		membership = party_krug_shaman;
+	}
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&reanimate_charges								= 1
+			&reanimate_recharge								= 9
+			&min_approach_distance							= 8
+			&free_move_on_enemy_enter_OCZ					= true
+			&required_ranged_attackers_to_hold_formation	= 1
+			&formation_recharge								= 2.4;
+	}
+}
+[t:template,n:party_krug_scout_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by a krug scout boss.";
+
+	[common]
+	{
+		membership = party_krug_scout_boss;
+	}
+	[mind]
+	{
+		jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&approach_distance								= 3
+			&min_approach_distance							= 4
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_recharge								= 2.6;
+	}
+}
+[t:template,n:party_krug_scavenger_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by a krug scavenger boss.";
+
+	[common]
+	{
+		membership = party_krug_scavenger_boss;
+	}
+	[mind]
+	{
+		jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 4
+			&approach_distance								= 3
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_recharge								= 2.6;
+	}
+}
+[t:template,n:party_larch_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by a larch boss.";
+	
+	[common]
+	{
+		membership = party_larch_boss;
+	}
+	[mind]
+	{
+		jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance 							= 5
+			&approach_distance								= 3.1
+			&formation_recharge								= 2
+			&required_ranged_attackers_to_hold_formation	= 0;
+	}
+}
+
+[t:template,n:party_lava_imp_02]
+{
+	specializes = party_computer;
+	doc = "Party formed by lava imp 02.";
+
+	[common]
+	{
+		membership = party_lava_imp_02;
+	}
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&approach_distance								= 1.2		
+			&formation_recharge								= 3
+			&min_approach_distance 							= 8
+			&required_ranged_attackers_to_hold_formation	= 2;
+
+	}
+}	
+[t:template,n:party_lava_imp_03]
+{
+	specializes = party_computer;
+	doc = "Party formed by lava imp 03.";
+
+	[common]
+	{
+		membership = party_lava_imp_03;
+	}
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&approach_distance		= 2.3		
+			&formation_recharge		= 2
+			&min_approach_distance	= 8.5;
+	}
+}
+[t:template,n:party_maljin_ranged]
+{
+	specializes = party_computer;
+	doc = "Party formed by ranged Maljin.";
+
+	[common]
+	{
+		membership = party_maljin_ranged;
+	}
+
+	[mind]
+	{
+		jat_brain									= world\ai\jobs\common\brain_party.skrit
+			?min_approach_distance							= 8.5
+			&use_loose_formation							= true
+			&formation_recharge								= 2	
+			&required_ranged_attackers_to_hold_formation	= 2;
+
+	}
+}	
+[t:template,n:party_mucosa_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by mucosa boss";
+
+	[common]
+	{
+		membership = party_mucosa_boss;
+	}
+
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&min_approach_distance	= 6
+			&approach_distance		= 2
+			&formation_recharge		= 2;
+	}
+}
+[t:template,n:party_phrak_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by phrak boss.";
+
+	[common]
+	{
+		membership = phrak;
+	}
+	[mind]
+	{
+		jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&formation_recharge								= 2.0		
+			&required_ranged_attackers_to_hold_formation	= 1
+			&min_approach_distance							= 7.5;
+	}
+}
+[t:template,n:party_scorpion_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by scorpion boss";
+	[common]
+	{
+		membership = party_scorpion_boss;
+	}
+	[mind]
+	{
+		jat_brain									= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 5
+			&approach_distance								= 2.3
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_recharge								= 1.8;
+	}
+}
+[t:template,n:party_seck]
+{
+	specializes = party_computer;
+	doc = "Party of seck.";
+
+	[common]
+	{
+		membership = seck;
+	}
+
+	[mind]
+	{
+		jat_brain								= world\ai\jobs\common\brain_party.skrit
+			?min_approach_distance							= 7.4
+			&formation_recharge								= 6
+			&formation_change								= .1
+			&formation_charges								= 2
+			&required_ranged_attackers_to_hold_formation	= 2;
+	}
+}	
+[t:template,n:party_skeleton_guard_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by skeleton guard boss.";
+
+	[common]
+	{
+		membership = party_skeleton_guard_boss;
+	}
+	[mind]
+	{
+		jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation 							= true
+			&min_approach_distance							= 5
+			&formation_recharge								= 2
+			&approach_distance 								= 2
+			&required_ranged_attackers_to_hold_formation	= 0;
+	}
+}	
+[t:template,n:party_swamp_slinger]
+{
+	specializes = party_computer;
+	doc = "Party formed by swamp_slinger.";
+	
+	[common]
+	{
+		membership = party_swamp_slinger;
+	}
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation		= true
+			&formation_recharge			= 3			
+			&min_approach_distance		= 8;
+	}
+}		
+[t:template,n:party_spiked_dweller]
+{
+	specializes = party_computer;
+	doc = "Party formed by spiked dweller.";
+	
+	[common]
+	{
+		membership = party_spiked_dweller;
+	}
+	[mind]
+	{
+		jat_brain	= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation = true
+			&min_approach_distance = 8;			
+	}
+}
+[t:template,n:party_spiked_maw_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by spiked maw boss";
+	[common]
+	{
+		membership = party_spiked_maw_boss;
+	}
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 10
+			&approach_distance								= 2.3
+			&required_ranged_attackers_to_hold_formation	= 2
+			&formation_recharge								= 3;
+	}
+}
+[t:template,n:party_skeleton_mercenary_archer]
+{
+	specializes = party_computer;
+	doc = "Party formed by a skeleton mercenary archer.";
+	
+	[common]
+	{
+		membership = party_skeleton_mercenary_archer;
+	}
+	[mind]
+	{
+		jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance 							= 11
+			&approach_distance								= 2
+			&required_ranged_attackers_to_hold_formation	= 2
+			&formation_recharge								= 2;
+						
+	}
+}
+[t:template,n:party_sand_mage]
+{
+	specializes = party_computer;
+	doc = "Party formed by a sand mage.";
+	
+	[common]
+	{
+		membership = party_sand_mage;
+	}
+	[mind]
+	{
+		jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance 							= 8
+			&required_ranged_attackers_to_hold_formation	= 1;
+	}
+}
+[t:template,n:party_swamp_creature_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by a swamp creature boss.";
+	
+	[common]
+	{
+		membership = party_swamp_creature_boss;
+	}
+	[mind]
+	{
+		jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance 							= 5
+			&approach_distance								= 3.5			
+			&formation_recharge								= 2
+			&required_ranged_attackers_to_hold_formation	= 0;
+				
+	}
+}
+[t:template,n:party_trog_warrior_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by a Trog warrior boss.";
+	
+	[common]
+	{
+		membership = party_trog_warrior_boss;
+	}
+	[mind]
+	{
+		jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&formation_recharge								= 1.75
+			&min_approach_distance 							= 8
+			&approach_distance								= 2.2
+			&required_ranged_attackers_to_hold_formation	= 0;
+	}
+}
+[t:template,n:party_troll_swamp_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by a troll swamp boss.";
+	
+	[common]
+	{
+		membership = party_troll_swamp_boss;
+	}
+	[mind]
+	{
+		jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance 							= 5
+			&approach_distance								= 3.5			
+			&formation_recharge								= 2
+			&required_ranged_attackers_to_hold_formation	= 0;
+				
+	}
+}
+[t:template,n:party_bandit_ranged]
+{
+	specializes = party_computer;
+	doc = "Party formed by a bandit archer.";
+	
+	[common]
+	{
+		membership = party_bandit_ranged;
+	}
+	[mind]
+	{
+		jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance 							= 10
+			&approach_distance								= 3.5
+			&formation_recharge								= 2.0			
+			&required_ranged_attackers_to_hold_formation	= 0;
+	}
+}
+[t:template,n:party_ice_archer]
+{
+	specializes = party_computer;
+	doc = "Party formed by an ice archer.";
+	
+	[common]
+	{
+		membership = party_ice_archer;
+	}
+	[mind]
+	{
+		jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance 							= 9
+			&formation_recharge								= 4			
+			&required_ranged_attackers_to_hold_formation	= 2;
+	}
+}
+[t:template,n:party_water_lunger_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by water lunger boss";
+	[common]
+	{
+		membership = party_water_lunger_boss;
+	}
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 5
+			&approach_distance								= 4
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_recharge								= 2.5;
+	}
+}
+[t:template,n:party_wolf_black_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by black wolf boss";
+	[common]
+	{
+		membership = party_wolf_black_boss;
+	}
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 5
+			&approach_distance								= 3.5
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_charges								= 2
+			&formation_recharge								= 2;
+	}
+}
+[t:template,n:party_wolf_gray_boss]
+{
+	specializes = party_computer;
+	doc = "Party formed by a gray wolf boss.";
+	
+	[common]
+	{
+		membership = party_wolf_gray_boss;
+	}
+	[mind]
+	{
+		jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance 							= 5
+			&approach_distance								= 3.5
+			&formation_recharge								= 2
+			&required_ranged_attackers_to_hold_formation	= 0;
+				
+	}
+}
+[t:template,n:party_wraith]
+{
+	specializes = party_computer;
+	doc = "Party formed by a wraith.";
+	
+	[common]
+	{
+		membership = party_wraith;
+	}
+	[mind]
+	{
+		jat_brain	= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&approach_distance 								= 8
+			&required_ranged_attackers_to_hold_formation	= 0;			
+	}
+}
+[t:template,n:party_wraith_mage]
+{
+	specializes = party_computer;
+	doc = "Party formed by a wraith mage.";
+	
+	[common]
+	{
+		membership = party_wraith_mage;
+	}
+	[mind]
+	{
+		jat_brain											= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&min_approach_distance							= 10.0
+			&required_ranged_attackers_to_hold_formation	= 0
+			&formation_recharge								= 2.5;
+	}
+}									
+//////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,221 @@
+[end_game_summary_stats]
+{
+	interface = true;
+	
+	/*
+	[t:button,n:button_timeline]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 18;
+		rect = 626,38,776,54;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { onbuttonpress=notify(end_game_view_timeline); }
+		[t:text,n:button_timeline_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "View Timeline";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	*/
+	
+	[t:window,n:stats_bg]
+	{
+		alpha = 1.00000;
+		draw_order = 0;
+		rect = 476,96,766,356;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	
+	[t:window,n:stat_bg]
+	{
+		alpha = 0.300000;
+		draw_order = 10;
+		rect = 195,98,280,354;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text_box,n:stat_header]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 195,64,280,96;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		center_height = true;
+		fixed_location = true;
+		visible = false;
+	}
+
+	[t:text,n:player1stat]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 195,106,280,122;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player2stat]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 195,138,280,152;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player3stat]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 195,170,280,186;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player4stat]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 195,202,280,218;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player5stat]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 195,234,280,250;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player6stat]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 195,266,280,282;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player7stat]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 195,298,280,314;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player8stat]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 195,330,280,346;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+}

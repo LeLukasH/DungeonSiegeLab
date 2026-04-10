@@ -1,0 +1,487 @@
+[dialogue_box]
+{
+	intended_resolution_height = 480;
+	intended_resolution_width = 640;
+  b interface = true;
+	[t:button,n:button_accept]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000019;
+		group = potential_member;
+		is_top_anchor = true;
+		rect = 205,145,297,161;
+		top_anchor = 145;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(dialogue_accept_member) & playsound(s_e_frontend_tiny_button);
+			onvisible = alphaanimation(1.0,0.0,1.0);
+		}
+		[t:text,n:text_accept]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000001A;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 232,146,297,161;
+			text = "Accept";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		rollover_help = accept;
+	}
+	[t:button,n:button_decline]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x0000001A;
+		group = potential_member;
+		is_top_anchor = true;
+		rect = 308,145,400,161;
+		top_anchor = 145;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(dialogue_decline_member) & playsound(s_e_frontend_tiny_button);
+			onvisible = alphaanimation(1.0,0.0,1.0);
+		}
+		[t:text,n:text_decline]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000001B;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 332,146,400,161;
+			text = "Decline";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+
+		rollover_help = decline;
+	}
+	[t:button,n:button_stats]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x0000001A;
+		group = potential_member;
+		is_top_anchor = true;
+		rect = 411,145,503,161;
+		top_anchor = 145;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	  x disable_color = 0x555f5f5f; 
+		[messages]
+		{
+			onbuttonpress = notify(hire_stats_show) & playsound(s_e_frontend_tiny_button);
+			onvisible = alphaanimation(1.0,0.0,1.0);
+		}
+		[t:text,n:text_stats]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000001B;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 332,146,400,161;
+			text = "View";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+
+		rollover_help = show_stats;
+	}
+
+	[t:button,n:button_buy_packmule]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x0000001B;
+		group = buy_packmule;
+		is_top_anchor = true;
+		rect = 205,145,325,161;
+		top_anchor = 145;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x55ffffff;
+		[messages]
+		{
+			onbuttonpress = notify(dialogue_buy_packmule) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_buy_packmule]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000001C;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 220,146,325,161;
+			text = "Buy Packmule";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+
+		rollover_help = buy_packmule;
+	}
+	[t:button,n:button_close]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x0000000E;
+		is_top_anchor = true;
+		rect = 471,165,563,181;
+		top_anchor = 165;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = dialog_close;
+		[messages]
+		{
+			onbuttonpress = notify(exit_dialogue) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_close]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000000F;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 502,166,563,181;
+			text = "Close";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		rollover_help = close_dialogue;
+	}
+	[t:button,n:button_shop]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x0000001B;
+		group = shop;
+		is_top_anchor = true;
+		rect = 364,165,461,181;
+		top_anchor = 165;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(dialogue_shop);
+		}
+		[t:text,n:text_shop]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000001C;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 237,146,297,161;
+			text = "Shop";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		rollover_help = shop;
+	}
+	[t:button,n:button_x]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000020;
+		rect = 581,10,597,26;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_dialogue) & playsound(s_e_frontend_tiny_button);
+		}
+		rollover_help = close_dialogue;
+	}	
+	[t:button,n:button_replay]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = replay;
+	  x draw_order = 0x00000016;
+		//is_top_anchor = true;
+		rect = 514,141,530,157;
+		texture = b_gui_cmn_button_replay_up;
+		top_anchor = 119;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(reset_dialogue) & playsound(s_e_frontend_tiny_button);
+		}
+
+		rollover_help = replay;
+		group = dialog_sound;
+	}	
+	[t:button,n:button_stop]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_stop;
+	  x draw_order = 0x00000014;
+		//is_top_anchor = true;
+		rect = 530,141,546,157;
+		texture = b_gui_cmn_button_stop_up;
+		top_anchor = 119;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(stop_dialogue) & playsound(s_e_frontend_tiny_button);
+		}
+		rollover_help = stop;
+		group = dialog_sound;
+	}
+	
+	[t:text_box,n:dialogue_box]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = ;
+	  x draw_order = 0x0000000E;
+	  b fixed_location = true;
+		font_type = b_gui_fnt_12p_copperplate-light;
+	  b has_slider = true;
+		is_top_anchor = true;
+		justify = left;
+	  x max_height = 0x000000F0;
+	  x max_width = 0x00000140;
+		rect = 204,15,545,134;
+	  f scroll_rate = 20.000000;		
+		top_anchor = 15;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		show_first_line = true;
+		
+		[messages]
+		{
+			onexit = notify(exit_dialogue) & playsound(s_e_frontend_tiny_button);
+		}		
+	}
+	[t:dialog_box,n:dialogue_main_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  x draw_order = 0x00000009;
+		is_top_anchor = true;
+		rect = 187,5,602,190;
+		top_anchor = 5;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		consumable = true;
+	}
+	[t:dialog_box,n:dialogue_text_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  x draw_order = 0x0000000D;
+		is_top_anchor = true;
+		rect = 201,12,564,137;
+		top_anchor = 12;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:checkbox,n:radio_button_soundoff]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;		
+	  x draw_order = 0x00000017;		
+	  b popup = true;		
+		radio_group = dialogue_mute;
+		rect = 546,141,562,157;
+		texture = b_gui_cmn_button_soundon_up;
+		top_anchor = 119;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{		
+			oncheck = notify(mute_dialogue) & playsound(s_e_frontend_tiny_button);			
+			
+			onlbuttondown = loadtexture(b_gui_cmn_button_soundon_down);
+			onlbuttonup	= loadtexture(b_gui_cmn_button_soundon_up);
+			onrolloff = loadtexture(b_gui_cmn_button_soundon_up);
+			onrollover = loadtexture(b_gui_cmn_button_soundon_hov);
+
+			onlbuttondownchecked = loadtexture(b_gui_cmn_button_soundoff_down);
+			onlbuttonupchecked	= loadtexture(b_gui_cmn_button_soundoff_up);
+			onrolloffchecked	= loadtexture(b_gui_cmn_button_soundoff_up);
+			onrolloverchecked	= loadtexture(b_gui_cmn_button_soundoff_hov);		
+
+			onuncheck = notify(unmute_dialogue) & playsound(s_e_frontend_tiny_button);
+		}
+
+		rollover_help = sound_toggle;
+		group = dialog_sound;
+	}
+	[t:text,n:text_available_gold]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x0000001F;
+	  x font_color = 0xFFFFFFFF;
+	  x font_size = 0x00000000;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 206,167,355,180;
+		text = "Available Gold: ";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = party_gold;
+	}
+	[t:text,n:text_pack_cost]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x0000001B;
+	  x font_color = 0xFFFFFFFF;
+	  x font_size = 0x00000000;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = buy_packmule;
+		justify = center;
+		rect = 400,167,400,180;
+		text = "Cost: 0";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;		
+	}
+
+	[t:button,n:button_more]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000019;
+		group = more;
+		is_top_anchor = true;
+		rect = 205,145,297,161;
+		top_anchor = 145;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(dialogue_more) & playsound(s_e_frontend_tiny_button);
+			onvisible = alphaanimation(1.0,0.0,1.0);
+		}
+		[t:text,n:text_more]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000001A;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 232,146,297,161;
+			text = "More...";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		rollover_help = more_dialogue;
+	}
+
+
+	// Generic Buttons
+	[t:button,n:button_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000019;
+		group = generic_button_1;
+		is_top_anchor = true;
+		rect = 205,145,297,161;
+		top_anchor = 145;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(dialogue_button_1) & playsound(s_e_frontend_tiny_button);
+			onvisible = alphaanimation(1.0,0.0,1.0);
+		}
+		[t:text,n:text_1]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000001A;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 232,146,297,161;
+			text = "1";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:button_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x0000001A;
+		group = generic_button_2;
+		is_top_anchor = true;
+		rect = 308,145,400,161;
+		top_anchor = 145;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(dialogue_button_2) & playsound(s_e_frontend_tiny_button);
+			onvisible = alphaanimation(1.0,0.0,1.0);
+		}
+		[t:text,n:text_2]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000001B;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 332,146,400,161;
+			text = "2";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+}

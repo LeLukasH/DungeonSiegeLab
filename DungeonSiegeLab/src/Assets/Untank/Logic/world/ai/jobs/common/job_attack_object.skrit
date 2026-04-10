@@ -1,0 +1,173 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: job_attack_object.skrit
+
+	Author(s)	: Bartosz Kijanka
+
+	Purpose		: This is a generic attack an object job - that object can
+				  be an actor or an item.
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+GoMind	m_Mind$;
+Job		m_Job$;
+
+
+#include "k_job_c_attack_utils"
+
+
+startup state Startup$
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job /*job$*/ )
+{
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	m_Job$	= job$;
+	m_Go$	= job$.GetGo;
+	m_Mind$	= job$.GetGo.GetMind;
+
+	Go weapon$ 	= m_Job$.GoalModifier.Go;
+	Go target$  = m_Job$.GoalObject.Go;
+
+	////////////////////////////////////////////////////////////////////////////////
+	//	auto pick weapon if none specified
+
+	if( m_Go$.IsHuded )
+	{
+		report.reportf( "aiskrit", 	"'%s' - job_attack_object starting with weapon = %s\n", m_Go$.TemplateName, weapon$ == NULL ? "NULL" : weapon$.TemplateName );
+	}
+
+	if( weapon$ == NULL )
+	{
+		////////////////////////////////////////
+		//	pick best weapon or spell
+
+		weapon$ = GetBestAutoAttackWeaponSpellOrKarate$( m_Go$, target$ );
+
+		if( m_Go$.IsHuded )
+		{
+			report.reportf( "aiskrit", 	"'%s' - job_attack_object picked weapon = %s\n", m_Go$.TemplateName, weapon$ == NULL ? "NULL" : weapon$.TemplateName );
+		}
+
+		if( weapon$ == NULL )
+		{
+			if( m_Go$.IsHuded )
+			{
+				report.warningf( "aiskrit", "'%s' - job_attack_object, scid 0x%08x was told to attack, but it can't pick a weapon.", m_Go$.TemplateName, m_Go$.Scid );
+			}
+			m_Job$.MarkForDeletion( JR_FAILED );
+			return;
+		}
+		else if( weapon$ == m_Go$ )
+		{
+			////////////////////////////////////////
+			//	have the ui display a message aobut 'switching to...' // $$ not sure this is the best place
+			if ( m_Go$.IsScreenPartyMember() && !m_Go$.Inventory.IsPackOnly() && m_Go$.Inventory.GetSelectedItem() != NULL )
+			{
+				m_Go$.Inventory.ReportItemSwitching( NULL );
+			}				
+
+			////////////////////////////////////////
+			//	unequip gear so we can fight hand-to-hand
+			if( m_Go$.Inventory.GetEquipped( ES_WEAPON_HAND ) != NULL )
+			{
+				m_Go$.Inventory.RSUnequip( ES_WEAPON_HAND, m_Job$.Origin );
+			}
+
+			////////////////////////////////////////
+			//	unequip any ranged weapon
+			if( m_Go$.Inventory.IsRangedWeaponEquipped )
+			{
+				if( m_Go$.Inventory.GetEquipped( ES_SHIELD_HAND ) != NULL )
+				{
+					m_Go$.Inventory.RSUnequip( ES_SHIELD_HAND, m_Job$.Origin  );
+				}
+			}
+		}
+	}
+
+	////////////////////////////////////////
+	//	make sure the weapon we want to attack with is the weapon we have equipped
+
+	if( (weapon$ != m_Go$) && !m_Go$.Inventory.IsEquipped( weapon$ ) && !weapon$.IsSpell )
+	{
+		if( m_Go$.IsHuded )
+		{
+			report.reportf( "aiskrit", "'%s' checking engage range weapon = %s\n", m_Go$.TemplateName, weapon$.TemplateName );
+			report.reportf( "aiskrit", "'%s' equipping weapon = %s\n", m_Go$.TemplateName, weapon$.TemplateName );
+		}
+
+		m_Go$.Inventory.RSAutoEquip( ES_ANY, weapon$.Goid, m_Job$.Origin, false );
+		if ( m_Go$.IsScreenPartyMember() )
+		{
+			m_Go$.Inventory.ReportItemSwitching( weapon$ );
+		}
+	}	
+
+	////////////////////////////////////////////////////////////////////////////////
+	//	pick job based on weapon
+
+	eJobAbstractType jat$;
+	jat$ = JAT_NONE;
+
+	if( weapon$ == m_Go$ || weapon$.IsMeleeWeapon )
+	{
+		jat$ = JAT_ATTACK_OBJECT_MELEE;
+	}
+	else if( weapon$.IsRangedWeapon )
+	{
+		jat$ = JAT_ATTACK_OBJECT_RANGED;
+	}
+	// Attack with any active offensive magic we have
+	else if( weapon$.IsSpell )
+	{
+		jat$ = JAT_CAST;
+	}
+
+	if( jat$ != JAT_NONE )
+	{
+		//report.genericf( "'%s' a3 - attacking %s with weapon = %s\n", m_Go$.TemplateName, ToString( jat$ ), weapon$.TemplateName );
+		JobReq req$ = MakeJobReq( jat$, JQ_ACTION, QP_NONE, m_Job$.GetOrigin, m_Job$.GoalObject, weapon$.Goid );
+		req$.PlaceBefore = m_Job$.Id;
+
+		Job newJob$ = m_Mind$.SDoJob( req$ );
+		if( newJob$ != NULL )
+		{
+			newJob$.TakesOver( job$ );
+			m_Job$.MarkForDeletion( JR_OK );
+		}
+		else
+		{
+			if( m_Go$.IsHuded )
+			{
+				report.warningf( "Job %s for actor %s failed to assign another attack.\n", ToString( m_Job$.GetJobAbstractType() ), m_Go$.GetTemplateName );
+			}
+			m_Job$.MarkForDeletion( JR_FAILED );
+		}
+		return;
+	}
+	else
+	{
+		// $$$ error message here
+	}
+
+	m_Job$.MarkForDeletion( JR_FAILED );
+}
+
+

@@ -1,0 +1,7 @@
+[t:tsd,n:b_gui_ig_mnu_sb_box]
+{
+  b dither = true;
+  b hasalpha = true;
+	layer1texture1 = b_gui_ig_mnu_sb_box;
+  i texturedetail = 0;
+}

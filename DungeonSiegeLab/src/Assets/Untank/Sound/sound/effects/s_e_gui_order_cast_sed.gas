@@ -1,0 +1,5 @@
+[t:sed,n:s_e_gui_order_cast_SED]
+{
+	sound_effect_file = "s_e_gui_order_cast";
+	max_simultaneous_samples = 1;
+}

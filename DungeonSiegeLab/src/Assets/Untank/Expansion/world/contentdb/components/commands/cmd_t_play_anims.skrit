@@ -1,0 +1,173 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_t_play_anims.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: Randomly loops through a series of animations from
+// the time it receives an activate event to the time it receives a deactivate event
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "cmd_t_play_anims";
+
+// external properties
+property scid character_scid$			doc = "Scid to play the animations on.";
+property int cc_1$ = 0					doc = "Character code for first animation.";
+property int cc_2$ = 0					doc = "Character code for second animation.";
+property int cc_3$ = 0					doc = "Character code for third animation.";
+property int cc_4$ = 0					doc = "Character code for fourth animation.";
+property bool randomize$ = false		doc = "Should we randomize the order of animations.";
+
+owner = GoSkritComponent;
+
+// globals
+int num_ccs$;
+int current_cc$;
+int current_cc_num$;
+
+//////////////////////////////////////////////////////
+/// Support Functions
+
+// switches to the reveal animation
+float SwitchAnimation$(eAnimChore chore$, int fourcc$, scid the_scid$)
+{
+	//report.genericf("playing animation!\n");
+
+	// turn off auto fidget
+	the_scid$.Go.Mind.SetActorAutoFidgets(false);
+
+	// clear the mcp
+	MCPManager.Flush(the_scid$.Go.Goid);
+
+	// get the correct animation
+	int anim$ = the_scid$.Go.Aspect.AspectHandle.Blender.GetSubAnimIndex(chore$, fourcc$);
+		
+	// make sure we got one
+	if (anim$ >= 0)
+	{
+		// make the request for the action
+		eReqRetCode ret$ = MCPManager.MakeRequest(the_scid$.Go.Goid, PL_PLAYANIM, chore$, anim$, 0);
+	}
+	else
+	{
+		report.genericf("The animation could not be found, %d\n", fourcc$ );
+		return 0;
+	}
+
+	// return the duration
+	return the_scid$.Go.Aspect.AspectHandle.Blender.GetDuration(anim$);
+}
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+// wait for deactivate tevents
+trigger OnGoHandleMessage$( WE_REQ_DEACTIVATE )
+{
+	// we're all set
+	SetState Done$;
+}
+
+// chill here until we get an activate event
+startup state Start$
+{
+	// look for activates
+	event OnGoHandleMessage$(eWorldEvent e$, WorldMessage /*msg$*/)
+	{
+		// activate?
+		if(e$ == WE_REQ_ACTIVATE)
+		{
+			// check the scids
+			if( !character_scid$.Goid.IsValid() ) { report.genericf( "character_scid$ is invalid!\n" ); }
+
+			// how many ccs do we have?
+			if( cc_1$ == 0 ) { report.genericf( "cc_1$ is empty!\n" ); }
+			else if( cc_2$ == 0 ) { num_ccs$ = 1; }
+			else if( cc_3$ == 0 ) { num_ccs$ = 2; }
+			else if( cc_4$ == 0 ) { num_ccs$ = 3; }
+			else { num_ccs$ = 4; }
+
+			// set the current cc number
+			current_cc_num$ = 0;
+
+			// jump into the delete state
+			SetState Wait$;
+		}
+	}
+}
+
+// wait here until the current animation is finished
+state Wait$
+{
+	event OnEnterState$
+	{
+		// are we randomizing?
+		if( randomize$ )
+		{
+			// pick an animation
+			current_cc_num$ = Math.RandomInt( 1, num_ccs$ );
+		}
+		else
+		{
+			// increment
+			current_cc_num$ += 1;
+
+			// check bounds
+			if( current_cc_num$ > num_ccs$ )
+			{
+				current_cc_num$ = 1;
+			}
+			// just in case
+			else if( current_cc_num$ < 1 ) { current_cc_num$ = 1; }
+		}
+		
+		if( current_cc_num$ == 1 ) { current_cc$ = cc_1$; }
+		else if( current_cc_num$ == 2 ) { current_cc$ = cc_2$; }
+		else if( current_cc_num$ == 3 ) { current_cc$ = cc_3$; }
+		else { current_cc$ = cc_4$; }
+
+		// play the animation
+		SetState PlayAnim$;
+	}
+
+	// jump back into the wait state on timer 1
+	transition->Wait$:OnTimer( 1 );
+}
+
+// plays the animation
+state PlayAnim$
+{
+	event OnEnterState$
+	{
+		float duration$;
+
+		// do the animation 
+		duration$ = SwitchAnimation$( CHORE_MISC, current_cc$, character_scid$ );
+
+		// wait until it's done and wait again
+		this.CreateTimer( 2, duration$ );
+	}
+
+	// go to the wait state when you're done with the animation
+	transition->Wait$:OnTimer( 2 );
+}
+
+// finishing state.  cleans everything up
+state Done$
+{
+	event OnEnterState$
+	{
+		// i suppose we don't really need to clean anything up in this case
+		// any reason to delete ourselves?
+	}
+}

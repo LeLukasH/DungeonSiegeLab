@@ -1,0 +1,213 @@
+[t:template,n:base_cyclops]
+{
+	category_name = "1W_evil_c";
+	doc = "cyclops base template";
+	specializes = actor_evil;
+	[aspect]
+	{
+		model = m_c_ecm_cy_pos_1;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_cyclops; }
+			[hit_critical]	{ priority = low; * = s_e_hit_cyclops_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_cyclops_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_cyclops_SED; }
+		}
+	}
+	[body]
+	{
+		avg_move_velocity = 1.550000; //1.15
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine1;
+			body_posterior = bip01_spine1;
+			kill_bone = bip01_spine1;
+			shield_bone = bip01_l_hand;
+			weapon_bone = bip01_r_hand;
+		}
+		[weapon_scales]
+		{
+			as_single_melee	= 1.7, 1.7, 1.7;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ecm_cy_fs;
+			[chore_attack]
+			{
+				chore_stances = 0,1;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					01 = at-02;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0,1;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0,1;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0,1;
+				skrit = select_fidget;
+				[anim_files] { 00=dff; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0,1;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[mind]
+	{
+		jat_fidget	= world\ai\jobs\common\job_fidget.skrit
+			?still		= false;
+	}
+}
+[t:template,n:cyclops]
+{
+	category_name = "1W_evil_c";
+	doc = "cyclops";
+	specializes = base_cyclops;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  	24, 0;
+			intelligence =  10, 0;
+			dexterity =  	11, 0;
+            melee =  		24,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 12446;
+		life = 1240;
+		max_life = 1240;
+		mana = 18;
+		max_mana = 18;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 95;
+		damage_min = 85;
+		reload_delay = 0;
+	}
+	[common] { screen_name="Cyclops"; }
+    [defend] { defense=255; }
+   	[inventory]
+	{
+    	[pcontent]
+		{
+   			[oneof*]
+			{
+				[oneof*]
+				{
+					es_weapon_hand = cb_un_2h_cyclops;
+				}
+				[oneof*]
+				{
+					chance = 0.5;
+					il_main = #*/75-103;
+					il_main = #armor/46-235;
+                	il_main = #nmagic/15-30;
+                	il_main = #cmagic/15-30;
+				}
+				[oneof*]
+				{
+	            	chance = 0.004;
+	                il_main = #weapon/-rare(1)/90-110;
+	                il_main = #armor/-rare(1)/289-343;
+                    il_main = #*/-rare(1)/90-110;
+                }
+				[oneof*]
+				{
+                	chance = 0.002;
+	                il_main = #weapon/-unique(2)/90-110;
+	                il_main = #armor/-unique(2)/289-343;
+                    il_main = #*/-unique(2)/90-110;
+	            }
+			}
+        }
+	}
+	[mind]
+	{
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+}
+[t:template,n:cave_giant_base]
+{
+	category_name = "1W_evil_c";
+	doc = "cave_giant";
+	specializes = base_cyclops;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  24, 0;
+			intelligence =  6, 0;
+			dexterity =  11, 0;
+            melee =  9,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 700;
+		life = 750;
+		max_life = 750;
+		mana = 18;
+		max_mana = 18;
+		textures:0 = b_c_ecm_cy-02;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_cave_giant; }
+			[hit_critical]	{ priority = low; * = s_e_hit_cave_giant_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_cave_giant_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_cave_giant_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 95;
+		damage_min = 85;
+		reload_delay = 0;
+	}
+	[common] { screen_name="Cave Giant"; }
+    [defend] { defense=94; }
+	[mind]
+	{
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+}
+[t:template,n:cave_giant]
+{
+	category_name = "1W_evil_c";
+	doc = "cave_giant";
+	specializes = cave_giant_base;
+}
+[t:template,n:cave_giant_summon]
+{
+	category_name = "1W_evil_c";
+	doc = "[summon] cave_giant";
+	specializes = cave_giant_base;
+	aspect:experience_value = 0;
+}

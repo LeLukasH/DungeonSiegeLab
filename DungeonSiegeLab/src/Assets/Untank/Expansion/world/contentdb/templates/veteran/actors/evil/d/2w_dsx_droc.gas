@@ -1,0 +1,503 @@
+[t:template,n:2W_base_droc]
+{
+	doc = "2W_Base Droc";
+	specializes = actor_evil;
+	[aspect]
+	{
+		//pholder melee
+		model = m_c_edm_drc_pos_1;
+		textures:0 = b_c_edm_drc;
+	 
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_droc_SED; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_droc_SED; }
+			[hit_critical]	{ priority = low; * = s_e_hit_droc_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_droc_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_droc_SED; }
+		}
+	}
+	[body]
+	{
+		min_move_velocity	= 1.5;
+		avg_move_velocity	= 5.000000;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = Bip01_Spine1;
+			body_posterior = bip01_pelvis;
+			kill_bone = Bip01_Spine1;
+			// shield_bone = shield_grip;
+			// weapon_bone = weapon_grip;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_drc_fs;
+			[chore_attack]
+			{
+				chore_stances = 0,6;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					01 = at-02;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0,6;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0,6;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0,6;
+				skrit = select_fidget;
+				[anim_files] { 00=dff; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0,6;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+		}	
+	}	
+	[common]
+	{
+		membership = droc, monster;
+	}
+	[mind]
+	{
+		jat_fidget				= world\ai\jobs\common\job_fidget.skrit
+		?curious				= 0.75
+		&wander					= 0.8
+		&social					= 0.1
+		&interest				= interest
+		&delay_min				= 6
+		&delay_max				= 16
+		&still					= false;
+
+		on_enemy_spotted_alert_friends = true;
+
+		jat_brain						= world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party		= true
+		&actor_creates_own_party		= true
+		&party_template					= "party_dsx_droc";
+
+		com_channels					= dyn_party, droc;
+		com_range						= 8.0;
+		melee_engage_range				= 13.2;
+		ranged_engage_range	 			= 13.5;
+		sight_range						= 14.0;
+		actor_life_ratio_low_threshold 	= 0.5;
+	}
+	[physics]
+	{
+		fire_effect = human_physics_fire;
+	}
+}
+
+
+[t:template,n:2W_droc_archer_base]
+//balanced to Level 21
+//this is currently hooked up with a ranged spell
+//due to model goofiness
+{
+	category_name = "2W_evil_d";
+	doc = "2W_Droc Archer Base";
+	specializes = 2W_base_droc;
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 34.8, 0;
+			intelligence 	= 10.6, 0;
+			dexterity		= 19.1, 0;
+			ranged			= 60, 0;
+			combat_magic	= 60, 0;
+			nature_magic	= 60, 0;
+		}
+	}
+
+	[aspect]
+	{
+		experience_value = 65975;
+		life 			 = 1194.7;
+		max_life 		 = 1194.7;
+		mana 			 = 85.3;
+		max_mana 		 = 85.3;
+	
+	}
+	[attack]
+	{
+		attack_range 	= 0.5;
+		damage_max 		= 325.2;
+		damage_min 		= 211.2;
+		damage_bonus_min_cmagic = 147;
+		damage_bonus_max_cmagic = 209;
+	}
+	[defend] { defense=464.8; }
+	[common] { screen_name="Droc Spatter"; }
+	[guts_manager]
+	{
+		effect_name = melee_hit_2;
+	}
+	[body]
+		{
+			min_move_velocity	= 1.5;
+			avg_move_velocity	= 5.000000;
+			[bone_translator]
+			{
+				body_anterior = bip01_head;
+				body_mid = Bip01_Spine1;
+				body_posterior = bip01_pelvis;
+				kill_bone = Bip01_Spine1;
+				// shield_bone = shield_grip;
+				// weapon_bone = weapon_grip;
+			}		
+			[chore_dictionary]
+			{
+				chore_prefix = a_c_edm_drc_fs;
+				[chore_attack]
+				{
+					chore_stances = 0;
+					skrit = select_attack;
+					[anim_files]
+					{
+						00 = at;
+					}
+				}
+				[chore_default]
+				{
+					chore_stances = 0;
+					skrit = infinite_loop;
+					[anim_files] { 00=ds; }
+				}
+				[chore_die]
+				{
+					chore_stances = 0;
+					skrit = select_transition;
+					[anim_files] { 00=di; }
+				}
+				[chore_fidget]
+				{
+					chore_stances = 0;
+					skrit = select_fidget;
+					[anim_files] { 00=dff; }
+				}
+				[chore_walk]
+				{
+					chore_stances = 0;
+					skrit = select_walk;
+					[anim_files] { 00=rl; }
+				}
+				[chore_magic]
+				{
+					chore_stances = 0;
+					skrit = select_attack;
+					[anim_files]
+					{
+						00 = mg;
+						00 = mg-02;
+					}
+				}
+			}		
+		}
+	[inventory]
+	{
+
+		spew_equipped_kill_count = <ignore>;
+		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=spell_droc; }
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 14, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 10157;
+					max = 20212;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/89-122;
+					il_main = #armor/46-274;
+					il_main = #*/89-122;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/122-146;
+					il_main = #armor/-rare(1)/189-418;
+					il_main = #*/-rare(1)/122-146;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/122-146;
+					il_main = #armor/-unique(2)/189-418;
+					il_main = #*/-unique(2)/122-146;
+				}			
+			}
+		}			
+	}
+	[mind]
+		{
+			actor_weapon_preference			= WP_MAGIC;
+			actor_auto_switches_to_magic	= true;
+			actor_auto_switches_to_melee	= false;
+			actor_auto_switches_to_ranged	= false;
+			actor_auto_uses_stored_items	= false;
+		
+			on_enemy_entered_icz_switch_to_melee = false;
+			inner_comfort_zone_range			= 2;
+			outer_comfort_zone_range			= 4.0;
+			melee_engage_range					= 2;
+			ranged_engage_range					= 13.5;
+			sight_range													 = 14.0;
+					
+			jat_fidget						= world\ai\jobs\common\job_fidget.skrit
+			?social							= 0.45
+			&delay_min						= 7.0
+			&still							= false;
+		}
+}
+[t:template,n:2W_dsx_droc_archer]
+//balanced to Level 20
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_droc_archer";
+	specializes = 2W_droc_archer_base;
+	
+	[guts_manager]
+	{
+		effect_name = melee_hit_2;
+	}
+}
+
+[t:template,n:2W_droc_melee_base]
+//balanced for Level 21+
+{
+	category_name = "2W_evil_d";
+	doc = "2W_Droc Melee Base";
+	specializes = 2W_base_droc;
+	[actor]
+	{
+		[skills]
+		{
+			strength	= 37, 0;
+			intelligence = 10.6, 0;
+			dexterity	= 19.1, 0;
+			melee		= 60, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 66339;
+		life		 	= 1225.1;
+		max_life	 	= 1225.1;
+		mana		 	= 79.2;
+		max_mana	 	= 79.2;
+		model 			= m_c_edm_drc_pos_2;
+		textures:0 = b_c_edm_drc-02;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 362.1;
+		damage_min = 271.5;
+	}
+	[common] { screen_name="Droc"; }
+	[defend] { defense=598.9; }
+	[guts_manager]
+	{
+		effect_name = melee_hit_2;
+	}
+	[inventory]
+	{
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 14, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 10157;
+					max = 20212;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/89-122;
+					il_main = #armor/46-274;
+					il_main = #*/89-122;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/122-146;
+					il_main = #armor/-rare(1)/189-418;
+					il_main = #*/-rare(1)/122-146;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/122-146;
+					il_main = #armor/-unique(2)/189-418;
+					il_main = #*/-unique(2)/122-146;
+				}			
+			}
+		}	
+	}
+	[mind]
+	{
+		jat_fidget				= world\ai\jobs\common\job_fidget.skrit
+		?curious				= 0.65
+		&wander					= 0.8
+		&social					= 0.1
+		&interest				= interest
+		&delay_min				= 6
+		&delay_max				= 16
+		&still					= false;
+
+		on_enemy_spotted_alert_friends 	= true;
+
+		jat_brain						= world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party		= true
+		&actor_creates_own_party		= true
+		&party_template					= "party_dsx_droc";
+
+		com_channels					= dyn_party, droc;
+		com_range						= 8.0;
+		melee_engage_range				= 13.2;
+		ranged_engage_range	 			= 13.5;
+		sight_range						= 14.0;
+		actor_life_ratio_low_threshold 	= 0.5;		
+	}
+}
+
+[t:template,n:2W_dsx_droc_grunt]
+//balanced for Level 21
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_droc_grunt";
+	specializes = 2W_droc_melee_base;
+}
+
+//balanced for level 21+
+[t:template,n:2W_dsx_droc_commander]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_droc_commander";
+	specializes = 2W_droc_melee_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength	= 39.1, 0;
+			intelligence = 11.9, 0;
+			dexterity	= 20.9, 0;
+			melee		= 61, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 65247;
+		life		 = 1273.9;
+		max_life	 = 1273.9;
+		mana		 = 79.2;
+		max_mana	 = 79.2;
+		model = m_c_edm_drc_pos_3;
+		textures:0 = b_c_edm_drc-03;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max 	= 392.2;
+		damage_min 	= 288;
+	}
+	[common]
+	{
+		screen_name="Droc Superior";
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+				no_trig_bits = true;
+			}
+		}
+	}
+	[defend] { defense=609.5; }
+	[inventory]
+		{
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 14, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 10157;
+					max = 20212;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/89-122;
+					il_main = #armor/46-274;
+					il_main = #*/89-122;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/122-146;
+					il_main = #armor/-rare(1)/189-418;
+					il_main = #*/-rare(1)/122-146;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/122-146;
+					il_main = #armor/-unique(2)/189-418;
+					il_main = #*/-unique(2)/122-146;
+				}			
+			}
+		}	
+	}
+	[mind]{}
+}

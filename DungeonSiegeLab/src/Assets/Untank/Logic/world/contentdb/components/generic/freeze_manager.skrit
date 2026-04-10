@@ -1,0 +1,109 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  freeze_manager.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+//	This is sneaky... dont try this at home kids.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+owner = GoSkritComponent;
+
+string freeze_state$ = "Frozen";
+
+startup state Main$
+{ 	
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_ACTIVATE )
+		{
+//			report.generic("Ack\n");	
+			
+			Goid attacked$ = msg$.GetSendFrom();
+			
+			// need to unpack a freeze durration here
+			float freeze_time$ = msg$.GetData1() / 1000.0;
+			
+			if( attacked$.IsValidMp() )
+			{
+				if( ( freeze_time$ > 0.0 ) && attacked$.Go.HasActor && ( attacked$.Go.Player.Controller != PC_HUMAN ) )
+				{
+					if( AIQuery.Is( attacked$.Go, attacked$.Go, QT_ALIVE_CONSCIOUS ) )
+					{
+						if( !attacked$.Go.Actor.HasGenericState( freeze_state$ ) )
+						{
+							int timer$ = MakeInt( attacked$ );
+							This.CreateTimer( timer$, freeze_time$);
+							This.SetTimerGlobal ( timer$, true );
+							GoDb.StartWatching( owner.Goid, attacked$);
+							
+							// Add the effected state so this can only happen once
+							attacked$.Go.Actor.SAddGenericState( freeze_state$, freeze_state$, freeze_time$, owner.goid, owner.goid, 0 );			
+							
+							// add cool box effect
+							attacked$.Go.Aspect.SSetFreezeMeshFlag( true );
+							
+							// stop moving
+							attacked$.Go.Aspect.SSetLockMeshFlag(true);
+							
+							//turn off brain so he wont try to attack any more.
+							MCPManager.MakeRequest( attacked$, PL_FACE );
+							attacked$.Go.Mind.Clear();
+							MCPManager.Flush( attacked$ );
+						}
+					} else {
+//						report.generic("not alive, so blow him up!!\n");
+						
+						SiegeFx.SRunScript( "ice_explosion_large", attacked$, attacked$, "", owner.Goid, e$ );
+			
+						GoDb.SMarkForDeletion( attacked$, true, true );
+					}
+				}
+			}
+		} 
+	}
+	
+	event OnGoHandleCCMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{	
+		goid frozen_guy$ = msg$.GetSendTo();
+		
+		if( e$ == WE_KILLED && frozen_guy$.IsValidMp() ) {
+			
+			GoDb.StopWatching( owner.Goid, frozen_guy$);
+				
+			frozen_guy$.Go.Aspect.SSetFreezeMeshFlag( false );
+			frozen_guy$.Go.Aspect.SSetLockMeshFlag( false );
+			frozen_guy$.Go.Actor.SRemoveGenericState( freeze_state$ );
+			
+			int timer$ = MakeInt( frozen_guy$ );
+							
+			This.DestroyTimer( timer$ );
+			
+			SiegeFx.SRunScript( "ice_explosion_large", frozen_guy$, frozen_guy$, "", owner.Goid, e$ );
+			
+			GoDb.SMarkForDeletion( frozen_guy$, true, true );
+		}
+	}
+	
+	event OnTimer$( int id$, float /*off$*/ )
+	{
+//		report.generic("I'm trying to un-freeze someone special...\n");
+		goid frozen_guy$ = MakeGoid( id$ );
+		if (frozen_guy$.IsValid)
+		{
+			GoDb.StopWatching( owner.Goid, frozen_guy$);
+				
+			frozen_guy$.Go.Aspect.SSetFreezeMeshFlag( false );
+			frozen_guy$.Go.Aspect.SSetLockMeshFlag( false );
+			frozen_guy$.Go.Mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+			
+			// remove the state so this can be affected again
+			frozen_guy$.Go.Actor.SRemoveGenericState( freeze_state$ );
+		}
+	}
+}

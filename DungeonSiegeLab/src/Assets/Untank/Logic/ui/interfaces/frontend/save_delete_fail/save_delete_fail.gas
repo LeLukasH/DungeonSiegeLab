@@ -1,0 +1,107 @@
+[save_delete_fail]
+{
+  b interface = true;
+	modal = true;
+	centered = dialog_box_main;
+
+	[t:button,n:button_delete_okay]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000006;
+		rect = 330,338,430,354;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			onbuttonpress = notify(save_delete_fail_close);
+		}	
+		
+		topmost = true;	
+
+		[t:text,n:text_okay]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x00000008;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 418,339,509,354;
+			text = "Okay";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			topmost = true;
+		}
+	}
+	[t:dialog_box,n:dialog_box_heading]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  x draw_order = 0x00000003;
+		rect = 255,229,531,255;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		topmost = true;
+	}
+	[t:dialog_box,n:dialog_box_main]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  x draw_order = 0x00000001;
+		rect = 175,203,616,382;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		topmost = true;
+	}
+	[t:dialog_box,n:dialog_box_main2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  x draw_order = 0x00000001;
+		rect = 175,203,616,382;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		topmost = true;
+	}	
+
+	[t:text,n:text_heading]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+	  x font_color = 0xFFFFFFFF;
+	  x font_size = 0x00000000;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 258,234,526,250;
+		text = "Save Game Deletion";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		topmost = true;
+	}
+	[t:text,n:text_save_message]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+	  x font_color = 0xFFFFFFFF;
+	  x font_size = 0x00000000;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 185,283,604,304;
+		text = "Quick-save files and auto-save files cannot be deleted.";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		topmost = true;
+	}
+}

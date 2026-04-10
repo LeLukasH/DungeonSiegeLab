@@ -1,0 +1,110 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  experience_award.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = true;
+property string _doc$                = "Gives an award to a person or the party";
+property string _required_component$ = "placement";
+
+// exported properties
+property float 			experience$ 		= 500              			doc = "Amount to award the actor.";
+property bool			award_party$		= true						doc = "give the award to the entire party";
+property string			quest_name$										doc = "name of the quest that must be completed. You can leave this blank if the quest status is checked elsewhere.";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+// local states
+
+startup state Start$
+{
+	transition -> Active$: OnGoHandleMessage( WE_ENTERED_WORLD );
+}
+
+state Active$
+{
+    event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_ACTIVATE )
+		{
+			// The recipient of this reward is packed into data1 of the message.
+			Goid Recipient$ = MakeGoid( msg$.GetData1() );
+			
+			
+			// If they specified a quest name check to see if it is completed.
+			if( !StringTool.IsEmpty( quest_name$ ) )
+			{	
+				if( !Victory.IsQuestCompleted( quest_name$ ) )
+				{
+					return;
+				}
+			}
+			
+			
+			if( Recipient$.IsValid() ) 
+			{
+				if( award_party$ ) 
+				{
+					// get the party
+					Go Party$ = Recipient$.Go.OwningParty;
+					if (Party$ != NULL)
+					{
+						GopColl partyMembers$ = Party$.Children;
+						
+						int i$ = 0;
+						Go temp$;
+						
+						// iterate through all party members.
+						while( i$ < partyMembers$.Size() )
+						{
+							temp$ = partyMembers$.Get( i$ );
+							if (temp$.HasInventory() ) {
+		 				
+		 						// find each members active weapon and give them experience acordingly.
+				 				Go Weapon$ = NULL;
+				 				if( temp$.Inventory.IsMeleeWeaponSelected || temp$.Inventory.IsRangedWeaponSelected )
+				 				{
+				 					Weapon$ = temp$.Inventory.GetSelectedWeapon;
+				 				} else if ( temp$.Inventory.IsSpellSelected ) {
+				 					Weapon$ = temp$.Inventory.GetSelectedSpell;
+				 				}
+				 				
+				 				if (Weapon$ != NULL ) {
+				 					Rules.AwardExperience( temp$.goid, Weapon$.goid, experience$ );
+				 				} 
+				 			}
+							i$ += 1;
+						}
+					}
+				} else {
+					if (Recipient$.Go.HasInventory() ) {
+		 				
+		 				// find the active weapon and give experience acordingly.
+		 				Go Weapon$ = NULL;
+		 				if( Recipient$.Go.Inventory.IsMeleeWeaponSelected || Recipient$.Go.Inventory.IsRangedWeaponSelected )
+		 				{
+		 					Weapon$ = Recipient$.Go.Inventory.GetSelectedWeapon;
+		 				} else if ( Recipient$.Go.Inventory.IsSpellSelected ) {
+		 					Weapon$ = Recipient$.Go.Inventory.GetSelectedSpell;
+		 				}
+		 				
+		 				if (Weapon$ != NULL ) {
+		 					Rules.AwardExperience( Recipient$, Weapon$.goid, experience$ );
+		 				} 
+		 			}
+		 		}
+			}
+		}
+	}
+}

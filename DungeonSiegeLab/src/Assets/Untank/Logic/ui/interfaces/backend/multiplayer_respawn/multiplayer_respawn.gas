@@ -1,0 +1,111 @@
+[multiplayer_respawn]
+{
+  b interface = true;
+  b modal = true;
+  centered = dialog_multi_respawn;
+
+	[t:button,n:button_exit]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000004;
+		rect = 245,254,385,270;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[t:text,n:text_exit_game]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x00000007;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 270,255,361,268;
+			text = "Exit Game";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+
+		[messages]
+		{
+			onbuttonpress=notify(show_exit_game_dialog);
+		}
+	}
+	[t:button,n:button_respawn]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000003;
+		rect = 245,233,385,249;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	  x disable_color = 0x555f5f5f;
+
+		[t:text,n:text_respawn]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x00000008;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 269,233,361,248;
+			text = "Respawn as Ghost";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+
+		[messages]
+		{
+			onbuttonpress=notify(respawn);
+		}
+	}
+	[t:button,n:button_resume]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000002;
+		rect = 245,212,385,228;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[t:text,n:text_resume]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000001A;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 270,213,361,226;
+			text = "Resume";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+
+		[messages]
+		{
+			onbuttonpress=notify(resume_from_respawn);
+		}
+	}
+	[t:dialog_box,n:dialog_multi_respawn]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  x draw_order = 0x00000001;
+		rect = 204,181,427,303;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}		
+}

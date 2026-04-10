@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_des_sign-dragon]
+{
+	layer1texture1 = b_i_des_sign-dragon;
+  i texturedetail = 2;
+}

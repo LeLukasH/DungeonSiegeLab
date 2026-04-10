@@ -1,0 +1,368 @@
+[t:template,n:3W_dsx_slithermage_base]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_slithermage_base";
+	specializes = actor_evil;
+	[actor]
+		{
+			[skills]
+				{
+					strength =	242.9, 0;
+					intelligence = 132.7, 0;
+					dexterity =	188.2, 0;
+					melee =		158, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1491248;
+			life			= 902.5;
+			max_life		= 902.5;
+			mana			= 902.5;
+			max_mana		= 902.5;
+			model = m_c_ecm_kl_pos_1;
+		textures:0 = b_c_edm_ph_melee;
+			[voice]
+				{
+					[die]			{ priority = high;	* = s_e_die_slithermage;		}
+					[enemy_spotted]	{ priority = high; * = s_e_call_slithermage_SED; }
+					[hit_critical]	{ priority = low;	* = s_e_hit_slithermage_SED;		}
+					[hit_glance]	{ priority = low;	* = s_e_hit_slithermage_SED;		}
+					[hit_solid]		{ priority = low;	* = s_e_hit_slithermage_SED;		}
+				}
+
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 487.7; //! Do by hand, on a curve.	 For low values, ~==XP (6xp => 6damage; 90xp=> 50damage)
+			damage_min = 399; //! Same as damage_max
+		}
+	[body]
+		{
+			avg_move_velocity = 2.5;
+			[bone_translator]
+				{
+					body_anterior = bip01_head;
+					body_mid = bip01_spine1;
+					body_posterior = bip01_pelvis;
+					kill_bone = bip01_spine1;
+					shield_bone = bip01_l_hand;
+					weapon_bone = bip01_r_hand;
+				}
+			[chore_dictionary]
+				{
+					chore_prefix = a_c_ecm_kl_fs;
+					[chore_attack]
+						{
+							chore_stances = 0;
+							skrit = select_attack;
+							[anim_files]
+								{
+									00 = at;
+									01 = at-02;
+								}
+						}
+					[chore_default]
+						{
+							chore_stances = 0;
+							skrit = infinite_loop;
+							[anim_files] { 00=ds; }
+						}
+					[chore_die]
+						{
+							chore_stances = 0;
+							skrit = select_transition;
+							[anim_files] { 00=di; }
+						}
+					[chore_fidget]
+						{
+							chore_stances = 0;
+							skrit = select_fidget;
+							[anim_files] { 00=dff; }
+						}
+					[chore_walk]
+						{
+							chore_stances = 0;
+							skrit = select_walk;
+							[anim_files] { 00=wl; }
+						}
+					[chore_magic]
+						{
+							chore_stances = 0;
+							skrit = select_attack;
+							[anim_files]
+								{
+									00 = mg;
+									01 = at;
+									02 = at-02;
+								}
+						}
+				}
+		}
+	[common]
+		{
+			screen_name = "Slithermage Base"; //--
+			membership = monster; //--
+		}
+	[defend] { defense = 2004.9; }
+
+	[mind]
+		{
+			jat_brain = world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party	= true;
+			jat_fidget = world\ai\jobs\common\job_fidget.skrit;
+
+			melee_engage_range = 14;
+			personal_space_range = 0.7;
+			ranged_engage_range = 14.0;
+			sight_range = 14.0;
+		}
+}
+
+[t:template,n:3W_dsx_slithermage_melee]
+//balanced to Level 24
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_slithermage_melee";
+	specializes = 3W_dsx_slithermage_base;
+	[actor]
+		{
+			[skills]
+				{
+					strength =	50.3, 0;
+					intelligence = 12.2, 0;
+					dexterity =	23.8, 0;
+					melee =		88, 0;
+					combat_magic = 91,0;
+					nature_magic = 91,0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1491248;
+			life				= 3245.8;
+			max_life			= 3245.8;
+			mana				= 902.5;
+			max_mana			= 902.5;
+		textures:0 = b_c_ecm_kl-03;
+
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 600.9;
+			damage_min = 352.7;
+		damage_bonus_min_cmagic = 389;
+		damage_bonus_max_cmagic = 523;
+		}
+	[body]
+		{
+			avg_move_velocity = 2.5;
+		}
+	[common]
+		{
+			screen_name = "Slithermage Master"; //--
+			membership = monster; //--
+		}
+	[defend] { defense = 1157.8; }
+
+	[mind]
+		{
+			jat_brain = world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party	= true;
+			jat_fidget = world\ai\jobs\common\job_fidget.skrit;
+
+			melee_engage_range = 14;
+			personal_space_range = 0.7;
+			ranged_engage_range = 14.0;
+			sight_range = 14.0;
+		}
+	[inventory]
+
+		{
+			selected_active_location = il_active_primary_spell;
+			[other]
+				{
+					il_active_primary_spell	= dsx_spell_slithermage_blast_2; 
+				}
+	
+		
+			drop_at_use_point = true;
+			[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 25, Weak */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 236098;
+				max = 468670;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.111111111111111;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.1;
+				il_main = #weapon/190-263;
+				il_main = #armor/87-653;
+				il_main = #*/190-263;
+			}
+			[oneof*]
+			{
+				chance = 0.005;
+				il_main = #weapon/-rare(1)/170-275;
+				il_main = #armor/-rare(1)/467-653;
+				il_main = #*/-rare(1)/170-275;
+			}
+			
+		}
+	}
+		}
+}
+
+[t:template,n:3W_dsx_slithermage_ranged_base]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_slithermage_ranged_base";
+	specializes = 3W_dsx_slithermage_base; 
+	[actor]
+	{
+		[skills]
+		{
+			strength =		50.3, 0;
+			intelligence = 12.2, 0;
+			dexterity =		23.8, 0;
+			nature_magic =	91, 0;
+			combat_magic =	91, 0;
+			}
+	}
+	[aspect]
+	{
+		experience_value = 1673772;
+		life			= 2177.1;
+		max_life		= 2177.1;
+		mana			= 902.5;
+		max_mana		= 902.5;
+		textures:0 = b_c_ecm_kl-02;
+		scale_base	 = 0.65;
+	}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 335.3;
+			damage_min = 242.3;
+		damage_bonus_min_cmagic = 181;
+		damage_bonus_max_cmagic = 251;
+		}
+	[body]
+		{
+			avg_move_velocity = 2.5;
+		}
+	[common]
+		{
+			screen_name = "Slithermage"; //--
+			membership = monster; //--
+		}
+	[defend] { defense = 524.5; }
+
+	[inventory]
+		{
+			selected_active_location = il_active_primary_spell;
+			[other]
+				{
+					il_active_primary_spell		= dsx_spell_slithermage_blast; 
+				}
+				[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 25, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 236098;
+				max = 468670;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.111111111111111;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/201-263;
+				il_main = #armor/87-653;
+				il_main = #*/201-263;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/213-287;
+				il_main = #armor/-rare(1)/507-910;
+				il_main = #*/-rare(1)/213-287;
+			}
+			
+		}
+	}
+		}
+
+	[mind]
+		{
+			jat_brain = world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party	= true;
+			jat_fidget = world\ai\jobs\common\job_fidget.skrit;
+
+			melee_engage_range = 14;
+			personal_space_range = 0.7;
+			ranged_engage_range = 14.0;
+			sight_range = 14.0;
+		}
+	[inventory]
+		{
+			drop_at_use_point = true;
+			
+		}
+}
+
+[t:template,n:3W_dsx_slithermage_ranged]
+//balanced to Level 18
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_slithermage_ranged";
+	specializes = 3W_dsx_slithermage_ranged_base; 
+}
+
+[t:template,n:3W_dsx_slithermage_summon]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_summon_slithermage";
+	specializes = 3W_dsx_slithermage_ranged_base;
+ aspect:experience_value = 0;
+	[inventory]
+		{
+			selected_active_location = il_active_primary_spell;
+			
+		}
+}

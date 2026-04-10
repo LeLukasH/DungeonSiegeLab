@@ -1,0 +1,169 @@
+[t:template,n:3W_dsx_wraith]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_wraith";
+	specializes = base_battle_wraith; //from ds1
+	[common]{}
+
+	[actor]
+		{
+			[skills]
+				{
+					strength 	= 44.8, 0;
+					intelligence = 12.5, 0;
+					dexterity 	= 21.6, 0;
+					melee 		= 80, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1181550;
+			life = 1500.4;
+			max_life = 1500.4;
+			mana = 114.9;
+			max_mana = 114.9;
+			model = m_c_ecm_wr_pos_1;
+			[textures] { 0=b_c_ecm_wr; }
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 456.5;
+			damage_min = 333.3;
+		}
+	[defend] { defense=606.5; }
+	[body]
+		{
+			[chore_dictionary]
+				{
+					chore_prefix = a_c_ecm_wr_fs;
+					[chore_attack]
+						{
+							chore_stances = 0;
+							skrit = select_attack;
+							[anim_files]
+								{
+									00 = at;
+									01 = at-02;
+									02 = at-03;
+									03 = at-04;
+									04 = at-05;
+								}
+						}
+					[chore_default]
+						{
+							chore_stances = 0;
+							skrit = infinite_loop;
+							[anim_files] { 00=dfs; }
+						}
+					[chore_die]
+						{
+							chore_stances = 0;
+							skrit = select_transition;
+							[anim_files] { 00=di; }
+						}
+					[chore_misc]
+						{
+							chore_stances = 0;
+							skrit = select_transition;
+							[anim_files]
+								{
+									slep = ds;
+									wake = up;
+								}
+						}
+					[chore_fidget]
+						{
+							chore_stances = 0;
+							skrit = select_fidget;
+							[anim_files] { 00=dff; }
+						}
+					[chore_walk]
+						{
+							chore_stances = 0;
+							skrit = select_walk;
+							[anim_files] { 00=wl; }
+						}
+				}
+		}
+	[effect_manager_server]
+		{
+			effect_name	= "wraith_flame_head";
+			repeat		= false;
+
+			start_msg	= WE_ENEMY_SPOTTED;
+			stop_msg	= WE_KILLED;
+		}
+	[common]
+		{
+			screen_name="Battle Wraith";
+			[template_triggers]
+				{
+					[*]
+						{
+							action* = call_sfx_script("wraith_tracer","shield_grip");
+							action* = call_sfx_script("wraith_tracer","weapon_grip");
+							condition* = receive_world_message("WE_ENTERED_WORLD");
+							single_shot = true;
+						}
+				}
+		}
+	[inventory]
+	{
+		drop_at_use_point = true;
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 13, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 101055;
+					max = 201449;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_super;
+					il_main = potion_health_super;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/153-220;
+					il_main = #armor/57-453;
+					il_main = #*/153-220;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/171-250;
+					il_main = #armor/-rare(1)/338-753;
+					il_main = #*/-rare(1)/171-250;
+				}
+				
+			}
+		}
+	}
+	[mind]
+		{
+			jat_brain						= world\ai\jobs\common\brain_hero.skrit
+				?actor_creates_own_party	= true
+				&party_template				= "party_wraith";
+		}
+	[physics]
+		{
+			[break_particulate]
+				{
+					frag_glb_wraith_01 = 1;
+					frag_glb_wraith_02 = 1;
+					frag_glb_wraith_03 = 2;
+					frag_glb_wraith_04 = 1;
+					frag_glb_wraith_05 = 3;
+					frag_glb_wraith_06 = 2;
+					frag_glb_wraith_08 = 1;
+				}
+		}
+}

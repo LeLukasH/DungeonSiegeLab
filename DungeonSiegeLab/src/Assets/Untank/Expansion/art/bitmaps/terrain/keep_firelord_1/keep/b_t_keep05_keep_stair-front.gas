@@ -1,0 +1,5 @@
+[t:tsd,n:b_t_keep05_keep_stair-front]
+{
+	layer1texture1 = b_t_keep05_keep_stair-front;
+  i texturedetail = 2;
+}

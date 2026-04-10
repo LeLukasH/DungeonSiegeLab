@@ -1,0 +1,1750 @@
+[multi_inventory]
+{
+  b interface = true;
+	
+	[t:button,n:gold_icon_human_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_human_1;
+		rect = 304,8,320,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+	[t:button,n:button_gold_human_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x0000000d;
+		group = multi_inventory_human_1_gold;				
+		rect = 200,9,258,24;
+		rollover_help = button_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:inventory_gold_human_1]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000000e;
+		  x font_color = 0xffffffff;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = multi_inventory_human_1_gold;
+			justify = center;
+			rect = 302,8,360,24;
+			text = "9999999";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}
+	}
+	[t:button,n:gold_icon_human_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_human_2;
+		rect = 304,8,320,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+	[t:button,n:gold_icon_human_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_human_3;
+		rect = 304,8,320,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+	[t:button,n:gold_icon_human_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_human_4;
+		rect = 304,8,320,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+	[t:button,n:gold_icon_human_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_human_5;
+		rect = 304,8,320,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+	[t:button,n:gold_icon_human_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_human_6;
+		rect = 304,8,320,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+	[t:button,n:gold_icon_human_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_human_7;
+		rect = 304,8,320,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+	[t:button,n:gold_icon_human_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_human_8;
+		rect = 304,8,320,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+
+	[t:button,n:gold_icon_packmule_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_packmule_1;
+		rect = 138,8,154,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}	
+	[t:button,n:gold_icon_packmule_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_packmule_2;
+		rect = 138,8,154,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+	[t:button,n:gold_icon_packmule_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_packmule_3;
+		rect = 138,8,154,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+	[t:button,n:gold_icon_packmule_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_packmule_4;
+		rect = 138,8,154,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+	[t:button,n:gold_icon_packmule_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_packmule_5;
+		rect = 138,8,154,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+	[t:button,n:gold_icon_packmule_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_packmule_6;
+		rect = 138,8,154,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+	[t:button,n:gold_icon_packmule_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_packmule_7;
+		rect = 138,8,154,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+	[t:button,n:gold_icon_packmule_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;
+		group = multi_inventory_packmule_8;
+		rect = 138,8,154,24;
+		texture = b_gui_ig_mnu_ip_gold;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer);
+		}	
+		rollover_help = button_gold;
+	}
+
+
+	[t:button,n:button_inventory_exit_human_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_human_1;
+		rect = 369,2,385,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 0;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_human_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_human_2;
+		rect = 369,2,385,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 1;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_human_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_human_3;
+		rect = 369,2,385,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 2;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_human_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_human_4;
+		rect = 369,2,385,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 3;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_human_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_human_5;
+		rect = 369,2,385,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 4;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_human_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_human_6;
+		rect = 369,2,385,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 5;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_human_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_human_7;
+		rect = 369,2,385,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 6;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_human_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_human_8;
+		rect = 369,2,385,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 7;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_packmule_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_packmule_1;
+		rect = 459,2,475,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 0;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_packmule_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_packmule_2;
+		rect = 459,2,475,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 1;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_packmule_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_packmule_3;
+		rect = 459,2,475,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 2;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_packmule_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_packmule_4;
+		rect = 459,2,475,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 3;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_packmule_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_packmule_5;
+		rect = 459,2,475,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 4;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_packmule_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_packmule_6;
+		rect = 459,2,475,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 5;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_packmule_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_packmule_7;
+		rect = 459,2,475,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 6;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:button,n:button_inventory_exit_packmule_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		group = multi_inventory_packmule_8;
+		rect = 459,2,475,18;
+		rollover_help = inventory_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		index = 7;
+		[messages]
+		{
+			onbuttonpress = notify(character_exit);
+		}
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_human_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_human_1;
+		rect = 253,0,387,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_human_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_human_2;
+		rect = 253,0,387,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_human_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_human_3;
+		rect = 253,0,387,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_human_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_human_4;
+		rect = 253,0,387,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_human_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_human_5;
+		rect = 253,0,387,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_human_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_human_6;
+		rect = 253,0,387,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_human_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_human_7;
+		rect = 253,0,387,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_human_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_human_8;
+		rect = 253,0,387,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_packmule_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_packmule_1;
+		rect = 87,0,477,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_packmule_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_packmule_2;
+		rect = 87,0,477,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_packmule_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_packmule_3;
+		rect = 87,0,477,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_packmule_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_packmule_4;
+		rect = 87,0,477,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_packmule_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_packmule_5;
+		rect = 87,0,477,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_packmule_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_packmule_6;
+		rect = 87,0,477,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_packmule_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_packmule_7;
+		rect = 87,0,477,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_inv_bg_packmule_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		group = multi_inventory_packmule_8;
+		rect = 87,0,477,449;
+		uvcoords = 0.000000,0.000000,0.765714,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:grid_place_human_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_human_1;
+		rect = 255,30,384,447;
+		uvcoords = 0.000000,-12.031250,4.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_human_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_human_2;
+		rect = 255,30,384,447;
+		uvcoords = 0.000000,-12.031250,4.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_human_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_human_3;
+		rect = 255,30,384,447;
+		uvcoords = 0.000000,-12.031250,4.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_human_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_human_4;
+		rect = 255,30,384,447;
+		uvcoords = 0.000000,-12.031250,4.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_human_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_human_5;
+		rect = 255,30,384,447;
+		uvcoords = 0.000000,-12.031250,4.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_human_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_human_6;
+		rect = 255,30,384,447;
+		uvcoords = 0.000000,-12.031250,4.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_human_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_human_7;
+		rect = 255,30,384,447;
+		uvcoords = 0.000000,-12.031250,4.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_human_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_human_8;
+		rect = 255,30,384,447;
+		uvcoords = 0.000000,-12.031250,4.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_packmule_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_packmule_1;
+		rect = 89,30,474,447;
+		uvcoords = 0.000000,-12.031250,12.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_packmule_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_packmule_2;
+		rect = 89,30,474,447;
+		uvcoords = 0.000000,-12.031250,12.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_packmule_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_packmule_3;
+		rect = 89,30,474,447;
+		uvcoords = 0.000000,-12.031250,12.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_packmule_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_packmule_4;
+		rect = 89,30,474,447;
+		uvcoords = 0.000000,-12.031250,12.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_packmule_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_packmule_5;
+		rect = 89,30,474,447;
+		uvcoords = 0.000000,-12.031250,12.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_packmule_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_packmule_6;
+		rect = 89,30,474,447;
+		uvcoords = 0.000000,-12.031250,12.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_packmule_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_packmule_7;
+		rect = 89,30,474,447;
+		uvcoords = 0.000000,-12.031250,12.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:grid_place_packmule_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		group = multi_inventory_packmule_8;
+		rect = 89,30,474,447;
+		uvcoords = 0.000000,-12.031250,12.031250,1.000000;
+		wrap_mode = tiled;
+	}
+
+	[t:button,n:multi_button_arrange_human_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_1;
+		rect = 279,2,303,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 0;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_human_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_2;
+		rect = 279,2,303,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 1;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_human_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_3;
+		rect = 279,2,303,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 2;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_human_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_4;
+		rect = 279,2,303,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 3;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_human_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_5;
+		rect = 279,2,303,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 4;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_human_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_6;
+		rect = 279,2,303,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 5;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_human_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_7;
+		rect = 279,2,303,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 6;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_human_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_8;
+		rect = 279,2,303,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 7;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+
+	[t:button,n:multi_button_arrange_packmule_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_1;		
+		rect = 113,2,137,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 0;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_packmule_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_2;
+		rect = 113,2,137,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 1;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_packmule_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_3;
+		rect = 113,2,137,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 2;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_packmule_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_4;
+		rect = 113,2,137,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 3;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_packmule_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_5;
+		rect = 113,2,137,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 4;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_packmule_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_6;
+		rect = 113,2,137,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 5;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_packmule_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_7;
+		rect = 113,2,137,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 6;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+	[t:button,n:multi_button_arrange_packmule_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_8;
+		rect = 113,2,137,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		index = 7;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+
+	[t:itemslot,n:multi_portrait_human_1]
+	{
+		allow_input = false;
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_1;
+		index = 0;
+		rect = 255,2,279,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_human_2]
+	{
+		allow_input = false;
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_2;
+		index = 1;
+		rect = 255,2,279,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_human_3]
+	{
+		allow_input = false;
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_3;
+		index = 2;
+		rect = 255,2,279,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_human_4]
+	{
+		allow_input = false;
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_4;
+		index = 0;
+		rect = 255,2,279,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_human_5]
+	{
+		allow_input = false;
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_5;
+		index = 4;
+		rect = 255,2,279,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_human_6]
+	{
+		allow_input = false;
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_6;
+		index = 0;
+		rect = 255,2,279,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_human_7]
+	{
+		allow_input = false;
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_7;
+		index = 6;
+		rect = 255,2,279,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_human_8]
+	{
+		allow_input = false;
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_human_8;
+		index = 7;
+		rect = 255,2,279,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_packmule_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_1;
+		index = 0;
+		rect = 89,2,113,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_packmule_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_2;
+		index = 0;
+		rect = 89,2,113,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_packmule_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_3;
+		index = 0;
+		rect = 89,2,113,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_packmule_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_4;
+		index = 0;
+		rect = 89,2,113,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_packmule_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_5;
+		index = 0;
+		rect = 89,2,113,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_packmule_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_6;
+		index = 0;
+		rect = 89,2,113,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_packmule_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_7;
+		index = 0;
+		rect = 89,2,113,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:itemslot,n:multi_portrait_packmule_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = multi_inventory_packmule_8;
+		index = 0;
+		rect = 89,2,113,30;
+		slot_type = picture;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+	}
+	
+	/*
+	[t:window,n:window_gold_bg_human_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_human_1;
+		rect = 279,2,362,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_human_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_human_2;
+		rect = 279,2,362,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_human_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_human_3;
+		rect = 279,2,362,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_human_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_human_4;
+		rect = 279,2,362,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_human_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_human_5;
+		rect = 279,2,362,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_human_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_human_6;
+		rect = 279,2,362,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_human_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_human_7;
+		rect = 279,2,362,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_human_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_human_8;
+		rect = 279,2,362,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_packmule_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_packmule_1;
+		rect = 113,2,196,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_packmule_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_packmule_2;
+		rect = 113,2,196,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_packmule_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_packmule_3;
+		rect = 113,2,196,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_packmule_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_packmule_4;
+		rect = 113,2,196,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_packmule_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_packmule_5;
+		rect = 113,2,196,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_packmule_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_packmule_6;
+		rect = 113,2,196,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_packmule_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_packmule_7;
+		rect = 113,2,196,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_gold_bg_packmule_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000007;
+		group = multi_inventory_packmule_8;
+		rect = 113,2,196,30;
+		texture = b_gui_ig_mnu_ip_gold_box;
+		uvcoords = 0.000000,0.125000,0.648438,1.000000;
+		wrap_mode = clamp;
+	}
+	*/
+}

@@ -1,0 +1,44 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  enchantment_manager.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = true;
+property string _doc$                = "Applies an enchantment to the owner when the given message is recieved.";
+
+// exported properties
+property	eWorldEvent message_event$			= WE_ENTERED_WORLD	doc ="Message printed when this event is recieved.";
+
+
+owner = GoSkritComponent;
+
+startup state Waiting$
+{	
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == message_event$ )
+		{
+			if( owner.goid.IsValid )
+			{
+				if( owner.Go.HasMagic )
+				{
+					owner.go.magic.SApplyEnchantments( owner.goid, owner.goid );
+				}
+			}
+			SetState Done$;
+	   	}
+	}
+}
+
+state done$
+{}

@@ -1,0 +1,169 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  go_emitter.skrit
+// Author(s):  Rick Saenz, Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property bool   _server_only$		= 	true;
+
+property bool		start_on_creation$	= false					doc = "Start Emitter when it enters the world";
+
+property string		model$				= "frag_glb_bone_06"	doc = "Template name of game object to emit";
+property string		model2$										doc = "Template name of game object to emit";
+property string		model3$										doc = "Template name of game object to emit";
+property string		model4$										doc = "Template name of game object to emit";
+property string		model5$										doc = "Template name of game object to emit";
+property float		duration$			= -1					doc = "How long to spend spawning objects";
+property float		interval$			= .15					doc = "How many seconds to wait before spawning another";
+property int		count$				= 10000					doc = "Total number to spawn";
+property float		random_delay$		= 0.0					doc = "Random delay between 0 and entered value. used to stagger spawn when you have multiple models.";
+
+
+property float		start_radius_min$	= 0.0					doc = "Inner start spawn radius - (spawn frustum)";
+property float		start_radius_max$	= 0.0					doc = "Outer start spawn radius - (spawn frustum)";
+property float		end_radius_min$		= 1.0					doc = "Inner end spawn radius - (spawn frustum)";
+property float		end_radius_max$		= 1.5					doc = "Outer end spawn radius - (spawn frustum)";
+
+property float		lvx$				= 0						doc = "Linear velocity - x component";
+property float		lvy$				= 0						doc = "Linear velocity - y component";
+property float		lvz$				= 8 					doc = "Linear velocity - z component";
+
+property float		lvx_var$			= 0						doc = "Linear velocity variance - x component";
+property float		lvy_var$			= 0						doc = "Linear velocity variance - y component";
+property float		lvz_var$			= 5						doc = "Linear velocity variance - z component";
+									
+property float		avx$				= 0						doc = "Angular velocity - x component";
+property float		avy$				= 0						doc = "Angular velocity - y component";
+property float		avz$				= 4						doc = "Angular velocity - z component";
+							
+property float		avx_var$			= 0						doc = "Angular velocity variance - x component";
+property float		avy_var$			= 0						doc = "Angular velocity variance - y component";
+property float		avz_var$			= 5						doc = "Angular velocity variance - z component";
+
+
+owner = GoSkritComponent;
+
+SFxSID active_script_id$ = 0;
+SFxSID active_script_id2$ = 0;
+SFxSID active_script_id3$ = 0;
+SFxSID active_script_id4$ = 0;
+SFxSID active_script_id5$ = 0;
+string params$;
+
+void StartEmitter$()
+{
+	String temp$;
+	// Run the generic_spawn script
+	
+	float delay$ = Math.RAndomFloat( delay$ );
+	temp$ = MakeStringF( "%s%s)delay(%g)]", params$, model$, delay$ ); 
+	
+	active_script_id2$ =	SiegeFx.SRunScript( "go_emitter", owner.Goid, owner.Goid, temp$, owner.Goid, WE_REQ_ACTIVATE );
+	
+	if( !StringTool.IsEmpty( model2$ ) )
+	{
+		delay$ = Math.RAndomFloat( delay$ );
+		temp$ = MakeStringF( "%s%s)delay(%g)]", params$, model2$, delay$ ); 
+	
+		// Run the generic_spawn script
+		active_script_id2$ =	SiegeFx.SRunScript( "go_emitter", owner.Goid, owner.Goid, temp$, owner.Goid, WE_REQ_ACTIVATE );
+	}
+	if( !StringTool.IsEmpty( model3$ ) )
+	{
+		delay$ = Math.RAndomFloat( delay$ );
+		temp$ = MakeStringF( "%s%s)delay(%g)]", params$, model3$, delay$ ); 
+	
+		
+		// Run the generic_spawn script
+		active_script_id3$ =	SiegeFx.SRunScript( "go_emitter", owner.Goid, owner.Goid, temp$, owner.Goid, WE_REQ_ACTIVATE );
+	}
+	if( !StringTool.IsEmpty( model4$ ) )
+	{
+		delay$ = Math.RAndomFloat( delay$ );
+		temp$ = MakeStringF( "%s%s)delay(%g)]", params$, model4$, delay$ ); 
+	
+		
+		// Run the generic_spawn script
+		active_script_id4$ =	SiegeFx.SRunScript( "go_emitter", owner.Goid, owner.Goid, temp$, owner.Goid, WE_REQ_ACTIVATE );
+	}
+	if( !StringTool.IsEmpty( model5$ ) )
+	{
+		delay$ = Math.RAndomFloat( delay$ );
+		temp$ = MakeStringF( "%s%s)delay(%g)]", params$, model5$, delay$ ); 
+	
+		
+		// Run the generic_spawn script
+		active_script_id5$ =	SiegeFx.SRunScript( "go_emitter", owner.Goid, owner.Goid, temp$, owner.Goid, WE_REQ_ACTIVATE );
+	}
+}
+
+void StopEmitter$()
+{
+	if( active_script_id$ != null)
+	{
+		// Let the effect know that it should finish what it is doing and not spawn anything else
+		SiegeFx.FinishScript( active_script_id$ );
+
+		// Clear the script id
+		active_script_id$ = null;
+	}
+	if( active_script_id2$ != null)
+	{
+		// Let the effect know that it should finish what it is doing and not spawn anything else
+		SiegeFx.FinishScript( active_script_id2$ );
+
+		// Clear the script id
+		active_script_id2$ = null;
+	}
+	if( active_script_id3$ != null)
+	{
+		// Let the effect know that it should finish what it is doing and not spawn anything else
+		SiegeFx.FinishScript( active_script_id3$ );
+
+		// Clear the script id
+		active_script_id3$ = null;
+	}
+	if( active_script_id4$ != null)
+	{
+		// Let the effect know that it should finish what it is doing and not spawn anything else
+		SiegeFx.FinishScript( active_script_id4$ );
+
+		// Clear the script id
+		active_script_id4$ = null;
+	}
+	if( active_script_id5$ != null)
+	{
+		// Let the effect know that it should finish what it is doing and not spawn anything else
+		SiegeFx.FinishScript( active_script_id5$ );
+
+		// Clear the script id
+		active_script_id5$ = null;
+	}
+}
+
+startup state Idle$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == WE_ENTERED_WORLD )
+		{
+			params$ = MakeStringF( "[-dur(%g)spawn_int(%g)count(%d)sr_min(%g)sr_max(%g)er_min(%g)er_max(%g)lvel(%g,%g,%g)lvel_var(%g,%g,%g)avel(%g,%g,%g)avel_var(%g,%g,%g)model(",
+												duration$, interval$, count$, start_radius_min$, start_radius_max$,
+												end_radius_min$, end_radius_max$, lvx$, lvy$, lvz$, lvx_var$, lvy_var$, lvz_var$, 
+												avx$, avy$, avz$, avx_var$, avy_var$, avz_var$ );
+		} 
+		else if( ( e$ == WE_REQ_ACTIVATE ) && ( active_script_id$ == 0 ) )
+		{
+			StartEmitter$();
+		}
+		else if( ( e$ == WE_REQ_DEACTIVATE ) && ( active_script_id$ != 0 ) )
+		{
+			StopEmitter$();
+		}
+	}
+}

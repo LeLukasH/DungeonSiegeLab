@@ -1,0 +1,820 @@
+[staging_area_game_settings]
+{
+	interface = true;
+
+	[t:text,n:title]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 79;
+		rect = 34,70,200,90;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		font_color = -1;
+		font_size = 22;
+		font_type = b_gui_fnt_20p_copperplate-light;
+		justify = left;
+		text = "Game Settings";
+	}
+
+	[t:button,n:staging_button_accept_game]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;		
+		draw_order = 18;
+		rect = 252,308,392,324;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { onbuttonpress=notify(staging_accept_game_settings) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:button_accept_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "Accept";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:staging_button_cancel_game]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;		
+		draw_order = 18;
+		rect = 408,308,548,324;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { onbuttonpress=notify(staging_cancel_option) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:button_cancel_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "Cancel";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	
+	[t:text,n:player_limit_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 80,100,250,116;
+		text = "Player Limit";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:player_limit_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 80,118,250,138;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:combo_box,n:combo_player_limit]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 330;
+		rect = 84,121,230,136;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 4;
+		[t:button,n:combo_player_limit_button]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 32;
+			rect = 232,120,248,136;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_player_limit]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 530;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 80,138,250,320;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+			}
+		}
+	}
+/*
+	[t:text,n:game_type_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 80,150,250,166;
+		text = "Game Type";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:game_type_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 80,168,250,188;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:combo_box,n:combo_game_type]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 320;
+		rect = 84,171,230,186;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 6;
+		[t:button,n:combo_game_type_button]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 32;
+			rect = 232,170,248,186;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_game_type]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 520;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 80,188,250,320;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+			}
+		}
+	}
+*/
+
+	[t:text,n:difficulty_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 80,150,250,166;
+		text = "Difficulty";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:difficulty_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 80,168,250,188;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:combo_box,n:combo_difficulty]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 310;
+		rect = 84,171,230,186;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 6;
+		[t:button,n:combo_difficulty_button]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 32;
+			rect = 232,170,248,186;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_difficulty]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 510;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 80,188,250,320;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+			}
+		}
+	}
+
+	[t:text,n:time_limit_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 80,200,250,216;
+		text = "Time Limit";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:time_limit_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 80,218,250,238;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:combo_box,n:combo_time_limit]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 300;
+		rect = 84,221,230,236;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 6;
+		[t:button,n:combo_time_limit_button]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 32;
+			rect = 232,220,248,236;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_time_limit]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 500;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 80,238,250,320;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+			}
+		}
+	}
+
+	[t:text,n:characters_drop_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 80,250,250,266;
+		text = "Drop on Death";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:characters_drop_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 80,268,250,288;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:combo_box,n:combo_characters_drop]
+	{
+		alpha = 0.6;
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 10;
+		rect = 84,271,230,286;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 6;
+		
+		[t:button,n:combo_characters_drop_button]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 10;
+			rect = 232,270,248,286;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_characters_drop]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 10;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 80,288,250,320;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			topmost = true;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+			}
+		}
+	}
+/*
+	[t:text,n:character_respawn_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 315,150,485,166;
+		text = "Character Respawn";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:character_respawn_background]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 315,168,485,188;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:combo_box,n:combo_character_respawn]
+	{
+		alpha = 0.6;
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 3000;
+		rect = 319,171,465,186;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 6;
+		topmost = true;
+		[t:button,n:combo_character_respawn_button]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 3000;
+			rect = 467,170,483,186;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_character_respawn]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 3000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 315,188,485,320;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			topmost = true;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+			}
+		}
+	}
+*/
+
+	[t:checkbox,n:checkbox_enable_teamplay]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1296;
+		rect = 315,112,331,128;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:window,n:checkbox_enable_teamplay_texture]
+		{
+			alpha = 1.0000;
+			rect = 315,112,331,128;
+			draw_order = 2000;
+			texture = b_gui_cmn_checkbox_x;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[t:text_box,n:checkbox_enable_teamplay_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 339,98,485,138;
+			text = "Enable Team Play";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			center_height = true;
+			fixed_location = true;
+		}
+	}
+
+	[t:checkbox,n:checkbox_enable_pvp]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1296;
+		rect = 315,162,331,178;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:window,n:checkbox_enable_pvp_texture]
+		{
+			alpha = 1.0000;
+			rect = 315,162,331,178;
+			draw_order = 2000;
+			texture = b_gui_cmn_checkbox_x;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[t:text_box,n:checkbox_enable_pvp_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 339,148,485,188;
+			text = "Enable Player vs. Player";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			center_height = true;
+			fixed_location = true;
+		}
+	}
+
+	[t:checkbox,n:checkbox_allow_start_selection]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1296;
+		rect = 315,212,331,228;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:window,n:checkbox_allow_start_selection_texture]
+		{
+			alpha = 1.0000;
+			rect = 315,212,331,228;
+			draw_order = 2000;
+			texture = b_gui_cmn_checkbox_x;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[t:text_box,n:checkbox_allow_start_selection_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 339,198,485,238;
+			text = "Allow players to choose start locations";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			center_height = true;
+			fixed_location = true;
+		}
+	}
+	[t:checkbox,n:checkbox_allow_new_characters]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1296;
+		rect = 315,262,331,278;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:window,n:checkbox_allow_new_characters_texture]
+		{
+			alpha = 1.0000;
+			rect = 315,262,331,278;
+			draw_order = 2000;
+			texture = b_gui_cmn_checkbox_x;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[t:text_box,n:checkbox_allow_new_characters_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 339,248,485,288;
+			text = "Restrict Players to New Characters";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			center_height = true;
+			fixed_location = true;
+		}
+	}
+
+	[t:checkbox,n:checkbox_allow_player_pausing]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1296;
+		rect = 550,112,566,128;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:window,n:checkbox_allow_player_pausing_texture]
+		{
+			alpha = 1.0000;
+			rect = 550,112,566,128;
+			draw_order = 2000;
+			texture = b_gui_cmn_checkbox_x;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[t:text_box,n:checkbox_allow_player_pausing_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 574,98,720,138;
+			text = "Allow players to pause the game";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			center_height = true;
+			fixed_location = true;
+		}
+	}
+	
+	[t:checkbox,n:checkbox_allow_player_joining]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1296;
+		rect = 550,162,566,178;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:window,n:checkbox_allow_player_joining_texture]
+		{
+			alpha = 1.0000;
+			rect = 550,162,566,178;
+			draw_order = 2000;
+			texture = b_gui_cmn_checkbox_x;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[t:text_box,n:checkbox_allow_player_joining_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 574,148,720,188;
+			text = "Allow players to join game in progress";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			center_height = true;
+			fixed_location = true;
+		}
+	}
+	[t:button,n:staging_button_change_password]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;		
+		draw_order = 18;
+		rect = 530,270,740,286;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { onbuttonpress=notify(staging_change_password) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:staging_button_change_password_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "Change Game Password...";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+}

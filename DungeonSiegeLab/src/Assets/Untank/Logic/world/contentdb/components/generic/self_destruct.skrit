@@ -1,0 +1,82 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  self_destruct.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+//
+// deletes itself at the given message
+//
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = true;
+property string _doc$                = "delets a GO when It gets a message.";
+property string _required_component$ = "placement";
+
+property bool			fade$   		= true					doc = "Fade the go when deleting it.";
+property bool			explode$   		= false					doc = "explode instead of delete.";
+property eWorldEvent	delete_msg$		= WE_ANIM_DIE			doc = "message to delete on";
+property float			delete_time$	= -1.0					doc = "set positive to delete after this time.";
+property float			hide_time$		= -1.0					doc = "set positive to hide model after this time.";
+
+
+
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+// local states
+
+startup state Start$
+{
+	Trigger OnTimer$( 1 )
+	{
+		if( explode$ )
+		{
+			Physics.ExplodeGoWithDamage( owner.Goid, owner.Goid, owner.Goid);
+		} else {
+			godb.SMarkForDeletion ( owner.Goid, true, fade$ );
+		}
+	}	
+	
+	Trigger OnTimer$( 2 )
+	{
+		owner.Go.Aspect.AspectHandle.SetHideMeshFlag( true );
+	}	
+	
+	event OnEnterState$
+	{
+		if( delete_time$ > 0.0)
+		{
+			This.CreateTimer(1, delete_time$);
+		}
+		if( hide_time$ > 0.0)
+		{
+			This.CreateTimer(2, hide_time$);
+		}
+	}
+	
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == delete_msg$ ) 
+		{
+			if( explode$ )
+			{
+				Physics.ExplodeGoWithDamage( owner.Goid, owner.Goid, owner.Goid);
+			} else {
+				godb.SMarkForDeletion ( owner.Goid, true, fade$ );
+			}
+		}
+		else if( ( e$ == WE_LEFT_WORLD ) && explode$ )
+		{
+			GoDb.SMarkGoAndChildrenForDeletion( owner.Goid );
+		}
+	}
+}

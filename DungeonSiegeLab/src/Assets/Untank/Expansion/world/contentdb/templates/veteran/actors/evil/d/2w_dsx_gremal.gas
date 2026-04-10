@@ -1,0 +1,66 @@
+[t:template,n:2W_dsx_gremal]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_gremal";
+	specializes = gremal_killer_base;
+	[actor]
+	{
+		alignment			= aa_evil;
+		[skills]
+		{
+			strength =  26, 0;
+			intelligence =  9.6, 0;
+			dexterity =  14.3, 0;
+			melee =  43,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 21190;
+		life = 510;
+		max_life = 510;
+		mana = 0;
+        	max_mana = 0;
+		megamap_icon = <none>;
+		model = m_c_edm_gm_pos_2;
+		scale_base = .85;
+		[voice]
+		{
+			[enemy_spotted]		{ priority = high; * = s_e_call_gremal_SED; }
+			[die]			{ priority = high; * = s_e_die_gremal_SED; }
+			[hit_critical]	{ priority = low; * = s_e_hit_gremal_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_gremal_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_gremal_SED; }
+		}
+	}
+	[attack]
+	{
+		damage_max = 313.5;
+		damage_min = 135;
+	}
+    [defend] { defense = 365; }
+	[common]
+	{
+		screen_name="Giant Rabid Gremal";
+	}
+	[mind]
+	{
+		jat_fidget = world\ai\jobs\actors\evil\job_fidget_curious.skrit;
+		on_alert_projectile_near_missed_flee = true;
+
+		on_enemy_spotted_alert_friends       = true;
+		on_enemy_entered_ocz_flee            = false;
+		on_friend_entered_ocz_flee           = false;
+		on_enemy_entered_icz_attack          = true;
+
+		sensor_scan_period		 = 0.75;
+		flee_count				 = 1000;
+		com_range                = 7.0;
+		inner_comfort_zone_range = 0.5;
+		melee_engage_range       = 12.0;
+		ranged_engage_range      = 12.0;
+		outer_comfort_zone_range = 3.0;
+		personal_space_range     = 0.7;
+		sight_range              = 12.0;
+	}
+}

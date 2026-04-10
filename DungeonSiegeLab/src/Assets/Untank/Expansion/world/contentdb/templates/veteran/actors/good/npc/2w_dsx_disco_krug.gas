@@ -1,0 +1,130 @@
+[t:template,n:2W_dsx_krug_disco]
+{
+	category_name = "2W_npc";
+	doc = "2W_dsx_krug_disco";
+	specializes = npc;
+	
+	[aspect]
+	{
+		  experience_value = 53784;
+		  life = 570;
+		  mana = 54;
+		  material = steel;
+		  max_life = 570;
+		  max_mana = 54;
+		  model = m_c_eam_dsckrg_pos_1;
+		  scale_base = 1.2;
+		  selection_indicator_scale = 0.85;
+		[textures]
+		{
+			  0 = b_c_eam_discokg-01;
+			  1 = b_c_eam_discokg-02;  
+		}
+	}
+	[conversation]
+	{
+		[conversations]
+		{
+			* = disco_hello;
+		}
+	}
+	[body]
+	{
+		min_move_velocity = 1.75;
+		avg_move_velocity = 2;
+		max_move_velocity = 2.700;
+		[bone_translator]
+		{
+			  body_anterior  = bip01_head;
+			  body_mid       = Bip01_Spine3;
+			  body_posterior = bip01_pelvis;
+			  kill_bone      = Bip01_Spine3;
+			  shield_bone    = shield_grip;
+			  weapon_bone    = weapon_grip;
+		}
+		[chore_dictionary]
+		{
+			  chore_prefix = a_c_eam_dsckrg_fs;
+			[chore_attack]
+			{
+				  chore_stances = 0;
+				  skrit = select_attack;
+				[anim_files]
+				{
+					  00 = at;
+				}
+			}
+			[chore_default]
+			{
+				  chore_stances = 0;
+				  skrit = infinite_loop;
+				[anim_files]
+				{
+					  00 = dfs;
+				}
+			}
+			[chore_die]
+			{
+				  chore_stances = 0;
+				  skrit = select_transition;
+				[anim_files]
+				{
+					  00 = di;
+				}
+			}
+			[chore_fidget]
+			{
+				  chore_stances = 0;
+				  skrit = select_fidget;
+				[anim_files]
+				{
+					  00 = dsf;
+					  01 = dsf-02;
+				}
+			}
+			[chore_magic]
+			{
+				  chore_stances = 0;
+				  skrit = select_attack;
+				[anim_files]
+				{
+					  00 = mg;
+				}
+			}
+			[chore_walk]
+			{
+				  chore_stances = 0;
+				  skrit = select_walk;
+				[anim_files]
+				{
+					  00 = wl;
+				}
+			}
+		}
+	}
+	[mind]
+	{
+		jat_fidget				= world\ai\jobs\common\job_fidget.skrit
+		?curious				= 0.65
+		&wander					= 0.8
+		&social					= 0.1
+		&interest				= interest
+		&delay_min				= 6
+		&delay_max				= 16
+		&still					= false;
+		
+		actor_may_attack = false;
+        	actor_may_be_attacked = false;
+	}
+	[common]
+	{
+		  screen_name = "Disco Krug";
+	}
+	[inventory]
+		{
+			[equipment]			
+			{
+				//es_weapon_hand = st_g_c_dsx_pcane;
+			}
+		}
+}

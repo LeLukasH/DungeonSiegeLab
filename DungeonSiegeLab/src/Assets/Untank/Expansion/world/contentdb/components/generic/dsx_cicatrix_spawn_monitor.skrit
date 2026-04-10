@@ -1,0 +1,302 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	dsx_cicatrix_spawn_monitor.skrit
+
+	Author(s)	: 	Mathew Corthell
+
+	Purpose		:	Special monitor for the cicatrix that makes sure he
+					surrounds himself with summoned skeletons.
+	
+	Expected Behavior	: When the character engages the death knight, he 
+						will start to summon skeletons.  This skrit will periodically
+						check to see if the skeleton count is low.  If it's low, then
+						the death knight will be told to perform another summoning.
+						It also watches the skeletons so that if they die, the counter
+						will be changed.
+
+	(C)opyright 2003 Mad Doc Software
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+property bool		_server_only$			= true;
+
+property string skeletonMeleeTemplate$="skeleton" doc="the melee monster that the cicatrix will summon";
+property string skeletonRangedTemplate$="skeleton_archer" doc="the ranged monster that the cicatrix will summon";
+
+property int maxTotalMeleeSkeletons$=5 doc="The max number of skeletons that the death knight will have at one time.";
+property int maxTotalRangedSkeletons$=5 doc="the max number of ranged skeletons the cicatrix will have at a time";
+
+property int maxMeleeToSummon$=2 doc="The max number of melee monster to summon at the same time.";
+property int maxRangedToSummon$=2 doc="The max number of ranged monster to summon at the same time.";
+
+
+property string summonEffect$="" doc="The effect to play when summoning the skeletons.";
+
+property float waitInterval$=1 doc="Period of time to go before checking whether we need to spawn.";
+
+property float minDistanceFromCicatrix$=1 doc="Minimum distance from cicatrix for skeleton to appear.";
+property float maxDistanceFromCicatrix$=3 doc="Maximum distance from cicatrix for skeleton to appear.";
+
+property int radius$ = 30 		  doc = "the distance we search to find summoned skeletons to kill when cica dies";
+
+owner = GoSkritComponent;
+
+int m_RangedSkeletonCount$=0;
+int m_MeleeSkeletonCount$=0;
+
+// when set to true will create more summons, init to true just to start off
+bool createMoreSummons$=true;
+
+// Summon a single skeleton
+void SummonSkeleton$( string skeletonTemplate$ )
+{
+	// Get a position to spawn this skeleton.
+	AIQuery.FindSpotRelativeToSource(owner.go, minDistanceFromCicatrix$,  maxDistanceFromCicatrix$, 2, owner.go.Mind.TempPos1);
+
+	// Clone the skeleton.
+	GoCloneReq cloneReq$ = MakeGoCloneReq(skeletonTemplate$);
+	cloneReq$.FadeIn = true;
+	cloneReq$.StartingPos = owner.go.Mind.TempPos1;
+	Goid skeleton$ = GoDb.SCloneGo(cloneReq$);
+
+	// Play the spawn effect on the skeleton.
+	if(!StringTool.IsEmpty(summonEffect$))
+	{
+		SiegeFX.SRunMPScript(summonEffect$, skeleton$, skeleton$, "", owner.Goid, WE_REQ_CAST);
+	}
+
+	// Start watching this skeleton so that we know when it dies.
+	GoDb.StartWatching(owner.goid, skeleton$);
+
+//	report.genericf("Cicatrix spawn monitor: Skeleton spawned.  Total skeletons: %d\n", m_skeletonCount$);
+}
+
+// Function to summon multiple skeletons.
+void SummonSkeletons$()
+{
+	// Spawn a number of skeletons.  Make sure we don't go over the per-summon limit or over
+	// the maximum limit.
+	int count$ = 0;
+	while(count$ < maxMeleeToSummon$ && m_MeleeSkeletonCount$ < maxTotalMeleeSkeletons$)
+ 	{
+		SummonSkeleton$(skeletonMeleeTemplate$);
+		m_MeleeSkeletonCount$ = m_MeleeSkeletonCount$ + 1;
+		count$ = count$ + 1;
+	}
+	count$ = 0;
+	while(count$ < maxRangedToSummon$ && m_RangedSkeletonCount$ < maxTotalRangedSkeletons$)
+	{
+		SummonSkeleton$(skeletonRangedTemplate$);
+		m_RangedSkeletonCount$ = m_RangedSkeletonCount$ + 1;
+		count$ = count$ + 1; 
+	}	
+}
+
+startup state Initial$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		// When we are told to activate, kick the cicatrix
+		if( e$ == WE_REQ_ACTIVATE )
+		{
+		//	report.generic("Cicatrix spawn monitor: WE_REQ_ACTIVATE received, switch to monitor state\n");
+			// tell the cicatrix that it can auto fidget
+			owner.Go.Mind.SetActorAutoFidgets( true );
+			
+			SetState Monitoring$;
+		}		
+	}
+}
+
+state Monitoring$
+{	
+	// whenever we enter this state check if we need to reset the timer
+	event OnEnterState$
+	{
+		// if we aren't going to create summons right now, set the timer to check for needing to summon
+		if( !createMoreSummons$ )
+		{
+			// create a timer that tells the cicatrix when to summon more things
+			this.CreateTimer(1, waitInterval$);
+		}
+	}
+	
+	// time to check to see if we need to summon again
+	event OnTimer$(int id$, float /*delta$*/)
+	{
+		if(id$ == 1)
+		{
+			// let's create some more skellies
+			createMoreSummons$ = true;
+		}
+	}
+	
+	// listen for messages to cicatrix
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		// when an animation finishes and we want to create more summons
+		if( e$ == WE_ANIM_DONE && createMoreSummons$ )
+		{
+		//	report.generic("cicatrix IS creating more things now\n");
+			// If the current number of skeletons is less than the max, then summon some 
+			// more skeletons.
+			if(m_RangedSkeletonCount$ < maxTotalRangedSkeletons$ || m_MeleeSkeletonCount$ < maxTotalMeleeSkeletons$)
+			{
+				SetState StateSummonSkeleton$;
+			}
+			
+		}
+		
+		if( e$ == WE_KILLED )
+		{
+		//	report.generic("Cicatrix spawn monitor: Death knight killed, time to exit\n");
+
+			SetState CleanUp$;
+		}
+	}
+
+	event OnGoHandleCCMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{	
+		// If one of the skeletons is killed, then stop watching it and decrement the
+		// amount of skeletons.
+		if( e$ == WE_KILLED )
+		{
+			// stop watching this monster
+			GoDb.StopWatching(owner.goid, msg$.GetSendTo());
+			
+			// decrement the correct counter
+			if( msg$.GetSendTo().GetGo().GetTemplateName() == skeletonMeleeTemplate$)
+			{
+				m_RangedSkeletonCount$ = m_RangedSkeletonCount$ - 1;
+			}
+			else
+			{
+				m_MeleeSkeletonCount$ = m_MeleeSkeletonCount$ - 1;
+			}
+
+		//	report.genericf("MONITORIING: Cicatrix spawn monitor: Skeleton killed.  melee: %d ranged: %d\n", m_RangedSkeletonCount$, m_MeleeSkeletonCount$);
+		}
+	}
+
+
+}
+
+state StateSummonSkeleton$
+{
+	event OnEnterState$
+	{
+		// Have the cicatrix play a summon animation.
+		// For now, this is just one of his fidgets that looks pretty good.
+		MCPManager.Flush(owner.goid);
+		eReqRetCode ret$ = MCPManager.MakeRequest( owner.goid, PL_PLAYANIM, CHORE_FIDGET, 1, 0 );
+		// we are creating more summons so no need to keep checking
+		createMoreSummons$ = false;
+	}
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		// when an animation finishes it is the fidget (cast) animation
+		if( e$ == WE_ANIM_DONE )
+		{
+			// summon some skellies
+			SummonSkeletons$();
+			
+			// wake up the cicatrix
+			owner.go.mind.Clear();
+			owner.go.Mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+			
+			SetState Monitoring$;
+		}
+		
+		if( e$ == WE_KILLED )
+		{
+
+			SetState CleanUp$;
+		}
+	}
+
+	event OnGoHandleCCMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{	
+		// If one of the skeletons is killed, then stop watching it and decrement the
+		// amount of skeletons.
+		if( e$ == WE_KILLED )
+		{
+			// stop watching this monster
+			GoDb.StopWatching(owner.goid, msg$.GetSendTo());
+			
+			// decrement the correct counter
+			if( msg$.GetSendTo().GetGo().GetTemplateName() == skeletonMeleeTemplate$)
+			{
+				m_RangedSkeletonCount$ = m_RangedSkeletonCount$ - 1;
+			}
+			else
+			{
+				m_MeleeSkeletonCount$ = m_MeleeSkeletonCount$ - 1;
+			}
+
+		//	report.genericf("SUMMONING: Cicatrix spawn monitor: Skeleton killed.  melee: %d ranged: %d\n", m_RangedSkeletonCount$, m_MeleeSkeletonCount$);
+		}
+	}
+}
+
+// That's all folks.  
+state CleanUp$
+{
+	// when the cicatrix is killed, we want to kill its summons
+	event OnEnterState$
+	{
+		// do a search for all the skeletons that have been summoned
+		owner.Go.Mind.TempGopColl1.Clear;
+		owner.Go.Mind.TempQtColl1.Clear;
+		owner.Go.Mind.TempQtColl1.Add( QT_ACTOR );
+		owner.Go.Mind.TempQtColl1.Add( QT_EVIL );
+		
+		// get them all	
+		owner.Go.Mind.GetVisible( owner.Go.Mind.TempQtColl1, owner.Go.Mind.TempGopColl1, radius$ );
+										
+		int i$ = 0;
+		int iend$ = owner.Go.Mind.TempGopColl1.Size();
+		Go temp$;
+		
+		//Report.Genericf("Cleanup has size = %d\n", iend$);
+		
+		while( i$ < iend$ )
+		{
+			temp$ = owner.Go.Mind.TempGopColl1.Get( i$ );
+			
+			//Report.Genericf("%d: Deleting temp %s\n", i$, temp$.TemplateName);
+			
+			// if it is a summon, kill it
+			if( temp$.GetTemplateName() == skeletonMeleeTemplate$ ||
+			    temp$.GetTemplateName() == skeletonRangedTemplate$ )
+			{
+				// do enough damage to gib it
+				//Rules.DamageGo(temp$.Goid, NULL, NULL, temp$.Aspect.GetMaxLife()*2, false, false);
+				
+				// Create an omni version of our helper to kill the skeleton - we can't just do it here
+				//	because the GopColl list gets cleared out by gibbing something - it gets
+				//	a message and that clears the list
+				
+				GoCloneReq cloneReq$ = MakeGoCloneReq( "dsx_cicatrix_spawn_helper" );
+				cloneReq$.Omni = true;
+				
+				// JCD 9/30/03
+				// we don't want to clone the spawn helper on the clients, only on the server
+				cloneReq$.SetForceServerOnly(true);
+				cloneReq$.SetForceClientAllowed(false);
+				
+				Goid new_clone_thing$ = GoDb.SCloneGo( cloneReq$ );
+	
+				// send Omni version an activate
+				PostWorldMessage( WE_REQ_ACTIVATE, owner.goid, new_clone_thing$, MakeInt( temp$.Goid ), 0 );
+			
+				
+			}
+			
+			i$ = i$ + 1;
+		}
+	}
+}

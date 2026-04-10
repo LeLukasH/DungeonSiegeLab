@@ -1,0 +1,7 @@
+[t:tsd,n:b_gui_ig_mnu_zepheryl_dark]
+{
+  b dither = true;
+  b hasalpha = true;
+	layer1texture1 = b_gui_ig_mnu_zepheryl_dark;
+  i texturedetail = 0;
+}

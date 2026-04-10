@@ -1,0 +1,7 @@
+[credits_movie]
+{
+	[movie*]
+	{
+		movie_file = movies\credits.bik;
+	}
+}

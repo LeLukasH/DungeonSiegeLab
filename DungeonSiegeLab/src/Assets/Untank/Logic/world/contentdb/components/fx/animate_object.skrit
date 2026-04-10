@@ -1,0 +1,97 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  animate_object.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+owner = GoSkritComponent;
+
+
+property	Scid		target$							doc = "Scid of the object to animate";
+property 	eAnimChore 	Chore$			= CHORE_ROTATE	doc = "Animation Chore when active.";
+property 	eAnimChore 	Chore_inactive$	= CHORE_DEFAULT	doc = "Animation Chore when inactive.";
+property	bool		start_invis$	= false			doc = "Object starts invisible, becomes visible on activate";
+
+#only( game )
+[[
+startup state InActive$ 
+{	
+	trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+	{
+		if( start_invis$ )
+		{
+			if(target$.goid.IsValid())
+			{
+				target$.Go.Aspect.SSetIsVisible( false );
+			}
+			else
+			{
+				owner.Go.Aspect.SSetIsVisible( false );
+			}
+		}
+	}
+	
+	trigger OnGoHandleMessage$( WE_REQ_ACTIVATE )
+	{
+		if(target$.goid.IsValid())
+		{
+			if( start_invis$ )
+			{
+				target$.Go.Aspect.SSetIsVisible( true );
+			}
+			
+			if(target$.go.HasBody())
+			{
+				// Request animation
+				MCPManager.Flush(target$.Goid);
+				MCPManager.MakeRequest( target$.goid, PL_PLAYANIM, Chore$ , 0, 0 );
+				SetState Active$;
+			}
+		}
+		else
+		{
+			if( start_invis$ )
+			{
+				owner.Go.Aspect.SSetIsVisible( true );
+			}
+			
+			if(owner.go.HasBody())
+			{
+				// Request animation
+				MCPManager.Flush(owner.Goid);
+				MCPManager.MakeRequest( owner.goid, PL_PLAYANIM, Chore$ , 0, 0 );
+				SetState Active$;
+			}
+		}
+	}
+}
+
+state Active$ 
+{
+	trigger OnGoHandleMessage$( WE_REQ_DEACTIVATE )
+	{
+		if(target$.goid.IsValid())
+		{
+			// Request animation
+			MCPManager.Flush(target$.Goid);
+			MCPManager.MakeRequest( target$.goid, PL_PLAYANIM, Chore_inactive$ , 0, 0 );
+			SetState InActive$;
+		}
+		else
+		{
+			if(owner.go.HasBody())
+			{
+				// Request animation
+				MCPManager.Flush(owner.Goid);
+				MCPManager.MakeRequest( owner.goid, PL_PLAYANIM, Chore_inactive$ , 0, 0 );
+				SetState InActive$;
+			}
+		}
+	}
+}
+]]

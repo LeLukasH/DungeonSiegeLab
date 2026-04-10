@@ -1,0 +1,157 @@
+[zonematch_private_chat]
+{
+	interface = true;
+//	modal = true;
+	centered = background;
+	
+	[t:window,n:bg_fill]
+	{
+		alpha = 0.40000;
+		common_control = false;
+		common_template = ;
+		draw_order = 0;
+		rect = -1000,-1000,1000,1000;
+		texture = b_gui_cmn_textbox_bg;
+		uvcoords = 0.000000,0.000000,0.000000,0.000000;
+		wrap_mode = clamp;
+	}
+
+	[t:dialog_box,n:background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_wide;
+		draw_order = 1;
+		rect = 176,196,524,382;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:title]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_16p_copperplate-light;
+		justify = left;
+		rect = 190,210,490,226;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:button,n:button_close]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = x;
+		draw_order = 20;
+		rect = 496,208,512,224;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_close_private_chat);
+			onescape = notify(zonematch_close_private_chat);
+		}
+	}
+
+	[t:dialog_box,n:chat_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 2;
+		rect = 190,232,510,340;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:chat_box,n:private_chat_box]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = ;
+		draw_order = 50;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_11p_chat;
+		rect = 193,235,491,337;
+		texture = none;
+		type = chat_box;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_slider = true;
+		scroll_down = true;
+		delete_timeouts = false;
+		max_history = 100;
+		retain_scroll_position = true;
+	}
+	[t:dialog_box,n:chat_edit_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 2;
+		rect = 190,344,510,366;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:edit_box,n:private_chat_edit_box]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 80;
+		rect = 192,346,410,364;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_11p_chat;
+		max_string_size = 256;
+		permanent_focus = true;
+		[prompt] { draw_order=26; texture=b_gui_fe_m_single_prompt; width=1; }
+		[messages]
+		{
+			oneditselect = notify(zonematch_send_private_message);
+		}
+	}
+	[t:button,n:private_chat_send]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_inset;
+	  i draw_order = 22;
+		rect = 440,347,508,363;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_send_private_message);
+		}
+		[t:text,n:private_chat_send_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 360,60,461,74;
+			text = "Send";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+}

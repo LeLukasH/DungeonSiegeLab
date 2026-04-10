@@ -1,0 +1,578 @@
+[t:template,n:book_glb_lore_hero]
+{
+	category_name = "lorebook";
+	doc = "The Hero's Journal";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "The Hero's Journal";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_diary;
+		lore_key = lore_hero;
+	}
+}
+[t:template,n:book_glb_lore_dsx_wicket]
+{
+	category_name = "lorebook";
+	doc = "The Displacers";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "The Displacers";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_lore-book-02;
+		lore_key = lore_wicket;
+	}
+}
+[t:template,n:book_glb_lore_dsx_1arhok]
+{
+	category_name = "lorebook";
+	doc = "Arhok's Lot - Bow";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Arhok's Lot";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_diary;
+		lore_key = lore_1arhok;
+	}
+}
+[t:template,n:book_glb_lore_dsx_experiments]
+{
+	category_name = "lorebook";
+	doc = "Species Experimentation";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Species Experimentation";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_exp_journal;
+		lore_key = lore_experiments;
+	}
+}
+[t:template,n:book_glb_lore_dsx_darktech]
+{
+	category_name = "lorebook";
+	doc = "Experiment Log Book";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Experiment Log Book, #306";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_exp_journal;
+		lore_key = lore_darktech;
+	}
+}
+[t:template,n:book_glb_lore_dsx_assistant]
+{
+	category_name = "lorebook";
+	doc = "Assistant's Journal";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Assistant's Journal";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_exp_journal;
+		lore_key = lore_assistant;
+	}
+}
+[t:template,n:book_glb_lore_dsx_lostqueen]
+{
+	category_name = "lorebook";
+	doc = "The Lost Queen";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "The Account of Ashish";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_exp_journal;
+		lore_key = lore_lostqueen;
+	}
+}
+[t:template,n:book_glb_lore_dsx_shadowjumper]
+{
+	category_name = "lorebook";
+	doc = "The Binding of the Shadowjumper";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "The Binding of the Shadowjumper";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_lore-book-02;
+		lore_key = lore_shadowjumper;
+	}
+}
+[t:template,n:book_glb_lore_dsx_2arhok]
+{
+	category_name = "lorebook";
+	doc = "Arhok's Lot - Shield";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Arhok's Lot";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_diary;
+		lore_key = lore_2arhok;
+	}
+}
+[t:template,n:book_glb_lore_dsx_air]
+{
+	category_name = "lorebook";
+	doc = "The Air of Illicor";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "The Air of Illicor";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_scroll;
+		inventory_height = 1;
+		inventory_width = 2;
+		lore_key = lore_air;
+	}
+}
+[t:template,n:book_glb_lore_dsx_3arhok]
+{
+	category_name = "lorebook";
+	doc = "Arhok's Lot - Blade";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Arhok's Lot";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_diary;
+		lore_key = lore_3arhok;
+	}
+}
+[t:template,n:book_glb_lore_algher]
+{
+	category_name = "lorebook";
+	doc = "Algher Notebook";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Algher's Notes on the Ruins";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_journal;
+		lore_key = lore_algher;
+	}
+}
+[t:template,n:book_glb_lore_dsx_kajj]
+{
+	category_name = "lorebook";
+	doc = "The Kit of Kajj";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "The Kit of Kajj";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_torn_note;
+		lore_key = lore_kajj;
+	}
+}
+[t:template,n:book_glb_lore_dsx_demlock]
+{
+	category_name = "lorebook";
+	doc = "Demlock's Compendium";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Demlock's Compendium";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_lore-book-02;
+		lore_key = lore_demlock;
+	}
+}
+[t:template,n:book_glb_lore_dsx_manifesto]
+{
+	category_name = "lorebook";
+	doc = "Green Brother Manifesto";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Green Brother Manifesto";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_scrawled_letter;
+		lore_key = lore_manifesto;
+	}
+}
+[t:template,n:book_glb_lore_ghage]
+{
+	category_name = "lorebook";
+	doc = "Ghage Notes";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Ghage's Notes";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_journal;
+		lore_key = lore_ghage;
+	}
+}
+[t:template,n:book_glb_lore_nirr]
+{
+	category_name = "lorebook";
+	doc = "Nirr Letter to Jaff";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Nirr's letter to Jaff";
+		auto_expiration_class = never;
+	}
+	[gui]
+	{
+		can_sell = false;
+		inventory_icon = b_gui_ig_i_it_sealed_letter;
+		lore_key = lore_nirr;
+	}
+}
+[t:template,n:book_glb_lore_dsx_krell]
+{
+	category_name = "lorebook";
+	doc = "Krell's Notebook";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "The Codex of Krell";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_exp_journal;
+		lore_key = lore_krell;
+	}
+}
+[t:template,n:book_glb_lore_nossirom]
+{
+	category_name = "lorebook";
+	doc = "Nossirom Notebook";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Nosirrom's Journals";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_journal;
+		lore_key = lore_nossirom;
+	}
+}
+[t:template,n:book_glb_lore_dsx_genesis]
+{
+	category_name = "lorebook";
+	doc = "Genesis of the Lower Species";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Genesis of the Lower Species";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_lore-book;
+		lore_key = lore_genesis;
+	}
+}
+[t:template,n:book_glb_lore_dsx_fortress]
+{
+	category_name = "lorebook";
+	doc = "Fortress Emarard";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Fortress Emarard";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_lore-book;
+		lore_key = lore_fortress;
+	}
+}
+[t:template,n:book_glb_lore_dsx_toc]
+{
+	category_name = "lorebook";
+	doc = "Research Reports a1_r6";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Master Sebihp's Research Reports";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_exp_journal;
+		lore_key = lore_toc;
+	}
+}
+[t:template,n:book_glb_lore_dsx_prison]
+{
+	category_name = "lorebook";
+	doc = "Prison Records a1_r6";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Prison Records";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_lore-book-02;
+		lore_key = lore_prison;
+	}
+}
+[t:template,n:book_glb_lore_dsx_scribble]
+{
+	category_name = "lorebook";
+	doc = "Jherkal Fall Note";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Hastily Scribbled Note";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_scrawled_letter;
+		lore_key = lore_scribble;
+	}
+}
+[t:template,n:book_glb_lore_dsx_pamphlet]
+{
+	category_name = "lorebook";
+	doc = "Jherkal's Crown Pamphlet";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Welcome To Jherkal's Crown!";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_exp_fold_out_pamphlet;
+		lore_key = lore_pamphlet;
+	}
+}
+[t:template,n:book_glb_lore_dsx_utraeans]
+{
+	category_name = "lorebook";
+	doc = "The Ancient Utraeans";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "The Ancient Utraeans";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_lore-book-02;
+		lore_key = lore_utraean;
+	}
+}
+[t:template,n:book_glb_lore_dsx_hub]
+{
+	category_name = "lorebook";
+	doc = "HUB Control Guidebook";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Travel Unlimited's - Central HUB Guidebook";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_exp_fold_out_pamphlet;
+		lore_key = lore_hubhint;
+	}
+}
+[t:template,n:book_glb_lore_dsx_friendly]
+{
+	category_name = "lorebook";
+	doc = "Our Friend: The Zaurask";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Our Friend: The Zaurask";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_exp_fold_out_pamphlet;
+		lore_key = lore_friendly;
+	}
+}
+[t:template,n:book_glb_lore_dsx_schedule]
+{
+	category_name = "lorebook";
+	doc = "Displacer Schedule";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "HUB Schedule";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_exp_fold_out_pamphlet;
+		lore_key = lore_schedule;
+	}
+}
+[t:template,n:book_glb_lore_dsx_acolytes]
+{
+	category_name = "lorebook";
+	doc = "The Priests of Cicatrix";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "The Priests of Cicatrix";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_scroll;
+		inventory_height = 1;
+		inventory_width = 2;
+		lore_key = lore_acolytes;
+	}
+}
+[t:template,n:book_glb_lore_dsx_observe]
+{
+	category_name = "lorebook";
+	doc = "Itane's Eye";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Itane's Eye";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_torn_note;
+		lore_key = lore_observe;
+	}
+}
+[t:template,n:book_glb_lore_dsx_guardian]
+{
+	category_name = "lorebook";
+	doc = "Guardian's Journal";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Guardian's Journal";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_journal;
+		lore_key = lore_guardian;
+	}
+}
+[t:template,n:book_glb_lore_dsx_guide]
+{
+	category_name = "lorebook";
+	doc = "Jherkal's Crown";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "A Guide to Jherkal's Crown";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_exp_fold_out_pamphlet;
+		lore_key = lore_guide;
+	}
+}
+[t:template,n:book_glb_lore_dsx_parents]
+{
+	category_name = "lorebook";
+	doc = "Parents";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "The Fall of the Defenders of Arhok";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_scroll;
+		inventory_height = 1;
+		inventory_width = 2;
+		lore_key = lore_parents;
+	}
+}
+[t:template,n:book_glb_lore_dsx_safety]
+{
+	category_name = "lorebook";
+	doc = "Safety Tips";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Safety Tips";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_exp_fold_out_pamphlet;
+		lore_key = lore_safety;
+	}
+}
+[t:template,n:book_glb_lore_dsx_clockwork]
+{
+	category_name = "lorebook";
+	doc = "Clockwork Posture";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Clockwork Posture";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_lore-book-02;
+		lore_key = lore_clockwork;
+	}
+}
+[t:template,n:book_glb_lore_dsx_lhuc]
+{
+	category_name = "lorebook";
+	doc = "Demlock's Demise";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Demlock's Demise";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_lore-book-02;
+		lore_key = lore_lhuc;
+	}
+}
+[t:template,n:book_glb_lore_dsx_hubbattle]
+{
+	category_name = "lorebook";
+	doc = "Central HUB Battle";
+	specializes = base_book_lore;
+	[common]
+	{
+		screen_name = "Warrior's Journal - HUB Battle";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_it_torn_note;
+		lore_key = lore_hubbatt;
+	}
+}

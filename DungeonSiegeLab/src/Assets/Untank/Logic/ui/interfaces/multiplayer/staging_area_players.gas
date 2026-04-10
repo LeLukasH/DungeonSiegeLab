@@ -1,0 +1,2561 @@
+[staging_area_players]
+{
+	interface = true;
+	
+	[t:dialog_box,n:header_bg]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 32,70,768,94;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:player_header_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = left;
+		rect = 37,73,221,91;
+		text = "Player";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	/*
+	[t:dialog_box,n:team_header_bg]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 225,70,315,94;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	*/
+	[t:text,n:team_header_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = center;
+		rect = 228,73,312,91;
+		text = "Team";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	/*
+	[t:dialog_box,n:start_location_header_bg]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 316,70,536,94;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	*/
+	[t:text,n:start_location_header_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = left;
+		rect = 319,73,533,91;
+		text = "Start Location";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	/*
+	[t:dialog_box,n:character_header_bg]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 537,70,766,94;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	*/
+	[t:text,n:character_header_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = left;
+		rect = 543,73,760,91;
+		text = "Character";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	
+	[t:window,n:player1_bg]
+	{
+		alpha = 0.200000;
+		draw_order = 10;
+		rect = 34,98,766,122;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}
+	/*
+	[t:dialog_box,n:player1_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 34,100,224,120;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}
+	*/
+	[t:window,n:player1_ready]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,102,52,118;
+		texture = b_gui_fe_m_mp_staging_ready;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player1_ingame]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,102,52,118;
+		texture = b_gui_fe_m_mp_zone_user_ingame;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:window,n:player1_ping]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,102,70,118;
+		texture = b_gui_fe_m_mp_staging_ping_5;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player1_zone]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,102,70,118;
+		texture = b_gui_fe_m_mp_staging_zone;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player1_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 74,103,220,117;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	
+	[t:window,n:player_team_sep1]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 224,102,225,118;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+/*
+	[t:dialog_box,n:team1_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 258,98,282,122;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+		}
+	}
+*/
+	[t:button,n:team1_sign]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 258,98,282,122;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+			onrbuttondown = notify(select_previous_team);
+		}
+	}
+	
+	[t:window,n:team_start_sep1]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 315,102,316,118;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+	
+	[t:dialog_box,n:start_location1_bg]
+	{
+		alpha = 0.400000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 320,102,532,118;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:start_location1_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 322,103,532,117;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:combo_box,n:combo_start_locations1]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 670;
+		rect = 320,103,516,117;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		show_text = false;
+		tag = 1;
+		[messages]
+		{
+			onchange = notify(change_start_location);
+			oncomboexpand = notify(clear_town_description);
+		}
+		[t:button,n:combo_start_locations_expand1]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 670;
+			rect = 516,102,532,118;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			consumable = true;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_start_locations1]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 670;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 320,119,532,120;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				onselect = notify(show_town_description);	
+				onlbuttonup = notify(clear_town_description);		
+			}
+		}
+	}
+
+	[t:window,n:start_char_sep1]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 536,102,537,118;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+	/*
+	[t:dialog_box,n:character1_portrait_bg]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 542,100,572,130;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:character1_portrait]
+	{
+		alpha = 1.000000;
+		draw_order = 20;
+		rect = 544,102,570,128;
+		texture = ;
+		uvcoords = 0.000000,0.593750,0.253907,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	*/
+	/*
+	[t:dialog_box,n:character1_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 537,100,766,120;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	*/
+	[t:button,n:button_select_char1]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 60;
+		rect = 541,102,762,118;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tag = 1;
+		visible = false;
+		[messages] { onbuttonpress=notify(staging_select_character) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:button_select_char1_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 527,8,621,21;
+			text = "Select character...";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			truncate = true;
+		}
+	}
+	[t:text,n:character1_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 18;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 543,103,760,117;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+
+	[t:window,n:player2_bg]
+	{
+		alpha = 0.300000;
+		draw_order = 10;
+		rect = 34,128,766,152;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}
+	/*
+	[t:dialog_box,n:player2_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 34,130,224,150;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}
+	*/
+	[t:window,n:player2_ready]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,132,52,148;
+		texture = b_gui_fe_m_mp_staging_ready;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player2_ingame]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,132,52,148;
+		texture = b_gui_fe_m_mp_zone_user_ingame;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:window,n:player2_ping]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,132,70,148;
+		texture = b_gui_fe_m_mp_staging_ping_5;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player2_zone]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,132,70,148;
+		texture = b_gui_fe_m_mp_staging_zone;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player2_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 74,133,220,147;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:window,n:player_team_sep2]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 224,132,225,148;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+	
+/*
+	[t:dialog_box,n:team2_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 258,128,282,152;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+		}
+	}
+*/
+	[t:button,n:team2_sign]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 258,128,282,152;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+			onrbuttondown = notify(select_previous_team);
+		}
+	}
+	[t:window,n:team_start_sep2]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 315,132,316,148;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+	[t:dialog_box,n:start_location2_bg]
+	{
+		alpha = 0.400000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 320,132,532,148;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:start_location2_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 322,133,532,147;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:combo_box,n:combo_start_locations2]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 660;
+		rect = 320,133,516,147;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		show_text = false;
+		tag = 2;
+		[messages]
+		{
+			onchange = notify(change_start_location);
+			oncomboexpand = notify(clear_town_description);
+		}
+		[t:button,n:combo_start_locations_expand2]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 660;
+			rect = 516,132,532,148;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			consumable = true;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_start_locations2]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 660;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 320,149,532,150;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				onselect = notify(show_town_description);	
+				onlbuttonup = notify(clear_town_description);		
+			}
+		}
+	}
+	[t:window,n:start_char_sep2]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 536,132,537,148;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+	/*
+	[t:dialog_box,n:character2_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 537,130,766,150;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	*/
+	[t:button,n:button_select_char2]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 60;
+		rect = 541,132,762,148;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tag = 2;
+		visible = false;
+		[messages] { onbuttonpress=notify(staging_select_character) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:button_select_char2_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 527,8,621,21;
+			text = "Select character...";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			truncate = true;
+		}
+	}
+	[t:text,n:character2_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 18;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 543,133,760,147;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+
+	/*
+	[t:dialog_box,n:player3_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 34,160,224,180;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}*/
+	[t:window,n:player3_bg]
+	{
+		alpha = 0.200000;
+		draw_order = 10;
+		rect = 34,158,766,182;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}
+	[t:window,n:player3_ready]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,162,52,178;
+		texture = b_gui_fe_m_mp_staging_ready;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player3_ingame]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,162,52,178;
+		texture = b_gui_fe_m_mp_zone_user_ingame;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:window,n:player3_ping]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,162,70,178;
+		texture = b_gui_fe_m_mp_staging_ping_5;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player3_zone]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,162,70,178;
+		texture = b_gui_fe_m_mp_staging_zone;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player3_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 74,163,220,177;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:window,n:player_team_sep3]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 224,162,225,178;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+/*
+	[t:dialog_box,n:team3_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 258,158,282,182;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+		}
+	}
+*/
+	[t:button,n:team3_sign]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 258,158,282,182;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+			onrbuttondown = notify(select_previous_team);
+		}
+	}
+	[t:window,n:team_start_sep3]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 315,162,316,178;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+	[t:dialog_box,n:start_location3_bg]
+	{
+		alpha = 0.400000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 320,162,532,178;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:start_location3_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 322,163,532,177;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:combo_box,n:combo_start_locations3]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 650;
+		rect = 320,163,516,177;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		show_text = false;
+		tag = 3;
+		[messages]
+		{
+			onchange = notify(change_start_location);
+			oncomboexpand = notify(clear_town_description);
+		}
+		[t:button,n:combo_start_locations_expand3]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 650;
+			rect = 516,162,532,178;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			consumable = true;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_start_locations3]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 650;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 320,179,532,180;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				onselect = notify(show_town_description);	
+				onlbuttonup = notify(clear_town_description);		
+			}
+		}
+	}
+
+	[t:window,n:start_char_sep3]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 536,162,537,178;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+	/*
+	[t:dialog_box,n:character3_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 537,160,766,180;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	*/
+	[t:button,n:button_select_char3]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 60;
+		rect = 541,162,762,178;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tag = 3;
+		visible = false;
+		[messages] { onbuttonpress=notify(staging_select_character) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:button_select_char3_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 527,8,621,21;
+			text = "Select character...";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			truncate = true;
+		}
+	}
+	[t:text,n:character3_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 18;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 543,163,760,177;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+
+/*	[t:dialog_box,n:player4_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 34,190,224,210;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}*/
+	[t:window,n:player4_bg]
+	{
+		alpha = 0.300000;
+		draw_order = 10;
+		rect = 34,188,766,212;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}
+	[t:window,n:player4_ready]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,192,52,208;
+		texture = b_gui_fe_m_mp_staging_ready;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player4_ingame]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,192,52,208;
+		texture = b_gui_fe_m_mp_zone_user_ingame;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:window,n:player4_ping]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,192,70,208;
+		texture = b_gui_fe_m_mp_staging_ping_5;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player4_zone]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,192,70,208;
+		texture = b_gui_fe_m_mp_staging_zone;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player4_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 74,193,220,207;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:window,n:player_team_sep4]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 224,192,225,208;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+/*
+	[t:dialog_box,n:team4_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 258,188,282,212;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+		}
+	}
+*/
+	[t:button,n:team4_sign]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 258,188,282,212;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+			onrbuttondown = notify(select_previous_team);
+		}
+	}
+	[t:window,n:team_start_sep4]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 315,192,316,208;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+	[t:dialog_box,n:start_location4_bg]
+	{
+		alpha = 0.400000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 320,192,532,208;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:start_location4_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 322,193,532,207;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:combo_box,n:combo_start_locations4]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 640;
+		rect = 320,193,516,207;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		show_text = false;
+		tag = 4;
+		[messages]
+		{
+			onchange = notify(change_start_location);
+			oncomboexpand = notify(clear_town_description);
+		}
+		[t:button,n:combo_start_locations_expand4]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 640;
+			rect = 516,192,532,208;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			consumable = true;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_start_locations4]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 640;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 320,209,532,210;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				onselect = notify(show_town_description);	
+				onlbuttonup = notify(clear_town_description);		
+			}
+		}
+	}
+
+	[t:window,n:start_char_sep4]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 536,192,537,208;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+	/*
+	[t:dialog_box,n:character4_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 537,190,766,210;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	*/
+	[t:button,n:button_select_char4]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 60;
+		rect = 541,192,762,208;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tag = 4;
+		visible = false;
+		[messages] { onbuttonpress=notify(staging_select_character) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:button_select_char4_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 527,8,621,21;
+			text = "Select character...";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			truncate = true;
+		}
+	}
+	[t:text,n:character4_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 18;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 543,193,760,207;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+
+	[t:window,n:player5_bg]
+	{
+		alpha = 0.200000;
+		draw_order = 10;
+		rect = 34,218,766,242;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}
+/*	[t:dialog_box,n:player5_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 34,220,224,240;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}*/
+	[t:window,n:player5_ready]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,222,52,238;
+		texture = b_gui_fe_m_mp_staging_ready;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player5_ingame]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,222,52,238;
+		texture = b_gui_fe_m_mp_zone_user_ingame;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:window,n:player5_ping]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,222,70,238;
+		texture = b_gui_fe_m_mp_staging_ping_5;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player5_zone]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,222,70,238;
+		texture = b_gui_fe_m_mp_staging_zone;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player5_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 74,223,220,237;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:window,n:player_team_sep5]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 224,222,225,238;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+/*
+	[t:dialog_box,n:team5_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 258,218,282,242;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+		}
+	}
+*/
+	[t:button,n:team5_sign]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 258,218,282,242;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+			onrbuttondown = notify(select_previous_team);
+		}
+	}
+	[t:window,n:team_start_sep5]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 315,222,316,238;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+	[t:dialog_box,n:start_location5_bg]
+	{
+		alpha = 0.400000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 320,222,532,238;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:start_location5_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 322,223,530,237;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:combo_box,n:combo_start_locations5]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 630;
+		rect = 320,223,516,237;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		show_text = false;
+		tag = 5;
+		[messages]
+		{
+			onchange = notify(change_start_location);
+			oncomboexpand = notify(clear_town_description);
+		}
+		[t:button,n:combo_start_locations_expand5]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 630;
+			rect = 516,222,532,238;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			consumable = true;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_start_locations5]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 630;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 320,249,532,250;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				onselect = notify(show_town_description);	
+				onlbuttonup = notify(clear_town_description);		
+			}
+		}
+	}
+
+	[t:window,n:start_char_sep5]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 536,222,537,238;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+	/*
+	[t:dialog_box,n:character5_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 537,220,766,240;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	*/
+	[t:button,n:button_select_char5]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 60;
+		rect = 541,222,762,238;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tag = 5;
+		visible = false;
+		[messages] { onbuttonpress=notify(staging_select_character) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:button_select_char5_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 527,8,621,21;
+			text = "Select character...";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			truncate = true;
+		}
+	}
+	[t:text,n:character5_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 18;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 543,223,760,237;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+
+/*	[t:dialog_box,n:player6_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 34,250,224,270;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}*/
+	[t:window,n:player6_bg]
+	{
+		alpha = 0.300000;
+		draw_order = 10;
+		rect = 34,248,766,272;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}
+	[t:window,n:player6_ready]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,252,52,268;
+		texture = b_gui_fe_m_mp_staging_ready;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player6_ingame]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,252,52,268;
+		texture = b_gui_fe_m_mp_zone_user_ingame;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:window,n:player6_ping]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,252,70,268;
+		texture = b_gui_fe_m_mp_staging_ping_5;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player6_zone]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,252,70,268;
+		texture = b_gui_fe_m_mp_staging_zone;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player6_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 74,253,220,267;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:window,n:player_team_sep6]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 224,252,225,268;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+/*
+	[t:dialog_box,n:team6_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 258,248,282,272;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+		}
+	}
+*/
+	[t:button,n:team6_sign]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 258,248,282,272;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+			onrbuttondown = notify(select_previous_team);
+		}
+	}
+	[t:window,n:team_start_sep6]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 315,252,316,268;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+	[t:dialog_box,n:start_location6_bg]
+	{
+		alpha = 0.400000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 320,252,532,268;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:start_location6_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 322,253,532,267;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:combo_box,n:combo_start_locations6]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 620;
+		rect = 320,253,516,267;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		show_text = false;
+		tag = 6;
+		[messages]
+		{
+			onchange = notify(change_start_location);
+			oncomboexpand = notify(clear_town_description);
+		}
+		[t:button,n:combo_start_locations_expand6]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 620;
+			rect = 516,252,532,268;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			consumable = true;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_start_locations6]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 620;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 320,278,532,270;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				onselect = notify(show_town_description);	
+				onlbuttonup = notify(clear_town_description);		
+			}
+		}
+	}
+
+	[t:window,n:start_char_sep6]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 536,252,537,268;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+	/*
+	[t:dialog_box,n:character6_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 537,250,766,270;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	*/
+	[t:button,n:button_select_char6]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 60;
+		rect = 541,252,762,268;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tag = 6;
+		visible = false;
+		[messages] { onbuttonpress=notify(staging_select_character) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:button_select_char6_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 527,8,621,21;
+			text = "Select character...";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			truncate = true;
+		}
+	}
+	[t:text,n:character6_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 18;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 543,253,760,267;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+
+/*	[t:dialog_box,n:player7_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 34,280,224,300;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}*/
+	[t:window,n:player7_bg]
+	{
+		alpha = 0.200000;
+		draw_order = 10;
+		rect = 34,278,766,302;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}
+	[t:window,n:player7_ready]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,282,52,298;
+		texture = b_gui_fe_m_mp_staging_ready;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player7_ingame]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,282,52,298;
+		texture = b_gui_fe_m_mp_zone_user_ingame;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:window,n:player7_ping]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,282,70,298;
+		texture = b_gui_fe_m_mp_staging_ping_5;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player7_zone]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,282,70,298;
+		texture = b_gui_fe_m_mp_staging_zone;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player7_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 74,283,220,297;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:window,n:player_team_sep7]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 224,282,225,298;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+/*
+	[t:dialog_box,n:team7_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 258,278,282,302;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+		}
+	}
+*/
+	[t:button,n:team7_sign]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 258,278,282,302;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+			onrbuttondown = notify(select_previous_team);
+		}
+	}
+	[t:window,n:team_start_sep7]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 315,282,316,298;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+	[t:dialog_box,n:start_location7_bg]
+	{
+		alpha = 0.400000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 320,282,532,298;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:start_location7_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 322,283,532,297;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:combo_box,n:combo_start_locations7]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 610;
+		rect = 320,283,516,297;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		show_text = false;
+		tag = 7;
+		[messages]
+		{
+			onchange = notify(change_start_location);
+			oncomboexpand = notify(clear_town_description);
+		}
+		[t:button,n:combo_start_locations_expand7]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 610;
+			rect = 516,282,532,298;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			consumable = true;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_start_locations7]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 610;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 320,299,532,300;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				onselect = notify(show_town_description);	
+				onlbuttonup = notify(clear_town_description);		
+			}
+		}
+	}
+
+	[t:window,n:start_char_sep7]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 536,282,537,298;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+	/*
+	[t:dialog_box,n:character7_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 537,280,766,300;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	*/
+	[t:button,n:button_select_char7]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 60;
+		rect = 541,282,762,298;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tag = 7;
+		visible = false;
+		[messages] { onbuttonpress=notify(staging_select_character) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:button_select_char7_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 527,8,621,21;
+			text = "Select character...";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			truncate = true;
+		}
+	}
+	[t:text,n:character7_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 18;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 543,283,760,297;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+
+/*	[t:dialog_box,n:player8_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 34,310,224,330;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}*/
+	[t:window,n:player8_bg]
+	{
+		alpha = 0.300000;
+		draw_order = 10;
+		rect = 34,308,766,332;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onrbuttondown = notify(show_player_options_popup);
+		}
+	}
+	[t:window,n:player8_ready]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,312,52,328;
+		texture = b_gui_fe_m_mp_staging_ready;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player8_ingame]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 36,312,52,328;
+		texture = b_gui_fe_m_mp_zone_user_ingame;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:window,n:player8_ping]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,312,70,328;
+		texture = b_gui_fe_m_mp_staging_ping_5;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player8_zone]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 54,312,70,328;
+		texture = b_gui_fe_m_mp_staging_zone;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+	[t:text,n:player8_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 74,313,220,327;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:window,n:player_team_sep8]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 224,312,225,328;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+/*	
+	[t:dialog_box,n:team8_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 258,308,282,332;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+*/
+	[t:button,n:team8_sign]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 258,308,282,332;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(select_next_team);
+			onrbuttondown = notify(select_previous_team);
+		}
+	}
+	[t:window,n:team_start_sep8]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 315,312,316,328;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+
+	[t:dialog_box,n:start_location8_bg]
+	{
+		alpha = 0.400000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 320,312,532,328;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:start_location8_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 322,313,532,327;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:combo_box,n:combo_start_locations8]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 600;
+		rect = 320,313,516,327;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		show_text = false;
+		tag = 8;
+		[messages]
+		{
+			onchange = notify(change_start_location);
+			oncomboexpand = notify(clear_town_description);
+		}
+		[t:button,n:combo_start_locations_expand8]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 600;
+			rect = 516,312,532,328;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			consumable = true;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_start_locations8]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 600;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 322,329,532,330;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				onselect = notify(show_town_description);	
+				onlbuttonup = notify(clear_town_description);		
+			}
+		}
+	}
+
+	[t:window,n:start_char_sep8]
+	{
+		alpha = 0.800000;
+		draw_order = 10;
+		rect = 536,312,537,328;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+	/*
+	[t:dialog_box,n:character8_bg]
+	{
+		alpha = 0.600000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 537,310,766,330;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	*/
+	[t:button,n:button_select_char8]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 60;
+		rect = 541,312,762,328;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tag = 8;
+		visible = false;
+		[messages] { onbuttonpress=notify(staging_select_character) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:button_select_char8_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 527,8,621,21;
+			text = "Select character...";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			truncate = true;
+		}
+	}
+	[t:text,n:character8_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 18;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 543,313,760,327;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+
+	[t:popupmenu,n:player_options_popup_menu]
+	{
+		alpha = 0.60000;
+		rect = 0,0,0,0;
+		element_height = 16;
+		draw_order = 1000;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		auto_size = true;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		visible = false;
+		consumable = true;
+		alignment = down_left;
+		[selection_box]
+		{
+			alpha = 0.5;
+			texture = b_gui_cmn_selection;
+		}
+		[messages]
+		{
+			onmenuselect = notify(player_popup_menu_select);
+		}
+	}	
+
+	[t:dialog_box,n:active_player_box]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 1;
+		rect = 34,96,766,124;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+}

@@ -1,0 +1,45 @@
+[debug_help]
+{
+	interface = true;
+	centered_x = dialogbox_save_textbox;
+
+	[t:text_box,n:text_box_save_info]
+	{
+	  f alpha = 1.000000;
+	  b center_height = false;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 10;
+	  b fixed_location = true;
+	  b has_slider = false;
+	  i max_height = -421075225;
+	  i max_width = -421075225;
+		rect = 92,334,548,422;
+	  f scroll_rate = 0.000000;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = saveload_bar;
+		font_type = b_gui_fnt_12p_copperplate-light;
+	}
+
+	[t:text_box,n:text_box_load_info]
+	{
+	  f alpha = 1.000000;
+	  b center_height = false;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 10;
+	  b fixed_location = true;
+	  b has_slider = false;
+	  i max_height = -421075225;
+	  i max_width = -421075225;
+		rect = 91,336,547,423;
+	  f scroll_rate = 0.000000;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = loading_bar;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		is_bottom_anchor = true;
+		bottom_anchor = 100;
+	}
+}

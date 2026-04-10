@@ -1,0 +1,84 @@
+[t:template,n:3W_base_cow]
+{
+	doc = "3W_Base template for all ambient cow.";
+	specializes = actor_ambient;
+	[actor] { race=other; }
+	[aspect]
+	{
+		model = m_c_na_cw_pos_1;
+	}
+	[body]
+	{
+		avg_move_velocity = 1.330000;
+		[bone_translator]
+		{
+			body_anterior = shld_cntr_bone10;
+			body_mid = root_bone01;
+			body_posterior = tail_base_bone40;
+			kill_bone = head_bone22;
+			shield_bone = ear_r_bone23;
+			weapon_bone = ear_l_bone25;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_na_cw_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=gz; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=gz; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[common] { screen_name="cow"; }
+
+	[mind]
+	{
+		on_enemy_spotted_alert_friends = false;
+		on_enemy_spotted_attack = false;
+		on_enemy_entered_ocz_attack = false;
+		on_enemy_entered_icz_attack = false;
+		on_enemy_entered_ocz_flee = true;
+		on_enemy_entered_weapon_engage_range_attack = false;
+	}
+}
+[t:template,n:3W_cow_black_white]
+{
+	category_name = "3W_ambients";
+	doc = "3W_cow_black and white";
+	specializes = 3W_base_cow;
+}
+[t:template,n:3W_cow_brown]
+{
+	category_name = "3W_ambients";
+	doc = "3W_cow_brown";
+	specializes = 3W_base_cow;
+	[aspect]
+	{
+		[textures] { 0=b_c_na_cw; }
+	}
+}

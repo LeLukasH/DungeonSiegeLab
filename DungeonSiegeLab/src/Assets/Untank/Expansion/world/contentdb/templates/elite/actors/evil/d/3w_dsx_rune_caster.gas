@@ -1,0 +1,526 @@
+[t:template,n:3W_base_rune_caster]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_Base Rune Caster";
+	specializes = actor_evil;
+
+	[aspect]
+		{
+			[textures]	{ 0 = b_c_edm_rune_caster; }
+			model = m_c_edm_sw_pos_1;
+			[voice]
+				{
+					[cast]	{ * = s_e_attack_rune_caster; }
+					[die]		{ priority = high; * = s_e_die_rune_caster_SED; }
+					[hit_glance]	{ priority = low; * = s_e_hit_rune_caster_SED; }
+				}
+		}
+
+	[body]
+		{
+			avg_move_velocity = 1.8;
+			[bone_translator]
+				{
+					body_anterior = Bip01_Head;
+					body_mid = Bip01_Spine1;
+					body_posterior = Bip01_Pelvis;
+					kill_bone = Bip01_Spine;
+					shield_bone = shield_grip;
+					weapon_bone = weapon_grip;
+				}
+			[chore_dictionary]
+				{
+					initial_chore = chore_none;
+					chore_prefix = a_c_edm_sw_fs;
+					[chore_attack]
+						{
+							chore_stances = 0;
+							skrit = select_attack;
+							[anim_files] { 00=mg; }
+						}
+					[chore_default]
+						{
+							chore_stances = 0;
+							skrit = infinite_loop;
+							[anim_files] { 00=dfs; }
+						}
+					[chore_die]
+						{
+							chore_stances = 0;
+							skrit = select_transition;
+							[anim_files] { 00=di; }
+						}
+					[chore_magic]
+						{
+							chore_stances = 0;
+							skrit = select_attack;
+							[anim_files] { 00=mg; }
+						}
+					[chore_fidget]
+						{
+							chore_stances = 0;
+							skrit = select_fidget;
+							[anim_files] { 00=dff; }
+						}
+					[chore_misc]
+						{
+							chore_stances = 0;
+							skrit = select_transition;
+							[anim_files] 
+								{
+									cast = mg; 
+								}
+						}
+					[chore_walk]
+						{
+							chore_stances = 0;
+							skrit = select_walk;
+							[anim_files] { 00=wl; }
+						}
+				}
+		}
+
+	[mind]
+		{
+			jat_cast						= world\ai\jobs\common\job_cast.skrit
+				?rand_spell						= true;
+			jat_die							= world\ai\jobs\common\job_die_fade.skrit;
+
+
+			actor_weapon_preference			= WP_MAGIC;
+			actor_auto_switches_to_magic	= true;
+			actor_auto_switches_to_karate	= false;
+			actor_auto_switches_to_melee	= false;
+
+			melee_engage_range				= 2;
+			personal_space_range			= 0.7;
+			on_enemy_entered_ocz_attack		= true;
+			ranged_engage_range				= 13.0;
+			sight_range						= 13.0;
+		}
+
+	[inventory]
+		{
+			drop_at_use_point = true;
+			
+		}
+}
+
+[t:template,n:3W_rune_caster_base]
+//balanced for Level 14
+{
+	category_name = "3W_evil_d";
+	doc = "3W_Rune Caster Base";
+	specializes = 3W_base_rune_caster;
+	[actor]
+		{
+			[skills]
+				{
+					strength =	40.1, 0;
+					intelligence =	12.3, 0;
+					dexterity =	 20.4, 0;
+					nature_magic =	80,	 0;
+					combat_magic =	80, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1266200;
+			life = 1266.2;
+			max_life = 1266.2;
+			mana = 195.6;
+			max_mana = 195.6;	
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 209.7;
+			damage_min = 132;
+		damage_bonus_min_cmagic = 154;
+		damage_bonus_max_cmagic = 214;
+		}
+	[common] { screen_name="Rune Caster"; }
+	
+	[generator_in_object]
+		{
+			child_template_name = swamp_switch_skeleton;
+			spawn_event = WE_KILLED;
+			spawn_chance = 1.0;
+		}
+	
+	[defend] { defense=435.1; }
+	
+	[inventory]
+		{
+			spew_equipped_kill_count = ;		
+			selected_active_location = il_active_primary_spell;
+			[other]
+				{
+					il_active_primary_spell=dsx_spell_rune_caster_damage;
+					il_spell_1=dsx_spell_rune_caster_summon;
+				}
+				[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 18, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 152142;
+				max = 301861;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/171-232;
+				il_main = #armor/68-533;
+				il_main = #*/171-232;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/185-261;
+				il_main = #armor/-rare(1)/396-807;
+				il_main = #*/-rare(1)/185-261;
+			}
+			
+		}
+	}
+		}
+	
+	[mind]
+		{
+			jat_fidget						= world\ai\jobs\common\job_fidget.skrit
+				?social							= 0.35
+				&meander						= false
+				&still							= false;
+			jat_cast						= world\ai\jobs\common\job_cast.skrit
+				?rand_spell					= true
+				&spell_chances				= "0.5,									 0.5"
+				&spells						= "dsx_spell_rune_caster_damage, dsx_spell_rune_caster_summon";
+		
+			on_enemy_entered_ocz_flee		= true;
+			on_enemy_entered_ocz_attack = false;
+			on_enemy_entered_icz_flee		= true;
+			on_enemy_entered_icz_attack = false;
+			flee_count					= 1;
+		}
+}
+
+[t:template,n:3W_dsx_rune_caster]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_rune_caster";
+	specializes = 3W_rune_caster_base;
+
+	[actor]
+		{
+			[skills]
+				{
+					strength     =	46.2, 0;
+					intelligence =	12.3, 0;
+					dexterity    =	22.7, 0;
+					nature_magic =	83, 0;
+					combat_magic =	83, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1266200;
+			life 			= 1588.9;
+			max_life 		= 1588.9;
+			mana 			= 195.6;
+			max_mana 		= 195.6;	
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 268.9;
+			damage_min = 193.6;
+		damage_bonus_min_cmagic = 154;
+		damage_bonus_max_cmagic = 214;
+		}
+	[common] { screen_name="Rune Caster"; }
+	
+	[generator_in_object]
+		{
+			child_template_name = swamp_switch_skeleton;
+			spawn_event = WE_KILLED;
+			spawn_chance = 1.0;
+		}
+	
+	[defend] { defense=586.7; }
+
+	[inventory]
+		{
+			spew_equipped_kill_count = ;		
+			selected_active_location = il_active_primary_spell;
+			[other]
+				{
+					il_active_primary_spell=dsx_spell_rune_caster_damage;
+					il_spell_1=dsx_spell_rune_caster_summon;
+				}
+				[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 18, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 152142;
+				max = 301861;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/171-232;
+				il_main = #armor/68-533;
+				il_main = #*/171-232;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/185-261;
+				il_main = #armor/-rare(1)/396-807;
+				il_main = #*/-rare(1)/185-261;
+			}
+			
+		}
+	}
+		}
+	
+	[mind]
+		{
+			jat_fidget						= world\ai\jobs\common\job_fidget.skrit
+				?social							= 0.35
+				&meander						= false
+				&still							= false;
+			jat_cast						= world\ai\jobs\common\job_cast.skrit
+				?rand_spell					= true
+				&spell_chances				= "0.5,									 0.5"
+				&spells						= "dsx_spell_rune_caster_damage, dsx_spell_rune_caster_summon";
+		
+			on_enemy_entered_ocz_flee		= true;
+			on_enemy_entered_ocz_attack = false;
+			on_enemy_entered_icz_flee		= true;
+			on_enemy_entered_icz_attack = false;
+			flee_count					= 1;
+		}
+
+}
+
+
+
+[t:template,n:3W_dsx_rune_caster_q]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_rune_caster_q";
+	specializes = 3W_rune_caster_base;
+
+	[actor]
+		{
+			[skills]
+				{
+					strength =	46.2, 0;
+					intelligence =	12.3, 0;
+					dexterity =	 22.7, 0;
+					nature_magic =	83,	 0;
+					combat_magic =  83, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1266200;
+			life = 1588.9;
+			max_life = 1588.9;
+			mana = 195.6;
+			max_mana = 195.6;	
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 268.9;
+			damage_min = 193.6;
+		damage_bonus_min_cmagic = 154;
+		damage_bonus_max_cmagic = 214;
+		}
+	[common] { screen_name="Rune Caster"; }
+	
+	[generator_in_object]
+		{
+			child_template_name = swamp_switch_skeleton;
+			spawn_event = WE_KILLED;
+			spawn_chance = 1.0;
+		}
+	
+	[defend] { defense=586.7; }
+
+	
+	[mind]
+		{
+			jat_fidget						= world\ai\jobs\common\job_fidget.skrit
+				?social							= 0.35
+				&meander						= false
+				&still							= false;
+			jat_cast						= world\ai\jobs\common\job_cast.skrit
+				?rand_spell					= true
+				&spell_chances				= "0.5,									 0.5"
+				&spells						= "dsx_spell_rune_caster_damage, dsx_spell_rune_caster_summon";
+		
+			on_enemy_entered_ocz_flee		= true;
+			on_enemy_entered_ocz_attack = false;
+			on_enemy_entered_icz_flee		= true;
+			on_enemy_entered_icz_attack = false;
+			flee_count					= 1;
+		}
+
+	[inventory]
+		{
+			spew_equipped_kill_count = ;
+			selected_active_location = il_active_primary_spell;
+			[other]
+				{
+					il_active_primary_spell=dsx_spell_rune_caster_damage;
+					il_spell_1=dsx_spell_rune_caster_summon_q;
+				}
+				
+		}
+}
+
+
+
+[t:template,n:3W_dsx_rune_master]
+//balanced for Level 14
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_rune_master";
+	specializes = 3W_rune_caster_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength =	46.2, 0;
+			intelligence =	13.9, 0;
+			dexterity =	 22.7, 0;
+			nature_magic =	84,	 0;
+			combat_magic = 84, 0;
+
+		}
+	}
+	[aspect]
+	{
+		scale_base = 1.4;
+		textures:0 = b_c_edm_rune_master;
+		experience_value = 1694760;
+		life = 2473.8;
+		max_life = 2473.8;
+		mana = 293.3;
+		max_mana = 293.3;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 354.9;
+		damage_min = 264;
+
+		damage_bonus_min_cmagic = 210;
+		damage_bonus_max_cmagic = 282;
+	}
+	[common]
+	{
+		screen_name="Rune Master";
+		membership=monster,immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+				no_trig_bits = true;				
+				action* = call_sfx_script("unique_ray_green(sgx)");
+			}
+		}
+	}
+
+	[generator_in_object]
+	{
+		child_template_name = swamp_switch_skeleton;
+		spawn_event = WE_KILLED;
+		spawn_chance = 1.0;
+	}
+
+	[defend] { defense = 689.3; }
+
+	[inventory]
+	{
+		spew_equipped_kill_count = ;		
+
+		selected_active_location = il_active_primary_spell;
+		[other]
+		{
+			il_active_primary_spell=dsx_spell_rune_master_damage;
+			il_spell_1=dsx_spell_rune_caster_summon_q;
+		}
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 18, Special */
+			[all*]
+			{
+				[gold*]
+				{
+					//chance = 0.2;
+					min = 152142;
+					max = 301861;
+				}
+				[oneof*]
+				{
+					//chance = 0.2;
+					il_main = potion_mana_super;
+					il_main = potion_health_super;
+				}
+				[oneof*]
+				{
+					//chance = 0.2;
+					il_main = #weapon/185-247;
+					il_main = #armor/103-577;
+					il_main = #*/185-247;
+				}
+				[oneof*]
+				{
+					//chance = 0.01;
+					il_main = #weapon/-rare(1)/247-284;
+					il_main = #armor/-rare(1)/440-851;
+					il_main = #*/-rare(1)/247-284;
+				}
+				[oneof*]
+				{
+					//chance = 0.005;
+					il_main = #weapon/-unique(2)/247-284;
+					il_main = #armor/-unique(2)/440-851;
+					il_main = #*/-unique(2)/247-284;
+				}			
+			}
+		}					
+	}
+}
+
+
+

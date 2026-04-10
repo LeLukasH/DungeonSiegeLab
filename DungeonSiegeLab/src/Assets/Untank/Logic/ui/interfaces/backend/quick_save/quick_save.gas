@@ -1,0 +1,49 @@
+[quick_save]
+{
+	centered = dialog_box_save_bar;
+  b interface = true;
+	[t:dialog_box,n:dialog_box_save_bar]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox_thin_dark;
+	  i draw_order = 4;
+		group = saveload_bar;
+		rect = 226,203,414,277;
+		topmost = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:status_bar,n:saveload_bar]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 6;
+		draw_outline = true;
+		dynamic_edge = right;
+		group = saveload_bar;
+		rect = 261,245,383,255;
+		texture = b_gui_fe_m_mn_3d_progressbar;
+		topmost = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_quick]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 7;
+	  x font_color = -1;
+	  x font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = saveload_bar;
+		justify = center;
+		rect = 227,228,412,244;
+		text = "Saving...";
+		topmost = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+}

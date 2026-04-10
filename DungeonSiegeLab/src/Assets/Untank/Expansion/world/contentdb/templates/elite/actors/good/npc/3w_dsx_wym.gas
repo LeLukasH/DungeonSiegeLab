@@ -1,0 +1,46 @@
+[t:template,n:3W_wym]
+{
+	category_name = "3W_shopkeep";
+	doc = "3W_wym_trunq_vendor";
+	specializes = 3W_base_giant;
+	
+	[actor]
+	{ 
+		portrait_icon = b_gui_ig_i_ic_c_wym; 
+	}
+	[aspect]
+	{
+		draw_selection_indicator = TRUE;
+		use_range = 1.0;
+		is_ghost_usable = TRUE;
+		[textures]
+		{
+			0 = b_c_gan_hg_skin_01;
+			1 = b_c_pos_a1_100;
+		}
+	}
+	[common]
+	{
+		screen_name = "Wym";
+	}
+	[conversation]
+	{
+	}
+	[inventory]
+	{
+		[store_pcontent]
+		{
+			full_ratio = 0;
+		}
+	}
+    	[mind]
+    	{
+		actor_may_attack = false;
+        	actor_may_be_attacked = false;
+        	jat_talk = world\ai\jobs\actors\good\job_talk_wym.skrit;
+	}
+	[store]
+	{
+		item_markup = 2;
+	}
+}

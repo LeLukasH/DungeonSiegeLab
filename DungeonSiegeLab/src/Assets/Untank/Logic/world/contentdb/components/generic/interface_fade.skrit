@@ -1,0 +1,36 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  interface_fade.skrit
+// Author(s):  Chad Queen
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool			_server_only$			= true;
+property string			_doc$					= "Fades a ui interface on and off the screen.";
+
+owner = GoSkritComponent;
+
+// external properties
+property string			interface$;
+property float			duration$;
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		#only( game )
+		[[
+			UIMenuManager.SFadeInterface( interface$, duration$, MakeGoid( msg$.Data1 ) );	
+		]]		
+	}
+}

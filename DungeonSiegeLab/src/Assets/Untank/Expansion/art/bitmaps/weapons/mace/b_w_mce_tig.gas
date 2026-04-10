@@ -1,0 +1,7 @@
+[t:tsd,n:b_w_mce_tig] // <------ n: must be same name as your texture 
+
+{
+	b hasalpha = true;             // this gives the engine a heads-up
+	layer1texture1 = b_w_mce_tig;   // <------ must be same name as your texture, without file extension
+}
+

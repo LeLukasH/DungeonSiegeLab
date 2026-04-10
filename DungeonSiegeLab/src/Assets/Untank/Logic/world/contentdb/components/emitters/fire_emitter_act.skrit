@@ -1,0 +1,151 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  fire_emitter.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//
+// Scid Bits Key
+// 0 = Changed.
+// 1 = State. true = active, false = inactive.
+//
+
+property bool   _server_only$		= 	false;
+
+property bool	start_on_creation$	=	false	doc = "Start Emitter when it enters the world";
+
+property float	red0$				=	0.8		doc = "Red color intensity 0-1";
+property float	green0$				=	0.5		doc = "Green color intensity 0-1";
+property float	blue0$				=	0.0		doc = "Blue color intensity 0-1";
+
+property float	red1$				=	0.15	doc = "Red variance intensity 0-1";
+property float	green1$				=	0.09	doc = "Green variance intensity 0-1";
+property float	blue1$				=	0.0		doc = "Blue variance intensity 0-1";
+
+property float	xvel$				=	0.0		doc = "X component of initial velocity";
+property float	yvel$				=	8.0		doc = "Y component of initial velocity";
+property float	zvel$				=	0.0  	doc = "Z component of initial velocity";
+
+property float	xacc$				=	0.0		doc = "X component of acceleration";
+property float	yacc$				=	14.0	doc = "Y component of acceleration";
+property float	zacc$				=	0.0 	doc = "Z component of acceleration";
+
+property float	fade$				=	0.85 	doc = "Amount to decrease particle alpha per second";
+property float	particle_size$		=	1.75	doc = "Size of an individual particle";
+property int	count$				=	30		doc = "Maximum number of particles";
+
+property float	start_radius_min$	=	0.0		doc = "Inner spawn radius";
+property float	start_radius_max$	=	4.0		doc = "Outer spawn radius";
+property float	displace_min$		=	0.0		doc = "Random y displacement range min";
+property float	displace_max$		=	1.25	doc = "Random y displacement range max";
+
+property bool	dark$				=	false	doc = "Enable dark blending method";
+property bool	grey_tex$			=	false	doc = "use a grey texture";
+property bool	cheap$				=	false	doc = "Uses cheaper particle motion calculations";
+property bool	instant$			=	false	doc = "Fire instantly has volume instead of burning slowly";
+property bool	yorient$			=	false	doc = "Orients fire to y-axis only";
+property bool	ignite$				=	false	doc = "Ignite anything within collision volume";
+
+property float	damage_min$			=	3.0		doc = "Minimum amount of damage to do per second";
+property float	damage_max$			=	7.0		doc = "Maximum amount of damage to do per second";
+property float	particle_fit$  		=	0.2		doc = "Emission volume fit for collision 0 is loose, 1 is tight";
+
+property float	time_scale$			=	1		doc = "Time scalar - factor to scale time by";
+property float	scale$		  		=	1		doc = "Scale factor - factor to scale size of effect by";
+
+
+owner = GoSkritComponent;
+#include "k_inc_fire_emitter" 
+SFxSID active_script_id$ = 0;
+
+startup state Constructed$
+{
+}
+
+void StartEmitter$()
+{
+	if ( active_script_id$ == 0 )
+	{
+		// Run the generic_spawn script
+		active_script_id$ =	SiegeFx.RunScript( "fire_emitter", owner.Goid, owner.Goid, params$, owner.Goid, WE_REQ_ACTIVATE );
+	}
+}
+
+void StopEmitter$()
+{
+	if( active_script_id$ != 0 )
+	{
+		// Let the effect know that it should finish what it is doing and not spawn anything else
+		SiegeFx.FinishScript( active_script_id$ );
+	
+		// Clear the script id
+		active_script_id$ = null;
+	}
+}
+
+trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+{
+	SetState Setup$;
+}
+
+trigger OnGoHandleMessage$( WE_SCIDBITS_CHANGED )
+{
+	SetState Setup$;
+}
+
+trigger OnGoHandleMessage$( WE_REQ_ACTIVATE )
+{
+	if( IsServerLocal )
+	{
+		Godb.SSetScidBit( owner.scid, 1, true );
+	}
+}
+
+trigger OnGoHandleMessage$( WE_REQ_DEACTIVATE )
+{
+	if( IsServerLocal )
+	{
+		Godb.SSetScidBit( owner.scid, 1, false );
+	}
+}
+
+state Setup$
+{
+	event OnEnterState$
+	{
+		if( StringTool.IsEmpty( params$ ) )
+		{
+			PackParams$();
+		}
+		if( !Godb.GetScidBit( owner.scid, 0 ) ) // nothing has changed. In the default state.
+		{
+			if( IsServerLocal )
+			{
+				if (start_on_creation$ == true)
+				{
+					int Bits$ = Godb.GetScidBits( owner.scid );
+					Bits$ |= 1;
+					Bits$ |= 2;
+					Godb.SSetScidBits( owner.scid, Bits$ );
+				}
+				else
+				{
+					Godb.SSetScidBit( owner.scid, 0, true );
+				}
+			}
+		}
+		else if ( Godb.GetScidBit( owner.scid, 1 ) ) // emitter was active when it streamed out turn it back on.
+		{
+			StartEmitter$();
+		} 
+		else 
+		{
+			StopEmitter$();
+		}
+	}
+}

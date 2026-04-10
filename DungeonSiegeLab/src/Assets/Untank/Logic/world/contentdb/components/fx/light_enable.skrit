@@ -1,0 +1,320 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  light_enable.skrit
+// Author(s):  Scott Bilas, Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool		_server_only$			= false;
+property string		_doc$					= "Enable/disable a Siege light";
+
+// exported properties
+property LightId	siege_light$			= 0					doc = "Identifier of siege light to attach this effect to";
+property bool		initially_active$		= true				doc = "Should the light be on when initially constructed?";
+property bool		is_toggle$				= false				doc = "Should this toggle the light or require separate activate/deactivate messages?";
+property bool		self_destruct$			= false				doc = "Self-destruct on algorithm completion";
+property bool		use_flare$				= false				doc = "will ramp from zero intensity to double then back to normal.";
+property float		flare_duration$			= 1.0				doc = "durration of initial flare.";
+property float		flare_magnitude$		= 1.5				doc = "how much to flare. 1.0 is original intensity.";
+property bool		use_fizzle$				= false				doc = "will fizzle from intensity to zero.";
+property float		fizzle_duration$		= 1.0				doc = "durration of fizzle.";
+
+owner = GoSkritComponent;
+float initial_intensity$;
+float time$ = 0;
+bool set_intensity$ = false;
+
+//////////////////////////////////////////////////////////////////////////////
+
+check_intensity$
+{
+	if( siege_light$.IsValid )
+	{
+		if( !set_intensity$ )
+		{
+			set_intensity$ = true;
+			initial_intensity$ = siege_light$.Intensity;
+//			report.genericf( "Set %s light initial Intensity to: %g\n", ( siege_light$.active ? "active" : "Inactive" ), siege_light$.Intensity );
+		}
+	}
+	else
+	{
+		set_intensity$ = false;
+	}
+}
+
+trigger OnGoDrawDebugHud$
+{
+	if ( siege_light$.IsValid )
+	{
+		SiegePos pos$ = SiegePos.MakeDefault;
+		siege_light$.GetPosition( pos$ );
+		World.DrawDebugLine( owner.go.Placement.Position,
+							 pos$,
+							 MakeColor( 1.0, 1.0, 1.0, 0.5 ),
+							 "enable" );
+	}
+}
+
+trigger OnGoHandleMessage$( WE_POST_RESTORE_GAME )
+{
+	SetState Setup$;
+}
+
+trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+{
+	#only( game )
+	[[
+//	report.generic("Entered World\n");
+//	if ( siege_light$.IsValid )
+//	{
+//		report.genericf( "intensity: %g\n", siege_light$.Intensity );
+//	}
+	SetState Setup$;
+	]]
+}
+
+trigger OnGoHandleMessage$( WE_LEFT_WORLD )
+{
+//	report.generic("Left World\n");
+	if ( siege_light$.IsValid && set_intensity$ )
+	{
+		if( initial_intensity$ > 0.05 )
+		{
+			siege_light$.Intensity = initial_intensity$;
+		}
+		else
+		{
+		    set_intensity$ = false;
+		}
+//		report.genericf( "intensity: %g\n", siege_light$.Intensity );
+	}
+}
+
+startup state StartUp$
+{
+}
+
+state Setup$
+{			
+	event OnEnterState$
+	{
+//		report.generic("setup\n");		
+		check_intensity$;
+	
+//		if ( siege_light$.IsValid )
+//		{
+//			report.genericf( "Bits: 0x%08x\n", Godb.GetScidBits( owner.scid ) );
+//			report.genericf( "intensity: %g\n", siege_light$.Intensity );
+//		}		
+		// check
+		if( !Godb.GetScidBit( owner.scid, 2 ) ) // nothing has changed. In the default state. Set our bits to get us in the right state.
+		{
+			if( IsServerLocal )
+			{
+				if( initially_active$ )
+				{
+					// set the light active and used.
+					// It appears that we can't bit shift in Skrit... The following code is supposed to try and set the 2nd and 3rd ScidBits to true.
+					// would just do it with 2 different calls, but this should be cheaper network wise.
+					int Bits$ = Godb.GetScidBits( owner.scid );
+					Bits$ |= 4;
+					Bits$ |= 8;
+					Godb.SSetScidBits( owner.scid, Bits$ );
+				}
+				else
+				{
+					if ( siege_light$.IsValid )
+					{
+						siege_light$.active = false;
+					}
+					// Set the used Bits
+					if( IsServerLocal )
+					{
+						Godb.SSetScidBit( owner.scid, 2, true );
+					}
+				}
+			}
+		} 
+		else if ( Godb.GetScidBit( owner.scid, 3 ) ) // was active when it streamed out turn it back on.
+		{	
+			if ( siege_light$.IsValid )
+			{
+				SetState FlareUp$;
+				return;
+			}
+		}
+		else
+		{
+			if ( siege_light$.IsValid )
+			{
+				SetState Fizzle$;
+				return;
+			}
+		}
+		
+		SetState Wait$;
+		return;
+	}
+}
+
+trigger OnGoHandleMessage$( WE_SCIDBITS_CHANGED )
+{
+	SetState Setup$;
+}
+
+trigger OnGoHandleMessage$( WE_REQ_ACTIVATE )
+{
+	if( IsServerLocal )
+	{
+		if ( !Godb.GetScidBit( owner.scid, 3 ) ) // Is the light supposed to be on?
+		{
+			Godb.SSetScidBit( owner.scid, 3, true );
+		} 
+		else if( is_toggle$ )
+		{
+			Godb.SSetScidBit( owner.scid, 3, false );
+		}
+	}
+}
+
+trigger OnGoHandleMessage$( WE_REQ_DEACTIVATE )
+{
+	if( IsServerLocal )
+	{
+		Godb.SSetScidBit( owner.scid, 3, false );
+	}
+}
+
+state Wait$
+{
+	// We have a problem in that we can't detect if a light has been unloaded then loaded.
+	// If I'm just sitting inactive for 1 second I'm going to try to set up again.
+	transition -> Setup$: OnTimer( 1 );
+	event OnEnterState$
+	{
+//		report.generic("Waiting\n");
+		This.CreateTimer( 1, 1 );
+	}
+}
+	
+state FlareUp$
+{
+	transition -> Wait$: OnTimer( 1 );
+	event OnEnterState$
+	{
+		check_intensity$;
+		if( siege_light$.IsValid )
+		{
+			if( siege_light$.active )
+			{
+				if( set_intensity$ )
+				{
+					siege_light$.Intensity = initial_intensity$;
+				}
+				SetState Wait$;
+				return;
+			}
+			
+			siege_light$.active = true;
+			if ( use_flare$ )
+			{
+				siege_light$.Intensity = 0;
+				time$ = 0;
+			}
+			else
+			{
+				SetState Wait$;
+				return;
+			}
+		}
+		else
+		{
+			
+			This.CreateTimer( 1, 1 );
+		}
+	}
+	event OnGoUpdate$( float deltaTime$ )
+	{
+		if ( siege_light$.IsValid )
+		{
+			time$ += deltaTime$;
+	
+			if ( time$ >= flare_duration$)
+			{
+				siege_light$.Intensity = initial_intensity$;
+				SetState Wait$;
+			}
+			else
+			{
+				siege_light$.Intensity = (flare_magnitude$/2.0) * initial_intensity$ * (1 - Math.Cos( (time$ / flare_duration$) * 1.5 * Math.Pi) );
+			}
+//			report.genericf("initial_intensity, %g\n", initial_intensity$ );
+//			report.genericf("Intensity, %g\n", siege_light$.Intensity);
+		}
+	}
+}
+
+state Fizzle$
+{
+	transition -> Wait$: OnTimer( 1 );
+	event OnEnterState$
+	{
+		check_intensity$;
+		if( siege_light$.IsValid )
+		{
+			if( !siege_light$.active )
+			{
+				SetState Wait$;
+				return;
+			}
+			
+			if ( use_fizzle$ )
+			{
+				time$ = 0;
+			}
+			else
+			{
+				siege_light$.active = false;
+				SetState Wait$;
+				return;
+			}
+		}
+		else
+		{
+			This.CreateTimer( 1, 1 );
+		}
+	}
+	event OnGoUpdate$( float deltaTime$ )
+	{
+		if ( siege_light$.IsValid )
+		{
+			time$ += deltaTime$;
+	
+			if ( time$ >= fizzle_duration$)
+			{
+				siege_light$.Intensity = initial_intensity$;
+				siege_light$.active = false;
+//				report.genericf("Fizzle Intensity, %g\n", siege_light$.Intensity);
+				SetState Wait$;
+				return;
+			}
+			else
+			{
+				siege_light$.Intensity = initial_intensity$ * (1 - Math.Sin( (time$ / fizzle_duration$) * .5 * Math.Pi) );
+			}
+//			report.genericf("initial_intensity, %g\n", initial_intensity$ );
+//			report.genericf("Intensity, %g\n", siege_light$.Intensity);
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////

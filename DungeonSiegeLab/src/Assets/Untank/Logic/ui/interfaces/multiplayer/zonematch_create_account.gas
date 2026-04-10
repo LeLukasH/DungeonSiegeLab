@@ -1,0 +1,314 @@
+[zonematch_create_account]
+{
+	  interface = true;
+	  modal = true;
+	[t:dialog_box,n:backgound_password2_text]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = cpbox;
+		i draw_order = 13;
+		  rect = 250,319,550,341;
+		  texture = none;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:dialog_box,n:backgound_password_text]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = cpbox;
+		i draw_order = 13;
+		  rect = 250,269,550,291;
+		  texture = none;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:dialog_box,n:backgound_username_text]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = cpbox;
+		i draw_order = 10;
+		  rect = 250,219,550,241;
+		  texture = none;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:dialog_box,n:background]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = cpbox_wide;
+		i draw_order = 2;
+		  rect = 200,145,600,455;
+		  texture = none;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:window,n:bg_fill]
+	{
+		f alpha = 0.400000;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 1;
+		  rect = 0,0,800,600;
+		  texture = b_gui_cmn_textbox_bg;
+		  uvcoords = 0.000000,0.000000,0.000000,0.000000;
+		  wrap_mode = clamp;
+	}
+	[t:button,n:button_cancel]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = button_4;
+		i draw_order = 20;
+		  rect = 410,409,540,425;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		[t:text,n:button_cancel_text]
+		{
+			f alpha = 1.000000;
+			b common_control = false;
+			  common_template = ;
+			i draw_order = 68;
+			i font_color = -1;
+			i font_size = 12;
+			  font_type = b_gui_fnt_12p_copperplate-light;
+			  justify = center;
+			  rect = 456,410,540,425;
+			  text = "Cancel";
+			  texture = none;
+			  type = text;
+			  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			  wrap_mode = clamp;
+		}
+		[messages]
+		{
+			  onbuttonpress = notify(zonematch_dialog_cancel);
+		}
+	}
+	[t:button,n:button_create_account_ok]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = button_4;
+		i draw_order = 20;
+		  rect = 260,409,390,425;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		[t:text,n:button_create_account_ok_text]
+		{
+			f alpha = 1.000000;
+			b common_control = false;
+			  common_template = ;
+			i draw_order = 68;
+			i font_color = -1;
+			i font_size = 12;
+			  font_type = b_gui_fnt_12p_copperplate-light;
+			  justify = center;
+			  rect = 317,410,390,425;
+			  text = "OK";
+			  texture = none;
+			  type = text;
+			  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			  wrap_mode = clamp;
+		}
+		[messages]
+		{
+			  onbuttonpress = notify(zonematch_create_account_ok) & playsound(s_e_interface_close);
+			  onenter = notify(zonematch_create_account_ok) & playsound(s_e_interface_close);
+		}
+	}
+	[t:button,n:button_create_account_sign_in]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = button_4;
+		i draw_order = 20;
+		  rect = 250,359,550,375;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		[t:text,n:button_create_account_sign_in_text]
+		{
+			f alpha = 1.000000;
+			b common_control = false;
+			  common_template = ;
+			i draw_order = 68;
+			i font_color = -1;
+			i font_size = 12;
+			  font_type = b_gui_fnt_12p_copperplate-light;
+			  justify = center;
+			  rect = 301,360,550,375;
+			  text = "Sign in with existing account...";
+			  texture = none;
+			  type = text;
+			  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			  wrap_mode = clamp;
+		}
+		[messages]
+		{
+			  onbuttonpress = notify(zonematch_sign_in_fresh);
+		}
+	}
+	[t:dialog_box,n:command_seperator]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = cpbox_thin;
+		i draw_order = 3;
+		  rect = 300,391,500,395;
+		  texture = none;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:edit_box,n:create_account_password2_edit_box]
+	{
+		f alpha = 1.000000;
+		b clear_select = false;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 81;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		  hidden_text = true;
+		i max_string_size = 20;
+		b permanent_focus = false;
+		  rect = 253,322,547,338;
+		  text = "";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		  tab_stop = 2;
+		[prompt]
+		{
+			  draw_order = 26;
+			  texture = b_gui_fe_m_single_prompt;
+			  width = 1;
+		}
+		[prompt]
+		{
+			  texture = ;
+			i width = 1;
+		}
+	}
+	[t:edit_box,n:create_account_password_edit_box]
+	{
+		f alpha = 1.000000;
+		b clear_select = false;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 81;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		  hidden_text = true;
+		i max_string_size = 20;
+		b permanent_focus = false;
+		  rect = 253,272,547,288;
+		  text = "";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		  tab_stop = 1;
+		[prompt]
+		{
+			  draw_order = 26;
+			  texture = b_gui_fe_m_single_prompt;
+			  width = 1;
+		}
+		[prompt]
+		{
+			  texture = ;
+			i width = 1;
+		}
+	}
+	[t:edit_box,n:create_account_user_name_edit_box]
+	{
+		f alpha = 1.000000;
+		b clear_select = false;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 80;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		i max_string_size = 20;
+		b permanent_focus = false;
+		  rect = 253,222,547,238;
+		  text = "";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		  tab_stop = 0;
+		[prompt]
+		{
+			  draw_order = 26;
+			  texture = b_gui_fe_m_single_prompt;
+			  width = 1;
+		}
+		[prompt]
+		{
+			  texture = ;
+			i width = 1;
+		}
+	}
+	[t:text,n:password2_text]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 83;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		  justify = left;
+		  rect = 250,299,450,315;
+		  text = "Retype Password";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:text,n:password_text]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 83;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		  justify = left;
+		  rect = 250,249,450,265;
+		  text = "Enter Password";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:text,n:title]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 79;
+		i font_color = -1;
+		i font_size = 22;
+		  font_type = b_gui_fnt_20p_copperplate-light;
+		  justify = center;
+		  rect = 240,161,560,181;
+		  text = "CREATE NEW ACCOUNT";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:text,n:user_name_text]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 82;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		  justify = left;
+		  rect = 250,199,450,215;
+		  text = "Enter a User Name";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+}

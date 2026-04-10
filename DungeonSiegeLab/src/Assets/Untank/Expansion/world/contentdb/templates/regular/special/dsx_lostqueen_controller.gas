@@ -1,0 +1,23 @@
+///////////////////////////////////////////////////////////////////
+// Controller for lost queen manager
+
+// TRJ - 6/5/03
+// lost queen manager controller
+[t:template,n:dsx_lostqueen_controller]
+{
+	specializes = special;
+
+	doc = "Lost Queen Controller";
+	category_name = "zurb";
+
+	common:auto_expiration_class = immediate;
+	common:forced_expiration_class = immediate;
+
+	[gizmo] { diffuse_color=0.300000,0.000000,0.800000; texture=; }
+	[placement] {}
+
+	[dsx_lostqueen_tail_manager]
+	{
+		spawn_template = "dsx_twisted_mucosa_raider";
+	}
+}

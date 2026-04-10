@@ -1,0 +1,857 @@
+[zonematch_games_filter]
+{
+	interface = true;
+	modal = true;
+	centered = background;
+	
+	[t:dialog_box,n:background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_thin_dark;
+		draw_order = 2;
+		rect = 290,50,790,440;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;		
+	}
+	[t:text,n:title]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 79;
+		rect = 310,60,770,76;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		font_color = -1;
+		font_size = 22;
+		font_type = b_gui_fnt_16p_copperplate-light;
+		justify = center;
+		text = "Custom Filters";
+	}
+	[t:dialog_box,n:background_options]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 4;
+		rect = 304,84,776,396;
+		texture = b_gui_fe_m_mp_background_05;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:filter_divider]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_thin_dark;
+		draw_order = 68;
+		//uber
+		//rect = 522,232,744,252;
+		//full
+		//rect = 622,292,744,312; //272middle
+		rect = 342,272,740,276;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;		
+	}
+	[t:button,n:button_ok]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 20;
+		rect = 450,410,630,426;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_ok_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 107,300,231,316;
+			text = "Apply";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages] { onbuttonpress=notify(zonematch_games_apply_filters); }
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////
+	//	
+	//				PVP
+	//
+	/////////////////////////////////////////////////////////////////////////////////
+	[t:button,n:outline_pvp]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 7;
+		rect = 572,112,744,132;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:text_box,n:show_pvp_games_text]
+	{
+		alpha = 0.99;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = right;
+		rect = 322,106,562,136;
+		text = "Show Games with Player vs. Player Enabled?";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		fixed_location = true;
+		center_height = true;
+		texture = none;
+	}	
+	[t:combo_box,n:combo_box_pvp]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 2600;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		tag = 1;
+		//rect = 585,144,744,160;
+		rect = 585,114,744,130;
+		[t:button,n:button_combo_show_pvp]
+		{
+		  f alpha = 0.99;
+		  b common_control = true;
+			common_template = down;
+		  i draw_order = 2601;
+			//rect = 745,143,760,161;
+			rect = 745,114,760,130;
+			texture = ;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onbuttonpress = parentmessage(oncomboexpand) ;
+			}
+		}
+		[t:listbox,n:listbox_pvp]
+		{
+			alpha = 0.97500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 2602;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			//rect = 573,91,759,141;
+			rect = 573,133,759,183;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.75;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				
+			}		  
+		}  
+	}		
+
+	/////////////////////////////////////////////////////////////////////////////////
+	//	
+	//				TEAM SELECTED
+	//
+	/////////////////////////////////////////////////////////////////////////////////
+	[t:button,n:outline_team]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 7;
+		rect = 572,142,744,162;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:dialog_box,n:background_team]
+	{
+		alpha = 0.05000000;
+		common_control = false;
+		common_template = none;
+		draw_order = 6;
+		//rect = 404,286,776,316;
+		rect = 404,106,776,136;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		texture = b_gui_cmn_brownbar;
+	}
+	[t:text_box,n:show_team_games_text]
+	{
+		alpha = 0.99;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = right;
+		rect = 322,136,562,166;
+		text = "Show Games with Teams Enabled?";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		fixed_location = true;
+		center_height = true;
+		texture = none;
+	}
+	[t:combo_box,n:combo_box_team]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 2500;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		tag = 1;
+		//rect = 585,294,744,310;
+		rect = 585,144,744,160;
+		[t:button,n:button_combo_show_team]
+		{
+		  f alpha = 0.99;
+		  b common_control = true;
+			common_template = down;
+		  i draw_order = 2501;
+			//rect = 745,293,760,311;
+			rect = 745,144,760,160;
+			texture = ;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onbuttonpress = parentmessage(oncomboexpand) ;
+			}
+		}
+		[t:listbox,n:listbox_team]
+		{
+			alpha = 0.97500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 2502;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			//rect = 573,241,759,291;
+			rect = 573,163,759,213;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.75;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				
+			}		  
+		}  
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////
+	//	
+	//				WORLD LEVEL
+	//
+	/////////////////////////////////////////////////////////////////////////////////
+	[t:button,n:outline_worldlevel]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 7;
+		rect = 572,172,744,192;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:text_box,n:show_worldlevel_games_text]
+	{
+		alpha = 0.99;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = right;
+		rect = 322,166,562,196;
+		text = "Show Games with World Level:";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		fixed_location = true;
+		center_height = true;
+		texture = none;
+	}	
+	[t:combo_box,n:combo_box_worldlevel]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 2400;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		tag = 1;
+		//rect = 585,114,744,130;
+		rect = 585,174,744,190;
+		[t:button,n:button_combo_show_worldlevel]
+		{
+		  f alpha = 0.99;
+		  b common_control = true;
+			common_template = down;
+		  i draw_order = 2401;
+			//rect = 745,113,760,131;
+			rect = 745,174,760,190;
+			texture = ;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onbuttonpress = parentmessage(oncomboexpand) ;
+			}
+		}
+		[t:listbox,n:listbox_worldlevel]
+		{
+			alpha = 0.97500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 2402;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			//rect = 573,46,759,111;
+			rect = 573,193,759,223;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.75;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				
+			}		  
+		}  
+	}
+	/////////////////////////////////////////////////////////////////////////////////
+	//	
+	//				INVENTORY DROP
+	//
+	/////////////////////////////////////////////////////////////////////////////////
+	[t:button,n:outline_inventory]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 7;
+		rect = 572,202,744,222;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = playsound(s_e_frontend_tiny_button);
+		}
+	}
+
+	[t:text_box,n:show_inventory_games_text]
+	{
+		alpha = 0.99;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = right;
+		rect = 322,196,562,226;
+		text = "Show Games that Drop Items on Death?";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		fixed_location = true;
+		center_height = true;
+		texture = none;
+	}
+	[t:combo_box,n:combo_box_inventory]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 2300;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		tag = 1;
+		//rect = 585,324,744,340;
+		rect = 585,204,744,220;
+		[t:button,n:button_combo_show_inventory]
+		{
+		  f alpha = 0.99;
+		  b common_control = true;
+			common_template = down;
+		  i draw_order = 2301;
+			//rect = 745,323,760,341;
+			rect = 745,204,760,220;
+			texture = ;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onbuttonpress = parentmessage(oncomboexpand) ;
+			}
+		}
+		[t:listbox,n:listbox_inventory]
+		{
+			alpha = 0.97500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 2302;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			//rect = 573,271,759,321;
+			rect = 573,223,759,273;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.75;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				
+			}		  
+		}  
+	}
+		/////////////////////////////////////////////////////////////////////////////////
+	//	
+	//				UBER GAMES
+	//
+	/////////////////////////////////////////////////////////////////////////////////
+	[t:button,n:outline_uber]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 7;
+		rect = 572,232,744,252;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = playsound(s_e_frontend_tiny_button);
+		}
+	}
+
+	[t:text_box,n:show_uber_games_text]
+	{
+		alpha = 0.99;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = right;
+		rect = 322,226,562,256;
+		text = "Show Games with Players Under Level: ";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		fixed_location = true;
+		center_height = true;
+		texture = none;
+	}
+	[t:combo_box,n:combo_box_uber]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 2200;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		tag = 1;
+		//rect = 585,264,744,280;
+		rect = 585,234,744,250;
+		[t:button,n:button_combo_show_uber]
+		{
+		  f alpha = 0.99;
+		  b common_control = true;
+			common_template = down;
+		  i draw_order = 2201;
+			//rect = 745,263,760,281;
+			rect = 745,234,760,250;
+			texture = ;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onbuttonpress = parentmessage(oncomboexpand) ;
+			}
+		}
+		[t:listbox,n:listbox_uber]
+		{
+			alpha = 0.97500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 2202;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			//rect = 573,181,759,261;
+			rect = 573,253,759,303;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.75;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				
+			}		  
+		}  
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////
+	//	
+	//				FULL GAMES
+	//
+	/////////////////////////////////////////////////////////////////////////////////
+	[t:button,n:outline_full]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 7;
+		rect = 572,292,744,312;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = playsound(s_e_frontend_tiny_button);
+		}
+	}
+
+	[t:text_box,n:show_full_games_text]
+	{
+		alpha = 0.99;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = right;
+		rect = 322,286,562,316;
+		text = "Show Full Games?";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		fixed_location = true;
+		center_height = true;
+		texture = none;
+	}	
+	[t:combo_box,n:combo_box_full]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 2100;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		tag = 1;
+		//rect = 585,234,744,250;
+		rect = 585,294,744,310;
+		[t:button,n:button_combo_show_full]
+		{
+		  f alpha = 0.99;
+		  b common_control = true;
+			common_template = down;
+		  i draw_order = 2101;
+			//rect = 745,233,760,251;
+			rect = 745,295,760,311;
+			texture = ;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onbuttonpress = parentmessage(oncomboexpand) ;
+			}
+		}
+		[t:listbox,n:listbox_full]
+		{
+			alpha = 0.97500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 2102;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			//rect = 573,181,759,231;
+			rect = 573,313,759,363;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.75;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				
+			}		  
+		}  
+	}		
+	/////////////////////////////////////////////////////////////////////////////////
+	//	
+	//				PASSWORD
+	//
+	/////////////////////////////////////////////////////////////////////////////////
+	[t:button,n:outline_password]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 7;
+		rect = 572,322,744,342;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = playsound(s_e_frontend_tiny_button);
+		}
+	}
+
+	[t:text_box,n:show_password_games_text]
+	{
+		alpha = 0.99;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = right;
+
+		rect = 322,316,562,346;
+		text = "Show Password Protected Games?";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		fixed_location = true;
+		center_height = true;
+		texture = none;
+	}	
+	[t:combo_box,n:combo_box_password]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 2000;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		tag = 1;
+		//rect = 585,174,744,190;
+		rect = 585,324,744,340;
+		[t:button,n:button_combo_show_password]
+		{
+		  f alpha = 0.99;
+		  b common_control = true;
+			common_template = down;
+		  i draw_order = 2001;
+			//rect = 745,173,760,191;
+			rect = 745,325,760,341;
+			texture = ;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onbuttonpress = parentmessage(oncomboexpand) ;
+			}
+		}
+		[t:listbox,n:listbox_password]
+		{
+			alpha = 0.97500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 2002;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			//rect = 573,121,759,171;
+			rect = 573,343,759,373;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.75;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				
+			}		  
+		}  
+	}		
+	/////////////////////////////////////////////////////////////////////////////////
+	//	
+	//				IN PROGRESS
+	//
+	/////////////////////////////////////////////////////////////////////////////////
+	[t:button,n:outline_progress]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 7;
+		rect = 572,352,744,372;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = playsound(s_e_frontend_tiny_button);
+		}
+	}
+
+	[t:text_box,n:show_games_in_progress_text]
+	{
+		alpha = 0.99;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = right;
+		rect = 322,346,562,376;
+		text = "Show Games In Progress or In Staging Area?";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		fixed_location = true;
+		center_height = true;
+		texture = none;
+	}	
+	[t:combo_box,n:combo_box_progress]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 1900;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 10;
+		tag = 1;
+		//rect = 585,204,744,220;
+		rect = 585,354,744,370;
+		[t:button,n:button_combo_show_progress]
+		{
+		  f alpha = 0.99;
+		  b common_control = true;
+			common_template = down;
+		  i draw_order = 1901;
+			//rect = 745,203,760,221;
+			rect = 745,353,760,371;
+			texture = ;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onbuttonpress = parentmessage(oncomboexpand) ;
+			}
+		}
+		[t:listbox,n:listbox_progress]
+		{
+			alpha = 0.97500000;
+			common_control = true;
+			common_template = ;	
+			draw_order = 1902;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			//rect = 573,151,759,201;
+			rect = 573,373,759,413;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.75;
+				texture = b_gui_cmn_selection;
+			}			
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				
+			}		  
+		}  
+	}		
+}
+
+
+
+

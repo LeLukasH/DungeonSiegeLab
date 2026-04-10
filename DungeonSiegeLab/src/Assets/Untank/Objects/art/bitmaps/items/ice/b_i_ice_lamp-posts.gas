@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_ice_lamp-posts]
+{
+	layer1texture1 = b_i_ice_lamp-posts;
+  i texturedetail = 2;
+}

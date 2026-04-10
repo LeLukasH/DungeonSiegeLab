@@ -1,0 +1,13 @@
+[worldmap_settings]
+{
+	// How many pieces is our map image in?
+	num_map_parts = 12;
+
+	default_text_color = 0xFFEDE6C7;	//0xFF43392C;
+	font = b_gui_fnt_36p_mtcorsiva;
+	foreign_font = b_gui_fnt_16p_copperplate-light;
+	default_marker_texture = b_gui_ig_mnu_wmap_marker;
+	
+	screen_width = 1024.0;
+	screen_height = 768.0;	
+}

@@ -1,0 +1,59 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  elevator_instant_1c.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool			_server_only$					= true;
+property string			_doc$							= "1-connection instant elevator";
+property string			_required_component$			= "placement";
+
+// exported properties
+property SiegeId		elevator_node$					= 0						doc = "Node used for transition";
+property int			elevator_door_level1$			= 0						doc = "Door used for connection with connect_node at level 1";
+property int			elevator_door_level2$			= 0						doc = "Door used for connection with connect_node at level 2";
+															
+property SiegeId		connect_node_level1$			= 0						doc = "Node used for connection at level 1";
+property SiegeId		connect_node_level2$			= 0						doc = "Node used for connection at level 2";
+
+property int			connect_door_level1$			= 0						doc = "Door used for connection with elevator_node at level 1";
+property int			connect_door_level2$			= 0						doc = "Door used for connection with elevator_node at level 2";
+
+owner                                                   = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+startup state L1$
+{
+	transition
+	{
+		-> L2$: OnGoHandleMessage( WE_REQ_ACTIVATE ) =
+		{
+			WorldTerrain.SRequestNodeConnection( elevator_node$, elevator_door_level2$,
+												 connect_node_level2$, connect_door_level2$, true, true );
+		}
+	}
+}
+
+state L2$
+{
+	transition
+	{
+		-> L1$: OnGoHandleMessage( WE_REQ_ACTIVATE ) =
+		{
+			WorldTerrain.SRequestNodeConnection( elevator_node$, elevator_door_level1$,
+												 connect_node_level1$, connect_door_level1$, true, true );
+		}
+	}
+}
+//////////////////////////////////////////////////////////////////////////////
+

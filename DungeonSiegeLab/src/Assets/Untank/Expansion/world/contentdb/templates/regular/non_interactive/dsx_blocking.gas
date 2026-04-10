@@ -1,0 +1,1005 @@
+[t:template,n:dsx_clock_gear_1]
+{
+	category_name = "node";
+	doc = "dsx_clock_gear_1";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_glb_gear_clk_01;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			[chore_default]
+			{
+				skrit = rotatey?rpm=8;
+			}
+		}
+	}
+}
+
+[t:template,n:dsx_clkrm_fan_blade]
+{
+	category_name = "node";
+	doc = "dsx_clkrm_fan_blade";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_glb_fan_blade;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			[chore_default]
+			{
+				skrit = rotatez?rpm=50;
+			}
+		}
+	}
+}
+
+[t:template,n:dsx_clock_gear_mechanism]
+{
+	category_name = "node";
+	doc = "dsx_clock_gear_mechanism";
+	specializes = non_interactive;
+	[aspect]
+	{
+		model = m_i_glb_gear_clk_11_new;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			
+			[chore_default]
+			{
+				skrit = infinite_loop;
+				[anim_files]	{00 =a_i_glb_gear_clk_11-turning;
+				}
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				[anim_files]
+				{
+					slow = a_i_glb_gear_clk_11-turning_slwdwn-new2; // slow down
+					slol = a_i_glb_gear_clk_11-turning_slw; // slow loop
+				}
+			}
+		}
+	}
+	[effect_manager]
+	{
+		start_msg = WE_ENTERED_WORLD;
+		stop_msg = WE_REQ_DEACTIVATE;
+
+		effect_name = "";
+		rep_effect_name = "clock_gear_mechanism";
+
+		repeat_rate = .5;
+		repeat_rate_max = 2;
+
+		run_once = true;
+	}
+}
+
+[t:template,n:dsx_clock_gear_mechanism_b]
+{
+	category_name = "node";
+	doc = "dsx_clock_gear_mechanism_b";
+	specializes = non_interactive;
+	[aspect]
+	{
+		model = m_i_glb_gear_clk_10;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			
+			[chore_default]
+			{
+				skrit = infinite_loop;
+				[anim_files]	{00 =a_i_glb_gear_clk_10-turning;
+				}
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				[anim_files]
+				{
+					slow = a_i_glb_gear_clk_10-turning-slwdwn-new2; // slow down
+					slol = a_i_glb_gear_clk_10-turning-slw; // slow loop
+				}
+			}
+		}
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("clock_gear_mechanism_b_continuous");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+	[effect_manager]
+	{
+		start_msg = WE_ENTERED_WORLD;
+		stop_msg = WE_REQ_DEACTIVATE;
+
+		effect_name = "";
+		rep_effect_name = "clock_gear_mechanism_b_periodic";
+
+		repeat_rate = 1;
+		repeat_rate_max = 5;
+
+		run_once = true;
+	}
+}
+
+
+[t:template,n:dsx_clock_gear_mechanism_c]
+{
+	category_name = "node";
+	doc = "dsx_clock_gear_mechanism_c";
+	specializes = non_interactive;
+	[aspect]
+	{
+		model = m_i_glb_gear_clk_12;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			
+			[chore_default]
+			{
+				skrit = infinite_loop;
+				[anim_files]	{00 =a_i_glb_gear_clk_12-turning;
+				}
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				[anim_files]
+				{
+					stop = a_i_glb_gear_clk_12-turning_slwdwn-main; // slow to stop
+				}
+			}
+		}
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("clock_gear_mechanism_c");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+
+[t:template,n:dsx_clock_gear_mechanism_d]
+{
+	category_name = "node";
+	doc = "dsx_clock_gear_mechanism_d";
+	specializes = non_interactive;
+	[aspect]
+	{
+		model = m_i_glb_clk-arm;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			
+			[chore_default]
+			{
+				skrit = infinite_loop;
+				[anim_files]	{00 =a_i_glb_clk-arm-turning;
+				}
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				[anim_files]
+				{
+					slow = a_i_glb_gear_clk_arm-turning-slwdwn; // slow down
+					slol = a_i_glb_clk-arm-turning-slw; // slow loop
+				}
+			}
+		}
+	}
+
+}
+
+
+[t:template,n:dsx_wizcty_statue_bob]
+{
+	category_name = "node";
+	doc = "dsx_dsx_wizcty_statue_bob";
+	specializes = non_interactive;
+	[aspect]
+	{
+		model = m_i_glb_wizcty-statue1;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			
+			[chore_default]
+			{
+				skrit = infinite_loop;
+				[anim_files]	{00 =a_i_glb_wizcty-statue1-bob;
+				}
+			}
+		}
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("effect_bob");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+
+[t:template,n:dsx_wizcty_statue_wobble]
+{
+	category_name = "node";
+	doc = "dsx_dsx_wizcty_statue_wobble";
+	specializes = non_interactive;
+	[aspect]
+	{
+		model = m_i_glb_wizcty-statue1;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			
+			[chore_default]
+			{
+				skrit = infinite_loop;
+				[anim_files]	{00 =a_i_glb_wizcty-statue1-wobble;
+				}
+			}
+		}
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("effect_wobble");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+
+[t:template,n:dsx_clock_pipe]
+{
+	category_name = "node";
+	doc = "dsx_Clock_pipe";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_clk_pipe; }
+}
+[t:template,n:dsx_clock_pipe_b]
+{
+	category_name = "node";
+	doc = "dsx_Clock_pipe_a";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_clk_pipe-b; }
+}
+[t:template,n:dsx_clock_pipe_c]
+{
+	category_name = "node";
+	doc = "dsx_Clock_pipe_b";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_clk_pipe-c; }
+}
+[t:template,n:dsx_clock_generator]
+{
+	category_name = "node";
+	doc = "dsx_Clock_generator";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_clk_generator; }
+}
+[t:template,n:dsx_clock_tank]
+{
+	category_name = "node";
+	doc = "dsx_Clock_tank";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_clk_tank; }
+}
+[t:template,n:dsx_clock_pipe_con]
+{
+	category_name = "node";
+	doc = "dsx_Clock_pipe_con";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_clk_pipe-con; }
+}
+[t:template,n:dsx_wizcty_bench]
+{
+	category_name = "indoor";
+	doc = "dsx_bench";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_wizcty-bench; }
+}
+[t:template,n:dsx_wizcty_planter]
+{
+	category_name = "outdoor";
+	doc = "dsx_planter";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_wizcty-planter; }
+}
+[t:template,n:dsx_herostatue]
+{
+	category_name = "statue";
+	doc = "dsx_herostatue";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_dsx_herostatue; }
+}
+[t:template,n:dsx_clock_arm]
+{
+	category_name = "node";
+	doc = "dsx_clock_arm";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_clk_arm; }
+}
+[t:template,n:dsx_utraean_pad]
+{
+	category_name = "sign";
+	doc = "dsx_utraean_pad";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_utraean_pad; }
+}
+[t:template,n:dsx_rock_head_01]
+{
+	category_name = "statue";
+	doc = "dsx_rock_head_01";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_rock_head_01; }
+}
+[t:template,n:dsx_rock_head_02]
+{
+	category_name = "statue";
+	doc = "dsx_rock_head_02";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_rock_head_02; }
+}
+[t:template,n:dsx_torch_lavacave]
+{
+	category_name = "lighting";
+	doc = "dsx_torch_lavacave";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_torch-lavacave; }
+}
+[t:template,n:dsx_jungle_sign_01]
+{
+	category_name = "sign";
+	doc = "dsx_jungle_sign_01";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_jng_sign-01; }
+}
+[t:template,n:dsx_jungle_sign_02]
+{
+	category_name = "sign";
+	doc = "dsx_jungle_sign_02";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_jng_sign-02; }
+}
+
+[t:template,n:dsx_wizcty-statue2]
+{
+	category_name = "statue";
+	doc = "dsx_wizcty_statue2";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_wizcty-statue2; }
+}
+
+[t:template,n:dsx_shipwreck]
+{
+ category_name = "node";
+ doc = "dsx_shipwreck";
+ specializes = non_interactive_blocking;
+ [aspect] { model=m_i_glb_shipwreck; }
+}
+[t:template,n:dsx_telescope]
+{
+ category_name = "node";
+ doc = "dsx_telescope";
+ specializes = non_interactive_blocking;
+ [aspect] { model=m_i_glb_telescope; }
+}
+[t:template,n:dsx_telescope-a]
+{
+ category_name = "node";
+ doc = "dsx_telescope-a";
+ specializes = non_interactive_blocking;
+ [aspect] { model=m_i_glb_telescope-a; }
+}
+[t:template,n:dsx_burial_mound]
+{
+ category_name = "node";
+ doc = "dsx_burial_mound";
+ specializes = non_interactive_blocking;
+ [aspect] { model=m_i_glb_burial_hill; }
+}
+[t:template,n:dsx_burial_mound_sml]
+{
+ category_name = "node";
+ doc = "dsx_burial_mound_sml";
+ specializes = non_interactive_blocking;
+ [aspect] { model=m_i_glb_burial_mound-rock; }
+}
+[t:template,n:dsx_ancient_crypt]
+{
+ category_name = "node";
+ doc = "dsx_ancient_crypt";
+ specializes = non_interactive_blocking;
+ [aspect] { model=m_i_glb_ancient-crypt; }
+} 
+[t:template,n:dsx_rock_mound]
+{
+ category_name = "node";
+ doc = "dsx_rock_mound";
+ specializes = non_interactive_blocking;
+ [aspect] { model=m_i_glb_rock_burial; }
+} 
+[t:template,n:dsx_hassat_flag]
+{
+ category_name = "node";
+ doc = "dsx_hassat_flag";
+ specializes = non_interactive_blocking;
+ [aspect] { model=m_i_glb_hassat-banner; }
+} 
+[t:template,n:dsx_hassat_pole]
+{
+ category_name = "node";
+ doc = "dsx_hassat_pole";
+ specializes = non_interactive_blocking;
+ [aspect] { model=m_i_glb_hassat-pole; }
+} 
+[t:template,n:dsx_hassat_totem]
+{
+ category_name = "node";
+ doc = "dsx_hassat_totem";
+ specializes = non_interactive_blocking;
+ [aspect] { model=m_i_glb_hassat-totem; }
+} 
+ 
+[t:template,n:dsx_displacer_console]
+{
+ category_name = "node";
+ doc = "dsx_displacer_console";
+ specializes = non_interactive_blocking;
+ [aspect] { model=m_i_glb_console; }
+} 
+
+[t:template,n:dsx_displacer_control]
+{
+ category_name = "node";
+ doc = "dsx_displacer_control";
+ specializes = non_interactive_blocking;
+ [aspect] { model=m_i_glb_displacer_control; }
+} 
+ 
+[t:template,n:dsx_disco_bench]
+{
+ category_name = "indoor";
+ doc = "dsx_disco_bench";
+ specializes = non_interactive_blocking;
+ [aspect] { model=m_i_glb_bench-pimp; }
+} 
+
+[t:template,n:dsx_darkgenerator_broken_1]
+{
+	category_name = "indoor";
+	doc = "dsx_darkgenerator_broken_1";
+	specializes = non_interactive_blocking;
+	[aspect] 
+		{ 
+			model = m_i_glb_dkgen-broken;
+		}
+	[common]
+	{
+		screen_name = "Disabled Dark Generator";
+		rollover_display = true;
+	}
+}
+
+[t:template,n:dsx_darkgenerator_broken_2]
+{
+	category_name = "indoor";
+	doc = "dsx_darkgenerator_broken_2";
+	specializes = non_interactive_blocking;
+	[aspect] 
+		{ 
+			model = m_i_glb_dkgen-broken2;
+		}
+	[common]
+	{
+		screen_name = "Damaged Dark Generator";
+		rollover_display = true;
+	}
+}
+
+[t:template,n:dsx_darkgenerator_broken_clockroom]
+{
+	category_name = "indoor";
+	doc = "dsx_darkgenerator_broken_clockroom";
+	specializes = non_interactive_blocking;
+	[aspect] 
+		{ 
+			scale_base = 1.25;
+			model = m_i_glb_dkgen-broken2;
+		}
+	[common]
+	{
+		screen_name = "Damaged Dark Generator";
+		rollover_display = true;
+	}
+}
+
+[t:template,n:tent_zaurask]
+{
+	category_name = "outdoor";
+	doc = "dsx_tent_zaurask";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_glb_zaurask-tent;
+		scale_base		 = 0.5;
+		[textures]
+		{
+			0 = b_i_glb_zaurask-tent;
+		}
+	}
+}
+
+[t:template,n:tent_hassat]
+{
+	category_name = "outdoor";
+	doc = "dsx_tent_hassat";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_glb_zaurask-tent;
+		scale_base		 = 0.5;
+		[textures]
+		{
+			0 = b_i_glb_hassat-tent;
+		}
+	}
+}
+
+[t:template,n:dsx_fen_statue_01]
+{
+	category_name = "statue";
+	doc = "dsx_fen_statue_01";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		model = m_i_glb_statue_01;
+		[textures]
+		{
+			0 = b_i_glb_statue_01-01;
+			1 = b_i_glb_statue_01-02;
+		}
+	}
+}
+ 
+[t:template,n:dsx_fen_statue_02]
+{
+	category_name = "statue";
+	doc = "dsx_fen_statue_02";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		model = m_i_glb_statue_02;
+		[textures]
+		{
+			0 = b_i_glb_statue_02-01;
+			1 = b_i_glb_statue_02-02;
+		}
+	}
+}
+ 
+
+[t:template,n:dsx_fen_statue_03]
+{
+	category_name = "statue";
+	doc = "dsx_fen_statue_03";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{		
+		model = m_i_glb_statue_03;
+		[textures]
+		{
+			0 = b_i_glb_statue_03-01;
+			1 = b_i_glb_statue_03-02;
+		}
+	}
+}
+ 
+
+[t:template,n:dsx_fen_statue_04]
+{
+	category_name = "statue";
+	doc = "dsx_fen_statue_04";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{	
+		model = m_i_glb_statue_04;
+		[textures]
+		{
+			0 = b_i_glb_statue_04-01;
+			1 = b_i_glb_statue_04-02;
+		}
+	}
+}
+ 
+
+[t:template,n:dsx_fen_statue_05]
+{
+	category_name = "statue";
+	doc = "dsx_fen_statue_05";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		model = m_i_glb_statue_05;
+		[textures]
+		{
+			0 = b_i_glb_statue_05-01;
+			1 = b_i_glb_statue_05-02;
+		}
+	}
+}
+ 
+
+[t:template,n:dsx_fen_statue_06]
+{
+	category_name = "statue";
+	doc = "dsx_fen_statue_06";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{		
+		model = m_i_glb_statue_06;
+		[textures]
+		{
+			0 = b_i_glb_statue_06-01;
+			1 = b_i_glb_statue_06-02;
+		}
+	}
+}
+
+// FOR GREAT JUSTICE!
+[t:template,n:planter_glb_zig]
+{
+	category_name = "outdoor";
+	doc = "planter_trees_lg_zig";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_glb_potted-plants-06;
+		textures:0 = b_i_glb_potted-plants-zig;
+	}
+}
+
+[t:template,n:dsx_displacer_vac]
+{
+	category_name = "indoor";
+	doc = "DSX_Displacer_Vac";
+	specializes = prop;
+
+	[aspect]
+	{
+		model = m_i_glb_displacer_vac;
+
+		[textures]							
+			{
+			}
+
+		is_usable	= false;
+		is_selectable	= true;
+		life_state	= LS_ALIVE_CONSCIOUS;
+		max_life	= 500;
+		life		= 500;
+		is_collidable			= true;
+		draw_selection_indicator	= false;
+		megamap_icon = <none>;	
+		material = ice;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_dark_gen_01; }
+		}
+	}
+	[generator_in_object]
+	{
+		//spawn_chance = 1;
+		//child_template_name = dsx_displacer_vac_broken;
+	}
+	[physics]
+	{
+		break_effect = coil_explosion;
+		explode_when_killed = true;
+		explosion_magnitude = 1.75;
+		[break_particulate]
+		{
+			frag_glb_displacer_vac_01 = 3;
+			frag_glb_displacer_vac_02 = 1;
+			frag_glb_displacer_vac_03 = 1;
+			frag_glb_displacer_vac_04 = 1;
+			frag_glb_displacer_vac_05 = 3;
+		}
+	}
+	[common]
+	{
+		screen_name = "Displacer Vacuum";
+		rollover_display = true;
+	}
+	[body]
+	{
+		initial_chore =	chore_default;
+		[chore_dictionary]
+		{
+			[chore_default]
+			{
+				skrit =	infinite_loop;
+				[anim_files] 
+					{ 
+						0 = a_i_glb_displacer_vac; 
+					}
+			}
+		}
+	}
+}
+
+[t:template,n:dsx_banner_glb_zaurask]
+{
+	category_name = "outdoor";
+	doc = "dsx_banner_zaurask_sway";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model = m_i_glb_zaurask_banner; 
+		textures:0 = b_i_glb_zaurask_banner;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_i_glb;
+			[chore_default]
+			{
+				skrit = infinite_loop;
+				[anim_files]
+				{
+					00 = legion-banner-02-flap;
+				}
+			}
+		}
+	}
+}
+
+[t:template,n:dsx_totem_glb_zaurask]
+{
+	category_name = "outdoor";
+	doc = "dsx_totem_zaurask";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model = m_i_glb_zaurask_totem; 
+		textures:0 = b_i_glb_zaurask_totem;
+	}
+}
+
+[t:template,n:dsx_ziggurat_bench]
+{
+	category_name = "outdoor";
+	doc = "dsx_bench_ziggurat";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model=m_i_glb_ziggurat_bench; 
+		textures:0 = b_i_glb_ziggurat_bench;	
+	}
+}
+
+[t:template,n:dsx_ziggurat_bench_02]
+{
+	category_name = "outdoor";
+	doc = "dsx_bench_ziggurat_02";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model=m_i_glb_ziggurat_bench-02; 
+		textures:0 = b_i_glb_ziggurat_bench;	
+	}
+}
+
+[t:template,n:dsx_ziggurat_wall_01]
+{
+	category_name = "outdoor";
+	doc = "dsx_wall_ziggurat_01";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		scale_base = 22.0;
+		model=m_i_glb_ziggurat_wall_01; 
+		textures:0 = b_i_glb_ziggurat_wall_01;	
+	}
+}
+
+[t:template,n:dsx_ziggurat_wall_02]
+{
+	category_name = "outdoor";
+	doc = "dsx_wall_ziggurat_02";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model=m_i_glb_ziggurat_wall_02; 
+		textures:0 = b_i_glb_ziggurat_wall_02;	
+	}
+}
+
+[t:template,n:dsx_ziggurat_wall_03]
+{
+	category_name = "outdoor";
+	doc = "dsx_wall_ziggurat_03";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model=m_i_glb_ziggurat_wall_03; 
+		textures:0 = b_i_glb_ziggurat_wall_03;	
+	}
+}
+
+[t:template,n:dsx_ziggurat_wall_04]
+{
+	category_name = "outdoor";
+	doc = "dsx_wall_ziggurat_04";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model=m_i_glb_ziggurat_wall_04; 
+		textures:0 = b_i_glb_ziggurat_wall_04;	
+	}
+}
+
+[t:template,n:dsx_ziggurat_wall_05]
+{
+	category_name = "outdoor";
+	doc = "dsx_wall_ziggurat_05";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model=m_i_glb_ziggurat_wall_05; 
+		textures:0 = b_i_glb_ziggurat_wall_05;	
+	}
+}
+
+[t:template,n:dsx_pillar_utraean_01]
+{
+	category_name = "outdoor";
+	doc = "dsx_pillar_utraean_01";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_utraean_obj; }
+	[common]
+	{
+	}
+
+}
+
+[t:template,n:dsx_disco_car]
+{
+	specializes = base_usable;
+	doc = "dsx_disco_car";
+	category_name = "outdoor";
+
+	[aspect]
+	{
+		model = m_i_glb_caddy;
+		material    = button_caddy;
+	}
+
+	[body]
+	{
+		[chore_dictionary]
+		{
+            		chore_prefix = a_i_glb;
+
+			[chore_open]
+			{
+				skrit = transition;
+				[anim_files]
+				{
+					00 = caddy-hop;
+				}
+			}
+			[chore_close]
+			{
+				skrit = transition;
+				[anim_files]
+				{
+					00 = caddy-hop;
+				}
+			}
+		}
+	}
+	[common] 
+	{ 
+		screen_name = "The Love Machine"; 
+	}
+    	[on_off_lever]
+	{
+		reset_time = 1.0000;
+	}
+}
+
+[t:template,n:dsx_disco_ball]
+{
+	category_name = "node";
+	doc = "dsx_disco_ball";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_glb_disco-ball;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			[chore_default]
+			{
+				skrit = rotatey?rpm=8;
+			}
+		}
+	}
+}
+
+[t:template,n:dsx_goblin_bar]
+{
+	category_name = "indoor";
+	doc = "dsx_goblin_bar";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model=m_i_glb_goblinbar; 
+		[textures]
+		{
+			0 = b_i_glb_goblinbar;
+			1 = b_i_glb_goblinbar-02;
+		}	
+	}
+}

@@ -1,0 +1,119 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  k_inc_spl_utils.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+// This skrit contains many of the common used functions from spells.
+// These functions assume that there is a valid target and caster so check before calling these.
+// 
+
+string params$ = "";
+
+bool GoodBuffTarget$( Goid target$ )
+{
+	if( !target$.IsValid )
+	{
+		return false;
+	}
+	
+	if( !target$.Go.HasActor )
+	{
+		return false;
+	}
+	
+	if( 	target$.Go.Inventory.IsPackOnly ||
+			!target$.Go.IsAnyHumanPartyMember || 
+			target$.Go.Actor.HasGenericState( "summoned" ) || 
+			target$.Go.Actor.HasGenericState( "Animate" ) )
+	{
+		return false;
+	}
+	
+	return true;
+}
+		
+////////////////////////////////////////
+//	Freeze
+
+void TryFreeze$( Goid Hit$ )
+{
+	// stop moving
+	Hit$.Go.Aspect.SSetLockMeshFlag(true);
+	
+	// add cool box effect
+	Hit$.Go.Aspect.SSetFreezeMeshFlag( true );
+	
+	//turn off brain so he wont try to attack any more.
+	MCPManager.MakeRequest( Hit$, PL_FACE );
+	Hit$.Go.Mind.Clear();
+	MCPManager.Flush(Hit$);
+}
+
+////////////////////////////////////////
+//	Thaw
+
+void TryThaw$( Goid Hit$ )
+{
+	Hit$.Go.Aspect.SSetFreezeMeshFlag( false );
+	Hit$.Go.Aspect.AspectHandle.SetLockMeshFlag( false );
+	Hit$.Go.Mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+}
+
+
+////////////////////////////////////////
+//	Pack fire damage
+
+void PackFire$(float particle_fit$, bool ignite$, float duration$, float radius$, bool pass_distance$, goid caster$, goid target$)
+{
+	params$ = "";
+	
+	if( particle_fit$ > 0.0 )
+	{
+		if( ignite$ )
+		{
+			StringTool.Append( params$, "[ignite()" );
+		} else {
+			StringTool.Append( params$, "[damage()" );
+		}
+			
+		StringTool.AppendF( params$, "fdamage(%g,%g,%g)][dur(%g)][%g]", owner.Go.Attack.DamageMin, owner.Go.Attack.DamageMax, particle_fit$ , duration$, duration$ );
+		if( radius$ > 0.0 )
+		{
+			StringTool.AppendF( params$, "[%g]", Math.MaxFloat( radius$, 0.5) );
+		}
+		if( pass_distance$ )
+		{
+			StringTool.AppendF( params$, "[%g]", GetSiegeDistance( caster$.Go.placement.position, target$.Go.placement.position ) );
+		}
+		
+	}
+}
+
+////////////////////////////////////////
+//	Pack lightning damage
+
+void PackLightning$( float dur$ )
+{
+	params$ = "";
+		
+	float dam_min$ = owner.Go.Attack.DamageMin;
+	float dam_max$ = owner.Go.Attack.DamageMax;
+
+	StringTool.AppendF( params$, "[damage(%g,%g,0)][dur(%g)]", dam_min$, dam_max$, dur$ );	
+}
+
+void PackChainLightning$( float dur$, float falloff$ )
+{
+	params$ = "";
+		
+	float dam_min$ = owner.Go.Attack.DamageMin * falloff$;
+	float dam_max$ = owner.Go.Attack.DamageMax * falloff$;
+
+	StringTool.AppendF( params$, "[damage(%g,%g,0)][dur(%g)]", dam_min$, dam_max$, dur$ );	
+}

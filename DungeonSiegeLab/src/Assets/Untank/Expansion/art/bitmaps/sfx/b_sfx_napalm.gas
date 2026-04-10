@@ -1,0 +1,7 @@
+[t:tsd,n:b_sfx_napalm]
+{
+  b dither = true;
+  b hasalpha = true;
+	layer1texture1 = b_sfx_napalm;
+  i texturedetail = 2;
+}

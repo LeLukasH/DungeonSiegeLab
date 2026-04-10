@@ -1,0 +1,934 @@
+[t:template,n:sd_g_c_dsx_kat_1h_shadowjumper_NIS_ONLY] 
+{ //SHADOWJUMPER'S VERSION OF THE KATANA
+  doc = "DSX Shadowjumper_sword_no_sound";
+  specializes = dsx_base_sword;
+  [aspect]
+    {
+      model = m_w_swd_302;
+    }
+  [attack]
+    {
+      f damage_max = 100.0;
+      f damage_min = 90.0;
+			is_two_handed = false;
+    }
+	[common]
+	{
+		is_pcontent_allowed = false;
+		screen_name = "Shadowjumper's Lightning BLade";
+	}
+  [gui]
+    {
+      active_icon = b_gui_ig_i_ic_swd_007; //PLACEHOLDER
+      inventory_icon = b_gui_ig_i_w_swd_302;
+      equip_requirements = strength:20;
+      inventory_height = 3;
+      inventory_width = 1;
+    }
+	[effect_manager]
+	{
+		start_msg = WE_ENTERED_WORLD;
+		stop_msg = WE_LEFT_WORLD;
+
+		effect_name = "";
+		rep_effect_name = "shadow_jumper_sword_lightning_no_sound";
+
+		repeat_rate = .25;
+		repeat_rate_max = .5;
+
+		run_once = true;
+	}
+	[magic]
+	{
+		[enchantments]
+		{
+			[*]
+			{
+				alteration		= alter_max_life;
+				value			= 0;
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+				effect_script_equip	= shadow_jumper_sword;
+				effect_script_hit   = shadow_jumper_sword_hit;
+			}
+		}
+	}
+  [pcontent]
+    {
+      [base]
+				{
+					f modifier_max = 14;
+					f modifier_min = 0;
+				}
+    }
+}
+
+//Shadowjumper Lt Sword
+[t:template,n:sd_g_c_dsx_kat_1h_shadowjumper] 
+{ 	
+	doc = "DSX Shadowjumper's sword";
+	specializes = dsx_base_sword;
+	[aspect]
+    {
+		model = m_w_swd_302;
+    }
+	[attack]
+    {
+		f damage_max = 130.0;
+		f damage_min = 100.0;
+		is_two_handed = false;
+    }
+	[common]
+	{
+		is_pcontent_allowed = false;
+	}
+	[effect_manager]
+	{
+		start_msg = WE_ENTERED_WORLD;
+		stop_msg = WE_LEFT_WORLD;
+		
+		effect_name = "";
+		rep_effect_name = "shadow_jumper_sword_lightning";
+		
+		repeat_rate = .25;
+		repeat_rate_max = .5;
+		
+		run_once = true;
+	}
+	[magic]
+	{
+		[enchantments]
+		{
+			[*]
+			{
+				alteration			= alter_max_life;
+				value				= 0;
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+				effect_script_equip	= shadow_jumper_sword;
+				effect_script_hit   = shadow_jumper_sword_hit;
+			}
+		}
+	}
+}
+
+[t:template,n:ss_g_c_bl_1h_fun_zaur_dsx]
+//unique for zaurask Zombie stinger in Area 9
+{
+	doc = "Zaurask Stinger Blade";
+	specializes = base_sword;
+	[aspect]
+	{
+      		model = m_w_swd_048;
+	}
+	[attack]
+	{
+	  f damage_max = 115.000000;
+	  f damage_min = 107.000000;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+	  b allow_modifiers = false;
+		screen_name = "Tempered Blade";
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_swd_001;
+		equip_requirements = strength:13;
+		inventory_height = 3;
+		inventory_icon = b_gui_ig_i_w_swd_006;
+		inventory_width = 1;
+	}
+}
+
+[t:template,n:ss_g_c_bl_1h_fun_noss_dsx]
+//unique for Nossirom
+{
+	doc = "Nossirom's Blade";
+	specializes = base_sword;
+	[aspect]
+	{
+      		model = m_w_swd_048;
+		scale_base	 = 2.0;
+	}
+	[attack]
+	{
+	  f damage_max = 113.000000;
+	  f damage_min = 104.000000;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+	  b allow_modifiers = false;
+		screen_name = "Nosirrom's Blade";
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_swd_001;
+		equip_requirements = strength:16;
+		inventory_height = 3;
+		inventory_icon = b_gui_ig_i_w_swd_006;
+		inventory_width = 1;
+	}
+}
+
+
+[t:template,n:ss_g_c_bl_1h_fun_04_dsx]
+//unique for the Zaurask Fighter in area 8
+{
+	doc = "Dull Zaurask Blade";
+	specializes = base_sword;
+	[aspect]
+	{
+		model = m_w_swd_014;
+	}
+	[attack]
+	{
+	  f damage_max = 124.000000;
+	  f damage_min = 115.000000;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+	  b allow_modifiers = false;
+		screen_name = "Dull Blade";
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_swd_001;
+		equip_requirements = strength:13;
+		inventory_height = 3;
+		inventory_icon = b_gui_ig_i_w_swd_006;
+		inventory_width = 1;
+	}
+}
+
+[t:template,n:ss_g_c_bl_1h_fun_05_dsx]
+//unique for the Zaurask Slasher in area 8
+{
+	doc = "Dull Zaurask Blade";
+	specializes = base_sword;
+	[aspect]
+	{
+		model = m_w_swd_014;
+	}
+	[attack]
+	{
+	  f damage_max = 118.000000;
+	  f damage_min = 99.000000;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+	  b allow_modifiers = false;
+		screen_name = "Dull Blade";
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_swd_001;
+		equip_requirements = strength:13;
+		inventory_height = 3;
+		inventory_icon = b_gui_ig_i_w_swd_006;
+		inventory_width = 1;
+	}
+}
+
+[t:template,n:ss_g_c_bl_1h_fun_03_dsx]
+//unique for the zaurask whacker in area 7
+{
+	doc = "Dull Zaurask Blade";
+	specializes = base_sword;
+	[aspect]
+	{
+		model = m_w_swd_014;
+	}
+	[attack]
+	{
+	  f damage_max = 84.000000;
+	  f damage_min = 75.000000;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+	  b allow_modifiers = false;
+		screen_name = "Dull Blade";
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_swd_001;
+		equip_requirements = strength:13;
+		inventory_height = 3;
+		inventory_icon = b_gui_ig_i_w_swd_006;
+		inventory_width = 1;
+	}
+}
+
+[t:template,n:ss_g_c_bl_1h_fun_01_dsx]
+//unique for the zaurask chieftan in Area 7
+{
+	doc = "Zaurask Blade";
+	specializes = base_sword;
+	[aspect]
+	{
+      		model = m_w_swd_048;
+	}
+	[attack]
+	{
+	  f damage_max = 145.000000;
+	  f damage_min = 125.000000;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+	  b allow_modifiers = false;
+		screen_name = "Tempered Blade";
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_swd_001;
+		equip_requirements = strength:13;
+		inventory_height = 3;
+		inventory_icon = b_gui_ig_i_w_swd_006;
+		inventory_width = 1;
+	}
+}
+
+
+[t:template,n:ss_g_c_bl_1h_fun_02_dsx]
+//unique for dsx_hassat_fighter in Area 7
+{
+	doc = "Tempered Blade";
+	specializes = base_sword;
+	[aspect]
+	{
+      	model = m_w_swd_048;
+	}
+	[attack]
+	{
+	  f damage_max = 95.000000;
+	  f damage_min = 84.000000;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+	  b allow_modifiers = false;
+		screen_name = "Tempered Blade";
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_swd_001;
+		equip_requirements = strength:13;
+		inventory_height = 3;
+		inventory_icon = b_gui_ig_i_w_swd_006;
+		inventory_width = 1;
+	}
+}
+
+[t:template,n:ss_g_c_bl_1h_fun_dsx]
+//unique for dsx_zaurask_commander in Area 5
+{
+	doc = "Dull Blade";
+	specializes = base_sword;
+	[aspect]
+	{
+		model = m_w_swd_014;
+	}
+	[attack]
+	{
+	  f damage_max = 100;
+	  f damage_min = 82;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+	  b allow_modifiers = false;
+		screen_name = "Zaurask Dull Blade";
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_swd_001;
+		equip_requirements = strength:13;
+		inventory_height = 3;
+		inventory_icon = b_gui_ig_i_w_swd_006;
+		inventory_width = 1;
+	}
+}
+
+[t:template,n:sd_g_c_sd_1h_avg_dsx]
+//unique for the dsx_skeleton_large in Area 5
+{
+	doc = "Long Sword";
+	specializes = base_sword;
+	[aspect]
+	{
+		model = m_w_swd_018;
+	}
+	[attack]
+	{
+	  f damage_max = 81.000000;
+	  f damage_min = 65.000000;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		screen_name = "Skeleton's Long Sword";
+	}
+	[gui]
+	{
+		equip_requirements = strength:24;
+		inventory_height = 4;
+		inventory_icon = b_gui_ig_i_w_swd_017;
+		inventory_width = 1;
+	}
+}
+
+[t:template,n:dsx_base_sword]
+{
+  doc = "Sword";
+  specializes = base_sword;
+  [aspect]
+    {
+      material = steelsword;
+      [voice]
+	{
+	  [put_down]
+	    {
+	      * = s_e_gui_put_down_sword;
+	    }
+	}
+    }
+  [attack]
+    {
+      attack_class = ac_sword;
+      is_melee = true;
+      reload_delay = 0;
+      skill_class = melee;
+    }
+  [body]
+    {
+      [bone_translator]
+	{
+	  handle = grip;
+	  middle = ap_trace02;
+	  tip = ap_trace01;
+	}
+    }
+  [gui]
+    {
+      active_icon = b_gui_ig_i_ic_swd_002;
+      equip_slot = es_weapon_hand;
+    }
+}
+
+
+
+//////////////////////////////////////////////////
+// UNIQUE SWORDS
+//////////////////////////////////////////////////
+
+//SWORD FOR THE DEATH KNIGHT -- there's a player version and a monster
+//version, slightly different
+//CICATRIX
+[t:template,n:sd_d_c_dsx_skl_1h_mag_base]
+{
+  doc = "Death Knight Sickle Sword";
+  specializes = dsx_base_sword;
+  [aspect]
+    {
+		model = m_w_swd_skle;
+		material = steelsword;
+		[voice]
+		{
+			[attack]
+			{
+				* = s_e_attack_igniter;
+			}
+		}      
+	}
+	[attack]
+	{
+		damage_max = 70;
+		damage_min = 60;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		pcontent_special_type = unique;
+		screen_name = "Death Knight Sickle Sword";
+		b allow_modifiers = false;
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_swd_008;
+		inventory_height = 4;
+		inventory_icon = b_gui_ig_i_w_swd_313;
+		inventory_width = 1;
+	}
+	[magic]
+	{
+		[enchantments]
+		{
+			[fire_damage]
+			{
+				alteration		= alter_custom_damage_melee;
+				custom_damage		= fire;
+				value			= 10;
+				max_value			= 20;
+				description		= "Adds 10 to 20 Fire Damage";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+				effect_script_equip	= sickle_fire;
+				effect_script_hit	= fire_weapon;
+			}
+		}
+	}
+}
+//the monster version -- just like the base
+[t:template,n:sd_d_c_dsx_skl_1h_mag]
+{
+	specializes = sd_d_c_dsx_skl_1h_mag_base;
+	
+	// Monster version can't be dropped
+	gui:is_droppable = false;
+	
+	// damage balanced for monster
+	[attack]
+	{
+		damage_max = 100;
+		damage_min = 85;
+	}
+}
+
+//the player version
+[t:template,n:sd_d_c_dsx_skl_1h_mag_player]
+{
+	specializes = sd_d_c_dsx_skl_1h_mag_base;
+	
+	// TAT 8/14/2003 - we no longer want it to be 2-handed.  But I left
+	//	this as it's own template, so we can have the damage amount
+	//	be different for balancing purposes, if we want
+
+	// damage balanced for melee player level 11
+	[attack]
+	{
+		damage_max = 47;
+		damage_min = 32;
+	}
+	[gui]
+	{
+		equip_requirements = strength:17;
+		active_icon = b_gui_ig_i_ic_swd_008;
+		inventory_height = 4;
+		inventory_icon = b_gui_ig_i_w_swd_313;
+		inventory_width = 1;
+	}
+
+	// nord - added this block to rebalance weapon, which was too strong 9/5
+	[magic]
+	{
+		[enchantments]
+		{
+			[fire_damage]
+			{
+				alteration		= alter_custom_damage_melee;
+				custom_damage	= fire;
+				value			= 4;
+				max_value		= 8;
+				description		= "Adds 4 to 8 Fire Damage";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+				effect_script_equip	= sickle_fire;
+				effect_script_hit	= fire_weapon;
+			}
+		}
+	}
+
+}
+
+
+//VETERAN VERSION - lvl 50
+//the player version
+[t:template,n:2w_sd_d_c_dsx_skl_1h_mag_player]
+{
+	specializes = sd_d_c_dsx_skl_1h_mag_base;
+	// TAT 8/14/2003 - we no longer want it to be 2-handed.  But I left
+	//	this as it's own template, so we can have the damage amount
+	//	be different for balancing purposes, if we want
+
+ common:screen_name = "Super Death Knight Sickle Sword";
+
+	// damage balanced for melee player level 11
+	[attack]
+	{
+		damage_max = 192;
+		damage_min = 128;
+	}
+	[gui]
+	{
+		equip_requirements = strength:50;
+		active_icon = b_gui_ig_i_ic_swd_008;
+		inventory_height = 4;
+		inventory_icon = b_gui_ig_i_w_swd_313;
+		inventory_width = 1;
+	}
+	// nord - added this block to rebalance weapon, which was too strong 9/5
+	[magic]
+	{
+		[enchantments]
+		{
+			[fire_damage]
+			{
+				alteration		= alter_custom_damage_melee;
+				custom_damage	= fire;
+				value			= 14;
+				max_value		= 21;
+				description		= "Adds 14 to 21 Fire Damage";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+				effect_script_equip	= sickle_fire;
+				effect_script_hit	= fire_weapon;
+			}
+		}
+	}
+}
+
+//ELITE VERSION -  lvl 68
+//the player version
+[t:template,n:3w_sd_d_c_dsx_skl_1h_mag_player]
+{
+	specializes = sd_d_c_dsx_skl_1h_mag_base;
+	// TAT 8/14/2003 - we no longer want it to be 2-handed.  But I left
+	//	this as it's own template, so we can have the damage amount
+	//	be different for balancing purposes, if we want
+
+ common:screen_name = "Supreme Death Knight Sickle Sword";
+
+	// damage balanced for melee player level 11
+	[attack]
+	{
+		damage_max = 346;
+		damage_min = 256;
+	}
+	[gui]
+	{
+		equip_requirements = strength:68;
+		active_icon = b_gui_ig_i_ic_swd_008;
+		inventory_height = 4;
+		inventory_icon = b_gui_ig_i_w_swd_313;
+		inventory_width = 1;
+	}
+	// nord - added this block to rebalance weapon, which was too strong 9/5
+	[magic]
+	{
+		[enchantments]
+		{
+			[fire_damage]
+			{
+				alteration		= alter_custom_damage_melee;
+				custom_damage	= fire;
+				value			= 28;
+				max_value		= 38;
+				description		= "Adds 28 to 38 Fire Damage";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+				effect_script_equip	= sickle_fire;
+				effect_script_hit	= fire_weapon;
+			}
+		}
+	}
+}
+
+
+// Sword for dsx_goblin_guard (Goblin Headsman) in area 9
+[t:template,n:sd_g_c_dsx_goblin_guard]
+{
+	doc = "DSX Goblin Sword";
+	specializes = dsx_base_sword;
+	[aspect]
+	{
+		model = m_w_swd_blkstel;
+	}
+	[attack]
+	{
+		f damage_max = 91.0;
+		f damage_min = 85.0;
+		is_two_handed = false;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		screen_name = "Goblin Sword";
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_swd_007;
+		inventory_icon = b_gui_ig_i_w_swd_300;
+		equip_requirements = strength:15;
+		inventory_height = 4;
+		inventory_width = 1;
+	}
+
+}
+
+
+////////////////////////////////////////////////////////////
+// START NON-UNIQUE, REGULAR PCONTENT SWORDS
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+// TEMPLATES PAST THIS POINT HAS BEEN AUTOGENERATED
+// PLEASE CONTACT JOHN C. / MATT N. WHEN MANUALLY EDITING
+////////////////////////////////////////////////////////////
+
+[t:template,n:sd_g_c_dsx_chr_1h_avg]
+{
+  doc = "DSX Black Steel";
+  specializes = dsx_base_sword;
+  [aspect]
+    {
+      model = m_w_swd_blkstel;
+    }
+  [attack]
+    {
+      f damage_max = 28.0;
+      f damage_min = 22.0;
+			is_two_handed = false;
+    }
+  [common]
+    {
+      screen_name = "Black Steel";
+			pcontent_special_type = rare, unique, normal;
+    }
+  [gui]
+    {
+      active_icon = b_gui_ig_i_ic_swd_007; //PLACEHOLDER
+      inventory_icon = b_gui_ig_i_w_swd_300;
+      equip_requirements = strength:15;
+      inventory_height = 4;
+      inventory_width = 1;
+    }
+  [pcontent]
+    {
+      [base]
+				{
+					f modifier_max = 7;
+					f modifier_min = 0;
+				}
+    }
+}
+[t:template,n:sd_g_c_dsx_clk_1h_avg]
+{
+  doc = "DSX Clockwork Sword";
+  specializes = dsx_base_sword;
+  [aspect]
+    {
+      model = m_w_swd_301;
+    }
+  [attack]
+    {
+      f damage_max = 32.0;
+      f damage_min = 28.0;
+			is_two_handed = false;
+    }
+  [common]
+    {
+      screen_name = "Clockwork Sword";
+    }
+  [gui]
+    {
+      active_icon = b_gui_ig_i_ic_swd_007; //PLACEHOLDER
+      inventory_icon = b_gui_ig_i_w_swd_301;
+      equip_requirements = strength:15;
+      inventory_height = 4;
+      inventory_width = 1;
+    }
+  [pcontent]
+    {
+      [base]
+				{
+					f modifier_max = 9;
+					f modifier_min = 0;
+				}
+    }
+}
+[t:template,n:sd_g_c_dsx_kat_1h_avg]
+{
+  doc = "DSX Katana";
+  specializes = dsx_base_sword;
+  [aspect]
+    {
+      model = m_w_swd_302;
+    }
+  [attack]
+    {
+      f damage_max = 60.0;
+      f damage_min = 45.0;
+			is_two_handed = false;
+    }
+  [common]
+    {
+      screen_name = "Katana";
+    }
+  [gui]
+    {
+      active_icon = b_gui_ig_i_ic_swd_007; //PLACEHOLDER
+      inventory_icon = b_gui_ig_i_w_swd_302;
+      equip_requirements = strength:22;
+      inventory_height = 3;
+      inventory_width = 1;
+    }
+  [pcontent]
+    {
+      [base]
+				{
+					f modifier_max = 15;
+					f modifier_min = 0;
+				}
+    }
+}
+[t:template,n:sd_g_c_dsx_zkt_1h_avg]
+{
+  doc = "DSX Zaurask Katana";
+  specializes = dsx_base_sword;
+  [aspect]
+    {
+      model = m_w_swd_sye;
+    }
+  [attack]
+    {
+      f damage_max = 71.0;
+      f damage_min = 61.0;
+			is_two_handed = false;
+    }
+  [common]
+    {
+      screen_name = "Zaurask Katana";
+    }
+  [gui]
+    {
+      active_icon = b_gui_ig_i_ic_swd_007; //PLACEHOLDER
+      inventory_icon = b_gui_ig_i_w_swd_303;
+      equip_requirements = strength:26;
+      inventory_height = 3;
+      inventory_width = 1;
+    }
+  [pcontent]
+    {
+      [base]
+				{
+					f modifier_max = 19;
+					f modifier_min = 0;
+				}
+    }
+}
+[t:template,n:sd_g_c_dsx_ser_1h_avg]
+{
+  doc = "DSX Serrated sword";
+  specializes = dsx_base_sword;
+  [aspect]
+    {
+      model = m_w_swd_twist;
+    }
+  [attack]
+    {
+      f damage_max = 40.0;
+      f damage_min = 32.0;
+			is_two_handed = false;
+    }
+  [common]
+    {
+      screen_name = "Serrated sword";
+    }
+  [gui]
+    {
+      active_icon = b_gui_ig_i_ic_swd_007; //PLACEHOLDER
+      inventory_icon = b_gui_ig_i_w_swd_309;
+      equip_requirements = strength:17;
+      inventory_height = 3;
+      inventory_width = 1;
+    }
+  [pcontent]
+    {
+      [base]
+				{
+					f modifier_max = 10;
+					f modifier_min = 0;
+				}
+    }
+}
+[t:template,n:sd_g_c_dsx_slc_2h_avg]
+{
+  doc = "DSX Zaurask Slicer";
+  specializes = dsx_base_sword;
+  [aspect]
+    {
+      model = m_w_swd_310;
+    }
+  [attack]
+    {
+      f damage_max = 424.0;
+      f damage_min = 302.0;
+			is_two_handed = false;
+    }
+  [common]
+    {
+      screen_name = "Zaurask Slicer";
+    }
+  [gui]
+    {
+      active_icon = b_gui_ig_i_ic_swd_007; //PLACEHOLDER
+      inventory_icon = b_gui_ig_i_w_swd_310;
+      equip_requirements = strength:93;
+      inventory_height = 4;
+      inventory_width = 2;
+    }
+  [pcontent]
+    {
+      [base]
+				{
+					f modifier_max = 103;
+					f modifier_min = 0;
+				}
+    }
+}
+[t:template,n:sd_g_c_dsx_snk_1h_avg]
+{
+  doc = "DSX Zaurask Snakebite";
+  specializes = dsx_base_sword;
+  [aspect]
+    {
+      model = m_w_swd_311;
+    }
+  [attack]
+    {
+      f damage_max = 25.0;
+      f damage_min = 15.0;
+			is_two_handed = false;
+    }
+  [common]
+    {
+      screen_name = "Zaurask Snakebite";
+    }
+  [gui]
+    {
+      active_icon = b_gui_ig_i_ic_swd_007; //PLACEHOLDER
+      inventory_icon = b_gui_ig_i_w_swd_311;
+      equip_requirements = strength:13;
+      inventory_height = 4;
+      inventory_width = 1;
+    }
+  [pcontent]
+    {
+      [base]
+				{
+					f modifier_max = 6;
+					f modifier_min = 0;
+				}
+    }
+}

@@ -1,0 +1,34 @@
+[defeat_menu]
+{
+	type = interface;
+	modal = true;
+	intended_resolution_height = 480;
+	intended_resolution_width = 640;
+	
+	[t:window,n:defeat_background]
+	{
+		alpha = 0.45000;
+		draw_order = 1;
+		texture = b_gui_cmn_textbox_bg;
+		background_color = 0;
+		uvcoords = 0.000000,0.000000,0.000000,0.000000;
+		rect = 0,0,640,480;
+		wrap_mode = clamp;
+		normalize_resize = true;		
+	}
+	[t:text,n:defeat_text]
+	{
+		alpha = 1.000000;
+		draw_order = 13;
+		font_color = -1;
+		font_type = b_gui_fnt_20p_copperplate-light;
+		rect = 0,100,640,140;
+		text = "Defeat!";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		justify = center;
+		normalize_resize = true;		
+	}
+}

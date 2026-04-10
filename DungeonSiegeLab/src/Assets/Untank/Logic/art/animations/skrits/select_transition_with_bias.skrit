@@ -1,0 +1,108 @@
+// Animation Skrit: Select_Transition_with_bias
+//
+//		VERSION 1.0:  derived from select transition, speed bias IS applied	
+//
+//												
+
+property int MAJORVERSION$ = 1;
+property int MINORVERSION$ = 0;
+
+owner = Aspect;
+
+////////////////////////////////////////////////////////////////////////////
+// Utilities
+
+RestartChore$ ( int newanim$ )
+{ 
+ 	int numanims$ = owner.Blender.GetNumSubAnims();
+
+	if (newanim$ >= numanims$) {
+		newanim$ = 0;
+	}
+
+	int bg$ = owner.blender.OpenBlendGroup();
+	owner.blender.AddAnimToBlendGroup(newanim$,1);
+	owner.blender.CloseBlendGroup();
+	owner.blender.SetBlendGroupWeight(bg$,1);
+
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// States
+
+//----------------------------
+
+startup state InitialState$ 
+{
+
+	event OnStartChore$ ( int subanim$, int /*flags$*/ )
+	{
+		RestartChore$ ( subanim$ ); 
+		SetState LinearTransition$;
+	}
+
+}
+
+//----------------------------
+
+state LinearTransition$	
+{
+ 
+	event OnStartChore$ ( int subanim$, int /*flags$*/ )
+	{
+		RestartChore$ ( subanim$ );
+ 	}
+
+	event OnUpdate$( float delta_t$, float speed_bias$)
+	{
+
+ 	 	int events$ = owner.UpdateBlender(delta_t$ * speed_bias$);
+
+		if (AnimEventBitTest(events$,ANIMEVENT_SFX_1)) {
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  1, 0 );
+		}
+		if (AnimEventBitTest(events$,ANIMEVENT_SFX_2)) {
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  2, 0 );
+		}
+		if (AnimEventBitTest(events$,ANIMEVENT_SFX_3)) {
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  3, 0 );
+		}
+		if (AnimEventBitTest(events$,ANIMEVENT_SFX_4)) {
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  4, 0 );
+		}
+		if (AnimEventBitTest(events$,ANIMEVENT_ATTACH_AMMO)) {
+			PostWorldMessage( WE_ANIM_ATTACH_AMMO, owner.goid, owner.goid, owner.CurrentReqBlock, 0 );
+		}
+ 		if (AnimEventBitTest(events$,ANIMEVENT_FIRE_WEAPON)) {
+			PostWorldMessage( WE_ANIM_WEAPON_FIRE, owner.goid, owner.goid, owner.CurrentReqBlock, 0 );
+		}
+ 		if (AnimEventBitTest(events$,ANIMEVENT_DIE)) {
+			PostWorldMessage( WE_ANIM_DIE, owner.goid, owner.goid, owner.CurrentReqBlock, 0 );
+		}
+		if (AnimEventBitTest(events$,ANIMEVENT_HIDE_MESH)) {
+			owner.SetHideMeshFlag(true);
+		}
+		if (AnimEventBitTest(events$,ANIMEVENT_SHOW_MESH)) {
+			owner.SetHideMeshFlag(false);
+		}
+		if (AnimEventBitTest(events$,ANIMEVENT_FINISH)) {
+			PostWorldMessage( WE_ANIM_DONE, owner.goid, owner.goid, owner.CurrentReqBlock, 0 );
+			SetState (HoldAtEnd$);
+		}
+
+ 	}
+
+}
+ 
+
+//----------------------------
+
+state HoldAtEnd$
+{
+	event OnStartChore$ ( int subanim$, int /*flags$*/ )
+	{
+		RestartChore$ ( subanim$ ); 
+		SetState LinearTransition$;
+ 	}
+
+}

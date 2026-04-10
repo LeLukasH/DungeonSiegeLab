@@ -1,0 +1,966 @@
+[t:template,n:bw_dsx_reynards_gift]
+{
+	category_name = "weapon";
+	doc = "DSX Reynard's Gift";
+	specializes = base_bow;
+	[aspect]
+	{
+		model = m_w_bow_034;
+	}
+	[attack]
+	{
+		attack_range = 8.0;
+	  f damage_max = 32.000000;
+	  f damage_min = 22.000000;
+		reload_delay = 0;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		b allow_modifiers = false;
+		screen_name = "Reynard's Gift";
+	}
+	[gui]
+	{
+		equip_requirements = dexterity:13;
+		active_icon = b_gui_ig_i_ic_bow_003;
+		inventory_icon = b_gui_ig_i_w_bow_050;
+		inventory_height = 4;
+		inventory_width = 1;
+		can_sell = false;
+	}
+}
+[t:template,n:bw_dsx_cicatrix_skeleton]
+{
+	category_name = "weapon";
+	doc = "dsx cicatrix skeleton bow";
+	specializes = base_bow;
+	[aspect]
+	{
+		model = m_w_bow_011;
+	}
+	[attack]
+	{
+		attack_range = 12;
+	  	f damage_max = 45.000000;
+	  	f damage_min = 32.000000;
+		reload_delay = 0;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		b allow_modifiers = false;
+		screen_name = "cicatrix skeleton bow";
+	}
+	[gui]
+	{
+		inventory_icon = b_gui_ig_i_w_bow_050;
+		inventory_height = 4;
+		inventory_width = 1;
+		is_droppable = false;
+	}
+}
+// used by mutant goblin hurler in 9_1
+[t:template,n:dsx_rock_goblin]
+{
+	doc = "dsx_rock_goblin";
+	specializes = base_bow;
+	[aspect]
+	{
+		is_selectable = false;
+		model = m_w_misc_017;
+		[voice]
+		{
+			[attack]
+			{
+				* = s_e_swing_01;
+				* = s_e_swing_03;
+			}
+		}
+	}
+	[attack]
+	{
+		ammo_appears_jit = true;
+		ammo_template = rock_krug_ammo;
+		damage_max = 102;
+		damage_min = 88;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		screen_name = "Rock";
+	}
+	[gui]
+	{
+		is_droppable = false;
+	}
+	[physics]
+	{
+		velocity = 10;
+	}
+}
+
+
+
+[t:template,n:bw_dsx_shadjump_2_avg]
+//unique for the dsx_shadow_jumper_minion_two in area 8 
+{
+	doc = "DSX Shadow Jumper 2 Fire Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_301;
+		}
+	[attack]
+		{
+			ammo_template = arrow_fire;
+			attack_range = 12;
+			f damage_max = 112; 
+			f damage_min = 105;
+			reload_delay = 0;
+		}
+	[common]
+		{
+			is_pcontent_allowed = false;
+			screen_name = "Fire Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_301;
+			equip_requirements = strength:15,dexterity:22;
+			inventory_height = 4;
+			inventory_width = 1;
+		}
+}
+
+[t:template,n:bw_dsx_shadjump_4_avg]
+//unique for the dsx_shadow_jumper_minion_four in area 9
+{
+	doc = "DSX Shadow Jumper 4 Fire Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+	{
+		model = m_w_bow_301;
+	}
+	[attack]
+	{
+		ammo_template = arrow_fire;
+		attack_range = 12;
+		f damage_max = 180; 
+		f damage_min = 170;
+		reload_delay = 0;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		screen_name = "SJ 4 Fire Bow";
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_bow_004;
+		inventory_icon = b_gui_ig_i_w_bow_301;
+		equip_requirements = strength:15,dexterity:22;
+		inventory_height = 4;
+		inventory_width = 1;
+	}
+}
+
+
+[t:template,n:bw_dsx_zau_2_d]
+//unique for the dsx_zaurask_ranger in area 8 
+{
+	category_name = "weapon";
+	doc = "DSX Zaurask Long Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_025;
+		}
+	[attack]
+		{
+			attack_range = 15;
+			f damage_max = 100.000000;
+			f damage_min = 91.000000;
+			reload_delay = 0;
+		}
+	[common]
+		{
+			is_pcontent_allowed = false;
+			b allow_modifiers = false;
+			screen_name = "Zaurask Long Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_002;
+			equip_requirements = strength:15,dexterity:22;
+			inventory_height = 4;
+			inventory_icon = b_gui_ig_i_w_bow_014;
+			inventory_width = 1;
+		}
+}
+
+[t:template,n:bw_dsx_zau_2_c]
+{
+	category_name = "weapon";
+	doc = "DSX Zaurask Long Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_025;
+		}
+	[attack]
+		{
+			attack_range = 15;
+			f damage_max = 93.000000;
+			f damage_min = 84.000000;
+			reload_delay = 0;
+		}
+	[common]
+		{
+			is_pcontent_allowed = false;
+			b allow_modifiers = false;
+			screen_name = "Zaurask Long Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_002;
+			equip_requirements = strength:15,dexterity:22;
+			inventory_height = 4;
+			inventory_icon = b_gui_ig_i_w_bow_014;
+			inventory_width = 1;
+		}
+}
+
+[t:template,n:bw_un_droog_avg_dsx]
+//unique for the droc_archer in area 7
+//currently not hooked up due to model problems
+{
+	category_name = "weapon";
+	doc = "bw_un_droog_avg";
+	specializes = base_bow;
+	[aspect]
+	{
+		model = m_w_bow_038;
+	}
+	[attack]
+	{
+		attack_range = 12;
+		damage_max = 43;
+		damage_min = 27;
+		reload_delay = 0;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		screen_name = "Droog Archer Bow";
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_bow_004;
+		equip_requirements = strength:22,dexterity:35;
+		inventory_height = 3;
+		inventory_icon = b_gui_ig_i_w_bow_088;
+		inventory_width = 1;
+	}
+}
+
+[t:template,n:bw_dsx_hassat_01]
+//unique for the hassat archer area 6
+{
+	category_name = "weapon";
+	doc = "DSX Hassat Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+	{
+		model = m_w_bow_030;
+	}
+	[attack]
+	{
+		attack_range = 10;
+		f damage_max = 60.000000;
+		f damage_min = 54.000000;
+		reload_delay = 0;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		pcontent_special_type = rare, unique;
+		screen_name = "Hassat Bow";
+	}
+	[gui]
+	{
+		equip_requirements = strength:0,dexterity:0;
+		inventory_height = 3;
+		inventory_icon = b_gui_ig_i_w_bow_079;
+		inventory_width = 1;
+	}
+}
+
+[t:template,n:bw_dsx_hassat_02]
+//unique for the Hassat ranger in area 7
+{
+	category_name = "weapon";
+	doc = "DSX Hassat Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_030;
+		}
+	[attack]
+		{
+			attack_range = 10;
+			f damage_max = 66.000000;
+			f damage_min = 58.000000;
+			reload_delay = 0;
+		}
+	[common]
+		{
+			is_pcontent_allowed = false;
+			pcontent_special_type = rare, unique;
+			screen_name = "Hassat Bow";
+		}
+	[gui]
+		{
+			equip_requirements = strength:0,dexterity:0;
+			inventory_height = 3;
+			inventory_icon = b_gui_ig_i_w_bow_079;
+			inventory_width = 1;
+		}
+}
+[t:template,n:bw_dsx_hassat_03]
+//unique for the Hassat ranger in area 3
+{
+	category_name = "weapon";
+	doc = "DSX Hassat Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+	{
+		model = m_w_bow_022;
+	}
+	[attack]
+	{
+		attack_range = 10;
+	  	f damage_max = 36;
+	  	f damage_min = 26;
+		reload_delay = 0;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		b allow_modifiers = false;
+		screen_name = "Hassat Bow";
+	}
+	[gui]
+	{
+		equip_requirements = dexterity:0;
+		inventory_height = 4;
+		inventory_icon = b_gui_ig_i_w_bow_006;
+		inventory_width = 1;
+	}
+}
+[t:template,n:bw_dsx_zaurask_2_b]
+// unique for zaurask spine in level 5
+{
+	category_name = "weapon";
+	doc = "DSX Zaurask Long Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+	{
+		model = m_w_bow_025;
+	}
+	[attack]
+	{
+		attack_range = 15;
+		f damage_max = 57;
+		f damage_min = 45;
+		reload_delay = 0;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		pcontent_special_type = rare, unique;
+		b allow_modifiers = false;
+		screen_name = "Zaurask Long Bow";
+	}
+	[gui]
+	{
+		is_droppable = false;
+		active_icon = b_gui_ig_i_ic_bow_002;
+		equip_requirements = strength:15,dexterity:22;
+		inventory_height = 4;
+		inventory_icon = b_gui_ig_i_w_bow_014;
+		inventory_width = 1;
+	}
+}
+
+[t:template,n:bw_dsx_zau_2_b]
+{
+	category_name = "weapon";
+	doc = "DSX Zaurask Long Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_025;
+		}
+	[attack]
+		{
+			attack_range = 15;
+			f damage_max = 38.000000;
+			f damage_min = 28.000000;
+			reload_delay = 0;
+		}
+	[common]
+		{
+			is_pcontent_allowed = false;
+			b allow_modifiers = false;
+			screen_name = "Zaurask Long Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_002;
+			equip_requirements = strength:15,dexterity:22;
+			inventory_height = 4;
+			inventory_icon = b_gui_ig_i_w_bow_014;
+			inventory_width = 1;
+		}
+}
+
+
+[t:template,n:bw_g_c_s_s_r_avg_dsx]
+// unique for the skeletal archers in Area 5
+{
+	category_name = "weapon";
+	doc = "Skeleton's Short Recurve";
+	specializes = base_bow;
+	[aspect]
+	{
+		model = m_w_bow_013;
+	}
+	[attack]
+	{
+		attack_range = 10;
+	  f damage_max = 54.000000;
+	  f damage_min = 50.000000;
+		reload_delay = 0;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		b allow_modifiers = false;
+		screen_name = "Skeleton's Short Recurve";
+	}
+	[gui]
+	{
+		is_droppable = false;
+		inventory_height = 3;
+		inventory_icon = b_gui_ig_i_w_bow_062;
+		inventory_width = 1;
+	}
+}
+[t:template,n:dsx_base_bow]
+{
+	doc = "DSX Bow";
+	specializes = base_bow;
+	[aspect]
+		{
+			material = arrow;
+			[voice]
+				{
+					[put_down]
+						{
+							* = s_e_gui_put_down_bow;
+						}
+				}
+		}
+	[attack]
+		{
+			ammo_attach_bone = weapon_grip;
+			ammo_template = arrow;
+			attack_class = ac_bow;
+			attack_range = 9.0;
+			damage_max = 4;
+			damage_min = 2;
+			is_projectile = true;
+			is_two_handed = true;
+			reload_delay = 0.0;
+			skill_class = ranged;
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_001;
+			equip_slot = es_shield_hand;
+		}
+	[physics]
+		{
+			velocity = 14.0;
+		}
+}
+
+
+[t:template,n:bw_dsx_zau_2]
+{
+	category_name = "weapon";
+	doc = "DSX Zaurask Long Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_025;
+		}
+	[attack]
+		{
+			attack_range = 15;
+			f damage_max = 85.000000;
+			f damage_min = 65.000000;
+			reload_delay = 0.0;
+		}
+	[common]
+		{
+			is_pcontent_allowed = false;
+			b allow_modifiers = false;
+			screen_name = "Zaurask Long Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_002;
+			equip_requirements = strength:15,dexterity:22;
+			inventory_height = 4;
+			inventory_icon = b_gui_ig_i_w_bow_014;
+			inventory_width = 1;
+		}
+}
+
+[t:template,n:bw_dsx_zau_2_a]
+{
+	category_name = "weapon";
+	doc = "DSX Zaurask Long Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_025;
+		}
+	[attack]
+		{
+			attack_range = 15;
+			f damage_max = 70.000000;
+			f damage_min = 62.000000;
+			reload_delay = 0;
+		}
+	[common]
+		{
+		is_pcontent_allowed = false;
+			b allow_modifiers = false;
+			screen_name = "Zaurask Long Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_002;
+			equip_requirements = strength:15,dexterity:22;
+			inventory_height = 4;
+			inventory_icon = b_gui_ig_i_w_bow_014;
+			inventory_width = 1;
+		}
+}
+
+
+[t:template,n:bw_dsx_rune_caster]
+{
+	category_name = "weapon";
+	doc = "DSX Rune Caster Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_028;
+		}
+	[attack]
+		{
+			attack_range = 13;
+			f damage_max = 85.000000;
+			f damage_min = 65.000000;
+			reload_delay = 0;
+		}
+	[common]
+		{
+		is_pcontent_allowed = false;
+			screen_name = "Rune Caster Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_002;
+			equip_requirements = strength:16,dexterity:26;
+			inventory_height = 4;
+			inventory_icon = b_gui_ig_i_w_bow_080;
+			inventory_width = 1;
+		}
+}
+[t:template,n:bw_dsx_hassat]
+{
+	category_name = "weapon";
+	doc = "DSX Hassat Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_030;
+		}
+	[attack]
+		{
+			attack_range = 10;
+			f damage_max = 25.000000;
+			f damage_min = 14.000000;
+			reload_delay = 0;
+		}
+	[common]
+		{
+		is_pcontent_allowed = false;
+			pcontent_special_type = rare, unique;
+			screen_name = "Hassat Bow";
+		}
+	[gui]
+		{
+			equip_requirements = strength:13,dexterity:18;
+			inventory_height = 3;
+			inventory_icon = b_gui_ig_i_w_bow_079;
+			inventory_width = 1;
+		}
+
+}
+
+////////////////////////////////////////////////////////////
+// TEMPLATES PAST THIS POINT HAS BEEN AUTOGENERATED
+// PLEASE CONTACT JOHN C. / MATT N. WHEN MANUALLY EDITING
+////////////////////////////////////////////////////////////
+
+[t:template,n:bw_g_c_dsx_nat_avg]
+{
+	doc = "DSX Beaded Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_304;
+		}
+	[attack]
+		{
+			attack_range = 12;
+			f damage_max = 45;
+			f damage_min = 40.0;
+			reload_delay = 0.0;
+		}
+	[common]
+		{
+			screen_name = "Beaded Bow";
+			pcontent_special_type = rare, unique;
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_304;
+			equip_requirements = strength:12,dexterity:16;
+			inventory_height = 4;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{		
+			[base]	
+				{	
+					f modifier_max = 12;
+					f modifier_min = 0;
+				}
+		}
+}
+
+[t:template,n:bw_g_c_dsx_cry_avg]
+{
+	doc = "DSX Crystal Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_300;
+		}
+	[attack]
+		{
+			attack_range = 12;
+			f damage_max = 49.0;
+			f damage_min = 41;
+			reload_delay = 0.0;
+		}
+	[common]
+		{
+			screen_name = "Crystal Bow";
+			pcontent_special_type = rare, unique, normal;
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_300;
+			equip_requirements = strength:12,dexterity:16;
+			inventory_height = 3;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{		
+			[base]	
+				{	
+					f modifier_max = 13;
+					f modifier_min = 0;
+				}
+		}
+}
+
+[t:template,n:bw_g_c_dsx_fir_avg]
+{
+	doc = "DSX Fire Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_301;
+		}
+	[attack]
+		{
+			attack_range = 12;
+			f damage_max = 85;
+			f damage_min = 70.0;
+			reload_delay = 0.0;
+		}
+	[common]
+		{
+			screen_name = "Fire Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_301;
+			equip_requirements = strength:15,dexterity:23;
+			inventory_height = 4;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{		
+			[base]	
+				{	
+					f modifier_max = 22;
+					f modifier_min = 0;
+				}
+		}
+}
+
+[t:template,n:bw_g_c_dsx_hst_avg]
+{
+	doc = "DSX Hassat Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_306;
+		}
+	[attack]
+		{
+			attack_range = 12;
+			f damage_max = 37;
+			f damage_min = 33.0;
+			reload_delay = 0.0;
+		}
+	[common]
+		{
+			screen_name = "Hassat Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_306;
+			equip_requirements = strength:12,dexterity:15;
+			inventory_height = 3;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{		
+			[base]	
+				{	
+					f modifier_max = 10;
+					f modifier_min = 0;
+				}
+		}
+}
+
+[t:template,n:bw_g_c_dsx_jwl_avg]
+{
+	doc = "DSX Jeweled Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_313;
+		}
+	[attack]
+		{
+			attack_range = 12;
+			f damage_max = 70;
+			f damage_min = 50.0;
+			reload_delay = 0.0;
+		}
+	[common]
+		{
+			screen_name = "Jeweled Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_313;
+			equip_requirements = strength:14,dexterity:21;
+			inventory_height = 4;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{		
+			[base]	
+				{	
+					f modifier_max = 17;
+					f modifier_min = 0;
+				}
+		}
+}
+
+[t:template,n:bw_g_c_dsx_ltn_avg]
+{
+	doc = "DSX Thunderwood Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_302;
+		}
+	[attack]
+		{
+			attack_range = 12;
+			f damage_max = 49;
+			f damage_min = 40.0;
+			reload_delay = 0.0;
+		}
+	[common]
+		{
+			screen_name = "Thunderwood Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_302;
+			equip_requirements = strength:12,dexterity:16;
+			inventory_height = 4;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{		
+			[base]	
+				{	
+					f modifier_max = 13;
+					f modifier_min = 0;
+				}
+		}
+}
+
+[t:template,n:bw_g_c_dsx_qll_avg]
+{
+	doc = "DSX Quill bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_308;
+		}
+	[attack]
+		{
+			attack_range = 12;
+			f damage_max = 72;
+			f damage_min = 60.0;
+			reload_delay = 0.0;
+		}
+	[common]
+		{
+			screen_name = "Quill bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_308;
+			equip_requirements = strength:14,dexterity:21;
+			inventory_height = 4;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{		
+			[base]	
+				{	
+					f modifier_max = 19;
+					f modifier_min = 0;
+				}
+		}
+}
+
+[t:template,n:bw_g_c_dsx_shd_avg]
+{
+	doc = "DSX Shadow Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_303;
+		}
+	[attack]
+		{
+			attack_range = 12;
+			f damage_max = 95;
+			f damage_min = 80.0;
+			reload_delay = 0.0;
+		}
+	[common]
+		{
+			screen_name = "Shadow Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_303;
+			equip_requirements = strength:16,dexterity:24;
+			inventory_height = 4;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{		
+			[base]	
+				{	
+					f modifier_max = 25;
+					f modifier_min = 0;
+				}
+		}
+}
+
+[t:template,n:bw_g_c_dsx_spd_avg]
+{
+	doc = "DSX Spidersilk Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_310;
+		}
+	[attack]
+		{
+			attack_range = 12;
+			f damage_max = 25;
+			f damage_min = 20.0;
+			reload_delay = 0.0;
+		}
+	[common]
+		{
+			screen_name = "Spidersilk Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_310;
+			equip_requirements = strength:11,dexterity:13;
+			inventory_height = 3;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{		
+			[base]	
+				{	
+					f modifier_max = 6;
+					f modifier_min = 0;
+				}
+		}
+}

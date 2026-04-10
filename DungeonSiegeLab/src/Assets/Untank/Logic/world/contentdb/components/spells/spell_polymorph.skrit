@@ -1,0 +1,120 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_polymorph.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property string effect_script$	= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string script_params$	= ""   	doc = "Parameters to send to SiegeFx script";
+property string immunity$				doc = "If the target contains this membership then it is immune to this spell.";
+
+
+owner = GoSkritComponent;
+
+int pos$;
+
+Goid summoned_goid$;
+Goid caster$;
+Goid target$;
+Goid go_hit$;
+			
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) {
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			if( !target$.IsValidMp || !caster$.IsValidMp )
+			{
+				SetState Finish$;
+				return;
+			}
+			
+			// Start the visual
+			SiegeFx.SRunScript( effect_script$, target$, caster$, script_params$, owner.Goid, WE_DAMAGED );
+		} 
+		else if ( e$ == WE_SPELL_COLLISION ) 
+		{
+			go_hit$ = msg$.SendFrom;
+			SetState ReplaceGo$;
+		}
+	}
+}
+
+
+state ReplaceGo$
+{
+	transition -> DeleteGo$: OnTimer( 1 );
+
+	event OnEnterState$
+	{
+		if (go_hit$.IsValid)
+		{
+			if( !StringTool.IsEmpty( immunity$ ) )
+			{
+				if( go_hit$.Go.Common.Membership.Contains( immunity$ ) )
+				{
+					SetState Finish$;
+					return;
+				}
+			}
+			
+			if( go_hit$.Go.Player.Controller != PC_COMPUTER  )
+			{
+				SetState Finish$;
+				return;
+			}
+			
+			// Copy the reference to the starting position into SiegeFx persistant storage
+			pos$ = SiegeFx.AddVariable( go_hit$.go.placement.position, owner.goid );
+		
+			// Create new game objects as specified in delayed_pcontent block
+			owner.go.inventory.AddDelayedPcontent();
+		
+			Go summoned_go$ = owner.go.children.get( 0 );
+		
+			owner.go.inventory.RSRemove( summoned_go$, false );
+			summoned_go$.placement.SSetposition( SiegeFx.GetVariable( pos$, owner.goid ), true );
+			summoned_goid$ = summoned_go$.goid;
+			
+			summoned_go$.actor.ssetalignment( aa_neutral );
+			
+			// need to get rid of the polymorphed actor we want to go through the normal kill code, so we want to use damage to kill the go.
+			Rules.AwardExperience( caster$, owner.goid, Rules.CalculateExperience( caster$, owner.goid, go_hit$, go_hit$.Go.Aspect.MaxLife * 3.0 ) );
+			Rules.DamageGo( go_hit$, caster$, owner.goid, go_hit$.Go.Aspect.MaxLife * 3.0, true, true );
+		}
+		this.CreateTimer( 1, 0 );
+	}
+}
+			
+state DeleteGo$
+{
+	event OnEnterState$
+	{
+		if (go_hit$.IsValid)
+		{			
+			GoDb.SMarkForDeletion( go_hit$ );
+		}
+		SetState Finish$;
+	}
+}							 
+
+state Finish$
+{
+	event OnEnterState$
+	{
+		SiegeFx.ClearVariables( owner.goid );
+		
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}
+
+
+

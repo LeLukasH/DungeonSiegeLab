@@ -1,0 +1,3285 @@
+[t:custom_view_v1,n:generic_outdoor_nodes]
+{
+	[t:cv_folder,n:generic_outdoor_nodes]
+	{
+	  b has_spaces = false;
+		[t:cv_folder,n:02]
+		{
+		  b has_spaces = false;
+			[t:cv_folder,n:02_dry]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_02a-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_02a-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_02a-tx-02b-ccav-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_02a-tx-02b-ccav-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_02a-tx-02b-ccav-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_02a-tx-02b-ccav-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_02a-tx-02b-cnvx-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_02a-tx-02b-cnvx-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_02a-tx-02b-cnvx-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_02a-tx-02b-cnvx-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_02b-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_02b-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-diag-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-diag-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-diag-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-diag-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-thick.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-02b-ccav-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-02b-ccav-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-02b-ccav-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-02b-ccav-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-02b-cnvx-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-02b-cnvx-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-02b-cnvx-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-02b-cnvx-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-02b-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-02b-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-04-ccav-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-04-ccav-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-04-cnvx-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-04-cnvx-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-rmp-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02a-tx-rmp-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02b-thick.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02b-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02b-tx-02b-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02b-tx-02b-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02b-tx-rmp-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_02b-tx-rmp-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:02_h2o]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_h2o_02a-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_02a-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_02a-tx-02b-ccav-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_02a-tx-02b-ccav-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_02a-tx-02b-ccav-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_02a-tx-02b-ccav-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_02a-tx-02b-cnvx-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_02a-tx-02b-cnvx-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_02a-tx-02b-cnvx-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_02a-tx-02b-cnvx-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_02b-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_02b-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-diag-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-diag-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-diag-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-diag-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-thick.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-tx-02b-ccav-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-tx-02b-ccav-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-tx-02b-ccav-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-tx-02b-ccav-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-tx-02b-cnvx-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-tx-02b-cnvx-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-tx-02b-cnvx-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02a-tx-02b-cnvx-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02b-thick.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_02b-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+		}
+		[t:cv_folder,n:04]
+		{
+		  b has_spaces = false;
+			[t:cv_folder,n:04_dry]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_04-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_04-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-diag-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-diag-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-diag-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-diag-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-pth-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-pth-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-thck.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-tx-02b-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-tx-02b-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-tx-08-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-tx-08-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-tx-rmp-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-tx-rmp-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:04_h2o]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_h2o_04-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_04-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-diag-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-diag-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-diag-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-diag-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-pth-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-pth-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-thck.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-tx-02b-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-tx-02b-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-tx-04-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-tx-04-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-tx-08-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_04-tx-08-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+		}
+		[t:cv_folder,n:08]
+		{
+		  b has_spaces = false;
+			[t:cv_folder,n:08_dry]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_08-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_08-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-alcove-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-diag-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-diag-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-diag-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-diag-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-pth-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-pth-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-pth-tall-narrow-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-pth-tall-narrow-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-pth-tall-wide-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-pth-tall-wide-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-thck.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-tx-02b-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-tx-02b-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-tx-04-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-tx-04-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-tx-12-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-tx-12-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-tx-32-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-tx-32-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-tx-rmp-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-tx-rmp-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:08_h2o]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_h2o_08-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_08-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-alcove-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-diag-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-diag-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-diag-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-diag-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-pth-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-pth-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-pth-tall-narrow-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-pth-tall-narrow-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-pth-tall-wide-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-pth-tall-wide-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-thck.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-tx-02b-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-tx-02b-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-tx-04-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-tx-04-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-tx-08-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-tx-08-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-tx-12-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-tx-12-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-tx-32-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_08-tx-32-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+		}
+		[t:cv_folder,n:12]
+		{
+		  b has_spaces = false;
+			[t:cv_folder,n:12_dry]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_12-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_12-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-diag-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-diag-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-diag-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-diag-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-pth-tall-narrow-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-pth-tall-narrow-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-pth-tall-wide-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-pth-tall-wide-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-thck.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-tx-02b-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-tx-02b-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-tx-08-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-tx-08-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-tx-24-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-tx-24-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-tx-rmp-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-tx-rmp-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:12_h2o]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_h2o_12-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_12-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-diag-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-diag-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-diag-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-diag-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-pth-tall-narrow-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-pth-tall-narrow-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-pth-tall-wide-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-pth-tall-wide-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-thck.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-tx-02b-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-tx-02b-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-tx-08-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-tx-08-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-tx-12-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-tx-12-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-tx-24-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_12-tx-24-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+		}
+		[t:cv_folder,n:24]
+		{
+		  b has_spaces = false;
+			[t:cv_folder,n:24_dry]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_24-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_24-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_24-diag-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_24-diag-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_24-diag-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_24-diag-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_24-thck.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_24-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_24-tx-02b-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_24-tx-02b-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_24-tx-rmp-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_24-tx-rmp-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:24_h2o]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_h2o_24-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_24-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_24-diag-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_24-diag-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_24-diag-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_24-diag-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_24-thck.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_24-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_24-tx-02b-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_24-tx-02b-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_24-tx-rmp-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_24-tx-rmp-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+		}
+		[t:cv_folder,n:32]
+		{
+		  b has_spaces = false;
+			[t:cv_folder,n:32_dry]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_32-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_32-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_32-diag-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_32-diag-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_32-diag-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_32-diag-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_32-thck.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_32-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_32-tx-02b-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_32-tx-02b-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_32-tx-rmp-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_32-tx-rmp-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:32_h2o]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_h2o_32-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_32-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_32-diag-thick-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_32-diag-thick-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_32-diag-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_32-diag-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_32-thck.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_32-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_32-tx-02b-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_32-tx-02b-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_32-tx-rmp-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_h2o_32-tx-rmp-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+		}
+		[t:cv_folder,n:caves]
+		{
+		  b has_spaces = false;
+			[t:cv_item,n:t_xxx_wal_cave-tx-abc-base-front-a.sno]
+			{
+			  b has_spaces = false;
+			  i image = 1;
+			  i selected_image = 1;
+			}
+			[t:cv_item,n:t_xxx_wal_cave-tx-abc-sides-front-a.sno]
+			{
+			  b has_spaces = false;
+			  i image = 1;
+			  i selected_image = 1;
+			}
+			[t:cv_item,n:t_xxx_wal_cave-tx-abc-top-front-a.sno]
+			{
+			  b has_spaces = false;
+			  i image = 1;
+			  i selected_image = 1;
+			}
+		}
+		[t:cv_folder,n:floor]
+		{
+		  b has_spaces = false;
+			[t:cv_folder,n:floor_dry]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_flr_04x04-v0.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_flr_04x08-v0.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_flr_08x08-v0.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:floor_h2o]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_flr_h2o_04x04-v0.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_flr_h2o_04x04-v1.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_flr_h2o_04x04-v2.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_flr_h2o_04x04-v3.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_flr_h2o_04x08-v0.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_flr_h2o_08x08-v0.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_flr_h2o_08x08-v1.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_flr_h2o_08x08-v2.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_flr_h2o_08x08-v3.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+		}
+		[t:cv_folder,n:ledge]
+		{
+		  b has_spaces = false;
+			[t:cv_folder,n:08]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_ledg_08-cnr-ccav-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_08-cnr-ccav-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_08-cnr-ccav-tf.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_08-cnr-cnvx-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_08-cnr-cnvx-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_08-ele-bottom-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_08-ele-top-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_08-ele-wheels-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_08-thck-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_08-thck-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_08-thin-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_08-thin-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-08-l-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-08-l-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-08-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-08-r-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-08-r-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-08-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:12]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_ledg_12-cnr-ccav-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_12-cnr-ccav-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_12-cnr-ccav-tf.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_12-cnr-cnvx-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_12-cnr-cnvx-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_12-ele-bottom-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_12-ele-top-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_12-ele-wheels-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_12-thck-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_12-thck-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_12-thin-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_12-thin-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-12-l-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-12-l-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-12-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-12-r-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-12-r-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-12-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:24]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_ledg_24-cnr-ccav-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_24-cnr-ccav-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_24-cnr-ccav-tf.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_24-cnr-cnvx-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_24-cnr-cnvx-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_24-ele-bottom-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_24-ele-top-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_24-ele-wheels-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_24-thck-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_24-thck-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_24-thin-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_24-thin-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-24-l-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-24-l-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-24-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-24-r-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-24-r-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-24-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:32]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_ledg_32-cnr-ccav-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_32-cnr-ccav-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_32-cnr-ccav-tf.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_32-cnr-cnvx-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_32-cnr-cnvx-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_32-ele-bottom-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_32-ele-top-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_32-ele-wheels-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_32-thck-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_32-thck-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_32-thin-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_32-thin-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-32-l-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-32-l-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-32-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-32-r-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-32-r-t.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_ledg_tx-wal-32-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_item,n:t_xxx_ledg_ele-platform-a.sno]
+			{
+			  b has_spaces = false;
+			  i image = 1;
+			  i selected_image = 1;
+			}
+		}
+		[t:cv_folder,n:path]
+		{
+		  b has_spaces = false;
+			[t:cv_folder,n:path_dry]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_pth_02b-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_02b-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_02b-thick.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_02b-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_04x04-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_04x04-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_04x04-c.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_04x04-d.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_04x04-e.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_04x04-f.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_04x04-g.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x04-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x04-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x04-c.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x04-d.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x04-e.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x04-f.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x04-g.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x04-h.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x04-i.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x04-j.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x08-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x08-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x08-c.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x08-d.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x08-e.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x08-f.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x08-g.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x08-h.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x08-i.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_08x08-j.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:path_h2o]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_pth_h2o_04x04-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_h2o_04x04-d.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_h2o_08x04-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_h2o_08x04-g.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_h2o_08x04-h.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_h2o_08x08-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_h2o_08x08-c.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_h2o_08x08-d.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_h2o_08x08-e.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_h2o_08x08-f.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_pth_h2o_tx-wal-02a-thin-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+		}
+		[t:cv_folder,n:ramp]
+		{
+		  b has_spaces = false;
+			[t:cv_folder,n:ramp_dry]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_rmp_cnr-ccav.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_cnr-cnvx.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_ctx-04-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_ctx-04-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_ctx-hal-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_ctx-hal-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_pth-staircase.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_pth-thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_pth-traverse-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_pth-traverse-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_pth-traverse-rails-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_pth-traverse-rails-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_thck.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_thin.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_tx-02b-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_tx-02b-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_tx-rmp-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_tx-rmp-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_tx-rvr-in.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_tx-rvr-out.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_tx-wal-04-thck-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_tx-wal-04-thck-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_tx-wal-04-thin-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rmp_tx-wal-04-thin-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:ramp_h2o]
+			{
+			  b has_spaces = false;
+			}
+		}
+		[t:cv_folder,n:river]
+		{
+		  b has_spaces = false;
+			[t:cv_folder,n:bridges]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_rvr_08-bridge-left-tx-right-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_08-bridge-right-tx-left-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-bridge-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-stonebridge-cobble-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-stonebridge-cobble-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-stonebridge-cobble-c.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-stonebridge-granite-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-stonebridge-granite-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-stonebridge-granite-c.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-stonebridge-marble-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-stonebridge-marble-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-stonebridge-marble-c.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-stonebridge-ruins-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-stonebridge-ruins-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-stonebridge-ruins-c.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:rivers]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_rvr_08-left-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_08-left-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_08-left-turn.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_08-left-tx-right-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_08-right-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_08-right-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_08-right-turn.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_08-right-tx-left-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-left-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-left-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-left-c.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-right-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-right-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-right-c.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-tx-08-left-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-tx-08-left-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-tx-08-right-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_12-tx-08-right-b.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:wall_ins_outs]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_wal_04-tx-rvr-in.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_04-tx-rvr-out.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-tx-rvr-in.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_08-tx-rvr-out.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-tx-rvr-in.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_12-tx-rvr-out.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_32-tx-rvr-in.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_wal_32-tx-rvr-out.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:waterfalls]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_rvr_wfall-02a-tx-08-left.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-02a-tx-08-right.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-02a-tx-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-04-tx-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-04-tx-split-08.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-04-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-08-tx-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-08-tx-split-08.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-08-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-12-tx-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-12-tx-split-08.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-12-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-24-tx-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-24-tx-split-08.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-24-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-32-tx-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-32-tx-split-08.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-32-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-alcove-base-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-alcove-falls-a.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-hal-tx-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-hal-tx-split-08.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-hal-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-rmp-tx-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-rmp-tx-split-08.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-rmp-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-04-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-04-tx-wal-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-08-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-08-tx-wal-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-12-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-12-tx-wal-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-24-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-24-tx-wal-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-36-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-36-tx-wal-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-hal-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-hal-tx-wal-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-rmp-tx-wal-02.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_rvr_wfall-water-rmp-tx-wal-12.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+		}
+		[t:cv_folder,n:tee_corner]
+		{
+		  b has_spaces = false;
+			[t:cv_folder,n:tee_dry]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_tee-02a-02a-rmp-ccav-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02a-02a-rmp-ccav-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02a-02a-rmp-cnvx-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02a-02a-rmp-cnvx-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02a-02b-04-cncv-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02a-02b-04-cncv-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02a-02b-04-cnvx-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02a-02b-04-cnvx-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02a-02b-rmp-ccav-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02a-02b-rmp-ccav-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02a-02b-rmp-cnvx-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02a-02b-rmp-cnvx-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02b-02b-rmp-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02b-02b-rmp-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02b-04-ccav-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-02b-04-ccav-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-04-04-08-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-04-04-08-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-04-08-12-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-04-08-12-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-08-04-12-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-08-04-12-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-hal-hal-08-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-hal-hal-08-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-rmp-rmp-08-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_tee-rmp-rmp-08-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+			[t:cv_folder,n:tee_h2o]
+			{
+			  b has_spaces = false;
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-02a-02a-rmp-ccav-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-02a-02a-rmp-ccav-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-02a-02a-rmp-cnvx-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-02a-02a-rmp-cnvx-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-02a-02b-rmp-ccav-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-02a-02b-rmp-ccav-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-02a-02b-rmp-cnvx-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-02a-02b-rmp-cnvx-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-02b-02b-rmp-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-02b-02b-rmp-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-04-04-08-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-04-04-08-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-04-08-12-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-04-08-12-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-08-04-12-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-08-04-12-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-hal-hal-08-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-hal-hal-08-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-rmp-rmp-08-l.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+				[t:cv_item,n:t_xxx_cnr_h2o_tee-rmp-rmp-08-r.sno]
+				{
+				  b has_spaces = false;
+				  i image = 1;
+				  i selected_image = 1;
+				}
+			}
+		}
+	}
+}

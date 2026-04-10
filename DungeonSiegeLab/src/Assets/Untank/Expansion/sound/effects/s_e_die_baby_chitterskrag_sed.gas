@@ -1,0 +1,7 @@
+[t:sed,n:s_e_die_baby_chitterskrag_SED]
+{
+	sound_effect_file = "s_e_die_spider_giant";
+	max_simultaneous_samples = 2;
+	min_playback_rate = 1.5;
+	max_playback_rate = 1.85;
+}

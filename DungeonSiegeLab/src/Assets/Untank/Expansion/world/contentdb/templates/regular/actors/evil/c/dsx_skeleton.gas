@@ -1,0 +1,788 @@
+[t:template,n:dsx_skeleton]//used in Area 1_6_queencave
+{
+	category_name = "1W_evil_c";
+	doc = "dsx_skeleton";
+	specializes = base_skeleton;
+	[actor]
+		{
+			[skills]
+				{
+					strength =	8, 0;
+					intelligence =	7, 0;
+					dexterity =	8, 0;
+					melee	=	3,	0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 40;
+			life = 77;
+			max_life = 77;
+			mana = 2;
+			max_mana = 2;
+
+			[textures]	{0 = b_c_ecm_sk-02;}
+		}
+	[attack]
+		{
+			damage_min = 23;
+			damage_max = 23;
+		}
+	[defend] { defense = 31; }
+
+	[common]
+		{
+			membership = skeleton, monster;
+		}
+	[physics]
+		{
+			[break_particulate]
+				{
+					frag_glb_bone_dirty_01 = 1;
+					frag_glb_bone_dirty_02 = 1;
+					frag_glb_bone_dirty_03 = 1;
+					frag_glb_bone_dirty_04 = 4;
+					frag_glb_bone_dirty_05 = 1;
+					frag_glb_bone_dirty_06 = 1;
+				}
+		}
+	[common] { screen_name="Bones"; }
+
+	[inventory]
+		{
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 5, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 19;
+				max = 38;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_small;
+				il_main = potion_health_small;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/14-14;
+				il_main = #armor/3-34;
+				il_main = #*/14-14;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/17-20;
+				il_main = #armor/-rare(1)/0-43;
+				il_main = #*/-rare(1)/17-20;
+			}
+			
+		}
+	}	
+		}
+	[mind]
+		{
+			jat_brain									= world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party					= true;
+
+			job_travel_distance_limit = 10;
+			melee_engage_range = 8.0;
+			on_job_reached_travel_distance_abort_attack = true;
+			ranged_engage_range							= 8.0;
+			sight_range									= 14.0;
+			jat_fidget									= world\ai\jobs\common\job_fidget.skrit;
+		}
+}
+
+[t:template,n:dsx_skeleton_04]//used in Area 1_6_queendungeon
+{
+	category_name = "1W_evil_c";
+	doc = "dsx_skeleton_04";
+	specializes = base_skeleton;
+	[actor]
+		{
+			[skills]
+				{
+					strength 	=	8, 0;
+					intelligence =	7, 0;
+					dexterity 	=	8, 0;
+					melee		=	3,	0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 49;
+			life = 97;
+			max_life = 97;
+			mana = 2;
+			max_mana = 2;
+
+			[textures]	{0 = b_c_ecm_sk-02;}
+		}
+	[attack]
+		{
+			damage_min = 30;
+			damage_max = 35;
+		}
+	[defend] { defense = 42; }
+
+	[common]
+		{
+			membership = skeleton, monster;
+		}
+	[physics]
+		{
+			[break_particulate]
+				{
+					frag_glb_bone_dirty_01 = 1;
+					frag_glb_bone_dirty_02 = 1;
+					frag_glb_bone_dirty_03 = 1;
+					frag_glb_bone_dirty_04 = 4;
+					frag_glb_bone_dirty_05 = 1;
+					frag_glb_bone_dirty_06 = 1;
+				}
+		}
+	[common] { screen_name="Skeleton"; }
+
+	[inventory]
+		{
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 5, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 19;
+				max = 38;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_small;
+				il_main = potion_health_small;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/14-14;
+				il_main = #armor/3-34;
+				il_main = #*/14-14;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/17-20;
+				il_main = #armor/-rare(1)/0-43;
+				il_main = #*/-rare(1)/17-20;
+			}
+			
+		}
+	}
+	}	
+		}
+	[mind]
+		{
+			jat_brain									= world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party					= true;
+
+			job_travel_distance_limit = 10;
+			melee_engage_range = 8.0;
+			on_job_reached_travel_distance_abort_attack = true;
+			ranged_engage_range							= 8.0;
+			sight_range									= 14.0;
+			jat_fidget									= world\ai\jobs\common\job_fidget.skrit;
+		}
+}
+
+
+[t:template,n:dsx_skeleton_02]//used in Area 4
+{ 
+//level 14 medium melee
+	category_name = "1W_evil_c";
+	doc = "dsx_skeleton_02";
+	specializes = base_skeleton;
+	[actor]
+	{
+		[skills]
+		{
+			strength	= 13, 0;
+			intelligence= 8, 0;
+			dexterity	= 9, 0;
+			melee		= 10, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 226;
+		life = 259;
+		max_life = 259;
+		mana = 2;
+		max_mana = 2;
+
+		[textures]	{0 = b_c_ecm_sk-02;}
+	}
+	[attack]
+	{
+		damage_max = 55;
+		damage_min = 45;
+	}
+	[defend] { defense = 110; }
+
+	[common]
+	{
+		membership = skeleton, monster;
+	}
+	[physics]
+	{
+		[break_particulate]
+			{
+				frag_glb_bone_dirty_01 = 1;
+				frag_glb_bone_dirty_02 = 1;
+				frag_glb_bone_dirty_03 = 1;
+				frag_glb_bone_dirty_04 = 4;
+				frag_glb_bone_dirty_05 = 1;
+				frag_glb_bone_dirty_06 = 1;
+			}
+	}
+	[common] { screen_name="Skeleton"; }
+
+	[inventory]
+	{
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 13, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 153;
+				max = 305;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_small;
+				il_main = potion_health_small;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/25-36;
+				il_main = #armor/9-71;
+				il_main = #*/25-36;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/28-41;
+				il_main = #armor/-rare(1)/53-118;
+				il_main = #*/-rare(1)/28-41;
+			}
+			
+		}
+	}
+	}
+	[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party	= true;
+
+		job_travel_distance_limit = 10;
+		melee_engage_range = 8.0;
+		on_job_reached_travel_distance_abort_attack = true;
+		ranged_engage_range			= 8.0;
+		sight_range				= 14.0;
+		jat_fidget				= world\ai\jobs\common\job_fidget.skrit;
+	}
+}
+
+[t:template,n:dsx_skeleton_large]
+{
+// balanced to Level 14, hard melee
+	category_name = "1W_evil_c";
+	doc = "DSX_Skeleton_Large";
+	specializes = base_skeleton;
+	[actor]
+	{
+		[skills]
+		{
+			strength =	13, 0;
+			intelligence =	8, 0;
+			dexterity =	9, 0;
+			melee =		10, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 388;
+		life = 394;
+		max_life = 394;
+		mana = 4;
+		max_mana = 4;
+		[textures]	{0=b_c_ecm_sk-02;}
+		scale_base = 1.5;
+	}
+	[attack]
+	{
+		damage_max = 81;
+		damage_min = 65;
+	}
+
+	[body]
+		{
+			armor_version = ecm_sk;
+			avg_move_velocity = 1.500000;
+			[bone_translator]
+				{
+					body_anterior = bip01_head;
+					body_mid = bip01_spine2;
+					body_posterior = bip01_pelvis;
+					kill_bone = bip01_spine;
+					shield_bone = shield_grip;
+					weapon_bone = weapon_grip;
+				}
+			[chore_dictionary]
+				{
+					chore_prefix = a_c_ecm_sk_fs;
+					[chore_attack]
+						{
+							chore_stances = 0,1,2,3,4,5,6;
+							skrit = select_attack;
+							[anim_files]
+								{
+									00 = at;
+									02 = at-03;
+									04 = at-05;
+									05 = at-06;
+								}
+						}
+					[chore_default]
+						{
+							chore_stances = 0,1,2,3,4,5,6;
+							skrit = infinite_loop;
+							[anim_files] { 00=dfs; }
+						}
+					[chore_die]
+						{
+							chore_stances = 0,1,2,3,4,5,6;
+							skrit = select_transition;
+							[anim_files] { 00=di; }
+						}
+					[chore_fidget]
+						{
+							chore_stances = 0,1,2,3,4,5,6;
+							skrit = select_fidget;
+							[anim_files]
+								{
+									00 = dff;
+									01 = dff-02;
+									02 = dff-03;
+								}
+						}
+					[chore_walk]
+						{
+							chore_stances = 0,1,2,3,4,5,6;
+							skrit = select_walk;
+							[anim_files] { 00=wl-02; }
+						}
+				}
+		}
+
+	[physics]
+	{
+		[break_particulate]
+			{
+				frag_glb_bone_dirty_01 = 1;
+				frag_glb_bone_dirty_02 = 1;
+				frag_glb_bone_dirty_03 = 1;
+				frag_glb_bone_dirty_04 = 4;
+				frag_glb_bone_dirty_05 = 1;
+				frag_glb_bone_dirty_06 = 1;
+			}
+	}
+	[common]
+	{
+		screen_name="Giant Skeleton Stalker";
+		membership = skeleton, monster;
+	}
+	[defend] { defense=165; }
+	[inventory]
+		{
+			spew_equipped_kill_count = ;
+			[pcontent]
+	{
+					es_weapon_hand = sd_g_c_sd_1h_avg_dsx;
+					es_shield_hand = sh_un_m_o_k_m_dermal_dsx;
+					// sh_un_m_o_c_m_parade
+					// sh_ra_w_g_o_k_m_fin
+					// sh_un_m_o_k_m_dermal
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 14, Strong */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 200;
+				max = 398;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_small;
+				il_main = potion_health_small;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = #weapon/30-41;
+				il_main = #armor/15-90;
+				il_main = #*/30-41;
+			}
+			[oneof*]
+			{
+				chance = 0.01;
+				il_main = #weapon/-rare(1)/41-49;
+				il_main = #armor/-rare(1)/62-137;
+				il_main = #*/-rare(1)/41-49;
+			}
+			[oneof*]
+			{
+				chance = 0.005;
+				il_main = #weapon/-unique(2)/41-49;
+				il_main = #armor/-unique(2)/62-137;
+				il_main = #*/-unique(2)/41-49;
+			}			
+		}
+	}
+		}
+	[mind]
+		{
+			jat_fidget		= world\ai\jobs\common\job_fidget.skrit
+				?still			= false;
+
+			melee_engage_range = 14.0;
+			ranged_engage_range = 14.0;
+			sight_range = 14.0;
+			personal_space_range = 1.4;
+		}
+}
+[t:template,n:dsx_skeletal_archer]
+{
+// balanced to Level 14, hard ranged
+	category_name = "1W_evil_c";
+	doc = "dsx_skeletal_archer";
+	specializes = base_skeleton;
+	[actor]
+	{
+		[skills]
+		{
+			strength     =	13, 0;
+			intelligence =	8, 0;
+			dexterity    =	9, 0;
+			ranged       =	11, 0;
+		}
+	}
+
+	[aspect]
+	{
+		experience_value = 292;
+		life = 259;
+		max_life = 259;
+		mana = 2;
+		max_mana = 2;
+	}
+	[attack]
+	{
+		damage_max = 54;
+		damage_min = 50;
+	}
+	[common] { screen_name="Skeletal Archer"; }
+	[defend] { defense=100; }
+	[inventory]
+	{
+		selected_active_location = IL_ACTIVE_RANGED_WEAPON;
+		[equipment]
+		{
+			es_shield_hand = bw_g_c_s_s_r_avg_dsx;
+		}
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 14, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 200;
+				max = 398;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_small;
+				il_main = potion_health_small;
+			}
+			[oneof*]
+			{
+				es_shield_hand = bw_g_c_s_s_r_avg_dsx;
+				chance = 0.15;
+				il_main = #weapon/28-39;
+				il_main = #armor/10-81;
+				il_main = #*/28-39;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/30-44;
+				il_main = #armor/-rare(1)/53-128;
+				il_main = #*/-rare(1)/30-44;
+			}
+			
+		}
+	}
+		
+	}
+
+	[mind]
+		{
+			melee_engage_range = 10.0;
+			ranged_engage_range = 16.0;
+			sight_range = 16.0;
+			jat_fidget							= world\ai\jobs\common\job_fidget.skrit
+				?social							= 0.5
+				&meander						= false
+				&still							= false;
+		}
+
+}
+
+[t:template,n:dsx_skeleton_03]//used in Area 5
+{
+//balanced to Level 14, medium melee
+	category_name = "1W_evil_c";
+	doc = "dsx_skeleton_03";
+	specializes = base_skeleton;
+	[actor]
+	{
+		[skills]
+		{
+			strength	= 13, 0;
+			intelligence 	= 8, 0;
+			dexterity	= 9, 0;
+			melee		= 10, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 292;
+		life = 284;
+		max_life = 284;
+		mana = 2;
+		max_mana = 2;
+
+		[textures]	{0 = b_c_ecm_sk-02;}
+	}
+	[attack]
+	{
+		damage_min = 63;
+		damage_max = 55;
+	}
+	[defend] { defense = 135; }
+
+	[common]
+	{
+		membership = skeleton, monster;
+	}
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_bone_dirty_01 = 1;
+			frag_glb_bone_dirty_02 = 1;
+			frag_glb_bone_dirty_03 = 1;
+			frag_glb_bone_dirty_04 = 4;
+			frag_glb_bone_dirty_05 = 1;
+			frag_glb_bone_dirty_06 = 1;
+		}
+	}
+	[common] { screen_name="Skeleton"; }
+
+	[mind]
+		{
+			jat_brain									= world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party					= true;
+
+			job_travel_distance_limit = 10;
+			melee_engage_range = 8.0;
+			on_job_reached_travel_distance_abort_attack = true;
+			ranged_engage_range							= 8.0;
+			sight_range									= 14.0;
+			jat_fidget									= world\ai\jobs\common\job_fidget.skrit;
+		}
+}
+
+// melee For the cicatrix to summon.
+[t:template,n:dsx_skeleton_cicatrix_minion_melee]
+{
+// Balanced to level 14, medium melee
+	category_name = "1W_evil_c";
+	doc = "dsx_skeleton_cicatrix_minion_melee";
+	specializes = base_skeleton;	
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 13, 0;
+			intelligence	= 8, 0;
+			dexterity		= 9, 0;
+			melee			= 9, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value 	= 0;
+		life 				= 217;
+		max_life 			= 217;
+		mana 				= 2;
+		max_mana 			= 2;
+	}
+	[attack]
+	{
+		damage_min = 45;
+		damage_max = 53;
+	}
+	[common]
+	{
+		screen_name = "Cicatrix's Skeleton";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("dsx_skeleton_cicatrix_minion");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+			}
+		}
+	}
+	
+	[defend] { defense = 65; }
+	
+	[inventory]
+	{
+		selected_active_location = IL_ACTIVE_MELEE_WEAPON;
+		[equipment]
+		{
+			es_weapon_hand = mc_dsx_cicatrix_skeleton;
+		}
+		[pcontent]
+		{
+			[oneof*] 
+			{
+				il_main=#mace/30; 
+			}			
+		}
+	}
+	[mind]
+	{
+		jat_fidget					= world\ai\jobs\common\job_fidget.skrit
+			?still					= false;
+		
+		jat_brain									= world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party		= true
+			&actor_creates_own_party		= false
+			&party_template				= "party_dsx_cicatrix";
+			com_channels				= dyn_party, cicatrix;
+			com_range				= 20.0;
+			melee_engage_range			= 20.0;
+			ranged_engage_range	 		= 20.0;
+			sight_range				= 20.0;
+	}
+}
+// ranged For the cicatrix to summon.
+[t:template,n:dsx_skeleton_cicatrix_minion_ranged]
+{
+// Balanced to level 14, medium ranged
+	category_name = "1W_evil_c";
+	doc = "dsx_skeleton_cicatrix_minion_ranged";
+	specializes = base_skeleton;
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 13, 0;
+			intelligence	= 8, 0;
+			dexterity		= 9, 0;
+			ranged			= 9, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value 	= 0;
+		life 				= 217;
+		max_life 			= 217;
+		mana 				= 2;
+		max_mana 			= 2;
+	}
+	[attack]
+	{
+		damage_min = 40;
+		damage_max = 48;
+	}
+	[common]
+	{
+		screen_name = "Cicatrix's Skeleton";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("dsx_skeleton_cicatrix_minion");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+			}
+		}
+	}
+	[defend] { defense = 70; }
+	[inventory]
+	{
+		selected_active_location = IL_ACTIVE_RANGED_WEAPON;
+		[equipment]
+		{
+			es_shield_hand = bw_dsx_cicatrix_skeleton;
+		}
+		[pcontent]
+		{
+			[oneof*] 
+			{ 
+				il_main=#bow/30; 
+			}			
+		}
+	}
+	[mind]
+	{
+		jat_fidget							= world\ai\jobs\common\job_fidget.skrit
+			?still							= false;
+		
+		jat_brain									= world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party		= true
+			&actor_creates_own_party		= false
+			&party_template				= "party_dsx_cicatrix";
+			com_channels				= dyn_party, cicatrix;
+			com_range				= 20.0;
+			melee_engage_range			= 20.0;
+			ranged_engage_range	 		= 20.0;
+			sight_range				= 20.0;
+	}
+}

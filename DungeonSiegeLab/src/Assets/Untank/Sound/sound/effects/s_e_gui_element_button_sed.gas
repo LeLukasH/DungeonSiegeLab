@@ -1,0 +1,8 @@
+[t:sed,n:s_e_gui_element_button_SED]
+{
+	sound_effect_file = "s_e_gui_prompt";
+	max_simultaneous_samples = 2;
+	min_playback_rate = 1;
+	max_playback_rate = 1;
+}
+

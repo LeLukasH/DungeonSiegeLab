@@ -1,0 +1,5 @@
+[t:tsd,n:b_d_blood]
+{
+	layer1texture1 = b_d_blood;
+  i texturedetail = 1;
+}

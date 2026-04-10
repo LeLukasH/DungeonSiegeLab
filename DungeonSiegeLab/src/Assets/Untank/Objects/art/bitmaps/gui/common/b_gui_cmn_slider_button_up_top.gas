@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_cmn_slider_button_up_top]
+{
+	layer1texture1 = b_gui_cmn_slider_button_up_top;
+  i texturedetail = 0;
+}

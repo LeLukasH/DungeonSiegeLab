@@ -1,0 +1,166 @@
+///////////////////////////////////////////////////////////////////////////
+
+[t:gametype,n:pvp_no_teams]
+{
+	screen_name = "PvP, no teams";
+	description = "Individual-based competition where the opposing teams players can hurt each other.";
+	automatic = true;
+	
+	allow_player_kills = true;
+
+	[colors]
+	{
+		enemies = 0xFFFF0000;
+	}
+
+	[stats]
+	{	
+		[in_game]
+		{
+			// columns
+			0 = kills;
+			1 = human_kills;
+			2 = deaths;
+		}
+		[end_game]
+		{
+			0 = kills;
+			1 = human_kills;
+			2 = deaths;
+		}
+	}
+	
+	[messages]
+	{
+		[death_generic]
+		{
+			screen_name = "%s took a dirtnap.";
+			screen_name = "%s has been vanquished.";
+			screen_name = "%s has died honorably.";
+			screen_name = "%s has fallen.";
+			screen_name = "%s has been extinguished.";
+			screen_name = "%s has decided to stop living for a while.";
+			screen_name = "%s has temporarily stepped out of this life.";
+			screen_name = "%s has been killed.";
+			screen_name = "%s has died.";
+			screen_name = "%s was mercilessly slaughtered.";
+			screen_name = "%s has passed from this world to the next.";
+			screen_name = "%s would probably love to be resurrected.";
+			screen_name = "%s greets Death warmly.";
+			screen_name = "%s has fallen in battle!";
+			screen_name = "%s bought the farm house.";
+			screen_name = "%s has fallen.";
+			screen_name = "%s was sent packing.";
+			screen_name = "%s's life fire has been snuffed.";
+			screen_name = "%s kicked the bucket.";
+			screen_name = "%s is pushing up daisies.";
+			screen_name = "%s is deceased.";
+			screen_name = "%s bit the big one.";
+		}
+		
+		[death_male]
+		{
+			screen_name = "%s met his maker.";
+			screen_name = "%s met his doom.";
+			screen_name = "%s has drawn his last breath.";
+			screen_name = "%s was cut down in his prime.";
+		}
+		[death_female]
+		{
+			screen_name = "%s met her maker.";
+			screen_name = "%s met her doom.";
+			screen_name = "%s has drawn her last breath.";
+			screen_name = "%s was cut down in her prime.";
+		}
+
+		[leader_kills]
+		{
+			screen_name = "%s has taken the lead with %d kills!";
+		}
+	}
+
+	[victory]
+	{
+		[condition*]
+		{
+			name = kill_limit;
+			screen_name = "Kill Limit";
+			default_value = 0;
+			exclusive = true;  // game ends upon being reached.
+		}
+	}
+	
+	//
+	// Game Script
+	skrit =
+	[[
+		check_team_for_victory$( int team$ )
+		{
+			int kill_limit$ = Victory.GetVictoryConditionValue( "kill_limit" );
+			
+			if ( kill_limit$ > 0 )
+			{
+				if ( Victory.GetTeamStat( "human_kills", team$ ) >= kill_limit$ )
+				{
+					Victory.SSetTeamVictoryConditionMet( "kill_limit", true, team$ );
+				}
+			}
+		}
+	
+		handle_world_message$( WorldMessage msg$ )
+		{
+			if ( msg$.GetEvent == WE_KILLED )
+			{
+				Go attacker$ = msg$.SendFrom.GetGo;
+				Go victim$ = msg$.GetSendTo.Go;
+
+				if ( victim$.IsAnyHumanPartyMember() )
+				{
+					bool bUseGeneric$ = true;
+					if ( victim$.Actor.GetIsMale() )
+					{
+						int randomInt$ = math.RandomInt( 1, 20 );
+						if ( randomInt$ == 1 )
+						{
+							bUseGeneric$ = false;
+							Victory.SDisplayMessage1Party( "death_male", victim$ );
+						}						
+					}	
+					else
+					{
+						int randomInt$ = math.RandomInt( 1, 20 );
+						if ( randomInt$ == 1 )
+						{
+							bUseGeneric$ = false;
+							Victory.SDisplayMessage1Party( "death_female", victim$ );
+						}						
+					}				
+
+					if ( bUseGeneric$ == true )
+					{
+						Victory.SDisplayMessage1Party( "death_generic", victim$ );
+					}
+				}
+				
+				/*	
+				if ( (attacker$ != NULL) && (victim$ != NULL) &&
+					 (attacker$.Player.Controller == PC_HUMAN) &&
+					 (victim$.Player.Controller == PC_HUMAN) )
+				{
+					Victory.SIncrementStat( "player_kills", attacker$.Player, 1 );
+					
+					int team_player_kills$ = Victory.GetTeamStat( "player_kills", attacker$.Player.Team );
+					
+					int kill_limit$ = Victory.GetVictoryConditionValue( "kill_limit" );
+					
+					if ( (kill_limit$ > 0) && (team_player_kills$ >= kill_limit$) )
+					{
+						// kill limit reached
+						Victory.SetVictoryConditionMet( "kill_limit", true, attacker$.Player.Team );
+					}
+				}
+				*/
+			}
+		}
+	]];
+}

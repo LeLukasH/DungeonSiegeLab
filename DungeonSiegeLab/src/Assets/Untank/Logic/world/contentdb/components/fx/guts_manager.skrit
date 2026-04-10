@@ -1,0 +1,73 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  guts_manager.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// This skrit manages how often actors spew guts when hit.
+//
+//////////////////////////////////////////////////////////////////////////////
+property bool			_server_only$			= false;
+property string 		_required_component$	= "aspect";
+
+
+property string 		effect_name$						 		doc = "name of the effect script to run.";
+property string 		effect_params$		= ""					doc = "Parameters to pass along to the SiegeFx script";
+				
+property eWorldEvent 	spew_msg$			= WE_DAMAGED			doc = "when to start effect";
+
+
+owner = GoSkritComponent;
+
+startup state Startup$
+{
+	trigger OnGoHandleMessage$( WE_CONSTRUCTED )
+	{
+		if (owner.Go.HasAspect())
+		{
+			SetState Idle$;
+		} else {
+			SetState Exit$;
+		}
+	}
+}
+
+state Idle$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == spew_msg$ )
+		{
+			// play our guts effect.
+		
+			if (!StringTool.IsEmpty( effect_name$ ) && ( owner.Go.Aspect.LifeState == LS_ALIVE_CONSCIOUS ) )
+			{
+				SiegeFx.SRunScript( effect_name$, owner.goid, owner.goid, effect_params$, owner.goid, e$ );
+			}
+			SetState Wait$;
+		}
+	}
+}
+
+
+state Wait$
+{
+	transition -> Idle$: OnTimer( 1 );
+	
+	event OnEnterState$
+	{
+		// Don't play again until repeat_rate$ expires
+		
+		int frame_delay$ = ContentDb.EvalIntFormula( "frames_before_next_guts_spew$", 20 );
+		
+//		report.genericf("delay: %d\n", frame_delay$);
+		this.CreateFrameTimer( 1, frame_delay$ );
+	}
+}
+
+state Exit$
+{ }

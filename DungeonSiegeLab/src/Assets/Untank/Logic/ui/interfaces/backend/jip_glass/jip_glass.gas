@@ -1,0 +1,20 @@
+[jip_glass]
+{
+	interface = true;
+	intended_resolution_width = 640;
+	intended_resolution_height = 480;
+
+	[t:window,n:jip_glass]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000008;		
+		rect = 0,0,640,480;
+		texture = b_gui_cmn_box_alpha_154;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		consumable = true;
+		normalize_resize = true;		
+	}
+}

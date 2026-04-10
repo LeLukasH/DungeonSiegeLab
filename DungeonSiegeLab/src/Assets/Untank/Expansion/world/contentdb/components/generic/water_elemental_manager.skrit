@@ -1,0 +1,343 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  water_elemental_manager.skrit
+// Author(s):  Jason Dunlop
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: To make the water elemental visible when players are in the water and 
+//		invisible when they aren't
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "water_elemental_manager";
+
+// external properties
+property string elemental_appear$="dsx_elemental_water_reveal" 	doc = "effect played when elemental appears";
+property string elemental_disappear$="dsx_elemental_water_hide"	doc = "effect played when elemental hides";
+property scid	sphere_center_scid$=0				doc = "used in checking for party members in sphere";
+property int	sphere_radius$=0				doc = "party member search spehere's radius";
+
+owner = GoSkritComponent;
+
+//bool elementalVisible$=false					doc = "whether the elemental can be seen by the player";
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// Support functions
+
+
+// plays any given effect
+play_effect$(string effect$, goid target$, goid source$, string params$, eWorldEvent e$)
+{
+	// play the effect
+	SiegeFX.SRunScript(effect$, target$, source$, params$, source$, e$);
+}
+
+// attack the give object
+attack_character$( goid attacker$, goid target$ )
+{
+	// attack the target
+	attacker$.Go.Mind.Clear( JQ_ACTION );
+	attacker$.Go.Mind.SDoJob( MakeJobReq( JAT_ATTACK_OBJECT, JQ_ACTION, QP_FRONT, AO_COMMAND, target$ ) );
+}
+
+ClearEngaged$(Goid target$)
+{
+	// clear the go collection and refill it with the friends within the given radius
+	target$.Go.Mind.TempGopColl1.Clear;
+	target$.Go.Mind.GetEngagedMeEnemies(target$.Go.Mind.TempGopColl1);
+
+	int i$ = 0;
+	int iend$ = target$.Go.Mind.TempGopColl1.Size();
+	Go temp$;
+
+	// loop through the engaged characters
+	while( i$ < iend$ )
+	{
+		// get the character
+		temp$ = target$.Go.Mind.TempGopColl1.Get( i$ );
+
+		// free their mind and their arse will follow
+		temp$.Mind.Clear(JQ_ACTION);
+
+		// increment i$
+		i$ = i$ + 1;
+	}
+}
+
+// moves a character from their current position to the location of the use point
+move_character$(goid character$, goid waypoint$)
+{
+	// clear the mcp
+	MCPManager.Flush(character$);
+
+	// make sure the waypoint is valid
+	if( waypoint$.IsValid() && character$.IsValid() )
+	{
+		if( waypoint$.Go != NULL && character$.Go != NULL )
+		{
+			// get the location of the use point
+			SiegePos pos$ = waypoint$.Go.Placement.GetPosition();
+
+			// try the move
+			MCPManager.MakeRequest(character$, PL_APPROACH, pos$, 0.0);
+		}
+	}
+}
+
+// return the number of actors that are in the water
+int GetAliveActorsInWater$()
+{
+	// search for good guys that are in the water
+	AIQuery.TempGopColl1.Clear;
+	AIQuery.TempGopColl2.Clear;
+	AIQuery.GetOccupantsInSphere( sphere_center_scid$.Go.Placement.Position, sphere_radius$, AIQuery.TempGopColl1 );
+			
+	AIQuery.TempQtColl1.Clear;
+	AIQuery.TempQtColl1.Add( QT_ACTOR );
+	AIQuery.TempQtColl1.Add( QT_GOOD );
+	
+	AIQuery.Get( owner.Go, AIQuery.TempQtColl1, AIQuery.TempGopColl1, AIQuery.TempGopColl2 );
+		
+	// JCD 9/18/03
+	// determine the number of actors in the water that we care about
+	// at this point we only ignore summons
+	int i$ = 0;
+	int iend$ = AIQuery.TempGopColl2.Size();
+	Go temp$;
+	int goodInWater$ = 0;
+	while( i$ < iend$ )
+	{
+		temp$ = AIQuery.TempGopColl2.Get(i$);
+		// must be a human party member, thusly excluding summons
+		if( temp$.IsAnyHumanPartyMember() )
+		{
+			// we only count the ones that are alive and conscious
+			if( temp$.GetLifeState() == LS_ALIVE_CONSCIOUS )
+			{
+				goodInWater$ = goodInWater$ + 1;
+			}
+		}
+		
+		i$ = i$ + 1;
+	}
+	
+	return goodInWater$;
+}
+
+// visible is whether we want to turn the water elemental visible or not
+// and character is the one that caused this change to be needed by entering or exiting the water
+// this returns zero if no change is needed, 1 if we are becoming visible and 2 if becoming invisible
+bool CheckForChange$(bool visible$)
+{	
+	//report.genericf("WATER: checking for change\n");
+	
+	int goodInWater$ = GetAliveActorsInWater$();
+		
+	// if we are trying to make the elemental invisible, and there are any good people in the water - return
+	// if we are trying to make the elemental invisible, and he is already invisible - return
+	// if we are trying to make the elemental visible and there are two people in the water - return
+	// if we are trying to make the elemental visible and he is already visible - return
+	if( 	(!visible$ && goodInWater$ > 0) ||
+		(!visible$ && !owner.go.aspect.GetIsVisible) ||
+	    	(visible$ && goodInWater$ >= 2) ||
+	    	(visible$ && owner.go.aspect.GetIsVisible) )
+	{
+		return false;
+	}
+	
+	return true;
+}
+
+// this is called whenever a player leaves or enters the water
+// however there may still be a player in the water or there may already have been one...
+ChangeElemental$(bool visible$)
+{	
+	//report.genericf("WATER: changing elemental\n");
+
+	
+	// change its recovery unit
+	if( visible$ )
+	{
+		// turn on his brain so he seems smart
+		owner.Go.Mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+		
+		// no more healing
+		#only(game)
+		[[
+		owner.go.aspect.SetLifeRecoveryUnit(0.0);
+		owner.go.aspect.SetNaturalLifeRecoveryUnit(0.0);
+		]]
+	}
+	else
+	{
+		//turn off brain so he wont try to attack any more.
+		MCPManager.MakeRequest( owner.goid, PL_FACE );
+		owner.Go.Mind.Clear();
+		MCPManager.Flush(owner.goid);
+		
+		// let him heal
+		#only(game)
+		[[
+		owner.go.aspect.SetLifeRecoveryUnit(5.0);
+		owner.go.aspect.SetNaturalLifeRecoveryUnit(5.0);
+		]]
+	}
+		
+	// change his attack status
+	owner.Go.Mind.SetMayBeAttacked(visible$);
+	
+	// clear the minds of the enemies engaged with the character
+	ClearEngaged$(owner.goid);
+	
+	// tell the elemental to move to the center of the water
+	if( !visible$ )
+	{
+		move_character$( owner.goid, sphere_center_scid$.goid );
+	}
+	
+	// make elemental change rendering
+	owner.go.aspect.SSetIsVisible(visible$);
+}
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+// chill here until we get an activate event
+startup state Wait$
+{	
+	// look for activates
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		// if we don't have the scid of this, there is nothing we can do.
+		if( sphere_center_scid$ == 0 )
+		{
+			SetState Done$;
+		}
+		
+		// activate?
+		else if(e$ == WE_REQ_ACTIVATE)
+		{
+			// check the scid
+			if( !owner.Goid.IsValid() ) { report.genericf( "owner$ is invalid!\n" ); }
+			if( !sphere_center_scid$.goid.isvalid() )   { report.genericf( "sphere_center_scid$ is invalid!\n" ); }
+
+			// jump into the start state
+			SetState Start$;
+		}
+	}
+	
+	event OnEnterState$
+	{
+		if( sphere_center_scid$ != 0 )
+		{
+			// make elemental invisible
+		//	owner.go.aspect.SSetIsVisible(false);
+		}
+	}
+}
+
+// start doing real events here
+state Start$
+{
+	// we want to appear
+	trigger OnTimer$(1)
+	{
+		//report.genericf("WATER: timer 1 firing\n");
+		// show the elemental
+		ChangeElemental$(true);
+	}
+	// we want to hide
+	trigger OnTimer$(2)
+	{
+		//report.genericf("WATER: timer 2 firing\n");
+		// hide the elemental
+		ChangeElemental$(false);
+	}
+	
+	// every 1.5 seconds we recheck for players in the water
+	trigger OnTimer$(3)
+	{
+		int goodInWater$ = GetAliveActorsInWater$();
+		if( goodInWater$ > 0 )
+		{
+			if( CheckForChange$(true) )
+			{
+				// play an effect on the elemental
+				SiegeFx.SRunScript(elemental_appear$, owner.goid, owner.goid, "", owner.Goid, WE_SPELL_SYNC_END);
+				// set the timer for the visibility change to occur, this is to make the effect look better
+				this.CreateTimer(1, 0.3);
+			}	
+		}
+		else if( CheckForChange$(false) )
+		{
+			// play an effect on the elemental
+			SiegeFx.SRunScript(elemental_disappear$, owner.goid, owner.goid, "", owner.Goid, WE_SPELL_SYNC_END);
+			// set timer for the visibility change to occur, this is to make the effect look better
+			this.CreateTimer(2, 0.1);
+		}
+		
+		this.CreateTimer(3, 1.5);
+		
+	}
+	
+	// look for activates
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		// a player has entered the water
+		if( e$ == WE_REQ_ACTIVATE )
+		{
+			if( CheckForChange$(true) )
+			{
+				// play an effect on the elemental
+				SiegeFx.SRunScript(elemental_appear$, owner.goid, owner.goid, "", owner.Goid, WE_SPELL_SYNC_END);
+				// set the timer for the visibility change to occur, this is to make the effect look better
+				this.CreateTimer(1, 0.3);
+			}
+		}
+		else if( e$ == WE_REQ_DEACTIVATE )
+		{
+			if( CheckForChange$(false) )
+			{
+				// play an effect on the elemental
+				SiegeFx.SRunScript(elemental_disappear$, owner.goid, owner.goid, "", owner.Goid, WE_SPELL_SYNC_END);
+				// set timer for the visibility change to occur, this is to make the effect look better
+				this.CreateTimer(2, 0.1);
+			}
+		}
+		// when the elemental dies, we have nothing left to do.
+		else if( e$ == WE_KILLED )
+		{
+			SetState Done$;
+		}
+	}
+
+	event OnEnterState$
+	{
+		// play an effect on the elemental
+		SiegeFx.SRunScript(elemental_appear$, owner.goid, owner.goid, "", owner.Goid, WE_SPELL_SYNC_END);
+		// set the timer for the visibility change to occur
+		this.CreateTimer(1, 0.2);
+		this.CreateTimer(3, 1.5);
+	}
+
+}
+
+// finishing state.  cleans everything up
+state Done$
+{
+	event OnEnterState$
+	{
+		// delete ourselves
+	//	PostWorldMessage(WE_REQ_DELETE, owner.Goid, owner.Goid, 1);
+	}
+}

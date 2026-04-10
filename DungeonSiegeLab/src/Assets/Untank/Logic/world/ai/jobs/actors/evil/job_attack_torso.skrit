@@ -1,0 +1,77 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: job_attack_torso.skrit
+
+	Author(s)	: Eric Tams
+
+	Purpose		: Attack job for the robo_suit torso.
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+GoMind	m_Mind$;
+Job		m_Job$;
+Goid 	m_Target$;
+
+#include "k_job_c_attack_utils"
+
+
+startup state Startup$
+{
+}
+
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$	= job$;
+	m_Go$	= job$.GetGo;
+	m_Mind$	= job$.GetGo.GetMind;
+}
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+	
+	m_Target$ = job$.GoalObject;
+	
+	MCPManager.MakeRequest( m_Go$.Goid,
+							PL_CAST_ON_OBJECT,
+							2.0,
+							0,
+							m_Target$,
+							2.0, 
+							2.0,
+							100000.0,
+							REQFLAG_DEFAULT );
+
+	MCPManager.MakeRequest( m_Go$.Goid,	PL_FACE, m_Target$, REQFLAG_NOTURN );
+							
+	SetState Wait$;
+}
+
+State Wait$
+{
+}
+
+trigger OnWorldMessage$( WE_MCP_INVALIDATED    ) { SetState Exiting$ ; }
+trigger OnWorldMessage$( WE_MCP_NODE_BLOCKED   ) { SetState Exiting$ ; }
+trigger OnWorldMessage$( WE_REQ_JOB_END        ) { SetState Exiting$ ; }
+trigger OnWorldMessage$( WE_ENGAGED_INVALID    ) { SetState Exiting$ ; }
+trigger OnWorldMessage$( WE_ENGAGED_KILLED     ) { SetState Exiting$ ; }
+trigger OnWorldMessage$( WE_ENGAGED_HIT_KILLED ) { SetState Exiting$ ; }
+trigger OnWorldMessage$( WE_DESTRUCTED         ) { SetState Exiting$ ; }
+trigger OnWorldMessage$( WE_JOB_DESTRUCTED     ) { SetState Exiting$ ; }
+
+state Exiting$
+{
+	event OnEnterState$
+	{
+		m_Job$.MarkForDeletion();
+	}
+}

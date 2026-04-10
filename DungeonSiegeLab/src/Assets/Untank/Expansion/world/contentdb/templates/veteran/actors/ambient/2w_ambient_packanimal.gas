@@ -1,0 +1,157 @@
+[t:template,n:2W_base_packanimal]
+{
+	doc = "2W_packanimal base template";
+	specializes = actor_ambient;
+    category_name = "2W_ambients";
+
+	[actor]
+	{
+		alignment = aa_good;
+		race = other;
+	}
+	[aspect]
+	{
+		gold_value = 200;
+		model = m_c_na_pa_03;
+	}
+	[body]
+	{
+		avg_move_velocity = 4.550000;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine1;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_pelvis;
+			shield_bone = bip01_l_hand;
+			weapon_bone = bip01_r_hand;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_na_pa_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=at; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files]
+				{
+					00 = dsf;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[common]
+	{
+		screen_name="Pack Animal";
+		is_multi_player = true;
+	}
+	[inventory]
+	{
+		is_pack_only = true;
+	        is_nonaggressive_pack = false;
+	}
+	[mind]
+	{
+		flee_count = 1000;
+		jat_attack_object_melee			= world\ai\jobs\common\job_attack_object_melee.skrit
+			?face_reverse				= true;
+		on_enemy_spotted_alert_friends = false;
+		on_enemy_spotted_attack = false;
+		//actor_attacks_others_in_icz = false;
+		on_enemy_entered_ocz_flee = true;
+		inner_comfort_zone_range = 4;
+		outer_comfort_zone_range = 8;
+		personal_space_range = 0.7;
+		sight_range = 10;
+	}
+}
+
+
+// plain mule
+[t:template,n:2W_packanimal]
+{
+	doc = "2W_Pack animal";
+	specializes = 2W_base_packanimal;
+	category_name = "2W_ambients";
+	[aspect]
+	{
+		gold_value = 200;
+	}
+}
+
+
+// region-specific mules
+//[t:template,n:mule_bt_r1]
+//{
+//	doc = "mule_bt_r1";
+//	specializes = base_mule;
+//    category_name = "1W_ambients";
+//    [aspect]
+//	{
+//		gold_value = 320;
+//	}
+//}
+//[t:template,n:mule_cf_r1]
+//{
+//	doc = "mule_cf_r1";
+//	specializes = base_mule;
+//    category_name = "1W_ambients";
+//    [aspect]
+//	{
+//		gold_value = 151800;
+//	}
+//}
+//[t:template,n:mule_df_r0]
+//{
+//	doc = "mule_df_r0";
+//	specializes = base_mule;
+//    category_name = "1W_ambients";
+//    [aspect]
+//	{
+//		gold_value = 16300;
+//	}
+//}
+//[t:template,n:mule_nt_r1]
+//{
+//	doc = "mule_nt_r1";
+//	specializes = base_mule;
+//    category_name = "1W_ambients";
+//    [aspect]
+//	{
+//		gold_value = 1750;
+//	}
+//}
+//[t:template,n:mule_path2dm]
+//{
+//	doc = "mule_path2dm";
+//	specializes = base_mule;
+//    category_name = "1W_ambients";
+//    [aspect]
+//	{
+//		gold_value = 955;
+//	}
+//}

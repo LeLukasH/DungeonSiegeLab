@@ -1,0 +1,45 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  hidden_reveal.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+//
+// sets revealing guys to not be visible when they enter the world.
+//
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = false;
+property string _doc$                = "hides a GO when It gets a message.";
+property string _required_component$ = "placement";
+
+property eWorldEvent	invis_msg$		= WE_ENTERED_WORLD			doc = "message to invis on";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+// local states
+
+startup state Start$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		#only(game)
+		[[
+		if ( e$ == invis_msg$)
+		{
+			if( !owner.Go.Mind.ActorAutoFidgets )
+			{
+				owner.Go.Aspect.AspectHandle.SetHideMeshFlag( true );
+			}
+		}
+		]]
+	}
+}

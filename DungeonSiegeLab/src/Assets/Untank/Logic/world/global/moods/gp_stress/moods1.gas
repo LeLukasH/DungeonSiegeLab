@@ -1,0 +1,553 @@
+[mood_setting*]
+{
+	mood_name				= gp_stress_start_r1_start;
+	transition_time			= 1.0f;
+	interior				= false;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 30.0f;
+		fog_far_dist		= 49.0f;
+		fog_lowdetail_near_dist		= 30.0f;
+		fog_lowdetail_far_dist		= 45.0f;
+		fog_color			= 0xFF646464;
+		fog_density			= 0.5f;
+	}
+
+	[wind]
+	{
+		wind_velocity		= 0.5f;
+		wind_direction		= 0.0f;
+	}
+
+	[music]
+	{
+		ambient_track		= "";
+		standard_track		= "";
+		standard_repeat_delay = 0.0f;
+		room_type			= rt_generic;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_start_r1_start_teleport;
+	transition_time			= 20.0f;
+	interior				= false;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 30.0f;
+		fog_far_dist		= 49.0f;
+		fog_lowdetail_near_dist		= 30.0f;
+		fog_lowdetail_far_dist		= 45.0f;
+		fog_color			= 0xFF646464;
+		fog_density			= 0.5f;
+	}
+
+	[wind]
+	{
+		wind_velocity		= 0.5f;
+		wind_direction		= 0.0f;
+	}
+
+	[music]
+	{
+		ambient_track		= "";
+		standard_track		= "";
+		standard_repeat_delay = 0.0f;
+		room_type			= rt_generic;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_start_r1_1;
+	transition_time			= 5.0f;
+	interior				= false;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 30.0f;
+		fog_far_dist		= 49.0f;
+		fog_lowdetail_near_dist		= 30.0f;
+		fog_lowdetail_far_dist		= 45.0f;
+		fog_color			= 0xFF646464;
+		fog_density			= 0.5f;
+	}
+
+	[wind]
+	{
+		wind_velocity		= 0.5f;
+		wind_direction		= 0.0f;
+	}
+
+	[music]
+	{
+		ambient_track		= "";
+		standard_repeat_delay = 0.0f;
+		standard_track		= "s_m_BesiegedTown_02";
+		room_type			= rt_generic;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_start_r1_1_teleport;
+	transition_time			= 20.0f;
+	interior				= false;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 30.0f;
+		fog_far_dist		= 49.0f;
+		fog_lowdetail_near_dist		= 30.0f;
+		fog_lowdetail_far_dist		= 45.0f;
+		fog_color			= 0xFF646464;
+		fog_density			= 0.5f;
+	}
+
+	[wind]
+	{
+		wind_velocity		= 0.5f;
+		wind_direction		= 0.0f;
+	}
+
+	[music]
+	{
+		ambient_track		= "";
+		standard_repeat_delay = 0.0f;
+		standard_track		= "s_m_BesiegedTown_02";
+		room_type			= rt_generic;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_start_r1_2;
+	transition_time			= 7.0f;
+	interior				= false;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 23.0f;
+		fog_far_dist		= 48.0f;
+		fog_lowdetail_near_dist		= 30.0f;
+		fog_lowdetail_far_dist		= 45.0f;
+		fog_color			= 0xFF5a585a;
+		fog_density			= 0.5f;
+	}
+
+	[wind]
+	{
+		wind_velocity		= 0.7f;
+		wind_direction		= 0.0f;
+	}
+	[rain]
+	{
+		rain_density		= 225.0f;
+	}
+	[music]
+	{
+		ambient_track		= "";
+		standard_repeat_delay = 0.0f;
+		standard_track		= "s_m_BesiegedTown_02";
+		room_type			= rt_generic;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_start_r1_3;
+	transition_time			= 6.0f;
+	interior				= false;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 21.0f;
+		fog_far_dist		= 48.0f;
+		fog_lowdetail_near_dist		= 30.0f;
+		fog_lowdetail_far_dist		= 45.0f;
+		fog_color			= 0xFF505650;
+		fog_density			= 0.5f;
+	}
+
+	[wind]
+	{
+		wind_velocity		= 0.5f;
+		wind_direction		= 0.0f;
+	}
+	[rain]
+	{
+		rain_density		= 300.0f;
+	}
+	[music]
+	{
+		ambient_track		= "";
+		standard_repeat_delay = 0.0f;
+		standard_track		= "s_m_BesiegedTown_02";
+		room_type			= rt_generic;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_df_r1_1;
+	transition_time			= 1.0f;
+	interior				= true;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 30.0f;
+		fog_far_dist		= 48.0f;
+		fog_lowdetail_near_dist		= 30.0f;
+		fog_lowdetail_far_dist		= 45.0f;
+		fog_color			=  0xFF1d271d;
+		fog_density			= 0.5f;
+	}
+
+	[rain]
+	{
+		rain_density		= 25.0f;
+	}
+
+	[wind]
+	{
+		wind_velocity		= 1.0f;
+		wind_direction		= 0.0f;
+	}
+
+	[music]
+	{
+		ambient_track		= "s_e_ambient_woods_01";
+		standard_repeat_delay	= 10.0f;
+		standard_track		= "s_m_Path2Crypts_01";
+		room_type			= rt_generic;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_dun_df_r1;
+	transition_time			= 1.0f;
+	interior				= true;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 28.0f;
+		fog_far_dist		= 39.0f;
+		fog_lowdetail_near_dist		= 20.0f;
+		fog_lowdetail_far_dist		= 25.0f;
+		fog_color			= 0xFF000000;
+		fog_density			= 0.5f;
+	}
+
+	[music]
+	{
+		ambient_track		= "s_e_ambient_crypt";
+		standard_repeat_delay	= 5.0f;
+		standard_track		= "s_m_Crypts_02";
+		room_type			= rt_stonecorridor;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_sf_r1_1;
+	transition_time			= 1.0f;
+	interior				= true;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+	[fog]
+	{
+		fog_near_dist		= 25.0f;
+		fog_far_dist		= 40.0f;
+		fog_lowdetail_near_dist		= 25.0f;
+		fog_lowdetail_far_dist		= 35.0f;
+		fog_color			= 0xFFa0a0b0;
+		fog_density			= 0.5f;
+	}
+
+	// Snowing
+	[snow]
+	{
+		snow_density		= 250;
+	}
+
+	[wind]
+	{
+		wind_velocity		= 0.75f;
+		wind_direction		= 0.0f;
+	}
+	
+	[rain] {} // empty [rain] block for lightning manipulation
+
+	[music]
+	{
+		ambient_track		= "";
+		standard_repeat_delay = 5.0f;
+		standard_track		= "s_m_Glacern_02";
+		room_type			= rt_generic;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_sf_r1_1_a;
+	transition_time			= 0.5f;
+	interior				= true;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+	[fog]
+	{
+		fog_near_dist		= 25.0f;
+		fog_far_dist		= 40.0f;
+		fog_lowdetail_near_dist		= 25.0f;
+		fog_lowdetail_far_dist		= 35.0f;
+		fog_color			= 0xFFa0a0b0;
+		fog_density			= 0.5f;
+	}
+	[wind]
+	{
+		wind_velocity		= 0.75f;
+		wind_direction		= 0.0f;
+	}
+	
+	[rain] {} // empty [rain] block for lightning manipulation
+
+	[music]
+	{
+		ambient_track		= "";
+		standard_repeat_delay = 5.0f;
+		standard_track		= "s_m_Glacern_02";
+		room_type			= rt_generic;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_sf_r1_2;
+	transition_time			= 1.0f;
+	interior				= true;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 28.0f;
+		fog_far_dist		= 42.0f;
+		fog_lowdetail_near_dist		= 20.0f;
+		fog_lowdetail_far_dist		= 25.0f;
+		fog_color			= 0xFF000000;
+		fog_density			= 0.5f;
+	}
+
+	[music]
+	{
+		ambient_track		= "s_e_ambient_crypt";
+		standard_repeat_delay	= 5.0f;
+		standard_track		= "s_m_Crypts_02";
+		room_type			= rt_stonecorridor;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_dun_sf_r1;
+	transition_time			= 0.6f;
+	interior				= true;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 28.0f;
+		fog_far_dist		= 39.0f;
+		fog_lowdetail_near_dist		= 20.0f;
+		fog_lowdetail_far_dist		= 25.0f;
+		fog_color			= 0xFF000000;
+		fog_density			= 0.5f;
+	}
+
+	[music]
+	{
+		ambient_track		= "s_e_ambient_crypt";
+		standard_repeat_delay	= 5.0f;
+		standard_track		= "s_m_Crypts_02";
+		room_type			= rt_stonecorridor;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_st_r1_1;
+	transition_time			= 9.0f;
+	interior				= true;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+	
+	[fog]
+	{
+		fog_near_dist		= 28.0f;
+		fog_far_dist		= 50.0f;
+		fog_lowdetail_near_dist		= 22.0f;
+		fog_lowdetail_far_dist		= 45.0f;
+		fog_color			= 0xFF977e64;
+		fog_density			= 0.5f;
+	}
+
+	[music]
+	{
+		ambient_track		= "";
+		standard_repeat_delay	= 3.0f;
+		standard_track		= "s_m_FortKroth_01";
+		room_type			= rt_generic;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_st_r1_2;
+	transition_time			= 1.0f;
+	interior				= true;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 28.0f;
+		fog_far_dist		= 50.0f;
+		fog_lowdetail_near_dist		= 20.0f;
+		fog_lowdetail_far_dist		= 45.0f;
+		fog_color			= 0xFF977e64;
+		fog_density			= 0.5f;
+	}
+
+	[music]
+	{
+		ambient_track		= "";
+		standard_repeat_delay	= 3.0f;
+		standard_track		= "s_m_FortKroth_01";
+		room_type			= rt_generic;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_st_cave_r1;
+	transition_time			= 0.6f;
+	interior				= true;
+
+	[frustum]
+	{
+		frustum_width		= 45.0f;
+		frustum_height		= 60.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 30.0f;
+		fog_far_dist		= 47.0f;
+		fog_lowdetail_near_dist		= 25.0f;
+		fog_lowdetail_far_dist		= 40.0f;
+		fog_color			= 0xFF000000;
+		fog_density			= 0.5f;
+	}
+
+	[music]
+	{
+		ambient_track		= "s_e_ambient_crypt";
+		standard_repeat_delay	= 5.0f;
+		standard_track		= "s_m_Crypts_02";
+		room_type			= rt_stonecorridor;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= gp_stress_teleport;
+	transition_time			= 2.0f;
+	interior				= true;
+
+	[frustum]
+	{
+		frustum_width		= 5.0f;
+		frustum_height		= 60.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 20.0f;
+		fog_far_dist		= 25.0f;
+		fog_lowdetail_near_dist		= 15.0f;
+		fog_lowdetail_far_dist		= 20.0f;
+		fog_color			= 0xFF000000;
+		fog_density			= 0.5f;
+	}
+
+	[rain] {} // empty [rain] block for lightning manipulation
+
+	[music]
+	{
+		ambient_track		= "";
+		//standard_track		= "s_m_Battle"; //placeholder music
+		room_type			= rt_generic;
+	}
+}

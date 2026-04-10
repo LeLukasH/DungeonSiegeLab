@@ -1,0 +1,272 @@
+
+[t:template,n:2W_dsx_spider_stalagnid]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_spider_stalagnid";
+	specializes = actor_evil;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  25.1, 0;
+			intelligence =  9.6, 0;
+			dexterity = 16.2, 0;
+			melee =  45,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 29925;
+		life = 805;
+		max_life = 805;
+		mana = 138;
+		max_mana = 138;
+		model = m_c_edm_sn_pos_1;
+		[voice]
+		{
+			[die]	{ priority = high; * = s_e_die_grub_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 253;
+		damage_min = 165.6;
+	}
+	[body]
+	{
+		avg_move_velocity = 1.570000;
+		[bone_translator]
+		{
+			body_anterior = bone04;
+			body_mid = bone02;
+			body_posterior = bone42;
+			kill_bone = bone02;
+			shield_bone = bone01;
+			weapon_bone = bone04;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_sn_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=at; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_misc]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files]
+				{
+					slep = ds;
+					wake = rv;
+				}
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=ds; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[common] { screen_name="Stalagnid"; }
+	[defend] { defense=364.2; }
+	[mind]
+	{
+		jat_startup = world\ai\jobs\common\job_startup_reveal.skrit;
+		actor_auto_fidgets = false;
+		melee_engage_range = 12;
+		personal_space_range = 0.7;
+		ranged_engage_range = 12.0;
+		sight_range = 13.0;
+	}
+	[physics]
+	{
+		explode_when_killed = true;
+		break_effect = blood_mist;
+		break_sound = s_e_meat_explosion;
+		gib_gore_good = true;
+		[break_particulate]
+		{
+			frag_glb_stalagnid_01 = 1;
+			frag_glb_stalagnid_02 = 3;
+			frag_glb_stalagnid_03 = 3;
+			frag_glb_stalagnid_04 = 3;
+			frag_glb_stalagnid_05 = 1;
+		}
+	}
+}
+
+
+[t:template,n:2W_dsx_spider_stalagnid_island]
+//balanced to Level 12
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_spider_stalagnid_island";
+	specializes = actor_evil;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  31.4, 0;
+			intelligence =  10.7, 0;
+			dexterity = 16.4, 0;
+			melee =  52,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 42728;
+		life = 520;
+		max_life = 520;
+		mana = 48;
+		max_mana = 48;
+		model = m_c_edm_sn_pos_1;
+		scale_base = 0.5;
+		[voice]
+		{
+			[die]	{ priority = high; * = s_e_die_grub_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 202.4;
+		damage_min = 144;
+	}
+	[body]
+	{
+		avg_move_velocity = 3.570000;
+		[bone_translator]
+		{
+			body_anterior = bone04;
+			body_mid = bone02;
+			body_posterior = bone42;
+			kill_bone = bone02;
+			shield_bone = bone01;
+			weapon_bone = bone04;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_sn_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=at; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_misc]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files]
+				{
+					slep = ds;
+					wake = rv;
+				}
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=ds; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[common] { screen_name="Stalagnid Impaler"; }
+	[defend] { defense=292; }
+[inventory]
+{
+	drop_at_use_point = true;
+	[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 4, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 2281;
+				max = 4436;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_large;
+				il_main = potion_health_large;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/42;
+				il_main = #armor/8-100;
+				il_main = #*/42;
+			}
+		}
+	}
+}
+	[mind]
+	{
+		jat_startup = world\ai\jobs\common\job_startup_reveal.skrit;
+		actor_auto_fidgets = false;
+		melee_engage_range = 12;
+		personal_space_range = 0.7;
+		ranged_engage_range = 12.0;
+		sight_range = 13.0;
+	}
+	[physics]
+	{
+		explode_when_killed = true;
+		break_effect = blood_mist;
+		break_sound = s_e_meat_explosion;
+		gib_gore_good = true;
+		[break_particulate]
+		{
+			frag_glb_dsx_stalagnid_01 = 1;
+			frag_glb_dsx_stalagnid_02 = 3;
+			frag_glb_dsx_stalagnid_03 = 3;
+			frag_glb_dsx_stalagnid_04 = 3;
+			frag_glb_dsx_stalagnid_05 = 1;
+		}
+	}
+}

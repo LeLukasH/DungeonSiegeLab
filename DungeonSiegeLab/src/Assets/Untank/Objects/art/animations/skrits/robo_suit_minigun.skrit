@@ -1,0 +1,182 @@
+// Animation Skrit: robo_suit_flamethrower
+//
+// History:
+//		VERSION 1.0:	Initial implementation
+//		VERSION 2.0:	Added support to aim at an enemy.
+//
+// Custon skrit made just for the robo_suit
+//												
+
+property int MAJORVERSION$ = 2;
+property int MINORVERSION$ = 0;
+
+owner = Aspect;
+
+float angle$ = 3.14;
+float time$ = 0;
+float speed$ = 0.5;
+float fire_time$ = 2.0;
+float pause_time$ = 0.0;
+goid Target$;
+goid ParentTarget$;
+goid m_Owner$;
+
+/////////////////////////////////////////////////////////////////////////////
+// Utilities
+
+float Bound$ ( float a$ )
+{
+	if( a$ > 3.14159)
+ 	{
+ 		return( a$ - 6.2832 );
+ 	} else if ( a$ < -3.14159 ) {
+ 		return( a$ + 6.2832 );
+ 	}
+ 	return( a$ );
+}
+
+float ComputeOrbit$ ( Goid targ$ )
+{
+	if( targ$.IsValid && m_Owner$.IsValid() )
+	{
+		if( m_Owner$.Go.Parent != NULL )
+		{
+			return GoMath.OrbitAngleToTarget( m_Owner$.Go.Parent.Goid, targ$ );
+		}
+	}
+	return( 0.0 );
+}
+
+RestartChore$ ( int /* newanim$ */ )
+{ 
+	Target$ = m_Owner$.Go.Mind.EngagedObject;
+	if( owner.parent != NULL )
+	{
+		ParentTarget$ = owner.parent.Goid.Go.Mind.EngagedObject;
+	}
+}
+
+startup state InitialState$ 
+{
+	event OnStartChore$ ( int /*subanim$*/, int /*flags$*/ )
+	{
+		m_Owner$ = owner.Goid;
+		RestartChore$ ( 1 );
+		SetState Animating$;
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// States
+
+state Animating$	
+{
+ 
+	event OnStartChore$ ( int /*subanim$*/, int /*flags$*/ )
+	{
+		m_Owner$ = owner.Goid;
+		RestartChore$ ( 1 );
+		pause_time$ = math.RandomFloat( 0, 5.0 );
+ 	}
+
+	event OnUpdate$( float delta_t$ )
+	{
+		if( owner.parent == NULL ) // our parent is dead, we will be destroyed shortly
+		{
+			return;
+		}
+		pause_time$ += delta_t$;
+		fire_time$ += delta_t$;
+		time$ += delta_t$;
+		
+		if( pause_time$ < 5.0 )
+		{	
+			float new_angle$ = angle$;
+	 	 	if( !ParentTarget$.Isvalid )
+			{
+				if( owner.parent != NULL )
+				{
+					ParentTarget$ = owner.parent.Goid.Go.Mind.EngagedObject;
+				}
+			}
+	 	 	float new_parent_angle$ = 3.1416 + ComputeOrbit$ ( ParentTarget$ );
+	
+			float turn_amount$ = 2.0 * speed$ * delta_t$;
+	 	 	
+	 	 	new_angle$ = ComputeOrbit$ ( Target$ ) - new_parent_angle$;
+	
+	// 	 	report.genericf( "flamethrower new_angle: %g\n", new_angle$ );
+			
+	 	 	float dif$ = (new_angle$ - angle$);
+			
+			if ( Math.Abs( dif$ ) > 3.14159 )
+			{
+				if (new_angle$ > angle$)
+				{
+					angle$ += 6.2832;
+				} else {
+					new_angle$ += 6.2832;
+				}
+				dif$ = (new_angle$ - angle$);
+			}
+			
+			turn_amount$ = Math.MinFloat( Math.Abs( dif$ ) , turn_amount$);
+			
+			if( dif$ < 0 )
+			{
+				angle$ -= turn_amount$;
+			} else {
+				angle$ += turn_amount$;
+			}
+			
+			angle$ = Bound$( angle$ );
+		
+//			report.genericf( "angle: %g\n", angle$ );
+			
+			if( (angle$ < 3.1 ) && ( angle$ > -2.2 ) )
+			{
+				if( angle$ > .1 )
+				{
+					angle$ = 3.1;
+				} else {
+					angle$ = -2.2;
+				}
+			}			
+
+	//		report.genericf( "dif: %g Fire_time %g\n", dif$, fire_time$ );
+			if( (Math.Abs( dif$ ) < 0.1) && ( fire_time$ > owner.goid.Go.Attack.ReloadDelay ))
+			{
+				fire_time$ = 0.0;
+				PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  1, 0 );
+			}
+		}
+		
+		
+		float jiggle$ = 0.0;
+		if( delta_t$ > 0.01 )
+		{
+			if( fire_time$ < 1.0 )
+			{
+				owner.RotateBoneZ("muzzel_bone", 12.0*time$);
+				jiggle$ = Math.RandomFloat( -0.12, 0.12);
+			} 
+			else if( fire_time$ < 1.5 )
+			{
+				owner.RotateBoneZ("muzzel_bone", 6.0*time$);
+				jiggle$ = Math.RandomFloat( -0.07, 0.07);
+			}
+		}		
+		
+			
+//		report.genericf( "minigun Angle: %g\n", angle$ );
+		owner.RotateBoneZ("L_elbow_rot_bone", 3.1416 + angle$);
+		owner.RotateBoneX("L_shoulder_rot", 0.866 + jiggle$);
+		owner.RotateBoneX("L_upperarm_hinge", -0.866 - jiggle$);
+		owner.RotateBoneX("L_lowerarm_hinge", -1.37);
+		
+		if( pause_time$ > 10.0 )
+		{	
+			pause_time$ = 0.0;
+		}
+ 	}
+}

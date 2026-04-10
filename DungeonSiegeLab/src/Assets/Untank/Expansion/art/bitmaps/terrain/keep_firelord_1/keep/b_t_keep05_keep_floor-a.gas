@@ -1,0 +1,5 @@
+[t:tsd,n:b_t_keep05_keep_floor-a]
+{
+	layer1texture1 = b_t_keep05_keep_floor-a;
+  i texturedetail = 1;
+}

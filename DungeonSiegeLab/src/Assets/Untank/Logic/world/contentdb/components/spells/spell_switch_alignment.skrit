@@ -1,0 +1,261 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_switch_alignment.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// This skrit is made to modify the alignment of the target. The normal version
+// of the spell just creates the omni version.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string 			effect_script$		= ""			doc = "Name of the SiegeFx script that will be providing the visual.";
+property string 			effect_params$		= ""   			doc = "Parameters to send to SiegeFx script";
+                                                        		
+property float  			alignment_freq_min$	= -1.0			doc = "how often to switch alignments";
+property float  			alignment_freq_max$	= -1.0			doc = "how often to switch alignments";
+
+property eActorAlignment	Alignment1$			= AA_GOOD		doc = "First alignment to choose from";
+property eActorAlignment	Alignment2$			= AA_NEUTRAL	doc = "Second alignment to choose from";
+property eActorAlignment	Alignment3$			= AA_EVIL		doc = "Third alignment to choose from";
+
+property int				Num_Alignments$		= 3				doc = "Number of alignments to choose from";
+property string 			description$		= ""			doc = "Description of enchantment being applied";
+property string 			screen_name$		= ""			doc = "Name of effect to use as a screen name.";
+property string 			state_name$			= "align"		doc = "Name of effect to use as a generic state.";
+
+property bool				allow_player_cast$	= false			doc = "allow this spell to be cast on a player";
+property string 			immunity$							doc = "If the target contains this membership then it is immune to this spell.";
+property bool				freeze$				= false			doc = "freeze instead of switch alignment";
+
+
+owner = GoSkritComponent;
+
+eActorAlignment orig_alignment$;
+Goid			caster$;
+Goid			target$;
+float 			spell_duration$;
+SFxSID			active_effect$ = 0;
+			
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) {
+
+			////////////////////
+			// Normal Go
+			
+			caster$ = msg$.GetSendFrom();
+			
+			if( Owner.go.Parent != NULL )
+			{
+				// create Omni version of the spell.
+				GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.go.Parent.Goid, owner.goid );
+				cloneReq$.Omni = true;
+				Goid new_spell$ = GoDb.SCloneGo( cloneReq$ );
+				
+				// send Omni version an Activate to get it started.
+				PostWorldMessage( WE_REQ_ACTIVATE, caster$, new_spell$, msg$.GetData1(), 0 );
+			}
+			
+			// delete normal version of the spell.
+			SetState Finished$;
+		
+		} else if ( e$ == WE_REQ_ACTIVATE ) {
+			
+			////////////////////
+			// Omni Go
+			
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+			
+			if( !target$.IsValid || !caster$.Isvalid )
+			{
+				SetState CleanUp$;
+				return;
+			}
+			
+			spell_duration$ = owner.Go.Magic.EvaluateEffectDuration(caster$.Go, target$.Go);
+			orig_alignment$ = target$.go.actor.getalignment;
+			
+			if( target$.Go.Actor.HasGenericState( state_name$ ) ) 
+			{
+				SetState Abort$;
+				return;
+			}
+			
+			if( !StringTool.IsEmpty( immunity$ ) )
+			{
+				if( target$.Go.Common.Membership.Contains( immunity$ ) )
+				{
+					SetState Abort$;
+					return;
+				}
+			}
+			
+			if( ( target$.Go.Player.Controller != PC_COMPUTER  ) && !allow_player_cast$ )
+			{
+				SetState Abort$;
+				return;
+			}
+				
+			// Start the visual effect
+			active_effect$ = SiegeFx.SRunMpScript( effect_script$, target$, caster$, effect_params$, owner.Goid, e$ );
+			this.CreateTimer( 2, spell_duration$ );
+			this.SetTimerGlobal( 2, true );
+			
+			GoDb.StartWatching( owner.Goid, target$);
+			
+			SetState Loop$;
+		}
+	}
+}
+
+
+state Loop$
+{	
+	////////////////////
+	// Omni Go
+			
+	event OnGoHandleCcMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( ( e$ == WE_KILLED ) && ( target$ == msg$.GetSendTo() ) ) 
+		{
+			SetState Cleanup$;
+		}
+	}
+	
+	trigger OnGoHandleCCMessage$( WE_DAMAGED )
+	{
+		if( !freeze$ )
+		{
+			SetState Cleanup$;
+		}
+	}
+	
+	trigger OnTimer$( 1 )
+	{
+		SetState Loop$;
+	}
+	trigger OnTimer$( 2 )
+	{
+		SetState CleanUp$;
+	}
+	event OnEnterState$
+	{	
+		if( !target$.isvalid )
+		{
+			SetState Finished$;
+			return;
+		} 
+		
+		if( freeze$ )
+		{
+			// Add the effected state so this can only happen once
+			target$.Go.Actor.SAddGenericState( state_name$, description$, spell_duration$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+		
+			// stop moving
+			target$.Go.Aspect.AspectHandle.SetLockMeshFlag(true);
+			
+			//turn off brain so he wont try to attack any more.
+			MCPManager.MakeRequest( target$, PL_FACE );
+			target$.Go.Mind.Clear();
+			MCPManager.Flush(target$);
+			return;
+		}
+		
+		if( ( target$.go.aspect.lifestate == LS_ALIVE_CONSCIOUS ) || ( target$.go.aspect.lifestate == LS_ALIVE_UNCONSCIOUS ) )
+		{
+			int rand_align$ = Math.RandomInt( 0, Math.MaxInt( 0, Num_Alignments$-1 ) );
+			
+			if (rand_align$ == 0) {
+				target$.Go.Actor.ssetalignment( alignment1$ );
+			} else if (rand_align$ == 1) {
+				target$.Go.Actor.ssetalignment( alignment2$ );
+			} else if (rand_align$ == 2) {
+				target$.Go.Actor.ssetalignment( alignment3$ );
+			}
+			target$.Go.Mind.SDoJob( MakeJobReq( JAT_STOP, JQ_ACTION, QP_CLEAR, AO_REFLEX ));
+			target$.Go.Mind.ResetSensors();
+			
+			// Add the effected state so this can only happen once
+			target$.Go.Actor.SAddGenericState( state_name$, description$, spell_duration$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+			
+			if ( (alignment_freq_min$ > 0.0) && (alignment_freq_max$ > 0.0) )
+			{
+				float random_delay$ = Math.RandomFloat( alignment_freq_min$, alignment_freq_max$ );
+				this.CreateTimer( 1, random_delay$ );
+			}
+		} else	{
+			SetState CleanUp$;
+		}
+		
+	}
+}
+
+state Abort$
+{
+	////////////////////
+	// Omni Go
+			
+	event OnEnterState$
+	{
+		report.generic("abort\n");
+		// Refund the players mana
+		Rules.ChangeMana( caster$, owner.go.getmagic.manacost );
+
+		SetState Finished$;
+	}
+}
+
+state CleanUp$
+{
+	////////////////////
+	// Omni Go
+			
+	event OnEnterState$
+	{
+		if( target$.isvalid )
+		{
+			if( freeze$ )
+			{
+				target$.Go.Aspect.AspectHandle.SetLockMeshFlag( false );
+				target$.Go.Mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+			}
+		
+			GoDb.StopWatching( owner.Goid, target$);
+			
+			target$.go.actor.ssetalignment( orig_alignment$ );
+			target$.Go.Actor.SRemoveGenericState( state_name$ );	
+			
+			if( ( target$.go.aspect.lifestate == LS_ALIVE_CONSCIOUS ) || 
+				( target$.go.aspect.lifestate == LS_ALIVE_UNCONSCIOUS ) )
+			{
+				target$.Go.Mind.SDoJob( MakeJobReq( JAT_STOP, JQ_ACTION, QP_CLEAR, AO_REFLEX ));
+				target$.Go.Mind.ResetSensors();
+			}
+			if (active_effect$ != 0)
+			{
+				SiegeFx.SStopScript( active_effect$ );
+			}
+		}
+	}
+}
+
+state Finished$
+{
+	////////////////////
+	// Both Gos
+			
+	event OnEnterState$
+	{
+		// Get rid of any temporary storage
+		SiegeFx.ClearVariables( owner.goid );
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

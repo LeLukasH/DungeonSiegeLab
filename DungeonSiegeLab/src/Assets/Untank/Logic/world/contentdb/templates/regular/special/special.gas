@@ -1,0 +1,676 @@
+///////////////////////////////////////////////////////////////
+// waterwheel
+
+[t:template,n:waterwheel_grs]
+{
+	specializes = non_interactive;
+	doc			= "Waterwheel";
+	category_name   = "node";
+
+	aspect:model = m_i_frm_waterwheel;
+
+	[body]
+	{
+		initial_chore = chore_default;
+
+		[chore_dictionary]
+		{
+			[chore_default]
+			{
+				skrit=rotatex?rpm=-8.0;
+			}
+		}
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+// waypoints
+
+[t:template,n:waypoint_moving]
+{
+	specializes = point;
+	doc = "waypoint";
+	category_name       = "gui_helper";
+
+	common:screen_name = "Movement Waypoint";
+}
+
+[t:template,n:click_waypoint]
+{
+	specializes = point;
+	doc = "click waypoint";
+	category_name       = "gui_helper";
+
+	[aspect]
+	{
+		model =	m_i_glb_waypoint-10;
+	}
+
+	common:screen_name = "Click Waypoint";
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// faders
+
+[t:template,n:fader_proxy]
+{
+	specializes = special;
+
+	[common]
+	{
+		forced_expiration_class = immediate;
+		auto_expiration_class = immediate;
+	}
+
+	[fader]  {  }
+	[placement]  {  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+[t:template,n:unknown]
+{
+	specializes = special;
+
+	[placement]	{  }
+	[aspect]	{  }
+}
+
+[t:template,n:none]
+{
+	specializes = special;
+
+	[placement]	{  }
+
+	aspect:textures:0 = b_a_err-badstyle;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//  Obfuscation cap for hiding areas
+
+[t:template,n:cap_black]
+{
+	specializes = non_interactive_nonblocking;
+	doc			= "cap_black";
+	category_name       ="node";
+
+	aspect:model		= m_i_glb_cap;
+	aspect:textures:0	= b_t_black;
+	aspect:megamap_icon	= <aspect_mesh>;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+[t:template,n:mana_shrine]
+{
+	specializes = point;
+	doc			= "shrine_mana effect";
+	category_name   = "special";
+
+	[common]
+	{
+		screen_name = "Mana Shrine";
+		rollover_display = true;
+	}
+	[gizmo]
+	{
+		model				=	m_i_glb_object-gogen;
+		texture				=	;
+		diffuse_color		=	.2, 0, 1.0;
+		use_diffuse_color	=	true;
+	}
+	[aspect]
+	{
+		model						= m_i_glb_object-gogen;
+
+		is_visible					= false;
+		draw_selection_indicator	= false;
+		dynamically_lit				= false;
+		force_no_render				= true;
+		bounding_volume_scale       = 4.0;
+		is_selectable				= true;
+	}
+	[respawn_shrine]
+	{
+		resurrect_msg = WE_REQ_ACTIVATE;
+		use_data = true;
+	}
+	[fountain]
+	{
+		effect_script	= "";
+		repeat_freq 	= -1.0;
+		heal_freq 		= -1.0;
+		heal_amount		= 1.0;
+		use_msg			= WE_REQ_ACTIVATE;
+		use_data1		= true;
+		heal_life		= false;
+	}
+	[effect_manager_server]
+	{
+		repeat_rate = 5.5;
+		effect_name	= mana_shrine2;
+
+		rep_effect_name	= mana_shrine_balls;
+
+		repeat = true;
+
+		start_msg = WE_REQ_ACTIVATE;
+		stop_msg = WE_REQ_DEACTIVATE;
+	}
+}
+
+[t:template,n:life_shrine]
+{
+	specializes = point;
+	doc			= "shrine_health effect";
+	category_name       = "special";
+
+	[common]
+	{
+		screen_name = "Life Shrine";
+		rollover_display = true;
+	}
+	[gizmo]
+	{
+		model				=	m_i_glb_object-gogen;
+		texture				=	;
+		diffuse_color		=	1.0, 0, .2;
+		use_diffuse_color	=	true;		
+	}
+	[aspect]
+	{
+		model						= m_i_glb_object-gogen;
+		is_visible					= false;
+		draw_selection_indicator	= false;
+		dynamically_lit				= false;
+		force_no_render				= true;
+		bounding_volume_scale       = 4.0;
+		is_selectable				= true;
+	}
+	[respawn_shrine]
+	{
+		resurrect_msg = WE_REQ_ACTIVATE;
+		use_data = true;
+	}
+	[fountain]
+	{
+		effect_script	= "";
+		repeat_freq 	= -1.0;
+		heal_freq 		= -1.0;
+		heal_amount		= 1.0;
+		use_msg			= WE_REQ_ACTIVATE;
+		use_data1		= true;
+		heal_life		= true;
+	}
+	[effect_manager_server]
+	{
+		repeat_rate = 5.5;
+		effect_name	= life_shrine2;
+
+		rep_effect_name	= life_shrine_balls;
+
+		repeat = true;
+
+		start_msg = WE_REQ_ACTIVATE;
+		stop_msg = WE_REQ_DEACTIVATE;
+	}
+}
+
+[t:template,n:respawn_statue]
+{
+	specializes 		= interactive;
+	doc 				= "statue_respawn";
+	category_name       = "interactive";
+
+	[aspect]
+	{
+		model = m_i_glb_statue-azunai-02;
+		is_ghost_usable = true;
+		draw_selection_indicator = false;
+	}
+
+	[respawn_shrine] { }
+
+	[common]
+	{
+		screen_name      = "Resurrection Shrine";
+		is_multi_player  = true;
+		is_single_player = false;
+		rollover_display = true;
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("respawn_shrine");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+			}
+			[*]
+			{
+				action* = call_sfx_script("respawn_shrine_charge");
+				condition* = receive_world_message("we_req_use");
+			}
+		}
+	}
+}
+
+[t:template,n:point_snapper]
+{
+	specializes   = point;
+	doc           = "point_snapper";
+	category_name = "special";
+	extra_doc     = "snap object to self when requested -- might not work";
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0.2, 0.8, 0.8;
+		use_diffuse_color	=	true;
+	}
+
+	[point_snapper]
+	{
+	}
+}
+
+[t:template,n:chipper]
+{
+	specializes = point;
+	doc			= "Chipper Spew point";
+
+	category_name       = "special";
+
+	[placement]	{}
+	[common] 	{}
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0.5, 0.5, 0.0;
+		use_diffuse_color	=	true;
+	}
+	[chipper] {}
+}
+
+[t:template,n:use_point]
+{
+	specializes = special;
+	doc = "Use Point";
+	category_name =    "special";
+	
+	[aspect]
+	{
+		lodfi_upper 				= -1;
+		lodfi_lower 				= -1;
+		is_visible 					= false;
+		model 						= m_i_glb_emitter;
+		draw_selection_indicator	= false;
+		dynamically_lit				= false;
+		force_no_render 			= true;
+	}
+	[common]
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+	}
+
+	[placement]		{  }
+	[gizmo]			{ model = m_i_glb_object-gogen;  texture = b_i_glb_yellow; }
+}
+
+[t:template,n:spawnpoint]
+{
+	specializes 		= special;
+	doc					= "Spawn point";
+	extra_doc			= "Spawn point for Use with Advanced Generators";
+	category_name       = "1w_generator";
+
+	[aspect]
+	{
+		lodfi_upper 				= -1;
+		lodfi_lower 				= -1;
+		is_visible 					= false;
+		model 						= m_i_glb_emitter;
+		draw_selection_indicator	= false;
+		dynamically_lit				= false;
+		force_no_render 			= true;
+	}
+	[common]
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+	}
+	[placement] {}
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0.0, 1, 0.0;
+		use_diffuse_color	=	true;
+	}
+}
+
+[t:template,n:interest_point]
+{
+	specializes = special;
+	doc = "Interest Point";
+	category_name =    "special";
+	[aspect]
+	{
+		is_visible					= false;
+		draw_selection_indicator	= false;
+		dynamically_lit				= false;
+		force_no_render				= true;
+	}
+	[common]
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+		membership = "interest";
+	}
+	[placement]		{  }
+	[gizmo]
+	{
+		model				=	m_i_glb_object-gogen;
+		texture				=	;
+		diffuse_color		=	1.0, 0.5, 0.0;
+		use_diffuse_color	=	true;
+	}
+}
+
+[t:template,n:blocking_object]
+{
+	specializes = special;
+	doc = "path blocker";
+	category_name =    "special";
+	[aspect]
+	{
+		model						= m_i_glb_object-gogen;
+		draw_selection_indicator	= false;
+		dynamically_lit				= false;
+		force_no_render				= true;
+		bounding_volume_scale       = 5.0;
+		does_block_path				= true;
+	}
+	[placement]		{}
+	[generic_objblock] {}
+	[gizmo]
+	{
+		model				=	m_i_glb_object-gogen;
+		texture				=	;
+		diffuse_color		=	1.0, 0.5, 0.0;
+		use_diffuse_color	=	true;
+	}
+}
+
+
+[t:template,n:freeze_manager]
+{
+	specializes = special;
+	doc = "Freeze manager";
+	category_name = "special";
+	[freeze_manager] {}
+}
+
+[t:template,n:tutorial_tip]
+{
+	specializes = special;
+	doc = "Tutorial Tip Activator";
+	category_name =    "special";
+
+	[common] // don't change me. -ET
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+	}
+	
+	[placement]		{  }
+	[gizmo]			{ model = m_i_glb_object-gogen;  texture = b_i_glb_blue; }
+	[tip]			{  }
+}
+
+[t:template,n:play_chapter_sound]
+{
+	specializes = special;
+	doc = " play chapter sound";
+	category_name =    "special";
+
+	[common] // don't change me. -ET
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+	}
+	
+	[placement]		{  }
+	[gizmo]			{ model = m_i_glb_object-gogen;  texture = b_i_glb_blue; }
+	[play_chapter_sound]	{  }
+}
+
+[t:template,n:interface_fade]
+{
+	specializes = special;
+	doc = "Interface fader";
+	category_name =    "special";
+
+	[common] // don't change me. -ET
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+	}
+	
+	[placement]			{  }
+	[gizmo]				{ model = m_i_glb_object-gogen;  texture = b_i_glb_blue; }
+	[interface_fade]	{  }
+}
+
+[t:template,n:activate_chapter]
+{
+	specializes = special;
+	doc = "Chapter activate";
+	category_name =    "special";
+
+	[common] // don't change me. -ET
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+	}
+	
+	[placement]			{  }
+	[gizmo]				{ model = m_i_glb_object-gogen;  texture = b_i_glb_blue; }
+	[activate_chapter]	{  }
+}
+
+[t:template,n:swamp_switch_skeleton]
+{
+	category_name = "special";
+	doc = "swamp witch skelton";
+	specializes = non_interactive;
+	extra_doc = "Used with swamp witch die, don't place in levels";
+
+	[aspect]
+	{
+		model=m_c_ecm_sk_pos_a0;
+		life_state = LS_GHOST;
+		ghost_alpha = 60;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				  action* = call_sfx_script( "swamp_witch_skeleton" );
+				  condition* = receive_world_message("WE_ENTERED_WORLD");
+				  single_shot = true;
+			}
+		}
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_gan_sk_fs;
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = transition;
+				[anim_files] { 00=di-02; }
+			}
+		}
+	}
+	[self_destruct]
+	{
+		delete_msg = WE_ANIM_DONE;
+	}
+}
+
+/////// multi-player specific //////////////////////////////////////////////////
+[t:template,n:tombstone_multiplayer]
+{
+	specializes 		= non_interactive_nonblocking;
+	doc 				= "tombstone_ghost";
+	category_name       = "outdoor";
+
+	[aspect]
+	{
+		model 					 = m_i_cav_tombstone-01;
+		draw_selection_indicator = false;
+		is_selectable 			 = true;
+		megamap_icon			 = b_gui_ig_mnu_tombstone;
+	}
+
+	[common]
+	{
+		auto_expiration_class	= tombstone;
+		forced_expiration_class = tombstone;
+		rollover_display 		= true;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// new fun
+
+[t:template,n:he_threestorms]
+{
+	doc = "he_threestorms";
+	specializes = base_helm;
+
+	[common]
+	{
+		screen_name = "Helm of the Storms, the Three Storms";
+		is_pcontent_allowed = false;
+	}
+	[defend]
+	{
+		armor_style = 046;
+		armor_type = type44;
+		defense = 50;
+	}
+	[gui] { inventory_icon=b_gui_ig_i_a_hlmt_046; }
+}
+
+[t:template,n:the_nuke]
+{
+	specializes 		= treasure;
+	doc 				= "The Nuke";
+	category_name 		= "bad";
+
+	[common]
+	{
+		screen_name = "The Nuke.";
+		is_pcontent_allowed = false;
+	}
+
+	aspect:model = m_i_glb_the-nuke;
+	[gui]
+	{
+		inventory_width = 1;
+		inventory_height = 3;
+		inventory_icon = b_gui_ig_i_it_the-nuke;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+[t:template,n:generator_glb_spike_rock_01]
+{
+	specializes		= generator;
+	doc	= "lava_generator_lg";
+	category_name	= "1w_generator";
+
+	[aspect]
+	{
+		scale_base 	= 0.8;
+		model = m_i_cav_hole-01;
+		[textures]
+		{
+			0 = b_i_cav_hole-01;
+		}
+	}
+	[self_destruct] 
+	{
+		delete_time = 10.0;
+	}
+}
+
+[t:template,n:generator_glb_spike_rock_02]
+{
+	specializes		= generator;
+	doc	= "lava_generator_sm";
+	category_name	= "1w_generator";
+
+	[aspect]
+	{
+		scale_base 	= 0.65;
+		model = m_i_cav_hole-01;
+		[textures]
+		{
+			0 = b_i_cav_hole-01;
+		}
+	}
+	[self_destruct] 
+	{
+		delete_time = 10.0;
+	}
+}
+
+///////////////////////////////////////////////
+// ITEM GENERATORS
+
+[t:template,n:base_random_object]
+{
+	specializes 	= generator;
+	doc				= "random object creator";
+	category_name	= "special";
+
+	[gizmo]
+	{
+		diffuse_color=0.000000,0.000000,0.700000;
+		model = m_i_glb_object-gogen;
+	}
+	[aspect]
+	{
+		is_visible = false;
+	}
+	[generator_object_pcontent]
+	{
+		create_msg		= WE_ENTERED_WORLD;
+
+		msg_type		= WE_REQ_ACTIVATE;
+		trigger_msg		= WE_REQ_USE;
+
+		get_child_cc	= false;
+		throw_object	= false;
+	}
+}
+
+[t:template,n:random_object]
+{
+	specializes 	= base_random_object;
+	doc				= "random object creator";
+	category_name	= "special";
+}

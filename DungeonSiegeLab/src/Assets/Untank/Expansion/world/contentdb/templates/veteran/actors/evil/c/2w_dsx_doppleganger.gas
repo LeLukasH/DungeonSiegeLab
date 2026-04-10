@@ -1,0 +1,407 @@
+[t:template,n:2W_dsx_doppelganger_base]
+{
+	category_name = "2W_evil_c";
+	doc = "2W_DSX Doppelganger Base";
+	specializes = actor_evil;
+	[aspect]
+	{
+		force_no_render = true;
+		// MRC 7/18/2003 Allow clicking on invisible objects.
+		force_no_render_click = true;
+		megamap_icon	= b_gui_ig_mnu_doppelganger;
+		megamap_orient = true;
+		model = m_c_edm_dg_pos_1;
+		material = flesh;
+		[voice]
+		{
+			[die]			{ priority = high;	* = s_e_die_doppelganger;		}
+			[enemy_spotted]	{ priority = high; * = s_e_call_doppelganger_SED; }
+			[hit_critical]	{ priority = low;	* = s_e_hit_doppelganger_SED;		}
+			[hit_glance]	{ priority = low;	* = s_e_hit_doppelganger_SED;		}
+			[hit_solid]		{ priority = low;	* = s_e_hit_doppelganger_SED;		}
+		}
+
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 247.2;
+		damage_min = 202.3;
+	}
+	[body]
+	{
+		avg_move_velocity = 2;
+		[bone_translator]
+		{
+			body_anterior = Bip01_Head;
+			body_mid = Bip01_Spine;
+			body_posterior = Bip01_Pelvis;
+			kill_bone = Bip01_Pelvis;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[chore_dictionary]
+		{
+			initial_chore = chore_none;
+			chore_prefix = a_c_edm_dg_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=mg; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=dfs; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_magic]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=mg; }
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				[anim_files]
+				{
+					slep = a_c_edm_dg_fs0_dfs;
+					wake = a_c_edm_dg_fs0_ds;
+				}
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+		}
+	}
+
+	[common]
+	{
+		screen_name = "Doppelganger";
+		membership = monster,immune_freeze;
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("doppelganger_body");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+			}
+		}
+	}
+	[defend] { defense=481.6; }
+	[inventory]
+	{
+		spew_equipped_kill_count = ;
+
+  		
+	}
+
+	[doppelganger] {}
+
+	[mind]
+	{
+		jat_brain						= world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party	= true;
+
+		jat_fidget 						= world\ai\jobs\common\job_fidget.skrit;
+
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+
+	[physics]
+	{
+		explode_when_killed = true;
+		break_effect = doppelganger_die;
+		gib_gore_good = true;
+	}
+}
+
+[t:template,n:2W_dsx_doppelganger]
+//balanced to Level 14
+{
+	category_name = "2W_evil_c";
+	doc = "2W_dsx_doppelganger";
+	specializes = 2W_dsx_doppelganger_base;
+	[actor]
+	{
+		[skills]
+			{
+				strength 	=  33.2, 0;
+				intelligence = 10.6, 0;
+				dexterity 	=  19.2, 0;
+				melee 		=  55, 0;
+			}
+	}
+	[aspect]
+	{
+		experience_value = 68068;
+		life = 1775.4;
+		max_life = 1775.4;
+		mana = 3.2;
+		max_mana = 3.2;
+	}
+	[common]
+	{
+		screen_name = "Doppelganger";
+		membership = monster,immune_freeze;
+	}
+	[doppelganger]{ statsMultiplier = 0.8; }
+	[defend] { defense=598.8; }
+	[inventory]
+	{
+		drop_at_use_point = true;
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 19, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 40127;
+					max = 79649;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/122-163;
+					il_main = #armor/48-379;
+					il_main = #*/122-163;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/128-182;
+					il_main = #armor/-rare(1)/289-559;
+					il_main = #*/-rare(1)/128-182;
+				}
+				
+			}
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 303.7;
+		damage_min = 231.2;
+	}
+
+}
+
+[t:template,n:2W_dsx_doppelganger_2]
+{
+	category_name = "2W_evil_c";
+	doc = "2W_dsx_doppelganger_2";
+	specializes = 2W_dsx_doppelganger_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength 	=  32.7, 0;
+			intelligence = 10.6, 0;
+			dexterity 	=  19.1, 0;
+			melee 		=  56, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 62972;
+		life = 1143.9;
+		max_life = 1143.9;
+		mana = 3.1;
+		max_mana = 3.1;
+	}
+
+	[common]
+	{
+		screen_name = "Doppelganger Knave";
+		membership = monster,immune_freeze;
+	}
+	[doppelganger]{ statsMultiplier = 1.0; }
+	[defend] { defense=522.4; }
+	[inventory]
+	{
+		drop_at_use_point = true;
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 19, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 35611;
+					max = 70684;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/124-167;
+					il_main = #armor/71-397;
+					il_main = #*/124-167;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/167-191;
+					il_main = #armor/-rare(1)/310-570;
+					il_main = #*/-rare(1)/167-191;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/167-191;
+					il_main = #armor/-unique(2)/310-570;
+					il_main = #*/-unique(2)/167-191;
+				}			
+			}
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 245.5;
+		damage_min = 184.1;
+	}
+}
+
+[t:template,n:2W_dsx_doppelganger_boss]
+{
+	category_name = "2W_evil_c";
+	doc = "2W_dsx_doppelganger_boss";
+	specializes = 2W_dsx_doppelganger_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength 		= 33.5, 0;
+			intelligence 	=  10.7, 0;
+			dexterity 		= 19.5, 0;
+			melee 			= 57, 0;
+		}
+	}
+	[aspect]
+	{
+		scale_base = 2.0;
+		experience_value = 63480;
+		life = 1769.6;
+		max_life = 1769.6;
+		mana = 3.2;
+		max_mana = 3.2;
+	}
+	[common]
+	{
+		screen_name = "Doppelganger Lord";
+		membership = monster,immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;		
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("doppelganger_body_boss");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+			}
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+				no_trig_bits = true;
+				action* = call_sfx_script("unique_light_blue(sgx)");
+			}
+		}
+	}
+	[inventory]
+	{
+		drop_at_use_point = true;
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 19, Special */
+			[all*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 39871;
+					max = 79140;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/128-172;
+					il_main = #armor/74-410;
+					il_main = #*/128-172;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/172-197;
+					il_main = #armor/-rare(1)/320-589;
+					il_main = #*/-rare(1)/172-197;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/172-197;
+					il_main = #armor/-unique(2)/320-589;
+					il_main = #*/-unique(2)/172-197;
+				}			
+			}
+		}
+	}
+	[defend] { defense=628.8; }
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 313.3;
+		damage_min = 239;
+	}
+	
+	[doppelganger]
+	{ 
+		statsMultiplier = 2.5;
+		effect_script = doppelganger_glow_boss;
+	}
+}

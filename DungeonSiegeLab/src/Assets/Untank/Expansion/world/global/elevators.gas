@@ -1,0 +1,89 @@
+[elevators]
+{
+	[maps]
+	{
+		[map_expansion]
+		{
+			// GUIDs of all elevator nodes
+			[elevatorGuids]
+			{
+				// 1_1
+				* = 0x3c3eefea;
+				* = 0xa6a83168;
+
+				// 1_2
+				* = 0x44c4537b;
+
+				// 1_4
+				* = 0xf3ad3f31;
+
+				// 1_6a
+				* = 0x003dc2af;
+				* = 0x9efb2f71;
+
+				// 2_0
+				* = 0x925f57bd;
+
+				// 4_1
+				* = 0x4812f23b;
+
+				// 4_3
+				* = 0x3659ae21;
+
+				// 4_4
+				* = 0xc571060f;
+				// This one is a plain circle, but the regular elevator formation works
+				* = 0x05091b61;
+
+				// 5_4
+				* = 0xcee7c207;
+
+				// 5_4b
+				// This one is a plain circle, but the regular elevator formation works
+				* = 0xc622d74e;
+
+				// 6_1
+				* = 0x82e4046b;
+
+				// 6_2
+				* = 0xd63b7e5a;
+
+				// 6_3
+				* = 0xfb4c5291;
+
+				// 6_6
+				* = 0xc6168308;
+
+				// 8_3
+				* = 0x8d3a85e1;
+
+				// 9_1
+				* = 0x910144c5;
+
+				// 9_2a
+				// This one is a plain circle, but the regular elevator formation works
+				* = 0x73851e47;
+
+				// 9_3
+				* = 0x3e9d518d;
+
+			} // [elevator_guids...
+
+			// GUIDs of all TIGHT elevator nodes
+			[elevatorTightGuids]
+			{
+				// 1_5 (actually a rectangle)
+				* = 0xcc9a6cfd;
+
+				// 3_3 (a cage)
+				* = 0x09315c74;
+
+			} // [elevator_tight_guids...
+
+		} // [map_expansion...
+
+	} // [maps...
+
+
+}
+

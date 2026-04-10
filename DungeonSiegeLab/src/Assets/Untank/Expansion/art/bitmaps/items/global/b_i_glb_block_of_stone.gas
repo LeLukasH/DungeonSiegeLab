@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_block_of_stone]
+{
+	layer1texture1 = b_i_glb_block_of_stone;
+  i texturedetail = 1;
+}

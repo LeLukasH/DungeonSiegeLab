@@ -1,0 +1,109 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_camera_command.skrit
+// Author(s):  Eric Tams, David Tomandl, James Loe
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+// This skrit is kept simple on purpose; it's only purpose is to
+// move the camera without the camera snapping back to where it used to be. --DT
+
+// Note:  This is something that the camera code was never meant to do; so
+// we have to work around that fact.
+
+// Adding lots of fun stuff... And you wanted this to be simple. Ha! -ET
+
+// It might not be simple, but most of the complicated stuff is now being purposely hamstrung by the new default values.
+// The decision down from on high is that it's too distracting to have the game speed change.  --DT
+
+property bool		_server_only$			= false;
+
+property float		Distance$	= 10.0		doc = "Distance from the player that the camera will finish at.";
+property float		Duration$	= 1			doc = "Time to take to complete the camera move. Note: changing game speed effects this.";
+property float		game_speed$ = -1		doc = "Game speed while moving leaving -1 will not change the game speed.";
+
+// Duration used to be 0.66, game_speed used to be 0.05.  Then it was deemed too distracting to have the 
+// game speed change, and I changed the defaults.  This is still useful as an example of how to do that sort of thing...if you wanted to.  --DT
+
+float orig_speed$ = -1.0;
+float time$ = 0.0;
+
+owner = GoSkritComponent;
+
+startup state startup$
+{
+	transition -> Waiting$ : OnGoHandleMessage( WE_ENTERED_WORLD );	
+}
+
+state Waiting$
+{
+	// When an activate message is received, the camera is set to the new position, and will be zoomed out to 10 meters.
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_ACTIVATE )
+		{
+			if ( MakeGoid( msg$.Data1 ) == GoDb.GetFocusGo )
+			{
+				CameraAgent.SubmitCameraPosition( "pos_camera_move", MakeCameraPosition( owner.go.Placement.Position, owner.go.Placement.Orientation, Distance$ ) );
+				
+				// Camera now pans into place, taking one second to do so
+				CameraAgent.SubmitOrder( "pos_camera_move", COR_PAN, Duration$, false, Scid.InvalidScid );
+				
+				SetState Moving$;
+			}
+		}
+	}
+}
+
+state Moving$
+{
+	event OnGoUpdate$( float delta$ )
+	{
+		// change game speed	
+		if( (game_speed$ > 0.0) && (Duration$ > 0.0 ) )
+		{
+			time$ += delta$;
+
+			//float ratio$ = (0.5 - (0.5 * Math.Cos(6.283 * time$ / duration$) ));
+			float ratio$ = time$ / Duration$;
+
+			report.genericf("ratio %g\n",ratio$);
+			
+			WorldOptions.SetGameSpeed( (ratio$ * orig_speed$ ) + ( (1- ratio$) * game_speed$ ) );
+			//WorldOptions.SetGameSpeed( game_speed$ );
+		}
+	}
+	
+	event OnEnterState$
+	{
+		time$ = 0.0;
+		
+		// get the current game speed
+		orig_speed$ = WorldOptions.GameSpeed;
+		
+		this.CreateTimer( 1, Duration$ ); //set a timer with an ID of 1, to go off in duration seconds
+	}
+	
+	trigger OnTimer$( 1 ) // timer with ID 1
+	{
+		// restore game speed.
+		if( orig_speed$ > 0)
+		{
+			WorldOptions.SetGameSpeed( orig_speed$ );
+		}
+		
+		// Here's the hackwork; the camera mode is set to NONE, then TRACK.
+		// This effectively overwrites the game's internal position for the camera, then puts the camera
+		// back into it's regular "track" mode where it follows the player.
+		#only( game )
+		[[
+			UICamera.SetCameraMode( CMODE_NONE );
+			UICamera.SetCameraMode( CMODE_TRACK );
+		]]
+		SetState Waiting$;
+	}
+}

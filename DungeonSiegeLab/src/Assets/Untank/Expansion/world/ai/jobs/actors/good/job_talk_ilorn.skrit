@@ -1,0 +1,172 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	job_talk_ilorn.skrit
+
+	Author(s)	: 	Jason Dunlop
+
+	Purpose		: 	Ilorn the amulet guy.
+
+	(C)opyright 2003 Mad Doc Software, LLC/Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+Go		m_Go$;
+GoMind	m_Mind$;
+GoBody  m_Body$;
+Job		m_Job$;
+Goid	m_Target$;
+
+#include "k_job_c_mcp_fidget_utils"
+#include "k_job_c_talk_utils"
+
+startup state STARTUP$
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.Go;
+	m_Mind$		= job$.Go.Mind;
+	m_Body$		= job$.Go.Body;
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+
+	m_Target$	= job$.GoalObject;
+
+	SetState Talk$;  
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	face the audience
+state Face$
+{
+	transition
+	{
+		-> Talk$:	OnWorldMessage( WE_MCP_FACING_LOCKEDON );
+	}
+
+	event OnEnterState$
+	{		
+		if( !m_Go$.HasConversation )
+		{
+			report.errorf( "Actor '%s', scid:0x%08x was told to run job_talk but he doesn't have a conversation component.",
+							m_Go$.GetTemplateName,
+							m_Go$.Goid );
+			SetState Exiting$;
+		}
+		MCPManager.MakeRequest( m_Go$.Goid, PL_FACE, m_Target$ );	
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	blab blab away... pretend you're Lee
+state Talk$
+{
+	transition
+	{
+		-> Exiting$:	OnWorldMessage( WE_REQ_TALK_END ) =
+		{
+			if( m_Go$.Mind.ActorAutoFidgets )
+			{
+				StartFidgetIfRequired$();
+			}
+		}
+	}
+	
+	trigger OnWorldMessage$( WE_ANIM_DONE )
+	{
+		TryAnim$('talk');
+	}
+
+	event OnEnterState$
+	{
+		
+		// i am the one that has completed the amulet quest
+		if( Victory.IsQuestCompleted( "a2_amulet", m_Target$ ) )
+		{
+			m_Go$.GetConversation.RSSelectConversation( "ilorn_after_a2_amulet" );
+			TryAnim$('talk');
+		}
+		// someone has complete the amulet quest...
+		else if( GameAuditor.GetDb.GetBool( "ilorn_received_amulet" ) )
+		{
+			// i am not the one that completed the amulet quest.
+			m_Go$.GetConversation.RSSelectConversation( "ilorn_storekeep" );
+			TryAnim$('talk');
+		}
+		// check to see if the quest is active and the player has the amulet
+		else if	( Victory.IsQuestActive( "a2_amulet", m_Target$ ) && 
+			  ( Goid.InValidGoid != UIPartyManager.DoesActivePartyHaveTemplate( "amulet_ilorn", m_Target$ ) ) )
+		{
+			// Take (delete) the amulet
+			goid temp_amulet$ = UIPartyManager.DoesActivePartyHaveTemplate( "amulet_ilorn", m_Target$ );
+			m_Target$.Go.Mind.SDoJob( MakeJobReq( JAT_DROP, JQ_ACTION, QP_FRONT, AO_REFLEX, temp_amulet$ ) );
+			
+			PostWorldMessage( WE_REQ_DELETE, temp_amulet$, temp_amulet$, .1 );
+			GameAuditor.GetDb.SetBool( "ilorn_received_amulet", true);
+			m_Go$.GetConversation.RSSelectConversation( "ilorn_after_a2_amulet" );
+			TryAnim$('talk');
+		}
+		// if amulet quest is not completed
+		else
+		{
+			// if the player has the amulet, we don't want to activate this quest.  just take it away
+			// and let them shop.
+			if( Goid.InValidGoid != UIPartyManager.DoesActivePartyHaveTemplate( "amulet_ilorn", m_Target$ ) )
+			{
+				// Take (delete) the amulet
+				goid temp_amulet$ = UIPartyManager.DoesActivePartyHaveTemplate( "amulet_ilorn", m_Target$ );
+				m_Target$.Go.Mind.SDoJob( MakeJobReq( JAT_DROP, JQ_ACTION, QP_FRONT, AO_REFLEX, temp_amulet$ ) );
+				
+				PostWorldMessage( WE_REQ_DELETE, temp_amulet$, temp_amulet$, .1 );
+				
+				// we need to set a bool so that other mp players can shop from ilorn even though
+				// they may not have completed his quest.
+				GameAuditor.GetDb.SetBool( "ilorn_received_amulet", true);
+				m_Go$.GetConversation.RSSelectConversation( "ilorn_no_quest_player_has_amulet" );
+				TryAnim$('talk');
+			}
+			// if it isn't active, we need to give this quest
+			else if( Victory.IsQuestActive( "a2_amulet", m_Target$ ) )
+			{
+				m_Go$.GetConversation.RSSelectConversation( "ilorn_during_a2_amulet" );
+				TryAnim$('talk');
+			}
+			// otherwise it is during the amulet quest.
+			else
+			{
+				m_Go$.GetConversation.RSSelectConversation( "ilorn_before_a2_amulet" );
+				TryAnim$('talk');
+			}
+		}
+		
+		m_Go$.GetConversation.RSActivateDialogue();
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	finish blabbing
+state Exiting$
+{
+	event OnEnterState$
+	{
+		m_Job$.MarkForDeletion();
+	}
+}
+
+

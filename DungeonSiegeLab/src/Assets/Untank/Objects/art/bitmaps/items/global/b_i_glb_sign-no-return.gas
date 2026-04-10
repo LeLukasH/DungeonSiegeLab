@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_sign-no-return]
+{
+	layer1texture1 = b_i_glb_sign-no-return;
+  i texturedetail = 2;
+}

@@ -1,0 +1,109 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  tsd_manager.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+property bool	_server_only$			= false;
+
+property float  check_freq_min$			= .1	doc = "minimum time before changing tsd speed";
+property float  check_freq_max$			= .1	doc = "maximum time before changing tsd speed";
+
+property float  tsd_speed$				= 1.0	doc = "maximum tsd speed";
+property float  velocity$				= 2.0	doc = "velocity of the actor";
+property float  min_velocity$			= 0.1	doc = "minimum velocity for tsd to move";
+property float  weighted_avg_ratio$		= 0.0	doc = "influence of the previus texture speed on the new speed 0-1";
+
+property bool	use_velocity_for_speed$	= true	doc = "does the movement speed of the actor influence tsd speed?";
+
+property int	texture$				= 1		doc = "tsd to control";
+
+owner = GoSkritComponent;
+
+int prev_pos$;
+int current_pos$;
+
+float prev_time$;
+float current_time$;
+float orig_speed$;
+float avg_velocity$;
+float prev_speed$;
+
+float current_velocity$;
+
+//////////////////////////////////////////////////////////////////////////////
+
+startup state Startup$
+{
+	transition -> SetPositions$ : OnGoHandleMessage( WE_ENTERED_WORLD );
+}
+
+state SetPositions$
+{
+	event OnEnterState$
+	{
+		prev_pos$ = SiegeFx.AddVariable( owner.Go.placement.position, owner.goid );
+		current_pos$ = SiegeFx.AddVariable( owner.Go.placement.position, owner.goid );
+		prev_time$ = WorldTime.Time;
+		orig_speed$ = tsd_speed$;
+		avg_velocity$ = velocity$;
+		prev_speed$ = 0;
+		SetState Loop$;
+	}
+}
+
+state Loop$
+{
+	transition -> Loop$ : OnTimer( 1 );
+	
+	event OnEnterState$
+	{
+		SiegeFx.SetVariable(current_pos$, owner.Go.placement.position, owner.goid );
+		
+		current_time$ = WorldTime.Time;
+		
+		float time_elapsed$ = current_time$ - prev_time$;
+		float distance_dif$ = GetSiegeDistance(SiegeFx.GetVariable( prev_pos$, owner.goid ), SiegeFx.GetVariable( current_pos$, owner.goid ));
+		
+		SiegeFx.SetVariable(prev_pos$, SiegeFx.GetVariable( current_pos$, owner.goid ), owner.goid );
+		
+		prev_time$ = current_time$;
+		
+		if (time_elapsed$ > 0)
+		{
+			if ( owner.Go.hasfollower )
+			{
+				current_velocity$ = owner.Go.follower.CurrentVelocity;
+			} else {
+				current_velocity$ = distance_dif$ / time_elapsed$;
+			}
+			
+			
+			float speed$ = 0;
+			speed$ = orig_speed$ * (current_velocity$ / avg_velocity$);
+			
+			if (speed$ >= min_velocity$)
+			{
+				if (use_velocity_for_speed$)
+				{
+					speed$ *= (1 - weighted_avg_ratio$);
+					speed$ += weighted_avg_ratio$ * prev_speed$;
+				} else {
+					speed$ = tsd_speed$;
+				}
+			} else {
+				speed$ = 0;
+			}
+			
+			owner.Go.Aspect.RCSetAspectTextureSpeed(texture$, speed$);
+			
+			prev_speed$ = speed$;
+		}
+		float random_delay$ = Math.RandomFloat( check_freq_min$, check_freq_max$ );
+		This.CreateTimer( 1, random_delay$ );
+	}
+} 

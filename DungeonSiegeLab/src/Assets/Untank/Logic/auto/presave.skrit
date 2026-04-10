@@ -1,0 +1,285 @@
+//***************************************************************************/
+//*
+//*	File	 :	presave.skrit
+//*	Author(s):	Bryce Jones
+//*
+//*	Copyright ©	2001 Microsoft & Gas Powered Games,	Inc.  All rights reserved.
+//*--------------------------------------------------------------------------/
+//*	 $Revision:: $				$Date:$
+//*--------------------------------------------------------------------------/
+//***************************************************************************/
+
+/****************************************************************************/
+/*Properties																*/
+/****************************************************************************/
+property int 	SaveGames$ = 20	doc ="Number of savegames to generate -- 	Corresponds to number of presaves in the console.gas";
+property bool 	IsDemo$ = false doc ="Used to generate a demo prefix";
+
+/****************************************************************************/
+/*global Variables															*/
+/****************************************************************************/
+
+
+int 	Iterator$;
+go		party$;
+string	SaveType$;
+
+
+/****************************************************************************/
+/*Supporting Functions														*/
+/****************************************************************************/
+
+void FillHealthAndMana$(go ActorGo$)
+{
+	float 	MaxLife$ = ActorGo$.aspect.GetMaxLife();
+	float	MaxMana$ = ActorGo$.aspect.GetMaxMana();
+	ActorGo$.aspect.SSetCurrentMana(MaxMana$);
+	ActorGo$.aspect.SSetCurrentLife(MaxLife$);
+}
+
+
+
+/****************************************************************************/
+/*State	Machine	Section														*/
+/****************************************************************************/
+
+
+
+startup state InitialState$ trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+{
+	if ( (WorldState.CurrentState == WS_SP_INGAME) || (WorldState.CurrentState == WS_MP_INGAME) )
+	{
+		report.enable("generic");
+		
+		if (IsDemo$ == true)
+		{
+			SaveType$ = "demo";
+		}
+		else
+		{
+			SaveType$ = "pre_saved";
+		}
+		
+		setstate WaitForNisToEnd$;
+	}
+}
+
+state WaitForNisToEnd$
+{
+	InGame$ at( 15 frames )
+	{
+		report.report("Generic","\nEntered WaitForNisToEnd State");
+		if (WorldState.CurrentState == WS_SP_INGAME)
+		{
+			setstate Setup$;
+		}
+		else
+		{
+			setstate WaitforNisToEnd$;
+		}
+	}
+}
+
+
+
+state Setup$
+{
+	InGame2$ at( 5 frames )
+	{
+		string sAddString$;
+		stringtool.assignf(sAddString$,"exec add %s",SaveType$);
+		gpconsole.execute(sAddString$);
+		report.report("Generic","\n=================Executed add pre_saved============");
+		Iterator$ = 1;
+		setstate ChangeRegion$;
+	}
+	
+}
+
+state ChangeRegion$
+{
+	InGame6$ at( 2 )
+	{
+		report.reportf("Generic","\n%d Time(s) Through the state loop",Iterator$);
+		if (Iterator$ > SaveGames$)
+		{
+			report.report("Generic","\n!!!!!!!!!! Iterator is larger than savegames Calling Exit");
+			setstate Exit$;
+		}
+		else
+		{
+			report.report("Generic","\nIterator is less than savegames Calling teleport");
+			string sTeleport$ = "";
+
+			AppModule.UserPause(false);
+
+			stringtool.assignf(sTeleport$,"exec %s_%02d_teleport",SaveType$,Iterator$ );
+
+
+			report.reportf("Generic","\n=================Executing %s============",sTeleport$);
+			gpconsole.execute(sTeleport$);
+			report.report("Generic","\n=================DONE============");
+			setstate PartyOperations$;
+		}
+
+	}
+}
+	
+
+
+state PartyOperations$
+
+{
+	InGame3$ at( 8 )
+	{
+		string sBuildParty$ = "";
+
+
+
+
+		stringtool.Assignf(sBuildParty$,"exec %s_%02d_buildparty",SaveType$,Iterator$);
+	
+		
+		report.reportf("Generic","\n=================Executing %s============",sBuildParty$);
+		gpconsole.execute(sBuildParty$);
+		AppModule.UserPause(true);	
+
+		godb.DeselectAll();
+		setstate BuffParty$;
+	}
+}
+state BuffParty$
+{
+	//transition -> savegame$: OnTimer( 1 );
+	int i$;													//start iteration from first in party
+	int PartySize$;
+	goid member$;
+		
+	InGame7$ at( 3 )
+	{
+		party$ = Server.GetScreenParty();
+		if (! party$.children.get(0).IsSelected())
+		{
+			party$.children.get(0).Select();										//select the hero
+		}
+		string sHero$ = "";
+		stringtool.assignf(sHero$,"exec %s_%02d_hero",SaveType$,Iterator$);  //Equip the hero
+		gpconsole.execute(sHero$);
+		report.report("Generic","\n=================Buffed the Hero============");
+		FillHealthAndMana$(party$.children.get(0));
+		party$.children.get(0).Deselect();
+		
+		i$ = 1;
+		PartySize$ = party$.children.Size();
+		this.CreateTimer( 1, 3.0 );			
+	}
+	
+	Trigger OnTimer$( 1 )
+	{
+		if( i$ >= PartySize$)
+		{
+			SetState SaveGame$;
+			return;
+		}
+			
+		member$ = party$.children.get(i$).goid;
+		if( member$.IsValid )
+		{
+			godb.DeselectAll();
+			if (! party$.children.get(i$).IsSelected())
+			{
+				party$.children.get(i$).Select();										//select the hero
+			}			
+
+		}
+		This.CreateTimer( 2, 3.0 ); 
+	}
+	Trigger OnTimer$( 2 )
+	{
+		string sMember$ = "";
+		stringtool.appendf(sMember$,"exec %s_%02d_member_%02d",SaveType$,Iterator$,i$);
+		gpconsole.execute(sMember$);
+		report.reportf("Generic","\n=================Executing %s============",sMember$);
+		This.CreateTimer( 3, 3.0 ); 
+	}
+	
+	Trigger OnTimer$( 3 )
+	{
+		FillHealthAndMana$(party$.children.get(i$));
+
+		//party$.children.get(i$).Deselect();
+		i$ += 1;
+		this.CreateTimer( 1, 0 );		
+	}
+}
+
+state SaveGame$
+{
+	InGame4$ at( 2 )
+	{
+		string	sCurrentSaveGameName$ = "";
+		string  sIsRetail$ = "";
+		
+		if (config.getbool("force_retail_content"))
+		{
+			sIsRetail$ = "Retail";
+		}
+		else
+		{
+			sIsRetail$ = "Dev";
+ 		}
+ 		if (IsDemo$ == True)
+ 		{
+ 			sIsRetail$ = "Demo";
+ 		}
+ 		
+		stringtool.assignf(sCurrentSaveGameName$,"%s_PreSaved_%02d",sIsRetail$, Iterator$);
+		game.savegame(sCurrentSaveGameName$);
+		setstate PartyCleanup$;
+	}	
+}
+
+State PartyCleanUp$
+{
+	InGame5$ at(4)
+	{
+		party$ = Server.GetScreenParty();
+		int PartyCounter$ = party$.children.Size() -1 ;
+		
+		while( PartyCounter$ > 0 )
+		{
+			godb.SMarkGoAndChildrenFordeletion(party$.children.get(PartyCounter$));
+			PartyCounter$ -= 1;
+		}
+		
+		go hero$ = party$.children.get(0);
+		hero$.Mind.ClearAndCommit( JQ_ACTION );		// make sure hero is not doing any jobs before we delete his inventory etc.
+		gopcoll HeroChildren$ = hero$.children;
+		int ChildCount$ = HeroChildren$.size()-1;
+		while (ChildCount$ > 1)
+		{
+			godb.SMarkfordeletion(HeroChildren$.get(ChildCount$));
+			ChildCount$ -= 1;
+		}
+
+		if ((WorldState.CurrentState == WS_SP_INGAME) || (WorldState.CurrentState == WS_MP_INGAME))
+		{
+			Iterator$ += 1;
+			setstate ChangeRegion$;
+		}
+		else
+		{
+			setstate Exit$;  // cannot continue if game state is not in game			
+		}
+	}
+}
+state Exit$
+{
+	trigger OnEnterState$
+	{
+		gpconsole.execute("exit");
+	}
+}
+
+
+

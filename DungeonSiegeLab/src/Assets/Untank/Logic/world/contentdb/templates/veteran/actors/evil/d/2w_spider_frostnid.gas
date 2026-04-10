@@ -1,0 +1,177 @@
+[t:template,n:2W_spider_frostnid_base]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_spider_frostnid base";
+	specializes = actor_evil;
+	[aspect]
+	{
+		model = m_c_edm_fn_pos_1;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_spider; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_spider_SED; }
+		}
+	}
+	[body]
+	{
+		avg_move_velocity = 1.610000;
+		[bone_translator]
+		{
+			body_anterior = bone01;
+			body_mid = bone01;
+			body_posterior = bone01;
+			kill_bone = bone01;
+			shield_bone = bone01;
+			weapon_bone = bone01;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_fn_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=at; }
+			}
+			[chore_magic]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=at; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[mind]
+	{
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+		sight_origin_height	= 1;
+	}
+	[physics]
+	{
+		//break_effect = ;
+		explode_when_killed = true;
+		explosion_magnitude = 1.0;
+		gib_gore_good = true;
+		[break_particulate]
+		{
+			frag_glb_spider_frostnid_01 = 1;
+			frag_glb_spider_frostnid_02 = 1;
+			frag_glb_spider_frostnid_03 = 2;
+			frag_glb_spider_frostnid_04 = 3;
+			frag_glb_spider_frostnid_05 = 3;
+			frag_glb_ice_04 = 2;
+			frag_glb_ice_08 = 3;
+		}
+	}
+}
+[t:template,n:2W_spider_frostnid]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_spider_frostnid";
+	specializes = 2W_spider_frostnid_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  27.9, 0;
+			intelligence =  5.7, 0;
+			dexterity =  30.6, 0;
+            melee =  61,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 36936;
+		life = 847.1;
+        max_life = 847.1;
+        mana = 38.3;
+		max_mana = 38.3;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 189.5;
+		damage_min = 129.2;
+	}
+	[common] { screen_name="Frostnid"; }
+    [defend] { defense=414; }
+}
+[t:template,n:2W_spider_frostnid_ranged]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_spider_frostnid_ranged";
+	specializes = 2W_spider_frostnid_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  28.9, 0;
+			intelligence =  7.2, 0;
+			dexterity =  33.3, 0;
+            ranged =  64,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 43164;
+		life = 556.6;
+        max_life = 556.6;
+        mana = 41.2;
+		max_mana = 41.2;
+		[voice]
+		{
+			[cast]			{ * = s_e_attack_frostnid; }
+			[die]			{ priority = high; * = s_e_die_spider; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_spider_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 226.8;
+		damage_min = 176.3;
+		damage_bonus_min_cmagic = 150;
+		damage_bonus_max_cmagic = 201;
+	}
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=spell_frostnid_freeze; }
+	}
+	[common] { screen_name="Frost Spitter"; }
+    [defend] { defense=453.5; }
+	[mind]
+	{
+		actor_weapon_preference			= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+		actor_auto_switches_to_karate	= false;
+		actor_auto_switches_to_melee	= false;
+	}
+}

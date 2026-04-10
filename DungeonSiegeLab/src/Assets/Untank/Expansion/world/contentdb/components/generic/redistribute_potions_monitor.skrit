@@ -1,0 +1,66 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  redistribute_potions_monitor.skrit
+// Author(s):  Mathew Corthell
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+// Skrit for monitoring members of a party that are participating in a potion
+// redistribution.
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "Monitors members of a party that are participating in a potion swap.";
+
+owner = GoSkritComponent;
+bool m_activated$ = false;
+
+//////////////////////////////////////////////////////////////////////////////
+
+startup state Initial$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{	
+		if( e$ == WE_REQ_ACTIVATE )
+		{
+			m_activated$ = true;
+		}
+	}
+	
+	event OnGoHandleCCMessage$(eWorldEvent e$, WorldMessage msg$)
+	{
+		if(m_activated$)
+		{
+			// If one of the party members is killed or knocked unconscious,
+			// then try redistributing with the rest of the party.
+			if(e$ == WE_KILLED
+			   || e$ == WE_LOST_CONSCIOUSNESS)
+			{
+				#only( game )
+				[[
+					UIPartyManager.RedistributePotions(true, owner.goid);
+				]]
+			}
+
+			// If one of the party members starts processing a new job,
+			// then they're no longer moving to the center party member, so
+			// stop watching them.  This should prevent the redistribution
+			// from happening.
+			if(e$ == WE_MIND_PROCESSING_NEW_JOB)
+			{
+				Goid member$ = msg$.GetSendTo();
+
+				if(member$.Go.Mind.GetFrontActionJat() != JAT_APPROACH)
+				{
+					GoDb.StopWatching(owner.goid, member$);
+				}
+			}
+		}
+	}
+}
+

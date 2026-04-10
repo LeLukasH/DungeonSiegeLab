@@ -1,0 +1,331 @@
+[internet_game_menu]
+{
+	interface = true;
+	[t:dialog_box,n:address_background]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 10;
+		rect = 130,150,480,174;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:background]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox_wide;
+	  i draw_order = 2;
+		rect = 8,8,792,592;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:button,n:button_cancel]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 8;
+		rect = 500,464,650,480;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_cancel_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 559,466,650,480;
+			text = "Close";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(show_multiplayer_main) & playsound(s_e_interface_close);
+		}
+	}
+	[t:button,n:button_connect]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 8;
+		rect = 500,180,650,196;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_connect_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 552,182,650,196;
+			text = "Connect";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(internet_connect) & playsound(s_e_interface_close);
+		}
+	}
+	[t:button,n:button_host]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 8;
+		rect = 500,206,650,222;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_host_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 544,208,650,222;
+			text = "Host Game";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(internet_host) & playsound(s_e_interface_close);
+		}
+	}
+	[t:button,n:button_remove]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 8;
+		rect = 500,232,650,248;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_remove_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 528,234,650,248;
+			text = "Remove Address";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(internet_remove_ip) & playsound(s_e_interface_close);
+		}
+	}
+	[t:dialog_box,n:help_background]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 3;
+		rect = 24,530,776,576;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:host_address_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 68;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 130,130,480,146;
+		text = "Enter host's IP address, if joining";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:edit_box,n:internet_player_name_edit_box]
+	{
+	  f alpha = 1.000000;
+	  b clear_select = false;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 72;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+	  i max_string_size = 20;
+	  b permanent_focus = false;
+		rect = 294,94,506,110;
+		text = "";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tab_stop = 1;
+		[prompt]
+		{
+			texture = b_gui_fe_m_single_prompt;
+			width = 1;
+		}
+	}
+	[t:edit_box,n:ip_edit_box]
+	{
+		allow_ime = false;
+	  f alpha = 1.000000;
+	  b clear_select = false;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 72;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+	  i max_string_size = 20;
+	  b permanent_focus = false;
+		rect = 134,154,476,170;
+		text = "";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tab_stop = 2;
+		allowed_chars = "0123456789.";
+		[messages]
+		{
+			oneditselect = notify(internet_connect) & playsound(s_e_interface_close);
+		}
+		[prompt]
+		{
+			draw_order = 30;
+			texture = b_gui_fe_m_single_prompt;
+			width = 1;
+		}
+	}
+	[t:dialog_box,n:player_name_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 10;
+		rect = 290,90,510,114;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:player_name_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 68;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 290,70,510,86;
+		text = "Enter Player Name";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:recent_ip_background]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 10;
+		rect = 130,180,480,480;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:listbox,n:recent_ip_listbox]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_control = true;
+		common_template = ;
+	  i draw_order = 70;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		rect = 133,183,477,477;
+	  x text_color = 0xFFFFFFFF;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oncreated = setelementheight(16);
+			onldoubleclick = notify(internet_connect);
+			onselect = notify(internet_choose_ip);
+		}		
+		[t:selection_box,n:selection_box]
+		{
+			alpha = 0.5;
+			texture = b_gui_cmn_selection;
+		}
+	}	
+	[t:text,n:title]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 79;
+	  i font_color = -1;
+	  i font_size = 22;
+		font_type = b_gui_fnt_20p_copperplate-light;
+		justify = left;
+		rect = 24,28,224,50;
+		text = "MULTIPLAYER INTERNET";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:yourip_background]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 10;
+		rect = 24,498,776,520;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:yourip_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 22;
+	  i font_color = -1;
+	  i font_size = 15;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 28,500,771,516;
+		text = "";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+}

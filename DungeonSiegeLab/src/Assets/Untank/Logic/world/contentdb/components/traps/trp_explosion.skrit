@@ -1,0 +1,34 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  trp_explosion.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property bool _server_only$ = true;
+
+property string	effect_script$		= ""	doc = "Effect script to call for effect";
+property float	radius$				= 1.0	doc = "size of the damage area";
+property float	magnitude$			= 1.0	doc = "speed that the explosion expands.";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		float damage$ = msg$.GetData1() / 1000.0;
+		
+		SiegeFx.SRunScript( effect_script$, owner.Goid, owner.Goid, "", owner.Goid, WE_REQ_ACTIVATE );
+		
+		Physics.CreateExplosion( owner.go.placement.position, radius$, magnitude$, damage$, owner.Goid, owner.Goid );
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////

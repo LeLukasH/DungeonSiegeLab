@@ -1,0 +1,546 @@
+//
+//	Traps effect scripts
+//
+//	Any traps that are in the game which call effect scripts
+//	should be placed in this file
+//
+
+[effect_script*]
+{
+	name	=firetrap_repeater;
+
+	script	=[[
+			call firetrap;
+			pause 2;
+			call firetrap_repeater;
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=firetrap;
+
+	script	=[[
+			set $shot_direction 0,0,100;
+			set $shot_life 5;
+			set $fire_color .86,.4,.1;
+
+
+			//* Create an effect to use as a reference point to direct the fireball towards
+			sfx create orbiter #TARGET 
+				"offset($shot_direction)iphi(0)invisible()dur($shot_life)";
+			set $reference_point #POP;
+			sfx start $reference_point;
+
+
+			//* Create the actual effect to be shot at the reference point
+			sfx create trackball #TARGET 
+				"color0($fire_color)dur($shot_life)scale(.25)afterlife(2)";
+			set $fireball #POP;
+			sfx friendly target $fireball;
+			sfx rat $fireball;
+			sfx target $fireball $reference_point;
+			sfx position_at $fireball @kill_bone target;
+
+
+			//* Add some effects to the trackball to make it look more like a fireball
+			sfx create lightsource #TARGET 
+				"color0($fire_color)color1(.1,.1,.1)";
+			sfx create fire	#TARGET 
+				"color0($fire_color)ts(3)instant()velocity(0,0,0)accel(0,0,0)
+				alphafade(1)scale(1.25)count(50)min_displace(-.675)
+				max_displace(.675)[0]";
+			set $red_fire #POP;
+			set $red_light #POP;
+			sfx rat $red_fire;
+			sfx rat $red_light;
+			sfx target $red_fire $fireball;
+			sfx target $red_light $fireball;
+			sfx attach $fireball $red_fire;
+			sfx attach $fireball $red_light;
+
+
+			//* Play a sound to go with when the fireball launches
+			sound play s_e_spell_fireshot_cast at #SOURCE_POSITION dist 3 20;
+
+			// Start the fireball and it's attached effects
+			sfx start $fireball;
+
+			//* Wait until it collides with something
+			waitfor collision $fireball #DEFAULT_TIMEOUT;
+			set $collision_type #POP;
+
+			//* Play a sound to indicate thtat something was unless we timed out
+			if ( $collision_type != #NO_COLLISION )
+			{
+				// Tell the old effects to finish
+				sfx finish $red_fire;
+				sfx destroy $red_light;
+
+			}
+
+			//* Depending on what type of collision it is react accordingly
+			if ( $collision_type == #OBJECT_COLLISION )
+			{
+
+				//* Collision occured with a game target so just light it on fire
+				get collision target $fireball target;
+
+				sfx create fire #TARGET_KB
+					"must_update()ts(1.25)scale(.75)color0(1,.6,.3)color1(.1,.1,0)
+					dur(.5)count(15)radius(.2)";
+				sfx start #POP;
+
+				sfx create lightsource #TARGET_KB
+					"must_update()radius(1.5)color0(.75,.6,0)dur(1)tin(.2)
+					tout(.1)";
+				sfx start #POP;
+
+				sfx create explosion #TARGET_KB
+					"must_update()radius(0)texture(b_sfx_sparkle_02)color0(1,.6,.3)
+					color1(0,.2,.2)ivel(0,.25,0)vmin(3)vmax(5)omni_dir()
+					fade_range(0,1,0)scale(.3)";
+				sfx start #POP;
+
+			}
+			else
+			{
+			//* The terrain was hit so create a small fire at the point of impact
+				if ($collision_type == #TERRAIN_COLLISION )
+				{
+
+					//* Collided with the terrain so get the point of impact and create a small fire there
+					get collision point $fireball;
+					sfx create fire #POP 
+						"color0($fire_color)dur(.2)scale(.25)[0]";
+					set $fire_spot #POP;
+					sfx start $fire_spot;
+
+					get target_position $fire_spot target;
+					sound play s_e_spell_fireshot_hit at #POP dist 3 30;
+
+					//* Create another target from the point of impact on the terrain to attach a red light to
+					get collision point $fireball;
+					sfx create lightsource #POP 
+						"color0($fire_color)color1(.1,.1,.1)dur(.3)tin(.2)tout(.2)
+						radius(2)";
+					sfx start #POP;
+
+				}
+			}
+
+			//* Cleanup
+			sfx destroy $fireball;
+
+			]];
+}
+
+[effect_script*]
+{
+	name	=zap_trap;
+
+	script	=[[
+			sound play s_e_trap_sprung at #SOURCE_POSITION dist 10 35;
+			
+			pause .25;
+			
+			sfx create explosion #SOURCE 
+				"must_update()srate(.01)vmin(2)vmax(3)omni_dir()ivel(0,2,0)
+				rvel(1,0,1)scale_range(.3,.6,0)texture(b_sfx_sparkle01)
+				color0(.5,.75,.75)color1(0,.25,.25)dur(2)radius(.1)
+				fade_range(1,1,0)count(16)dur(.66)offset(0,.1,0)";
+			sfx start #POP;
+			
+			sfx create fire #SOURCE 
+				"ts(1)must_update()scale(1)color0(.7,.7,1)texture(b_sfx_sparkle01)
+				count(16)velocity(0,2,0)accel(0,2,0)alphafade(.85)flamesize(2)
+				max_radius(3)dur(.66)";
+			sfx start #POP;
+			
+			pause .25;
+			
+			sound play s_e_trap_zap at #SOURCE_POSITION dist 10 35;
+
+			sfx create lightning #TARGET_KB 
+				"must_update()scale(1)bolt_life(1)mindisplace(-.2)maxdisplace(.2)
+				color0(.7,.7,1)[0]";
+			set $bolt #POP;
+			sfx target $bolt source;
+			sfx start $bolt;
+
+			sfx create lightning #TARGET_KB 
+				"must_update()scale(1)bolt_life(1)mindisplace(-.2)maxdisplace(.2)
+				color0(.8,1,.8)";
+			set $bolt2 #POP;
+			sfx target $bolt2 source;
+			sfx attach $bolt $bolt2;
+
+			sfx create explosion #TARGET_KB 
+				"must_update()vmin(2)vmax(3)omni_dir()ivel(0,0,0)rvel(2,0,2)
+				scale_range(0,.3,0)texture(b_sfx_sparkle01)color0(.5,.75,.75)
+				color1(0,.25,.25)dur(2)radius(.4)fade_range(0,1,0)count(16)";
+			sfx attach $bolt #POP;
+
+			sfx create explosion #TARGET_KB 
+				"must_update()srate(.01)vmin(2)vmax(3)omni_dir()ivel(0,0,0)
+				rvel(2,0,2)scale_range(0,.3,0)texture(b_sfx_sparkle01)
+				color0(.5,.75,.75)color1(0,.25,.25)dur(2)radius(.4)
+				fade_range(0,1,0)count(16)";
+			sfx attach $bolt #POP;
+
+			pause 1;
+			]];
+}
+
+[effect_script*]
+{
+	name	=gas_trap;
+
+	script	=[[
+			sound play s_e_trap_sprung at #SOURCE_POSITION dist 10 35;
+			
+			pause .25;
+			
+			set $scale 1;
+			
+			sfx create fire #TARGET 
+				"ts(1)must_update()dark()grey_tex()scale($scale)color0(.4,.6,.2)
+				count(16)velocity(0,16,0)accel(0,16,0)alphafade(.85)flamesize(2)
+				max_radius(8)dur(.66)";
+			sfx start #POP;
+	
+			pause .25;
+			
+			sound play s_e_spell_acid_cloud_cast at #SOURCE_POSITION dist 10 35;
+			
+			sfx create fire #TARGET 
+				"must_update()scale($scale)color0(.25,.5,.1)count(30)
+				velocity(0,1,0)accel(0,0,0)alphafade(.15)flamesize(.1)
+				min_radius(6)max_radius(30)[0]";
+			set $base #POP;
+			sfx start $base;
+			
+			sfx create fire #TARGET 
+				"ts(1)must_update()dark()grey_tex()scale($scale)color0(.4,.6,.2)
+				count(60)velocity(0,8,0)accel(0,-5,0)alphafade(.25)flamesize(6)
+				max_radius(30)dur(1)";
+			sfx attach $base #POP;
+
+			sfx create fire #TARGET 
+				"ts(.3)must_update()scale($scale)color0(.6,.6,.2)count(12)
+				velocity(0,2,0)accel(0,0,0)alphafade(.85)flamesize(.3)
+				max_radius(28)dur(1)";
+			sfx attach $base #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=flame_trap;
+
+	script	=[[			
+			sound play s_e_trap_sprung at #SOURCE_POSITION dist 10 35;
+			
+			pause .25;
+			
+			sfx create fire #TARGET 
+				"ts(1)must_update()scale(1)color0(1,.7,.3)
+				count(16)velocity(0,3,0)accel(0,3,0)alphafade(.85)flamesize(2)
+				max_radius(3)dur(1.2)offset(0,1,0)scale(2)";
+			sfx start #POP;
+	
+			pause .25;
+			
+			sound play s_e_spell_flame_cast at #SOURCE_POSITION dist 10 35;
+
+			set $velocity 0,0,40;
+			set $accel 0,0,0;
+
+			sfx create fireb #SOURCE 
+				"fctrl(0,0,7)flamesize(2)alphafade(.5)color0(1,.7,.3)
+				velocity($velocity)accel($accel)cvel(1)lower_r0(0)lower_r1(1)
+				upper_r0(1)upper_r1(20)count(50)bone_orient()offset(0,1,0)[0]";
+			set $base #POP;
+			
+			sfx create fireb #SOURCE 
+				"fctrl(0,0,7)flamesize(2)alphafade(.5)color0(1,.3,0)
+				velocity($velocity)accel($accel)cvel(1)lower_r0(1)lower_r1(1)
+				upper_r0(30)upper_r1(60)count(50)offset(0,1,0)dur(1)
+				bone_orient()";
+			sfx attach $base #POP;
+			
+			sfx start $base;
+			]];
+}
+
+[effect_script*]
+{
+	name	=frost_trap;
+
+	script	=[[
+			sound play s_e_trap_sprung at #SOURCE_POSITION dist 10 35;
+			
+			pause .25;
+			
+			sfx create fire #TARGET 
+				"ts(1)must_update()scale(1)color0(.3,.4,1)
+				count(16)velocity(0,3,0)accel(0,3,0)alphafade(.85)flamesize(2)
+				max_radius(3)dur(1.2)offset(0,1,0)scale(2)";
+			sfx start #POP;
+	
+			pause .25;
+			
+			sound play s_e_spell_flame_cast at #SOURCE_POSITION dist 10 35;
+
+			set $velocity 0,0,40;
+			set $accel 0,0,0;
+
+			sfx create orbiter #SOURCE
+				"dur(10)invisible()offset(0,1,0)radius(0)";
+			set $orb #POP;
+			sfx start $orb;
+			
+			sfx create fireb #SOURCE 
+				"fctrl(0,0,7)flamesize(2)alphafade(.5)color0(.3,.4,1)
+				velocity($velocity)accel($accel)cvel(1)lower_r0(1)lower_r1(1)
+				upper_r0(0)upper_r1(20)count(50)bone_orient()offset(0,1,0)[0]";
+			set $base #POP;
+			
+			sfx create fireb #SOURCE 
+				"fctrl(0,0,7)flamesize(.4)alphafade(.5)color0(.5,.7,1)
+				velocity($velocity)accel($accel)cvel(1)lower_r0(1)lower_r1(1)
+				upper_r0(15)upper_r1(45)count(50)offset(0,1,0)dur(1)
+				texture(b_sfx_sparkle01)bone_orient()";
+			sfx attach $base #POP;
+			
+			sfx start $base;
+			]];
+}
+
+[effect_script*]
+{
+	name	=fireball_trap;
+
+	script	=[[
+			sound play s_e_trap_sprung at #SOURCE_POSITION dist 10 35;
+			
+			pause .25;
+			
+			sfx create fire #SOURCE 
+				"ts(1)must_update()scale(1)color0(.86,.4,.1)
+				count(16)velocity(0,5,0)accel(0,5,0)alphafade(.85)flamesize(2)
+				max_radius(3)dur(.66)scale(1.5)";
+			sfx start #POP;
+	
+			pause .25;
+			
+			sound play s_e_spell_fireshot_cast at #SOURCE_POSITION dist 10 35;
+			
+			//* Create the actual effect to be shot at the reference point
+			sfx create trackball #TARGET_KB
+				"color0(.86,.4,.1)dur(5)scale(.5)afterlife(2)
+				velocity(12)";
+			set $fireball #POP;
+			sfx friendly source $fireball;
+			sfx position_at $fireball @kill_bone source;
+			sfx start $fireball;
+
+			sfx create fire #TARGET
+				"ts(3)scale(1.2)count(60)color0(.86,.4,.1)color1(.05,.05,0)
+				alphafade(.6)velocity(0,0,0)accel(0,0,0)flamesize(6)max_displace(1)
+				min_displace(-1)max_radius(9)";
+				 
+			set $fire #POP;
+			sfx rat $fire;
+			sfx target $fire $fireball;
+			sfx attach $fireball $fire;
+			
+			waitfor collision $fireball #DEFAULT_TIMEOUT;
+			set $collision_type #POP;
+			
+			
+			if ( $collision_type == #OBJECT_COLLISION )
+			{
+				get target_position $fireball target;
+				sound play s_e_spell_fireshot_hit at #POP dist 10 35;
+			 
+			 	get collision target $fireball target;
+				sfx create fire #TARGET_KB
+					"must_update()ts(1.25)scale(.75)color0(.86,.4,.1)color1(.1,.1,0)
+					dur(.5)count(15)radius(.2)";
+				sfx start #POP;
+
+				sfx create explosion #TARGET_KB
+					"must_update()radius(0)texture(b_sfx_sparkle_02)color0(.86,.4,.1)
+					color1(0,.1,.1)ivel(0,.25,0)vmin(3)vmax(5)omni_dir()
+					fade_range(0,1,0)scale(.2)";
+				sfx start #POP;
+			}
+			
+			if ( $collision_type == #TERRAIN_COLLISION )
+			{	
+				get target_position $fireball target;
+				sound play s_e_spell_fireshot_hit at #POP dist 10 35;
+			
+				get collision point $fireball;
+				sfx create fire #POP
+					"must_update()ts(1.25)scale(.75)color0(.86,.4,.1)color1(.1,.1,0)
+					dur(.5)count(15)radius(.2)";
+				sfx start #POP;
+				
+				get collision point $fireball;
+				sfx create explosion #POP
+					"must_update()radius(0)texture(b_sfx_sparkle_02)color0(.86,.4,.1)
+					color1(0,.1,.1)ivel(0,.25,0)vmin(3)vmax(5)omni_dir()
+					fade_range(0,1,0)scale(.2)";
+				sfx start #POP;
+			}
+			]];
+}
+
+[effect_script*]
+{
+	name	=fireball_explosive_trap;
+
+	script	=[[
+			sound play s_e_trap_sprung at #SOURCE_POSITION dist 10 35;
+			
+			pause .25;
+			
+			sfx create fire #SOURCE 
+				"ts(1)must_update()scale(1)color0(.86,.4,.1)
+				count(16)velocity(0,5,0)accel(0,5,0)alphafade(.85)flamesize(2)
+				max_radius(3)dur(.66)scale(1.5)";
+			sfx start #POP;
+	
+			pause .25;
+			
+			sound play s_e_spell_fireshot_cast at #SOURCE_POSITION dist 10 35;
+			
+			//* Create the actual effect to be shot at the reference point
+			sfx create trackball #TARGET_KB
+				"color0(.86,.4,.1)dur(5)scale(.65)afterlife(2)
+				velocity(12)";
+			set $fireball #POP;
+			sfx friendly source $fireball;
+			sfx position_at $fireball @kill_bone source;
+			sfx start $fireball;
+
+			sfx create fire #TARGET
+				"ts(3)scale(1.4)count(60)color0(.86,.4,.1)color1(.05,.05,0)
+				alphafade(.6)velocity(0,0,0)accel(0,0,0)flamesize(6)max_displace(1)
+				min_displace(-1)max_radius(9)";
+				 
+			set $fire #POP;
+			sfx rat $fire;
+			sfx target $fire $fireball;
+			sfx attach $fireball $fire;
+			
+			waitfor collision $fireball #DEFAULT_TIMEOUT;
+			set $collision_type #POP;
+			
+			if ( $collision_type == #OBJECT_COLLISION )
+			{
+				get target_position $fireball target;
+				sound play s_e_spell_fireshot_hit at #POP dist 10 35;
+				
+				get collision target $fireball target;
+				sfx create fire #TARGET_KB
+					"must_update()ts(1.25)scale(1.15)color0(.86,.4,.1)color1(.1,.1,0)
+					dur(.5)count(15)radius(.2)";
+				sfx start #POP;
+
+				sfx create explosion #TARGET_KB
+					"must_update()radius(0)texture(b_sfx_sparkle_02)color0(.86,.4,.1)
+					color1(0,.1,.1)ivel(0,.25,0)vmin(3)vmax(5)omni_dir()
+					fade_range(0,1,0)scale(.66)";
+				sfx start #POP;
+				
+				sfx create cylinder #TARGET_KB 
+					"must_update()ts(2)offset(0,.05,0)scale(1)texture(b_sfx_cyl_03)
+					hp0(0,0,0)hp1(0,0,0)rp0(0,1.5,2)rp1(.5,2,2)tin(.10)tout(1)dur(.5)
+					color0(.86,.4,.1)spin(15)segments(12)";
+				sfx start #POP;
+	
+				sfx create cylinder #TARGET_KB 
+					"must_update()scale(.5)texture(b_sfx_cyl_03)hp0(0,0,0)hp1(0,0,0)
+					rp0(0,1.5,2)rp1(.5,2,2)tin(.10)tout(1)dur(.5)color0(.86,.4,.1)spin(15)
+					segments(12)ts(2)";
+				sfx start #POP;
+			}
+			
+			if ( $collision_type == #TERRAIN_COLLISION )
+			{
+				get target_position $fireball target;
+				sound play s_e_spell_fireshot_hit at #POP dist 10 35;
+				
+				get collision point $fireball;
+				sfx create fire #POP
+					"must_update()ts(1.25)scale(1.15)color0(.86,.4,.1)color1(.1,.1,0)
+					dur(.5)count(15)radius(.2)";
+				sfx start #POP;
+				
+				get collision point $fireball;
+				sfx create explosion #POP
+					"must_update()radius(0)texture(b_sfx_sparkle_02)color0(.86,.4,.1)
+					color1(0,.1,.1)ivel(0,.25,0)vmin(3)vmax(5)omni_dir()
+					fade_range(0,1,0)scale(.66)";
+				sfx start #POP;
+				
+				get collision point $fireball;
+				sfx create cylinder #POP 
+					"must_update()ts(2)offset(0,.05,0)scale(1)texture(b_sfx_cyl_03)
+					hp0(0,0,0)hp1(0,0,0)rp0(0,1.5,2)rp1(.5,2,2)tin(.10)tout(1)dur(.5)
+					color0(.86,.4,.1)spin(15)segments(12)";
+				sfx start #POP;
+	
+				get collision point $fireball;
+				sfx create cylinder #POP 
+					"must_update()scale(.5)texture(b_sfx_cyl_03)hp0(0,0,0)hp1(0,0,0)
+					rp0(0,1.5,2)rp1(.5,2,2)tin(.10)tout(1)dur(.5)color0(.86,.4,.1)spin(15)
+					segments(12)ts(2)";
+				sfx start #POP;
+			}
+			]];
+}
+
+[effect_script*]
+{
+	name	=explosive_trap;
+
+	script	=[[
+			sound play s_e_trap_sprung at #SOURCE_POSITION dist 10 35;
+			
+			pause .25;
+			
+			sound play s_e_FBFireball_hit at #TARGET_POSITION dist 9 30;
+					
+			sfx create cylinder #TARGET 
+				"must_update()ts(2)offset(0,.05,0)scale(1)texture(b_sfx_cyl_03)
+				hp0(.2,.2,0)hp1(.2,.2,0)rp0(0,2.5,3)rp1(.5,3,3)tin(.10)tout(1)dur(.5)
+				color0(1,.3,.2)spin(15)segments(12)";
+			sfx start #POP;
+
+			sfx create cylinder #TARGET 
+				"must_update()scale(.5)texture(b_sfx_cyl_03)hp0(.4,.4,0)hp1(.4,.4,0)
+				rp0(0,2.5,3)rp1(.5,3,3)tin(.10)tout(1)dur(.5)color0(1,.3,.2)spin(15)
+				segments(12)ts(2)";
+			sfx start #POP;
+
+			sfx create explosion #TARGET
+				"must_update()radius(0)texture(b_sfx_snow_01)color0(1,.3,.2)color1(0,.1,.1)
+				ivel(0,.25,0)vmin(6)vmax(8)omni_dir()fade_range(0,1,0)scale(.75)dur(1)";
+			sfx start #POP;
+
+			sfx create explosion #TARGET 
+				"must_update()scale(.8)vmin(6)vmax(8)texture(b_sfx_snow_01)
+				count(16)color0(1,.2,.1)rvel(3,1,3)dur(1)";
+			sfx start #POP;
+			
+			sfx create flurry #TARGET
+				"must_update()count(30)tin(0)tout(.5)dur(0.5)color0(1,.2,.1)
+				grow_params(-.3,2.1,2.3)scale(1.3)";
+			sfx start #POP;
+			]];
+}

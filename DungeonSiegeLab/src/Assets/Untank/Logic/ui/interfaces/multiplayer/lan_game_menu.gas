@@ -1,0 +1,205 @@
+[lan_game_menu]
+{
+	interface = true;
+	
+	[t:dialog_box,n:background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_wide;
+		draw_order = 2;
+		rect = 8,8,792,592;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:help_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 3;
+		rect = 24,530,776,576;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+
+	[t:text,n:title]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 79;
+		rect = 24,28,224,50;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		font_color = -1;
+		font_size = 22;
+		font_type = b_gui_fnt_20p_copperplate-light;
+		justify = left;
+		text = "MULTIPLAYER NETWORK";
+	}
+	
+	[t:text,n:player_name_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 290,70,510,86;
+		text = "Enter Player Name";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:player_name_bg]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 290,90,510,114;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:edit_box,n:lan_player_name_edit_box]
+	{
+		alpha = 1.000000;
+		clear_select = false;
+		common_control = false;
+		common_template = ;
+		draw_order = 72;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		max_string_size = 20;
+		permanent_focus = false;
+		rect = 294,94,506,110;
+		text = ;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[prompt] { draw_order=30; texture=b_gui_fe_m_single_prompt; width=1; }
+	}
+	
+	[t:dialog_box,n:games_list_bg]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 70,130,730,484;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:listreport,n:lan_games_list]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = ;
+		draw_order = 70;
+		element_type = text;
+		font_color = 0xffffffff;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		rect = 73,133,727,481;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = tiled;
+		[messages]
+		{
+			onselect = notify(join_lan_game);
+		}
+	}
+
+	
+	[t:button,n:button_join]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 8;
+		rect = 70,494,230,510;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x99555555;
+		[t:text,n:button_join_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 90,337,200,352;
+			text = "Join Game";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages] { onbuttonpress=notify(join_lan_game) & playsound(s_e_interface_close); }
+	}		
+	[t:button,n:button_host]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 8;
+		rect = 250,494,400,510;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_host_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 210,337,320,352;
+			text = "Host Game";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages] { onbuttonpress=notify(host_lan_game) & playsound(s_e_interface_close); }
+	}			
+	[t:button,n:button_cancel]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 8;
+		rect = 580,494,730,510;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_cancel_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 450,337,560,352;
+			text = "Close";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages] { onbuttonpress=notify(show_multiplayer_main) & playsound(s_e_interface_close); }
+	}	
+}

@@ -1,0 +1,61 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  weapon_cold.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+//	This is sneaky... dont try this at home kids.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property float hold_time$ = 2.0 doc = "time to freeze bad guys";
+property string immunity$ = ""	doc = "Immunity type";
+property string manager_template$ = "dsx_hold_manager" doc = "Manager class for handling freezing state";
+
+Goid manager$;
+	
+on_add_custom_damage$( Go /*owner$*/ )
+{
+	// Create an Omni version of the spell. 
+	GoCloneReq cloneReq$ = MakeGoCloneReq( manager_template$ );
+	cloneReq$.Omni = true;
+	cloneReq$.ForceClientAllowed = true;
+	manager$ = GoDb.SCloneGo( cloneReq$ );
+}
+
+on_remove_custom_damage$( /*some params*/ )
+{
+	// nix omni GO.
+	if( manager$.IsValid )
+	{
+		PostWorldMessage( WE_REQ_DELETE, manager$, manager$, hold_time$ + 1.0 );
+	}
+}
+
+on_custom_damage$( Go victim$, Go /*attacker$*/, Go /*weapon$*/, float /*damage_amount$*/ )
+{
+//	Siegefx.SRunScript( "cold_weapon", victim$.Goid, weapon$.Goid, "", attacker$.Goid, WE_UNKNOWN );
+	
+	if( !StringTool.IsEmpty( immunity$ ) )
+	{
+		if( victim$.Common.Membership.Contains( immunity$ ) )
+		{
+			return;
+		}
+	}
+	
+	
+	if( victim$.Player.Controller != PC_COMPUTER  )
+	{
+		return;
+	}
+
+	// pack duration here...
+	int packed_speed$ = Math.Round( hold_time$ * 1000 );
+	
+	SendWorldMessage( WE_REQ_ACTIVATE, victim$.goid, manager$, packed_speed$ );
+}

@@ -1,0 +1,5 @@
+[t:tsd,n:b_d_sawdust-a]
+{
+	layer1texture1 = b_d_sawdust-a;
+  i texturedetail = 2;
+}

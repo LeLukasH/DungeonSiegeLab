@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_cav_rail]
+{
+	layer1texture1 = b_i_cav_rail;
+  i texturedetail = 1;
+}

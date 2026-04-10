@@ -1,0 +1,150 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_transmuteall.skrit
+// Author(s):  Tara Teich
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Give commands to all enemies in radius or spell.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string effect_script$	= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string script_params$	= ""   	doc = "Parameters to send to SiegeFx script";
+property string enchant_script$	= ""   	doc = "Name of the SiegeFx script that will be providing the visual.";
+property float	radius$			= 15.0	doc = "Radius of the effect, centered on the caster.";
+property string description$	= ""	doc = "Description of enchantment being applied";
+property float	effect_delay$	= 0		doc = "Extra time to wait before removing the enchant_script";
+
+owner = GoSkritComponent;
+
+Goid	target$;
+Goid	caster$;
+Goid	gold$;
+
+////////////////////////////////////////
+//	State Machine
+trigger OnGoPreload$
+{
+	GoDb.PreloadCloneSource( owner.Go, "gold" );
+}
+
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) {
+			
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+			
+			if( target$.isvalid && caster$.isvalid && ( Owner.go.Parent != NULL ) )
+			{
+				// we need to find all the items in radius of the caster
+				if ( caster$.Go.Hasmind )
+				{
+					caster$.Go.Mind.TempGopColl1.Clear;
+					
+					caster$.Go.Mind.GetVisible( QT_ITEM, caster$.Go.Mind.TempGopColl1, radius$ );
+										
+					int i$ = 0;
+					int iend$ = caster$.Go.Mind.TempGopColl1.Size();
+					
+					int enchanted$ = 0;
+					Go temp$;
+					bool canTransmute$;
+					
+					float level$ = Math.MinFloat( caster$.Go.Actor.GetSkillLevel( owner.Go.Magic.SkillClass ), owner.Go.Magic.MaxCastLevel );
+					
+					// this formula comes from the original transmute spell - figure we should scale the same as the original did
+					float efficiency$ = (0.346-((1.0/(( level$ /10.0)+6.0))*1.5));					
+
+					// now loop through the items
+					while(i$ < iend$)
+					{
+						temp$ = caster$.Go.Mind.TempGopColl1.Get( i$ );
+					
+						// Can we cast on this thing - our target type is TRANSMUTABLE
+						//		so, we are checking that this is transmutable
+						if( owner.Go.Magic.IsCastableOn( temp$, false) )
+						{
+							// default to can transmute
+							canTransmute$ = true;
+
+							// if this can't be sold, don't transmute it - don't want to lose quest items
+							if ( temp$.HasGui() )
+							{
+								if( !temp$.Gui.CanSell )
+								{
+									// can't transmute
+									canTransmute$ = false;
+								}
+							}
+
+							if (canTransmute$)
+							{
+								// make the original object invisible
+								temp$.Aspect.SSetIsVisible( false );					
+					
+								// make some gold
+								GoCloneReq cloneReq$ = MakeGoCloneReq( "gold" );
+								cloneReq$.StartingPos = temp$.placement.position;
+								cloneReq$.SnapToTerrain = true;
+								gold$ = GoDb.SCloneGo( cloneReq$ );
+								int value$ = Math.ToInt( (temp$.Aspect.GetGoldValue() * efficiency$) + 1);
+								// remove the original object
+								GoDb.SMarkForDeletion( temp$ );
+								gold$.Go.Aspect.SetGoldValue(value$);
+								
+								// Start the visual
+								if( enchant_script$ != "" )
+								{
+									SiegeFx.SRunMpScript( enchant_script$, gold$, caster$, "", owner.Goid, e$ );
+								}
+								enchanted$ += 1;
+							}
+						}
+				        i$ += 1;
+				    }
+				    if( ( enchanted$ > 0 ) && ( effect_script$ != "" ) )
+				    {
+				    	// Start the visual
+					SiegeFx.SRunScript( effect_script$, target$, caster$, script_params$, owner.Goid, e$ );
+					
+					SetState Finish$;
+				    }
+				    
+				    SetState Finished$;
+				    return;	
+				}
+			} 
+			SetState Finished$;
+			return;
+		}
+	}
+}
+
+state Finish$
+{
+	trigger OnGoHandleMessage$( WE_SPELL_SYNC_END )
+	{
+		SetState Finished$;
+	}
+}
+
+state Finished$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+		SiegeFx.ClearVariables( owner.goid );
+		
+		// Delete this skrit
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

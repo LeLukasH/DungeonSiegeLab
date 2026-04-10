@@ -1,0 +1,7 @@
+[t:tsd,n:b_gui_ig_mnu_unsummon_creature_dwn]
+{
+  b dither = true;
+  b hasalpha = true;
+	layer1texture1 = b_gui_ig_mnu_unsummon_creature_dwn;
+  i texturedetail = 0;
+}

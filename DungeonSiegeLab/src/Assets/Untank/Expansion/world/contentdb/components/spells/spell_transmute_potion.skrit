@@ -1,0 +1,109 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_transmute_potion.skrit
+// Author(s):  Eric Tams, Tara Teich
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property string	effect_script$	= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string script_params$	= ""   	doc = "Parameters to send to SiegeFx script";
+property string potion_type$ = "health"	doc = "Type of potion we are converting to";
+property float points_per_gold$ = 1.0	doc = "Amount of points (health or mana) per converted gold value of item";
+
+owner = GoSkritComponent;
+
+#include "k_inc_spl_utils_DSX"
+
+Goid caster$;
+Goid target$;
+Goid potion$;
+
+
+// We don't know which item we're cloning - determined by gold value.  Hope this isn't needed!			
+//trigger OnGoPreload$
+//{
+//	GoDb.PreloadCloneSource( owner.Go, "gold" );
+//}
+
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) 
+		{
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			if( !target$.IsValid || !caster$.IsValid )
+			{
+				SetState Finished$;
+				return;
+			}
+			
+			//bail if this is an item that you can't sell. wouldn't want to convert a quest item.
+			if( target$.Go.HasGui() )
+			{
+				if( !target$.Go.Gui.CanSell )
+				{
+					SetState Finished$;
+					return;
+				}
+			}
+			
+			if( !target$.Go.IsInsideInventory() && target$.Go.Aspect.IsVisible )
+			{
+				target$.Go.Aspect.SSetIsVisible( false );
+				
+				float level$ = Math.MinFloat( caster$.Go.Actor.GetSkillLevel( owner.Go.Magic.SkillClass ), owner.Go.Magic.MaxCastLevel );
+				
+				// this formula comes from the original transmute spell - figure we should scale the same as the original did
+				float efficiency$ = (0.346-((1.0/(( level$ /10.0)+6.0))*1.5));
+
+				// we need to figure out how much health potion we want - how about 5% of the gold value? - after level efficiency is considered
+				int potionAmt$ = Math.ToInt( ( target$.Go.Aspect.GetGoldValue() * efficiency$ * points_per_gold$ ) + 1 );
+
+				// create a potion
+				potion$ = CreatePotion$( StringTool.SameNoCase(potion_type$, "health"), potionAmt$, target$ );
+
+				// delete the original target
+				GoDb.SMarkForDeletion( target$ );
+
+				This.CreateTimer(1,0);
+			}
+			else
+			{
+				setstate Finished$;
+			}
+		}
+	}
+	transition -> Finish$ : OnTimer( 1 ) =
+	{
+		if ( potion$.IsValidMp && caster$.IsValidMp )
+		{
+			// Start the visual
+			SiegeFx.SRunScript( effect_script$, potion$, caster$, script_params$, owner.Goid, WE_REQ_CAST );
+		}
+	}
+}
+
+state Finish$
+{
+	trigger OnGoHandleMessage$( WE_SPELL_SYNC_END )
+	{
+		SetState Finished$;
+	}
+}
+
+state Finished$
+{
+	event OnEnterState$
+	{
+		SiegeFx.ClearVariables( owner.goid );
+		
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

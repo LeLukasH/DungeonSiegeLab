@@ -1,0 +1,19 @@
+[t:tsd,n:b_c_edm_ht-dynamic]
+{
+  b hasalpha = true;
+	layer1alphaarg1 = texture;
+	layer1alphaarg2 = diffuse;
+	layer1alphaop = arg1;
+	layer1colorarg1 = texture;
+	layer1colorarg2 = diffuse;
+	layer1colorop = modulate;
+  i layer1numframes = 1;
+	layer1texture1 = b_c_edm_ht-dynamic;
+  f layer1ushiftpersecond = 0.0;
+  b layer1uwrap = true;
+  f layer1vshiftpersecond = 2.0;
+  b layer1vwrap = true;
+  i numlayers = 1;
+  i texturedetail = 1;
+  b timesyncanimation = true;
+}

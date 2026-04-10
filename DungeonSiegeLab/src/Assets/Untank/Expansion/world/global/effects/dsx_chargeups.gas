@@ -1,0 +1,40 @@
+////////////////////////////////////
+//
+// Similar to cdimage\world\global\effects\ChargeUps.gas, this file is intended for 
+// containing charge up effects to play on the casters when a spell is cast.  See the
+// afforementioned file for ideas.
+
+//////////////////////////////////////////////////////////////////
+// combat magic chargeups.
+//////////////////////////////////////////////////////////////////
+
+[effect_script*] 
+{
+	name	=monster_magnet_charge;
+
+	script	=[[
+			sfx create explosion #SOURCE 
+				"srate(.001)vmin(8)vmax(8)omni_dir()ts(.15)
+				scale_range(.33,.66,0)texture(b_sfx_sparkle01)color0(1,0,0)
+				color1(0,0,0)dur(.55)radius(.2)fade_range(16,16,0)count(16)
+				scale(.45)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+	
+			sfx create explosion #SOURCE 
+				"srate(.001)vmin(8)vmax(8)omni_dir()ts(.15)
+				scale_range(.33,.66,0)texture(b_sfx_sparkle01)color0(0,1,0)
+				color1(0,0,0)dur(.55)radius(.2)fade_range(16,16,0)count(16)
+				scale(.45)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+
+			sfx create explosion #SOURCE 
+				"srate(.001)vmin(8)vmax(8)omni_dir()ts(.15)
+				scale_range(.33,.66,0)texture(b_sfx_sparkle01)color0(0,0,1)
+				color1(0,0,0)dur(.55)radius(.2)fade_range(16,16,0)count(16)
+				scale(.45)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			]];
+}

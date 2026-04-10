@@ -1,0 +1,278 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  minigun_magic.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property float	shot_life$	 			= 2.0						doc = "Life of shot - timeout in seconds";
+
+property bool	do_fire_damage$			= false						doc = "Flames from fireball fire will ignite stuff";
+property bool	do_hit_damage$			= false						doc = "Upon collision damage to a go will be done";
+property bool	create_damage_volume$	= false						doc = "create a damage volume every reload delay.";
+
+property float	particle_fit$  			=  .2						doc = "Emission volume fit for collision 0 is loose, 1 is tight";
+
+property bool	repeat$					= true						doc = "Will continually keep firing based on repeat rate";
+property bool	stop_on_death$			= true						doc = "Stop last effect on death of actor wielding the weapon.";
+property string effect_name$			= "minigun_flamethrower"	doc = "name of the effect script to run.";
+
+property bool	animate_weapon$			= false						doc = "Animate the weapon when firing.";
+property bool	use_mana$				= false						doc = "Does the weapon use mana to fire?";
+property float	mana_per_shot$			= 0.0 						doc = "how much mana is used per shot.";
+
+property int	total_effects$			= 3							doc = "number of effects that can be active at one time"; 
+
+owner = GoSkritComponent;
+
+bool deactivate_requested$ = false;
+Goid m_Weapon$;
+Goid target$;
+Goid m_Ammo$;
+Goid Watched$;
+int active_effects$;
+SFxSID	last_effect$ = 0;
+
+trigger OnGoHandleCcMessage$( WE_KILLED ) 
+{
+	if ( ( last_effect$ != 0 ) && ( stop_on_death$ ) )
+ 	{
+		SiegeFx.SStopScript( last_effect$ );
+	}
+	
+	if ( Watched$.IsValid )
+	{
+		GoDb.StopWatching( owner.Goid, Watched$ );
+	}
+	Report.Report("AISkrit","Minigun is returning to the idle state.\n");
+	SetState( Idle$ );
+}
+
+
+startup state Idle$
+{
+	event OnEnterState$
+	{
+		active_effects$ = 0;
+	}
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_ACTIVATE )
+		{
+			Report.Report("AISkrit","Minigun has recieved an activate.\n");
+			
+			target$ 	= MakeGoid( msg$.GetData1() );
+			m_Weapon$	= owner.Goid;
+			Watched$	= owner.Go.Parent.goid;
+			
+			GoDb.StartWatching( owner.Goid, Watched$ );
+			
+			deactivate_requested$ = false;
+			SetState Fire$;
+		}
+	}
+}
+
+
+state Fire$
+{
+	event OnEnterState$
+	{
+		// Don't shoot again until our reload delay is up
+		this.CreateTimer( 1, m_Weapon$.Go.Attack.ReloadDelay );
+		
+		if(!target$.IsValid || !m_Weapon$.IsValid )
+		{
+			return;
+		}
+		
+		if( use_mana$ )
+		{
+//			report.genericf("fuel: %g\n",m_Weapon$.Go.Aspect.CurrentMana);
+			if ( mana_per_shot$ >= m_Weapon$.Go.Aspect.CurrentMana )
+			{
+				this.CreateTimer( 1, m_Weapon$.Go.Attack.ReloadDelay );
+				SendWorldMessage( WE_MANA_RATIO_REACHED_LOW, owner.Goid, owner.Go.Parent.goid );
+				return;
+			} else {
+				Rules.ChangeMana( m_Weapon$, -1.0 * mana_per_shot$);
+//				report.genericf("fuel: %g\n",m_Weapon$.Go.Aspect.CurrentMana);
+			}
+		}
+		
+		if( animate_weapon$ )
+		{
+			MCPManager.MakeRequest( m_Weapon$, PL_PLAYANIM, CHORE_ROTATE , 0, 0 );
+		}
+			
+		if (m_Weapon$.Go.Attack.GetAmmoCloneSource == goid.invalidgoid)
+		{
+			if(active_effects$ < total_effects$)
+			{
+				if( create_damage_volume$)
+				{
+					float damage$ = Math.RandomFloat( owner.Go.Attack.DamageMin, owner.Go.Attack.DamageMax );
+					
+					Physics.CreateDamageVolume( m_Weapon$, target$, owner.Go.Attack.AttackRange + 2.0 , m_Weapon$.Go.Attack.AreaDamageRadius / 2.0 ,m_Weapon$.Go.Attack.AreaDamageRadius, damage$, m_Weapon$.Go.Attack.ReloadDelay, owner.Go.Parent.goid, m_Weapon$ );
+				}
+				
+				string params$;
+		
+				// [0] - $shot_life
+				StringTool.AppendF( params$, "[%g]", shot_life$ );
+				if( do_fire_damage$ )
+				{
+				// [1] - fire damage
+					StringTool.AppendF( params$, "[ignite()fdamage(%g,%g,%g)]", m_Weapon$.Go.Attack.DamageMin, m_Weapon$.Go.Attack.DamageMax, particle_fit$ );
+				}
+		
+//				report.genericf("%s\n",params$);
+		
+				// Run the script
+				if( target$.IsValid )
+				{
+					if( !target$.Go.HasAspect )
+					{
+						// be a bad boy!! make a global Go at the position of the local go just to target the effect on. -ET
+						GoCloneReq cloneReq$ = MakeGoCloneReq( "point" );
+						cloneReq$.StartingPos	= target$.Go.Placement.position;
+	                	cloneReq$.SnapToTerrain = true;         
+						cloneReq$.ForceClientAllowed = true;
+	           			target$	= GoDb.SCloneGo( cloneReq$ );
+	           			GoDb.StartExpiration( target$.Go, true );
+					}
+				}
+				
+				if( target$.IsValidMp && m_Weapon$.IsValidMp )
+				{
+					last_effect$ = SiegeFx.SRunScript( effect_name$, target$, m_Weapon$, params$, m_Weapon$, WE_REQ_ACTIVATE );
+					active_effects$ += 1;
+				}
+				//report.genericf("active effects: %d\n",active_effects$);
+			}
+		} else {
+			if( target$.IsValid() )
+			{
+				if( !Watched$.IsValid )
+				{ 
+					return;
+				}
+				
+				if( !Watched$.Go.hasInventory )
+				{ 
+					return;
+				}
+				
+				if( !Watched$.Go.Inventory.IsEquipped( m_Weapon$.Go ) )
+				{ 
+					return;
+				}
+				
+				m_Ammo$ = m_Weapon$.Go.Attack.SPrepareAmmo;
+				
+				int firing_pos$ = SiegeFx.AddVariable( m_Weapon$.Go.Attack.ComputeFiringPos, m_Ammo$ );
+				
+				if ( target$.Go.HasAspect )
+				{
+					int target_pos$ = SiegeFx.AddVariable( m_Weapon$.Go.Attack.ComputeTargetPos( target$ ), m_Ammo$ );
+					
+					float velocity$ = m_Weapon$.Go.Physics.GetVelocity;
+	            
+					if( m_Weapon$.Go.Attack.IsInProjectileRange( velocity$, SiegeFx.GetVariable( target_pos$, m_Ammo$ ) ) )
+					{
+						m_Weapon$.Go.Attack.ComputeAimingError;
+						float x_error$ = m_Weapon$.Go.Attack.GetAimingErrorX;
+						float y_error$ = m_Weapon$.Go.Attack.GetAimingErrorY;
+									
+						float aiming_angle$ = m_Weapon$.Go.Attack.ComputeAimingAngle( SiegeFx.GetVariable( firing_pos$, m_Ammo$ ), SiegeFx.GetVariable( target_pos$, m_Ammo$ ), velocity$ );
+						m_Weapon$.Go.Attack.SLaunchAmmo( velocity$, SiegeFx.GetVariable( firing_pos$, m_Ammo$ ), SiegeFx.GetVariable( target_pos$, m_Ammo$ ), x_error$, y_error$, goid.invalidgoid );
+						m_Weapon$.Go.Attack.AlertRangedAttack( target$ );
+					}
+					else
+					{
+						//report.generic("Out of range for spell_launch.skrit");
+						m_Weapon$.Go.Attack.SUnprepareAmmo;
+					}			
+				} else {
+					m_Weapon$.Go.Attack.ComputeAimingError;
+					float x_error$ = m_Weapon$.Go.Attack.GetAimingErrorX;
+					float y_error$ = m_Weapon$.Go.Attack.GetAimingErrorY;
+			    
+					float velocity$ = m_Weapon$.Go.Physics.GetVelocity;
+			    
+					float aiming_angle$ = m_Weapon$.Go.Attack.ComputeAimingAngle( SiegeFx.GetVariable( firing_pos$, m_Ammo$ ), target$.go.placement.position, velocity$ );
+			    
+					m_Weapon$.Go.Attack.SLaunchAmmo( velocity$, SiegeFx.GetVariable( firing_pos$, m_Ammo$ ), target$.go.placement.position, x_error$, y_error$, Goid.InvalidGoid );
+				}
+				SiegeFx.ClearVariables( m_Ammo$ );
+			}
+		}
+	}
+
+	trigger OnTimer$( 1 )
+	{
+		// Handle fire repeat
+		if( deactivate_requested$ )
+		{
+			if ( Watched$.IsValid )
+			{
+				GoDb.StopWatching( owner.Goid, Watched$ );
+			}
+			Report.Report("AISkrit","Minigun is returning to the idle state.\n");
+			SetState( Idle$ );
+		}
+		else if( !deactivate_requested$ && repeat$ )
+		{
+			Report.Report("AISkrit","Minigun is trying to fire.\n");
+			SetState( Fire$ );
+		}
+		else if( !repeat$ )
+		{
+			// Need to reset to an idle state after repeat duration
+			Report.Report("AISkrit","Minigun is returning to the idle state.\n");
+			SetState( Idle$ );
+		}	
+	}
+	
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == WE_SPELL_SYNC_MID )
+		{
+			if( do_hit_damage$ )
+			{
+				if( target$.IsValid() )
+				{
+					if( target$.Go.HasAspect )
+					{
+						// For spell collisions the send from is game object that has been hit
+						Rules.DamageGoRanged( m_Weapon$.Go.GetParent().goid, m_Weapon$, target$ );
+					}
+				}
+			}
+		}
+		else if( e$ == WE_SPELL_SYNC_END )
+		{
+			if (m_Weapon$.Go.Attack.GetAmmoCloneSource == goid.invalidgoid)
+			{	
+				Report.Reportf("AISkrit","Minigun shot has expired total of %d active.\n",active_effects$);
+			
+				active_effects$ -= 1;
+				//report.genericf("active effects: %d\n",active_effects$);
+			}
+		}
+		else if( e$ == WE_REQ_DEACTIVATE )
+		{
+			Report.Report("AISkrit","Minigun has recieved a deactivate.\n");
+			
+			deactivate_requested$ = true;
+			if ( last_effect$ != 0 )
+			{
+				SiegeFx.FinishScript( last_effect$ );
+			}
+		}
+	}
+}

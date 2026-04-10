@@ -1,0 +1,57 @@
+[select_name_dialog]
+{
+	interface = true;
+	modal = true;
+	[t:button,n:button_select_name_okay]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 4;
+		rect = 350,334,450,350;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { onbuttonpress=notify(exit_select_name); }
+		[t:text,n:text_select_name_okay]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 5;
+			font_color = -1;
+			font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 388,324,455,339;
+			text = "OK";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:dialog_box,n:select_name_dialog_bg]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_wide;
+		draw_order = 1;
+		rect = 245,220,555,380;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text_box,n:select_name_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 3;
+		font_color = -1;		
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = center;
+		fixed_location = true;
+		center_height = true;
+		rect = 260,220,540,320;
+		text = "You must enter a name for your character.";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+}

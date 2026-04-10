@@ -1,0 +1,218 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  skrev_a3_r3_h_a_is_controller.skrit
+// Author(s):  Jason Dunlop
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: To control the hassat automaton fight is
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "skrev_a3_r3_h_a_is_controller";
+
+// external properties
+property scid attack_scid_1$			doc = "Scid of first attacker.";	// automaton 1
+property scid attack_scid_2$			doc = "Scid of second attacker.";	// automaton 2
+property scid attack_scid_3$			doc = "Scid of third attacker.";	// automaton 3
+property scid attack_scid_4$			doc = "Scid of fourth attacker.";	// hassat 1
+property scid attack_scid_5$			doc = "Scid of fifth attacker.";	// hassat 2
+
+owner = GoSkritComponent;
+
+// globals
+int hassatCounter$;	// we have two hassat
+int automatonCounter$;	// we have three automatons
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// Support functions
+
+
+// attack the give object
+attack_character$( goid attacker$, goid target$ )
+{
+	if( attacker$.IsValid && attacker$.Go!=NULL )
+	{
+		if( IsAlive(attacker$.Go.GetLifeState) )
+		{
+		//	report.generic( "attack skrev!\n" );
+			// attack the target
+			attacker$.Go.Mind.SDoJob( MakeJobReq( JAT_ATTACK_OBJECT, JQ_ACTION, QP_FRONT, AO_COMMAND, target$ ) );
+		}
+	}
+}
+
+// make them fight
+fight$( )
+{	
+	// if either side is totally dead, we want to quit right now.
+	if( (hassatCounter$ == 0) || (automatonCounter$ == 0) )
+	{
+		SetState Done$;
+		return;
+	}
+	
+	Goid autoAttack$ = NULL;
+	Goid hassatAttack$ = NULL;
+	
+	// find who the automatons will attack
+	if( attack_scid_4$.IsValid && (attack_scid_4$.Go!=NULL) )
+	{
+		if( IsConscious( attack_scid_4$.Go.GetLifeState ) )
+		{
+			autoAttack$ = attack_scid_4$.goid;
+		}
+	}
+	if( autoAttack$ == NULL )
+	{
+		autoAttack$ = attack_scid_5$.goid;
+	}
+	// find who the hassat will attack
+	if( attack_scid_1$.IsValid && (attack_scid_1$.Go!=NULL) )
+	{
+		if( IsConscious( attack_scid_1$.Go.GetLifeState ) )
+		{
+			hassatAttack$ = attack_scid_1$.goid;
+		}
+	}
+	if( hassatAttack$ == NULL && attack_scid_2$.IsValid && (attack_scid_2$.Go!=NULL) )
+	{
+		if( IsConscious( attack_scid_2$.Go.GetLifeState ) )
+		{
+			hassatAttack$ = attack_scid_2$.goid;
+		}
+	}
+	if( hassatAttack$ == NULL )
+	{
+		hassatAttack$ = attack_scid_3$.goid;
+	}
+	
+	// hassat attack
+	if( hassatAttack$ != NULL )
+	{
+		attack_character$( attack_scid_4$.goid,  hassatAttack$ );
+		attack_character$( attack_scid_5$.goid,  hassatAttack$ );
+	}
+	
+	// automatons attack
+	if( autoAttack$ != NULL )
+	{
+		attack_character$( attack_scid_1$.goid,  autoAttack$ );
+		attack_character$( attack_scid_2$.goid,  autoAttack$ );
+		attack_character$( attack_scid_3$.goid,  autoAttack$ );
+	}
+	
+}
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+// chill here until we get an activate event
+startup state Wait$
+{
+	// look for activates
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		// activate?
+		if(e$ == WE_REQ_ACTIVATE)
+		{
+			// check the scids
+			if( !attack_scid_1$.Goid.IsValid() ) { report.genericf( "attack_scid_1$ is invalid!\n" ); }
+			if( !attack_scid_2$.Goid.IsValid() ) { report.genericf( "attack_scid_2$ is invalid!\n" ); }
+			if( !attack_scid_3$.Goid.IsValid() ) { report.genericf( "attack_scid_3$ is invalid!\n" ); }
+			if( !attack_scid_4$.Goid.IsValid() ) { report.genericf( "attack_scid_4$ is invalid!\n" ); }
+			if( !attack_scid_5$.Goid.IsValid() ) { report.genericf( "attack_scid_5$ is invalid!\n" ); }
+
+			// start watching them all.   whenever one of them dies, we will reset who they are attacking.
+			GoDb.StartWatching( owner.Goid, attack_scid_1$.Goid );
+			GoDb.StartWatching( owner.Goid, attack_scid_2$.Goid );
+			GoDb.StartWatching( owner.Goid, attack_scid_3$.Goid );
+			GoDb.StartWatching( owner.Goid, attack_scid_4$.Goid );
+			GoDb.StartWatching( owner.Goid, attack_scid_5$.Goid );
+
+			hassatCounter$ = 2;
+			automatonCounter$ = 3;
+
+			// jump into the start state
+			SetState Start$;
+		}
+	}
+}
+
+// start doing real events here
+state Start$
+{
+	
+	//While we're fighting, watch to see if the target dies.
+	event OnGoHandleCcMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_KILLED )
+		{
+		
+			//If an automaton was killed, decrement their counter.
+			if( ( attack_scid_1$.goid == msg$.GetSendTo() ) ||
+			    ( attack_scid_2$.goid == msg$.GetSendTo() ) ||
+			    ( attack_scid_3$.goid == msg$.GetSendTo() ) )  
+			{
+				automatonCounter$ = automatonCounter$ - 1;
+				Fight$();
+			}
+			
+			// if a hassat was killed, decrement theirs.
+			else if( ( attack_scid_4$.goid == msg$.GetSendTo() ) ||
+			    	 ( attack_scid_5$.goid == msg$.GetSendTo() ) )
+			{
+				hassatCounter$ = hassatCounter$ - 1;
+				Fight$();
+				
+			}
+		}
+	}
+	
+	event OnEnterState$
+	{
+		Fight$();
+	}
+}
+
+// finishing state.  cleans everything up
+state Done$
+{
+	event OnEnterState$
+	{
+		//stop watching the fighters
+		if ( GoDb.IsBeingWatched(attack_scid_1$.Goid) )
+		{
+			GoDb.StopWatching( owner.Goid, attack_scid_1$.Goid );
+		}		
+		if ( GoDb.IsBeingWatched(attack_scid_2$.Goid) )
+		{
+			GoDb.StopWatching( owner.Goid, attack_scid_2$.Goid );
+		}
+		if ( GoDb.IsBeingWatched(attack_scid_3$.Goid) )
+		{
+			GoDb.StopWatching( owner.Goid, attack_scid_3$.Goid );
+		}
+		if ( GoDb.IsBeingWatched(attack_scid_4$.Goid) )
+		{
+			GoDb.StopWatching( owner.Goid, attack_scid_4$.Goid );
+		}
+		if ( GoDb.IsBeingWatched(attack_scid_5$.Goid) )
+		{
+			GoDb.StopWatching( owner.Goid, attack_scid_5$.Goid );
+		}
+		
+		//report.generic( "exiting skrev!\n" );
+		// delete ourselves
+		PostWorldMessage(WE_REQ_DELETE, owner.Goid, owner.Goid, 1);
+	}
+}

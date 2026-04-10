@@ -1,0 +1,38 @@
+[hair]
+{
+	[farmboy] 
+	{
+		* = b_c_gah_fb_hair_001;
+		* = b_c_gah_fb_hair_002;
+		* = b_c_gah_fb_hair_003;
+		* = b_c_gah_fb_hair_004;
+		* = b_c_gah_fb_hair_005;
+		* = b_c_gah_fb_hair_006;
+		* = b_c_gah_fb_hair_007;
+		* = b_c_gah_fb_hair_008;
+		* = b_c_gah_fb_hair_009;
+		* = b_c_gah_fb_hair_010;
+	}
+
+	[farmgirl] 
+	{
+		* = b_c_gah_fg_hair_001;
+		* = b_c_gah_fg_hair_002;
+		* = b_c_gah_fg_hair_003;
+		* = b_c_gah_fg_hair_004;
+		* = b_c_gah_fg_hair_005;
+		* = b_c_gah_fg_hair_006;
+		* = b_c_gah_fg_hair_007;
+		* = b_c_gah_fg_hair_008;
+		* = b_c_gah_fg_hair_009;
+		* = b_c_gah_fg_hair_010;
+	}
+
+	[dwarf] 
+	{
+	}
+
+	[skeleton_good] 
+	{
+	}
+}

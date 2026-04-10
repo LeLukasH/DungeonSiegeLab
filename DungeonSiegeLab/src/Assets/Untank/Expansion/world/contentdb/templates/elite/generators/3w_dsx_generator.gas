@@ -1,0 +1,741 @@
+[t:template,n:3W_dsx_generator_base_beach_shrub]
+{
+	specializes		= generator;
+	doc				= "base template automated generator bush shrub";
+    category_name   = "1w_automated";
+
+	[aspect]
+	{
+		is_collidable = 	FALSE;
+		is_selectable = 	FALSE;
+		is_usable = 		FALSE;
+        material = 			foliage;
+	    does_block_camera =	true;
+   		model = 			m_i_glb_bush-10;
+		textures:0		= b_i_sea_bush-gen;
+        scale_base      = 1.0;
+	}
+	[body]
+	{
+		[chore_dictionary]
+		{
+            chore_prefix = 0;
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+                [anim_files]
+				{
+					spwn = a_i_glb_bush-10-shake;
+					rest = a_i_glb_bush-10-still;
+				}
+			}
+
+		}
+	}
+
+    common:dev_instance_text = "GENERATOR";
+	common:forced_expiration_class = immediate;
+	common:auto_expiration_class = immediate;
+
+	[generator_advanced_a2]
+	{
+//        spawn_period = 0;
+        trigger_range = 14;
+        sound_start = true;
+        sound_end = false;
+        accelerate = false;
+	}
+
+	[gizmo]
+	{
+		diffuse_color		=	0.0, 1, 0.0;
+		model = m_i_glb_object-waypoint;
+		use_diffuse_color = TRUE;
+	}
+
+
+}
+
+[t:template,n:3W_dsx_gen_beach_shrub-swarmling]
+{
+	specializes = 3W_dsx_generator_base_beach_shrub;
+	doc = "dsx_gen_beach_shrub-swarmling";
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_swarmling;
+	}
+}
+
+[t:template,n:3W_dsx_gen_beach_shrub-chomper]
+{
+	specializes = 3W_dsx_generator_base_beach_shrub;
+	doc = "dsx_gen_beach_shrub-chomper";
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_chomper;
+	}
+}
+
+[t:template,n:3W_dsx_gen_beach_shrub-mhulliq]
+{
+	specializes = 3W_dsx_generator_base_beach_shrub;
+	doc = "dsx_gen_beach_shrub-mhulliq";
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_mhulliq_one;
+	}
+}
+
+[t:template,n:3W_dsx_gen_beach_shrub-phrak_jungle]
+{
+	specializes = 3W_dsx_generator_base_beach_shrub;
+	doc = "dsx_gen_beach_shrub-phrak_jungle";
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_phrak_jungle;
+	}
+}
+
+[t:template,n:3W_dsx_generator_base_jungle_bush]
+{
+	specializes		= generator;
+	doc				= "base template automated generator jungle bush";
+    category_name   = "1w_automated";
+
+	[aspect]
+	{
+		is_collidable = 	FALSE;
+		is_selectable = 	FALSE;
+		is_usable = 		FALSE;
+        material = 			foliage;
+	    does_block_camera =	true;
+   		model = 			m_i_glb_bush-10;
+		scale_base      = 1.0;
+	}
+	[body]
+	{
+		[chore_dictionary]
+		{
+            chore_prefix = 0;
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+                [anim_files]
+				{
+					spwn = a_i_glb_bush-10-shake;
+					rest = a_i_glb_bush-10-still;
+				}
+			}
+
+		}
+	}
+
+    common:dev_instance_text = "GENERATOR";
+	common:forced_expiration_class = immediate;
+	common:auto_expiration_class = immediate;
+
+	[generator_advanced_a2]
+	{
+//        spawn_period = 0;
+        trigger_range = 14;
+        sound_start = true;
+        sound_end = false;
+        accelerate = false;
+	}
+
+	[gizmo]
+	{
+		diffuse_color		=	0.0, 1, 0.0;
+		model = m_i_glb_object-waypoint;
+		use_diffuse_color = TRUE;
+	}
+
+
+}
+
+[t:template,n:3W_dsx_gen_jungle_bush-swarmling]
+{
+	specializes = 3W_dsx_generator_base_jungle_bush;
+	doc = "dsx_gen_jungle_bush-swarmling";
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_swarmling;
+	}
+}
+
+[t:template,n:3W_dsx_gen_jungle_bush-forest_klaw]
+{
+	specializes = 3W_dsx_generator_base_jungle_bush;
+	doc = "dsx_gen_jungle_bush-forest_klaw";
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_forest_klaw;
+	}
+}
+
+[t:template,n:3W_dsx_gen_jungle_bush-troll_forest]
+{
+	specializes = 3W_dsx_generator_base_jungle_bush;
+	doc = "dsx_gen_jungle_bush-troll_forest";
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_troll_forest;
+	}
+}
+
+[t:template,n:3W_dsx_gen_jungle_bush-chitterskrag_baby]
+{
+	specializes = 3W_dsx_generator_base_jungle_bush;
+	doc = "dsx_gen_jungle_bush-chitterskrag_baby";
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_chitterskrag_baby;
+	}
+}
+
+[t:template,n:3W_dsx_gen_jungle_bush-wasped]
+{
+	specializes = 3W_dsx_generator_base_jungle_bush;
+	doc = "dsx_gen_jungle_bush-wasped";
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_wasped;
+	}
+}
+
+[t:template,n:3W_dsx_gen_jungle_bush-mhulliq_two]
+{
+	specializes = 3W_dsx_generator_base_jungle_bush;
+	doc = "dsx_gen_jungle_bush-mhulliq_two";
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_mhulliq_two;
+	}
+}
+
+[t:template,n:3W_dsx_generator_base_cobweb]
+{
+	specializes		= base_breakable_wood;
+	doc				= "base template automated generator cobweb";
+    category_name   = "1w_automated";
+
+	[aspect]
+	{
+        is_collidable 		= false;
+		is_selectable = 	FALSE;
+		is_usable = 		FALSE;
+ 	    does_block_camera =	true;
+		model 				= m_i_csl_cobweb-07;
+	}
+	
+    common:dev_instance_text = "GENERATOR";
+	common:forced_expiration_class = immediate;
+	common:auto_expiration_class = immediate;
+
+	[generator_advanced_a2]
+	{
+//        spawn_period = 0;
+        trigger_range = 14;
+        sound_start = true;
+        sound_end = false;
+        accelerate = false;
+        Child_Template_Name = 3W_dsx_spider_sm;
+	}
+
+	[gizmo]
+	{
+		diffuse_color		=	0.0, 1, 0.0;
+		model = m_i_glb_object-waypoint;
+		use_diffuse_color = TRUE;
+	}
+
+    [physics]
+	{
+		break_effect		= sarcophagus_dust;
+		[break_particulate]
+		{
+			cobweb_csl_01	= 1;
+			cobweb_csl_02	= 1;
+        }
+	}
+	
+	[generator_breakable]
+	{
+		spawn_sfx = grate_dust;
+	}
+}
+
+[t:template,n:3W_dsx_spawner_spider_sm]
+{
+	specializes = 3W_dsx_generator_base_jungle_bush;
+	doc = "dsx_spawner_spider_sm";
+
+	aspect:model 				= m_i_csl_cobweb-07;
+	physics:break_effect		= sarcophagus_dust;
+
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_spider_sm;
+	}
+
+   [physics]
+	{
+		[break_particulate]
+		{
+			cobweb_csl_01	= 1;
+			cobweb_csl_02	= 1;
+        }
+	}
+
+}
+
+[t:template,n:3W_dsx_generator_base_tent_flap]
+{
+	specializes		= generator;
+	doc 			= "base template automated tent flap grs gens";
+    category_name   = "1w_automated";
+
+    aspect:model	= m_i_grs_tent-camp-03;
+
+	
+	[body]
+	{
+		[chore_dictionary]
+		{
+            chore_prefix = 0;
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+                [anim_files]
+				{
+					spwn = a_i_grs_tent-camp-03-open;
+				}
+			}
+		}
+	}
+
+    common:dev_instance_text = "GENERATOR";
+	common:forced_expiration_class = immediate;
+	common:auto_expiration_class = immediate;
+
+    [gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0, 0, 1.0;
+		use_diffuse_color	=	true;
+	}
+
+    [generator_advanced_a2]
+	{
+		spawn_range		= 0.0;
+    	anim_one_shot	= true;
+    	sound_start		= false;
+    	sound_end		= false;
+    	close_sfx_on	= false;
+		trigger_range	= 18;
+	}
+
+}
+
+[t:template,n:3W_dsx_gen_tent_flap-hassat_shaman]
+{
+	specializes		= 3W_dsx_generator_base_tent_flap;
+	doc 			= "dsx_gen_tent_flap-hassat_shaman";
+
+    [generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_hassat_shaman;
+	}
+}
+
+
+[t:template,n:3W_dsx_generator_base_swp_bush]
+{
+	specializes		= generator;
+	doc				= "base template automated generator bush swamp";
+    category_name   = "1w_automated";
+	[aspect]
+	{
+		is_collidable = 	FALSE;
+		is_selectable = 	FALSE;
+		is_usable = 		FALSE;
+        material = 			foliage;
+	    does_block_camera =	true;
+   		model 		= m_i_swp_bush-08;
+   		textures:0 	= b_i_swp_bush-05;
+	}
+	[body]
+	{
+		[chore_dictionary]
+		{
+            chore_prefix = 0;
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+                [anim_files]
+				{
+					spwn = a_i_swp_bush-08-shake;
+					rest = a_i_swp_bush-08-still;
+				}
+			}
+
+		}
+	}
+
+    common:dev_instance_text = "GENERATOR";
+	common:forced_expiration_class = immediate;
+	common:auto_expiration_class = immediate;
+
+	[generator_advanced_a2]
+	{
+//        spawn_period = 0;
+        trigger_range = 14;
+        sound_start = true;
+        sound_end = false;
+        accelerate = false;
+	}
+	[gizmo]
+	{
+		diffuse_color		=	0.0, 1, 0.0;
+		model = m_i_glb_object-waypoint;
+		use_diffuse_color = TRUE;
+	}
+}
+
+[t:template,n:3W_dsx_gen_bush_swamp-fleshrender]
+{
+	specializes = 3W_dsx_generator_base_swp_bush;
+	doc = "dsx_gen_swamp_bush-fleshrender";
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_fleshrender;
+	}
+}
+
+[t:template,n:3W_dsx_gen_bush_swamp-leetch]
+{
+	specializes = 3W_dsx_generator_base_swp_bush;
+	doc = "dsx_gen_swamp_bush-leetch";
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_leetch;
+	}
+}
+
+[t:template,n:3W_dsx_generator_base_grate_floor]
+{
+	specializes		= generator;
+	doc				= "base template automated floor grate gens";
+    category_name   = "1w_automated";
+
+	[aspect]
+	{
+	    model         = m_i_csl_grate-02;
+	    material      = steel;
+	    is_collidable = false;
+	    is_selectable = false;
+	    is_usable     = false;
+	}
+
+    common:dev_instance_text = "GENERATOR";
+	common:forced_expiration_class = immediate;
+	common:auto_expiration_class = immediate;
+
+	[body]
+	{
+		[chore_dictionary]
+		{
+            chore_prefix = 0;
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+                [anim_files]
+				{
+					spwn = a_i_csl_grate-02-open;
+					rest = a_i_csl_grate-02-close;
+				}
+			}
+		}
+
+	}
+
+    [generator_advanced_a2] 
+    {
+    	trigger_range = 10.0;
+    	accelerate = false;
+    }
+
+    [gizmo]
+	{
+		model				=	m_i_glb_waypoint-10;
+		texture				=	;
+		diffuse_color		=	0, 0, 1.0;
+		use_diffuse_color	=	true;
+	}
+
+}
+
+[t:template,n:3W_dsx_gen_grate_floor-chitterskrag_baby]
+{
+	specializes		= generator_base_grate_floor;
+	doc 			= "dsx_gen_grate_floor-chitterskrag_baby";
+
+    [generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_chitterskrag_baby;
+	}
+
+}
+
+
+[t:template,n:3W_dsx_generator_base_exploding_wood]
+{
+	specializes		= generator_base_exploding;
+	doc				= "base template for wood automated exploding gens";
+    category_name   = "1w_automated";
+
+	[aspect]
+	{
+		material		= wood;
+	}
+
+    [physics]
+	{
+        break_sound = s_e_env_break_container_wood;
+		explode_when_killed = true;
+
+		[break_particulate]
+		{
+			frag_glb_wood_01	= 3;
+			frag_glb_wood_02	= 2;
+			frag_glb_wood_03	= 2;
+			frag_glb_wood_04	= 4;
+		}
+	}
+
+    [gizmo]
+	{
+		model				=	m_i_glb_waypoint-10;
+		texture				=	;
+		diffuse_color		=	0, 0, 1.0;
+		use_diffuse_color	=	true;
+	}
+}
+
+[t:template,n:3W_dsx_gen_explode_door-fleshrender]
+{
+	specializes		= 3W_dsx_generator_base_exploding_wood;
+	doc				= "dsx_gen_explode_door-fleshrender";
+
+    aspect:model	= m_i_glb_door-01-l;
+	aspect:textures:0	= b_i_swp_door-01;
+
+    [generator_auto_object_exploding]
+	{
+        Child_Template_Name = 3W_dsx_fleshrender;
+	}
+}
+
+[t:template,n:3W_dsx_generator_base_mound]
+{
+	specializes		= generator;
+	doc				= "dsx_generator_base_mound";
+    category_name   = "1w_automated";
+
+	[aspect]
+	{
+		is_collidable = 	FALSE;
+		is_selectable = 	FALSE;
+		is_usable = 		FALSE;
+        material = 			foliage;
+	    does_block_camera =	true;
+   		model = 			m_i_glb_mound-a;
+		textures:0		= b_t_gi_flr_stg-08x08-a;
+        scale_base      = 1.0;
+	}
+	[body]
+	{
+		[chore_dictionary]
+		{
+            chore_prefix = 0;
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+                [anim_files]
+				{
+					spwn = a_i_glb_mound-shake2;
+					rest = a_i_glb_mound-shake-static;
+				}
+			}
+
+		}
+	}
+
+    common:dev_instance_text = "GENERATOR";
+	common:forced_expiration_class = immediate;
+	common:auto_expiration_class = immediate;
+
+	[generator_advanced_a2]
+	{
+        spawn_period = 0;
+        trigger_range = 14;
+        sound_start = true;
+        sound_end = false;
+        accelerate = false;
+	}
+
+	[gizmo]
+	{
+		diffuse_color		=	0.0, 1, 0.0;
+		model = m_i_glb_object-waypoint;
+		use_diffuse_color = TRUE;
+	}
+
+
+}
+
+[t:template,n:3W_dsx_generator_mound-phrak]
+{
+	specializes = 3W_dsx_generator_base_mound;
+	doc = "dsx_generator_mound-phrak";
+
+	[generator_advanced_a2]
+	{
+        Child_Template_Name = 3W_dsx_phrak_jungle;
+	}
+}
+
+[t:template,n:3W_emitter_cicatrix_reward_mp]
+{
+	specializes 		= inventory;
+	doc 			= "loot generator. Cicatrix";
+    	category_name       	= "generator";
+    
+	[aspect]
+	{
+		is_visible = false;
+		force_no_render = true;
+		is_selectable = false;
+	}
+    	common:is_pcontent_allowed = false;
+	[generator_multiple_mp] {}
+	[inventory]
+	{
+		[delayed_pcontent]
+		{
+			[oneof*]
+			{
+				il_main = #ring/-unique(2)/41-49;
+				il_main = #amulet/-unique(2)/41-49;
+			}
+			[all*]
+			{
+				il_main = #armor/-unique(2)/62-137;
+				il_main = #melee/-unique(2)/41-49;
+				il_main = #ranged/-unique(2)/41-49;
+				il_main = #*/-unique(2)/41-49;
+				il_main = #spell/11-15;				
+			}
+						
+		}
+	}
+}
+
+[t:template,n:3W_dsx_generator_elemental_water_minion]
+{
+	specializes		= generator;
+	doc			= "dsx_generator_elemental_water_minion";
+    category_name   		= "1w_automated";
+
+	[aspect]
+	{
+	    model         = m_i_glb_fountain_snake;
+	    material      = steel;
+	    is_collidable = false;
+	    is_selectable = false;
+	    is_usable     = false;
+	}
+    	[body]
+	{
+		[chore_dictionary]
+		{
+            		chore_prefix = 0;
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+                		[anim_files]
+				{
+					spwn = a_i_glb_fountain_snake-open;
+					rest = a_i_glb_fountain_snake-static;
+				}
+			}
+		}
+
+	}
+    [generator_advanced_a2] 
+    {
+    	child_template_name = 3W_dsx_elemental_water_minion;
+    	trigger_range = 10.0;
+    	accelerate = false;
+    }
+
+    [gizmo]
+	{
+		model				= m_i_glb_waypoint-10;
+		texture				= ;
+		diffuse_color			= 0, 0, 1.0;
+		use_diffuse_color		= true;
+	}
+
+}
+
+// Hardison Dhon quest reward emitter - a1_r1_town
+[t:template,n:3W_emitter_hardison_reward]
+{
+	specializes 	= inventory;
+	doc 		= "Loot generator - Hardison Dhon";
+    	category_name	= "generator";
+    
+	[aspect]
+	{
+		is_visible = false;
+		force_no_render = true;
+		is_selectable = false;
+	}
+   	common:is_pcontent_allowed = false;
+	[generator_multiple_mp]
+	{
+		// don't generate for every player in MP, just one
+		one_per_player = false;
+	}
+
+	[inventory]
+	{
+		[delayed_pcontent]
+		{
+			il_main = 3w_he_op_pl_f_ofkhar_dsx;
+			il_main = spell_zorkons_exploder;
+		}
+	}
+}

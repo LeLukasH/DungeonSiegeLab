@@ -1,0 +1,109 @@
+[t:template,n:3W_dsx_phrak_jungle_base]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_phrak_jungle_base";
+	specializes = base_phrak;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  	35.7, 0;
+			intelligence =  11.1, 0;
+			dexterity =  	20.4, 0;
+            melee = 	73, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 992680;
+		life = 575.3;
+        	max_life = 575.3;
+        	mana = 19.5;
+		max_mana = 19.5;
+		scale_base = 0.40;
+		textures:0 = b_c_edm_ph-02;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_phrak_SED; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_dsx_phrak_SED; }
+			[hit_critical]	{ priority = low; * = s_e_hit_phrak_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_phrak_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_phrak_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 429;
+		damage_min = 263.3;
+	}
+	[common]
+	{
+		screen_name="Jungle Phrak";
+		membership = monster;
+	}
+    [defend] { defense=250.3; }
+	[mind]
+	{
+		jat_brain						= world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party		= true;
+	}
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_phrak_piercer_01 = 1;
+			frag_glb_phrak_piercer_02 = 2;
+			frag_glb_phrak_piercer_03 = 2;
+			frag_glb_phrak_piercer_04 = 1;
+			frag_glb_phrak_piercer_05 = 2;
+		}
+	}
+}
+
+[t:template,n:3W_dsx_phrak_jungle]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_phrak_jungle";
+	specializes = 3W_dsx_phrak_jungle_base;
+}
+
+[t:template,n:3W_dsx_phrak_piercer]
+{
+// Balanced to level 26, easy melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_phrak_piercer";
+	specializes = 3W_dsx_phrak_jungle_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength 	 = 48.7, 0;
+			intelligence =  12.1, 0;
+			dexterity 	 = 25.5, 0;
+			melee		 = 90, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 1813680;
+		life 			= 906.6;
+        max_life 		= 906.6;
+        mana 			= 7.5;
+		max_mana 		= 7.5;
+		scale_base 		= 0.55;
+		textures:0 = b_c_edm_ph;
+	}
+	[attack]
+	{
+		damage_max = 492.5;
+		damage_min = 349.2;
+	}
+	[common]
+	{
+		screen_name="Mountain Phrak";
+		membership = phrak,monster;
+	}
+
+	[defend] { defense=552.2; }
+}

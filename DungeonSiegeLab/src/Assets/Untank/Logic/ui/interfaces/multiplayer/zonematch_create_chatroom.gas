@@ -1,0 +1,385 @@
+[zonematch_create_chatroom]
+{
+	  interface = true;
+	  modal = true;
+	[t:dialog_box,n:backgound_password_text]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = cpbox;
+		i draw_order = 5;
+		  rect = 350,325,550,347;
+		  texture = none;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:dialog_box,n:backgound_roomname_text]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = cpbox;
+		i draw_order = 5;
+		  rect = 350,211,550,233;
+		  texture = none;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:dialog_box,n:backgound_topic_text]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = cpbox;
+		i draw_order = 5;
+		  rect = 350,287,550,309;
+		  texture = none;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:dialog_box,n:backgound_userlimit_text]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = cpbox;
+		i draw_order = 5;
+		  rect = 350,249,550,271;
+		  texture = none;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:dialog_box,n:background]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = cpbox_wide;
+		i draw_order = 2;
+		  rect = 200,145,600,455;
+		  texture = none;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:button,n:button_cancel]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = button_4;
+		i draw_order = 20;
+		  rect = 410,415,540,431;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		[t:text,n:button_cancel_text]
+		{
+			f alpha = 1.000000;
+			b common_control = false;
+			  common_template = ;
+			i draw_order = 68;
+			i font_color = -1;
+			i font_size = 12;
+			  font_type = b_gui_fnt_12p_copperplate-light;
+			  justify = center;
+			  rect = 456,416,540,431;
+			  text = "Cancel";
+			  texture = none;
+			  type = text;
+			  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			  wrap_mode = clamp;
+		}
+		[messages]
+		{
+			  onbuttonpress = notify(zonematch_dialog_cancel);
+		}
+	}
+	[t:button,n:button_ok]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = button_4;
+		i draw_order = 20;
+		  rect = 260,415,390,431;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		[t:text,n:button_ok_text]
+		{
+			f alpha = 1.000000;
+			b common_control = false;
+			  common_template = ;
+			i draw_order = 68;
+			i font_color = -1;
+			i font_size = 12;
+			  font_type = b_gui_fnt_12p_copperplate-light;
+			  justify = center;
+			  rect = 317,416,390,431;
+			  text = "OK";
+			  texture = none;
+			  type = text;
+			  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			  wrap_mode = clamp;
+		}
+		[messages]
+		{
+			  onbuttonpress = notify(zonematch_create_chatroom_ok);
+		}
+	}
+	[t:checkbox,n:checkbox_hidden_room]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 1296;
+		  rect = 250,363,266,379;
+		  texture = b_gui_cmn_checkbox;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		[t:window,n:checkbox_hidden_room_texture]
+		{
+			f alpha = 1.000000;
+			b common_control = false;
+			  common_template = ;
+			i draw_order = 2000;
+			  rect = 250,363,266,379;
+			  texture = b_gui_cmn_checkbox_x;
+			  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			  wrap_mode = clamp;
+		}
+		[messages]
+		{
+			  oncheck = notify(create_chatroom_check_hidden_room);
+		}
+	}
+	[t:text,n:checkbox_hidden_room_text]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 68;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		  justify = left;
+		  rect = 292,363,550,379;
+		  text = "Hidden room (not visible in chat room list)";
+		  texture = none;
+		  type = text;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		  [messages]
+		  {
+			  onbuttonpress = notify(toggle_check_hidden_room);
+		  }
+	}
+	[t:dialog_box,n:client_background]
+	{
+		f alpha = 1.000000;
+		b common_control = true;
+		  common_template = cpbox;
+		i draw_order = 3;
+		  rect = 220,195,580,399;
+		  texture = none;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:checkbox,n:create_chatroom_checkbox_password]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 1296;
+		  rect = 250,328,266,344;
+		  texture = b_gui_cmn_checkbox;
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		[t:window,n:create_chatroom_checkbox_password_texture]
+		{
+			f alpha = 1.000000;
+			b common_control = false;
+			  common_template = ;
+			i draw_order = 2000;
+			  rect = 250,328,266,344;
+			  texture = b_gui_cmn_checkbox_x;
+			  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			  wrap_mode = clamp;
+		}
+		[messages]
+		{
+			  oncheck = notify(create_chatroom_check_password);
+			  onuncheck = notify(create_chatroom_uncheck_password);
+		}
+		[t:text_box,n:create_chatroom_checkbox_password_text]
+		{
+			f alpha = 1.000000;
+			b common_control = false;
+			  common_template = ;
+			i draw_order = 83;
+			i font_color = -1;
+			i font_size = 12;
+			  font_type = b_gui_fnt_12p_copperplate-light;
+			  justify = right;
+			  rect = 272,328,340,344;
+			  text = "Password";
+			  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			  wrap_mode = clamp;
+			  fixed_location = true;
+		}
+	}
+	[t:edit_box,n:create_chatroom_name_edit_box]
+	{
+		f alpha = 1.000000;
+		b clear_select = false;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 80;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		i max_string_size = 40;
+		b permanent_focus = false;
+		  rect = 353,214,547,230;
+		  text = "";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		  tab_stop = 0;
+		[prompt]
+		{
+			  draw_order = 26;
+			  texture = b_gui_fe_m_single_prompt;
+			  width = 1;
+		}		
+	}
+	[t:edit_box,n:create_chatroom_password_edit_box]
+	{
+		f alpha = 1.000000;
+		b clear_select = false;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 81;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;		  
+		i max_string_size = 32;
+		b permanent_focus = false;
+		  rect = 353,328,547,344;
+		  text = "";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		  tab_stop = 3;
+		  allow_ime = false;
+		[prompt]
+		{
+			  draw_order = 26;
+			  texture = b_gui_fe_m_single_prompt;
+			  width = 1;
+		}		
+	}
+	[t:edit_box,n:create_chatroom_topic_edit_box]
+	{
+		f alpha = 1.000000;
+		b clear_select = false;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 81;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		i max_string_size = 256;
+		b permanent_focus = false;
+		  rect = 353,290,547,306;
+		  text = "";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		  tab_stop = 2;
+		[prompt]
+		{
+			  draw_order = 26;
+			  texture = b_gui_fe_m_single_prompt;
+			  width = 1;
+		}		
+	}
+	[t:edit_box,n:create_chatroom_userlimit_edit_box]
+	{
+		f alpha = 1.000000;
+		b clear_select = false;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 81;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		i max_string_size = 3;
+		b permanent_focus = false;
+		  rect = 353,252,547,268;
+		  text = "";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		b allow_ime = false;
+		  restrict_input = true;
+		  ascii_high_bound = 57;
+		  ascii_low_bound = 48;
+		  tab_stop = 1;
+		[prompt]
+		{
+			  draw_order = 26;
+			  texture = b_gui_fe_m_single_prompt;
+			  width = 1;
+		}
+	
+	}
+	[t:text,n:room_name_text]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 82;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		  justify = right;
+		  rect = 250,214,340,230;
+		  text = "Room Name";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:text,n:title]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 79;
+		i font_color = -1;
+		i font_size = 22;
+		  font_type = b_gui_fnt_20p_copperplate-light;
+		  justify = center;
+		  rect = 240,161,560,177;
+		  text = "CREATE CHAT ROOM";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:text,n:topic_text]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 83;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		  justify = right;
+		  rect = 250,290,340,306;
+		  text = "Topic";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+	[t:text,n:userlimit_text]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		i draw_order = 83;
+		i font_color = -1;
+		i font_size = 12;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		  justify = right;
+		  rect = 250,252,340,268;
+		  text = "User Limit";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+	}
+}

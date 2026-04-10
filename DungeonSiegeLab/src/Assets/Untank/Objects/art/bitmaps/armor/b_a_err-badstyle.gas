@@ -1,0 +1,5 @@
+[t:tsd,n:b_a_err-badstyle]
+{
+	layer1texture1 = b_a_err-badstyle;
+  i texturedetail = 3;
+}

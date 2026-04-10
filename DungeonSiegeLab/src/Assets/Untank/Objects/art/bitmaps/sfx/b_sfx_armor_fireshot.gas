@@ -1,0 +1,5 @@
+[t:tsd,n:b_sfx_armor_fireshot]
+{
+	layer1texture1 = b_sfx_armor_fireshot;
+  i texturedetail = 1;
+}

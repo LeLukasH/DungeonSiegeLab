@@ -1,0 +1,716 @@
+// index map
+// 1 = Exit
+// 2 = Menubars
+// 3 = Hero Menu
+
+
+
+[button_exit]
+{
+	[mouseover]
+	{
+		3 = exitback-up;
+		8 = text-small-up;		
+	}
+
+	[mousedown]
+	{
+		3 = exitback-down;
+		8 = text-small-down;		
+	}	
+	
+	[mouseout]
+	{
+		3 = exitback;
+		8 = text-small;
+	}
+}
+
+
+[button_sp_back]
+{
+	[mouseover]
+	{
+		4 = exitback-up;
+		8 = text-small-up;	
+	}
+
+	[mousedown]
+	{
+		4 = exitback-down;
+		8 = text-small;
+	}
+
+	[mouseout]
+	{
+		4 = exitback;
+		8 = text-small;
+	}	
+}
+
+
+[button_diff_back]
+{
+	[mouseover]
+	{
+		4 = exitback-up;
+		8 = text-small-up;	
+	}
+
+	[mousedown]
+	{
+		4 = exitback-down;
+		8 = text-small;
+	}
+
+	[mouseout]
+	{
+		4 = exitback;
+		8 = text-small;
+	}	
+}
+
+
+[button_previous]
+{
+	[mouseover]
+	{
+		2 = exitback-up;
+		6 = text-small-up;
+	}
+
+	[mousedown]
+	{
+		2 = exitback-down;
+		6 = text-small-down;
+	}
+
+	[mouseout]
+	{
+		2 = exitback;
+		6 = text-small;
+	}
+}
+
+[button_next]
+{
+	[mouseover]
+	{
+		1 = exitback-up;
+		7 = text-small-up;
+	}
+
+	[mousedown]
+	{
+		1 = exitback-down;
+		7 = text-small-down;
+	}
+
+	[mouseout]
+	{
+		1 = exitback;
+		7 = text-small;
+	}
+}
+
+[name_edit_box]
+{
+/*
+	[mouseover]
+	{
+		5 = exitback-up;
+		9 = text-small-up;
+	}
+
+	[mousedown]
+	{
+		5 = exitback-down;
+		9 = text-small-down;
+	}
+*/
+	[mouseout]
+	{
+		5 = exitback;
+		9 = text-small;
+	}
+}
+
+[button_single_player]
+{
+	[mouseover]
+	{
+		1 = menubars-up;
+		6 = text-menubars1-up;
+		7 = text-menubars2-up;
+	}
+
+	[mousedown]
+	{
+		1 = menubars-down;
+		6 = text-menubars1-down;
+		7 = text-menubars2-down;		
+	}
+
+	[mouseout]
+	{
+		1 = menubars;
+		6 = text-menubars1;
+		7 = text-menubars2;
+	}
+}
+
+[button_multi_player]
+{
+	[mouseover]
+	{
+		2 = menubars-up;
+		8 = text-menubars1-up;
+		9 = text-menubars2-up;
+	}
+
+	[mousedown]
+	{
+		2 = menubars-down;
+		8 = text-menubars1-down;
+		9 = text-menubars2-down;		
+	}
+
+	[mouseout]
+	{
+		2 = menubars;
+		8 = text-menubars1;
+		9 = text-menubars2;
+	}
+}
+
+[button_options]
+{
+	[mouseover]
+	{
+		3 = menubars-up;
+		10 = text-menubars1-up;
+		11 = text-menubars2-up;
+	}
+
+	[mousedown]
+	{
+		3 = menubars-down;
+		10 = text-menubars1-down;
+		11 = text-menubars2-down;		
+	}
+
+	[mouseout]
+	{
+		3 = menubars;
+		10 = text-menubars1;
+		11 = text-menubars2;
+	}
+}
+
+[button_continue]
+{
+	[mouseover]
+	{
+		4 = menubars-up;
+		12 = text-menubars1-up;
+		13 = text-menubars2-up;
+	}
+
+	[mousedown]
+	{
+		4 = menubars-down;
+		12 = text-menubars1-down;
+		13 = text-menubars2-down;		
+	}
+
+	[mouseout]
+	{
+		4 = menubars;
+		12 = text-menubars1;
+		13 = text-menubars2;
+	}
+}
+
+
+[button_about]
+{
+	[mouseover]
+	{
+		5 = menubars-up;
+		14 = text-menubars1-up;
+		15 = text-menubars2-up;
+	}
+
+	[mousedown]
+	{
+		5 = menubars-down;
+		14 = text-menubars1-down;
+		15 = text-menubars2-down;		
+	}
+
+	[mouseout]
+	{
+		5 = menubars;
+		14 = text-menubars1;
+		15 = text-menubars2;
+	}
+}
+
+[button_start_new_game]
+{
+	[mouseover]
+	{
+		4 = menubars-up;
+		12 = text-menubars1-up;
+		13 = text-menubars2-up;
+	}
+
+	[mousedown]
+	{
+		4 = menubars-down;
+		12 = text-menubars1-down;
+		13 = text-menubars2-down;		
+	}
+
+	[mouseout]
+	{
+		4 = menubars;
+		12 = text-menubars1;
+		13 = text-menubars2;
+	}
+}
+
+
+[button_load_game]
+{
+	[mouseover]
+	{
+		5 = menubars-up;
+		14 = text-menubars1-up;
+		15 = text-menubars2-up;
+	}
+
+	[mousedown]
+	{
+		5 = menubars-down;
+		14 = text-menubars1-down;
+		15 = text-menubars2-down;		
+	}
+
+	[mouseout]
+	{
+		5 = menubars;
+		14 = text-menubars1;
+		15 = text-menubars2;
+	}
+}
+
+[button_head_left]
+{
+	[mouseover]
+	{
+		13 = heromenu-up;
+	}
+
+	[mousedown]
+	{
+		13 = heromenu-down;
+	}
+
+	[mouseout]
+	{
+		13 = heromenu;
+	}	
+}
+
+[button_head_right]
+{
+	[mouseover]
+	{
+		11 = heromenu-up;
+	}
+
+	[mousedown]
+	{
+		11 = heromenu-down;
+	}
+
+	[mouseout]
+	{
+		11 = heromenu;
+	}	
+}
+
+[button_shirt_left]
+{
+	[mouseover]
+	{
+		1 = heromenu-up;
+	}
+
+	[mousedown]
+	{
+		1 = heromenu-down;
+	}
+
+	[mouseout]
+	{
+		1 = heromenu;
+	}	
+}
+
+[button_shirt_right]
+{
+	[mouseover]
+	{
+		6 = heromenu-up;
+	}
+
+	[mousedown]
+	{
+		6 = heromenu-down;
+	}
+
+	[mouseout]
+	{
+		6 = heromenu;
+	}	
+}
+
+
+[button_pants_right]
+{
+	[mouseover]
+	{
+		7 = heromenu-up;
+	}
+
+	[mousedown]
+	{
+		7 = heromenu-down;
+	}
+
+	[mouseout]
+	{
+		7 = heromenu;
+	}	
+}
+
+
+[button_pants_left]
+{
+	[mouseover]
+	{
+		2 = heromenu-up;
+	}
+
+	[mousedown]
+	{
+		2 = heromenu-down;
+	}
+
+	[mouseout]
+	{
+		2 = heromenu;
+	}
+}
+
+
+[button_face_right]
+{
+	[mouseover]
+	{
+		8 = heromenu-up;
+	}
+
+	[mousedown]
+	{
+		8 = heromenu-down;
+	}
+
+	[mouseout]
+	{
+		8 = heromenu;
+	}	
+}
+
+
+[button_face_left]
+{
+	[mouseover]
+	{
+		3 = heromenu-up;
+	}
+
+	[mousedown]
+	{
+		3 = heromenu-down;
+	}
+
+	[mouseout]
+	{
+		3 = heromenu;
+	}	
+}
+
+[button_hair_right]
+{
+	[mouseover]
+	{
+		9 = heromenu-up;
+	}
+
+	[mousedown]
+	{
+		9 = heromenu-down;
+	}
+
+	[mouseout]
+	{
+		9 = heromenu;
+	}	
+}
+
+[button_hair_left]
+{
+	[mouseover]
+	{
+		4 = heromenu-up;
+	}
+
+	[mousedown]
+	{
+		4 = heromenu-down;
+	}
+
+	[mouseout]
+	{
+		4 = heromenu;
+	}	
+}
+
+///
+
+[button_gender_left]
+{
+	[mouseover]
+	{
+		5 = heromenu-up;
+	}
+
+	[mousedown]
+	{
+		5 = heromenu-down;
+	}
+
+	[mouseout]
+	{
+		5 = heromenu;
+	}	
+}
+
+[button_gender_right]
+{
+	[mouseover]
+	{
+		10 = heromenu-up;
+	}
+
+	[mousedown]
+	{
+		10 = heromenu-down;
+	}
+
+	[mouseout]
+	{
+		10 = heromenu;
+	}	
+}
+
+[map_ok]
+{
+	[mouseover]
+	{
+		1 = exitback-up;
+		7 = text-small-up;
+	}
+
+	[mousedown]
+	{
+		1 = exitback-down;
+		7 = text-small-down;
+	}
+
+	[mouseout]
+	{
+		1 = exitback;
+		7 = text-small;
+	}
+}
+
+[map_cancel]
+{
+	[mouseover]
+	{
+		2 = exitback-up;
+		6 = text-small-up;
+	}
+
+	[mousedown]
+	{
+		2 = exitback-down;
+		6 = text-small-down;
+	}
+
+	[mouseout]
+	{
+		2 = exitback;
+		6 = text-small;
+	}
+}
+
+[button_matchmaker]
+{
+	[mouseover]
+	{
+		3 = menubars-up;
+		10 = text-menubars1-up;
+		11 = text-menubars2-up;
+	}
+
+	[mousedown]
+	{
+		3 = menubars-down;
+		10 = text-menubars1-down;
+		11 = text-menubars2-down;		
+	}
+
+	[mouseout]
+	{
+		3 = menubars;
+		10 = text-menubars1;
+		11 = text-menubars2;
+	}			
+}
+
+[button_internet]
+{
+	[mouseover]
+	{
+		4 = menubars-up;
+		12 = text-menubars1-up;
+		13 = text-menubars2-up;
+	}
+
+	[mousedown]
+	{
+		4 = menubars-down;
+		12 = text-menubars1-down;
+		13 = text-menubars2-down;		
+	}
+
+	[mouseout]
+	{
+		4 = menubars;
+		12 = text-menubars1;
+		13 = text-menubars2;
+	}
+}
+
+[button_lan]
+{
+	[mouseover]
+	{
+		5 = menubars-up;
+		14 = text-menubars1-up;
+		15 = text-menubars2-up;
+	}
+
+	[mousedown]
+	{
+		5 = menubars-down;
+		14 = text-menubars1-down;
+		15 = text-menubars2-down;		
+	}
+
+	[mouseout]
+	{
+		5 = menubars;
+		14 = text-menubars1;
+		15 = text-menubars2;
+	}
+}
+
+
+[button_easy]
+{
+	[mouseover]
+	{
+		3 = menubars-up;
+		10 = text-menubars1-up;
+		11 = text-menubars3-up;
+	}
+
+	[mousedown]
+	{
+		3 = menubars-down;
+		10 = text-menubars1-down;
+		11 = text-menubars3-down;		
+	}
+
+	[mouseout]
+	{
+		3 = menubars;
+		10 = text-menubars1;
+		11 = text-menubars3;
+	}				
+}
+
+[button_medium]
+{
+	[mouseover]
+	{
+		4 = menubars-up;
+		12 = text-menubars1-up;
+		13 = text-menubars3-up;
+	}
+
+	[mousedown]
+	{
+		4 = menubars-down;
+		12 = text-menubars1-down;
+		13 = text-menubars3-down;		
+	}
+
+	[mouseout]
+	{
+		4 = menubars;
+		12 = text-menubars1;
+		13 = text-menubars3;
+	}
+}
+
+[button_hard]
+{
+	[mouseover]
+	{
+		5 = menubars-up;
+		14 = text-menubars1-up;
+		15 = text-menubars3-up;
+	}
+
+	[mousedown]
+	{
+		5 = menubars-down;
+		14 = text-menubars1-down;
+		15 = text-menubars3-down;		
+	}
+
+	[mouseout]
+	{
+		5 = menubars;
+		14 = text-menubars1;
+		15 = text-menubars3;
+	}
+}
+

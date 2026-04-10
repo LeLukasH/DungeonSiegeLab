@@ -98,10 +98,16 @@ public class TextureFinder
     /// Pokúsi sa nájsť fyzické súbory textúr v /Bits priečinku.
     /// Hľadá .raw a .psd súbory s rovnakým názvom (bez prípony).
     /// </summary>
-    public void ResolveTextureFiles(List<TextureReference> textures, string bitsRootPath)
+    /// <param name="overwriteExisting">
+    /// When false, skips textures that already have a resolved path.
+    /// Use false for fallback sources (e.g. Untank) so the primary Bits folder takes priority.
+    /// </param>
+    public void ResolveTextureFiles(List<TextureReference> textures, string rootPath, bool overwriteExisting = true)
     {
+        if (!Directory.Exists(rootPath)) return;
+
         var allTextureFiles = Directory
-            .EnumerateFiles(bitsRootPath, "*.*", SearchOption.AllDirectories)
+            .EnumerateFiles(rootPath, "*.*", SearchOption.AllDirectories)
             .Where(f => f.EndsWith(".raw", StringComparison.OrdinalIgnoreCase)
                      || f.EndsWith(".psd", StringComparison.OrdinalIgnoreCase))
             .GroupBy(f => Path.GetFileNameWithoutExtension(f), StringComparer.OrdinalIgnoreCase)
@@ -109,6 +115,7 @@ public class TextureFinder
 
         foreach (var tex in textures)
         {
+            if (!overwriteExisting && tex.ResolvedPath != null) continue;
             if (allTextureFiles.TryGetValue(tex.TextureName, out var resolvedPath))
                 tex.ResolvedPath = resolvedPath;
         }

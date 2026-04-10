@@ -1,0 +1,177 @@
+[t:template,n:2W_base_king]
+{
+	category_name = "2W_npc";
+	doc = "2W_base_king";
+	specializes = npc;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  5, 0;
+			intelligence =  5, 0;
+			dexterity =  5, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 2022;
+		life = 1000;
+		max_life = 1000;
+		model = m_c_gbn_kg_pos_1;
+	}
+	[attack]
+	{
+		attack_range = 1;
+		damage_max = 1.1;
+		damage_min = 0.9;
+		reload_delay = 1;
+	}
+	[body]
+	{
+		avg_move_velocity = 0.000000;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine1;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_pelvis;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_gbn_kg_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=ds; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				[anim_files]
+				{
+					tlk1 = a_c_gbn_kg_fs0_dsf-02;
+				}
+			}
+		}
+	}
+	[common]
+	{
+		screen_name="King Konreid";
+	}
+	[conversation] { }
+	[mind]
+	{
+		actor_may_attack = false;
+        actor_may_be_attacked = false;
+		jat_talk = world\ai\jobs\common\job_talk.skrit;
+		melee_engage_range = 10;
+		personal_space_range = 0.7;
+		ranged_engage_range = 10;
+		sight_range = 10.0;
+	}
+}
+[t:template,n:2W_king]
+{
+	category_name = "2W_npc";
+	doc = "2W_king";
+	specializes = 2W_base_king;
+	[inventory]
+	{
+		[other]
+		{
+			il_main = key_glb_star;
+		}
+	}
+}
+[t:template,n:2W_narrator]
+{
+	category_name = "2W_npc";
+	doc = "2W_narrator";
+	specializes = 2W_base_king;
+	[actor]
+	{
+		alignment			= aa_neutral;
+	}	
+	[aspect]
+	{
+		is_visible		= false;
+		is_selectable	= false;
+		experience_value = 2022;
+		life = 1000;
+		max_life = 1000;
+		model = m_c_gbn_kg_pos_1;
+		force_no_render = true;
+		draw_shadow = false;
+	}
+	[common]
+	{
+		screen_name="Narrator";
+		is_multi_player	= false;
+	}
+	[conversation] { }
+	[mind]
+	{
+		////////////////////////////////////////
+		//	jobs mappings
+
+		jat_attack_object			= jat_none;
+		jat_attack_object_melee 	= jat_none;
+		jat_attack_object_ranged	= jat_none;
+		jat_attack_position			= jat_none;
+		jat_attack_position_ranged	= jat_none;
+		jat_cast	    			= jat_none;
+		jat_cast_position  			= jat_none;
+		jat_die           			= jat_none;
+		jat_drink					= jat_none;
+		jat_do_se_command			= jat_none;
+		jat_drop          			= jat_none;
+		jat_equip         			= jat_none;
+		jat_face					= jat_none;
+		jat_fidget					= jat_none;
+		jat_flee_from_object		= jat_none;
+		jat_gain_consciousness		= jat_none;
+		jat_get           			= jat_none;
+		jat_give          			= jat_none;
+		jat_guard         			= jat_none;
+		jat_move          			= jat_none;
+		jat_patrol         			= jat_none;
+		jat_play_anim				= jat_none;
+		jat_use           			= jat_none;
+
+	}
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	1.0, 1, 0;
+		use_diffuse_color	=	true;
+	}	
+}

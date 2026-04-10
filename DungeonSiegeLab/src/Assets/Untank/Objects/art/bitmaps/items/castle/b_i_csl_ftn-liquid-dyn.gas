@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_csl_ftn-liquid-dyn]
+{
+	layer1texture1 = b_i_csl_ftn-liquid-dyn;
+  i texturedetail = 1;
+}

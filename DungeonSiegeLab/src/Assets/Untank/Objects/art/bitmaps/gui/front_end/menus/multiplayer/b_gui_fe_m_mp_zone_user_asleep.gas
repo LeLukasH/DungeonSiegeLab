@@ -1,0 +1,7 @@
+[t:tsd,n:b_gui_fe_m_mp_zone_user_asleep]
+{
+  b dither = true;
+  b hasalpha = true;
+	layer1texture1 = b_gui_fe_m_mp_zone_user_asleep;
+  i texturedetail = 0;
+}

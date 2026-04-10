@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_cask-ale]
+{
+	layer1texture1 = b_i_glb_cask-ale;
+  i texturedetail = 1;
+}

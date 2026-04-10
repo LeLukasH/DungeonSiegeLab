@@ -1,0 +1,123 @@
+[faces]
+{
+	[farmboy]
+	{
+		* = b_c_gah_fb_skin_001;
+		* = b_c_gah_fb_skin_002;
+		* = b_c_gah_fb_skin_003;
+		* = b_c_gah_fb_skin_004;
+		* = b_c_gah_fb_skin_005;
+		* = b_c_gah_fb_skin_006;
+		* = b_c_gah_fb_skin_007;
+		* = b_c_gah_fb_skin_008;
+		* = b_c_gah_fb_skin_009;
+		* = b_c_gah_fb_skin_010;
+		// DSX new texture
+		//* = b_c_gan_fb_skin_jondar;
+	}
+	[farmgirl]
+	{
+		* = b_c_gah_fg_skin_001;
+		* = b_c_gah_fg_skin_002;
+		* = b_c_gah_fg_skin_003;
+		* = b_c_gah_fg_skin_004;
+		* = b_c_gah_fg_skin_005;
+		* = b_c_gah_fg_skin_006;
+		* = b_c_gah_fg_skin_007;
+		* = b_c_gah_fg_skin_008;
+		* = b_c_gah_fg_skin_009;
+		* = b_c_gah_fg_skin_010;
+		// DSX new texture
+		//* = b_c_gan_fg_skin_lyssa;
+	}
+	[dwarf]
+	{
+		* = b_c_gan_df_skin_01;
+		* = b_c_gan_df_skin_02;
+		* = b_c_gan_df_skin_03;
+		* = b_c_gan_df_skin_04;
+		* = b_c_gan_df_skin_05;
+		* = b_c_gan_df_skin_06;
+	}
+	[skeleton_good]
+	{
+		* = b_c_ecm_sk;
+		* = b_c_ecm_sk-02;
+		* = b_c_ecm_skg;
+	}
+	
+	// DSX new race
+	[halfgiant]
+	{
+		* = b_c_gan_hg_skin_01;
+		* = b_c_gan_hg_skin_02;
+		* = b_c_gan_hg_skin_03;
+		* = b_c_gan_hg_skin_04;
+		* = b_c_gan_hg_skin_05;
+		* = b_c_gan_hg_skin_06;
+		* = b_c_gan_hg_skin_07;
+	}
+	
+	[utraean_boy]
+	{
+		// DSX Utraeans - none of them can have hair
+		* = b_c_gan_utraean_skin_01;
+		// 02 has a bit of hair - he only works with one particular head,
+		//		so we can't use him
+		//* = b_c_gan_utraean_skin_02;
+		* = b_c_gan_utraean_skin_03;
+	}
+	[utraean_girl]
+	{
+		// DSX Utraeans
+		* = b_c_gan_utraean_skin_04;
+		
+		// girl with no hair, looks weird with all other hairstyles
+		//* = b_c_gan_utraean_skin_05;
+	}	
+	[dsx_mp_farmboy]
+	{
+		* = b_c_gah_fb_skin_001;
+		* = b_c_gah_fb_skin_002;
+		* = b_c_gah_fb_skin_003;
+		* = b_c_gah_fb_skin_004;
+		* = b_c_gah_fb_skin_005;
+		* = b_c_gah_fb_skin_006;
+		* = b_c_gah_fb_skin_007;
+		* = b_c_gah_fb_skin_008;
+		* = b_c_gah_fb_skin_009;
+		* = b_c_gah_fb_skin_010;
+		// DSX new texture
+		//* = b_c_gan_fb_skin_jondar;
+	}
+	[dsx_mp_farmgirl]
+	{
+		* = b_c_gah_fg_skin_001;
+		* = b_c_gah_fg_skin_002;
+		* = b_c_gah_fg_skin_003;
+		* = b_c_gah_fg_skin_004;
+		* = b_c_gah_fg_skin_005;
+		* = b_c_gah_fg_skin_006;
+		* = b_c_gah_fg_skin_007;
+		* = b_c_gah_fg_skin_008;
+		* = b_c_gah_fg_skin_009;
+		* = b_c_gah_fg_skin_010;
+		// DSX new texture
+		//* = b_c_gan_fg_skin_lyssa;
+	}
+	[dsx_mp_dwarf]
+	{
+		* = b_c_gan_df_skin_01;
+		* = b_c_gan_df_skin_02;
+		* = b_c_gan_df_skin_03;
+		* = b_c_gan_df_skin_04;
+		* = b_c_gan_df_skin_05;
+		* = b_c_gan_df_skin_06;
+	}
+	[dsx_mp_skeleton]
+	{
+		* = b_c_ecm_sk;
+		* = b_c_ecm_sk-02;
+		* = b_c_ecm_skg;
+	}
+}

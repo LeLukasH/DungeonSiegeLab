@@ -1,0 +1,487 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  doppelganger.skrit
+// Author(s):  Tara Teich, Eric Tams
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string	_doc$	= "Changes to look like its target when attacking.";
+
+// external properties
+property float	statsMultiplier$ = .5						doc = "Fraction of stats of copied creature.";
+property string	manager_template$ = "doppelganger_manager"	doc = "Object to use to manage the new doppleganger";
+property string	effect_script$ = "doppelganger_glow"		doc = "Effect to play on the doppelganger while it's copied";
+property bool   copy_inventory$ = true				doc = "should doppelganger copy and use player's inventory?";
+
+owner = GoSkritComponent;
+
+Goid target$;
+Goid newMe$;
+
+// can we copy target$?  is it a good target?
+bool IsValidDoppelgangerTarget$( Go target$ )
+{
+	if( target$.Actor.HasGenericState("summoned") ||
+	    target$.Actor.HasGenericState("DSX_mezmerizing") ||
+	    target$.Actor.HasGenericState("invisibility_self") ||
+	    target$.Inventory.IsPackOnly)
+	{
+		return false;
+	}
+	
+	return true;	
+}
+
+
+// JCD 9/3/03
+// delete all the items in the invetory of the target_go
+void DeleteInventory$( go target_go$ )
+{
+	// do we have an inventory
+	if(target_go$.HasInventory())
+	{
+		// clear a collection to use
+		target_go$.Mind.TempGopColl1.Clear();
+
+		// get everything in the inventory
+		target_go$.Inventory.ListItems(IL_ALL, target_go$.Mind.TempGopColl1);
+
+		// get set to loop
+		int i$ = 0;
+		int iend$ = target_go$.Mind.TempGopColl1.Size();
+		Go temp$;
+
+		// loop through and search for items that have inventories.  then delete the item
+		while( i$ < iend$ )
+		{
+			// get the go
+			temp$ = target_go$.Mind.TempGopColl1.Get( i$ );
+
+			// do we have an inventory?  if yes, go one level deeper.  i hope no one
+			// is planning on going farther than that...
+			if( temp$.HasInventory() )
+			{
+				// get all the items in this inventory
+				target_go$.Mind.TempGopColl2.Clear();
+				temp$.Inventory.ListItems(IL_ALL, target_go$.Mind.TempGopColl2);
+
+				// loop and delete
+				int j$ = 0;
+				int jend$ = target_go$.Mind.TempGopColl2.Size();
+				Go temp2$;
+
+				while(j$ < jend$)
+				{
+					temp2$ = target_go$.Mind.TempGopColl2.Get( j$ );
+
+					// remove it from the inventory
+					temp$.Inventory.RSRemove(temp2$, false);
+					// delete it
+					PostWorldMessage(WE_REQ_DELETE, owner.Goid, temp2$.Goid, 0);
+
+					j$ = j$ + 1;
+				}
+			}
+
+			// delete the item itself
+			target_go$.Inventory.RSRemove(temp$, false);
+			PostWorldMessage(WE_REQ_DELETE, owner.Goid, temp$.Goid, 0);
+
+			i$ = i$ + 1;
+		}
+	}
+}
+
+// JCD 9/3/03
+// copy inventory of from_go to to_go.
+// if copy all is set, we are copying from the old doppelganger body to the new one
+// when this happens, everything copied is pcontent.
+void CopyInventory$( go from_go$, go to_go$, bool copyAll$ )
+{
+	// leave if we don't want to copy the inventory.
+	if( !copy_inventory$ )
+	{
+		return;
+	}
+	
+	// both actors must have an inventory.
+	if( from_go$.HasInventory() && to_go$.HasInventory() )
+	{
+		// clear a collection to use
+		from_go$.Mind.TempGopColl1.Clear();
+		
+		// get everything in the inventory
+		from_go$.Inventory.ListItems(IL_ALL, from_go$.Mind.TempGopColl1);
+
+		// get set to loop
+		int i$ = 0;
+		int iend$ = from_go$.Mind.TempGopColl1.Size();
+		Go temp$;
+		eInventoryLocation location$;
+		eEquipSlot slot$;
+		
+		// loop through and copy all items from one to another
+		while( i$ < iend$ )
+		{
+			// get the item
+			temp$ = from_go$.Mind.TempGopColl1.Get( i$ );
+			
+			// get its inventory location
+			location$ = from_go$.inventory.GetLocation(temp$);
+			
+			// get its equip slot
+			slot$ = from_go$.inventory.GetEquippedSlot(temp$);
+			
+			// if it is an item sitting in the targets inventory unused, we dont want it
+			if( location$ == IL_MAIN && slot$ == ES_NONE && !copyAll$ )
+			{
+			//	report.genericf("non useful item found and NOT copied\n");
+				i$ = i$ + 1;
+				continue;
+			}
+
+			// if the location is not the selected location, we don't want to put it there.
+			if( location$ != from_go$.inventory.GetSelectedLocation() )
+			{
+				location$ = IL_MAIN;
+			}
+			
+			// clone the item
+			GoCloneReq cloneReq$ = MakeGoCloneReq( temp$.GetTemplateName );
+			cloneReq$.StartingPos = owner.Go.Placement.Position;
+			Goid newItem$ = GoDb.SCloneGo( cloneReq$ );
+			
+			// this is an item we are grabbing from the old dopps body and 
+			// is therefore a pcontent query result
+			if( copyAll$ )
+			{
+				#only(game)
+				[[
+			//	report.genericf("setting an item as pcontent\n");
+				newItem$.go.SetIsPContentInventory(true);
+				]]
+			}
+			else
+			{
+				#only(game)
+				[[
+				newItem$.go.SetIsPContentInventory(false);
+				]]
+			}
+			
+			// give the doppelganger the new item in the same location
+			to_go$.Inventory.RSAdd(newItem$.go, location$, AO_REFLEX, false);
+			
+				
+			// only equip if the slot is specific.
+			if( slot$ != ES_NONE && !copyAll$ )
+			{
+				to_go$.Inventory.RSEquip(slot$, newItem$, AO_REFLEX);
+			}
+
+			i$ = i$ + 1;
+		}
+		
+		
+		
+		
+	}
+}
+
+Goid GetPartyMemberInRange$( goid temptarget$, float range$ )
+{
+	// get the bad guys party
+	Go EnemyParty$;
+	// JCD 8/12/03
+	// if temptarget is a summon, we need to get its owner's party instead
+	if( temptarget$.go.Actor.HasGenericState("summoned") )
+	{
+		#only( game )
+		[[
+		EnemyParty$ = temptarget$.go.actor.GetGenericStateCasterGoid("summoned").go.GetPlayer().GetParty();
+		]]
+	}
+	else if( temptarget$.go.actor.HasGenericState("DSX_mezmerizing") )
+	{
+		#only( game )
+		[[
+		EnemyParty$ = temptarget$.go.actor.GetGenericStateCasterGoid("DSX_mezmerizing").go.GetPlayer().GetParty();
+		]]	
+	}
+	else
+	{
+		#only( game )
+		[[
+		EnemyParty$ = temptarget$.go.GetPlayer().GetParty();
+		]]
+	}
+	if( EnemyParty$ != NULL )
+	{
+		AIQuery.TempGopColl1.clear;
+
+		int i$ = 0;
+		int iend$ = EnemyParty$.children.size;
+//		report.genericf("Doppelganger: enemy party size: %d\n",iend$ );
+		while( i$ < iend$ )
+		{
+//			report.genericf("Doppleganger: searching for enemy within range\n");
+			Go member$ = EnemyParty$.children.Get( i$ );
+			// add all of the party members in range to the list.
+			
+			// JCD 8/4/03
+			// don't allow dopps to copy summoned creatures nor spectral images
+			//	nor pack animals
+			if(	IsValidDoppelgangerTarget$( member$ ) &&
+				IsAlive( member$.Aspect.Lifestate ) &&
+				AIQuery.GetDistance( member$.Placement.Position, owner.Go.Placement.Position ) < ( range$ ) )
+			{
+//				report.genericf("Doppleganger: attackable enemy found\n");
+				AIQuery.TempGopColl1.Add( member$ );
+			}
+	
+				i$ += 1;
+		}
+		
+		if( AIQuery.TempGopColl1.size() > 0 )
+		{
+			Go temp$ = AIQuery.TempGopColl1.Get( Math.RandomInt( AIQuery.TempGopColl1.size() - 1 ) );
+		
+			if( temp$ != NULL )
+			{
+				return temp$.goid;
+			}
+		}
+	}
+	return temptarget$;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+Startup state Wait$
+{
+
+/*	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage )
+	{
+		if (	e$ == WE_ALERT_ENEMY_SPOTTED || 
+		    	e$ == WE_ENEMY_ENTERED_OUTER_COMFORT_ZONE || 
+		    	e$ == WE_ENEMY_ENTERED_INNER_COMFORT_ZONE	)
+		{
+			*/
+
+	event OnEnterState$
+	{
+		// every second we poll our range for an enemy to dopp.
+		this.CreateTimer(1, 1);
+	}
+	trigger OnTimer$(1)
+	{
+		this.CreateTimer(1, 1);
+
+		// We're going to clone our target enemy and then remove ourself
+		// Find who we're attacking
+		Job action$ = owner.Go.Mind.GetFrontJob( JQ_ACTION );
+			
+		target$ = NULL;
+
+		// JCD 8/12/03
+		// if the target is valid, just choose that
+		if ( action$!=NULL )
+		{
+			if( action$.IsOffensive )
+			{
+				if( action$.GoalObject.go.HasActor )
+				{
+					if( IsValidDoppelgangerTarget$(action$.GoalObject.go) )
+					{
+	//					report.genericf("Doppelganger: we have a suitable target");
+						target$ = action$.GoalObject;
+					}
+				}
+				// we can't do much if our target doesn't have an actor...
+				else
+				{
+					return;
+				}					
+			}
+		}
+		// otherwise we need to look for someone else to clone.
+		if( target$ == NULL )
+		{
+			// JCD 8/12/03
+			// if we have an enemy near us, we can set it as our target
+			if( owner.Go.Mind.GetBestFocusEnemy()!=NULL )
+			{
+				// find the closest enemy
+				target$ = owner.Go.Mind.GetBestFocusEnemy().Goid;
+			}
+			// if we have none near us, we can't do anything.
+			else
+			{
+				return;
+			}
+
+			// see if we can get a better target.
+			// see if we should choose a party member.
+			if( target$.IsValid )
+			{
+				target$ = GetPartyMemberInRange$( target$, owner.Go.mind.sightrange * 1.5 );
+			}
+		}
+			
+		// JCD 8/4/03
+		// we don't allow dopps to clone summoned creatures nor spectral images
+		if( !IsValidDoppelgangerTarget$(target$.go) )
+		{
+			return;
+		}
+
+		SiegeFX.SRunScript( "doppelganager_switch", owner.Goid, target$, "", target$, WE_REQ_ACTIVATE );
+		SetState Switch$;
+	}
+}
+
+State Switch$
+{	
+	change$ at ( 1.0 )
+	{
+//		report.genericf("Doppleganger: Changing.  My goid: 0x%x My scid: 0x%x\n", MakeInt(owner.goid), MakeInt(owner.scid));
+
+		if( !target$.IsValid )
+		{
+			SetState Wait$;
+			return;
+		}
+
+		if( !IsAlive( target$.Go.Aspect.Lifestate ) )
+		{
+			SetState Wait$;
+			return;
+		}
+		
+		//Report.Genericf("Doppelganger copying target %s\n", target$.Go.TemplateName);
+
+		// clone who we're attacking at my location - make the player be MY player, not the player
+		//		of who I am attacking
+		
+		GoCloneReq cloneReq$ = MakeGoCloneReq( target$, Owner.Go.PlayerId);
+		cloneReq$.StartingPos = owner.Go.Placement.Position; 
+		cloneReq$.SnapToTerrain = true;
+		#only( game )
+	        [[
+		cloneReq$.SetCopyInventory(false);
+		]]
+		newMe$ = GoDb.SCloneGo( cloneReq$ );
+		
+		// make new me invisible until the next phase, and unable to attack
+		newMe$.Go.Aspect.SSetIsVisible( false );
+		newMe$.Go.Mind.SetMayAttack( false );
+		newMe$.Go.Mind.SetMayBeAttacked( false );
+		
+		// TAT 9/29/2003 - because of timing issues, we want to be sure that the
+		//	clone is created on all machines before setting it up
+		//	so let's wait a moment
+		this.CreateTimer(1, 0.5);
+	}
+		
+	trigger OnTimer$(1)
+	{
+		if ( !newMe$.IsValid )
+		{
+			Report.Genericf("Doppelganger newMe is not valid\n");
+		}			
+		
+		// make new me visible and able to attack
+		newMe$.Go.Aspect.SSetIsVisible( true );
+		newMe$.Go.Mind.SetMayAttack( true );
+		newMe$.Go.Mind.SetMayBeAttacked( true );		
+		
+		// give the doppelganger a generic state so that we can check if it is a dopp later on
+		newMe$.go.Actor.SAddGenericState("doppelganger", "", -1, newMe$, newMe$, 0);
+
+//		report.genericf("Doppleganger: Changing.  My goid: 0x%x My new goid: 0x%x\n", MakeInt(owner.goid), MakeInt(newMe$));
+
+		// make it evil
+		newMe$.Go.Actor.SSetAlignment( aa_evil );
+
+		#only( game )
+	        [[
+		// copy the mind
+		newMe$.Go.Mind.RSCopyMind( owner.Go.Mind );
+
+		// and skills
+		newMe$.Go.Actor.RSCopySkills( owner.Go.Actor, statsMultiplier$ );
+
+		// set the screen name
+		string screenName$;
+		owner.Go.Common.GetScreenName(screenName$);
+		newMe$.Go.Common.SSetScreenName(screenName$);
+
+		// set up the appropriate stats
+		newMe$.Go.RSSetDoppelgangerStats( owner.Go, statsMultiplier$ );
+		]]
+
+		// make sure it isn't invincible
+		newMe$.Go.Aspect.SetIsInvincible( false );
+		
+		// Don't draw selection indicator
+		newMe$.Go.Aspect.SetDrawSelectionIndicator( false );
+				
+		// JCD 9/3/03
+		// we want to copy the targets current inventory, not original inventory from their template
+		// first - run through dopps inventory, deleting everything we come to
+		DeleteInventory$(newMe$.go);
+		// second - give the dopp everything the target has
+		CopyInventory$( target$.go, newMe$.go, false );
+		
+		// give the dopp everything from its old body
+		// everything we are giving here is pcontent.
+		CopyInventory$( owner.go, newMe$.go, true );
+		// delete the inventory of the old body
+		DeleteInventory$(owner.go);
+		
+		// JCD 8/5/03
+		// if we are dopping into a transformed character, let the transformation manager transform it
+		//  this will make saving and loading work correctly.
+		if( target$.go.Actor.HasGenericState("transformed") )
+		{
+			#only( game )
+	          	[[
+			newMe$.go.Actor.SAddGenericState("transformed", "", -1, newMe$, newMe$, 0);
+			TransformationManager.STransformMe( newMe$.Go, 	TransformationManager.GetNewTemplateName(target$.Go), "" );
+			]]
+		}
+
+		// Select the same slot as the target
+		// $$$ might want to change the slot. The target might be weilding a non-combat spell. -ET
+		newMe$.Go.Inventory.RSSelect( target$.Go.Inventory.SelectedLocation, AO_REFLEX );
+
+		// Create a manager object to watch the new doppelganger.
+		GoCloneReq cloneReq$ = MakeGoCloneReq( manager_template$ );
+		cloneReq$.Omni = true;
+		// MRC 8/4/2003 The manager should not exist on the client, and should be server only.
+		// Need to explicitly specify this for some reason.  Otherwise, the manager was getting
+		// created on the client, but was not being defeated.
+		cloneReq$.SetForceClientAllowed(false);
+		cloneReq$.SetForceServerOnly(true);
+		Goid manager$ = GoDb.SCloneGo( cloneReq$ );
+		SendWorldMessage( WE_REQ_ACTIVATE, newMe$, manager$ );
+
+//		report.genericf("Doppleganger: Changing.  My goid: 0x%x My manager goid: 0x%x\n", MakeInt(owner.goid), MakeInt(manager$));
+
+		// Get the radius of the new me to use to scale the effect.
+		string params$ = "";
+		StringTool.AppendF(params$, "[%g][%g]", target$.Go.GetAspect.GetBoundingSphereRadius() * .5, (target$.Go.GetAspect.GetBoundingSphereRadius() * .5) - .1);
+	
+		SiegeFX.SRunScript( effect_script$, newMe$, newMe$, params$, newMe$, WE_REQ_ACTIVATE );
+
+		// delete myself
+		GoDb.SMarkForDeletion( owner.Go );
+	}
+}

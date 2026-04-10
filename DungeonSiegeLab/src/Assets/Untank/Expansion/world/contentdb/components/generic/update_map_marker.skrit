@@ -1,0 +1,67 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  update_map_marker.skrit
+// Author(s):  Tara Teich
+//
+// Copyright © 2003 Mad Doc Software  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+//property bool			_server_only$			= true;
+property string			_doc$				= "Updates a world map marker upon receiving we_req_activate";
+
+// exported properties
+property string			marker_name$						doc = "Name of the marker and map piece";
+property bool			make_active$			= true			doc = "Are we making this the active marker?";
+property bool			make_visible$			= true			doc = "Should we make this piece visible?";
+
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		// need to have a marker name
+		if ( StringTool.IsEmpty( marker_name$ ) )
+		{
+			report.errorf("Trying to update a map marker without specifying a marker name!  Scid = 0x%x\n", owner.Scid );
+		}
+		else
+		{
+			// Need to get who we're triggering this for
+			//Goid player$ = Server.ScreenHero;
+			// Need to make sure people pass the catalyst through, or this won't work
+			Goid player$ = MakeGoid( msg$.GetData1() );
+
+			if (player$.go == NULL)
+			{
+				Report.Errorf( "Update_Map_Marker (Scid = 0x%08x) didn't receive catalyst player - need to pass through the trigger condition, talk to Tara.\n",
+					owner.Scid );
+				return;
+			}
+
+			#only( game )
+			[[
+			
+			// are we supposed to make this area active?
+			if ( make_active$ )
+			{
+				// do it
+				OverheadMap.RSUpdateCurrentAreaMarker( marker_name$, player$ );
+			}
+			
+			// set the visibility of this piece
+			OverheadMap.RSUpdateMapPieceVisibility( marker_name$, make_visible$, player$ );
+			]]
+		}
+	}
+}

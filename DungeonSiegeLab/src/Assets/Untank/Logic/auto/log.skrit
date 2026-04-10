@@ -1,0 +1,78 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  log.skrit (Skritbot)
+// Author(s):  Scott Bilas
+//
+// Summary  :  This bot will log all UI and world messages.
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+event OnBotHandleMessage$( eWorldEvent event$, WorldMessage msg$ )
+{
+	report.genericf(
+		"event: name = %s\n",
+		tostring( event$ ) );
+}
+
+event OnBotHandleUiAction$( UI_ACTION action$, string param$, UIWindow window$ )
+{
+	if ( action$ == action_setvisible  )  {  return;  }
+	if ( action$ == action_sethotspot  )  {  return;  }
+	if ( action$ == action_setrect     )  {  return;  }
+	if ( action$ == action_loadtexture )  {  return;  }
+	if ( action$ == action_setuvcoords )  {  return;  }
+
+	report.genericf(
+		"action: window = %s, interface = %s, action = %s, param = %s\n",
+		window$.name,
+		window$.interfaceparent,
+		tostring( action$ ),
+		param$ );
+}
+
+string nullName$ = "<null>";
+
+event OnBotHandleUiWindowMessage$( eUIMessage emsg$, UIMessage msg$, UIWindow window$ )
+{
+	if ( emsg$ == msg_onhidden            )  {  return;  }
+	if ( emsg$ == msg_onrollover          )  {  return;  }
+	if ( emsg$ == msg_onrolloff           )  {  return;  }
+	if ( emsg$ == msg_globalldoubleclick  )  {  return;  }
+	if ( emsg$ == msg_ongloballbuttondown )  {  return;  }
+	if ( emsg$ == msg_ongloballbuttonup   )  {  return;  }
+	if ( emsg$ == msg_globalmdoubleclick  )  {  return;  }
+	if ( emsg$ == msg_onglobalmbuttondown )  {  return;  }
+	if ( emsg$ == msg_onglobalmbuttonup   )  {  return;  }
+	if ( emsg$ == msg_globalrdoubleclick  )  {  return;  }
+	if ( emsg$ == msg_onglobalrbuttondown )  {  return;  }
+	if ( emsg$ == msg_onglobalrbuttonup   )  {  return;  }
+	if ( emsg$ == msg_onldoubleclick      )  {  return;  }
+	if ( emsg$ == msg_onlbuttondown       )  {  return;  }
+	if ( emsg$ == msg_onlbuttonup         )  {  return;  }
+	if ( emsg$ == msg_onmdoubleclick      )  {  return;  }
+	if ( emsg$ == msg_onmbuttondown       )  {  return;  }
+	if ( emsg$ == msg_onmbuttonup         )  {  return;  }
+	if ( emsg$ == msg_onrdoubleclick      )  {  return;  }
+	if ( emsg$ == msg_onrbuttondown       )  {  return;  }
+	if ( emsg$ == msg_onrbuttonup         )  {  return;  }
+
+	report.genericf(
+		"window message: message = %s, window = %s, interface = %s\n",
+		ToString( emsg$ ),
+		(window$ != null) ? window$.name : nullName$,
+		(window$ != null) ? window$.interfaceparent : nullName$ );
+}
+
+event OnBotHandleUiInterfaceMessage$( eUIMessage emsg$, UIMessage msg$, string interface$ )
+{
+	report.genericf(
+		"interface message: message = %s, interface = %s\n",
+		ToString( emsg$ ),
+		interface$ );
+}
+
+//////////////////////////////////////////////////////////////////////////////

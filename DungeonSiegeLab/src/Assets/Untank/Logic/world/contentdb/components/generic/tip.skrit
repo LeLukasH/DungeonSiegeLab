@@ -1,0 +1,35 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  tip.skrit
+// Author(s):  Chad Queen
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool			_server_only$			= true;
+property string			_doc$					= "Pops up a tip-of-the-day style dialog when WE_REQ_ACTIVATE is sent to it.";
+
+owner = GoSkritComponent;
+
+// external properties
+property string			tip$;
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		#only( game )
+		[[
+			UIMenuManager.SActivateTip( tip$, MakeGoid( msg$.Data1 ) );	
+		]]				
+	}
+}

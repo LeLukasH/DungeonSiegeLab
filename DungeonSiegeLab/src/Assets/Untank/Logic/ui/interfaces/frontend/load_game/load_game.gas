@@ -1,0 +1,174 @@
+[load_game]
+{
+	interface = true;
+	[t:button,n:delete_button]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 45;
+		rect = 413,492,500,518;
+		texture = b_gui_fe_m_mn_3d_button_wood_up;
+		uvcoords = 0.000000,0.187500,0.679688,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(delete_save_game);
+			onlbuttondown = loadtexture(b_gui_fe_m_mn_3d_button_wood_down);
+			onlbuttonup = loadtexture(b_gui_fe_m_mn_3d_button_wood_up);
+			onrolloff = loadtexture(b_gui_fe_m_mn_3d_button_wood_up);
+			onrollover = loadtexture(b_gui_fe_m_mn_3d_button_wood_hov);
+		}
+		[t:text,n:text_delete]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 50;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 308,498,374,509;
+			text = "Delete";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:button_next]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 25;
+		index = 1;
+		rect = 461,575,562,595;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(load_game_ok) & playsound(s_e_interface_close);
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);
+		}
+	}
+	[t:button,n:button_previous]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 12;
+		index = 1;
+		rect = 237,575,338,595;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(load_game_to_single_player);
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);
+		}
+	}
+	[t:button,n:load_button]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x disable_color = 0x555f5f5f;
+	  i draw_order = 89;
+		rect = 299,492,386,518;
+		texture = b_gui_fe_m_mn_3d_button_wood_up;
+		uvcoords = 0.000000,0.187500,0.679688,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(load_game_ok);
+			onlbuttondown = loadtexture(b_gui_fe_m_mn_3d_button_wood_down);
+			onlbuttonup = loadtexture(b_gui_fe_m_mn_3d_button_wood_up);
+			onrolloff = loadtexture(b_gui_fe_m_mn_3d_button_wood_up);
+			onrollover = loadtexture(b_gui_fe_m_mn_3d_button_wood_hov);
+		}
+		[t:text,n:text_load]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 90;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 308,498,374,509;
+			text = "Load";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:text_box,n:loadsave_game_name_text]
+	{
+	  f alpha = 1.000000;
+	  b center_height = true;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 12;
+	  b fixed_location = true;
+		font_type = b_gui_fnt_12p_copperplate-light;
+	  b has_slider = false;
+		justify = center;
+	  i max_height = 240;
+	  i max_width = 320;
+		rect = 226,172,470,252;
+	  f scroll_rate = 0.000000;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:preview_dialog_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = woodbox;
+	  i draw_order = 27;
+		rect = 483,174,573,243;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:preview_window]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 26;
+		rect = 488,179,616,307;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}	
+	[t:listbox,n:load_game_listbox]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = ;
+		draw_order = 3;
+		rect = 275,262,518,483;
+		font_color = 0x00959290;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages] 
+		{ 
+			oncreated=setelementheight(13); 
+			onselect=notify(load_select_game); 
+			onldoubleclick=notify(load_game_ok); 
+		}
+
+		[t:selection_box,n:selection_box] 
+		{
+			alpha = 0.5;
+			texture = b_gui_cmn_selection;
+		}
+	}
+}

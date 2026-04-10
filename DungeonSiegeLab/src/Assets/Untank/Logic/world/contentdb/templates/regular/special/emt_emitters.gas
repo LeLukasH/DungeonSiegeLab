@@ -1,0 +1,662 @@
+//////////////////////////////////////////////////////////////////////////////
+// Emitters
+[t:template,n:emitter_lightweight]
+{
+	specializes	=	emitter;
+    doc	= "Directional emitter";
+    category_name = "emitter";
+	[aspect]
+    {
+		model = m_i_glb_emitter;
+		lodfi_upper = 0.0;
+		lodfi_upper = 0.0;
+		force_no_render = true;
+		is_selectable = false;
+		is_visible = true;
+		draw_selection_indicator = false;
+	}
+	
+	[common]
+	{
+		forced_expiration_class = immediate;
+		auto_expiration_class = immediate;
+	}
+}
+
+[t:template,n:emt_generic_act]
+{
+	specializes	=	emitter;
+    category_name = "emitter";
+
+	doc			=	"t_emt_generic_act";
+    extra_doc = "requires trigger activation";
+	[on_client] {}
+	[generic_emitter_act] {}
+}
+[t:template,n:emt_generic]
+{
+	specializes		= emitter_lightweight;
+    category_name	= "emitter";
+	doc				= "t_emt_generic";
+	
+	extra_doc		= "starts on creation, lightweight use if possible.";
+	[generic_emitter]	{}
+}
+
+[t:template,n:emt_go]
+{
+	specializes		= emitter;
+    category_name	= "emitter";
+
+	doc				= "t_emt_go";
+    extra_doc		= "requires trigger activation";
+	[on_client] {}
+	[go_emitter]	{}
+}
+
+[t:template,n:emt_glow_act]
+{
+	specializes	=	emitter;
+    category_name = "emitter";
+
+	doc			=	"t_emt_glow_act";
+    extra_doc = "requires trigger activation";
+	[on_client] {}
+	[glow_emitter_act]	{}
+}
+
+[t:template,n:emt_glow]
+{
+	specializes		= emitter_lightweight;
+    category_name	= "emitter";
+	doc				= "t_emt_glow";
+	
+	extra_doc		= "starts on creation, lightweight use if possible.";
+	[glow_emitter]	{}
+}
+
+[t:template,n:emt_particle_act]
+{
+	specializes	=	emitter;
+    category_name = "emitter";
+
+	doc			=	"t_emt_particle_act";
+    extra_doc = "requires trigger activation";
+	[on_client] {}
+	[particle_emitter_act]	{}
+}
+
+[t:template,n:emt_particle]
+{
+	specializes		= emitter_lightweight;
+    category_name	= "emitter";
+	doc				= "t_emt_particle";
+	
+	extra_doc		= "starts on creation, lightweight use if possible.";
+	[particle_emitter]	{}
+}
+
+[t:template,n:emt_spark]
+{
+	specializes	=	emitter;
+    category_name = "emitter";
+
+	doc			=	"t_emt_spark";
+    extra_doc = "requires trigger activation";
+	[on_client] {}
+	[spark_emitter]	{}
+}
+
+[t:template,n:emt_fire_act]
+{
+	specializes	=	emitter;
+    category_name = "emitter";
+	doc			=	"t_emt_fire_act";
+	
+    extra_doc = "requires trigger activation";
+	[on_client] {}
+	[fire_emitter_act] {}
+}
+
+[t:template,n:emt_fire]
+{
+	specializes		= emitter_lightweight;
+    category_name	= "emitter";
+	doc				= "t_emt_fire";
+	
+	extra_doc		= "starts on creation, lightweight use if possible.";
+	[fire_emitter]	{}
+}
+
+[t:template,n:emt_mist_act]
+{
+	specializes	=	emitter;
+    category_name = "emitter";
+
+	doc			=	"t_emt_mist_act";
+    extra_doc = "requires trigger activation";
+	[on_client] {}
+	[fire_emitter_act]	
+	{
+		red0	= 0.4;
+		green0	= 0.4;
+		blue0	= 0.4;
+			
+		red1	= 0.0;
+		green1	= 0.0;
+		blue1	= 0.0;
+		
+		yvel	= 3.0;
+		yacc	= -1.0;
+		
+		fade	= 0.4;
+	}
+}
+
+[t:template,n:emt_mist]
+{
+	specializes	=	emitter_lightweight;
+    category_name = "emitter";
+
+	doc			=	"t_emt_mist";
+   	extra_doc		= "starts on creation, lightweight use if possible.";
+	[fire_emitter]
+	{
+		red0	= 0.4;
+		green0	= 0.4;
+		blue0	= 0.4;
+			
+		red1	= 0.0;
+		green1	= 0.0;
+		blue1	= 0.0;
+		
+		yvel	= 3.0;
+		yacc	= -1.0;
+		
+		fade	= 0.4;
+	}
+}
+
+/* looks bad, need to revisit if going to use in game. -ET
+[t:template,n:emt_mist_line]
+{
+	specializes	=	emitter;
+    category_name = "emitter";
+
+	doc			=	"t_emt_mist_line";
+    extra_doc = "requires trigger activation";
+	[line_mist_emitter]	{}
+}
+*/
+
+[t:template,n:emt_fireball]
+{
+	specializes	=	emitter;
+    category_name = "emitter";
+
+	doc			=	"t_emt_fireball";
+    extra_doc = "requires trigger activation";
+	[fireball_emitter]	{}
+}
+
+[t:template,n:emt_sound_act]
+{
+	specializes		= emitter;
+    category_name	= "emitter";
+
+	doc				= "t_emt_sound_act";
+    extra_doc 		= "requires trigger activation";
+	[sound_emitter_act]	{}
+}
+
+[t:template,n:emt_sound]
+{
+	specializes		= emitter_lightweight;
+    category_name	= "emitter";
+	doc				= "t_emt_sound";
+	
+	extra_doc		= "starts on creation, lightweight use if possible.";
+	[sound_emitter]	{}
+}
+
+[t:template,n:emt_hub_ball]
+{
+	specializes	=	emitter;
+    category_name = "emitter";
+
+	doc			=	"t_emt_hub_ball";
+    extra_doc = "requires trigger activation";
+    [on_client] {}
+	[generic_emitter_act] 
+	{
+		rep_freq_min = .3;
+		rep_freq_max = .3;
+		
+		other_effect = hub_balls;
+		
+		// fade_rate affects length of trail
+		// color0 & 1 are the color of the efect in RGB
+		// vdisplace specifies the movement
+		// dur is how long the effect lasts
+		
+		other_params = [fade_rate(8)color0(.5,.5,.5)color1(.5,.5,.5)][color0(.5,.5,.5)vdisplace(45)dur(.5)];
+	}
+}
+
+[t:template,n:emt_hub_center]
+{
+	specializes	=	emitter_lightweight;
+    category_name = "emitter";
+	doc			=	"t_emt_hub_center";
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("hub_center");
+			}
+		}
+	}
+}
+
+[t:template,n:emt_hub_pillar]
+{
+	specializes	=	emitter_lightweight;
+    category_name = "emitter";
+	doc			=	"t_emt_hub_pillar";
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("hub_pillar");
+			}
+		}
+	}
+}
+
+[t:template,n:emt_light_ray]
+{
+	specializes	=	emitter_lightweight;
+    category_name = "emitter";
+	doc			=	"t_emt_light_ray";
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("light_rays");
+			}
+		}
+	}
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0.0, 1, 0.0;
+		use_diffuse_color	=	true;
+	}
+}
+
+[t:template,n:emt_light_ray_red]
+{
+	specializes	=	emitter_lightweight;
+    category_name = "emitter";
+	doc			=	"t_emt_light_ray_red";
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("light_rays_red");
+			}
+		}
+	}
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0.0, 1, 0.0;
+		use_diffuse_color	=	true;
+	}
+}
+[t:template,n:emt_light_ray_blue]
+{
+	specializes	=	emitter_lightweight;
+    category_name = "emitter";
+	doc			=	"t_emt_light_ray_blue";
+	
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("light_rays_blue");
+			}
+		}
+	}
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0.0, 1, 0.0;
+		use_diffuse_color	=	true;
+	}
+}
+
+[t:template,n:emt_rainbow]
+{
+	specializes	=	emitter_lightweight;
+    category_name = "emitter";
+	doc			=	"t_emt_rainbow";
+	
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("light_rays_multi");
+			}
+		}
+	}
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0.0, 1, 0.0;
+		use_diffuse_color	=	true;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//Emitters
+
+// $$$ need to look at making local Go's but without an aspect.
+
+[t:template,n:emitter_grs_froth_01]
+{
+	specializes 		= emitter_lightweight;
+
+	doc 				= "emitter_grs_froth_01";
+    category_name       = "emitter";
+
+
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	1.0, 0, 0;
+		use_diffuse_color	=	true;
+	}
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("waterfall_froth");
+			}
+		}
+	}
+}
+
+[t:template,n:emitter_grs_froth_02]
+{
+	specializes 		= emitter_lightweight;
+    category_name       = "emitter";
+
+	doc 				= "emitter_grs_froth_02";
+
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	1.0, 0, 0;
+		use_diffuse_color	=	true;
+	}
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("waterfall_froth2");
+			}
+		}
+	}
+}
+
+[t:template,n:emitter_grs_froth_03]
+{
+	specializes 		= emitter_lightweight;
+    category_name       = "emitter";
+
+	doc 				= "emitter_grs_froth_03";
+
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	1.0, 0, 0;
+		use_diffuse_color	=	true;
+	}
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("waterfall_froth3");
+			}
+		}
+	}
+}
+
+[t:template,n:emitter_grs_froth_04]
+{
+	specializes 		= emitter_lightweight;
+    category_name       = "emitter";
+
+	doc 				= "emitter_grs_froth_04";
+
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	1.0, 0, 0;
+		use_diffuse_color	=	true;
+	}
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("waterfall_froth4");
+			}
+		}
+	}
+}
+
+[t:template,n:emitter_des_froth_01]
+{
+	specializes 		= emitter_lightweight;
+    category_name       = "emitter";
+
+	doc 				= "emitter_des_froth";
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	1.0, 0, 0;
+		use_diffuse_color	=	true;
+	}
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("waterfall_froth_desert");
+			}
+		}
+	}
+}
+
+[t:template,n:emitter_grs_froth_bridge]
+{
+	specializes 		= emitter_lightweight;
+    category_name       = "emitter";
+
+	doc 				= "emitter_grs_froth_bridge";
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	1.0, 0, 0;
+		use_diffuse_color	=	true;
+	}
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("waterfall_froth_bridge");
+			}
+		}
+	}
+}
+
+[t:template,n:emitter_glb_smoke_01]
+{
+	specializes 		= emitter_lightweight;
+    category_name       = "emitter";
+
+	doc 				= "emitter_smoke";
+
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	1.0, 0, 0;
+		use_diffuse_color	=	true;
+	}
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("smoke_emitter");
+			}
+		}
+	}
+}
+[t:template,n:emitter_glb_fire_01]
+{
+	specializes 		= emitter_lightweight;
+    category_name       = "emitter";
+
+	doc 				= "emitter_fire";
+
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	1.0, 0, 0;
+		use_diffuse_color	=	true;
+	}
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("glb_firews");
+			}
+		}
+	}
+	[light_flicker_lightweight]
+	{
+		magnitude = .15;
+		duration = 0;
+		flicker_frequency_min = 10;
+		flicker_frequency_max = 12;
+	}
+}
+
+[t:template,n:emitter_glb_furnace]
+{
+	specializes 		= emitter_lightweight;
+    category_name       = "emitter";
+	doc 				= "emitter_furnace";
+
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	1.0, 0, 0;
+		use_diffuse_color	=	true;
+	}
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("furnace_fire");
+			}
+		}
+	}
+	[light_flicker_lightweight]
+	{
+		magnitude = .15;
+		duration = 0;
+		flicker_frequency_min = 10;
+		flicker_frequency_max = 12;
+	}
+}

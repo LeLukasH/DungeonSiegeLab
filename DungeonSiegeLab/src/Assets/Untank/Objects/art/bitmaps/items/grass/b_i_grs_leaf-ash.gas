@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_grs_leaf-ash]
+{
+	layer1texture1 = b_i_grs_leaf-ash;
+  i texturedetail = 1;
+}

@@ -1,0 +1,290 @@
+[t:template,n:2W_base_dungeon_crawler]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dungeon crawler";
+	specializes = actor_evil;
+	[aspect]
+	{
+		model = m_c_edm_dc_pos_1;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_dungeon_crawler;  }
+			[hit_critical]	{ priority = low; * = s_e_hit_dungeon_crawler_SED;  }
+			[hit_glance]	{ priority = low; * = s_e_hit_dungeon_crawler_SED;  }
+			[hit_solid]		{ priority = low; * = s_e_hit_dungeon_crawler_SED;  }
+		}
+	}
+	[effect_manager]
+	{
+		start_msg = WE_ENTERED_WORLD;
+		stop_msg = WE_LEFT_WORLD;
+		stop_msg2 = WE_KILLED;
+
+		effect_name = "";
+		rep_effect_name = "trailing_blood";
+
+		repeat_rate = 1.33;
+		repeat_rate_max = 1.75;
+
+		run_once = true;
+	}
+	[body]
+	{
+		avg_move_velocity = 0.370000;
+		[bone_translator]
+		{
+			body_anterior = bip01_neck;
+			body_mid = bip01_spine1;
+			body_posterior = bip01_r_thigh;
+			kill_bone = bip01_head;
+			shield_bone = bip01_l_hand;
+			weapon_bone = bip01_r_hand;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_dc_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=at; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[mind]
+	{
+		jat_fidget	= world\ai\jobs\common\job_fidget.skrit
+			?meander	= false
+			&still		= false;
+
+		melee_engage_range = 14.0;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+		inner_comfort_zone_range = .1;
+		outer_comfort_zone_range = 3;
+		com_range = 8.0;
+		
+		sight_origin_height = 1.5;
+	}
+	[physics]
+	{
+		break_effect = blood_mist;
+		break_sound = s_e_meat_explosion;
+		[break_particulate]
+		{
+			frag_glb_generic_03 = 1;
+			frag_glb_generic_04 = 1;
+			frag_glb_generic_05 = 1;
+			frag_glb_generic_06 = 1;
+			frag_glb_generic_07 = 1;
+			frag_glb_generic_08 = 1;
+			frag_glb_generic_09 = 1;
+			frag_glb_generic_10 = 1;
+			frag_glb_generic_11 = 1;
+			frag_glb_generic_12 = 1;
+		}
+	}
+}
+[t:template,n:2W_dungeon_crawler]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dungeon crawler";
+	specializes = 2W_base_dungeon_crawler;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  	50.3, 0;
+			intelligence =  9.9, 0;
+			dexterity =  	17.2, 0;
+			melee =  		68, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 200000;
+		life = 3699.6;
+		max_life = 3699.6;
+		mana = 10.5;
+        max_mana = 10.5;
+    }
+    [attack]
+	{
+		attack_range = 0.5;
+		damage_max = 383.9;
+		damage_min = 245;
+	}
+	[common] { screen_name="Dungeon Crawler"; }
+	[defend] { defense=481.6; }
+   	[inventory]
+	{
+    	[pcontent]
+		{
+			[oneof*]
+			{
+				[all*]
+				{
+					chance = 0.35;
+					il_main = #*/111-239;
+					il_main = #armor/112-551;
+				}
+				[oneof*]
+				{
+	            	chance = 0.004;
+	                il_main = #weapon/-rare(1)/258-286;
+	                il_main = #armor/-rare(1)/813-834;
+                    il_main = #*/-rare(1)/258-286;
+                }
+				[oneof*]
+				{
+                	chance = 0.002;
+	                il_main = #weapon/-unique(2)/258-286;
+	                il_main = #armor/-unique(2)/813-834;
+                    il_main = #*/-unique(2)/258-286;
+	            }
+				[gold*]
+				{
+					chance = 0.125;
+					max = 188937;
+					min = 163225;
+				}
+			}
+		}
+	}
+}
+[t:template,n:2W_tortured_corpse]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_tortured_corpse";
+	specializes = 2W_base_dungeon_crawler;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  42, 0;
+			intelligence =  4.4, 0;
+			dexterity =  6.8, 0;
+			melee =  56, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 25650;
+		life = 340;
+		max_life = 340;
+		mana = 60;
+        max_mana = 60;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 133;
+		damage_min = 70;
+	}
+	[common] { screen_name="Tortured Corpse"; }
+	[defend] { defense=90; }
+   	[inventory]
+	{
+    	[pcontent]
+		{
+			[oneof*]
+			{
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/45-63;
+                	il_main = #armor/80-410;
+				}
+        		[oneof*]
+				{
+	        		chance = 0.002;
+	            	il_main = #weapon/-rare(1)/72-90;
+	            	il_main = #armor/-rare(1)/160-220;
+                }
+	        }
+        }
+	}
+}
+[t:template,n:2W_grave_crawler]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_grave_crawler";
+	specializes = 2W_base_dungeon_crawler;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  		29.8, 0;
+			intelligence =  	5.4, 0;
+			dexterity =  		7, 0;
+			melee =  			60, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 78000;
+		life = 1777.8;
+		max_life = 1777.8;
+		mana = 16.7;
+        max_mana = 16.7;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 427.8;
+		damage_min = 317.5;
+	}
+	[common] { screen_name="Grave Crawler"; }
+	[defend] { defense=475.9; }
+   	[inventory]
+	{
+    	[pcontent]
+		{
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = #weapon/22-36;
+                il_main = #armor/94-461;
+			}
+            [oneof*]
+				{
+	            chance = 0.004;
+	            il_main = #weapon/-rare(1)/33-57;
+	            il_main = #armor/-rare(1)/56-142;
+                il_main = #*/-rare(1)/33-57;
+            }
+			[oneof*]
+				{
+            	chance = 0.002;
+	            il_main = #weapon/-unique(2)/33-57;
+	            il_main = #armor/-unique(2)/56-142;
+                il_main = #*/-unique(2)/33-57;
+	        }
+		}
+	}
+}

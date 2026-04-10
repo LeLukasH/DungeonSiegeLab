@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_ice_sign-glacern-gate]
+{
+	layer1texture1 = b_i_ice_sign-glacern-gate;
+  i texturedetail = 2;
+}

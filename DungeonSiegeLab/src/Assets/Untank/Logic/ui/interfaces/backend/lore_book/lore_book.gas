@@ -1,0 +1,336 @@
+[lore_book]
+{
+  b interface = true;
+	[t:window,n:black_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 0;
+		rect = 85,17,553,444;
+		texture = b_gui_cmn_textbox_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:button,n:button_close]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x disable_color = 0x555f5f5f;
+	  i draw_order = 115894;
+		rect = 253,416,396,436;
+		texture = b_gui_cmn_jbox_fill;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(close_book) & playsound(s_e_frontend_tiny_button);
+			onlbuttondown = vertexcolor(0xff555555);
+			onlbuttonup = vertexcolor(0xffffffff);
+			onrolloff = vertexcolor(0xffffffff);
+			onrollover = vertexcolor(0xff999999);
+		}
+		[t:text,n:text_close]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 115895;
+		  i font_color = -1;
+		  i font_size = 10;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 309,420,396,436;
+			text = "Close";
+			texture = none;
+			topmost = true;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:button_x]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 38;
+		rect = 529,24,545,40;
+		rollover_help = journal_close;
+		texture = b_gui_cmn_jbox_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(close_book) & playsound(s_e_frontend_tiny_button);
+			onlbuttondown = loadtexture(b_gui_cmn_jbox_x_down);
+			onlbuttonup = loadtexture(b_gui_cmn_jbox_x_up);
+			onrolloff = loadtexture(b_gui_cmn_jbox_x_up);
+			onrollover = loadtexture(b_gui_cmn_jbox_x_hov);
+		}
+	}
+	[t:dialog_box,n:dialog_box_button_1_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 115893;
+		rect = 252,415,397,437;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_header_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 115894;
+		rect = 88,21,520,49;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_slider_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 125895;
+		rect = 519,57,542,405;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_trans_bg1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 115892;
+		rect = 88,53,546,410;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_trans_bg2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 115892;
+		rect = 88,53,546,410;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text_box,n:lore_box]
+	{
+	  f alpha = 1.000000;
+	  b center_height = false;
+	  b common_control = false;
+		common_template = ;
+	  b consumable = true;
+		consumable = true;
+	  i draw_order = 125894;
+	  b fixed_location = true;
+		font_type = b_gui_fnt_12p_copperplate-light;
+	  b has_slider = true;
+		justify = left;
+	  x max_height = 240;
+	  x max_width = 320;
+		rect = 92,57,516,406;
+	  f scroll_rate = 0.000000;
+		show_first_line = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:slider,n:slider_book]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 357684;
+			rect = 520,79,541,384;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[t:button,n:button_book_down]
+			{
+			  f alpha = 1.000000;
+			  b common_control = false;
+				common_template = ;
+			  i draw_order = 125896;
+				rect = 520,384,541,406;
+				texture = b_gui_ig_mnu_jnl_arrow_down;
+				uvcoords = 0.000000,0.312500,0.656250,1.000000;
+				wrap_mode = clamp;
+				[messages]
+				{
+					onbuttonpress = parentmessage(increment_slider);
+					onlbuttondown = setalpha(0.5);
+					onlbuttonup = setalpha(1.0);
+					onrolloff = setalpha(1.0);
+					onrollover = setalpha(0.8);
+				}
+			}
+			[t:button,n:button_book_up]
+			{
+			  f alpha = 1.000000;
+			  b common_control = false;
+				common_template = ;
+			  i draw_order = 125896;
+				rect = 520,58,541,80;
+				texture = b_gui_ig_mnu_jnl_arrow_up;
+				uvcoords = 0.000000,0.312500,0.656250,1.000000;
+				wrap_mode = clamp;
+				[messages]
+				{
+					onbuttonpress = parentmessage(decrement_slider);
+					onlbuttondown = setalpha(0.5);
+					onlbuttonup = setalpha(1.0);
+					onrolloff = setalpha(1.0);
+					onrollover = setalpha(0.8);
+				}
+			}
+			[t:slider_button,n:slider_button]
+			{
+				texture_bot = b_gui_cmn_slider_jnl_bot;
+				texture_mid = b_gui_cmn_slider_jnl_mid;
+				texture_top = b_gui_cmn_slider_jnl_top;
+			}
+		}
+	}
+	[t:text,n:text_book_title]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 231786;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_16p_copperplate-light;
+		justify = center;
+		rect = 91,25,516,45;
+		text = "Lore Book";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_0]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+		consumable = true;
+	  i draw_order = 187;
+		rect = 76,8,332,264;
+		texture = b_gui_ig_mnu_jnl_01;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+		consumable = true;
+	  i draw_order = 2;
+		rect = 465,8,595,264;
+		texture = b_gui_ig_mnu_jnl_02;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+		consumable = true;
+	  i draw_order = 6208;
+		rect = 77,263,333,519;
+		texture = b_gui_ig_mnu_jnl_03;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_2_0]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 24149;
+		rect = 333,265,466,519;
+		texture = b_gui_ig_mnu_jnl_03;
+		uvcoords = 0.230469,0.000000,0.750000,0.992188;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+		consumable = true;
+	  i draw_order = 4;
+		rect = 466,264,594,520;
+		texture = b_gui_ig_mnu_jnl_04;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 489;
+		rect = 171,13,427,72;
+		texture = b_gui_ig_mnu_mmap_top;
+		uvcoords = 0.000000,0.539063,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 92;
+		rect = 269,8,525,136;
+		texture = b_gui_ig_mnu_mmap_bot;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_5_0]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 110549;
+		rect = 275,308,531,436;
+		texture = b_gui_ig_mnu_mmap_bot;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 282;
+		rect = 322,69,529,197;
+		texture = b_gui_ig_mnu_mmap_top;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_6_0]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 62740;
+		rect = 316,192,523,320;
+		texture = b_gui_ig_mnu_mmap_top;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 231789;
+		rect = 46,38,46,38;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+}

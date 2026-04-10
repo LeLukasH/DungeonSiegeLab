@@ -1,0 +1,151 @@
+[t:template,n:2W_dsx_skick]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_skick";
+	specializes = skick_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength 	 =  35.9, 0;
+			intelligence =   10.6, 0;
+			dexterity 	 =  18.9, 0;
+            melee 		 =  61,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 63336;
+		life = 820.7;
+        max_life = 820.7;
+        mana = 23;
+		max_mana = 23;
+		model = m_c_edm_sk_pos_1;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_skick_SED;			}
+			[enemy_spotted]	{ priority = high; * = s_e_call_skick_SED;	}
+			[hit_critical]	{ priority = low; * = s_e_hit_skick_SED;		}
+			[hit_glance]	{ priority = low; * = s_e_hit_skick_SED;		}
+			[hit_solid]		{ priority = low; * = s_e_hit_skick_SED;		}
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max 	 = 328.3;
+		damage_min 	 = 219.5;
+	}
+	[body]
+	{
+		avg_move_velocity = 2.320000;
+		[bone_translator]
+		{
+			body_anterior = bip01_neck1;
+			body_mid = bip01_pelvis;
+			body_posterior = bip01_spine2;
+			kill_bone = bip01_pelvis;
+			shield_bone = bip01_l_hand;
+			weapon_bone = bip01_r_hand;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_sk_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=at; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=dfs; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dff; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[common] { screen_name="Skick"; }
+    [defend] { defense=457.7; }
+   	[inventory]
+	{
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 23, Weak */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 58322;
+					max = 115777;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.1;
+					il_main = #weapon/124-177;
+					il_main = #armor/55-419;
+					il_main = #*/124-177;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-rare(1)/115-186;
+					il_main = #armor/-rare(1)/287-419;
+					il_main = #*/-rare(1)/115-186;
+				}
+				
+			}
+		}
+	}
+	[mind]
+	{
+		jat_fidget		= world\ai\jobs\common\job_fidget.skrit
+			?still			= false;
+
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+	[physics]
+	{
+		break_effect = blood_mist;
+		break_sound = s_e_meat_explosion;
+		explode_when_killed = true;
+		[break_particulate]
+		{
+			frag_glb_skick_01 = 3;
+			frag_glb_skick_02 = 2;
+			frag_glb_skick_03 = 1;
+			frag_glb_skick_04 = 1;
+			frag_glb_skick_05 = 1;
+		}
+	}
+}

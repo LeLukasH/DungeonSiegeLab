@@ -1,0 +1,22 @@
+[multiplayer_help]
+{
+	interface = true;
+		
+	[t:text_box,n:multiplayer_help]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		x draw_order = 0x00000005;
+		x font_color = 0xffffffff;
+		x font_size = 0x00000000;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		  justify = center;
+		  rect = 28,534,772,572;		  
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		  fixed_location = true;
+		  text = ;
+		  center_height = true;
+	}
+}

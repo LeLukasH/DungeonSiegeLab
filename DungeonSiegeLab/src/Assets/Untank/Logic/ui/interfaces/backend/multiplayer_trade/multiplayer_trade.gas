@@ -1,0 +1,370 @@
+[multiplayer_trade]
+{
+	intended_resolution_height = 480;
+	intended_resolution_width = 640;
+	interface = true;
+	[t:button,n:button_zero_gold]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 1560;
+		rect = 509,251,613,267;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x55ffffff;
+
+		[messages]
+		{
+			onbuttonpress = notify(trade_reset_gold) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:text,n:dest_accept_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 15;
+	  x font_color = -1;
+	  x font_size = -842150451;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 321,187,529,203;
+		text = "WWWWWWWWWWWWWWW Accepts your offer";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:tdest_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 2;
+		rect = 289,3,629,210;
+		right_anchor = 302;
+		rollover_help = trade_destination;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:tdest_gold_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 10;
+		rect = 508,9,615,29;
+		right_anchor = 143;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:dest_gold_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 11;
+		  x font_color = -256;
+		  x font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 524,13,615,29;
+			text = "Trader Gold";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:dialog_box,n:tdest_grid_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 6;
+		rect = 296,47,622,181;
+		right_anchor = 288;
+		uvcoords = -0.003788,0.007407,1.231060,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:gridbox,n:tdest_gridbox]
+	{
+	  f alpha = 1.000000;
+		autoplace_only = true;
+	  f box_height = 32.000000;
+	  f box_width = 32.000000;
+	  i columns = 10;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 1554;
+		grid_type = inventory;
+		rect = 298,49,619,178;
+		right_anchor = 285;
+	  i rows = 4;
+		texture = b_gui_ig_mnu_ip_grid;
+		uvcoords = 0.000000,-3.031250,10.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:dialog_box,n:tdest_name_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 8;
+		rect = 296,9,491,29;
+		right_anchor = 289;
+		uvcoords = -0.015625,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:dest_name_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 9;
+		  x font_color = -1;
+		  x font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 380,13,491,29;
+			text = "NAME";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:text,n:text_dest_offer]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 517;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 296,30,621,45;
+		text = "WWWWWWWWWWWWWWW is offering in exchange.";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_source_offer]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 516;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 296,271,547,286;
+		text = "Items and gold you are offering.";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:tsource_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+		consumable = true;
+	  x draw_order = 41;
+		rect = 289,243,629,450;
+		right_anchor = 302;
+		rollover_help = trade_source;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:radio_button,n:tsource_button_accept]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+		consumable = true;
+	  x draw_order = 252;
+		popup = true;
+		radio_group = source_accept;
+		rect = 355,428,445,444;
+		right_anchor = 260;
+		rollover_help = trade_accept;
+		send_uncheck_to_self = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		ignore_items = false;
+		[t:text,n:accept_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 253;
+		  x font_color = -1;
+		  x font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 380,430,445,444;
+			text = "Accept";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			oncheck = notify(trade_source_accept) & playsound(s_e_frontend_tiny_button);
+			onuncheck = notify(trade_source_unaccept) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:tsource_button_cancel]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+		consumable = true;
+	  x draw_order = 229;
+		rect = 469,428,559,443;
+		right_anchor = 146;
+		rollover_help = trade_cancel;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		ignore_items = false;
+		[t:text,n:cancel_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 230;
+		  x font_color = -1;
+		  x font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 494,430,559,443;
+			text = "CANCEL";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(trade_cancel) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:dialog_box,n:tsource_gold_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 61;
+		rect = 508,249,615,269;
+		right_anchor = 132;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:source_gold_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 1623;
+		  x font_color = -256;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 523,253,614,269;
+			text = "Trader Gold";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:dialog_box,n:tsource_grid_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 101;
+		rect = 296,288,622,422;
+		right_anchor = 288;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:gridbox,n:tsource_gridbox]
+	{
+	  f alpha = 1.000000;
+	  f box_height = 32.000000;
+		box_height = 32;
+	  f box_width = 32.000000;
+		box_width = 32;
+	  x columns = 10;		
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 255;
+		grid_type = inventory;
+		grid_type = inventory;
+		rect = 298,290,619,419;
+		right_anchor = 286;
+		right_anchor = 286;
+	  x rows = 4;		
+		texture = b_gui_ig_mnu_ip_grid;
+		uvcoords = 0.000000,-3.031250,10.031250,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:dialog_box,n:tsource_name_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 60;
+		rect = 296,249,491,269;
+		right_anchor = 289;
+		uvcoords = -0.392857,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:source_name_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 61;
+		  x font_color = -1;
+		  x font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 361,253,491,269;
+			text = "Your Offer";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:window,n:window_accept_check]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1558;
+		rect = 301,189,317,205;
+		texture = b_gui_cmn_checkbox_x;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		visible = false;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_accept_indicator]
+	{
+		allow_user_press = false;
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1556;
+		rect = 301,189,317,205;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_grey_bg]
+	{
+	  f alpha = 0.500000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1041;
+		rect = 298,49,619,178;
+		texture = b_gui_cmn_box_fill1;
+		uvcoords = 0.000000,0.000000,1.249025,1.000000;
+		wrap_mode = clamp;
+	}
+}

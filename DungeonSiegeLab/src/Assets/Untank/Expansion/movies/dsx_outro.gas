@@ -1,0 +1,9 @@
+[dsx_outro]
+{
+	[movie*]
+	{
+		movie_file = movies\dsx_outro.bik;
+		width = 800;
+		height = 600;
+	}
+}

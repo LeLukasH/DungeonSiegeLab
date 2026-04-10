@@ -1,0 +1,101 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_actor_stats.skrit
+// Author(s):  Bartosz Kijanka
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string _doc$ = "Command for changing misc stats for actor.";
+property string _required_component$ = "placement";
+
+// exported properties
+property Scid      		 next_scid$ = 0			doc = "Scid of next command in sequence, 0 to terminate";
+
+property bool            set_may_attack$      = false;  
+property bool            may_attack$          = false;  
+
+property bool            set_may_be_attacked$ = false;  
+property bool            may_be_attacked$     = false;  
+
+property bool            set_is_invincible$   = false;  
+property bool            is_invincible$       = false;  
+
+property bool            set_alignment$       = false;  
+property eActorAlignment alignment$           = AA_GOOD;
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+trigger OnGoDrawDebugHud$
+{
+	Goid goid$ = next_scid$.Goid;
+	if ( goid$.IsValid )
+	{
+		// draw debug test label here...
+	}
+}
+
+event OnGoHandleMessage$( eWorldEvent event$, WorldMessage msg$ )
+{
+	if ( event$ == WE_REQ_ACTIVATE)
+	{
+		////////////////////////////////////////
+		//	validate params
+
+		Goid actorGoid$ = MakeGoid( msg$.Data1 );
+		Go actor$ = actorGoid$.Go;
+
+		if( actor$ == NULL )
+		{
+			return;
+		}
+		if( !actor$.HasMind() )
+		{
+			return;
+		}
+
+		////////////////////////////////////////
+		//	flip stats
+
+		if( set_may_attack$ )
+		{
+			actor$.Mind.SetMayAttack( may_attack$ );
+		}
+
+		if( set_may_be_attacked$ )
+		{
+			actor$.Mind.SetMayBeAttacked( may_be_attacked$ );
+		}
+
+		if( set_is_invincible$ )
+		{
+			actor$.Aspect.SetIsInvincible( is_invincible$ );
+		}
+
+		if( set_alignment$ )
+		{
+			actor$.Actor.SSetAlignment( alignment$ );
+		}
+
+		////////////////////////////////////////
+		//	activate next command
+
+		Goid nextGoid$ = next_scid$.Goid;
+
+		if ( nextGoid$.IsValid )
+		{
+			SendWorldMessage( WE_REQ_ACTIVATE, owner.Goid, nextGoid$, msg$.Data1 );
+		}
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////

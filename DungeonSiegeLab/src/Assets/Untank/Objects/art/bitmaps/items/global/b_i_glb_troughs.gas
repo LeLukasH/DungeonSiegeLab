@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_troughs]
+{
+	layer1texture1 = b_i_glb_troughs;
+  i texturedetail = 2;
+}

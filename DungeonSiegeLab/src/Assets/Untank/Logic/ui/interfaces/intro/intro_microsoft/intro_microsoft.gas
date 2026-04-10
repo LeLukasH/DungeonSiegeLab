@@ -1,0 +1,59 @@
+[intro_microsoft]
+{
+	interface = true;
+	original_height = 480;
+	original_width = 640;
+	centered = ms_panel_main;
+	[t:window,n:ms_panel_main]
+	{
+		alpha = 0.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1;
+		rect = 0,0,640,480;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = microsoft;
+		pass_through = true;
+	}
+	[t:window,n:ms_panel_1]
+	{
+		alpha = 0.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1;
+		rect = 0,0,256,256;
+		texture = b_gui_nis_ms_01;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = microsoft;
+		pass_through = true;
+		[messages] { onanimcomplete=notify(end_microsoft_fade); }
+	}
+	[t:window,n:ms_panel_2]
+	{
+		alpha = 0.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 3;
+		rect = 256,0,512,256;
+		texture = b_gui_nis_ms_02;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = microsoft;
+		pass_through = true;
+	}
+	[t:window,n:ms_panel_3]
+	{
+		alpha = 0.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 4;
+		rect = 512,0,640,256;
+		texture = b_gui_nis_ms_03;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = microsoft;
+		pass_through = true;
+	}
+}

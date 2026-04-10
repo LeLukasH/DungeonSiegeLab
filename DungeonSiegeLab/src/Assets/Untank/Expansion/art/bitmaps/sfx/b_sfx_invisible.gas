@@ -1,0 +1,27 @@
+[t:tsd,n:b_sfx_invisible]
+{
+  b hasalpha = true;
+	layer1alphaarg1 = texture;
+	layer1alphaarg2 = diffuse;
+	layer1alphaop = arg1;
+	//layer1alphaop = modulate2x;
+	layer1colorarg1 = texture;
+	layer1colorarg2 = diffuse;
+	layer1colorop = modulate2x;
+  i layer1numframes = 1;
+  f layer1secondsperframe = 0.0;
+
+	// b_sfx_sparkle01
+	// b_sfx_cyl_03
+	// b_sfx_armor_shock
+	// b_sfx_invisible
+
+	layer1texture1 = b_sfx_invisible;
+  f layer1ushiftpersecond = 0.25;
+  b layer1uwrap = true;
+  f layer1vshiftpersecond = 0.25;
+  b layer1vwrap = true;
+  i numlayers = 1;
+  i texturedetail = 2;
+  b timesyncanimation = false;
+}

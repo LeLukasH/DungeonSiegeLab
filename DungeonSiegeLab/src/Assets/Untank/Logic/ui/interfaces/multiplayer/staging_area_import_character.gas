@@ -1,0 +1,210 @@
+[staging_area_import_character]
+{
+	interface = true;
+
+	[t:text,n:title]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = left;
+		rect = 44,76,200,92;
+		text = "Import Character";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+
+	[t:button,n:staging_button_accept_character]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;		
+		draw_order = 18;
+		rect = 252,308,392,324;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { onbuttonpress=notify(staging_accept_import_character) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:button_accept_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "Accept";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:staging_button_cancel_character]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;		
+		draw_order = 18;
+		rect = 408,308,548,324;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { onbuttonpress=notify(staging_cancel_import_character) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:button_cancel_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "Cancel";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+
+	[t:text,n:import_save_games_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 270,80,200,96;
+		text = "Select Saved Game";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:import_save_games_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 270,102,500,122;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:combo_box,n:combo_import_save_games]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 495;
+		rect = 274,104,482,120;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 6;
+		[t:button,n:combo_import_save_games_button]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 32;
+			rect = 482,104,498,120;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_import_save_games]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 500;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 270,122,500,300;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.8;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+				onlbuttonup = notify(select_import_save_game);
+			}
+		}
+	}
+	
+	[t:text,n:import_character_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 10;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 270,134,200,150;
+		text = "Select Character";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:background_char_list]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 270,154,530,290;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:listbox,n:listbox_import_character]
+	{
+		alpha = 1.00000;
+		common_control = true;
+		common_template = ;
+		draw_order = 490;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		rect = 273,157,527,287;
+		text_color = 0xffffffff;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:selection_box,n:selection_box]
+		{
+			alpha = 0.5;
+			texture = b_gui_cmn_selection;
+		}
+		[messages]
+		{
+			oncreated = setelementheight(16);
+			onldoubleclick = notify(staging_accept_import_character);
+		}
+	}
+
+
+}

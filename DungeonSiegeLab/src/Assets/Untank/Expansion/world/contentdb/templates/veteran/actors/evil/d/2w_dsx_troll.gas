@@ -1,0 +1,458 @@
+[t:template,n:2W_dsx_troll]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_DSX Troll Base";
+	specializes = troll_base;
+	[aspect]
+	{
+		experience_value = 38368;
+		life = 1467.7;
+		max_life = 1467.7;
+		mana = 56.7;
+		max_mana = 56.7;
+		life_recovery_unit	= 1;
+		life_recovery_period = 8;
+        
+		[voice]
+		{
+			[die]		{ priority = high; * = s_e_die_troll_SED;		}
+			[enemy_spotted]	{ priority = high; * = s_e_call_troll_SED;	}
+            		[hit_glance]	{ priority = low; * = s_e_hit_troll_SED;	}
+		}
+	}
+	[inventory]
+	{
+		spew_equipped_kill_count = <ignore>;
+		[pcontent]
+		{
+			[oneof*]
+			{
+				es_weapon_hand = cb_un_2h_troll;
+			}
+		}
+	}
+	}
+	[common]
+	{
+		membership = troll, monster;
+	}
+	[mind]
+	{
+		jat_fidget				= world\ai\jobs\common\job_fidget.skrit
+		?curious				= 0.75
+		&wander					= 0.8
+		&social					= 0.1
+		&interest				= interest
+		&delay_min				= 6
+		&delay_max				= 16
+		&still					= false;
+		on_enemy_spotted_alert_friends 		= true;
+		jat_brain				= world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party		= true
+		&actor_creates_own_party		= true
+		&party_template				= "party_dsx_troll";
+		com_channels				= dyn_party, troll;
+		com_range				= 8.0;
+		melee_engage_range			= 13.2;
+		ranged_engage_range	 		= 13.5;
+		personal_space_range 			= 0.7;
+		sight_range				= 14.0;
+		actor_life_ratio_low_threshold 		= 0.33;
+		on_life_ratio_low_flee 			= true;	
+		flee_count 				= 1;
+		flee_distance 				= 20;				
+	}
+}
+
+[t:template,n:2W_dsx_troll_forest]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_troll_forest";
+	specializes = troll_forest_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength 		=	24.4, 0;
+			intelligence 	=	9.4, 0;
+			dexterity 		=	 13.4, 0;
+			melee 		=	 46,	 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 38368;
+		life 			= 997.3;
+		max_life 		= 997.3;
+		mana 			= 56.7;
+		max_mana 		= 56.7;
+		textures:0 = b_c_edm_tl-03;
+		life_recovery_unit	= 1;
+		life_recovery_period = 7;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 507;
+		damage_min = 337.6;
+	}
+	[common] { screen_name="Troll"; }
+	[defend] { defense=56; }
+	[inventory]
+	{
+		spew_equipped_kill_count = <ignore>;
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 9, Strong */
+		[oneof*]
+		{
+			es_weapon_hand = cb_un_2h_troll_dsx_forest;
+			[gold*]
+			{
+				chance = 0.2;
+				min = 43172;
+				max = 85958;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_large;
+				il_main = potion_health_large;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = #weapon/117-149;
+				il_main = #armor/57-351;
+				il_main = #*/117-149;
+			}
+			[oneof*]
+			{
+				chance = 0.01;
+				il_main = #weapon/-rare(1)/149-192;
+				il_main = #armor/-rare(1)/193-510;
+				il_main = #*/-rare(1)/149-192;
+			}
+			[oneof*]
+			{
+				chance = 0.005;
+				il_main = #weapon/-unique(2)/149-192;
+				il_main = #armor/-unique(2)/193-510;
+				il_main = #*/-unique(2)/149-192;
+			}			
+		}
+	}
+		
+	}
+	[mind]
+		{
+			jat_fidget							= world\ai\jobs\common\job_fidget.skrit
+				?curious							= 0.75
+				&interest							= interest
+				&meander							= false
+				&still								= false;
+
+			actor_life_ratio_low_threshold = .33;
+			on_life_ratio_low_flee = true;
+			flee_count = 1;
+			flee_distance = 20;
+			melee_engage_range = 14.0;
+			personal_space_range = 0.7;
+			ranged_engage_range = 14.0;
+			sight_range = 14.0;
+		}
+}
+	 
+	
+	
+[t:template,n:2W_dsx_troll_boss]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_troll_boss";
+	specializes = troll_forest_base;
+
+	[actor]
+	{
+		[skills]
+		{	
+			strength 		=	32.5, 0;
+			intelligence 	=	9.4, 0;
+			dexterity 		=	13.4, 0;
+			melee 			=	52,	0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 42350;
+		life = 1983.3;
+		life_recovery_period = 4;
+		life_recovery_unit	= 2;
+		max_life = 1416.7;
+		mana = 56.7;
+		max_mana = 56.7;
+		textures:0 = b_c_edm_tl-03;
+	    [voice]
+		{
+			[die]		{ priority = high; * = s_e_die_troll_boss_SED;		}
+			[enemy_spotted]	{ priority = high; * = s_e_call_gorack_SED;	}
+    		[hit_glance]	{ priority = low; * = s_e_hit_troll_SED;	}
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 500.8;
+		damage_min = 332.5;
+	}
+	[common] 
+	{
+		screen_name="Troll Captain";			
+		membership = monster,immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+				no_trig_bits = true;
+				action* = call_sfx_script("unique_ray_purple"); // Placeholder
+			}
+		}
+	}
+	[defend] { defense=85; }
+	[inventory]
+	{
+		spew_equipped_kill_count = <ignore>;
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 9, Strong */
+			[oneof*]
+			{
+				es_weapon_hand = cb_un_2h_troll_dsx_forest;
+				[gold*]
+				{
+					chance = 0.2;
+					min = 43172;
+					max = 85958;
+				}
+				[oneof*]
+				{
+					chance = 0.088888888888889;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/117-149;
+					il_main = #armor/57-351;
+					il_main = #*/117-149;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/149-192;
+					il_main = #armor/-rare(1)/193-510;
+					il_main = #*/-rare(1)/149-192;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/149-192;
+					il_main = #armor/-unique(2)/193-510;
+					il_main = #*/-unique(2)/149-192;
+				}			
+			}
+		}
+	}
+}
+
+
+
+[t:template,n:2W_dsx_troll_mountain]
+{
+// Balanced for level 26, medium melee
+	category_name = "1W_evil_d";
+	doc = "dsx_troll_mountain";
+	specializes = dsx_troll;
+	[actor]
+	{
+		[skills]
+		{
+			strength 		= 36.6, 0;
+			intelligence 	=  10.5, 0;
+			dexterity 		= 20.2, 0;
+			melee 			= 62, 0;
+		}
+	}
+	[aspect]
+	{
+		scale_base 		= 1.2;
+		experience_value = 72904;
+		life 			= 1289.8;
+		max_life 		= 1289.8;
+		mana 			= 26.5;
+		max_mana 		= 26.5;
+		life_recovery_unit = 1;
+		life_recovery_period = 8;
+		scale_base = 0.7;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 474.3;
+		damage_min = 348.7;
+	}
+	[common] { screen_name = "Mountain Troll"; }
+	[defend] { defense = 164; }
+	[inventory]
+	{
+		drop_at_use_point = true;
+		spew_equipped_kill_count = <ignore>;
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 26, Medium */
+		[oneof*]
+		{
+			es_weapon_hand = cb_un_dsx_2h_troll;
+			[gold*]
+			{
+				chance = 0.2;
+				min = 61356;
+				max = 121797;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_large;
+				il_main = potion_health_large;
+			}
+			[oneof*]
+			{
+				chance = 0.111111111111111;
+				il_main = potion_mana_large;
+				il_main = potion_health_large;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/144-185;
+				il_main = #armor/61-462;
+				il_main = #*/144-185;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/151-201;
+				il_main = #armor/-rare(1)/364-637;
+				il_main = #*/-rare(1)/151-201;
+			}
+			
+		}
+	}
+	}
+	[mind]
+	{
+		melee_engage_range = 14.0;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+}
+
+[t:template,n:2W_dsx_troll_scrub]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_troll_scrub";
+	specializes = troll_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength 	 =	32.6, 0;
+			intelligence =	 10.6, 0;
+			dexterity 	 =	19.1, 0;
+			melee 		 =	57, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value 	= 62972;
+		life 				= 1124.6;
+		life_recovery_period = 6;
+		life_recovery_unit	= 1;
+		max_life 			= 1124.6;
+		mana 				= 30.5;
+		max_mana 			= 30.5;
+		scale_base = 0.8;
+		textures:0 = b_c_edm_tl-02;
+		life_recovery_unit	= 1;
+		life_recovery_period = 5;
+        [voice]
+		{
+			[die]			{ priority = high; * = s_e_die_troll_small_SED;		}
+			[enemy_spotted]	{ priority = high; * = s_e_call_troll_small_SED;	}
+            [hit_glance]	{ priority = low; * = s_e_hit_troll_SED;	}
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 479.2;
+		damage_min = 311.7;
+	}
+	[body]
+	{
+		min_move_velocity = 2.8;
+		max_move_velocity = 4.1;
+	}
+	[common]
+	{
+		screen_name="Scrub Troll";
+	}
+	[defend] { defense=166; }
+	[inventory]
+	{
+		spew_equipped_kill_count = <ignore>;
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 21, Medium */
+		[oneof*]
+		{
+			es_weapon_hand = cb_un_1h_troll_dsx_scrub;
+			[gold*]
+			{
+				chance = 0.2;
+				min = 51495;
+				max = 102229;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_large;
+				il_main = potion_health_large;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/131-173;
+				il_main = #armor/55-418;
+				il_main = #*/131-173;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/140-188;
+				il_main = #armor/-rare(1)/305-588;
+				il_main = #*/-rare(1)/140-188;
+			}
+			
+		}
+	}
+	}
+}

@@ -1,0 +1,257 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  DSX_spell_magnet_utils.skrit
+// Author(s):  Mathew Corthell
+//
+// Copyright © 2003 Mad Doc Software.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Support functions for spell_magnet.skrit.  Contains actual AI modifications.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+// Given a collection of monsters (enemies, or whatever you'd like to call them)
+// determine which are available to be affected by this spell, and create an OMNI
+// version of the spell for each monster.  Returns false on an invalid magnet,
+// which means that the spell really can't continue.  Otherwise, true is returned.
+bool MagnetMonsters$(GopColl monsters$, Goid magnet$, string immunityType$, float timeLeft$)
+{
+	if(!magnet$.IsValid())
+	{
+		return false;
+	}
+
+	// MRC 7/10/2003 Bug 1240
+	// Determine the max intelligence of affected creatures.
+	float chanceToMagnet$ = 0;
+	// If we're limiting by the intelligence of the creature, then calculate the
+	// max intelligence.
+	if(useChance$)
+	{
+		// If the player is above the max cast level, then use the max cast level to
+		// determine the amount to increment.  The spell only improves until the
+		// max cast level.
+		float skillOverMinimum$ = 0;
+		if(owner.Go.Magic.GetMaxCastLevel() < m_Caster$.Go.Actor.GetSkillLevel( owner.Go.Magic.SkillClass ))
+		{
+			// Determine the difference between the minimum required skill level for the spell and the
+			// maximum skill level.
+			skillOverMinimum$ = owner.Go.Magic.GetMaxCastLevel() - owner.Go.Magic.GetRequiredCastLevel();
+		}
+		else
+		{
+			// Determine the difference between the minimum required skill level for the spell and the
+			// casters current lefel in the appropriate skill.
+			skillOverMinimum$ = m_Caster$.Go.Actor.GetSkillLevel( owner.Go.Magic.SkillClass ) - owner.Go.Magic.GetRequiredCastLevel();
+		}
+		// The chance to magnet is the initial chance plus one increment per level beyond the minimum req.
+		chanceToMagnet$ = initialChance$ + (incrementChance$ * skillOverMinimum$);
+	}
+
+	//Loop through the monsters and tell each to act stupid.
+	int i$ = 0;
+	Go temp$;
+	while( i$ < monsters$.Size() )
+	{
+		//Get this  monster.
+		temp$ = monsters$.Get( i$ );
+
+		//If it's capable of actually responding, then act on it.
+		if(temp$.hasmind())
+		{
+			//If the monster is not immune, then we can affect the monster.
+			bool doit$ = true;					
+			if( !StringTool.IsEmpty( immunityType$ ) )
+			{
+				if( temp$.Common.Membership.Contains( immunityType$ ) )
+				{
+					doit$ = false;
+				}
+			}
+
+			//Don't touch monsters that are just starting.
+			Job action$ = temp$.Mind.GetFrontJob( JQ_ACTION );
+			if( action$ != NULL )
+			{
+				if( action$.JobAbstractType == JAT_STARTUP )
+				{
+					doit$ = false;
+				}
+			}
+
+			//Also, if the monster is not thinking, assume that some other spell
+			//or affect has shut his brain off, and leave him alone.
+			action$ = temp$.Mind.GetFrontJob(JQ_BRAIN);
+			if(action$ == NULL)
+			{
+				doit$ = false;
+			}
+
+			//Skip player-controlled characters.
+			if( temp$.Player.Controller != PC_COMPUTER  )
+			{
+				doit$ = false;
+			}
+
+			//If the monster is being affected by this type of spell already
+			//then we should not try to affect it, either.
+			if(temp$.Actor.HasGenericState(stateName$))
+			{
+				doit$ = false;
+			}
+
+			//And actually affect the monster.
+			if( doit$ )
+			{	
+				bool trackingOnly$ = false;
+				
+				// MRC 7/10/2003 Bug 1240
+				// If we're required to, do a random check to see if we affect this monster.
+				if(useChance$)
+				{
+					// If the random number falls outside the chance range, then skip this monster.
+					if( Math.RandomFloat(0, 1) > chanceToMagnet$)
+					{
+						trackingOnly$ = true;
+					}
+				}
+
+				// Add state appropriate to what's happening to this monster.
+				if(trackingOnly$)
+				{
+					//Add the state to the monster so it doesn't get affected again.  Time is
+					//-1 so that it's infinite so that time doesn't get displayed.  We will manually
+					//take the state off at the appropriate time.  Also, don't pass a description,
+					// because we're not actually affecting the monster.
+					temp$.Actor.SAddGenericState(stateName$, "", -1, m_Caster$, owner.goid, owner.go.magic.GetMagicLevel( m_Caster$.go ));
+				}
+				else
+				{
+					//Add the state to the monster so it doesn't get affected again.  Time is
+					//-1 so that it's infinite so that time doesn't get displayed.  We will manually
+					//take the state off at the appropriate time.
+					temp$.Actor.SAddGenericState(stateName$, state_description$, timeLeft$, m_Caster$, owner.goid, owner.go.magic.GetMagicLevel( m_Caster$.go ));
+				}
+
+				//We create an OMNI version of the spell to track this particular monster.
+				GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.go.Parent.Goid, owner.goid );
+				cloneReq$.Omni = true;
+				Goid new_spell$ = GoDb.SCloneGo( cloneReq$ );				
+				
+				//By setting properties of the skrit component of the spell, we can
+				//pass some values to the skrit for the cloned version of the spell.
+
+				//The copy that we made is tracking a single monster.
+				new_spell$.Go.SetComponentBool("spell_magnet", "m_trackingSingleMonster", true);
+				//Pass down the Goid for the magnet.
+				new_spell$.Go.SetComponentInt("spell_magnet", "m_magnetAsInt", MakeInt(magnet$));
+				//Pass down the Goid for this spell.  The child spell will watch its parent so it
+				//knows when to stop.
+				new_spell$.Go.SetComponentInt("spell_magnet", "m_parentSpell", MakeInt(owner.goid));
+				//Pass whether this is only tracking the monster.
+ 				new_spell$.Go.SetComponentBool("spell_magnet", "m_trackingOnly", trackingOnly$);
+				
+				// send Omni version an Activate to get it started.
+				PostWorldMessage( WE_REQ_ACTIVATE, m_Caster$, new_spell$, MakeInt( temp$.goid ), 0 );
+			}
+		}
+		//Next monster!
+		i$ += 1;
+	}
+
+	return true;
+}
+
+// Function that tells a monster to attack a particular target.
+void AttractMonsterAttack$(Goid monster$, Goid magnet$)
+{
+	//Just attack the magnet.
+	if( monster$.go.Mind.UnderstandsJob( JAT_ATTACK_OBJECT ) )
+	{
+		monster$.go.Mind.SDoJob( MakeJobReq( JAT_ATTACK_OBJECT, JQ_ACTION, QP_CLEAR, AO_COMMAND, magnet$ ));
+	}
+}
+
+// Function that tells a monster to move within a certain distance of a target
+// object.  Once ther, the monster will face the target and fidget.
+void AttrackMonsterChase$(Goid monster$, Goid magnet$, float approachProximity$)
+{
+	monster$.go.Mind.Clear();
+
+	//Push several commands onto the monster's action stack.  It will do the last first,
+	//so it will move toward the magnet, face it, then fidget for the duration 
+	//of the spell.
+
+	//If it can fidget, make it do this.  Also clear the brain job queue
+	//specifically.  This turns the monster "off".
+	if( monster$.go.Mind.UnderstandsJob( JAT_FIDGET ))
+	{
+		monster$.go.Mind.SDoJob( MakeJobReq( JAT_FIDGET, JQ_ACTION, QP_FRONT, AO_REFLEX, magnet$ ) );
+	}
+
+	//If it can face the magnet, force it to face the magnet.
+	if( monster$.go.Mind.UnderstandsJob( JAT_FACE ))
+	{
+		monster$.go.Mind.SDoJob( MakeJobReq( JAT_FACE, JQ_ACTION, QP_FRONT, AO_REFLEX, magnet$ ) );
+	}
+
+	//If the monster is far enough away, and if the monster understands the job,
+	//and if the monster can actually move, then try to get closer.
+	// MRC 7/25/2003 Bug 1185 Checking that the monster understands how to move,
+	// as well.
+	if(monster$.go.Mind.GetDistance(magnet$.go) > approachProximity$
+		&& monster$.go.Mind.UnderstandsJob( JAT_APPROACH ) 
+		&& monster$.go.Mind.UnderstandsJob( JAT_MOVE ) 
+		&& monster$.go.Body.GetAvgMoveVelocity() > 0)
+	{
+		//Also, check to make sure that the monster can really get to the position of the magnet.
+		if(aiquery.IsAreaWalkable(monster$.go.body.TerrainMovementPermissions, magnet$.go.getplacement.getposition, 1, 0))
+		{
+			//Approach within a certain distance of the magnet.
+			JobReq req$ = MakeJobReq( JAT_APPROACH, JQ_ACTION, QP_FRONT, AO_COMMAND, magnet$ );
+			req$.Int1 = 0;
+			req$.Float1 = approachProximity$;
+			monster$.go.Mind.SDoJob(req$);
+		}
+	}
+}
+
+// Function that affects a single monster.  Determines which is the appropriate action
+// to take.  Returns false if the monster or magnet are not in a state to participate.
+bool MagnetSingleMonster$(Goid monster$, Goid magnet$, float approachProximity$, bool attractChase$)
+{
+	//Verify that the monster and magnet are still alive and well (valid, anyway).
+	if(!monster$.IsValid
+	   || !magnet$.IsValid)
+	{
+		return false;
+	}
+
+	// MRC 6/9/2003 - BUG 1118 Check for monster death after checking the validity of
+	// monster$ Goid.  I previously placed this check in the previous if statement,
+	// which is a no-no in skrit, since skrit always evaluates all expressions in an
+	// if statement.
+	if(IsDead(monster$.go.aspect.GetLifeState))
+	{
+		return false;
+	}
+
+	//If the monster should just chase the target, then force it to move close
+	//and look at the target.
+	if(attractChase$ == true)
+	{
+		AttrackMonsterChase$(monster$, magnet$, approachProximity$);
+	}
+	// If the monster should otherwise attack the magnet, then tell it to do so.
+	// Only do this once.  Once the jobs are on the stack, the monster will be OK.  
+	// Also, we don't want to affect monsters that have been touched by other spells 
+	// of the same type.
+	else
+	{
+		AttractMonsterAttack$(monster$, magnet$);
+	}
+
+	return true;
+}

@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_des_wood-pile]
+{
+	layer1texture1 = b_i_des_wood-pile;
+  i texturedetail = 2;
+}

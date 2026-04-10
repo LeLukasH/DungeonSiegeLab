@@ -1,0 +1,460 @@
+//
+// Dragon special effects scripts
+//
+//
+//
+
+[effect_script*]
+{
+	name	=signal_start;
+	script	=[[
+			signal all_scripts @start;
+			]];
+}
+[effect_script*]
+{
+	name	=signal_stop;
+	script	=[[
+			signal all_scripts @stop;
+			]];
+}
+
+[effect_script*]
+{
+	name	=signal_kill;
+	script	=[[
+			signal all_scripts @kill;
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=signal_test;
+	script	=[[
+
+			waitfor sig @start;
+			if ( #POP == #TRUE )
+			{
+				sfx create fireb #TARGET
+				"velocity(0,0,75)accel(0,0,-34)cvel(1)ts(.6)alphafade(.3)
+				lower_r0(2)lower_r1(6)upper_r0(-20)upper_r1(-40)count(400)
+				flamesize(4)bone_orient()";
+				
+				
+
+				set $fire_effect #PEEK;
+				set $fire_finished #FALSE;
+
+				sfx start #POP;
+			}
+
+
+			waitfor sig @stop;
+			if ( #POP == #TRUE )
+			{
+				sfx finish $fire_effect;
+				set $fire_finished #TRUE;
+			}
+
+			pause .25;
+
+			if ($fire_finished == #FALSE )
+			{
+				sfx finish $fire_effect;
+			}
+
+
+			waitfor sig @kill;
+			if ( #POP == #TRUE )
+			{
+				call dragon_breath_smoke_ring
+				exit;
+			}
+
+			call signal_test;
+			]];
+}
+
+
+
+
+[effect_script*]
+{
+	name	=dragon_attack;
+
+	script	=[[
+
+	// Dragon breath
+			sfx create fireb #SOURCE
+			"ignite()dur(2)start_rate(48)end_rate(8)velocity(0,0,75)
+			accel(0,12,-24)cvel(1)ts(.6)alphafade(.5)lower_r0(2)
+			lower_r1(6)upper_r0(40)upper_r1(80)count(200)flamesize(8)
+			bone_orient()";
+			
+			
+
+			sfx attach_point #PEEK @weapon_bone source;
+			sfx start #POP;
+			pause 1;
+
+			call dragon_fireball;
+			pause .15;
+
+	// Dragon ball smoke ring
+			sfx create fireb #SOURCE
+			"dur(1.15)dark()color0(.2,.2,.2)start_rate(3600)velocity(0,0,65)
+			accel(0,12,-38)cvel(1)ts(.45)alphafade(.5)lower_r0(2)
+			lower_r1(3)upper_r0(-130)upper_r1(-90)count(95)flamesize(6.25)
+			bone_orient()";
+			
+			
+
+			sfx attach_point #PEEK @weapon_bone source;
+			sfx start #POP;
+			]];	
+}
+
+
+[effect_script*]
+{
+	name	=breath;
+
+	script	=[[
+			sfx create fireb #TARGET
+			"ignite()velocity(0,0,-75)accel(0,0,34)cvel(1)ts(.6)
+			alphafade(.3)lower_r0(2)lower_r1(6)upper_r0(20)upper_r1(40)
+			count(400)flamesize(4)bone_orient()";
+			
+			
+
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+
+			sfx create fireb #TARGET
+			"color0(.3,.1,.1)velocity(0,0,75)accel(0,0,-34)cvel(1)
+			ts(.6)alphafade(.3)lower_r0(3)lower_r1(9)upper_r0(35)
+			upper_r1(50)count(200)flamesize(2)bone_orient()";
+			
+			
+
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=breath2;
+
+	// Dragon model spits down the POSITIVE Z axis of the AP_tip (weapon_bone)
+	script	=[[
+
+			sfx create fireb #TARGET
+			"[0]ignite()light_spawn()light_freq(65)light_radius(8)
+			start_rate(80)velocity(0,0,85)accel(0,4,-20)cvel(1)
+			ts(1.25)alphafade(.2)lower_r0(2)lower_r1(6)upper_r0(20)
+			upper_r1(40)count(400)flamesize(6)bone_orient()";
+			
+			
+
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+
+
+			sfx create fireb #TARGET
+			"color0(1,.35,0)light_radius(8)start_rate(80)velocity(0,0,85)
+			accel(0,4,-20)cvel(1)ts(1.25)alphafade(.2)lower_r0(2)
+			lower_r1(6)upper_r0(10)upper_r1(20)count(200)flamesize(3)
+			bone_orient()";
+			
+			
+
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+
+
+			randrange 0 3;
+
+			if ( #POP == 2 )
+			{
+				pause 1.75;
+
+				call dragon_breath_smoke_ring;
+			}
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=breath3;
+
+	script	=[[
+			sfx create fireb #TARGET
+			"ignite()velocity(0,0,75)accel(0,0,-34)cvel(1)ts(.6)
+			alphafade(.3)lower_r0(2)lower_r1(6)upper_r0(-20)upper_r1(-40)
+			count(800)flamesize(.5)bone_orient()";
+			
+			
+
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			]];
+}
+
+
+
+[effect_script*]
+{
+// this is for a quick screen shot
+	name	=staff_fire;
+
+	script	=[[
+			sfx create lightsource #TARGET 
+				"offset(0,0,-1)color0(.8,.5,0)radius(6)";
+			sfx start #POP;
+			sfx create lightsource #TARGET 
+				"offset(0,0,-7.5)color0(.8,.5,0)radius(6)";
+			sfx start #POP;
+
+			sfx create fireb #TARGET
+			"offset(0,0,-.45)velocity(0,0,-75)accel(0,2,34)cvel(1)
+			ts(.6)alphafade(.3)lower_r0(2)lower_r1(6)upper_r0(-20)
+			upper_r1(-40)count(400)flamesize(4)";
+			
+			
+
+			sfx start #POP;
+			]];
+}
+
+
+
+
+[effect_script*]
+{
+	name	=wtest;
+
+	script	=[[
+			sfx create fireb #TARGET
+			"color0(.4,.4,.7)velocity(0,0,0)accel(0,0,0)cvel(1)ts(.6)
+			alphafade(.3)lower_r0(10)lower_r1(10)upper_r0(-30)upper_r1(-50)
+			count(200)flamesize(3)";
+			
+			
+
+			sfx start #POP;
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=dragon_breath;
+
+	script	=[[
+			sfx create fireb #TARGET
+			"ignite()dur(2)start_rate(48)end_rate(8)velocity(0,0,75)
+			accel(0,12,-24)cvel(1)ts(.6)alphafade(.5)lower_r0(2)
+			lower_r1(6)upper_r0(40)upper_r1(80)count(200)flamesize(8)
+			bone_orient()";
+			
+			
+
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=dragon_breath_smoke_ring;
+
+	script	=[[
+
+			sfx create fireb #TARGET
+			"dur(1.15)dark()color0(.2,.2,.2)start_rate(3600)velocity(0,0,95)
+			accel(0,12,-38)cvel(1)ts(.45)alphafade(.5)lower_r0(2)
+			lower_r1(3)upper_r0(-130)upper_r1(-90)count(95)flamesize(3.25)
+			bone_orient()";
+			
+			
+
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=dragon_fireball;
+
+	script	=[[
+
+			set $main_color .86,.4,.1;
+			set $ball_color .86,.4,.1;
+
+			sfx create lightsource #SOURCE
+				"color0($main_color)";
+				
+			set $firelight #POP;
+			sfx rat $firelight;
+
+			sfx create fire #SOURCE
+			"ts(2.65)alphafade(1)count(250)scale(2.25)color0($main_color)
+			instant()velocity(0,0,0)accel(0,0,0)min_displace(-.785)
+			max_displace(.785)";
+			
+				
+
+			sfx create steam #SOURCE
+			"dark()ts(3.5)color0(.2,.2,.2)scale(1.75)wispsize(3)";
+			 
+				
+
+			set $smoke #POP;
+			set $fire #POP;
+
+			sfx rat $smoke;
+			sfx rat $fire;
+
+			sfx create trackball #TARGET 
+				"dur(10)color0($ball_color)afterlife(2)scale(.875)ts(1.4)";
+			set $trackball #POP;
+			sfx position_at $trackball @weapon_bone source;
+
+			sfx target $firelight $trackball;
+			sfx target $fire $trackball;
+			sfx target $smoke $trackball;
+
+			sfx friendly party $trackball;
+
+			sfx offset_bone $smoke v<0 -.10 0> target;
+
+
+			sfx start $trackball;
+			sfx start $fire;
+			sfx start $smoke;
+			sfx start $firelight;
+			
+			sound play s_e_FBfireball_launch;
+			set $burning_sound #POP;
+
+			waitfor collision $trackball #DEFAULT_TIMEOUT;
+			set $collision_type #POP;
+
+			if ( $collision_type == #TERRAIN_COLLISION )
+			{
+
+				get collision point $trackball;
+				sfx create fire #POP 
+					"color0($main_color)dur(1.85)scale(.65)";
+				sfx start #POP;
+
+				get collision point $trackball;
+				sfx create lightsource #POP
+				"color0($main_color)dur(2.25)tin(.2)tout(.2)radius(2)";
+				
+					
+				sfx start #POP;
+
+				sfx destroy $firelight;
+				sfx finish $fire;
+				sfx finish $smoke;
+
+				sound stop $burning_sound;
+				randrange 1 4;
+				set $sound #POP;
+
+				if ( $sound == 1 )
+				{
+					sound play s_e_FBfireball_hit
+					exit;
+				}
+				if ( $sound == 2 )
+				{
+					sound play s_e_FBfireball_hit
+					exit;
+				}
+				if ( $sound == 3 )
+				{
+					sound play s_e_FBfireball_hit
+					exit;
+				}
+				if ( $sound == 4 )
+				{
+					sound play s_e_FBfireball_hit
+					exit;
+				}
+
+			}
+			else 
+			{
+				if ($collision_type == #OBJECT_COLLISION)
+				{
+
+					get collision target $trackball target;
+
+					sfx create explosion #TARGET 
+						"scale(.5)";
+					set $explosion #POP;
+					sfx create fire #TARGET 
+						"dur(2.5)color0($main_color)";
+					set $fire2 #POP;
+
+					sfx create lightsource #TARGET 
+						"color0($main_color)dur(2.5)";
+					set $explodelight #POP;
+					sfx rat $explodelight;
+					sfx target $explodelight $fire2;
+					sfx start $explodelight;
+
+					get collision direction $trackball;
+					sfx direction $explosion #POP;
+
+					sfx start $explosion;
+					sfx start $fire2;
+
+					sfx destroy $firelight;
+					sfx finish $fire;
+					sfx finish $smoke;
+
+					worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+
+					sound stop $burning_sound;
+					randrange 1 4;
+					set $sound #POP;
+
+					if ( $sound == 1 )
+					{
+						sound play s_e_FBfireball_hit
+						exit;
+					}
+					if ( $sound == 2 )
+					{
+						sound play s_e_FBfireball_hit
+						exit;
+					}
+					if ( $sound == 3 )
+					{
+						sound play s_e_FBfireball_hit
+						exit;
+					}
+					if ( $sound == 4 )
+					{
+						sound play s_e_FBfireball_hit
+						exit;
+					}
+				}
+			}
+
+
+			sfx destroy $fire;
+			sfx destroy $smoke;
+			sfx destroy $trackball;
+			]];
+}

@@ -1,0 +1,8 @@
+// MRC 7/9/2003 Invisible texture for effect creatures.  This way, the creature will
+// be still be processed as if it's being rendered, but nothing will appear in game.
+[t:tsd,n:b_c_edm_inv]
+{
+  b hasalpha = true;
+	layer1texture1 = b_c_edm_inv;
+  i texturedetail = 3;
+}

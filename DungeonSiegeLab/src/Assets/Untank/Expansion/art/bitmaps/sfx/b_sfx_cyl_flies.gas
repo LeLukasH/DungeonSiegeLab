@@ -1,0 +1,7 @@
+[t:tsd,n:b_sfx_cyl_flies]
+{
+  b dither = true;
+  b hasalpha = true;
+	layer1texture1 = b_sfx_cyl_flies;
+  i texturedetail = 1;
+}

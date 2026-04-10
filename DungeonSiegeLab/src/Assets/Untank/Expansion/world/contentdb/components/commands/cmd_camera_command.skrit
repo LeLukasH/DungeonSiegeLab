@@ -1,0 +1,292 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_camera_command.skrit
+// Author(s):  Scott Bilas, Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string _doc$ = "camera_base_comand control";
+property string _required_component$ = "placement";
+
+// $$$ add "duration_sample" to calc base duration from the length of a sound sample
+
+// exported properties
+property Scid			next_scid$ 		= 0				doc = "Scid of next command in sequence, 0 to terminate";
+property float        	duration$  		= 5.0			doc = "Duration for entire command + waypoints sequence, or duration of this section if not using even durations.";
+property eCameraOrder	order$     		= cor_pan		doc = "Camera order: cor_snap, cor_pan, cor_offsetpan, cor_spline, cor_begin_spline, cor_cont_spline or cor_end_spline";
+
+property bool			even_durations$	= false			doc = "Even out all the durations on groups of camera commands";
+
+property float 			game_speed$		= 1.0       	doc = "Game speed durring this camera command. If -1 then the speed will not change.";
+
+
+owner = GoSkritComponent;
+
+Scid m_PostFinalScid$;
+int orig_speed$ = -1;
+
+//////////////////////////////////////////////////////////////////////////////
+
+trigger OnGoDrawDebugHud$
+{
+	Goid goid$ = next_scid$.Goid;
+	if ( goid$.IsValid )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 goid$.go.Placement.Position,
+									 MakeColor( 0, 1.0, 0, 0.5 ),
+									 ToString( order$ ) );
+	}
+}
+
+event OnGoHandleMessage$( eWorldEvent event$, WorldMessage msg$ )
+{
+	if ( event$ == WE_REQ_ACTIVATE)
+	{
+		orig_speed$ = msg$.Data1;
+		
+		// set the game speed for this shot
+		if( game_speed$ > 0)
+		{
+			WorldOptions.SetGameSpeed( game_speed$ );
+		}
+		
+		int count$ = 1;
+		string positionName$ = MakeStringF( "cmd_camera_%08X_%d", owner.Scid, count$ );
+//		report.genericf( "Name %s\n", positionName$ );
+		CameraAgent.SubmitCameraPosition( positionName$,
+			MakeCameraPosition( owner.Go.Placement.Position,  owner.Go.Placement.Orientation ) );
+		
+		// see if this happens to be a spline command
+		if ( order$ != cor_begin_spline )
+		{
+			Go next$ = next_scid$.Go;
+			// check to see if the next command is a waypoint.
+			if ( ( next$ != NULL ) && !next$.HasComponent( "cmd_camera_waypoint" ) )
+			{
+				// It's not a waypoint, just submit the job and that's it.
+				CameraAgent.SubmitOrder( positionName$, order$, duration$, false, owner.Scid );
+				m_PostFinalScid$ = next_scid$;
+			}
+			else
+			{
+				// We have a waypoint. We need to count the number of waypoints, then 
+				Scid iter$ = next_scid$;
+				forever
+				{
+					// this might be the last one
+					m_PostFinalScid$ = iter$;
+					
+					// check for me
+					if ( iter$ == owner.Scid )
+					{
+						break;
+					}
+			
+					// get next
+					Go nextGo$ = iter$.Go;
+					if ( nextGo$ == NULL )
+					{
+						break;
+					}
+					
+					// go until we run out of waypoints.
+					if ( !nextGo$.HasComponent( "cmd_camera_waypoint" ) )
+					{
+						break;
+					}
+					
+					iter$ = nextGo$.GetComponentScid( "cmd_camera_waypoint", "next_scid" );
+					
+					count$ += 1;
+				}
+				
+				// These will all be waypoints, so just blast out the commands.
+				iter$ = next_scid$;
+				float temp_dur$ = duration$ / count$;
+				forever
+				{	
+					Go thisGo$ = iter$.Go;
+					
+					// do the order
+					string waypointPositionName$ = MakeStringF( "cmd_camera_%08X_%d", owner.Scid, count$ );
+					CameraAgent.SubmitCameraPosition( waypointPositionName$,
+						MakeCameraPosition( thisGo$.Placement.Position, thisGo$.Placement.Orientation ) );
+					
+					// done?
+					count$ -= 1;
+					if ( count$ == 0 )
+					{
+//						report.genericf( "This Go should end the string %s\n", 	this$.Go.TemplateName );
+						CameraAgent.SubmitOrder( waypointPositionName$, order$, temp_dur$, true, owner.Scid );
+						break;
+					}
+					else
+					{
+//						report.generic("Should be submitting a waypoint here\n");
+						CameraAgent.SubmitOrder( waypointPositionName$, order$, temp_dur$, true, Scid.InvalidScid );
+					}
+					
+					iter$ = thisGo$.GetComponentScid( "cmd_camera_waypoint", "next_scid" );
+				}	
+			}
+		}
+		else
+		{
+			// find out how many there are
+			Scid iter$ = next_scid$;
+			float total_duration$ = duration$;
+			forever
+			{
+				// this might be the last one
+				m_PostFinalScid$ = iter$;
+				
+//				if( m_PostFinalScid$.Goid.Isvalid )
+//				{
+//					report.genericf( "Looking at GO %s\n", 	m_PostFinalScid$.Go.TemplateName );
+//				}
+		
+				// check for me
+				if ( iter$ == owner.Scid )
+				{
+					break;
+				}
+		
+				// get next
+				Go nextGo$ = iter$.Go;
+				if ( nextGo$ == NULL )
+				{
+					break;
+				}
+
+				// if this is a spline command then we want to look at the next camera commands and look for waypoints
+				// these will need to be submited in a special way.
+				if( nextGo$.HasComponent( "cmd_camera_command" ) )
+				{
+					total_duration$ += nextGo$.GetComponentFloat( "cmd_camera_command", "duration" );
+					eCameraOrder nextOrder$ = CameraOrderFromString( nextGo$.GetComponentString( "cmd_camera_command", "order" ) );
+					
+					if( ( nextOrder$ == cor_end_spline ) )
+					{
+						m_PostFinalScid$ = nextGo$.GetComponentScid( "cmd_camera_command", "next_scid" );
+						break;
+					}
+					else
+					{
+						iter$ = nextGo$.GetComponentScid( "cmd_camera_command", "next_scid" );
+					}				
+				}
+				else
+				{
+					if ( !nextGo$.HasComponent( "cmd_camera_waypoint" ) )
+					{
+						break;
+					}	
+					total_duration$ += nextGo$.GetComponentFloat( "cmd_camera_waypoint", "duration" );
+					iter$ = nextGo$.GetComponentScid( "cmd_camera_waypoint", "next_scid" );
+				}
+				
+				// add it
+				count$ += 1;
+//				report.genericf("count = %d\n", count$);
+			}
+		
+			// get duration of each segment, add in an aditional one for the begin spline command.
+			float each_duration$ = total_duration$ / ( count$ + 1 );
+			
+			report.genericf("count = %d\n", count$);
+			report.genericf("each_duration = %f\n", each_duration$);
+			
+			CameraAgent.SubmitOrder( positionName$, order$, (even_durations$) ? each_duration$ : duration$, true, Scid.InvalidScid );
+		
+			// now iter again and submit all orders at once (starting with me)
+			Scid this$ = owner.Scid, next$ = next_scid$;
+			
+			int count2$ = 1;
+			forever
+			{
+				// advance
+				this$ = next$;
+				Go nextGo$ = next$.Go;
+				
+				if( nextGo$.HasComponent( "cmd_camera_command" ) )
+				{
+					next$ = nextGo$.GetComponentScid( "cmd_camera_command", "next_scid" );				
+				}
+				else
+				{
+					next$ = nextGo$.GetComponentScid( "cmd_camera_waypoint", "next_scid" );
+				}
+				
+				// get next
+				Go thisGo$ = this$.Go;
+		
+				count2$ += 1;
+				
+				// do the order
+				string waypointPositionName$ = MakeStringF( "cmd_camera_%08X_%d", owner.Scid, count2$ );
+//				report.genericf( "Name %s\n", waypointPositionName$ );
+				CameraAgent.SubmitCameraPosition( waypointPositionName$,
+					MakeCameraPosition( thisGo$.Placement.Position, thisGo$.Placement.Orientation ) );
+		
+				eCameraOrder tempOrder$ = order$;
+				if( count$ == 1 )
+				{
+					tempOrder$ = cor_end_spline;
+				}
+				else
+				{
+					tempOrder$ = cor_cont_spline;
+				}
+				
+				float temp_dur$ = even_durations$ ? 
+									each_duration$ 
+									: 
+									nextGo$.HasComponent( "cmd_camera_command" ) ?
+										thisGo$.GetComponentFloat( "cmd_camera_command", "duration", each_duration$ )
+										:
+										thisGo$.GetComponentFloat( "cmd_camera_waypoint", "duration", each_duration$ );
+									
+				// done?
+				count$ -= 1;
+				if ( count$ == 0 )
+				{
+//					report.genericf( "This Go should end the string %s\n", 	this$.Go.TemplateName );
+					CameraAgent.SubmitOrder( waypointPositionName$, tempOrder$, temp_dur$, true, owner.Scid );
+					break;
+				}
+				else
+				{
+//					report.generic("Should be submitting a waypoint here\n");
+					CameraAgent.SubmitOrder( waypointPositionName$, tempOrder$, temp_dur$, true, Scid.InvalidScid );
+				}
+			}
+		}
+	}
+}
+
+trigger OnGoHandleMessage$( WE_CAMERA_COMMAND_DONE )
+{
+///	report.generic( "Camera Command done!!\n" );
+	if ( m_PostFinalScid$.IsValid )
+	{
+		SendWorldMessage( WE_REQ_ACTIVATE, owner.Goid, m_PostFinalScid$ ,orig_speed$);
+//		report.genericf( "Chaining command from Scid 0x%08X to 0x%08X\n", owner.Scid, m_PostFinalScid$ );
+//		report.generic( "Sending message.\n" );
+
+	}
+//	else
+//	{
+//		report.genericf( "Last command in chain\n" );
+//	}
+}
+
+//////////////////////////////////////////////////////////////////////////////

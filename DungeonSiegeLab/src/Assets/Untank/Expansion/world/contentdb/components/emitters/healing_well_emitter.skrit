@@ -1,0 +1,80 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  healing_well_emitter.skrit
+// Author(s):  Mathew Corthell
+//
+// Copyright © 2001 Mad Doc Software, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property bool	_server_only$		= false;
+
+property string effectNameTainted$ = "healing_well_tainted" doc="The name of the tainted effect to show.";
+property string effectNameCleansed$ = "healing_well_cleansed" doc = " The name of the cleansed effect to show.";
+
+owner = GoSkritComponent;
+
+bool m_cleansed$ = false;
+
+//First state, when we're created.
+startup state Init$
+{
+
+	trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+	{
+		SetState PlayingEffect$;
+	}
+	
+    trigger OnGoHandleMessage$(WE_REQ_ACTIVATE)
+    {
+		m_cleansed$ = true;
+    }
+
+}
+
+// Play the effect.
+state PlayingEffect$
+{
+    event OnEnterState$
+    {
+		if (!m_cleansed$)
+		{
+			SiegeFx.SRunScript( effectNameTainted$, owner.Goid, owner.Goid, "", owner.Goid, WE_ENTERED_WORLD );
+		}
+		else
+		{
+			SiegeFx.SRunScript( effectNameCleansed$, owner.Goid, owner.Goid, "", owner.Goid, WE_ENTERED_WORLD );
+		}
+	}
+
+    trigger OnGoHandleMessage$(WE_REQ_ACTIVATE)
+    {
+		SiegeFx.StopScript(owner.Goid, effectNameTainted$);
+		m_cleansed$ = true;
+		SiegeFx.SRunScript( effectNameCleansed$, owner.Goid, owner.Goid, "", owner.Goid, WE_ENTERED_WORLD );
+    }
+
+    trigger OnGoHandleMessage$(WE_LEFT_WORLD)
+    {
+        SetState(Cleanup$);
+    }
+}
+
+state Cleanup$
+{
+    event OnEnterState$
+    {
+		if(!m_cleansed$)
+		{
+			SiegeFx.StopScript(owner.Goid, effectNameTainted$);
+		}
+		else
+		{
+			SiegeFx.StopScript(owner.Goid, effectNameCleansed$);
+		}
+        
+		SetState(Init$);
+    }
+}

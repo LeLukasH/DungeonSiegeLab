@@ -1,0 +1,13 @@
+// This file needs to be relocated to the peroper location! --biddle
+[armor_subtype_lookup]
+{
+	// armor body type =  boot sub-type, gauntlet sub-type
+
+	a1 = b, b;
+	a2 = b, b;
+	a3 = a, a;
+	a4 = a, a;
+	a5 = a, a;
+	a6 = a, a;
+	a7 = c, a;
+}

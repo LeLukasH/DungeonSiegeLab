@@ -1,0 +1,189 @@
+[t:interface,n:game_console_mp]
+{
+	intended_resolution_height = 480;
+	intended_resolution_width = 640;
+	centered_x = dialog_box_console_bg;
+
+	[t:combo_box,n:combo_box_players]
+	{
+	  f alpha = 1.0000000;
+		bottom_anchor = 74;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 80;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = console_edit;
+		is_bottom_anchor = true;
+		rect = 482,406,602,421;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+		topmost = true;
+		has_background = true;
+		truncate = true;
+		[messages]
+		{	
+			onlbuttondown = notify(refresh_listbox_players);
+		}
+
+		[t:button,n:button_combo_show_players]
+		{
+		  f alpha = 1.000000;
+			bottom_anchor = 76;
+		  b common_control = true;
+			common_template = down;
+		  i draw_order = 81;
+			group = console_edit;
+			is_bottom_anchor = true;
+			rect = 603,404,618,422;
+			texture = ;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			topmost = true;
+			[messages]
+			{
+				onbuttonpress = notify(refresh_listbox_players);
+				onbuttonpress = parentmessage(oncomboexpand);
+			}
+		}
+		[t:listbox,n:listbox_players]
+		{
+			alpha = 1.0000000;
+			common_control = true;
+			common_template = ;
+			draw_order = 600;
+			font_type = b_gui_fnt_12p_copperplate-light;						
+			rect = 482,273,618,403;
+			is_bottom_anchor = true;
+			bottom_anchor = 210; // 403-273+76+422-404 = 214
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;							
+			group = console_edit;		
+			topmost = true;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.50;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+			}		  
+		}  
+	}	
+	[t:edit_box,n:console_edit]
+	{
+	  f alpha = 0.300000;
+		bottom_anchor = 76;
+	  b clear_select = true;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 73;
+	  i font_color = -1;
+	  i font_size = 15;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = console_edit;
+		is_bottom_anchor = true;
+	  i max_string_size = 256;
+	  b permanent_focus = true;
+		rect = 24,404,394,422;
+		text = "";
+	  b topmost = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		topmost = true;
+		[messages]
+		{
+			oncreated = setvisible(false) &
+							showgroup(false);
+			oneditselect = notify(console_submit_text) &
+							setvisible(false) &
+							notify(hide_console);
+		}
+		[prompt]
+		{
+			texture = b_gui_fe_m_single_prompt;
+			width = 1;
+		}	
+	}
+	[t:dialog_box,n:dialog_box_console_bg]
+	{
+	  f alpha = 1.000000;
+		bottom_anchor = 78;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 16;
+		group = console_edit;
+		is_bottom_anchor = true;
+		rect = 20,402,620,424;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		consumable = true;
+		topmost = true;
+	}
+	[t:dialog_box,n:dialog_players_combo_bg]
+	{
+	  f alpha = 1.000000;
+		bottom_anchor = 77;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 19;
+		group = console_edit;
+		is_bottom_anchor = true;
+		rect = 479,403,620,422;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		topmost = true;
+	}
+	[t:text,n:text_send]
+	{
+	  f alpha = 1.000000;
+		bottom_anchor = 75;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 37;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = console_edit;
+		is_bottom_anchor = true;
+		justify = right;
+		rect = 393,405,476,420;
+		text = "Send To:";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		topmost = true;
+	}
+	[t:window,n:window_chat_bg]
+	{
+	  b is_bottom_anchor = true;
+		bottom_anchor = 76;
+		group = console_edit;
+	  f alpha = 0.3000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 39;
+		rect = 22,404,394,422;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		topmost = true;
+	}
+
+	[t:window,n:window_divider]
+	{
+	  b is_bottom_anchor = true;
+		bottom_anchor = 76;
+		group = console_edit;
+	  f alpha = 1.0000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 39;
+		rect = 395,404,396,422;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		topmost = true;
+	}
+}

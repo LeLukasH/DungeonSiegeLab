@@ -1,0 +1,7 @@
+[t:sed,n:s_e_call_Whelnars_eyes_SED]
+{
+	sound_effect_file = "s_e_call_Whelnars_eyes";
+	max_simultaneous_samples = 2;
+	min_playback_rate = 0.95;
+	max_playback_rate = 1.05;
+}

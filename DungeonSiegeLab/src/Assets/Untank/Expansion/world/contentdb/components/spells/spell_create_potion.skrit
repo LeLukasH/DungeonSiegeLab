@@ -1,0 +1,97 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_create_potion.skrit
+// Author(s):  Tara Teich
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property string	effect_script$	= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string script_params$	= ""   	doc = "Parameters to send to SiegeFx script";
+property string potion_type$ = "health"	doc = "Type of potion we are creating";
+
+owner = GoSkritComponent;
+
+#include "k_inc_spl_utils_DSX"
+
+Goid caster$;
+Goid target$;
+Goid potion$;
+
+
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) 
+		{
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			if( !target$.IsValidMp || !caster$.IsValidMp )
+			{
+				SetState Finished$;
+				return;
+			}
+						
+			float level$ = Math.MinFloat( caster$.Go.Actor.GetSkillLevel( owner.Go.Magic.SkillClass ), owner.Go.Magic.MaxCastLevel );
+
+			// How much potion should we generate?  Right now it's dependent on level
+			//int potionAmt$ = Math.ToInt( ((level$+1)*14.0 - 0.7) / 2.5 );
+
+			//the same as Major Heal, but divided by three since you get a nice potion.
+			int potionAmt$ = Math.ToInt( ( level$ + 4 ) * 4) ; // 4 == * 12 / 3
+
+				//Math.ToInt(((level$ ** 0.7) + 1.4) * 5.0);
+
+			// create the potion
+			potion$ = CreatePotion$( StringTool.SameNoCase(potion_type$, "health"), potionAmt$, target$ );
+
+			GoDb.SMarkForDeletion( target$ );
+			// make the potion invisible - we want to play an effect first
+			potion$.Go.Aspect.SSetIsVisible( false );
+			This.CreateTimer(1,0);
+		}
+	}
+
+	trigger OnTimer$(1)
+	{
+		if ( potion$.IsValidMp && caster$.IsValidMp )
+		{
+			// Start the visual
+			SiegeFx.SRunScript( effect_script$, potion$, caster$, script_params$, owner.Goid, WE_REQ_CAST );
+			// timer for after the gfx effect
+			This.CreateTimer(2, 0.6);
+		}
+		else
+		{
+			SetState Finished$;
+		}
+	}
+
+	transition -> Finish$ : OnTimer( 2 ) =
+	{
+		// make the potion visible
+		potion$.Go.Aspect.SSetIsVisible( true );
+
+	}
+}
+
+state Finish$
+{
+	trigger OnGoHandleMessage$( WE_SPELL_SYNC_END )
+	{
+		SetState Finished$;
+	}
+}
+
+state Finished$
+{
+	event OnEnterState$
+	{		
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

@@ -1,0 +1,93 @@
+[t:template,n:2W_base_deer]
+{
+	doc = "2W_Base template for all ambient deer.";
+	specializes = actor_ambient;
+	[actor] { race=other; }
+	[aspect]
+	{
+		model = m_c_na_dr_pos_1;
+	}
+	[body]
+	{
+		avg_move_velocity = 4.220000;
+		[bone_translator]
+		{
+			body_anterior = spine1;
+			body_mid = spine2;
+			body_posterior = spine_hip;
+			kill_bone = spine_shoulder;
+			shield_bone = spine1;
+			weapon_bone = spine1;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_na_dr_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files]
+				{
+					00 = dsf;
+					01 = dsf-02;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+		}
+	}
+	[common] { screen_name="Deer"; }
+	[mind]
+	{
+		flee_count = 1000;
+		on_enemy_spotted_alert_friends = false;
+		on_enemy_spotted_attack = false;
+		on_enemy_entered_ocz_flee = true;
+		on_friend_entered_ocz_flee = true;
+		inner_comfort_zone_range = 0.1;
+		melee_engage_range = 0.1;
+		outer_comfort_zone_range = 3;
+		personal_space_range = 0.4;
+		sight_range = 6;
+	}
+}
+[t:template,n:2W_deer_doe]
+{
+	category_name = "2W_ambients";
+	doc = "2W_deer_doe";
+	specializes = 2W_base_deer;
+}
+[t:template,n:2W_deer_fawn]
+{
+	category_name = "2W_ambients";
+	doc = "2W_deer_fawn";
+	specializes = 2W_base_deer;
+	[aspect]
+	{
+		scale_base = .6;
+		[textures] { 0=b_c_na_fw; }
+	}
+	[common] { screen_name="Fawn"; }
+}

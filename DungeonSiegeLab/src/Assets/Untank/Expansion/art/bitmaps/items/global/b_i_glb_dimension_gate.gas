@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_dimension_gate]
+{
+	layer1texture1 = b_i_glb_dimension_gate;
+  i texturedetail = 1;
+}

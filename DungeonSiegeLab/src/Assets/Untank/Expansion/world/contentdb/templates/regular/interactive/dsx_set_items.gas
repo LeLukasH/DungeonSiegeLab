@@ -1,0 +1,3437 @@
+/////////////////////////////////////////////////////////////////////
+//THE BELOW SETS ARE PRESENT IN SP AND CAN DROP IN MP
+/////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////
+//Arhok's Lot (SP Area 1-3, Melee)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Armor
+//
+[t:template,n:bd_br_f_g_c_avg_dsx_set_arhok]
+{
+	category_name = "set_item";
+	doc = "DSX Arhok's Leather";
+	specializes = base_body_armor_leather;
+	
+	[aspect]
+		{
+			gold_value = 30;
+		}
+	
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Arhok's Leather";
+		}
+	[defend]
+		{
+			armor_style = 201;
+			armor_type = a3;
+			f defense = 10.000000;
+		}
+	[gui]
+		{
+			inventory_height = 3;
+			inventory_icon = b_gui_ig_i_a_pos_a3_201;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[magic]
+		{
+		}
+	[set_item]
+		{
+			set_name = "Arhok's Lot";
+			set_compare_name = arhok;
+			modifier_file = "arhoks_leather";
+			number_items_in_set = 4;
+			item_power_modifier = 4;
+		}
+}
+
+//
+//Short Bow
+//
+[t:template,n:bw_g_c_s_s_r_avg_dsx_set_arhok]
+{
+	category_name = "set_item";
+	doc = "DSX Arhok's Short Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_038;
+			gold_value = 50;
+		}
+	[attack]
+		{
+			attack_range = 12;
+		
+			damage_max = 20;
+			damage_min = 11;
+		
+			reload_delay = 0.15;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Arhok's Short Bow";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_height = 3;
+			inventory_icon = b_gui_ig_i_w_bow_088;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[magic]
+		{
+		}
+	[set_item]
+		{
+			set_name = "Arhok's Lot";
+			set_compare_name = arhok;
+			modifier_file = "arhoks_short_bow";
+			number_items_in_set = 4;
+			item_power_modifier = 14;
+		}
+}
+
+//
+//Shield
+//
+[t:template,n:sh_w_m_g_c_t_m_avg_dsx_set_arhok]
+{
+	category_name = "set_item";
+	doc = "DSX Arhok's Shield";
+	specializes = dsx_base_shield;
+	[aspect]
+		{
+			gold_value = 200;
+			model =	 m_a_shd_1000;
+			[textures]
+				{
+					0 = b_a_shd_1000;
+				}
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Arhok's Shield";
+		}
+	[defend]
+		{
+			f defense = 8;
+		}
+	[gui]
+		{
+			inventory_height = 3;
+			inventory_icon = b_gui_ig_i_a_shd_1000;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Arhok's Lot";
+			set_compare_name = arhok;
+			modifier_file = "arhoks_shield";
+			number_items_in_set = 4;
+			item_power_modifier = 44;
+		}
+	[magic]
+		{
+		}
+}
+
+//
+//Long Sword
+//
+[t:template,n:sd_g_c_sd_1h_avg_dsx_set_arhok]
+{
+	category_name = "set_item";
+	doc = "DSX Arhok's Long Sword";
+	specializes = dsx_base_sword;
+	[aspect]
+		{
+			gold_value = 650;
+			model = m_w_swd_048;
+		}
+	[attack]
+		{
+			f damage_max = 35.0;
+			f damage_min = 25.0;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Arhok's Long Sword";
+		}
+	[gui]
+		{
+			equip_requirements = strength:12;
+			active_icon = b_gui_ig_i_ic_swd_001;
+			inventory_height = 3;
+			inventory_icon = b_gui_ig_i_w_swd_006;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[magic]
+		{
+		}
+	[set_item]
+		{
+			set_name = "Arhok's Lot";
+			set_compare_name = arhok;
+			modifier_file = "arhoks_long_sword";
+			number_items_in_set = 4;
+			item_power_modifier = 30;
+		}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Air of Illicor (SP Area 2-6, Combat Magic)
+/////////////////////////////////////////////////////////////////////
+				
+//
+//Ring
+//
+[t:template,n:ring_dsx_set_illicor]
+{
+	category_name = "set_item";
+	doc = "DSX Illicor's Ring";
+	specializes = ring;
+	
+ aspect:gold_value = 400;
+	
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Illicor's Ring";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:12;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Air of Illicor";
+			set_compare_name = illicor;
+			modifier_file = "illicor_ring";
+			number_items_in_set = 5;
+			item_power_modifier = 17;
+		}
+	[magic]
+		{}
+}
+
+//
+//Amulet
+//
+[t:template,n:amulet_dsx_set_illicor]
+{
+	category_name = "set_item";
+	doc = "DSX Illicor's Amulet";
+	specializes = amulet;
+	
+ aspect:gold_value = 500;
+	
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Illicor's Amulet";
+		}
+	[set_item]
+		{
+			set_name = "Air of Illicor";
+			set_compare_name = illicor;
+			modifier_file = "illicor_amulet";
+			number_items_in_set = 5;
+			item_power_modifier = 28;
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:15;
+			tooltip_color = set_item;
+		}
+	
+	[magic]
+		{}
+}
+
+//
+//Beaded Hauberk
+//
+[t:template,n:bd_le_m_g_c_avg_dsx_set_illicor]
+{
+	category_name = "set_item";
+	doc = "DSX Illicor's Beaded Hauberk";
+	specializes = dsx_base_body_armor_plate;
+	
+ aspect:gold_value = 1700;
+	
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Illicor's Beaded Hauberk";
+		}
+	[defend]
+		{
+			armor_style = 226;
+			armor_type = a2;
+			f defense = 30;
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:18;
+			inventory_icon = b_gui_ig_i_a_pos_a2_226;
+			inventory_height = 2;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Air of Illicor";
+			set_compare_name = illicor;
+			modifier_file = "illicor_beaded_hauberk";
+			number_items_in_set = 5;
+			item_power_modifier = 73;
+		}
+	[magic]
+		{}
+}
+
+//
+//Staff
+//
+[t:template,n:st_g_c_dsx_set_illicor]
+{
+	category_name = "set_item";
+	doc = "DSX Illicor's Staff";
+	specializes = dsx_base_staff;
+	[aspect]
+		{
+			gold_value = 3500;
+			model = m_w_stf_403;
+		}
+	[attack]
+		{
+			f damage_max = 80.000000;
+			f damage_min = 60.000000;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Illicor's Staff";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:20;
+			active_icon = b_gui_ig_i_ic_stf_004;
+			inventory_height = 4;
+			inventory_icon = b_gui_ig_i_w_stf_403;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Air of Illicor";
+			set_compare_name = illicor;
+			modifier_file = "illicor_staff";
+			number_items_in_set = 5;
+			item_power_modifier = 47;
+		}
+	[magic]{}
+}
+
+//
+//Spellbook
+//
+[t:template,n:spellbook_dsx_set_illicor]
+{
+	category_name = "set_item";
+	doc = "DSX Illicor's Spellbook";
+	specializes = spellbook;
+	
+	[aspect]
+	{
+		gold_value = 8000;	
+		textures:0 = b_i_glb_book-magic-12;
+	}
+ 	[common]
+	{
+		b allow_modifiers = false;
+		screen_name = "Illicor's Spellbook";
+	}
+	[gui]
+	{
+		equip_requirements = intelligence:24;
+		inventory_icon = b_gui_ig_i_it_magic-book-12;
+		equip_slot	= es_spellbook;
+		inventory_width		= 1;
+		inventory_height	= 2;
+		tooltip_color = set_item;
+	}
+	[set_item]
+	{
+		set_name = "Air of Illicor";
+		set_compare_name = illicor;
+		modifier_file = "illicor_spellbook";
+		number_items_in_set = 5;
+		item_power_modifier = 58;
+	}
+	[magic]{}
+}
+
+/////////////////////////////////////////////////////////////////////
+//Kit of Kajj (SP Area 4-7, Armor)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Breastplate
+//
+[t:template,n:bd_le_m_g_c_avg_dsx_set_kajj]
+{
+	category_name = "set_item";
+	doc = "DSX Kajj's Breastplate";
+	specializes = base_body_armor_plate;
+	
+ aspect:gold_value = 2400;
+	
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Kajj's Breastplate";
+		}
+	[defend]
+		{
+			armor_style = 207;
+			armor_type = a3;
+			f defense = 80;
+		}
+	[gui]
+		{
+			equip_requirements = strength:18;
+			inventory_icon = b_gui_ig_i_a_pos_a3_207;
+			inventory_height = 3;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Kit of Kajj";
+			set_compare_name = kajj;
+			modifier_file = "kajj_breastplate";
+			number_items_in_set = 4;
+			item_power_modifier = 84;
+		}
+	[magic]
+		{
+		}
+
+}
+
+//
+//Gauntlets
+//
+[t:template,n:gl_gl_sc_r_g_c_avg_dsx_set_kajj]
+{
+	category_name = "set_item";
+	doc = "DSX Kajj's Gauntlets";
+	specializes = dsx_base_glove;
+	
+ aspect:gold_value = 2800;
+	
+	[defend]
+		{
+			armor_style = 300;
+			armor_type = type1;
+			f defense = 6;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Kajj's Gauntlets";
+		}
+	[gui]
+		{
+			equip_requirements = strength:18;
+			inventory_icon = b_gui_ig_i_a_gntl_300;
+			inventory_height = 2;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Kit of Kajj";
+			set_compare_name = kajj;
+			modifier_file = "kajj_gauntlets";
+			number_items_in_set = 4;
+			item_power_modifier = 90;
+		}
+	[magic] {}
+}
+
+//
+//Helm
+//
+[t:template,n:he_fl_pl_m_dsx_set_kajj]
+{
+	category_name = "set_item";
+	doc = "DSX Kajj's Helm";
+	specializes = dsx_base_helm;
+	
+ aspect:gold_value = 5500;
+	
+	[defend]
+		{
+			armor_style = thessic;
+			armor_type = thessic;
+			f defense = 8.000000;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Kajj's Helm";
+		}
+	[gui]
+		{
+			equip_requirements = strength:20;
+			inventory_icon = b_gui_ig_i_a_hlmt_126;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Kit of Kajj";
+			set_compare_name = kajj;
+			modifier_file = "kajj_helm";
+			number_items_in_set = 4;
+			item_power_modifier = 110;
+		}
+	[magic] {}
+}
+
+//
+//Claws
+//
+[t:template,n:dg_g_c_dsx_set_kajj]
+{
+	category_name = "set_item";
+	doc = "DSX Claws of Kajj";
+	specializes = dsx_base_dagger;
+	[aspect]
+		{
+			gold_value = 11000;
+			model = m_w_dag_400;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 73.0;
+			f damage_min = 53.0;
+			attack_class = ac_beastfu;
+			is_two_handed = false;
+		}
+	[common]
+		{
+			screen_name = "Claws of Kajj";
+			b allow_modifiers = false;
+		}
+	[gui] 
+		{
+			equip_requirements = strength:22;
+			inventory_height = 2;
+			inventory_icon = b_gui_ig_i_w_dgr_400; 
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Kit of Kajj";
+			set_compare_name = kajj;
+			modifier_file = "kajj_claws";
+			number_items_in_set = 4;
+			item_power_modifier = 63;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Solov's Inventions (SP Area 5-6, Combat Magic)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Blood Ward
+//
+[t:template,n:sh_w_m_g_c_t_m_avg_ward_blood_dsx_set_inventor]
+{
+	category_name = "set_item";
+	doc = "DSX Solov's Ward";
+	specializes = dsx_base_shield;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Solov's Ward";
+		}
+	[aspect]
+		{
+			gold_value = 4400;
+			model = m_a_shd_ward;
+			[textures]
+				{
+					0 = b_a_shd_ward_04-static; 1 = b_a_shd_ward_04-dynamic;
+				}
+		}
+	[defend]
+		{
+			f defense = 8;
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:20;
+			inventory_icon		 = b_gui_ig_i_a_shd_ward_04;
+			inventory_height	 = 2;
+			inventory_width		 = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Patents of the Inventor";
+			set_compare_name = patents;
+			modifier_file = "inventor_ward";
+			number_items_in_set = 3;
+			item_power_modifier = 104;
+		}
+	[magic]
+		{}
+}
+
+//
+//Fire Bow
+//
+[t:template,n:bw_g_c_dsx_fir_avg_dsx_set_inventor]
+{
+	category_name = "set_item";
+	doc = "DSX Solov's Bow";
+	specializes = dsx_base_bow;
+
+	[aspect]
+		{
+			gold_value = 5000;
+			model = m_w_bow_301;
+		}
+	[attack]
+		{
+			attack_range = 12;
+			f damage_max = 75;
+			f damage_min = 65;
+			reload_delay = 0.15;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Solov's Bow";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:20;
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_301;
+			inventory_height = 4;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Patents of the Inventor";
+			set_compare_name = patents;
+			modifier_file = "inventor_bow";
+			number_items_in_set = 3;
+			item_power_modifier = 50;
+		}
+	[magic]
+		{}
+}
+
+//
+//Spellbook	
+//
+[t:template,n:spellbook_dsx_set_inventor]
+{
+	category_name = "set_item";
+	doc = "DSX Solov's Spellbook";
+	specializes = spellbook;
+	
+ 	[aspect]
+	{
+		gold_value = 5500;	
+		textures:0 = b_i_glb_book-magic-15;
+	}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Solov's Spellbook";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:20;
+			inventory_icon = b_gui_ig_i_it_magic-book-15;	
+			equip_slot		= es_spellbook;
+			inventory_width		= 1;
+			inventory_height	= 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Patents of the Inventor";
+			set_compare_name = patents;
+			modifier_file = "inventor_spellbook";
+			number_items_in_set = 3;
+			item_power_modifier = 53;
+		}
+	[magic]
+		{}
+}
+
+/////////////////////////////////////////////////////////////////////
+//Demlock's Compendium (SP Area 6-8, Nature Magic)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Ring
+//
+[t:template,n:ring_dsx_set_demlock]
+{
+	category_name = "set_item";
+	doc = "DSX Demlock's Ring";
+	specializes = ring;
+	
+ aspect:gold_value = 5300;
+	
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Demlock's Ring";
+		}
+	[set_item]
+		{
+			set_name = "Demlock's Compendium";
+			set_compare_name = demlock;
+			modifier_file = "demlocks_ring";
+			number_items_in_set = 3;
+			item_power_modifier = 100;
+			item_power_modifier = 52;
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:22;
+			tooltip_color = set_item;
+		}
+	
+	[magic]
+		{}
+}
+
+//
+//Amulet
+//
+[t:template,n:amulet_dsx_set_demlock]
+{
+	category_name = "set_item";
+	doc = "DSX Demlock's Amulet";
+	specializes = amulet;
+	
+ aspect:gold_value = 9000;
+	
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Demlock's Amulet";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:24;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Demlock's Compendium";
+			set_compare_name = demlock;
+			modifier_file = "demlocks_amulet";
+			number_items_in_set = 3;
+			item_power_modifier = 60;
+		}
+	[magic]{}
+}
+
+//
+//Spellbook
+//
+[t:template,n:spellbook_dsx_set_demlock]
+{
+	category_name = "set_item";
+	doc = "DSX Demlock's Spellbook";
+	specializes = spellbook;
+	
+ 	[aspect]
+ 	{
+ 		gold_value = 15000;
+		textures:0 = b_i_glb_book-magic-05;
+ 	}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Demlock's Spellbook";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:23;
+			inventory_icon = b_gui_ig_i_it_magic-book-05;	
+			equip_slot			= es_spellbook;
+			inventory_width		= 1;
+			inventory_height	= 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Demlock's Compendium";
+			set_compare_name = demlock;
+			modifier_file = "demlocks_spellbook";
+			number_items_in_set = 3;
+			item_power_modifier = 69;
+		}
+	[magic]
+		{
+		}
+}
+
+/////////////////////////////////////////////////////////////////////
+//Clockwork Posture (SP Area 7-9, Ranged)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Bow
+//
+[t:template,n:cw_dsx_set_clockwork]
+{
+	category_name = "set_item";
+	doc = "DSX Clockwork Posture Crossbow";
+	specializes = dsx_base_projectile;
+	[aspect]
+		{
+			gold_value = 13000;
+			model = m_w_csb_301;
+			[voice]
+				{
+					[put_down]
+						{
+							* = s_e_gui_put_down_bow;
+						}
+				}
+		}
+	[attack]
+		{
+			ammo_template = bolt;
+			attack_range = 15;
+			reload_delay = 0.7;
+			f damage_max = 85.0;
+			f damage_min = 75.0;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Clockwork Crossbow";
+		}
+	[gui]
+		{
+			equip_requirements = dexterity:22;
+			active_icon = b_gui_ig_i_ic_csb_002;
+			inventory_icon = b_gui_ig_i_w_csb_301;
+			inventory_width = 2;
+			inventory_height = 3;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Clockwork Posture";
+			set_compare_name = clockwork;
+			modifier_file = "clockwork_posture_bow";
+			number_items_in_set = 4;
+			item_power_modifier = 66;
+		}
+	[magic]
+		{}
+}
+
+
+//
+//Boots
+//
+// $$$ - need to change this template name - but I don't want to invalidate saved games
+[t:template,n:ring_dsx_set_clockwork]
+{
+	category_name = "set_item";
+	doc = "DSX Clockwork Posture Boots";
+	specializes = dsx_base_boot;
+	
+ aspect:gold_value = 15000;
+	
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Clockwork Boots";
+		}
+	[defend]
+		{
+			armor_style = 504;
+			armor_type = type1;
+			f defense = 10;
+		}	
+	[gui]
+		{
+			equip_requirements = dexterity:24;
+			inventory_icon = b_gui_ig_i_a_boot_504;
+			inventory_height = 2;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Clockwork Posture";
+			set_compare_name = clockwork;
+			modifier_file = "clockwork_posture_boots";
+			number_items_in_set = 4;
+			item_power_modifier = 150;
+		}
+	[magic]
+		{}
+}
+
+//
+//Spear
+//
+[t:template,n:st_dsx_set_clockwork]
+{
+	category_name = "set_item";
+	doc = "DSX Clockwork Posture Spear";
+	specializes = dsx_base_polearm_staff;
+	[aspect]
+		{
+			gold_value = 16000;
+			model = m_w_stf_300;
+			selection_indicator_scale = 0.65;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 110;
+			f damage_min = 90;
+			is_two_handed = true;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Clockwork Staff";
+		}
+	[gui] //PLACEHOLDER
+		{
+			equip_requirements = dexterity:24;
+			active_icon = b_gui_ig_i_ic_stf_004;	// placeholder
+			inventory_icon = b_gui_ig_i_w_stf_300;
+			inventory_height = 4;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	 
+	[set_item]
+		{
+			set_name = "Clockwork Posture";
+			set_compare_name = clockwork;
+			modifier_file = "clockwork_posture_spear";
+			number_items_in_set = 4;
+			item_power_modifier = 71;
+		}
+	[magic]
+		{}
+}
+
+//
+//Amulet
+//
+[t:template,n:amulet_dsx_set_clockwork]
+{
+	category_name = "set_item";
+	doc = "DSX Clockwork Posture Amulet";
+	specializes = amulet;
+	
+ aspect:gold_value = 23000;
+	
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Clockwork Amulet";
+		}
+	[gui]
+		{
+			equip_requirements = dexterity:25;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Clockwork Posture";
+			set_compare_name = clockwork;
+			modifier_file = "clockwork_posture_amulet";
+			number_items_in_set = 4;
+			item_power_modifier = 80;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//THE FOLLOWING SETS ARE ONLY DROPPABLE IN MP
+/////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////
+//Chadekian (Nature Magic)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Spellbook
+//
+[t:template,n:book_glb_magic_dsx_set_chadek]
+{
+	category_name = "set_item";
+	doc = "DSX Chadek's Spellbook";
+	specializes = spellbook;
+
+	[aspect]
+	{
+		textures:0 = b_i_glb_book-magic-14;
+	}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Chadek's Spellbook";
+		}
+	[gui]
+		{
+			inventory_icon = b_gui_ig_i_it_magic-book-14;	
+			equip_slot		= es_spellbook;
+			inventory_width		= 1;
+			inventory_height	= 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Chadekian";
+			set_compare_name = chadek;
+			modifier_file = "chadek_spellbook";
+			number_items_in_set = 5;
+			item_power_modifier = 17;
+		}
+	[magic]
+		{}
+}
+
+//
+//Ceramic Reinforced Suit
+//
+[t:template,n:bd_le_m_g_c_avg_ceramic_dsx_set_chadek]
+{
+	category_name = "set_item";
+	doc = "DSX Chadek's Suit";
+	specializes = dsx_base_body_armor_plate;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Chadek's Suit";
+		}
+	[defend]
+		{
+			armor_style = 224;
+			armor_type = a4;
+			f defense = 19;
+		}
+	[gui]
+		{
+			//equip_requirements = intelligence:27;
+			inventory_icon = b_gui_ig_i_a_pos_a4_224;
+			inventory_height = 3;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Chadekian";
+			set_compare_name = chadek;
+			modifier_file = "chadek_suit";
+			number_items_in_set = 5;
+			item_power_modifier = 42;
+		}
+	[magic]
+		{}
+}
+
+//
+//Ceramic Boots
+//
+[t:template,n:bo_bo_sc_m_g_c_avg_ceramic_dsx_set_chadek]
+{
+	category_name = "set_item";
+	doc = "DSX Chadek's Boots";
+	specializes = dsx_base_boot;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Chadek's Boots";
+		}
+	[defend]
+		{
+			armor_style = 507;
+			armor_type = type1;
+			f defense = 3;
+		}
+	[gui]
+		{
+			//equip_requirements = intelligence:39;
+			inventory_icon = b_gui_ig_i_a_boot_507;
+			inventory_height = 2;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Chadekian";
+			set_compare_name = chadek;
+			modifier_file = "chadek_boots";
+			number_items_in_set = 5;
+			item_power_modifier = 63;
+		}
+	[magic]
+		{}
+}
+
+//
+//Ceramic Shield
+//
+[t:template,n:sh_w_m_g_c_t_m_avg_ceramic_dsx_set_chadek]
+{
+	category_name = "set_item";
+	doc = "DSX Chadek's Shield";
+	specializes = dsx_base_shield;
+	[aspect]
+		{
+			model = m_a_shd_14;
+			[textures]
+				{
+					0 = b_a_shd_618;
+				}
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Chadek's Shield";
+		}
+	[defend]
+		{
+			f defense = 5;
+		}	
+	[gui]
+		{
+			//equip_requirements = intelligence:27;
+			inventory_icon = b_gui_ig_i_a_shd_618;
+			inventory_height = 2;
+			inventory_width	= 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Chadekian";
+			set_compare_name = chadek;
+			modifier_file = "chadek_shield";
+			number_items_in_set = 5;
+			item_power_modifier = 62;
+		}
+	[magic]
+		{}
+}
+
+//	
+//Ceramic Headdress 
+//
+[t:template,n:he_vi_pl_m_ceramic_headdress_dsx_set_chadek]
+{
+	category_name = "set_item";
+	doc = "DSX Chadek's Headdress";
+	specializes = dsx_base_helm;
+	[common]
+		{
+			screen_name = "Chadek's Headdress";
+			b allow_modifiers = false;
+		}
+	[defend]
+		{
+			armor_style = 422;
+			armor_type = type90;
+			f defense = 4;
+		}
+	[gui]
+		{
+			//equip_requirements = intelligence:27;
+			inventory_icon = b_gui_ig_i_a_hlmt_422;
+			inventory_height = 2;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Chadekian";
+			set_compare_name = chadek;
+			modifier_file = "chadek_headdress";
+			number_items_in_set = 5;
+			item_power_modifier = 74;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Guiseppi's Wares (Ranged)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Spidersilk Bow
+//
+[t:template,n:bw_g_c_dsx_spd_avg_dsx_set_guiseppi]
+{
+	category_name = "set_item";
+	doc = "DSX Guiseppi's Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_310;
+			[voice]
+				{
+					[put_down]
+						{
+							* = s_e_gui_put_down_bow;
+						}
+				}
+		}
+	[attack]
+		{
+			ammo_template = bolt;
+			attack_range = 15;
+			reload_delay = 0.7;
+			f damage_max = 25.0;
+			f damage_min = 20.0;
+			is_two_handed = 2;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Guiseppi's Bow";
+		}
+	[gui]
+		{
+			//equip_requirements = strength:11,dexterity:13;
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_310;
+			inventory_height = 3;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Guiseppi's Wares";
+			set_compare_name = guiseppi;
+			modifier_file = "guiseppi_bow";
+			number_items_in_set = 3;
+			item_power_modifier = 22;
+		}
+	[magic]
+		{}
+	[physics]
+		{
+			velocity = 75;
+		}
+}
+
+//
+//Amulet
+//
+[t:template,n:amulet_dsx_set_guiseppi]
+{
+	category_name = "set_item";
+	doc = "DSX Guiseppi's Amulet";
+	specializes = amulet;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Guiseppi's Amulet";
+		}
+	[gui]
+		{
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Guiseppi's Wares";
+			set_compare_name = guiseppi;
+			modifier_file = "guiseppi_amulet";
+			number_items_in_set = 3;
+			item_power_modifier = 15;
+		}
+	[magic]
+		{}
+}
+
+//
+//Ring
+//
+[t:template,n:ring_dsx_set_guiseppi]
+{
+	category_name = "set_item";
+	doc = "DSX Guiseppi's Ring";
+	specializes = ring;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Guiseppi's Ring";
+		}
+	[gui]
+		{
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Guiseppi's Wares";
+			set_compare_name = guiseppi;
+			modifier_file = "guiseppi_ring";
+			number_items_in_set = 3;
+			item_power_modifier = 5;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Inclination of Kaltenbach (Armor) - ALLOY/CLOCK
+/////////////////////////////////////////////////////////////////////
+
+//
+//Full Mech Suit
+//
+[t:template,n:bd_le_f_g_c_avg_hvmech_dsx_set_kaltenbach]
+{
+	category_name = "set_item";
+	doc = "DSX Kaltenbach's Full Mech Suit";
+	specializes = dsx_base_body_armor_plate;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Kaltenbach's Full Mech Suit";
+		}
+	[defend]
+		{
+			armor_style = 235;
+			armor_type = a5;
+			f defense = 91;
+		}
+	[gui]
+		{
+			equip_requirements = strength:16;
+			inventory_icon = b_gui_ig_i_a_pos_a5_235;
+			inventory_height = 3;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Inclination of Kaltenbach";
+			set_compare_name = kaltenbach;
+			modifier_file = "kaltenbach_suit";
+			number_items_in_set = 4;
+			item_power_modifier = 91;
+		}
+	[magic]
+		{}
+}
+
+//
+//Clockwork Sword
+// 
+[t:template,n:sd_g_c_dsx_clk_1h_avg_dsx_set_kaltenbach]
+{
+	category_name = "set_item";
+	doc = "DSX Kaltenbach's Sword";
+	specializes = dsx_base_sword;
+	[aspect]
+		{
+			model = m_w_swd_301;
+		}
+	[attack]
+		{
+			f damage_max = 80.0;
+			f damage_min = 50.0;
+			is_two_handed = false;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Kaltenbach's Sword";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_swd_007; //PLACEHOLDER
+			inventory_icon = b_gui_ig_i_w_swd_301;
+			equip_requirements = strength:17;
+			inventory_height = 4;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Inclination of Kaltenbach";
+			set_compare_name = kaltenbach;
+			modifier_file = "kaltenbach_sword";
+			number_items_in_set = 4;
+			item_power_modifier = 64;
+		}
+	[magic]
+		{}
+}
+
+//
+//Clockface Shield
+//
+[t:template,n:sh_w_f_g_c_t_m_avg_clockface_dsx_set_kaltenbach]
+{
+	category_name = "set_item";
+	doc = "DSX Kaltenbach's Shield";
+	specializes = dsx_base_shield;
+	[aspect]
+		{
+			model = m_a_shd_02;
+			[textures]
+				{
+					0 = b_a_shd_613;
+				}
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Kaltenbach's Shield";
+		}
+	[defend]
+		{
+			f defense = 11;
+		}
+	[gui]
+		{
+			equip_requirements = strength:18;
+			inventory_icon = b_gui_ig_i_a_shd_613;
+			inventory_height = 2;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Inclination of Kaltenbach";
+			set_compare_name = kaltenbach;
+			modifier_file = "kaltenbach_shield";
+			number_items_in_set = 4;
+			item_power_modifier = 62;
+		}
+	[magic]
+		{}
+}
+
+//
+//Geared Gauntlets
+//
+[t:template,n:gl_ga_sc_f_g_c_avg_geared_dsx_set_kaltenbach]
+{
+	category_name = "set_item";
+	doc = "DSX Kaltenbach's Gauntlets";
+	specializes = dsx_base_glove;
+	[common]
+		{
+			screen_name = "Kaltenbach's Gauntlets";
+			b allow_modifiers = false;
+		}
+	[defend]
+		{
+			armor_style = 300;
+			armor_type = type1;
+			f defense = 6;
+		}
+	[gui]
+		{
+			equip_requirements = strength:19;
+			inventory_icon = b_gui_ig_i_a_gntl_305;
+			inventory_height = 2;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Inclination of Kaltenbach";
+			set_compare_name = kaltenbach;
+			modifier_file = "kaltenbach_gauntlets";
+			number_items_in_set = 4;
+			item_power_modifier = 66;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Rune Series (Melee)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Rune Sword
+//
+[t:template,n:sd_g_c_dsx_ser_1h_avg_dsx_set_rune]
+{
+	category_name = "set_item";
+	doc = "DSX Rune Sword";
+	specializes = dsx_base_sword;
+	[aspect]
+		{
+			model = m_w_swd_twist;
+		}
+	[attack]
+		{
+			f damage_max = 62.0;	//101.0;
+			f damage_min = 48.0;	// 66.0;
+			is_two_handed = false;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Rune Sword";
+		}
+	[gui]
+		{ 
+			equip_requirements = strength:16;
+			active_icon = b_gui_ig_i_ic_swd_007;
+			inventory_icon = b_gui_ig_i_w_swd_309;
+			inventory_height = 3;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Rune Series";
+			set_compare_name = rune;
+			modifier_file = "rune_sword";
+			number_items_in_set = 4;
+			item_power_modifier = 65;
+		}
+	[magic]
+		{}
+}
+
+//
+//Alloy Dome
+//
+[t:template,n:he_ca_pl_f_alloy_dsx_set_rune]
+{
+	category_name = "set_item";
+	doc = "DSX Rune Dome";
+	specializes = dsx_base_helm;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Rune Dome";
+		}
+	[defend]
+		{
+			armor_style = 400;
+			armor_type = type13;
+			f defense = 6;
+		}
+	[gui]
+		{
+			equip_requirements = strength:17;
+			inventory_icon = b_gui_ig_i_a_hlmt_400;
+			inventory_height = 2;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Rune Series";
+			set_compare_name = rune;
+			modifier_file = "rune_dome";
+			number_items_in_set = 4;
+			item_power_modifier = 50;
+		}
+	[magic]
+		{}
+}
+
+//
+//Gearwork Shield
+//
+[t:template,n:sh_w_f_g_c_t_m_avg_gearwork_dsx_set_rune]
+{
+	category_name = "set_item";
+	doc = "DSX Rune Shield";
+	specializes = dsx_base_shield;
+	[aspect]
+	{
+		model = m_a_shd_02;
+		[textures]
+			{
+				0 = b_a_shd_613;
+			}
+	}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Rune Shield";
+		}
+	[defend]
+		{
+			f defense = 11;
+		}
+	[gui]
+		{
+			equip_requirements = strength:18;
+			inventory_icon		 = b_gui_ig_i_a_shd_613;
+			inventory_height	 = 2;
+			inventory_width		 = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Rune Series";
+			set_compare_name = rune;
+			modifier_file = "rune_shield";
+			number_items_in_set = 4;
+			item_power_modifier = 62;
+		}
+	[magic]
+		{}
+}
+
+//
+//Articulated Alloy Armor
+//
+[t:template,n:bd_pl_f_g_c_avg_alloy_dsx_set_rune]
+{
+	category_name = "set_item";
+	doc = "DSX Rune Armor";
+	specializes = dsx_base_body_armor_plate;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Rune Armor";
+		}
+	[defend]
+		{
+			armor_style = 200;
+			armor_type = a3;
+			f defense = 91;
+		}
+	[gui]
+		{
+			equip_requirements = strength:19;
+			inventory_icon = b_gui_ig_i_a_pos_a3_200;
+			inventory_height = 3;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Rune Series";
+			set_compare_name = rune;
+			modifier_file = "rune_armor";
+			number_items_in_set = 4;
+			item_power_modifier = 91;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Adela's Demeanor (Combat Magic)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Spellbook
+//
+[t:template,n:spellbook_dsx_set_adela]
+{
+	category_name = "set_item";
+	doc = "DSX Adela's Spellbook";
+	specializes = spellbook;
+
+	[aspect]
+	{
+		textures:0 = b_i_glb_book-magic-20;
+	}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Adela's Spellbook";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:17;
+			inventory_icon = b_gui_ig_i_it_magic-book-20;	
+			equip_slot			= es_spellbook;
+			inventory_width		= 1;
+			inventory_height	= 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Adela's Demeanor";
+			set_compare_name = adela;
+			modifier_file = "adela_spellbook";
+			number_items_in_set = 5;
+			item_power_modifier = 45;
+		}
+	[magic]
+		{}
+}
+
+//
+//Ring
+//
+[t:template,n:ring_dsx_set_adela]
+{
+	category_name = "set_item";
+	doc = "DSX Adela's Ring";
+	specializes = ring;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Adela's Ring";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:18;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Adela's Demeanor";
+			set_compare_name = adela;
+			modifier_file = "adela_ring";
+			number_items_in_set = 5;
+			item_power_modifier = 55;
+		}
+	[magic]
+		{}
+}
+
+//
+//Amulet
+//
+[t:template,n:amulet_dsx_set_adela]
+{
+	category_name = "set_item";
+	doc = "DSX Adela's Amulet";
+	specializes = amulet;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Adela's Amulet";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:19;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Adela's Demeanor";
+			set_compare_name = adela;
+			modifier_file = "adela_amulet";
+			number_items_in_set = 5;
+			item_power_modifier = 75;
+		}
+	[magic]
+		{}
+}
+
+//
+//Staff
+//
+[t:template,n:st_g_c_dsx_hst_avg_dsx_set_adela]
+{
+	category_name = "set_item";
+	doc = "DSX Adela's Staff";
+	specializes = dsx_base_staff;
+	[aspect]
+		{
+			model = m_w_stf_hassat-staff;
+		}
+	[attack]
+		{
+			f damage_max = 90.000000;
+			f damage_min = 65.000000;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Adela's Staff";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:20;
+			active_icon = b_gui_ig_i_ic_stf_004;
+			inventory_height = 4;
+			inventory_icon = b_gui_ig_i_w_stf_082;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Adela's Demeanor";
+			set_compare_name = adela;
+			modifier_file = "adela_staff";
+			number_items_in_set = 5;
+			item_power_modifier = 66;
+		}
+	[magic]
+		{}
+}
+
+//
+//Framed Spidersilk Hauberk
+//
+[t:template,n:bd_le_m_g_c_avg_spider_framed_dsx_set_adela]
+{
+	category_name = "set_item";
+	doc = "DSX Adela's Hauberk";
+	specializes = dsx_base_body_armor_plate;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Adela's Spidersilk Hauberk";
+		}
+	[defend]
+		{
+			armor_style = 222;
+			armor_type = a2;
+			f defense = 103;
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:21;
+			inventory_icon = b_gui_ig_i_a_pos_a2_222;
+			inventory_height = 2;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Adela's Demeanor";
+			set_compare_name = adela;
+			modifier_file = "adela_hauberk";
+			number_items_in_set = 5;
+			item_power_modifier = 228;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Jeffron's Carriage (Armor) - FLYWING
+/////////////////////////////////////////////////////////////////////
+
+//
+//Elaborate Flywing Plate
+//
+[t:template,n:bd_pl_r_g_c_avg_flywing_dsx_set_jeffron]
+{
+	category_name = "set_item";
+	doc = "DSX Jeffron's Plate";
+	specializes = dsx_base_body_armor_plate;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Jeffron's Plate";
+		}
+	[defend]
+		{
+			armor_style = 214;
+			armor_type = a5;
+			f defense = 122;
+		}
+	[gui]
+		{
+			equip_requirements = strength:22;
+			inventory_icon = b_gui_ig_i_a_pos_a5_214;
+			inventory_height = 3;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Jeffron's Carriage";
+			set_compare_name = jeffron;
+			modifier_file = "jeffron_plate";
+			number_items_in_set = 5;
+			item_power_modifier = 188;
+		}
+	[magic]
+		{}
+}
+
+//
+//Flywing Crown
+//
+[t:template,n:he_op_pl_r_flywing_crown_dsx_set_jeffron]
+{
+	category_name = "set_item";
+	doc = "DSX Jeffron's Crown";
+	specializes = dsx_base_helm;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Jeffron's Crown";
+		}
+	[defend]
+		{
+			armor_style = 409;
+			armor_type = type2;
+			f defense = 12;
+		}
+	[gui]
+		{
+			equip_requirements = strength:23;
+			inventory_icon = b_gui_ig_i_a_hlmt_409;
+			inventory_height = 2;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Jeffron's Carriage";
+			set_compare_name = jeffron;
+			modifier_file = "jeffron_crown";
+			number_items_in_set = 5;
+			item_power_modifier = 154;
+		}
+	[magic]
+		{}
+}
+
+//
+//Flywing Wall
+//
+[t:template,n:sh_w_r_g_c_t_m_avg_wall_flywing_dsx_set_jeffrom]
+{
+	category_name = "set_item";
+	doc = "DSX Jeffron's Wall";
+	specializes = dsx_base_shield;
+	[aspect]
+		{
+			model = m_a_shd_09;
+			[textures]
+				{
+					0 = b_a_shd_606;
+				}
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Jeffron's Wall";
+		}
+	[defend]
+		{
+			f defense = 15;
+		}
+	[gui]
+		{
+			equip_requirements = strength:24;
+			inventory_icon		 = b_gui_ig_i_a_shd_606;
+			inventory_height	 = 3;
+			inventory_width		 = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Jeffron's Carriage";
+			set_compare_name = jeffron;
+			modifier_file = "jeffron_wall";
+			number_items_in_set = 5;
+			item_power_modifier = 129;
+		}
+	[magic]
+		{}
+}
+
+//
+//Flywing Gauntlets
+//
+[t:template,n:gl_ga_sc_r_g_c_avg_flywing_dsx_set_jeffron]
+{
+	category_name = "set_item";
+	doc = "DSX Jeffron's Gauntlets";
+	specializes = dsx_base_glove;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Jeffron's Gauntlets";
+		}
+	[defend]
+		{
+			armor_style = 304;
+			armor_type = type1;
+			f defense = 7;
+		}
+	[gui]
+		{
+			equip_requirements = strength:25;
+			inventory_icon = b_gui_ig_i_a_gntl_304;
+			inventory_height = 2;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Jeffron's Carriage";
+			set_compare_name = jeffron;
+			modifier_file = "jeffron_gauntlets";
+			number_items_in_set = 5;
+			item_power_modifier = 118;
+		}
+	[magic]
+		{}
+}
+
+//
+//Flywing Boots
+//
+[t:template,n:bo_bo_sc_r_g_c_avg_flywing_dsx_set_jeffron]
+{
+	category_name = "set_item";
+	doc = "DSX Jeffron's Boots";
+	specializes = dsx_base_boot;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Jeffron's Boots";
+		}
+	[defend]
+		{
+			armor_style = 504;
+			armor_type = type1;
+			f defense = 9;
+		}
+	[gui]
+		{
+			equip_requirements = strength:26;
+			inventory_icon = b_gui_ig_i_a_boot_504;
+			inventory_height = 2;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Jeffron's Carriage";
+			set_compare_name = jeffron;
+			modifier_file = "jeffron_boots";
+			number_items_in_set = 5;
+			item_power_modifier = 130;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Cicatrix' Bearing (Nature Magic)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Scythe
+//
+[t:template,n:sd_g_c_dsx_skl_1h_mag_dsx_set_cicatrix]
+{
+	category_name = "set_item";
+	doc = "DSX Cicatrix' Scythe";
+	specializes = base_axe;
+	[aspect]
+		{
+			model = m_w_misc_scythe-002;
+		}
+	[attack]
+		{
+			damage_max = 85;
+			damage_min = 55;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Scythe of Cicatrix";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:24;
+			active_icon = b_gui_ig_i_ic_msc_004;
+			inventory_height = 3;
+			inventory_icon = b_gui_ig_i_w_msc_011;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Cicatrix' Bearing";
+			set_compare_name = cicatrix;
+			modifier_file = "cicatrix_scythe";
+			number_items_in_set = 3;
+			item_power_modifier = 69;
+		}
+	[magic]
+		{}
+}
+
+//
+//Ring
+//
+[t:template,n:ring_dsx_set_cicatrix]
+{
+	category_name = "set_item";
+	doc = "DSX Cicatrix' Ring";
+	specializes = ring;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Ring of Cicatrix";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:25;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Cicatrix' Bearing";
+			set_compare_name = cicatrix;
+			modifier_file = "cicatrix_ring";
+			number_items_in_set = 3;
+			item_power_modifier = 61;
+		}
+	[magic]
+		{}
+}
+
+//
+//Spellbook
+//
+[t:template,n:spellbook_dsx_set_cicatrix]
+{
+	category_name = "set_item";
+	doc = "DSX Cicatrix' Spellbook";
+	specializes = spellbook;
+	[aspect]
+	{
+		textures:0 = b_i_glb_book-magic-16;
+	}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Spellbook of Cicatrix";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:26;
+			inventory_icon = b_gui_ig_i_it_magic-book-16;	
+			equip_slot		= es_spellbook;
+			inventory_width		= 1;
+			inventory_height	= 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Cicatrix' Bearing";
+			set_compare_name = cicatrix;
+			modifier_file = "cicatrix_spellbook";
+			number_items_in_set = 3;
+			item_power_modifier = 77;
+		}
+	[magic]
+		{}
+}
+
+
+
+/////////////////////////////////////////////////////////////////////
+//Utraean Archer's Outfit (Ranged)					
+/////////////////////////////////////////////////////////////////////
+
+//
+//Rubber Club
+//
+[t:template,n:cb_g_c_dsx_rbr_avg_dsx_set_utraean_archer]
+{
+	category_name = "set_item";
+	doc = "DSX Utraean Club";
+	specializes = dsx_base_club;
+	[aspect]
+		{
+			model = m_w_clb_302;
+		}
+	[attack]
+		{
+			damage_max = 175.0;
+			damage_min = 125.0;
+			is_two_handed = false;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Utraean Archer's Club";
+		}
+	[gui]
+		{
+			equip_requirements = strength:17,dexterity:28;
+			inventory_icon = b_gui_ig_i_w_clb_302;
+			inventory_height = 2;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Utraean Archer's Outfit";
+			set_compare_name = utraean_archer;
+			modifier_file = "utraean_archer_club";
+			number_items_in_set = 5;
+			item_power_modifier = 148;
+		}
+	[magic]
+		{}
+}
+
+//
+//Heavy Rubber Suit
+//
+[t:template,n:bd_br_r_g_c_avg_hvrubber_dsx_set_utraean_archer]
+{
+	category_name = "set_item";
+	doc = "DSX Utraean Suit";
+	specializes = dsx_base_body_armor_plate;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Utraean Archer's Suit";
+		}
+	[defend]
+		{
+			armor_style = 210;
+			armor_type = a2;
+			f defense = 173;
+		}
+	[gui]
+		{
+			equip_requirements = strength:17,dexterity:29;
+			inventory_icon = b_gui_ig_i_a_pos_a2_210;
+			inventory_height = 2;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Utraean Archer's Outfit";
+			set_compare_name = utraean_archer;
+			modifier_file = "utraean_archer_suit";
+			number_items_in_set = 5;
+			item_power_modifier = 266;
+		}
+	[magic]
+		{}
+}
+
+//
+//Rubber Visor
+//
+[t:template,n:he_vi_pl_r_rubber_visor_dsx_set_utraean_archer]
+{
+	category_name = "set_item";
+	doc = "DSX Utraean Cap";
+	specializes = dsx_base_helm;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Utraean Archer's Cap";
+		}
+	[defend]
+		{
+			armor_style = 412;
+			armor_type = type4;
+			f defense = 14;
+		}
+	[gui]
+		{
+			equip_requirements = strength:18,dexterity:30;
+			inventory_icon = b_gui_ig_i_a_hlmt_412;
+			inventory_height = 2;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Utraean Archer's Outfit";
+			set_compare_name = utraean_archer;
+			modifier_file = "utraean_archer_visor";
+			number_items_in_set = 5;
+			item_power_modifier = 180;
+		}
+	[magic]
+		{}
+}
+
+//
+//Quill Bow
+//
+[t:template,n:bw_g_c_dsx_qll_avg_dsx_set_utraean_archer]
+{
+	category_name = "set_item";
+	doc = "DSX Utraean Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_308;
+			[voice]
+				{
+					[put_down]
+						{
+							* = s_e_gui_put_down_bow;
+						}
+				}
+		}
+	[attack]
+		{
+			attack_range = 12;
+			f damage_max = 130;
+			f damage_min = 110;
+			reload_delay = 0.15;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Utraean Archer's Bow";
+		}
+	[gui]
+		{
+			equip_requirements = strength:18,dexterity:31;
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_308;
+			inventory_height = 4;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Utraean Archer's Outfit";
+			set_compare_name = utraean_archer;
+			modifier_file = "utraean_archer_bow";
+			number_items_in_set = 5;
+			item_power_modifier = 121;
+		}
+	[magic]
+		{}
+}
+
+//
+//Rubber Boots
+//
+[t:template,n:bo_bo_sc_r_g_c_avg_rubber_dsx_set_utraean_archer]
+{
+	category_name = "set_item";
+	doc = "DSX Utraean Boots";
+	specializes = dsx_base_boot;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Utraean Archer's Boots";
+		}
+	[defend]
+		{
+			armor_style = 501;
+			armor_type = type1;
+			f defense = 12;
+		}
+	[gui]
+		{
+			equip_requirements = strength:19,dexterity:32;
+			inventory_icon = b_gui_ig_i_a_boot_501;
+			inventory_height = 2;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Utraean Archer's Outfit";
+			set_compare_name = utraean_archer;
+			modifier_file = "utraean_archer_boots";
+			number_items_in_set = 5;
+			item_power_modifier = 174;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Fit of the Zaurask Champion (Melee)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Bone Axe
+//
+[t:template,n:ax_g_c_dsx_bon_avg_dsx_set_zaurask]
+{
+	category_name = "set_item";
+	doc = "DSX Zaurask Axe";
+	specializes = base_axe;
+	[aspect]
+		{
+			model = m_w_axe_030;
+			selection_indicator_scale = 0.65;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 275.000000;
+			f damage_min = 125.000000;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Axe of the Zaurask Champion";
+		}
+	[gui]
+		{
+			equip_requirements = strength:35;
+			active_icon = b_gui_ig_i_ic_axe_003;
+			inventory_height = 3;
+			inventory_icon = b_gui_ig_i_w_axe_090;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Fit of the Zaurask Champion";
+			set_compare_name = zaurask;
+			modifier_file = "zaurask_axe";
+			number_items_in_set = 3;
+			item_power_modifier = 153;
+		}
+	[magic]
+		{}
+}
+
+//
+//Bone Helm
+//
+[t:template,n:he_op_pl_f_bone_crown_dsx_set_zaurask]
+{
+	category_name = "set_item";
+	doc = "DSX Zaurask Helm";
+	specializes = dsx_base_helm;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Helm of the Zaurask Champion";
+		}
+	[defend]
+		{
+			armor_style = 407;
+			armor_type = type26;
+			f defense = 23;
+		}
+	[gui]
+		{
+			equip_requirements = strength:36;
+			inventory_icon = b_gui_ig_i_a_hlmt_407;
+			inventory_height = 2;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Fit of the Zaurask Champion";
+			set_compare_name = zaurask;
+			modifier_file = "zaurask_helm";
+			number_items_in_set = 3;
+			item_power_modifier = 192;
+		}
+	[magic]
+		{}
+}
+
+//
+//Bone Crossbow
+//
+[t:template,n:cw_g_c_dsx_bon_avg_dsx_set_zaurask]
+{
+	category_name = "set_item";
+	doc = "DSX Zaurask Crossbow";
+	specializes = dsx_base_projectile;
+	[aspect]
+		{
+			model = m_w_csb_300;
+			[voice]
+				{
+					[put_down]
+						{
+							* = s_e_gui_put_down_bow;
+						}
+				}
+		}
+	[attack]
+		{
+			ammo_template = bolt;
+			attack_range = 15;
+			reload_delay = 0.7;
+			f damage_max = 200.0;
+			f damage_min = 100.0;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Crossbow of the Zaurask Champion";
+		}
+	[gui]
+		{
+			equip_requirements = strength:37;
+			active_icon = b_gui_ig_i_ic_csb_002;
+			inventory_icon = b_gui_ig_i_w_csb_300;
+			inventory_height = 3;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Fit of the Zaurask Champion";
+			set_compare_name = zaurask;
+			modifier_file = "zaurask_crossbow";
+			number_items_in_set = 3;
+			item_power_modifier = 145;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Xulphae's Presence (Nature Magic)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Spellbook
+//
+[t:template,n:spellbook_dsx_set_xulphae]
+{
+	category_name = "set_item";
+	doc = "DSX Xulphae's Spellbook";
+	specializes = spellbook;
+
+	[aspect]
+	{
+		textures:0 = b_i_glb_book-magic-22;
+	}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Xulphae's Spellbook";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:39;
+			inventory_icon = b_gui_ig_i_it_magic-book-22;	
+			equip_slot		= es_spellbook;
+			inventory_width		= 1;
+			inventory_height	= 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Xulphae's Presence";
+			set_compare_name = xulphae;
+			modifier_file = "xulphae_spellbook";
+			number_items_in_set = 4;
+			item_power_modifier = 99;
+		}
+	[magic]
+		{}
+}
+
+//
+//Crude Electric Plate
+//
+[t:template,n:bd_le_m_g_c_avg_crmech_dsx_set_xulphae]
+{
+	category_name = "set_item";
+	doc = "DSX Xulphae's Plate";
+	specializes = dsx_base_body_armor_plate;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Xulphae's Plate";
+		}
+	[defend]
+		{
+			armor_style = 231;
+			armor_type = a1;
+			f defense = 187;
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:40;
+			inventory_icon = b_gui_ig_i_a_pos_a1_231;
+			inventory_height = 2;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Xulphae's Presence";
+			set_compare_name = xulphae;
+			modifier_file = "xulphae_plate";
+			number_items_in_set = 4;
+			item_power_modifier = 416;
+		}
+	[magic]
+		{}
+}
+
+//
+//Staff
+//
+[t:template,n:st_g_c_dsx_hst_avg_dsx_set_xulphae]
+{
+	category_name = "set_item";
+	doc = "DSX Xulphae's Staff";
+	specializes = dsx_base_staff;
+	[aspect]
+		{
+			model = m_w_stf_hassat-staff;
+		}
+	[attack]
+		{
+			f damage_max = 170.000000;
+			f damage_min = 100.000000;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Xulphae's Staff";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:41;
+			active_icon = b_gui_ig_i_ic_stf_004;
+			inventory_height = 4;
+			inventory_icon = b_gui_ig_i_w_stf_082;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Xulphae's Presence";
+			set_compare_name = xulphae;
+			modifier_file = "xulphae_staff";
+			number_items_in_set = 4;
+			item_power_modifier = 113;
+		}
+	[magic]
+		{}
+}
+
+//
+//Ring	
+//
+[t:template,n:ring_dsx_set_xulphae]
+{
+	category_name = "set_item";
+	doc = "DSX Xulphae's Ring";
+	specializes = ring;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Xulphae's Ring";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:42;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Xulphae's Presence";
+			set_compare_name = xulphae;
+			modifier_file = "xulphae_ring";
+			number_items_in_set = 4;
+			item_power_modifier = 120;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Kmethekt's Artifacts (Combat Magic)
+/////////////////////////////////////////////////////////////////////
+
+//Spellbook
+//
+// of the Fire (10%)
+//
+//
+[t:template,n:spellbook_dsx_set_kmethekt]
+{
+	category_name = "set_item";
+	doc = "DSX Kmethekt's Spellbook";
+	specializes = spellbook;
+
+	[aspect]
+	{
+		textures:0 = b_i_glb_book-magic-17;
+	}
+	[common]
+	{
+		b allow_modifiers = false;
+		screen_name = "Kmethekt's Spellbook";
+	}
+	[gui]
+	{
+		equip_requirements = intelligence:46;
+			inventory_icon = b_gui_ig_i_it_magic-book-17;	
+		equip_slot		= es_spellbook;
+		inventory_width		= 1;
+		inventory_height	= 2;
+		tooltip_color = set_item;
+	}
+	
+	[set_item]
+	{
+		set_name = "Kmethekt's Artifacts";
+		set_compare_name = kmethekts;
+		modifier_file = "kmethekt_spellbook";
+		number_items_in_set = 4;
+		item_power_modifier = 120;
+	}
+	[magic]{}
+}
+
+//
+//Chitterskrag Armor
+//
+[t:template,n:bd_br_m_g_c_avg_chitter_dsx_set_kmethekt]
+{
+	category_name = "set_item";
+	doc = "DSX Kmethekt's Armor";
+	specializes = dsx_base_body_armor_plate;
+	[common]
+	{
+		b allow_modifiers = false;
+		screen_name = "Kmethekt's Armor";
+	}
+	[defend]
+	{
+		armor_style = 240;
+		armor_type = a9;
+		f defense = 228;
+	}
+	[gui]
+	{
+		equip_requirements = intelligence:47;
+		inventory_icon = b_gui_ig_i_a_pos_a9_240;
+		inventory_height = 3;
+		inventory_width = 2;
+		tooltip_color = set_item;
+	}
+	
+	[set_item]
+		{
+			set_name = "Kmethekt's Artifacts";
+			set_compare_name = kmethekts;
+			modifier_file = "kmethekt_armor";
+			number_items_in_set = 4;
+			item_power_modifier = 507;
+		}
+	[magic]
+		{}
+}
+
+//
+//Amulet
+//
+[t:template,n:amulet_dsx_set_kmethekt]
+{
+	category_name = "set_item";
+	doc = "DSX Kmethekt's Amulet";
+	specializes = amulet;
+	[common]
+	{
+		b allow_modifiers = false;
+		screen_name = "Kmethekt's Amulet";
+	}
+	[gui]
+	{
+		equip_requirements = intelligence:48;
+		tooltip_color = set_item;
+	}
+	
+	[set_item]
+	{
+		set_name = "Kmethekt's Artifacts";
+		set_compare_name = kmethekts;
+		modifier_file = "kmethekt_amulet";
+		number_items_in_set = 4;
+		item_power_modifier = 130;
+	}
+	[magic]
+	{}
+}
+
+//
+//Staff	
+//
+[t:template,n:st_g_c_dsx_hst_avg_dsx_set_kmethekt]
+{
+	category_name = "set_item";
+	doc = "DSX Kmethekt's Staff";
+	specializes = dsx_base_staff;
+	[aspect]
+		{
+			model = m_w_stf_hassat-staff;
+		}
+	[attack]
+		{
+			f damage_max = 170.000000;
+			f damage_min = 160.000000;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Kmethekt's Staff";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:49;
+			active_icon = b_gui_ig_i_ic_stf_004;
+			inventory_height = 4;
+			inventory_icon = b_gui_ig_i_w_stf_082;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Kmethekt's Artifacts";
+			set_compare_name = kmethekts;
+			modifier_file = "kmethekt_staff";
+			number_items_in_set = 4;
+			item_power_modifier = 142;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Mien of the Utraean Guard (Melee)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Diamond Sword
+//
+[t:template,n:sd_g_c_dsx_kat_1h_avg_dsx_set_utraean_guard]
+{
+	category_name = "set_item";
+	doc = "DSX Utraean Guard Sword";
+	specializes = dsx_base_sword;
+	[aspect]
+		{
+			model = m_w_swd_302;
+		}
+	[attack]
+		{
+			f damage_max = 300.0;
+			f damage_min = 280.0;
+			is_two_handed = false;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Utraean Guard's Sword";
+		}
+	[gui]
+		{
+			equip_requirements = strength:51;
+			active_icon = b_gui_ig_i_ic_swd_007;
+			inventory_icon = b_gui_ig_i_w_swd_302;
+			inventory_height = 3;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Mien of the Utraean Guard";
+			set_compare_name = utraean_guard;
+			modifier_file = "utraean_guard_sword";
+			number_items_in_set = 5;
+			item_power_modifier = 189;
+		}
+	[magic]
+		{}
+}
+
+//
+//Alloy Boots
+//
+[t:template,n:bo_bo_sc_f_g_c_avg_alloy_dsx_set_utraean_guard]
+{
+	category_name = "set_item";
+	doc = "DSX Utraean Guard Boots";
+	specializes = dsx_base_boot;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Utraean Guard's Boots";
+		}
+	[defend]
+		{
+			armor_style = 500;
+			armor_type = type1;
+			f defense = 31;
+		}
+	[gui]
+		{
+			equip_requirements = strength:52;
+			inventory_icon = b_gui_ig_i_a_boot_500;
+			inventory_height = 2;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Mien of the Utraean Guard";
+			set_compare_name = utraean_guard;
+			modifier_file = "utraean_guard_boots";
+			number_items_in_set = 5;
+			item_power_modifier = 291;
+		}
+	[magic]
+		{}
+}
+
+//
+//Kraken Shield
+//
+[t:template,n:sh_w_f_g_c_t_l_avg_dsx_set_utraean_guard]
+{
+	category_name = "set_item";
+	doc = "DSX Utraean Guard Shield";
+	specializes = dsx_base_shield;
+	[aspect]
+		{
+			model = m_a_shd_22;
+			[textures]
+				{
+					0 = b_a_shd_601;
+				}
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Utraean Guard's Shield";
+		}
+	[defend]
+		{
+			f defense = 52;
+		}
+	[gui]
+		{
+			equip_requirements = strength:53;
+			inventory_icon		 = b_gui_ig_i_a_shd_601;
+			inventory_height	 = 3;
+			inventory_width		 = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Mien of the Utraean Guard";
+			set_compare_name = utraean_guard;
+			modifier_file = "utraean_guard_shield";
+			number_items_in_set = 5;
+			item_power_modifier = 291;
+		}
+	[magic]
+		{}
+}
+
+//
+//Hassat Bow
+//
+[t:template,n:bw_g_c_dsx_hst_avg_dsx_set_utraean_guard]
+{
+	category_name = "set_item";
+	doc = "DSX Utraean Guard Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_030;
+		}
+	[attack]
+		{
+			attack_range = 10;
+			f damage_max = 225.000000;
+			f damage_min = 175.000000;
+			reload_delay = 0;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Utraean Guard's Bow";
+		}
+	[gui]
+		{
+			equip_requirements = strength:54,dexterity:28;
+			inventory_height = 3;
+			inventory_icon = b_gui_ig_i_w_bow_079;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Mien of the Utraean Guard";
+			set_compare_name = utraean_guard;
+			modifier_file = "utraean_guard_bow";
+			number_items_in_set = 5;
+			item_power_modifier = 198;
+		}
+	[magic]
+		{}
+}
+
+//
+//Utraean Plate
+//
+[t:template,n:bd_pl_f_g_c_avg_utraean_dsx_set_utraean_guard]
+{
+	category_name = "set_item";
+	doc = "DSX Utraean Guard Plate";
+	specializes = dsx_base_body_armor_plate;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Utraean Guard's Plate";
+		}
+	[defend]
+		{
+			armor_style = 241;
+			armor_type = a9;
+			f defense = 434;
+		}
+	[gui]
+		{
+			equip_requirements = strength:55;
+			inventory_icon = b_gui_ig_i_a_pos_a9_241;
+			inventory_height = 3;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Mien of the Utraean Guard";
+			set_compare_name = utraean_guard;
+			modifier_file = "utraean_guard_plate";
+			number_items_in_set = 5;
+			item_power_modifier = 434;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Ancient Hassat Ensemble (Ranged)
+/////////////////////////////////////////////////////////////////////
+
+//
+//Dagger
+//
+[t:template,n:dg_g_c_dsx_hassat_avg_dsx_set_hassat]
+{
+	category_name = "set_item";
+	doc = "DSX Hassat Dagger";
+	specializes = dsx_base_dagger;
+	[aspect]
+		{
+			model = m_w_dag_hand;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 333.0;
+			f damage_min = 270.0;
+			is_two_handed = false;
+			attack_class = ac_beastfu;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Ancient Hassat Dagger";
+		}
+	[gui]
+		{
+			equip_requirements = strength:28,dexterity:56;
+			inventory_icon = b_gui_ig_I_w_dgr_307;
+			inventory_height = 2;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Ancient Hassat Ensemble";
+			set_compare_name = hassat;
+			modifier_file = "hassat_dagger";
+			number_items_in_set = 4;
+			item_power_modifier = 298;
+		}
+	[magic]
+		{}
+}
+
+//
+//Jeweled Bow
+//
+[t:template,n:bw_g_c_dsx_jwl_avg_dsx_set_hassat]
+{
+	category_name = "set_item";
+	doc = "DSX Hassat Bow";
+	specializes = dsx_base_bow;
+	[aspect]
+		{
+			model = m_w_bow_313;
+		}
+	[attack]
+		{
+			attack_range = 12;
+			f damage_max = 280;
+			f damage_min = 250;
+			reload_delay = 0.15;
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Ancient Hassat Bow";
+		}
+	[gui]
+		{
+			equip_requirements = strength:29,dexterity:57;
+			active_icon = b_gui_ig_i_ic_bow_004;
+			inventory_icon = b_gui_ig_i_w_bow_313;
+			inventory_height = 4;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Ancient Hassat Ensemble";
+			set_compare_name = hassat;
+			modifier_file = "hassat_bow";
+			number_items_in_set = 4;
+			item_power_modifier = 264;
+		}
+	[magic]
+		{}
+}
+
+//
+//Ring
+//
+[t:template,n:ring_dsx_set_hassat]
+{
+	category_name = "set_item";
+	doc = "DSX Hassat Ring";
+	specializes = ring;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Ancient Hassat Ring";
+		}
+	[gui]
+		{
+			equip_requirements = intelligence:20,dexterity:58;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Ancient Hassat Ensemble";
+			set_compare_name = hassat;
+			modifier_file = "hassat_ring";
+			number_items_in_set = 4;
+			item_power_modifier = 250;
+		}
+	[magic]
+		{}
+}
+
+//
+//Beaded Fan
+//
+[t:template,n:sh_w_r_g_c_t_m_avg_fan_beaded_dsx_set_hassat]
+{
+	category_name = "set_item";
+	doc = "DSX Hassat Fan";
+	specializes = dsx_base_shield_fan;
+	[aspect]
+		{
+			model = m_a_shd_91;
+			[textures]
+				{
+					0 = b_a_shd_611;
+				}
+		}
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Ancient Hassat Fan";
+		}
+	[defend]
+		{
+			f defense = 48;
+		}
+	[gui]
+		{
+			equip_requirements = strength:30,dexterity:59;
+			inventory_icon		 = b_gui_ig_i_a_shd_611;
+			inventory_height	 = 2;
+			inventory_width		 = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Ancient Hassat Ensemble";
+			set_compare_name = hassat;
+			modifier_file = "hassat_fan";
+			number_items_in_set = 4;
+			item_power_modifier = 414;
+		}
+	[magic]
+		{}
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//Jerkal's Comportment (Armor) - CERAMIC
+/////////////////////////////////////////////////////////////////////
+
+//
+//Bugshell Boots
+//
+[t:template,n:bo_sh_sc_r_g_c_avg_bug_dsx_set_jerkal]
+{
+	category_name = "set_item";
+	doc = "DSX Jerkal's Boots";
+	specializes = dsx_base_boot;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Jerkal's Boots";
+		}
+	[defend]
+		{
+			armor_style = 508;
+			armor_type = type1;
+			f defense = 33;
+		}
+	[gui]
+		{
+			equip_requirements = dexterity:65,strength:32;
+			inventory_icon = b_gui_ig_i_a_boot_508;
+			inventory_height = 2;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Jerkal's Comportment";
+			set_compare_name = jerkal;
+			modifier_file = "jerkal_boots";
+			number_items_in_set = 3;
+			item_power_modifier = 477;
+		}
+	[magic]
+		{}
+}
+
+//
+//Cured Leaf Visor
+//
+[t:template,n:he_vi_pl_r_leaf_visor_dsx_set_jerkal]
+{	
+	category_name = "set_item";
+	doc = "DSX Jerkal's Visor";
+	specializes = dsx_base_helm;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Jerkal's Visor";
+		}
+	[defend]
+		{
+			armor_style = 410;
+			armor_type = type4;
+			f defense = 37;
+		}
+	[gui]
+		{
+			equip_requirements = dexterity:66,strength:32;
+			inventory_icon = b_gui_ig_i_a_hlmt_410;
+			inventory_height = 2;
+			inventory_width = 2;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Jerkal's Comportment";
+			modifier_file = "jerkal_visor";
+			set_compare_name = jerkal;
+			number_items_in_set = 3;
+			item_power_modifier = 475;
+		}
+	[magic]
+		{}
+}
+
+//
+//Shell Gloves
+//
+[t:template,n:gl_gl_sc_r_g_c_avg_shell_dsx_set_jerkal]
+{
+	category_name = "set_item";
+	doc = "DSX Jerkal's Gloves";
+	specializes = dsx_base_glove;
+	[common]
+		{
+			b allow_modifiers = false;
+			screen_name = "Jerkal's Gloves";
+		}
+	[defend]
+		{
+			armor_style = 308;
+			armor_type = type1;
+			f defense = 29;
+		}
+	[gui]
+		{
+			equip_requirements = dexterity:67,strength:33;
+			inventory_icon = b_gui_ig_i_a_gntl_308;
+			inventory_height = 2;
+			inventory_width = 1;
+			tooltip_color = set_item;
+		}
+	
+	[set_item]
+		{
+			set_name = "Jerkal's Comportment";
+			modifier_file = "jerkal_gloves";
+			set_compare_name = jerkal;
+			number_items_in_set = 3;
+			item_power_modifier = 491;
+		}
+	[magic]
+		{}
+}

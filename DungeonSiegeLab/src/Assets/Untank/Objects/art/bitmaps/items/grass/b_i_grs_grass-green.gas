@@ -1,0 +1,6 @@
+[t:tsd,n:b_i_grs_grass-green]
+{
+  b hasalpha = true;
+	layer1texture1 = b_i_grs_grass-green;
+  i texturedetail = 1;
+}

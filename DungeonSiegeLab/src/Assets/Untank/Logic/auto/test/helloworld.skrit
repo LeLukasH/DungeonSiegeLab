@@ -1,0 +1,34 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :	HelloWorld.skrit (Skritbot)
+// Author(s):   Brian Warris
+//
+// Summary  :  	Display a "Hello World" skrit in the game
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+owner = GoSkritComponent;
+
+startup state STARTUP$
+{
+	trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+	{
+	   if ( (WorldState.CurrentState == WS_SP_INGAME) || (WorldState.CurrentState == WS_MP_INGAME) )
+	   {
+	      setstate SInGame$;
+	   }
+	}
+}
+
+
+state SInGame$
+{
+   FInGame$ at ( 5 frames )
+   {
+      Report.MessageBoxA( "Hello World!");    
+   }
+}

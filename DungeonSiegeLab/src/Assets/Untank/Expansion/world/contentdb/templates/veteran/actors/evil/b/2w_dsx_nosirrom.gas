@@ -1,0 +1,213 @@
+[t:template,n:2W_dsx_nosirrom]
+//balanced roughly to Level 25,
+{
+	category_name = "2W_evil_b";
+	doc = "2W_dsx_nosirrom";
+	specializes = actor_evil;
+	[actor]
+		{
+			[skills]
+				{
+					strength 		= 39, 0;
+					intelligence = 10.7, 0;
+					dexterity =		19.2, 0;
+					melee =			67, 0;
+					ranged =		67, 0;
+					combat_magic =	67, 0;
+					nature_magic =	67, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 82940;
+			life			= 4434.8;
+			max_life		= 4434.8;
+			mana			= 898.8;
+			max_mana		= 898.8;
+			model = m_c_ebb_nossirom;
+			// textures:0=;
+			material = flesh;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_v_die_nossy;	 }
+				damage_bonus_min_cmagic = 218;
+				damage_bonus_max_cmagic = 286;
+					[attack] { * = s_e_attack_igniter;	}
+					[enemy_spotted]	{ priority = high; * = s_e_nis_call_boss_rune_guardian; }
+					[hit_critical]	{ priority = low; * = s_e_hit_zaurask_mini_boss_2_SED;	}
+					//[hit_glance]	{ priority = low; * = s_e_hit_zaurask_mini_boss_1_SED;	}
+					//[hit_solid]		{ priority = low; * = s_e_hit_zaurask_mini_boss_2_SED;	}
+				}
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 667;
+			damage_min = 482.7;
+		damage_bonus_min_cmagic = 218;
+		damage_bonus_max_cmagic = 286;
+		}
+	[body]
+		{
+			avg_move_velocity = 2.5;
+			[bone_translator]
+				{
+					body_anterior = Bip01_Head;
+					body_mid = Bip01_Spine2;
+					body_posterior = Bip01_Pelvis;
+					kill_bone = Bip01_Spine2;
+					shield_bone = shield_grip;
+					weapon_bone = weapon_grip;
+				}
+			[weapon_scales]
+				{
+					as_staff = 1.5, 1.5, 1.5;
+				}
+			[chore_dictionary]
+				{
+					chore_prefix = a_c_ebb_nossirom_fs;
+					[chore_attack]
+					{
+						chore_stances = 5;
+						skrit = select_attack;
+						[anim_files]
+							{
+								0mid = at;
+								loww = at-03;
+							}
+					}
+					[chore_default]
+					{
+					chore_stances = 5;
+					skrit = infinite_loop;
+					[anim_files] { 00=ds; }
+					}
+					[chore_die]
+					{
+						chore_stances = 5;
+						skrit = select_transition;
+						[anim_files] { 00=di; }
+					}
+					[chore_fidget]
+					{
+						chore_stances = 5;
+						skrit = select_fidget;
+						[anim_files] { 00=dsf; }
+					}
+					[chore_walk]
+					{
+						chore_stances = 5;
+						skrit = select_walk;
+						[anim_files] { 00=rl; }
+					}
+					[chore_magic]
+					{
+						chore_stances = 5;
+						skrit = select_attack;
+						[anim_files] { 00=mg-01; }
+					}
+					[chore_misc]
+					{
+						chore_stances = ignore;
+						skrit = select_transition;
+						// need all anim files here for nis control
+						[anim_files]
+						{
+							tlk1 = a_c_ebb_nossirom_fs5_dsf-02;
+							tlk2 = a_c_ebb_nossirom_fs5_dsf;
+							tlk3 = a_c_ebb_nossirom_fs5_ds;
+						}
+					}
+				}
+		}
+	[common]
+		{
+			screen_name = "Nosirrom"; 
+			membership = party_nosirrom,monster,immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("nosirrom_die");
+				condition* = receive_world_message("WE_KILLED");
+				single_shot = true;
+			}
+		}
+		}
+	[defend] { defense = 776.1; }
+
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+
+		[equipment]
+		{
+			es_weapon_hand=st_g_c_bl_1h_fun_nossirom_dsx;
+			//					es_shield_hand=st_g_c_bl_1h_fun_nossirom_dsx;
+		}
+		[other]
+		{
+			il_main = book_glb_lore_nossirom;
+			il_active_primary_spell=dsx_spell_nosirrom;
+			il_spell_1=dsx_spell_nosirrom_heal;
+			il_spell_2=dsx_spell_nosirrom_resurrect;
+		}
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 26, Special */
+		[all*]
+		{
+				[gold*]
+				{
+					max = 177369;
+					min = 89351;
+					min_pile = 15;
+					piles = 2 - 4;
+				}
+				[all*]
+				{
+					il_main = potion_health_large;
+					il_main = potion_mana_large;
+					il_main = #armor/-unique(2)/432-736;
+					il_main = #weapon/-rare(1)/214-238;
+					il_main = #*/-unique(2)/214-238;
+				}
+		}
+	}
+}	
+	[mind]
+	{
+
+		actor_weapon_preference			= WP_MAGIC;
+		actor_auto_heals_others_life	= true;
+		actor_auto_reanimates_friends	= true;
+		actor_auto_switches_to_magic	= true;
+		actor_auto_switches_to_melee	= true;
+
+		on_enemy_entered_icz_switch_to_melee = true;
+
+		jat_brain							 = world\ai\jobs\common\brain_hero.skrit
+			?actor_creates_own_party		 = true
+			&form_party_on_friend_entered_ICZ = true
+			&form_party_on_friend_entered_OCZ = true
+			&party_template					 = "party_nosirrom"
+			&party_creation_distance		 = 20;
+
+		jat_fidget	= world\ai\jobs\common\job_fidget.skrit;
+		
+		job_travel_distance_limit = 10;	
+		on_job_reached_travel_distance_abort_attack = true;
+		
+		jat_attack_object_melee	 		= world\ai\jobs\common\job_attack_object_melee.skrit
+			?persistence				= 0.0
+			&hit_multiple				= true;
+
+		melee_engage_range = 4.1;
+		personal_space_range = 1;
+		ranged_engage_range = 20.0;
+		sight_range = 20.0;
+		inner_comfort_zone_range        = 4.0;
+		outer_comfort_zone_range        = 9.0;
+	}
+}

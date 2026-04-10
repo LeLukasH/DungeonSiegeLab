@@ -1,0 +1,84 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  set_item.skrit
+// Author(s):  Jason Dunlop
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// helps set items to apply their modifiers
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string set_name$		= ""  		doc = "Name of the set this item is grouped into.";
+property string set_compare_name$	= ""		doc = "used to group set items together.";
+property string modifier_file$ 		= "" 		doc = "File that contains this items possible modifiers.";
+property int	number_items_in_set$ 	= 0 		doc = "The number of items in this item's set.";
+property float  item_power_modifier$	= 0		doc = "Modifier is added to base power value and result is used by pcontent when dropping an item.";
+
+owner = GoSkritComponent;
+Goid wielder$;
+
+startup state Startup$
+{
+	trigger OnGoHandleMessage$(WE_CONSTRUCTED)
+	{
+		#only( game )
+	        [[
+		owner.go.GetAspect().SSetIsSetItem(true);
+		owner.go.GetAspect().SSetItemSetGroup(set_name$, set_compare_name$);
+		owner.go.GetAspect().SSetItemSetModName(modifier_file$);
+		owner.go.GetAspect().SSetItemNumbers( number_items_in_set$ );
+		owner.go.GetAspect().SInitISModifierData();
+		]]
+		SetState Idle$;
+	}
+}
+
+State Idle$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{	
+		wielder$ = msg$.GetSendFrom();
+
+		if( e$ == WE_EQUIPPED || e$ == WE_UNEQUIPPED || e$ == WE_PICKED_UP || e$ == WE_DROPPED || e$ == WE_REQ_ACTIVATE )
+		{	
+			#only( game )
+	        	[[
+	        	// JCD 9/4/03
+	        	// make sure that we aren't being held by a doppelganger
+	        	if( wielder$.IsValid() )
+	        	{
+	        		if( wielder$.go.HasActor() )
+	        		{
+	        			if( wielder$.go.actor.HasGenericState("doppelganger") )
+	        			{
+	        				return;
+	        			}
+	        		}
+	        	}
+	        	
+	        	// we also want to reset the items set values
+	        	owner.go.GetAspect().SSetIsSetItem(true);
+			owner.go.GetAspect().SSetItemSetGroup(set_name$, set_compare_name$);
+			owner.go.GetAspect().SSetItemSetModName(modifier_file$);
+			owner.go.GetAspect().SSetItemNumbers( number_items_in_set$ );
+			owner.go.GetAspect().SInitISModifierData();
+	        		
+	        	// if our wielder is valid
+	        	if( wielder$.IsValid() )
+	        	{
+	        		// and they have an inventory
+	        		if( wielder$.go.HasInventory() )
+	        		{
+			        	// set this item as the dirty set item and let the inventory know that it's dirty too
+					wielder$.go.Inventory.SSetDirtySetItem(owner.go, wielder$.Go.Player.MachineId);
+					wielder$.go.Inventory.SSetInventoryDirty(true);
+				}
+			}
+			]]
+		}
+	}
+}

@@ -1,0 +1,89 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  trapped.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = true;
+property string _doc$                = "A pop out a guy when an object breaks generator";
+property string _required_component$ = "placement";
+
+// exported properties
+property 	string		trap$					= "trp_generator_test"		doc ="template name of the trap to spawn";
+property	eWorldEvent spawn_event$			= WE_ENTERED_WORLD			doc ="message to spawn new go on.";
+property	float		spawn_delay$			= 0.0						doc ="delay before spawning child";
+property	bool		fade_kid$				= false						doc ="fade in the kind instead of poping him in.";
+
+property	eWorldEvent fire_event$				= WE_EXPLODED				doc ="message to fire trap on.";
+
+
+owner = GoSkritComponent;
+
+Goid trap_goid$;
+
+//////////////////////////////////////////////////////////////////////////////
+// local states
+
+trigger OnGoPreload$
+{
+	if(!StringTool.IsEmpty( trap$ ))
+	{
+		GoDb.PreloadCloneSource( owner.Go, trap$ );
+	}
+}
+
+startup state WaitToSpawn$
+{	
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == spawn_event$ )
+		{
+			this.createTimer(1, 0);
+	   	}
+	}
+	trigger Ontimer$( 1 )
+	{
+		GoCloneReq cloneReq$;
+		cloneReq$ = MakeGoCloneReq( owner.goid, trap$ );
+		cloneReq$.StartingPos = owner.Go.Placement.Position;
+		cloneReq$.SetStartingOrient = owner.Go.Placement.Orientation;
+		GoDb.SCloneGo( cloneReq$ );
+   		SetState FindTrap$;
+	}
+}
+
+state FindTrap$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_ACTIVATE )
+		{
+			trap_goid$ = makeGoid( msg$.data1 );
+			SetState Armed$;
+		}
+	}
+}
+
+state Armed$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == fire_event$ )
+		{
+			float damage$ = Math.RandomFloat( owner.Go.Attack.DamageMin, owner.Go.Attack.DamageMax );
+			int packed_damage$ = Math.Round( damage$ * 1000 );
+
+			PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, trap_goid$, packed_damage$, 0.1);
+			owner.Go.RemoveAllChildren;
+	   	}
+	}
+}

@@ -1,0 +1,130 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  skrev_reg_6_rune_guard.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$					= "region 6 Rune Guardian summon sequence controller";
+
+// external properties
+property scid	main_caster$ 		doc = "Main caster.";
+property scid	support_caster1$ 	doc = "Support caster 1.";
+property scid	support_caster2$ 	doc = "Support caster 2.";
+property scid	support_caster3$ 	doc = "Support caster 3.";
+property scid	support_caster4$ 	doc = "Support caster 4.";
+property scid	summoned_creature$ 	doc = "Summoned creature.";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// Support functions
+
+bool TryAnim$( goid target$, int FourCC$ )
+{
+	target$.Go.Mind.SetActorAutoFidgets( false );
+	MCPManager.Flush(target$);
+	int Anim$ = target$.Go.Aspect.AspectHandle.Blender.GetSubAnimIndex(CHORE_MISC,FourCC$);
+		
+	if (Anim$ >= 0)
+	{
+		eReqRetCode ret$ = MCPManager.MakeRequest( target$, PL_PLAYANIM, CHORE_MISC, Anim$, 0 );
+//		report.generic("true\n" );
+		return true;
+	}
+//	report.generic("false\n" );
+	return false;
+}
+
+start_setup$
+{
+//	report.generic("making summon invisible\n" );
+	summoned_creature$.Go.Aspect.AspectHandle.SetHideMeshFlag( true );
+}
+
+start_main_summon$
+{
+//	report.generic("Playing main summon animation\n" );
+	TryAnim$( main_caster$.goid, 'cast' );
+	SiegeFX.SRunScript( "runemaster_summon", summoned_creature$.Goid, main_caster$.Goid, "", main_caster$.Goid, WE_REQ_ACTIVATE );
+}
+
+play_sound$
+{
+// I'm just a sound...
+	SiegeFX.SRunScript( "runemaster_chant", main_caster$.Goid, main_caster$.Goid, "", main_caster$.Goid, WE_REQ_ACTIVATE );
+}
+
+stop_sound$
+{
+	// stop the effect
+	SiegeFX.SStopScript( main_caster$.Goid, "runemaster_chant" );
+}
+
+start_support_summon$( scid caster$ )
+{
+//	report.generic("Playing support summon animation\n" );
+	TryAnim$( caster$.goid, 'cast' );
+	SiegeFX.SRunScript( "runemaster_summon_support", summoned_creature$.Goid, caster$.goid, "", caster$.goid, WE_REQ_ACTIVATE );	
+}
+
+make_visible$
+{
+// summoned_creature$.Go.Aspect.AspectHandle.SetHideMeshFlag( false );
+//	report.generic("making summon visible\n" );
+	SendWorldMessage( WE_REQ_ACTIVATE, summoned_creature$.Goid, summoned_creature$.Goid);
+}
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// Main trigger
+
+trigger OnGoHandleMessage$( WE_REQ_ACTIVATE )
+{
+	if( !main_caster$.Goid.IsValid ) { report.error("Main caster isn't valid!\n"); }
+	if( !support_caster1$.Goid.IsValid ) { report.error("support caster 1 isn't valid!\n"); }
+	if( !support_caster2$.Goid.IsValid ) { report.error("support caster 2 isn't valid!\n"); }
+	if( !support_caster3$.Goid.IsValid ) { report.error("support caster 3 isn't valid!\n"); }
+	if( !support_caster4$.Goid.IsValid ) { report.error("support caster 4 isn't valid!\n"); }
+	if( !summoned_creature$.Goid.IsValid ) { report.error("summoned creature isn't valid!\n"); }
+	SetState Start$;
+}
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+startup state Wait$
+{
+}
+
+state Start$
+{
+	setup$ at			( 1.0 ) { start_setup$; }
+
+	chant$ at			( 2.5 ) { play_sound$; }
+
+	main_summon$ at		( 9.5 ) { start_main_summon$; }
+
+	support_summon$ at	( 9.85 ) 
+	{ 
+		start_support_summon$(support_caster1$);
+		start_support_summon$(support_caster2$);
+		start_support_summon$(support_caster3$);
+		start_support_summon$(support_caster4$); 
+	}
+	
+	vis$ at				( 13.0 ) { make_visible$; }
+
+	// make sure the chant is done if we escape
+	stop_chant$ at ( 13.0 ) { stop_sound$; }
+}	

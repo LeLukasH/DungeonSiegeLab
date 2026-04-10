@@ -1,0 +1,2930 @@
+[t:template,n:dsx_mantrap_spell]
+{
+	category_name = "magic";
+	doc = "dsx_mantrap_spell";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		aiming_error_range_x = 2.5;
+		aiming_error_range_y = 2.5;
+		ammo_attach_bone = ap_flame;
+		ammo_template = spike_mine_worm;
+		damage_max = 50;
+		damage_min = 40;
+		use_aiming_error = true;
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[physics]
+	{
+		velocity = 25;
+	}
+	[spell_launch]
+	{
+		number = 5;
+	}
+}
+[t:template,n:dsx_spell_skrubb_spit_farm]
+{
+	category_name = "magic";
+	doc = "spell skrubb spit small";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		ammo_attach_bone = lowerjawBone10;
+		ammo_template = skrub_spit_farm;
+		damage_max = 19;
+		damage_min = 15;
+		ammo_appears_jit = true;
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 0.7;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[physics]
+	{
+		velocity = 7;
+	}
+	[spell_launch]
+	{
+		number = 1;
+	}
+}
+[t:template,n:dsx_spell_blaster_bomb]
+{
+	category_name = "magic";
+	doc = "spell blaster bomb";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		attack_class = ac_combat_magic;
+		aiming_error_range_x = 8.5;
+		aiming_error_range_y = 8.5;
+		ammo_attach_bone = bone05;
+		ammo_template = grenade_magic;
+		area_damage_radius = 3.5;
+		damage_max = 100;
+		damage_min = 90;
+		use_aiming_error = true;
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 2;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[physics]
+	{
+		velocity = 10;
+	}
+	[spell_launch]
+	{
+		number = 1;
+	}
+}
+[t:template,n:dsx_spell_frostnid_freeze]
+{
+	category_name = "magic";
+	doc = "spell dsx frostnid freeze";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 22;
+		damage_min = 17;
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		effect_duration = 5;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = frostnid_freeze;
+		ignite = false;
+		particle_fit = 0.7;
+	}
+}
+
+[t:template,n:dsx_spell_fireshot]
+{
+	category_name = "magic";
+	doc = "spell fireshot";
+	specializes = base_spell_monster;
+	[aspect]
+	{
+		gold_value = 8;
+	}
+	[attack]
+	{
+		damage_max = 0;
+		damage_min = 0;
+	}
+	[common]
+	{
+		description = "Hurls a ball of fire at the Target.";
+		screen_name = "Fireshot";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("fireshot");
+				condition* = receive_world_message("we_req_cast");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "combat_spell_sparkle" );
+				condition* = receive_world_message("we_dropped");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "fireshot_charge" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_sp_078;
+		inventory_icon = b_gui_ig_i_ic_sp_078_inv;
+	}
+	[magic]
+	{
+//		attack_damage_modifier_max = ((#magic*1.8)*1.2)+5.99*(1.15+((#magic+1)/50));
+//		attack_damage_modifier_min = ((#magic*1.8)*1.2)+5.99*(0.86-((#magic+1)/50));
+		cast_range = 10;
+		cast_reload_delay = 1;
+		mana_cost = 0; //monster spells cost 0 typically, so they never run out of mana
+		max_level = 17;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy | tt_breakable | tt_terrain;
+		usage_context_flags = uc_offensive;
+	}
+	[spell_default] {}
+}
+
+
+[t:template,n:dsx_spell_hassat_shaman_fireshot]
+{
+	category_name = "magic";
+	doc = "spell dsx hassat shaman fireshot";
+	specializes = dsx_spell_fireshot;
+	
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("hassat_caster_spell");
+				condition* = receive_world_message("we_req_cast");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "hassat_caster_charge_one_hand" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}			
+	}
+
+	[attack]
+	{
+		damage_max = 45;
+		damage_min = 35;
+	}
+	[magic]
+	{
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+}
+
+[t:template,n:dsx_spell_krakbone_lesser_fireshot]
+{
+	category_name = "magic";
+	doc = "spell dsx krakbone lesser fireshot";
+	specializes = dsx_spell_fireshot;
+	
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("hassat_caster_spell");
+				condition* = receive_world_message("we_req_cast");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "hassat_caster_charge_one_hand" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}			
+	}
+
+	[attack]
+	{
+		damage_max = 102;
+		damage_min = 85;
+	}
+	[magic]
+	{
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+}
+
+[t:template,n:dsx_spell_booka]
+{
+	category_name = "magic";
+	doc = "spell dsx booka";
+	specializes = dsx_spell_fireshot;
+
+	[attack]
+	{
+		damage_max = 45;
+		damage_min = 25;
+	}
+	[magic]
+	{
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+}
+
+[t:template,n:dsx_spell_hassat_caster_fireshot]
+{
+	category_name = "magic";
+	doc = "spell dsx hassat shaman fireshot";
+	specializes = dsx_spell_fireshot;
+	[attack]
+	{
+		damage_max = 72;
+		damage_min = 64;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("hassat_caster_spell");
+				condition* = receive_world_message("we_req_cast");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "hassat_caster_charge" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}
+	}
+	magic:cast_sub_animation = 1;
+	[magic]
+	{
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+}		
+[t:template,n:dsx_spell_hassat_mage_fireshot]
+{
+	category_name = "magic";
+	doc = "dsx Spell hassat shaman fireshot";
+	specializes = dsx_spell_fireshot;
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("hassat_caster_spell");
+				condition* = receive_world_message("we_req_cast");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "hassat_caster_charge_one_hand" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}
+	}
+	[attack]
+	{
+		damage_max = 80;
+		damage_min = 74;
+	}
+	[magic]
+	{
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+}
+[t:template,n:DSX_base_spell_monster_orb]
+{
+	category_name = "magic";
+	doc = "spell_monster_orb";
+	specializes = base_spell_monster;
+	[aspect]
+	{
+		gold_value = 20;
+	}
+	[attack]
+	{
+		damage_max = 0;
+		damage_min = 0;
+	}
+	[common]
+	{
+		description = "A glowing orb orbits the caster's body, shooting fireballs at nearby enemies.";
+		screen_name = "Orb of Fire";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script( "combat_spell_sparkle" );
+				condition* = receive_world_message("we_dropped");
+			}
+		}
+	}
+		
+	[magic]
+	{
+		attack_damage_modifier_max = 0;
+		attack_damage_modifier_min = 0;
+		cast_range = 10;
+		cast_reload_delay = 1;
+		// monster spells have 0 cost
+		mana_cost = 0;
+
+		max_level = 25;		
+		
+		caster_state_name = "Orb_spell_orbiting";
+		effect_duration = 30;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		require_state_check = true;		
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	
+	[spell_orb]
+	{
+		orbEffect = orb_fire_orbiter;
+		orbSoundEffect = orb_fire_sound;
+		shotEffect = orb_fire_projectile;
+		casterDescription = "Orb of Fire";
+	}	
+}
+
+[t:template,n:dsx_spell_hassat_mage_orb]
+{
+	category_name = "magic";
+	doc = "dsx Spell hassat shaman orb";
+	specializes = DSX_base_spell_monster_orb;
+	[magic]
+	{
+		attack_damage_modifier_max = 9;
+		attack_damage_modifier_min = 7;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+}
+
+		
+[t:template,n:dsx_spell_rune_fiend_blast]
+{
+	category_name = "magic";
+	doc = "spell dsx rune fiend blast";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 55;
+		damage_min = 44;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("rune_fiend_blast");
+				condition* = receive_world_message("we_req_cast");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "rune_fiend_blast_charge" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_sp_078;
+		inventory_icon = b_gui_ig_i_ic_sp_078_inv;
+	}
+	[magic]
+	{
+//		attack_damage_modifier_max = ((#magic*1.8)*1.2)+5.99*(1.15+((#magic+1)/50));
+//		attack_damage_modifier_min = ((#magic*1.8)*1.2)+5.99*(0.86-((#magic+1)/50));
+		cast_range = 10;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		max_level = 17;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_default] {}
+}
+	
+[t:template,n:dsx_spell_slithermage_blast]
+{
+	category_name = "magic";
+	doc = "spell dsx slithermage blast";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 77;
+		damage_min = 68;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("slithermage_blast");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_sp_078;
+		inventory_icon = b_gui_ig_i_ic_sp_078_inv;
+	}
+	[magic]
+	{
+//		attack_damage_modifier_max = ((#magic*1.8)*1.2)+5.99*(1.15+((#magic+1)/50));
+//		attack_damage_modifier_min = ((#magic*1.8)*1.2)+5.99*(0.86-((#magic+1)/50));
+		cast_range = 10;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		max_level = 17;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_default] {}
+}	
+
+[t:template,n:dsx_spell_slithermage_blast_2]
+{
+	category_name = "magic";
+	doc = "spell dsx slithermage blast";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 131;
+		damage_min = 119;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("slithermage_blast");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_sp_078;
+		inventory_icon = b_gui_ig_i_ic_sp_078_inv;
+	}
+	[magic]
+	{
+//		attack_damage_modifier_max = ((#magic*1.8)*1.2)+5.99*(1.15+((#magic+1)/50));
+//		attack_damage_modifier_min = ((#magic*1.8)*1.2)+5.99*(0.86-((#magic+1)/50));
+		cast_range = 10;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		max_level = 17;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_default] {}
+}	
+
+[t:template,n:dsx_spell_rune_caster_damage]
+{
+	category_name = "magic";
+	doc = "dsx Spell Rune Caster Damage";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		 damage_max = 50;
+		 damage_min = 44;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script( "rune_caster_snakes" );
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+
+	[spell_instant_hit] { }
+}
+
+[t:template,n:dsx_spell_rune_master_damage]
+{
+	category_name = "magic";
+	doc = "dsx Spell Rune Caster Damage";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		 damage_max = 66;
+		 damage_min = 60;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script( "rune_caster_snakes" );
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+
+	[spell_instant_hit] { }
+}
+
+
+[t:template,n:dsx_spell_rune_caster_summon]
+{
+	category_name = "magic";
+	doc = "dsx Spell Rune Caster Summon";
+	specializes = base_spell_monster;
+
+	[inventory]
+	{
+		[delayed_pcontent]
+		{
+			[oneof*]
+			{
+				[all*]
+				{
+					chance = 0.500;
+					il_main = dsx_rune_guardian_summon;
+				}
+				[all*]
+				{
+					chance = 0.500;
+					il_main = dsx_rune_guardian_r_summon;
+				}
+			}
+		}
+	}
+
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 1;
+		caster_state_name = "Controlling Monster";
+		effect_duration = 600;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		state_name = "Controlling Monster";
+		require_state_check = true;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+
+	[spell_summon_random]
+	{
+		monster_summon = true;
+		spawn_radius	= 3.0;
+		effect_script = "summon";
+		end_script = "un_summon";
+		script_params = "[scale(1.75)]";
+		description = "Summoned Creature";
+		caster_description = "Controlling Summoned";
+	}
+}
+
+
+[t:template,n:dsx_spell_noctiss_sap]
+{
+	category_name = "magic";
+	doc = "dsx Spell Noctiss sap";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 64;
+		damage_min = 56;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("noctiss_sap");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 14;
+		cast_reload_delay = 0.35;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_instant_hit] {}
+}
+
+[t:template,n:dsx_spell_noctiss_sap_02]
+{
+	category_name = "magic";
+	doc = "dsx Spell Noctiss sap_02";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 84;
+		damage_min = 66;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("ghost_sap");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 14;
+		cast_reload_delay = 0.35;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_instant_hit] {}
+}
+
+[t:template,n:dsx_spell_rune_caster_summon_q]
+{
+	category_name = "magic";
+	doc = "dsx Spell Rune Caster Summon for A6_quest";
+	specializes = base_spell_monster;
+
+	[inventory]
+	{
+		[delayed_pcontent]
+		{
+			[oneof*]
+			{
+				[all*]
+				{
+					chance = 0.500;
+					il_main = dsx_rune_guardian_summon_q;
+				}
+				[all*]
+				{
+					chance = 0.500;
+					il_main = dsx_rune_guardian_r_summon_q;
+				}
+			}
+		}
+	}
+
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 1;
+		caster_state_name = "Controlling Monster";
+		effect_duration = 600;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		state_name = "Controlling Monster";
+		require_state_check = true;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+
+	[spell_summon_random]
+	{
+		monster_summon = true;
+		spawn_radius	= 3.0;
+		effect_script = "summon";
+		end_script = "un_summon";
+		script_params = "[scale(1.75)]";
+		description = "Summoned Creature";
+		caster_description = "Controlling Summoned";
+	}
+}
+
+[t:template,n:dsx_spell_moth_dust]
+{
+	category_name = "magic";
+	doc = "Moth Dust";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 12;
+		damage_min = 6;
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 1;
+		effect_duration = 5;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("moth_dust");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[spell_default] { }
+}
+
+[t:template,n:dsx_spell_ice_moth_dust]
+{
+	category_name = "magic";
+	doc = "Ice Moth Dust";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 8;
+		damage_min = 4;
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 1;
+		effect_duration = 5;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("ice_moth_dust");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[spell_default] { }
+}
+
+
+[t:template,n:dsx_spell_mucosa_poison]
+{
+	category_name = "magic";
+	doc = "DSX Spell Mucosa Poison";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 25;
+		damage_min = 17;
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 1;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = dsx_mucosa_poison;
+		ignite = false;
+		particle_fit = 0.6;
+	}
+}
+
+[t:template,n:dsx_spell_mucosa_poison_small]
+{
+	category_name = "magic";
+	doc = "DSX Spell Mucosa Poison Small";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 18;
+		damage_min = 14;
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 1;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = dsx_mucosa_poison_small;
+		ignite = false;
+		particle_fit = 0.6;
+	}
+}
+[t:template,n:dsx_spell_dark_bolt]
+{
+	category_name = "magic";
+	doc = "Dark Generator Bolt";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 3;
+		damage_min = 2;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("tesla_bolt");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_instant_hit] {}
+}
+[t:template,n:dsx_spell_dark_bolt2]
+{
+	category_name = "magic";
+	doc = "Dark Generator Bolt 2";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 3;
+		damage_min = 2;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("tesla_bolt2");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_instant_hit] {}
+}
+[t:template,n:dsx_spell_dark_heal]
+{
+	category_name = "magic";
+	doc = "Dark Generator Heal";
+	specializes = base_spell_monster;
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("heal_tesla_coil");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 25;
+		cast_reload_delay = 0;
+		is_one_shot = true;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		target_type_flags = tt_injured_friend | tt_self;
+		usage_context_flags = uc_life_giving;
+		[enchantments]
+		{
+			[*]
+			{
+				alteration = alter_life;
+				description = "dark heal spell";
+				value = 100;
+			}
+		}
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_default] {}
+}
+[t:template,n:dsx_spell_mine_worm_spikes]
+{
+	category_name = "magic";
+	doc = "Mine Worm Spikes";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		aiming_error_range_x = 2.5;
+		aiming_error_range_y = 2.5;
+		ammo_attach_bone = ap_flame;
+		ammo_template = spike_mine_worm;
+		damage_max = 10;
+		damage_min = 5;
+		use_aiming_error = true;
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 2;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[physics]
+	{
+		velocity = 25;
+	}
+	[spell_launch]
+	{
+		number = 5;
+	}
+}
+
+[t:template,n:dsx_spell_jungle_slinger]
+{
+	category_name = "magic";
+	doc = "Jungle Lunger Spear";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		aiming_error_range_x = 2;
+		aiming_error_range_y = 2;
+		ammo_attach_bone = weapon_grip;
+		ammo_template = spear_lunger;
+		damage_max = 17;
+		damage_min = 23;
+		use_aiming_error = true;
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[physics]
+	{
+		velocity = 10;
+	}
+	[spell_launch]
+	{
+		number = 1;
+	}
+}
+[t:template,n:dsx_spell_jungle_slinger_boss]
+{
+	category_name = "magic";
+	doc = "Jungle Slinger Boss Spear";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		aiming_error_range_x = 1;
+		aiming_error_range_y = 1;
+		ammo_attach_bone = weapon_grip;
+		ammo_template = spear_lunger;
+		damage_max = 25;
+		damage_min = 20;
+		use_aiming_error = true;
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[physics]
+	{
+		velocity = 10;
+	}
+	[spell_launch]
+	{
+		number = 1;
+	}
+}
+[t:template,n:spell_dsx_phrak_dart]
+{
+	category_name = "magic";
+	doc = "spell dsx phrak dart";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		ammo_attach_bone = Nose;
+		ammo_template = phrak_dart;
+		damage_max = 5;
+		damage_min = 3;
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[physics]
+	{
+		velocity = 15;
+	}
+	[spell_launch]
+	{
+		number = 1;
+	}
+}
+
+
+[t:template,n:spell_zepheryl_zap]
+{
+	category_name = "magic";
+	doc = "zepheryl Zap";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		 damage_max = 82;
+		 damage_min = 57;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("zepheryl_zap");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		cast_sub_animation = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_instant_hit] {}
+}
+
+[t:template,n:spell_zepheryl_zap_two]
+{
+	category_name = "magic";
+	doc = "zepheryl zap two";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		 damage_max = 98;
+		 damage_min = 64;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("zepheryl_zap_two");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		cast_sub_animation = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_instant_hit] {}
+}
+
+[t:template,n:dsx_spell_giant_spider_acid]
+{
+	category_name = "magic";
+	doc = "Spider Acid";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 28;
+		damage_min = 23;
+	}
+	[magic]
+	{
+		cast_range = 15;
+		cast_reload_delay = 0.4;
+		effect_duration = 0.8;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = dsx_giant_spider_acid;
+		ignite = false;
+		particle_fit = 0.1;
+	}
+}
+
+[t:template,n:dsx_spell_phrak_dart]
+{
+	category_name = "magic";
+	doc = "dsx spell phrak dart";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		ammo_attach_bone = Nose;
+		ammo_template = phrak_dart;
+		damage_max = 25;
+		damage_min = 15;
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[physics]
+	{
+		velocity = 15;
+	}
+	[spell_launch]
+	{
+		number = 1;
+	}
+}
+
+[t:template,n:dsx_spell_spiked_dweller_spikes]
+{
+	category_name = "magic";
+	doc = "Spiked Dweller Spikes";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		aiming_error_range_x = 2.5;
+		aiming_error_range_y = 2.5;
+		ammo_attach_bone = bip01_spine;
+		ammo_template = spike_spiked_maw;
+		damage_max = 70;
+		damage_min = 55;
+		use_aiming_error = true;
+		ammo_appears_jit = true;
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[physics]
+	{
+		velocity = 16;
+	}
+	[spell_launch]
+	{
+		number = 1;
+	}
+}
+
+[t:template,n:dsx_spell_ghost_sap]
+{
+	category_name = "magic";
+	doc = "dsx spell ghost sap";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 60;
+		damage_min = 42;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("ghost_sap");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 14;
+		cast_reload_delay = 0.35;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_instant_hit] {}
+}
+
+[t:template,n:dsx_spell_zaurask_apprentice]
+{
+	category_name = "magic";
+	doc = "dsx_spell_zaurask_apprentice";
+	specializes = dsx_spell_fireshot;
+	[attack]
+	{
+		damage_max = 60;
+		damage_min = 50;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("zaurask_caster_spell");
+				condition* = receive_world_message("we_req_cast");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "zaurask_caster_charge_one_hand" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}
+	}
+	magic:cast_sub_animation = 1;
+	[magic]
+	{
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+}
+
+[t:template,n:dsx_spell_zaurask_adept]
+{
+	category_name = "magic";
+	doc = "dsx_spell_zaurask_adept";
+	specializes = base_spell_monster;
+	[aspect]
+	{
+		gold_value = 8;
+	}
+	[attack]
+	{
+		damage_max = 68;
+		damage_min = 58;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("zaurask_caster_spell");
+				condition* = receive_world_message("we_req_cast");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "combat_spell_sparkle" );
+				condition* = receive_world_message("we_dropped");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "zaurask_caster_charge" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_sp_078;
+		inventory_icon = b_gui_ig_i_ic_sp_078_inv;
+	}
+	[magic]
+	{
+//		attack_damage_modifier_max = ((#magic*1.8)*1.2)+5.99*(1.15+((#magic+1)/50));
+//		attack_damage_modifier_min = ((#magic*1.8)*1.2)+5.99*(0.86-((#magic+1)/50));
+		cast_range = 10;
+		cast_reload_delay = 1;
+		mana_cost = 0; //monster spells cost 0 typically, so they never run out of mana
+		max_level = 17;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy | tt_breakable | tt_terrain;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_default] {}
+}
+
+[t:template,n:dsx_spell_zaurask_caster]
+{
+	category_name = "magic";
+	doc = "dsx_spell_zaurask_caster";
+	specializes = dsx_spell_fireshot;
+	[attack]
+	{
+		damage_max = 95;
+		damage_min = 76;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("zaurask_caster_spell");
+				condition* = receive_world_message("we_req_cast");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "zaurask_caster_charge_one_hand" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}
+	}
+	magic:cast_sub_animation = 1;
+	[magic]
+	{
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+}
+
+[t:template,n:spell_zaurask_mage_dsx]
+{
+	category_name = "magic";
+	doc = "dsx_spell_zaurask_caster";
+	specializes = dsx_spell_fireshot;
+	[attack]
+	{
+		damage_max = 112;
+		damage_min = 103;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("zaurask_caster_spell");
+				condition* = receive_world_message("we_req_cast");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "zaurask_caster_charge_one_hand" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}
+	}
+	magic:cast_sub_animation = 1;
+	[magic]
+	{
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+}
+
+[t:template,n:dsx_spell_possessed_skull_burn]
+{
+	category_name = "magic";
+	doc = "spell rector burn";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 78;
+		damage_min = 64;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("rector_burn");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		effect_duration = 8;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_default] {}
+}
+
+[t:template,n:dsx_spell_golem_frost_blast]
+{
+	category_name = "magic";
+	doc = "dsx_spell_golem_frost_blast";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 5;
+		damage_min = 15;
+	}
+	[magic]
+	{
+		cast_range = 8;
+		cast_reload_delay = 1;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = dsx_golem_frost_blast_effect;
+		start_radius = 1.5;
+		length = 11.0;
+	}
+}
+
+[t:template,n:dsx_spell_earth_elemental_blast]
+{
+	category_name = "magic";
+	doc = "dsx_spell_earth_elemental_blast";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 140;
+		damage_min = 110;
+		area_damage_radius = 5;
+	}
+	[magic]
+	{
+		cast_range = 8;
+		cast_reload_delay = 1;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = dsx_earth_elemental_blast_effect;
+		start_radius = 1.5;
+		length = 11.0;
+	}
+}
+
+[t:template,n:spell_chitterskrag_poison]
+{
+	category_name = "magic";
+	doc = "spell_chitterskrag_poison";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 66;
+		damage_min = 55;
+	}
+	[magic]
+	{
+		cast_range = 8;
+		cast_reload_delay = 1;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = chitterskrag_poison;
+		ignite = false;
+		particle_fit = 0.6;
+	}
+}
+
+[t:template,n:spell_droc]
+{
+	category_name = "magic";
+	doc = "spell_droc";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 93;
+		damage_min = 80;
+	}
+	[magic]
+	{
+		cast_range = 14;
+		cast_reload_delay = 1;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = droc_spell;
+		ignite = false;
+		particle_fit = 0.6;
+	}
+}
+
+[t:template,n:spell_rock_beast_blast_dsx]
+{
+	category_name = "magic";
+	doc = "DSX Rock Beast Blast";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 124;
+		damage_min = 105;
+		area_damage_radius = 3;
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 0.5;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = dsx_rock_beast_blast;
+		start_radius = 1.5;
+		length = 11.0;
+	}
+}
+
+[t:template,n:spell_eyes_whelnar]
+{
+	category_name = "magic";
+	doc = "Whelnar's Eyes attack";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		 damage_min = 68;
+		 damage_max = 58;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("eyes_whelnar_attack");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		cast_sub_animation = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_instant_hit] {}
+}
+
+[t:template,n:spell_midge_swirling]
+{
+	category_name = "magic";
+	doc = "Swirling Midges attack";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		 damage_min = 110;
+		 damage_max = 88;
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		cast_sub_animation = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = midge_swirling_attack;
+		ignite = false;
+	}
+}
+
+[t:template,n:spell_lost_queen]
+{
+	category_name = "magic";
+	doc = "spell_lost_queen";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 50;
+		damage_min = 40;
+		area_damage_radius = 5.0;
+	}
+	[common]
+	{
+        [template_triggers]
+        {
+        	[*]
+			{
+				action* = call_sfx_script( "lost_queen_spell_charge" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+        }
+	}
+	[magic]
+	{
+		cast_range = 15;
+		cast_reload_delay = 1;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = lost_queen_spell;
+		ignite = false;
+		particle_fit = 0.6;
+	}
+	[spell_lostqueen_groundshake]
+	{
+		groundEffect="lost_queen_ground_spell";
+		targetEffect="lost_queen_ground_spell_targethit";
+
+		effectRadius=3;
+		effectMagnitude=8;
+		effectDamageMin=10;
+		effectDamageMax=20;
+	}
+}
+
+// First Crystal Guardian Encountered
+[t:template,n:dsx_spell_shard_zap_teal]
+{
+	category_name = "magic";
+	doc = "Shard zap teal";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 115;
+      	damage_min = 102;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("shard_zap_teal");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_default] {}
+}
+
+// Second Crystal Guardian Encountered
+[t:template,n:dsx_spell_shard_zap_blue]
+{
+	category_name = "magic";
+	doc = "Shard zap blue";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 125;
+      	damage_min = 112;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("shard_zap_blue");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_default] {}
+}
+
+
+// Third Crystal Guardian Encountered
+[t:template,n:dsx_spell_shard_zap_green]
+{
+	category_name = "magic";
+	doc = "Shard zap green";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 135;
+      	damage_min = 122;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("shard_zap_green");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_default] {}
+}
+
+// Final Crystal Guardian Encountered
+[t:template,n:dsx_spell_shard_zap_purple]
+{
+	category_name = "magic";
+	doc = "Shard zap purple";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 155;
+      	damage_min = 125;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("shard_zap_purple");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_default] {}
+}
+
+[t:template,n:dsx_spell_lava_spirit_fire]
+{
+	category_name = "magic";
+	doc = "Lava Spirit Fire";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 80;
+		damage_min = 71;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("lava_spirit_charge");
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "dsx_lava_spirit_fire" );
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 14;
+		cast_reload_delay = 1;
+		effect_duration = 5;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+}
+[t:template,n:dsx_spell_perforator_minigun]
+{
+	category_name = "magic";
+	doc = "Perforator Minigun";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 96;
+		damage_min = 90;
+		area_damage_radius = 1.5;
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = perforator_attack;
+		start_radius = .75;
+		length = 13.0;
+	}
+}
+[t:template,n:dsx_spell_perforator_minigun_1]
+{
+	category_name = "magic";
+	doc = "Perforator Minigun";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 96;
+		damage_min = 90;
+		area_damage_radius = 1.5;
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = perforator_attack;
+		start_radius = .75;
+		length = 13.0;
+	}
+}
+
+[t:template,n:dsx_spell_scorpigun_laser]
+{
+	category_name = "magic";
+	doc = "Scorpiot Laser";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 73;
+		damage_min = 65;
+		area_damage_radius = 1.5;
+	}
+	[magic]
+	{
+		cast_sub_animation = 0;
+		cast_range = 12;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = scorpiot_laser;
+		start_radius = .75;
+		length = 13.0;
+	}
+}
+
+[t:template,n:dsx_spell_scorpigun_lcannon]
+{
+	category_name = "magic";
+	doc = "Scorpiot Left Minigun";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 73;
+		damage_min = 65;
+		area_damage_radius = 1.5;
+	}
+	[magic]
+	{
+		cast_sub_animation = 1;
+		cast_range = 12;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = scorpiot_lcannon;
+		start_radius = .75;
+		length = 13.0;
+	}
+}
+
+[t:template,n:dsx_spell_scorpigun_zap_rcannon]
+{
+	category_name = "magic";
+	doc = "Scorpiot Right Minigun";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 73;
+		damage_min = 65;
+		area_damage_radius = 1.5;
+	}
+	[magic]
+	{
+		cast_sub_animation = 2;
+		cast_range = 12;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = scorpiot_zap_rcannon;
+		ignite = false;
+	}
+}
+
+// This probably needs a new effect with the correct bones.
+// Also, the "cast_sub_animation" number needs to be fixed for
+// the rusted template
+[t:template,n:dsx_spell_rusted_scorpigun_lcannon]
+{
+	category_name = "magic";
+	doc = "Scorpiot Rusted Minigun Left";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 45;
+		damage_min = 30;
+		area_damage_radius = 1.5;
+	}
+	[magic]
+	{
+		cast_sub_animation = 1;
+		cast_range = 12;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = scorpiot_lcannon;
+		start_radius = .75;
+		length = 13.0;
+	}
+}
+
+// This probably needs a new effect with the correct bones.
+// Also, the "cast_sub_animation" number needs to be fixed for
+// the rusted template
+[t:template,n:dsx_spell_rusted_scorpigun_rcannon]
+{
+	category_name = "magic";
+	doc = "Scorpiot Rusted Minigun Right";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 45;
+		damage_min = 30;
+		area_damage_radius = 1.5;
+	}
+	[magic]
+	{
+		cast_sub_animation = 1;
+		cast_range = 12;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = scorpiot_zap_rcannon;
+		start_radius = .75;
+		length = 13.0;
+	}
+}
+
+[t:template,n:dsx_spell_automoton_minigun]
+{
+	category_name = "magic";
+	doc = "Automoton Minigun";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 95;
+		damage_min = 88;
+		area_damage_radius = 2.0;
+	}
+	[magic]
+	{
+		cast_sub_animation = 1;
+		cast_range = 12;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = automoton_minigun;
+		start_radius = .75;
+		length = 13.0;
+	}
+}
+
+[t:template,n:dsx_spell_rusted_automoton_minigun]
+{
+	category_name = "magic";
+	doc = "Rusted Automoton Minigun";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 35;
+		damage_min = 28;
+		area_damage_radius = 1.5;
+	}
+	[magic]
+	{
+		cast_sub_animation = 1;
+		cast_range = 12;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = rusted_automoton_minigun;
+		start_radius = .75;
+		length = 13.0;
+	}
+}
+
+[t:template,n:dsx_spell_nosirrom]
+{
+	category_name = "magic";
+	doc = "dsx_spell_nosirrom";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 133;
+		damage_min = 124;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("nosirrom_spell");
+				condition* = receive_world_message("we_req_cast");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "nosirrom_charge" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 11;
+		cast_reload_delay = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_instant_hit] {}
+}
+[t:template,n:dsx_spell_drake_breath_green]
+{//REPLACED, ONCE DELETED JPC 11AUG2003
+	category_name = "magic";
+	doc = "Drake Fire";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 93;
+		damage_min = 85;
+	}
+	[magic]
+	{
+		cast_range = 8;
+		cast_reload_delay = 1;
+		effect_duration = 5;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = drake_poison;
+		ignite = false;
+		particle_fit = 0.2;
+		watch_caster = true;
+	}
+}
+[t:template,n:dsx_spell_drake_breath_red]
+{
+	category_name = "magic";
+	doc = "Drake Fire";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 90;
+		damage_min = 80;
+	}
+	[magic]
+	{
+		cast_range = 8;
+		cast_reload_delay = 1;
+		effect_duration = 5;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = drake_fire_red;
+		particle_fit = 0.2;
+		watch_caster = true;
+	}
+}
+
+[t:template,n:dsx_spell_drake_breath_black]
+{
+	category_name = "magic";
+	doc = "Drake Fire";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 90;
+		damage_min = 80;
+	}
+	[magic]
+	{
+		cast_range = 8;
+		cast_reload_delay = 1;
+		effect_duration = 5;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = drake_fire_black;
+		particle_fit = 0.2;
+		watch_caster = true;
+	}
+}
+[t:template,n:dsx_spell_fury_slam]
+{
+	category_name = "magic";
+	doc = "Fury Slam";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 110;
+		damage_min = 90;
+		area_damage_radius = 6;
+	}
+	[magic]
+	{
+		cast_sub_animation = 5;
+		cast_range = 5.8;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		caster_center = true;
+		effect_script = fury_earth_stomp;
+	}
+}
+[t:template,n:dsx_spell_fury_spin]
+{
+	category_name = "magic";
+	doc = "Fury Spin";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 110;
+		damage_min = 90;
+		area_damage_radius = 4;
+	}
+	[magic]
+	{
+		cast_sub_animation = 6;
+		cast_range = 3.8;
+		cast_reload_delay = 0.2;
+		effect_duration = 2;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		caster_center = true;
+		effect_script = fury_spin;
+	}
+}
+[t:template,n:dsx_spell_fury_gas]
+{
+	category_name = "magic";
+	doc = "Fury Gas";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 110;
+		damage_min = 90;
+	}
+	[magic]
+	{
+		cast_sub_animation = 4;
+		cast_range = 8;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = fury_gas;
+		particle_fit = 0.2;
+		watch_caster = true;
+	}
+}
+[t:template,n:dsx_spell_fury_spit]
+{
+	category_name = "magic";
+	doc = "Fury Spit";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 110;
+		damage_min = 90;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script( "fury_spit_charge" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+			[*]
+			{
+				action* = call_sfx_script( "fury_spit" );
+				condition* = receive_world_message("we_req_cast");
+			}
+
+		}
+	}
+	[magic]
+	{
+		cast_sub_animation = 3;
+		cast_range = 12;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_default] {}
+}
+[t:template,n:dsx_spell_fury_zap_1]
+{
+	category_name = "magic";
+	doc = "Fury Zap";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 80;
+		damage_min = 60;
+		area_damage_radius = 8;
+	}
+	[magic]
+	{
+		cast_sub_animation = 0;
+		cast_range = 12;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = fury_zap_1;
+		start_radius = 1.5;
+		length = 12.0;
+	}
+}
+[t:template,n:dsx_spell_fury_zap_2]
+{
+	category_name = "magic";
+	doc = "Fury Zap";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 110;
+		damage_min = 90;
+		area_damage_radius = 8;
+	}
+	[magic]
+	{
+		cast_sub_animation = 1;
+		cast_range = 12;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = fury_zap_2;
+		start_radius = 1.5;
+		length = 12.0;
+	}
+}
+[t:template,n:dsx_spell_fury_zap_3]
+{
+	category_name = "magic";
+	doc = "Fury Zap";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 110;
+		damage_min = 90;
+		area_damage_radius = 8;
+	}
+	[magic]
+	{
+		cast_sub_animation = 2;
+		cast_range = 12;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = fury_zap_3;
+		start_radius = 1.5;
+		length = 12.0;
+	}
+}
+
+[t:template,n:dsx_spell_nosirrom_resurrect]
+{
+	category_name = "magic";
+	doc = "dsx_spell_nosirrom_resurrect";
+	specializes = base_spell_monster;
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("dsx_nosirrom_resurrect_charge");
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 1;
+		is_one_shot = true;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_dead_friend;
+		usage_context_flags = uc_passive | uc_reanimating;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_resurrect] 
+	{
+		createZombie = true;
+		effect_script = dsx_nosirrom_resurrect;
+		zombie_melee=dsx_zaurask_zombie_sword;
+		zombie_ranged=dsx_zaurask_zombie_archer;
+		zombie_caster=dsx_zaurask_zombie_karate;
+	}
+}
+
+[t:template,n:dsx_spell_nosirrom_heal]
+{
+	category_name = "magic";
+	doc = "dsx_spell_nosirrom_heal";
+	specializes = base_spell_monster;
+
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("dsx_nosirrom_healing", "@body_mid");
+				condition* = receive_world_message("we_req_cast");
+			}
+			[*]
+			{
+				action* = call_sfx_script("dsx_nosirrom_healing_charge");
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 1;
+		is_one_shot = true;
+		mana_cost = 0;
+		max_level = 21;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_injured_friend | tt_self;
+		usage_context_flags = uc_life_giving;
+		[enchantments]
+		{
+			[*]
+			{
+				alteration = alter_life;
+				description = "nosirrom heal spell";
+				value = 100;
+			}
+		}
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_default] {}
+}
+
+[t:template,n:dsx_elemental_fire_blast]
+{
+	category_name = "magic";
+	doc = "Fire Elemental blast";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 335;
+		damage_min = 303;
+		area_damage_radius = 3;
+	}
+	[magic]
+	{
+		cast_range = 10;
+		cast_reload_delay = 0.5;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = dsx_elemental_fire_blast;
+		start_radius = 1.5;
+		length = 11.0;
+	}
+}
+
+[t:template,n:dsx_spell_air_elemental_blast]
+{
+	category_name = "magic";
+	doc = "dsx_spell_air_elemental_blast";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 394;
+		damage_min = 350;
+	}
+	[magic]
+	{
+		cast_range = 8;
+		cast_reload_delay = 2.5;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_damage_volume]
+	{
+		effect_script = dsx_air_elemental_blast_effect;
+		start_radius = 1.5;
+		length = 11.0;
+	}
+}
+
+[t:template,n:dsx_spell_skatwyrm_gas]
+{
+	category_name = "magic";
+	doc = "Skatwyrm Gas";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 72;
+		damage_min = 68;
+	}
+	[magic]
+	{
+		cast_range = 8;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy;
+		usage_context_flags = uc_offensive;
+		magic_class = mc_combat_magic;
+		skill_class = "Combat Magic";
+	}
+	[spell_fire]
+	{
+		effect_script = dsx_skatwyrm_gas;
+		particle_fit = 0.2;
+		watch_caster = true;
+	}
+}

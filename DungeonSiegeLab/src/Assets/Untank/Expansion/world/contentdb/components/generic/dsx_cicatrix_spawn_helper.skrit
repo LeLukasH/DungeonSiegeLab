@@ -1,0 +1,35 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	dsx_cicatrix_spawn_helper.skrit
+
+	Author(s)	: 	Tara Teich
+
+	Purpose		:	Kills cicatrix minions
+	
+	(C)opyright 2003 Mad Doc Software
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+owner = GoSkritComponent;
+
+startup state Initial$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if ( e$ == WE_REQ_ACTIVATE )
+		{
+			// this is from an omni copy, it wants us to delete a skeleton minion
+			Goid minion$ = MakeGoid( msg$.GetData1() );
+			
+			// kill the minion
+			Rules.DamageGo( minion$, NULL, NULL, minion$.Go.Aspect.MaxLife*2, false, false );			
+			
+			// and delete myself
+			PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 0 );			
+		}		
+	}
+}

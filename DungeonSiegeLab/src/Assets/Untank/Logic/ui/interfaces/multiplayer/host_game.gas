@@ -1,0 +1,225 @@
+[host_game]
+{
+	interface = true;
+	modal = true;
+	centered = background;
+	
+	[t:dialog_box,n:background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_wide;
+		draw_order = 2;
+		rect = 200,150,600,384;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:client_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 2;
+		rect = 220,200,580,328;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	
+	[t:text,n:title]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 79;
+		rect = 240,166,560,186;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		font_color = -1;
+		font_size = 22;
+		font_type = b_gui_fnt_20p_copperplate-light;
+		justify = center;
+		text = "HOST GAME";
+	}
+		
+	[t:button,n:button_ok]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 20;
+		rect = 260,344,390,360;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_ok_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 107,256,231,271;
+			text = "OK";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress=notify(multiplayer_host_game) & playsound(s_e_frontend_tiny_button);
+			onenter=notify(multiplayer_host_game);
+		}
+	}
+	[t:button,n:button_cancel]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 20;
+		rect = 410,344,540,360;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_cancel_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 272,256,417,272;
+			text = "Cancel";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress=notify(cancel_host_game) & playsound(s_e_frontend_tiny_button);
+			onescape=notify(cancel_host_game);
+		}
+	}
+	
+		
+	[t:text,n:host_game_name_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 82;
+		rect = 250,224,450,240;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text = "Game Name";
+		justify = left;
+	}
+	[t:dialog_box,n:backgound_gamename_text]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 32;
+		rect = 250,244,550,266;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:edit_box,n:game_name_edit_box]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 80;
+		rect = 253,247,547,263;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		max_pixels = 260;
+		has_pixel_limit = true;
+		tab_stop = 0;
+		[prompt] { draw_order=26; texture=b_gui_fe_m_single_prompt; width=1; }
+	}
+
+	[t:checkbox,n:checkbox_password_game]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1296;
+		rect = 250,282,266,298;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:window,n:check_texture]
+		{
+			alpha = 1.0000;
+			rect = 250,282,266,298;
+			draw_order = 2000;
+			texture = b_gui_cmn_checkbox_x;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[t:text_box,n:host_password_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			text = "Password";
+			justify = center;
+			draw_order = 83;
+			rect = 270,281,340,297;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			fixed_location = true;
+		}
+		[messages]
+		{
+			oncheck = notify(host_game_check_password);
+			onuncheck = notify(host_game_uncheck_password);
+		}
+	}
+	[t:dialog_box,n:backgound_password_text]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 34;
+		rect = 350,278,550,300;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:edit_box,n:game_password_edit_box]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 81;
+		rect = 353,281,547,297;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;		
+		allow_ime = false;
+		tab_stop = 1;
+		max_string_size = 20;
+		[prompt] { draw_order=26; texture=b_gui_fe_m_single_prompt; width=1; }
+	}
+}

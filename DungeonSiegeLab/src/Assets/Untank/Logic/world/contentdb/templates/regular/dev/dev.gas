@@ -1,0 +1,46 @@
+//////////////////////////////////////////////////////////////////////
+// Generic path point template
+
+[dev,t:template,n:dev_path_point]
+{
+	specializes = test;
+	doc = "Development Path Point";
+	category_name = "dev";
+
+	[gizmo]
+	{
+		model =	m_i_glb_object-waypoint;
+		diffuse_color =	1.0, 1.0, 1.0;
+		use_diffuse_color = true;
+	}
+
+	[common]
+	{
+		screen_name = "Development Path Point";
+		forced_expiration_class = immediate;
+		auto_expiration_class = immediate;
+	}
+
+	[dev_path_point] {  }
+
+}
+
+//////////////////////////////////////////////////////////////////////
+// Generic console commmand template
+
+[dev,t:template,n:dev_console]
+{
+	specializes = test;
+	doc = [dev_console];
+	category_name = "dev";
+
+	[gizmo]			
+	{
+		model = m_i_glb_object-trigger; 
+		diffuse_color = 0,0,0;
+		use_diffuse_color = true;
+	}
+
+	[dev_console] {  }
+
+}

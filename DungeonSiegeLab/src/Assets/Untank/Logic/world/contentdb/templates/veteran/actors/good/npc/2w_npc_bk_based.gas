@@ -1,0 +1,1180 @@
+[t:template,n:2W_base_npc_bk]
+{
+	doc = "2W_Base template for NPC's based on the barkeep.";
+	specializes = npc;
+	[actor]
+	{
+		[skills]
+		{
+			dexterity = 10.3, 0;
+			intelligence = 7.1, 0;
+			strength = 14.8, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 2022;
+		life = 6;
+		model = m_c_gbn_bk_pos_1;
+		scale_base = 0.85;
+	}
+	[attack]
+	{
+		attack_range = 1;
+		damage_max = 6.6;
+		damage_min = 5.4;
+		reload_delay = 1;
+	}
+	[body]
+	{
+		avg_move_velocity = 1;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine1;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_pelvis;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_gbn_bk_fs;
+			[chore_attack]
+			{
+				chore_stances = 1;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					00 = at-02;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0,1;
+				skrit = infinite_loop;
+				[anim_files]
+				{
+					00 = ds;
+				}
+			}
+			[chore_die]
+			{
+				chore_stances = 1;
+				skrit = select_transition;
+				[anim_files]
+				{
+					00 = di;
+				}
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0,1;
+				skrit = select_fidget;
+				[anim_files]
+				{
+					00 = dsf;
+				}
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				[anim_files]
+				{
+					look = a_c_gbn_bk_fs0_dsf-03;
+					talk = a_c_gbn_bk_fs0_dsf-04;
+					tlk2 = a_c_gbn_bk_fs0_dsf-05;
+					wipe = a_c_gbn_bk_fs0_dsf-02;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 0,1;
+				skrit = select_walk;
+				[anim_files]
+				{
+					00 = wl;
+				}
+			}
+		}
+	}
+	[mind]
+	{
+		actor_may_attack = false;
+        actor_may_be_attacked = false;
+		jat_talk = world\ai\jobs\common\job_talk.skrit;
+		melee_engage_range = 10;
+		personal_space_range = 0.7;
+		ranged_engage_range = 10;
+		sight_range = 10.0;
+	}
+}
+[t:template,n:2W_bodrus]
+{
+	category_name = "2W_shopkeep";
+	doc = "2W_bodrus";
+	specializes = 2W_base_npc_bk;
+	[actor]
+	{
+		portrait_icon = b_gui_ig_i_ic_c_shopkeep;
+	}
+	[aspect]
+	{
+		draw_selection_indicator = TRUE;
+		use_range = 1.0;
+		is_ghost_usable = TRUE;
+		[textures]
+		{
+			0 = b_c_gbn_bk-04;
+		}
+	}
+	[common]
+	{
+		screen_name = "Bodrus";
+	}
+	[conversation]
+	{
+	}
+	[inventory]
+	{
+		[store_pcontent]
+		{
+			full_ratio = 0;
+			[armor]
+			{
+				[all*]
+				{
+					il_main = #body,ro/124-566;
+					max = 4;
+					min = 4;
+				}
+
+				[all*]
+				{
+					il_main = #body/124-171;
+					max = 7;
+					min = 7;
+				}
+				[all*]
+				{
+					il_main = #body/178-419;
+					max = 16;
+					min = 16;
+				}
+				[all*]
+				{
+					il_main = #body/426-566;
+					max = 3;
+					min = 3;
+				}
+
+
+				[all*]
+				{
+					il_main = #gloves/16-171;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #gloves/178-419;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #gloves/426-566;
+					max = 4;
+					min = 4;
+				}
+
+
+				[all*]
+				{
+					il_main = #helm/16-171;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #helm/178-419;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #helm/426-566;
+					max = 4;
+					min = 4;
+				}
+
+				[all*]
+				{
+					il_main = #boots/16-171;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #boots/178-419;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #boots/426-566;
+					max = 4;
+					min = 4;
+				}
+			}
+			[shields]
+			{
+				[all*]
+				{
+					il_main = #shield/16-171;
+					max = 5;
+					min = 5;
+				}
+				[all*]
+				{
+					il_main = #shield/178-419;
+					max = 6;
+					min = 6;
+				}
+				[all*]
+				{
+					il_main = #shield/426-566;
+					max = 4;
+					min = 4;
+				}
+			}
+
+			[weapons]
+			{
+				[all*]
+				{
+					il_main = #melee/72-79;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #melee/86-194;
+					max = 18;
+					min = 18;
+				}
+				[all*]
+				{
+					il_main = #melee/202-252;
+					max = 6;
+					min = 6;
+				}
+				[all*]
+				{
+					il_main = #ranged/72-79;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #ranged/86-194;
+					max = 18;
+					min = 18;
+				}
+				[all*]
+				{
+					il_main = #ranged/202-252;
+					max = 6;
+					min = 6;
+				}
+			}
+
+			[magic]
+			{
+				[all*]
+				{
+					il_main = #spell/23-93;
+					max = 25;
+					min = 25;
+				}
+				[all*]
+				{
+					il_main = #spell/0-16;
+					max = 5;
+					min = 5;
+				}
+			}
+			[misc]
+			{
+				[all*]
+				{
+					il_main = book_glb_magic_01;
+					max = 3;
+					min = 3;
+				}
+			}
+		}
+	}
+	[respawn_shrine]
+	{
+	}
+	[store]
+	{
+		item_markup = 2;
+
+		[item_restock]
+		{
+			potion_health_small = 19;
+			potion_mana_small = 19;
+			potion_rejuvenation_small = 2;
+
+			scroll_resurrect = 2;
+            spell_resurrect = 2;
+            spell_revive = 2;
+            spell_healing_hands = 2;
+
+            spell_zap = 2;
+            spell_fireshot = 2;
+		}
+	}
+}
+[t:template,n:2W_edgaar]
+{
+	category_name = "2W_shopkeep";
+	doc = "2W_edgaar";
+	specializes = 2W_base_npc_bk;
+	[actor]
+	{
+		portrait_icon = b_gui_ig_i_ic_c_shopkeep;
+	}
+	[aspect]
+	{
+		draw_selection_indicator	= TRUE;
+		[textures]
+		{
+			0 = b_c_gbn_bk-05;
+		}
+	}
+	[body]
+	{
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_gbn_ed_fs;
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files]
+				{
+					00 = dsf-03;
+				}
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files]
+				{
+					00 = dsf-03;
+				}
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				[anim_files]
+				{
+					edg1 = a_c_gbn_ed_fs0_dsf; // Edgaar's first dialog speech
+					edg2 = a_c_gbn_ed_fs0_dsf-02; // Edgaar's generic talk anim
+				}
+			}
+		}
+	}
+	[common]
+	{
+		screen_name = "Edgaar";
+	}
+	[conversation]
+	{
+	}
+	[inventory]
+	{
+        [pcontent]
+        {
+			[all*]
+			{
+				il_main = potion_health_medium;
+				il_main = potion_mana_medium;
+			}
+        }
+	}
+    [mind]
+    {
+        jat_face = jat_none;
+	}
+}
+[t:template,n:2W_hein]
+{
+	category_name = "2W_shopkeep";
+	doc = "2W_hein";
+	specializes = 2W_base_npc_bk;
+	[actor]
+	{
+		portrait_icon = b_gui_ig_i_ic_c_hein;
+	}
+	[aspect]
+	{
+		use_range = 1.0;
+		draw_selection_indicator = TRUE;
+		is_ghost_usable = TRUE;
+		use_range = 1;
+		[textures]
+		{
+			0 = b_c_gbn_bk-03;
+		}
+	}
+	[common]
+	{
+		screen_name = "Hein";
+	}
+	[conversation]
+	{
+	}
+	[inventory]
+	{
+		[store_pcontent]
+		{
+			full_ratio = 0;
+			[armor]
+			{
+				[all*]
+				{
+					il_main = #body,ro/431-660;
+					max = 4;
+					min = 4;
+				}
+
+				[all*]
+				{
+					il_main = #body/431-496;
+					max = 7;
+					min = 7;
+				}
+				[all*]
+				{
+					il_main = #body/497-595;
+					max = 16;
+					min = 16;
+				}
+				[all*]
+				{
+					il_main = #body/597-660;
+					max = 3;
+					min = 3;
+				}
+
+
+				[all*]
+				{
+					il_main = #gloves/58-496;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #gloves/497-595;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #gloves/597-660;
+					max = 4;
+					min = 4;
+				}
+
+				[all*]
+				{
+					il_main = #helm/58-496;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #helm/497-595;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #helm/597-660;
+					max = 4;
+					min = 4;
+				}
+
+				[all*]
+				{
+					il_main = #boots/58-496;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #boots/497-595;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #boots/597-660;
+					max = 4;
+					min = 4;
+				}
+			}
+			[shields]
+			{
+				[all*]
+				{
+					il_main = #shield/58-496;
+					max = 5;
+					min = 5;
+				}
+				[all*]
+				{
+					il_main = #shield/497-595;
+					max = 6;
+					min = 6;
+				}
+				[all*]
+				{
+					il_main = #shield/597-660;
+					max = 4;
+					min = 4;
+				}
+			}
+			[weapons]
+			{
+				[all*]
+				{
+					il_main = #melee/193-220;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #melee/222-264;
+					max = 18;
+					min = 18;
+				}
+				[all*]
+				{
+					il_main = #melee/265-293;
+					max = 6;
+					min = 6;
+				}
+
+				[all*]
+				{
+					il_main = #ranged/193-220;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #ranged/222-264;
+					max = 18;
+					min = 18;
+				}
+				[all*]
+				{
+					il_main = #ranged/265-293;
+					max = 6;
+					min = 6;
+				}
+			}
+
+			[magic]
+			{
+				[all*]
+				{
+					il_main = #spell/70-106;
+					max = 25;
+					min = 25;
+				}
+				[all*]
+				{
+					il_main = #spell/0-68;
+					max = 5;
+					min = 5;
+				}
+			}
+			[misc]
+			{
+                [all*]
+				{
+					il_main = #spellbook/128-247;
+					max = 4;
+					min = 4;
+				}
+				[all*]
+				{
+					il_main = book_glb_magic_01;
+					max = 3;
+					min = 3;
+				}
+			}
+		}
+	}
+	[respawn_shrine]
+	{
+	}
+	[store]
+	{
+		item_markup = 2;
+
+		[item_restock]
+		{
+			potion_health_small = 3;
+			potion_health_medium = 6;
+			potion_health_large = 9;
+			potion_mana_small = 3;
+			potion_mana_medium = 6;
+			potion_mana_large = 9;
+			potion_rejuvenation_small = 1;
+			potion_rejuvenation_medium = 1;
+			potion_rejuvenation_large = 2;
+
+			scroll_resurrect = 2;
+            spell_resurrect = 2;
+            spell_revive = 2;
+            spell_healing_hands = 2;
+
+            spell_zap = 2;
+            spell_fireshot = 2;
+		}
+	}
+}
+[t:template,n:2W_leftenant_dhoge]
+{
+	category_name = "2W_shopkeep";
+	doc = "2W_leftenant_dhoge";
+	specializes = 2W_base_npc_bk;
+	[actor]
+	{
+		portrait_icon = b_gui_ig_i_ic_c_dhoge;
+	}
+	[aspect]
+	{
+		draw_selection_indicator = TRUE;
+		[textures]
+		{
+			0 = b_c_gbn_bk-02;
+		}
+	}
+	[common]
+	{
+		screen_name = "Leftenant Dhoge";
+	}
+	[conversation]
+	{
+	}
+	[store]
+	{
+		item_markup = 2;
+	}
+}
+[t:template,n:2W_master_smith_sultrin]
+{
+	category_name = "2W_shopkeep";
+	doc = "smith, grescal (MP)";
+	specializes = 2W_base_npc_bk;
+	[actor]
+	{
+		portrait_icon = b_gui_ig_i_ic_c_barkeep;
+	}
+	[aspect]
+	{
+		use_range = 1.0;
+		draw_selection_indicator = TRUE;
+		is_ghost_usable = TRUE;
+		[textures]
+		{
+			0 = b_c_gbn_bk;
+		}
+	}
+	[common]
+	{
+		screen_name = "Master Smith Sultrin";
+	}
+	[conversation]
+	{
+	}
+	[inventory]
+	{
+		[store_pcontent]
+		{
+			full_ratio = 0;
+			[armor]
+			{
+				[all*]
+				{
+					il_main = #body,ro/364-585;
+					max = 4;
+					min = 4;
+				}
+
+				[all*]
+				{
+					il_main = #body/364-425;
+					max = 7;
+					min = 7;
+				}
+				[all*]
+				{
+					il_main = #body/426-522;
+					max = 18;
+					min = 18;
+				}
+				[all*]
+				{
+					il_main = #body/524-585;
+					max = 5;
+					min = 5;
+				}
+
+
+				[all*]
+				{
+					il_main = #gloves/49-425;
+					max = 10;
+					min = 10;
+				}
+				[all*]
+				{
+					il_main = #gloves/426-522;
+					max = 12;
+					min = 12;
+				}
+				[all*]
+				{
+					il_main = #gloves/524-585;
+					max = 6;
+					min = 6;
+				}
+
+				[all*]
+				{
+					il_main = #helm/49-425;
+					max = 10;
+					min = 10;
+				}
+				[all*]
+				{
+					il_main = #helm/426-522;
+					max = 12;
+					min = 12;
+				}
+				[all*]
+				{
+					il_main = #helm/524-585;
+					max = 6;
+					min = 6;
+				}
+
+				[all*]
+				{
+					il_main = #boots/49-425;
+					max = 10;
+					min = 10;
+				}
+				[all*]
+				{
+					il_main = #boots/426-522;
+					max = 12;
+					min = 12;
+				}
+				[all*]
+				{
+					il_main = #boots/524-585;
+					max = 6;
+					min = 6;
+				}
+			}
+			[shields]
+			{
+				[all*]
+				{
+					il_main = #shield/49-425;
+					max = 10;
+					min = 10;
+				}
+				[all*]
+				{
+					il_main = #shield/426-522;
+					max = 12;
+					min = 12;
+				}
+				[all*]
+				{
+					il_main = #shield/524-585;
+					max = 6;
+					min = 6;
+				}
+			}
+			[weapons]
+			{
+				[all*]
+				{
+					il_main = #melee/164-189;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #melee/191-255;
+					max = 20;
+					min = 20;
+				}
+				[all*]
+				{
+					il_main = #melee/260-290;
+					max = 6;
+					min = 6;
+				}
+
+				[all*]
+				{
+					il_main = #ranged/164-189;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #ranged/191-255;
+					max = 20;
+					min = 20;
+				}
+				[all*]
+				{
+					il_main = #ranged/260-290;
+					max = 6;
+					min = 6;
+				}
+			}
+		}
+	}
+	[respawn_shrine]
+	{
+	}
+	[store]
+	{
+		item_markup = 2;
+	}
+}
+[t:template,n:2W_merchant_barkeep]
+{
+	category_name = "2W_shopkeep";
+	doc = "2W_barkeep";
+	specializes = 2W_base_npc_bk;
+	[actor]
+	{
+		portrait_icon = b_gui_ig_i_ic_c_barkeep;
+	}
+	[aspect]
+	{
+		draw_selection_indicator = TRUE;
+		[textures]
+		{
+			0 = b_c_gbn_bk;
+		}
+	}
+	[common]
+	{
+		screen_name = "Izen";
+	}
+	[conversation]
+	{
+	}
+}
+[t:template,n:2W_merchant_innkeeper]
+{
+	category_name = "2W_shopkeep";
+	doc = "2W_innkeeper";
+	specializes = 2W_base_npc_bk;
+	[aspect]
+	{
+		draw_selection_indicator = TRUE;
+		[textures]
+		{
+			0 = b_c_gbn_ik;
+		}
+	}
+	[common]
+	{
+		screen_name = "Innkeeper";
+	}
+	[conversation]
+	{
+	}
+	[store]
+	{
+		item_markup = 2;
+	}
+}
+[t:template,n:2W_merchant_shopkeeper]
+{
+	category_name = "2W_shopkeep";
+	doc = "2W_shopkeeper";
+	specializes = 2W_base_npc_bk;
+	[actor]
+	{
+		portrait_icon = b_gui_ig_i_ic_c_shopkeep;
+	}
+	[aspect]
+	{
+		draw_selection_indicator = TRUE;
+		[textures]
+		{
+			0 = b_c_gbn_sk;
+		}
+	}
+	[common]
+	{
+		screen_name = "Shopkeeper";
+	}
+	[conversation]
+	{
+	}
+	[store]
+	{
+		item_markup = 2;
+	}
+}
+[t:template,n:2W_mp_peasant_male_big]
+{
+	category_name = "2W_townsperson";
+	doc = "2W_mp_peasant_male_big";
+	specializes = 2W_base_npc_bk;
+	[aspect]
+	{
+		draw_selection_indicator = TRUE;
+		[textures]
+		{
+			0 = b_c_gbn_pmb;
+		}
+	}
+	[common]
+	{
+		screen_name = "Peasant";
+	}
+	[conversation]
+	{
+	}
+}
+[t:template,n:2W_peasant_male_big]
+{
+	category_name = "2W_townsperson";
+	doc = "2W_peasant_male_big";
+	specializes = 2W_base_npc_bk;
+	[aspect]
+	{
+		[textures]
+		{
+			0 = b_c_gbn_pmb;
+		}
+	}
+	[common]
+	{
+		screen_name = "Peasant";
+	}
+}
+[t:template,n:2W_smithy_liorne]
+{
+	category_name = "2W_shopkeep";
+	doc = "shopkeeper, fallraen (MP)";
+	specializes = 2W_base_npc_bk;
+	[actor]
+	{
+		portrait_icon = b_gui_ig_i_ic_c_shopkeep;
+	}
+	[aspect]
+	{
+		use_range = 1.0;
+		draw_selection_indicator = TRUE;
+		is_ghost_usable = TRUE;
+		[textures]
+		{
+			0 = b_c_gbn_sk;
+		}
+	}
+	[common]
+	{
+		screen_name = "Smithy Liorne";
+	}
+	[conversation]
+	{
+	}
+	[inventory]
+	{
+		[store_pcontent]
+		{
+			full_ratio = 0;
+			[armor]
+			{
+				[all*]
+				{
+					il_main = #body,ro/134-640;
+					max = 4;
+					min = 4;
+				}
+
+				[all*]
+				{
+					il_main = #body/134-233;
+					max = 7;
+					min = 7;
+				}
+				[all*]
+				{
+					il_main = #body/239-460;
+					max = 18;
+					min = 18;
+				}
+				[all*]
+				{
+					il_main = #body/465-640;
+					max = 5;
+					min = 5;
+				}
+
+
+				[all*]
+				{
+					il_main = #gloves/17-233;
+					max = 10;
+					min = 10;
+				}
+				[all*]
+				{
+					il_main = #gloves/239-460;
+					max = 12;
+					min = 12;
+				}
+				[all*]
+				{
+					il_main = #gloves/465-640;
+					max = 6;
+					min = 6;
+				}
+
+				[all*]
+				{
+					il_main = #helm/17-233;
+					max = 10;
+					min = 10;
+				}
+				[all*]
+				{
+					il_main = #helm/239-460;
+					max = 12;
+					min = 12;
+				}
+				[all*]
+				{
+					il_main = #helm/465-640;
+					max = 6;
+					min = 6;
+				}
+
+				[all*]
+				{
+					il_main = #boots/17-233;
+					max = 10;
+					min = 10;
+				}
+				[all*]
+				{
+					il_main = #boots/239-460;
+					max = 12;
+					min = 12;
+				}
+				[all*]
+				{
+					il_main = #boots/465-640;
+					max = 6;
+					min = 6;
+				}
+			}
+			[shields]
+			{
+				[all*]
+				{
+					il_main = #shield/17-233;
+					max = 10;
+					min = 10;
+				}
+				[all*]
+				{
+					il_main = #shield/239-460;
+					max = 12;
+					min = 12;
+				}
+				[all*]
+				{
+					il_main = #shield/465-640;
+					max = 6;
+					min = 6;
+				}
+			}
+			[weapons]
+			{
+				[all*]
+				{
+					il_main = #melee/77-99;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #melee/105-180;
+					max = 20;
+					min = 20;
+				}
+				[all*]
+				{
+					il_main = #melee/180-220;
+					max = 6;
+					min = 6;
+				}
+
+				[all*]
+				{
+					il_main = #ranged/77-99;
+					max = 8;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #ranged/105-180;
+					max = 20;
+					min = 20;
+				}
+				[all*]
+				{
+					il_main = #ranged/180-220;
+					max = 6;
+					min = 6;
+				}
+			}
+		}
+	}
+	[respawn_shrine]
+	{
+	}
+	[store]
+	{
+		item_markup = 2;
+	}
+}

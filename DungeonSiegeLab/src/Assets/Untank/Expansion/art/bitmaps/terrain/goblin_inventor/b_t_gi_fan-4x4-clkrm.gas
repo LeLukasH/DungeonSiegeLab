@@ -1,0 +1,13 @@
+[t:tsd,n:b_t_gi_fan-4x4-clkrm]
+{
+		b hasalpha = true;
+	layer1texture1 = b_t_gi_fan-4x4-clkrm;
+	layer1alphaarg1 = texture;
+	layer1alphaarg2 = diffuse;
+	layer1alphaop = arg1;
+	layer1colorarg1 = texture;
+	layer1colorarg2 = diffuse;
+	layer1colorop = modulate;
+	i texturedetail = 3;
+}
+}

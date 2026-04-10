@@ -1,0 +1,118 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  lightning_emitter.skrit
+// Author(s):  Mathew Corthell
+//
+// Copyright © 2001 Mad Doc Software, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property bool	_server_only$		= false;
+
+property float boltHeight$ = 20.0 doc = "Height of the lightning bolt effect.";
+property float bottomDriftMax$ = 2.0 doc = "How much drift can the bottom of the bolt have?";
+property float topDriftMax$ = 5.0 doc = "How much drift can the top of the bolt have?";
+
+property bool randomTiming$ = true doc = "Randomize the time between bolts?";
+property float minDelayRand$ = 5.0 doc = "Mimimun time between random bolts.";
+property float maxDelayRand$ = 15.0 doc = "Maximum time between random bolts.";
+property float fixedDelay$ = 2.0 doc = "Amount of time between bolts without random timing.";
+
+owner = GoSkritComponent;
+
+//The time to delay before firing the next bolt.
+float delay$;
+
+//Function to coordinate the firing of a lightning bolt..
+FireBolt$
+{
+    //Calculate the amount that the bottom will drift from the center point.
+    float bottomDriftX$ = Math.RandomFloat(-1 * bottomDriftMax$, bottomDriftMax$);
+	float bottomDriftZ$ = Math.RandomFloat(-1 * bottomDriftMax$, bottomDriftMax$);
+    //Calculate the amount the top will drift from the bottom.
+	float topDriftX$ = Math.RandomFloat(-1 * topDriftMax$, topDriftMax$);
+	float topDriftZ$ = Math.RandomFloat(-1 * topDriftMax$, topDriftMax$);
+    
+	string params$ = "";
+
+	// Set up params for offsetting the bottom of the bolt.
+	StringTool.Appendf(params$, "[%f][%f]", bottomDriftX$, bottomDriftZ$);
+
+	// Set up params for offsetting the top of the bolt.  Top offsets are intended to be
+	// additive with the bottom offset to give a little bit more variation in direction
+	// and position of the bolt.
+	StringTool.Appendf(params$, "[%f][%f][%f]", topDriftX$ + bottomDriftX$, boltHeight$, topDriftZ$ + bottomDriftZ$);    
+
+	// Set up params for the light flash.  Place it off the ground 1/4 of the way between
+	// the bottom and the top.
+	StringTool.Appendf(params$, "[%f][%f][%f]", (topDriftX$ / 4) + bottomDriftX$, (boltHeight$ / 4), (topDriftZ$ / 4) + bottomDriftZ$);
+
+	// Run the lightning and light effects scripts.  
+	// Each should be finished in about 1 second.
+    SiegeFx.SRunScript( "lightning_emitter", owner.Goid, owner.Goid, params$, owner.Goid, WE_ENTERED_WORLD );
+}
+
+//Function to determine the delay before the next bolt.
+GetDelay$
+{
+    if(randomTiming$)
+    {
+        delay$ = Math.RandomFloat(minDelayRand$, maxDelayRand$);
+    }
+    else
+    {
+        delay$ = fixedDelay$;
+    }
+}
+
+//First state, when we're created.
+startup state Init$
+{
+
+    //Once we're placed in the world, create the three extra points used to
+    //create the lightning effect.  Delay before firing the first bolt.
+	trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+	{
+        GetDelay$();
+		this.CreateTimer(1, delay$);
+	}
+	
+	trigger OnTimer$(1)
+	{
+        SetState(Loop$);
+    }
+}
+
+//Sit here and loop, firing lightning bolts over intervals.
+state Loop$
+{
+
+    event OnEnterState$
+    {
+        FireBolt$();
+        GetDelay$();
+		this.CreateTimer(1, delay$);
+    }
+
+    trigger OnTimer$(1)
+	{
+        FireBolt$();
+        GetDelay$();
+		this.CreateTimer(1, delay$);
+	}
+
+    trigger OnGoHandleMessage$(WE_LEFT_WORLD)
+    {
+        SetState(Cleanup$);
+    }
+}
+
+state Cleanup$
+{
+    event OnEnterState$
+    {
+        SetState(Init$);
+    }
+}

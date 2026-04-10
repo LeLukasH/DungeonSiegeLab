@@ -1,0 +1,83 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  gom_effects.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+//
+// custom skrit to make Gom play effects at certain times.
+//
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = false;
+property string _doc$                = "hides a GO when It gets a message.";
+property string _required_component$ = "placement";
+
+property string			effect1$;							
+property float			ratio1$;
+property string			effect2$;							
+property float			ratio2$;
+property string			effect3$;							
+property float			ratio3$;
+property string			effect4$;							
+property float			ratio4$;
+property string			effect5$;							
+property float			ratio5$;
+
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+// local states
+
+startup state Start$
+{
+	trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+	{
+		This.CreateTimer( 1, 0 );
+	}
+	
+	transition -> SpawnFx$:OnTimer( 1 );
+}
+
+state SpawnFx$
+{
+	event OnGoUpdate$( float /*delta_t$*/ )
+	{
+//		report.genericf("owner.Go.Aspect.Maxlife: %g, owner.Go.Aspect.Life: %g, owner.Go.Aspect.LifeRatio: %g\n",owner.Go.Aspect.Maxlife, owner.Go.Aspect.CurrentLife, owner.Go.Aspect.LifeRatio );
+		
+		if( ( ratio1$ > 0.0 ) && ( ratio1$ > owner.Go.Aspect.LifeRatio ) )
+		{
+			SiegeFx.RunScript( effect1$, owner.goid, owner.goid, "", owner.Goid, WE_KILLED );
+			ratio1$ = -1.0;
+		}
+		if( ( ratio2$ > 0.0 ) && ( ratio2$ > owner.Go.Aspect.LifeRatio ) )
+		{
+			SiegeFx.RunScript( effect2$, owner.goid, owner.goid, "", owner.Goid, WE_KILLED );
+			ratio2$ = -1.0;
+		}
+		if( ( ratio3$ > 0.0 ) && ( ratio3$ > owner.Go.Aspect.LifeRatio ) )
+		{
+			SiegeFx.RunScript( effect3$, owner.goid, owner.goid, "", owner.Goid, WE_KILLED );
+			ratio3$ = -1.0;
+		}	
+		if( ( ratio4$ > 0.0 ) && ( ratio4$ > owner.Go.Aspect.LifeRatio ) )
+		{
+			SiegeFx.RunScript( effect4$, owner.goid, owner.goid, "", owner.Goid, WE_KILLED );
+			ratio4$ = -1.0;
+		}
+		if( ( ratio5$ > 0.0 ) && ( ratio5$ > owner.Go.Aspect.LifeRatio ) )
+		{
+			owner.Go.Aspect.AspectHandle.SetHideMeshFlag( true );
+			SiegeFx.RunScript( effect5$, owner.goid, owner.goid, "", owner.Goid, WE_KILLED );
+			ratio5$ = -1.0;
+		}
+	}
+}

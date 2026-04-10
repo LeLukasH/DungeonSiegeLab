@@ -1,0 +1,5 @@
+[t:tsd,n:b_d_formation_spot]
+{
+	layer1texture1 = b_d_formation_spot;
+  i texturedetail = 1;
+}

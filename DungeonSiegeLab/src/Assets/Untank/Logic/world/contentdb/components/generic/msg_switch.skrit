@@ -1,0 +1,30 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  msg_switch.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// when you get a message send a message to yourself.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property eWorldEvent 	trigger_msg$		= WE_REQ_USE			doc = "Trigger message";
+property eWorldEvent 	send_msg$			= WE_REQ_ACTIVATE		doc = "Message to send";
+
+
+owner = GoSkritComponent;
+
+startup state Startup$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == trigger_msg$ )
+		{
+			SendWorldMessage( send_msg$, owner.Goid, owner.goid );
+		}
+	}
+}

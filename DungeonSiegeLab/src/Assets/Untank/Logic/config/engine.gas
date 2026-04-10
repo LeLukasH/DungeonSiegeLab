@@ -1,0 +1,51 @@
+[engine_settings]
+{
+	// Controls the speed at which the nodes fade in seconds
+	node_fade_time					= 0.4;
+
+	// Defines what level of alpha is used for a faded node using the "alpha" trigger
+	node_fade_alpha					= 32;
+
+	// Defines what level of alpha is used for a faded node using the "black" trigger
+	node_fade_black					= 0;
+
+	// Mouse drag selection threshold in pixels before the drag select is accepted by the engine	
+	drag_select_threshold			= 20;
+
+	// Controls the speed at which objects fade in seconds
+	object_fade_time				= 0.3;
+
+	// Defines the maximum and minimum allowable zoom distances for the minimap
+	minimap_min_size				= 20.0f;
+	minimap_max_size				= 120.0f;
+
+	// Defines how many meters (on the largest axis, in world space) the user is 
+	// permitted to view in the minimap.
+	default_minimap_size			= 90.0;
+
+	// How fast you can zoom in the minimap (in meters per second)
+	minimap_zoom_meters_per_second	= 150.0f;
+	minimap_step_zoom_meters		= 25.0f;
+
+	// Minimap display textures
+	minimap_partymember_tex			= b_gui_ig_mnu_party_member;
+	minimap_orientarrow_tex			= b_gui_ig_mnu_party_arrow;
+	minimap_selectionring_tex		= b_gui_ig_mnu_circle_white;
+	minimap_discovery_tex			= b_gui_ig_mnu_discovery;
+	minimap_selectiontri_tex		= b_gui_ig_mnu_triangle_white;
+	minimap_tombstone_tex			= b_gui_ig_mnu_tombstone;
+
+	// Scalar for inner frustum display (in % of total frustum width)
+	minimap_innerfrustum_scale		= 1.415f;  // Currently 1.415 is the sqrt(2)
+
+	// Discovery settings
+	discovery_radius				= 20.0f;
+	discovery_sample_length			= 5.0f;
+
+	// Streamer settings
+	streamer_node_time				= 0.5f;
+	streamer_texture_time			= 2.0f;
+	streamer_go_time				= 1.0f;
+	streamer_lodfi_time				= 1.5f;
+	streamer_overflow_time			= 1.0f;
+}

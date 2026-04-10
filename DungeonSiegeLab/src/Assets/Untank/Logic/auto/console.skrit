@@ -1,0 +1,34 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  console.skrit (Skritbot)
+// Author(s):  Scott Bilas
+//
+// Summary  :  Lets you specify console commands to run.
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property string ingame$			= ""		doc = "Command to run once in-game";
+
+//////////////////////////////////////////////////////////////////////////////
+
+startup state S$ trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+{
+	if ( (WorldState.CurrentState == WS_SP_INGAME) || (WorldState.CurrentState == WS_MP_INGAME) )
+	{
+		setstate SInGame$;
+	}
+}
+
+state SInGame$
+{
+	FInGame$ at ( 1 frames )
+	{
+		GpConsole.Execute( ingame$ );
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////

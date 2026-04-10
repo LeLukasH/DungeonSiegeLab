@@ -1,0 +1,99 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  single_pickup.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+//
+// This skrit is made to drop objects if the player already has one in his inventory.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = true;
+property string _doc$                = "Drops objects picked up by the wrong player.";
+property string _required_component$ = "placement";
+
+owner                                = GoSkritComponent;
+
+goid player$;
+
+//////////////////////////////////////////////////////////////////////////////
+
+// wait until the object has entered the world.
+startup state WaitForEnter$
+{
+	trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+	{
+		SetState Waiting$;
+	}
+}
+
+state Waiting$
+{
+	// look at events that this objects recieve.
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		// if we recieve the picked_up world event then look to see if the person that picked us up is allowed to have us.
+		if ( e$ == WE_PICKED_UP )
+		{
+			player$ = msg$.SendFrom;
+			
+			if( !player$.IsValid )
+			{
+				report.Error( "Bad player when trying to limit quest items.\n" );
+			}	
+				
+			// get evenything in the main inventory, this doesn't look in the book or at equied itmes.	
+			player$.Go.Inventory.ListItems( IL_MAIN, player$.Go.Mind.TempGopColl1 );
+			
+			int i$ = 0;
+			int num$ = 0;
+			int iend$ = player$.Go.Mind.TempGopColl1.size;
+			
+			// itterate through the invetory counting items similar to this one.
+			while( i$ < iend$ )
+			{
+				Go temp$ = player$.Go.Mind.TempGopColl1.Get( i$ );
+				
+				if( temp$ != null )
+				{
+					if( temp$.templatename == owner.Go.Templatename )
+					{
+						num$ += 1;
+					}	 	
+				} 
+				i$ += 1;	
+			}
+			
+			// if we have too many of this type of item then drom the one that just got picked up.
+			if( num$ > 1 )
+			{
+				this.CreateTimer( 1, 0 );
+				// take the item out of the inventory. This character isn't alloved to hold this item.
+				// player$.Go.Inventory.RSRemove( owner.Go, false, player$.Go );
+			}
+		}
+	}
+	trigger OnTimer$( 1 )
+	{
+		setstate Remove$;
+	}
+}
+
+state Remove$
+{
+	event OnEnterState$
+	{
+		// take the item out of the inventory. This character isn't alloved to hold this item.
+		player$.Go.Inventory.RSRemove( owner.Go, false, player$.Go );
+		setstate Waiting$;
+	}
+}

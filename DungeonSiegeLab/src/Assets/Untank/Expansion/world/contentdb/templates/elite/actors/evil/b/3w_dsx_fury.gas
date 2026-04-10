@@ -1,0 +1,253 @@
+[t:template,n:3W_dsx_base_fury]
+{
+	category_name = "3W_evil_b";
+	doc = "3W_fury";
+	specializes = actor_evil;
+	[aspect]
+	{
+		draw_shadow = false;
+		model = m_c_ebb_fy_pos_1;
+		[voice]
+		{
+			[die] 			{ priority = high; * = s_e_die_fury; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_fury_SED; }
+			[hit_critical] 	{ priority = low; * = s_e_hit_fury_SED; }
+			[hit_glance] 	{ priority = low; * = s_e_hit_fury_SED; }
+			[hit_solid] 	{ priority = low; * = s_e_hit_fury_SED; }
+		}
+	}
+	[body]
+	{
+		avg_move_velocity = 7.000000;
+		[bone_translator]
+		{
+			body_anterior = bone_main;
+			body_mid = bone_main;
+			body_posterior = bone_main;
+			kill_bone = bone_main;
+			shield_bone = bone_main;
+			weapon_bone = bone_main;
+		}
+		[chore_dictionary]
+		{
+			initial_chore = chore_none;
+			chore_prefix = a_c_ebb_fy_fs;
+			[chore_misc]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files]
+				{
+					slep = fl-02;
+					wake = rv;
+				}
+			}
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+				}
+			}
+			[chore_magic]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					01 = at-02;
+					02 = at-03;
+					03 = at-04;
+					04 = at-05;
+					05 = at-06;
+					06 = at-07;
+					qffg = dsf;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=fl-02; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=fl; }
+			}
+		}
+	}
+	[mind]
+	{
+		jat_die = world\ai\jobs\actors\evil\job_die_explode.skrit;
+		jat_cast 						= world\ai\jobs\common\job_cast.skrit
+			?rand_spell					= true;
+		jat_startup = world\ai\jobs\common\job_startup_reveal.skrit;
+		actor_weapon_preference			= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+		actor_auto_switches_to_karate	= false;
+		actor_auto_switches_to_melee	= false;
+
+		melee_engage_range 		= 5.0;
+		personal_space_range 	= 0.7;
+		ranged_engage_range 	= 9.0;
+		sight_range 			= 20.0;
+	}
+	[physics]
+	{
+		break_effect = blood_mist;
+		break_sound = s_e_meat_explosion;
+		gib_gore_good = true;
+		[break_particulate]
+		{
+			frag_glb_fury_01	= 1;
+			frag_glb_fury_02	= 1;
+			frag_glb_fury_03	= 1;
+			frag_glb_fury_04	= 1;
+			frag_glb_fury_05	= 1;
+			frag_glb_fury_06	= 1;
+			frag_glb_fury_07	= 1;
+			frag_glb_fury_08	= 1;
+		}
+	}
+}
+[t:template,n:3W_dsx_fury]
+{
+	category_name = "3W_evil_b";
+	doc = "3W_dsx_fury";
+	specializes = 3W_dsx_base_fury;
+	[actor]
+	{
+		[skills]
+			{
+				strength 	 = 50.3, 0;
+				intelligence =  12.2, 0;
+				dexterity 	 = 23.8, 0;
+				melee 		 = 89, 0;
+				ranged 		 = 89, 0;
+				combat_magic = 89, 0;
+				nature_magic = 89, 0;
+			}
+	}
+	[aspect]
+	{
+		experience_value = 1926495;
+		life 			 = 4947.9;
+		max_life 		 = 4947.9;
+		max_mana 		 = 3047.9;
+		mana 			 = 3047.9;
+	}
+	[attack]
+	{
+		attack_range = 10;
+		damage_max 	 = 653.1;
+		damage_min	 = 391.9;
+		damage_bonus_min_cmagic = 160;
+		damage_bonus_max_cmagic = 260;
+	}
+	[common]
+	{
+		screen_name="Fury";
+		membership=monster,immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+				no_trig_bits = true;
+				action* = call_sfx_script("unique_ray_red");
+			}
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+				no_trig_bits = true;
+				action* = call_sfx_script("unique_light_red");
+			}
+		}
+	}
+	[defend] { defense=1830.7; }
+	[inventory]
+	{
+		drop_at_use_point = true;
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 24, Special */
+			[all*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 218208;
+					max = 433282;
+				}
+				[oneof*]
+				{
+					chance = 0.3;
+					il_main = potion_mana_super;
+					il_main = potion_health_super;
+				}
+				[oneof*]
+				{
+					chance = 0.3;
+					il_main = #weapon/201-263;
+					il_main = #armor/119-653;
+					il_main = #*/201-263;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/-rare(1)/263-298;
+					il_main = #armor/-rare(1)/507-910;
+					il_main = #*/-rare(1)/263-298;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/-unique(2)/263-298;
+					il_main = #armor/-unique(2)/507-910;
+					il_main = #*/-unique(2)/263-298;
+				}			
+			}
+		}
+		selected_active_location = il_active_primary_spell;
+		[other]
+		{
+			il_active_primary_spell= dsx_spell_fury_zap_1;
+			il_spell_2 = dsx_spell_fury_zap_2;
+			il_spell_3 = dsx_spell_fury_zap_3;
+			il_spell_4 = dsx_spell_fury_slam;
+			il_spell_5 = dsx_spell_fury_spin;
+			il_spell_6 = dsx_spell_fury_gas;
+			il_spell_7 = dsx_spell_fury_spit;
+		}		
+	}
+	[mind]
+	{
+		jat_cast 			= world\ai\jobs\common\job_cast.skrit
+			?rand_spell		= true
+			&check_range	= true
+			&spell_chances	= "0.15, 				0.14, 				 0.14, 				 0.15, 				  0.14, 				0.14,             	  0.14"
+			&spells			= "dsx_spell_fury_slam, dsx_spell_fury_spin, dsx_spell_fury_gas, dsx_spell_fury_spit, dsx_spell_fury_zap_1, dsx_spell_fury_zap_2, dsx_spell_fury_zap_3";
+
+		on_engaged_lost_consciousness_abort_attack = true;
+	}
+}

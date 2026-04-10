@@ -1,0 +1,27 @@
+[heads]
+{
+	[farmgirl]
+	{
+		* = default;
+		* = m_c_gah_fg_hlmt_head-02;
+		* = m_c_gah_fg_hlmt_head-03;
+		* = m_c_gah_fg_hlmt_head-04;
+		* = m_c_gah_fg_hlmt_head-05;
+	}
+	[farmboy]
+	{
+		* = default;
+		* = m_c_gah_fb_hlmt_head-02;
+		* = m_c_gah_fb_hlmt_head-03;
+		* = m_c_gah_fb_hlmt_head-04;
+		* = m_c_gah_fb_hlmt_head-05;
+	}
+	[dwarf]
+	{
+		* = default;
+	}
+	[skeleton_good]
+	{
+		* = default;
+	}
+}

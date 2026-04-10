@@ -1,0 +1,60 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  weapon_flee.skrit
+// Author(s):  Tara Teich (modified from weapon_cold.skrit)
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+//	This is sneaky... dont try this at home kids.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+#include "k_inc_spl_utils_DSX"
+
+on_add_custom_damage$( Go /*owner$*/ )
+{
+}
+
+on_remove_custom_damage$( /*some params*/ )
+{
+}
+
+on_custom_damage$( Go victim$, Go attacker$, Go /*weapon$*/, float /*damage_amount$*/ )
+{
+	//Siegefx.SRunScript( "cold_weapon", victim$.Goid, weapon$.Goid, "", attacker$.Goid, WE_UNKNOWN );
+		
+	if( victim$.Common.Membership.Contains( "immune_control" ) )
+	{
+		return;
+	}
+	
+	if( victim$.Player.Controller != PC_COMPUTER  )
+	{
+		return;
+	}
+	
+	// make sure it has a mind
+	if ( !victim$.HasMind )
+	{
+		return;
+	}
+	
+	// MRC 7/8/2003 Bug 1654 Make sure the victim is still thinking.  
+	// If not, then he's been affected by something else, and he can't 
+	// think enough to run away.
+	Job action$ = victim$.Mind.GetFrontJob(JQ_BRAIN);
+	if(action$ != NULL)
+	{
+		// just make him run
+		if( victim$.Mind.UnderstandsJob( JAT_FLEE_FROM_OBJECT ) )
+		{
+			victim$.Mind.SDoJob( MakeJobReq( JAT_FLEE_FROM_OBJECT, JQ_ACTION, QP_FRONT, AO_COMMAND, attacker$.goid ) );
+			
+			// Clear the job of everyone attacking this guy
+			ClearEngaged$( victim$.goid );		
+		}	
+	}
+}

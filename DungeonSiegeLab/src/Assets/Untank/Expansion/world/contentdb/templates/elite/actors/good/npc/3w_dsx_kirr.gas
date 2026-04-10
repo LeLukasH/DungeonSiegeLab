@@ -1,0 +1,37 @@
+[t:template,n:3W_kirr]
+{
+	category_name = "3W_npc";
+	doc = "3W_kirr";
+	specializes = 3W_base_giant;
+	
+	[aspect]
+	{
+		draw_selection_indicator = TRUE;
+		[textures]
+		{
+			0 = b_c_gan_hg_skin_03;
+			1 = b_c_pos_a1_300;
+		}
+	}
+	
+	[common]
+	{
+		screen_name = "kirr";
+	}
+	[conversation]
+	{
+	}
+	[inventory]
+	{
+		[equipment]
+		{
+		}
+	}
+	[mind]
+	{
+		actor_may_attack = false;
+        	actor_may_be_attacked = false;
+		jat_talk = world\ai\jobs\actors\good\job_talk_kirr.skrit;
+ 	}
+}
+

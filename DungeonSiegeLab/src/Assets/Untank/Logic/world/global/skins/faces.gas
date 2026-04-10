@@ -1,0 +1,44 @@
+[faces]
+{
+	[farmboy]
+	{
+		* = b_c_gah_fb_skin_001;
+		* = b_c_gah_fb_skin_002;
+		* = b_c_gah_fb_skin_003;
+		* = b_c_gah_fb_skin_004;
+		* = b_c_gah_fb_skin_005;
+		* = b_c_gah_fb_skin_006;
+		* = b_c_gah_fb_skin_007;
+		* = b_c_gah_fb_skin_008;
+		* = b_c_gah_fb_skin_009;
+		* = b_c_gah_fb_skin_010;
+	}
+	[farmgirl]
+	{
+		* = b_c_gah_fg_skin_001;
+		* = b_c_gah_fg_skin_002;
+		* = b_c_gah_fg_skin_003;
+		* = b_c_gah_fg_skin_004;
+		* = b_c_gah_fg_skin_005;
+		* = b_c_gah_fg_skin_006;
+		* = b_c_gah_fg_skin_007;
+		* = b_c_gah_fg_skin_008;
+		* = b_c_gah_fg_skin_009;
+		* = b_c_gah_fg_skin_010;
+	}
+	[dwarf]
+	{
+		* = b_c_gan_df_skin_01;
+		* = b_c_gan_df_skin_02;
+		* = b_c_gan_df_skin_03;
+		* = b_c_gan_df_skin_04;
+		* = b_c_gan_df_skin_05;
+		* = b_c_gan_df_skin_06;
+	}
+	[skeleton_good]
+	{
+		* = b_c_ecm_sk;
+		* = b_c_ecm_sk-02;
+		* = b_c_ecm_skg;
+	}
+}

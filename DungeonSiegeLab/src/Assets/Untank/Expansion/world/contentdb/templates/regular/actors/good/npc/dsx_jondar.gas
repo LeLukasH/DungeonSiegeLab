@@ -1,0 +1,122 @@
+[t:template,n:jondar]
+{
+	category_name = "1W_character";
+	doc = "jondar";
+	specializes = base_pm_fb;
+	[actor]
+    {
+		portrait_icon = b_gui_ig_i_ic_c_jondar; 
+		[skills]
+		{
+			strength 		= 0.09, 0, 10;
+			dexterity 		= 0.18, 0, 10;
+			intelligence 	= 0.73, 0, 10;
+						
+			nature_magic 	= 1, 0, 0;
+			uber		 	= 1, 0, 0;
+		}
+    }
+	[aspect]
+	{	
+		[textures]
+		{
+			0 = b_c_gan_fb_skin_jondar;
+			1 = b_c_pos_a1_jondar;
+		}
+	[voice]
+	{
+		[die]		{ priority = high; * = s_v_jondar_die; }
+		//		[hit_critical]	{ priority = low; * = s_v_jondar_hit_03_SED;  }
+		//		[hit_glance]	{ priority = low; * = s_v_jondar_hit_01_SED;  }
+		//		[hit_solid]	{ priority = low; * = s_v_jondar_hit_02_SED;  }
+	}
+	[vo_voice]
+	{
+		[select_char]
+		{ 
+			priority = vo; 
+			* = s_v_jondar_select_01;
+			* = s_v_jondar_select_02;
+			* = s_v_jondar_select_03;
+			* = s_v_jondar_select_04;
+			* = s_v_jondar_select_05;
+			* = s_v_jondar_select_06;
+			* = s_v_jondar_select_07;
+			* = s_v_jondar_select_08;
+			* = s_v_jondar_select_09;
+			* = s_v_jondar_select_10;
+			* = s_v_jondar_select_11;
+			* = s_v_jondar_select_12;
+			* = s_v_jondar_select_13;
+			* = s_v_jondar_select_14;
+			* = s_v_jondar_select_15;
+		}
+		[order_move]
+		{
+			priority = vo; 
+			* = s_v_jondar_ack_01;
+			* = s_v_jondar_ack_02;
+			* = s_v_jondar_ack_03;
+			* = s_v_jondar_ack_04;
+			* = s_v_jondar_ack_05;
+			* = s_v_jondar_ack_06;
+			* = s_v_jondar_ack_07;
+			* = s_v_jondar_ack_08;
+			* = s_v_jondar_ack_09;
+			* = s_v_jondar_ack_10;
+			* = s_v_jondar_ack_11;
+			* = s_v_jondar_ack_12;
+			* = s_v_jondar_ack_13;
+			* = s_v_jondar_ack_14;
+			* = s_v_jondar_ack_15;
+		}
+		[order_attack]
+		{
+			priority = vo; 
+			* = s_v_jondar_attack_01;
+			* = s_v_jondar_attack_02;
+			* = s_v_jondar_attack_03;
+			* = s_v_jondar_attack_04;
+			* = s_v_jondar_attack_05;
+			* = s_v_jondar_attack_06;
+			* = s_v_jondar_attack_07;
+			* = s_v_jondar_attack_08;
+			* = s_v_jondar_attack_09;
+			* = s_v_jondar_attack_10;
+			* = s_v_jondar_attack_11;
+			* = s_v_jondar_attack_12;
+			* = s_v_jondar_attack_13;
+			* = s_v_jondar_attack_14;
+			* = s_v_jondar_attack_15;
+			}
+		}
+	}
+	[common]
+	{
+		screen_name = "Jondar";
+	}
+	
+	[conversation]{}
+	
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[equipment]
+		{
+			es_feet = #boots/-no_mod/6-10;
+			es_spellbook = book_glb_magic_01;
+			es_chest = bd_le_f_g_c_fun;
+			es_weapon_hand = #sword/5-10;
+			es_shield_hand = #bow/4-8;
+		}
+		[other]
+        	{
+			il_active_primary_spell=spell_zap;
+			il_active_secondary_spell=spell_healing_hands;
+        	}
+	}
+	[mind]
+	{
+		jat_talk = world\ai\jobs\actors\good\job_talk_jondar.skrit;
+	}
+}

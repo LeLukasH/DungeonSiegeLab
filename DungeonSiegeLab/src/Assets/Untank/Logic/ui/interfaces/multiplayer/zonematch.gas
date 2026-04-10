@@ -1,0 +1,388 @@
+[zonematch]
+{
+	interface = true;
+
+	[t:dialog_box,n:background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_wide;
+		draw_order = 0;
+		rect = 8,8,792,592;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:help_background_top]
+	{
+		alpha = 1.000000;
+		draw_order = 1;
+		rect = 12,530,786,532;
+		texture = b_gui_cmn_browntrim_top;
+		uvcoords = 0.000000,0.500000,1.000000,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:text_box,n:zonematch_help]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		x draw_order = 0x00000005;
+		x font_color = 0xffffffff;
+		x font_size = 0x00000000;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		  justify = center;
+		  rect = 28,534,772,588;		  
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		  fixed_location = true;
+		  text = ;
+		  center_height = true;
+	}
+	
+	[t:window,n:help_background_btm]
+	{
+		alpha = 1.000000;
+		draw_order = 1;
+		rect = 12,532,786,534;
+		texture = b_gui_cmn_browntrim_btm;
+		uvcoords = 0.000000,0.000000,1.000000,0.500000;
+		wrap_mode = tiled;
+	}	
+
+	///////////////////////////////////////////////////////////////////////////////////
+	//	Commands
+	
+
+	///////////////////////////////////////////////////////////////////////////////////
+	//	Chat Area
+	
+	[t:dialog_box,n:backgound_chat]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = graytrim;
+		draw_order = 2;
+		rect = 24,428,616,514;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+
+/*
+	[t:window,n:chat_window_slider]
+	{
+		alpha = 1.000000;
+		draw_order = 80;
+		rect = 304,424,336,428;
+		texture = b_gui_cmn_greytrim_handle;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zone_chat_header;
+		[messages]
+		{
+			onlbuttondown = notify(start_chat_resize);
+			ongloballbuttonup = notify(stop_chat_resize);
+		}
+	}
+	[t:window,n:chat_window_visible_slider]
+	{
+		alpha = 0.800000;
+		draw_order = 8000;
+		rect = 24,410,616,420;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		background_fill = true;
+		background_color = 0xff95fffe; //0xFF9FFEFF;
+		topmost = true;
+		visible = false;
+	}
+*/
+
+	[t:dialog_box,n:chat_header_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = browntrim;
+		draw_order = 2;
+		rect = 26,430,614,450;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zone_chat_header;
+	}
+	[t:window,n:chat_header_background_fill]
+	{
+		alpha = 1.000000;
+		draw_order = 3;
+		rect = 28,432,612,448;
+		texture = b_gui_cmn_brownbar;
+		uvcoords = 0.000000,0.000000,36.50000,1.000000;
+		wrap_mode = tiled;
+		group = zone_chat_header;
+	}
+	[t:window,n:chat_header_undertrim]
+	{
+		alpha = 1.000000;
+		draw_order = 6;
+		rect = 26,448,614,450;
+		texture = b_gui_cmn_trim_subtab-beside;
+		uvcoords = 0.000000,0.000000,1.000000,0.5000;
+		group = zone_chat_header;
+	}
+
+	[t:text,n:chat_title]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 128;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = left;
+		rect = 32,432,480,448;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+		group = zone_chat_header;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_chat_change_topic);
+		}
+	}
+	[t:button,n:button_chat_min]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = min;
+		draw_order = 128;
+		rect = 540,432,556,448;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zone_chat_header;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_chat_min);
+		}
+	}
+	[t:button,n:button_chat_mid]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = mid;
+		draw_order = 128;
+		rect = 556,432,572,448;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zone_chat_header;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_chat_mid);
+		}
+	}
+	[t:button,n:button_chat_max]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = max;
+		draw_order = 128;
+		rect = 572,432,590,448;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zone_chat_header;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_chat_max);
+		}
+	}
+	[t:button,n:button_chat_leave]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = x;
+		draw_order = 128;
+		rect = 596,432,612,448;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zone_chat_header;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_chat_leave);
+		}
+	}
+
+	[t:dialog_box,n:backgound_chatusers]
+	{
+		alpha = 1.000000;
+		draw_order = 6;
+		rect = 500,453,502,487;
+		texture = b_gui_cmn_browntrim_lt;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:listbox,n:zonematch_chatusers_list]
+	{
+		alpha = 1.00000;
+		common_control = true;
+		common_template = ;
+		draw_order = 500;
+		font_type = b_gui_fnt_11p_chat; //b_gui_fnt_12p_copperplate-light;
+		rect = 503,453,613,487;
+		text_color = 0xffffffff;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+//		selection_color = 0xFF3C461E;
+		selection_color = 0xFF008190;
+		[messages]
+		{
+			oncreated = setelementheight(16);
+			oncontext = notify(show_chat_popup_menu);
+			onldoubleclick = notify(zonematch_chat_private_chat);
+		}
+	}
+
+	[t:chat_box,n:match_chatbox]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = ;
+		draw_order = 70;
+		font_color = 0xffffffff;
+		font_size = 12;
+		font_type = b_gui_fnt_11p_chat;
+		has_slider = true;
+		line_timeout = 0.000000;
+		max_string_size = 0;
+		rect = 27,453,482,487;
+		scroll_down = true;
+		text = ;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		delete_timeouts = false;
+		max_history = 100;
+		retain_scroll_position = true;
+	}
+	
+	[t:dialog_box,n:chat_text_border]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = browntrim;
+		draw_order = 2;
+		rect = 26,488,614,512;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zone_chat_text;
+	}
+	[t:window,n:chat_text_border_background]
+	{
+		alpha = 1.000000;
+		draw_order = 3;
+		rect = 28,490,612,510;
+		texture = b_gui_cmn_brownbar;
+		uvcoords = 0.000000,0.000000,36.750000,1.000000;
+		wrap_mode = tiled;
+		group = zone_chat_text;
+	}
+	[t:window,n:chat_text_prompt]
+	{
+		alpha = 1.000000;
+		draw_order = 4;
+		rect = 30,492,46,508;
+		texture = b_gui_cmn_return-arrow;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zone_chat_text;
+	}
+	[t:window,n:chat_text_chat_background_lt]
+	{
+		alpha = 1.000000;
+		draw_order = 3;
+		rect = 48,491,64,509;
+		texture = b_gui_cmn_recessed-tbox-lt;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zone_chat_text;
+	}
+	[t:window,n:chat_text_chat_background_mid]
+	{
+		alpha = 1.000000;
+		draw_order = 3;
+		rect = 64,491,534,509;
+		texture = b_gui_cmn_recessed-tbox-mid;
+		uvcoords = 0.000000,0.000000,29.375000,1.000000;
+		wrap_mode = tiled;
+		group = zone_chat_text;
+	}
+	[t:window,n:chat_text_chat_background_rt]
+	{
+		alpha = 1.000000;
+		draw_order = 3;
+		rect = 534,491,550,509;
+		texture = b_gui_cmn_recessed-tbox-rt;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zone_chat_text;
+	}
+	[t:edit_box,n:match_chat_edit_box]
+	{
+		alpha = 1.000000;
+		clear_select = false;
+		common_control = false;
+		common_template = ;
+		draw_order = 71;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_11p_chat;
+		max_string_size = 256;
+		permanent_focus = true;
+		rect = 50,492,518,508;
+		text = ;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zone_chat_text;
+		[prompt] { draw_order=30; texture=b_gui_fe_m_single_prompt; width=1; }
+		[messages]
+		{
+			oneditselect = notify(zonematch_chat_send);
+		}
+	}
+	[t:button,n:button_chat_send]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_inset;
+		draw_order = 128;
+		rect = 552,492,610,508;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zone_chat_text;
+		[t:text,n:button_chat_send_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 200;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "Send";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_chat_send);
+		}
+	}
+}

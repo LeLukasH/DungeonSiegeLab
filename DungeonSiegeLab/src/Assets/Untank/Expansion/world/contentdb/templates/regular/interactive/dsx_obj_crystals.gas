@@ -1,0 +1,212 @@
+[t:template,n:dsx_cav_crystals_01]//$$breakable crystals for a8_r3
+{
+	category_name = "rocks";
+	doc = "dsx_cav_crystal_brk_teal";
+	specializes = base_breakable_stone;
+	[aspect] 
+	{ 
+		material = ice;
+		model = m_i_cav_gems-02; 
+		[textures] {0 = b_c_edm_shard-01-static; }
+		does_block_path = true;
+		is_collidable	= TRUE;
+	}
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_shard_teal_01 = 1;
+			frag_glb_shard_teal_02 = 1;
+			frag_glb_shard_teal_03 = 1;
+			frag_glb_shard_teal_04 = 1;
+			frag_glb_shard_teal_05 = 1;
+		}
+	}
+}
+
+[t:template,n:dsx_cav_crystals_02]//$$breakable crystals for a8_r3
+{
+	category_name = "rocks";
+	doc = "dsx_cav_crystal_brk_purple";
+	specializes = base_breakable_stone;
+	[aspect] 
+	{ 
+		material = ice;
+		model = m_i_cav_gems-02; 
+		[textures] {0 = b_c_edm_shard-02-static; }
+		does_block_path = true;
+		is_collidable	= TRUE;
+	}
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_shard_purple_01 = 1;
+			frag_glb_shard_purple_02 = 1;
+			frag_glb_shard_purple_03 = 1;
+			frag_glb_shard_purple_04 = 1;
+			frag_glb_shard_purple_05 = 1;
+		}
+	}
+}
+
+[t:template,n:dsx_cav_crystals_03]//$$breakable crystals for a8_r3
+{
+	category_name = "rocks";
+	doc = "dsx_cav_crystal_brk_green";
+	specializes = base_breakable_stone;
+	[aspect] 
+	{ 
+		material = ice;
+		model = m_i_cav_gems-02; 
+		[textures] {0 = b_c_edm_shard-03-static; }
+		does_block_path = true;
+		is_collidable	= TRUE;
+	}
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_shard_green_01 = 1;
+			frag_glb_shard_green_02 = 1;
+			frag_glb_shard_green_03 = 1;
+			frag_glb_shard_green_04 = 1;
+			frag_glb_shard_green_05 = 1;
+		}
+	}
+}
+
+[t:template,n:dsx_cav_crystals_04]//$$breakable crystals for a8_r3
+{
+	category_name = "rocks";
+	doc = "dsx_cav_crystal_brk_blue";
+	specializes = base_breakable_stone;
+	[aspect] 
+	{ 
+		material = ice;
+		model = m_i_cav_gems-02; 
+		[textures] {0 = b_c_edm_shard-04-static; }
+		does_block_path = true;
+		is_collidable	= TRUE;
+	}
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_shard_blue_01 = 1;
+			frag_glb_shard_blue_02 = 1;
+			frag_glb_shard_blue_03 = 1;
+			frag_glb_shard_blue_04 = 1;
+			frag_glb_shard_blue_05 = 1;
+		}
+	}
+}
+// the following unbreakable crystals are used in the guardian quest.
+// killing a crystal shard results in its corresponding (by color) crystal breaking
+[t:template,n:dsx_cav_crystals_01_ub]//$$unbreakable crystals for a8_r3
+{
+	category_name = "rocks";
+	doc = "dsx_cav_crystal_unbrk_teal";
+	specializes = base_breakable_stone;
+	[aspect] 
+	{ 
+		is_invincible     = true;
+		material = ice;
+		model = m_i_cav_gems-02; 
+		[textures] {0 = b_c_edm_shard-01-static; }
+		does_block_path = true;
+		is_collidable	= TRUE;
+	}
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_shard_teal_01 = 1;
+			frag_glb_shard_teal_02 = 1;
+			frag_glb_shard_teal_03 = 1;
+			frag_glb_shard_teal_04 = 1;
+			frag_glb_shard_teal_05 = 1;
+		}
+	}
+}
+
+[t:template,n:dsx_cav_crystals_02_ub]//$$unbreakable crystals for a8_r3
+{
+	category_name = "rocks";
+	doc = "dsx_cav_crystal_unbrk_purple";
+	specializes = base_breakable_stone;
+	[aspect] 
+	{ 
+		is_invincible     = true;
+		material = ice;
+		model = m_i_cav_gems-02; 
+		[textures] {0 = b_c_edm_shard-02-static; }
+		does_block_path = true;
+		is_collidable	= TRUE;
+	}
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_shard_purple_01 = 1;
+			frag_glb_shard_purple_02 = 1;
+			frag_glb_shard_purple_03 = 1;
+			frag_glb_shard_purple_04 = 1;
+			frag_glb_shard_purple_05 = 1;
+		}
+	}
+}
+
+[t:template,n:dsx_cav_crystals_03_ub]//$$unbreakable crystals for a8_r3
+{
+	category_name = "rocks";
+	doc = "dsx_cav_crystal_unbrk_green";
+	specializes = base_breakable_stone;
+	[aspect] 
+	{ 
+		is_invincible     = true;
+		material = ice;
+		model = m_i_cav_gems-02; 
+		[textures] {0 = b_c_edm_shard-03-static; }
+		does_block_path = true;
+		is_collidable	= TRUE;
+	}
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_shard_green_01 = 1;
+			frag_glb_shard_green_02 = 1;
+			frag_glb_shard_green_03 = 1;
+			frag_glb_shard_green_04 = 1;
+			frag_glb_shard_green_05 = 1;
+		}
+	}
+}
+
+[t:template,n:dsx_cav_crystals_04_ub]//$$unbreakable crystals for a8_r3
+{
+	category_name = "rocks";
+	doc = "dsx_cav_crystal_unbrk_blue";
+	specializes = base_breakable_stone;
+	[aspect] 
+	{ 
+		is_invincible     = true;
+		material = ice;
+		model = m_i_cav_gems-02; 
+		[textures] {0 = b_c_edm_shard-04-static; }
+		does_block_path = true;
+		is_collidable	= TRUE;
+	}
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_shard_blue_01 = 1;
+			frag_glb_shard_blue_02 = 1;
+			frag_glb_shard_blue_03 = 1;
+			frag_glb_shard_blue_04 = 1;
+			frag_glb_shard_blue_05 = 1;
+		}
+	}
+}

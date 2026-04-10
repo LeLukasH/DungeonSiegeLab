@@ -1,0 +1,5 @@
+[t:tsd,n:b_w_misc_stars-dynamic]
+{
+	layer1texture1 = b_w_misc_stars-dynamic;
+  i texturedetail = 1;
+}

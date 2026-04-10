@@ -1,0 +1,237 @@
+[t:template,n:3W_dsx_ursae_demonic_base]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_ursae_demonic_base";
+	specializes = actor_evil;
+	[actor]
+		{
+			[skills]
+				{
+					strength		 = 42.4, 0;
+					intelligence = 11, 0;
+					dexterity		 = 19.4, 0;
+					melee				 = 78, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1065060;
+			life						 = 1687.8;
+			max_life				 = 1687.8;
+			mana						 = 307.5;
+			max_mana				 = 307.5;
+
+			model = m_c_edm_DEMURSAE_pos_1;
+		textures:0 = b_c_edm_demonic_ursae;
+			material = claw;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_bear_SED; }
+					[enemy_spotted]	{ priority = high; * = s_e_call_bear_SED; }
+					[hit_glance]
+						{
+							* = s_e_hit_bear_SED;
+							* = s_e_hit_bear2_SED;
+							priority = low;
+						}
+				}
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 428.5; 
+			damage_min = 276.8; 
+		}
+	[common]
+		{
+			screen_name = "Ursae"; //--
+			membership = monster; //--
+		}
+
+	[defend] { defense = 715.2; }
+
+	[body]
+		{
+			avg_move_velocity = 2.180000;
+			[bone_translator]
+				{
+					body_anterior = bip01_head;
+					body_mid = bip01_spine1;
+					body_posterior = bip01_spine2;
+					kill_bone = Bip01_Head;
+					shield_bone = bip01_l_hand;
+					weapon_bone = bip01_r_hand;
+				}
+			[chore_dictionary]
+				{
+					chore_prefix = a_c_na_br_fs;
+					[chore_attack]
+						{
+							chore_stances = 0;
+							skrit = select_attack;
+							[anim_files] { 00=at; }
+						}
+					[chore_default]
+						{
+							chore_stances = 0;
+							skrit = infinite_loop;
+							[anim_files] { 00=ds; }
+						}
+					[chore_die]
+						{
+							chore_stances = 0;
+							skrit = select_transition;
+							[anim_files] { 00=di; }
+						}
+					[chore_fidget]
+						{
+							chore_stances = 0;
+							skrit = select_fidget;
+							[anim_files] { 00=dff; }
+						}
+					[chore_walk]
+						{
+							chore_stances = 0;
+							skrit = select_walk;
+							[anim_files] { 00=wl; }
+						}
+				}
+		}
+	[guts_manager]
+		{
+			effect_name = melee_hit_2;
+		}
+	[mind]
+		{
+			jat_fidget				= world\ai\jobs\common\job_fidget.skrit;
+
+			inner_comfort_zone_range = 3;
+			melee_engage_range = 6;
+			outer_comfort_zone_range = 4;
+			personal_space_range = 3.0;
+			sight_range = 10;
+		}
+	[physics]
+		{
+			break_effect = blood_mist;
+			break_sound = s_e_meat_explosion;
+			[break_particulate]
+				{
+					frag_glb_generic_01 = 2;
+					frag_glb_generic_02 = 2;
+					frag_glb_generic_03 = 2;
+					frag_glb_generic_04 = 2;
+					frag_glb_generic_05 = 2;
+					frag_glb_generic_06 = 2;
+					frag_glb_generic_07 = 2;
+					frag_glb_generic_08 = 1;
+					frag_glb_generic_09 = 1;
+					frag_glb_generic_10 = 1;
+					frag_glb_generic_11 = 1;
+					frag_glb_generic_12 = 1;
+				}
+		}
+
+}
+
+[t:template,n:3W_dsx_ursae_demonic]
+{
+// Balanced for level 12, hard melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_ursae_demonic";
+	specializes = 3W_dsx_ursae_demonic_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 42.4, 0;
+			intelligence	= 12.5, 0;
+			dexterity		= 21.8, 0;
+			melee			= 79, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 1122247;
+		life		 = 2412.2;
+		max_life	 = 2412.2;
+		mana		 = 307.5;
+		max_mana	 = 307.5;
+
+		model = m_c_edm_DEMURSAE_pos_1;
+		textures:0 = b_c_edm_demonic_ursae;
+		material = claw;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_bear_SED; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_bear_SED; }
+			[hit_glance]
+			{
+				* = s_e_hit_bear_SED;
+				* = s_e_hit_bear2_SED;
+				priority = low;
+			}
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 556.2;
+		damage_min = 399.8; 
+	}
+	[common]
+	{
+		screen_name = "Ursae"; //--
+		membership = monster, undead; //--
+	}
+
+	[defend] { defense = 772.2; }
+
+}
+
+[t:template,n:3W_dsx_ursae_demonic_summon]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_summon_ursae_demonic";
+	specializes = 3W_dsx_ursae_demonic_base;
+ aspect:experience_value = 0;
+	[inventory]
+		{
+			selected_active_location = il_active_primary_spell;
+			[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 12, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 123863;
+				max = 246900;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/163-215;
+				il_main = #armor/62-485;
+				il_main = #*/163-215;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/182-254;
+				il_main = #armor/-rare(1)/294-745;
+				il_main = #*/-rare(1)/182-254;
+			}	
+		}
+	}
+		}
+}

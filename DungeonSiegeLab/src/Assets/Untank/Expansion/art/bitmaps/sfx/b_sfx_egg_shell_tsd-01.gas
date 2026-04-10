@@ -1,0 +1,37 @@
+[t:tsd,n:b_sfx_egg_shell_tsd-01]
+{
+	hasalpha = true;
+
+	layer1alphaarg1 = texture;
+	layer1alphaarg2 = diffuse;
+	layer1alphaop = modulate;
+	layer1colorarg1 = texture;
+	layer1colorarg2 = diffuse;
+	layer1colorop = modulate;
+
+	layer1numframes = 1;
+
+	layer1secondsperframe = 0.0;
+
+	layer1texture1 = b_sfx_egg_shell;
+
+	Layer1RotationPerSecond = -4.0;
+
+	layer1RotationUCenter	= 0.5;
+	layer1RotationVCenter	= 0.5;
+
+
+	layer1ushiftpersecond = 0.0;
+
+	layer1uwrap = false;
+
+	layer1vshiftpersecond = 0.0;
+
+	layer1vwrap = false;
+
+	numlayers = 1;
+
+	texturedetail = 1;
+
+	timesyncanimation = true;
+}

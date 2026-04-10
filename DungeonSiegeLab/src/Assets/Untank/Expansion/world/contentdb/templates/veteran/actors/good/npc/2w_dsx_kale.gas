@@ -1,0 +1,357 @@
+[t:template,n:2W_dsx_kale]
+{
+	category_name = "2W_shopkeep";
+	doc = "2W_DSX Kale";
+	specializes = base_npc_fb;
+	[actor]
+	{
+		portrait_icon = b_gui_ig_i_ic_c_ranwor;
+	}
+	[aspect]
+	{
+		draw_selection_indicator = TRUE;
+		use_range = 1.0;
+		is_ghost_usable = TRUE;
+		[textures]
+		{
+			0 = b_c_gan_utraean_skin_01;
+			1 = b_c_pos_a1_utraean-01;
+		}
+	}
+	[common]
+	{
+		screen_name = "Kale";
+	}
+	[conversation]
+	{
+	}
+	[inventory]
+	{
+		[store_pcontent]
+		{
+			full_ratio = 0;
+// NOTE: Use caution when increasing number of items in the store - max items must
+//		not exceed 255		
+			[armor]
+			{
+				// BODY ARMOR
+				[all*]
+				{
+					il_main = #body,m/99-156;
+					max = 3;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #body,r/99-156;
+					max = 3;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #body,f/192-210;
+					max = 4;
+					min = 4;
+				}
+				[all*]
+				{
+					il_main = #body/36-63;
+					max = 5;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #body/69-150;
+					max = 15;
+					min = 10;
+				}
+				[all*]
+				{
+					il_main = #body/156-198;
+					max = 5;
+					min = 2;
+				}
+				
+				
+				// HELMETS
+				[all*]
+				{
+					il_main = #helm,m/;
+					max = 3;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #helm,r/;
+					max = 3;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #helm/36-63;
+					max = 4;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #helm/69-150;
+					max = 10;
+					min = 6;
+				}
+				[all*]
+				{
+					il_main = #helm/156-198;
+					max = 8;
+					min = 6;
+				}
+				
+				// GLOVES
+				[all*]
+				{
+					il_main = #gloves,m/;
+					max = 3;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #gloves,r/;
+					max = 3;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #gloves/36-96;
+					max = 4;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #gloves/102-150;
+					max = 10;
+					min = 6;
+				}
+				[all*]
+				{
+					il_main = #gloves/156-198;
+					max = 6;
+					min = 3;
+				}
+				
+				// BOOTS			
+				[all*]
+				{
+					il_main = #boots,m/;
+					max = 3;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #boots,r/;
+					max = 3;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #boots/36-96;
+					max = 4;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #boots/102-150;
+					max = 8;
+					min = 6;
+				}
+				[all*]
+				{
+					il_main = #boots/156-198;
+					max = 6;
+					min = 4;
+				}	
+			}
+			[shields]
+			{
+				[all*]
+				{
+					il_main = #shield,m/;
+					max = 2;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #shield,r/;
+					max = 2;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #shield/36-63;
+					max = 6;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #shield/69-150;
+					max = 10;
+					min = 6;
+				}
+				[all*]
+				{
+					il_main = #shield/156-198;
+					max = 4;
+					min = 2;
+				}				
+			}
+			[weapons]
+			{
+				[all*]
+				{
+					il_main = #melee/18-29;
+					max = 4;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #melee/32-73;
+					max = 8;
+					min = 6;
+				}
+				[all*]
+				{
+					il_main = #melee/76-97;
+					max = 8;
+					min = 4;
+				}
+				[all*]
+				{
+					il_main = #melee/106-141;
+					max = 8;
+					min = 4;
+				}
+				[all*]
+				{
+					il_main = #ranged/18-29;
+					max = 4;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #ranged/32-73;
+					max = 8;
+					min = 6;
+				}
+				[all*]
+				{
+					il_main = #ranged/76-97;
+					max = 8;
+					min = 4;
+				}
+				[all*]
+				{
+					il_main = #ranged/106-141;
+					max = 8;
+					min = 4;
+				}					   
+			}
+			[magic]
+			{
+				[all*]
+				{
+					il_main = #spell/0-12;
+					max = 12;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #spell/15-21;
+					max = 12;
+					min = 8;
+				}
+				[all*]
+				{
+					il_main = #spell/21-27;
+					max = 15;
+					min = 10;
+				}
+				[all*]
+				{
+					il_main = #spell/30-36;
+					max = 10;
+					min = 6;
+				}
+			}
+			[misc]
+			{
+				[all*]
+				{
+					il_main = DSX_backpack_empty;
+					max = 2;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #spellbook/;
+					max = 4;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #spellbook/;
+					max = 6;
+					min = 4;
+				}
+				[all*]
+				{
+					il_main = #spellbook/;
+					max = 4;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = book_glb_magic_01;
+					max = 2;
+					min = 2;
+				}
+				[all*]
+				{
+					il_main = #ring/73-117;
+					max = 3;
+					min = 1;
+				}
+				[all*]
+				{
+					il_main = #amulet/73-117;
+					max = 3;
+					min = 1;
+				}
+			}
+		}
+	}
+	[respawn_shrine]
+	{
+	}
+	[store]
+	{
+		item_markup = 2;
+		[item_restock]
+		{
+			potion_health_medium = 7;
+			potion_mana_medium = 7;
+
+			potion_health_large = 8;
+			potion_mana_large = 8;
+			potion_rejuvenation_medium = 4;
+			potion_rejuvenation_large = 4;
+			
+			scroll_resurrect = 2;
+			spell_resurrect = 2;
+			spell_revive = 1;
+			spell_healing_hands = 1;
+			spell_healing_wind = 1;
+		}
+	}
+	[mind]
+	{
+		jat_talk = world\ai\jobs\common\job_talk.skrit;
+	}
+}

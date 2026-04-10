@@ -1,0 +1,100 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_transmute.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property string	effect_script$	= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string script_params$	= ""   	doc = "Parameters to send to SiegeFx script";
+
+owner = GoSkritComponent;
+
+Goid caster$;
+Goid target$;
+Goid gold$;
+			
+trigger OnGoPreload$
+{
+	GoDb.PreloadCloneSource( owner.Go, "gold" );
+}
+
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) 
+		{
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			if( !target$.IsValid || !caster$.IsValid )
+			{
+				SetState Finished$;
+				return;
+			}
+			
+			//bail if this is an item that you can't sell. wouldn't want to convert a quest item.
+			if( target$.Go.HasGui() )
+			{
+				if( !target$.Go.Gui.CanSell )
+				{
+					SetState Finished$;
+					return;
+				}
+			}
+			
+			if( !target$.Go.IsInsideInventory() && target$.Go.Aspect.IsVisible )
+			{
+				target$.Go.Aspect.SSetIsVisible( false );
+				
+				float level$ = Math.MinFloat( caster$.Go.Actor.GetSkillLevel( owner.Go.Magic.SkillClass ), owner.Go.Magic.MaxCastLevel );
+				
+				float efficiency$ = (0.346-((1.0/(( level$ /10.0)+6.0))*1.5));
+				
+				GoCloneReq cloneReq$ = MakeGoCloneReq( "gold" );
+				cloneReq$.StartingPos = target$.go.placement.position;
+				cloneReq$.SnapToTerrain = true;
+				gold$ = GoDb.SCloneGo( cloneReq$ );
+				int value$ = Math.ToInt( (target$.Go.Aspect.GetGoldValue() * efficiency$) + 1);
+				GoDb.SMarkForDeletion( target$ );
+				gold$.Go.Aspect.SetGoldValue(value$);
+				This.CreateTimer(1,0);
+			}
+			else
+			{
+				setstate Finished$;
+			}
+		}
+	}
+	transition -> Finish$ : OnTimer( 1 ) =
+	{
+		if ( gold$.IsValidMp && caster$.IsValidMp )
+		{
+			// Start the visual
+			SiegeFx.SRunScript( effect_script$, gold$, caster$, script_params$, owner.Goid, WE_REQ_CAST );
+		}
+	}
+}
+
+state Finish$
+{
+	trigger OnGoHandleMessage$( WE_SPELL_SYNC_END )
+	{
+		SetState Finished$;
+	}
+}
+
+state Finished$
+{
+	event OnEnterState$
+	{
+		SiegeFx.ClearVariables( owner.goid );
+		
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

@@ -1,0 +1,1081 @@
+[staging_area_select_character]
+{
+	interface = true;
+
+	[t:text,n:select_character_header]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = left;
+		rect = 44,76,200,92;
+		text = "Select Character";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:characters_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 1;
+		rect = 44,100,756,300;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:characters_header_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 0;
+		rect = 48,104,752,128;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+	}
+
+	[t:text,n:character_name_header]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = left;
+		rect = 50,108,240,124;
+		text = "Character";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character_class_header]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = left;
+		rect = 245,108,370,124;
+		text = "Class";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character_skills_header]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = left;
+		rect = 375,108,600,124;
+		text = "Skills";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+
+	[t:slider,n:scroll_characters]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = ;
+		draw_order = 80;
+		rect = 736,130,752,296;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		min_value = 0;
+		max_value = 100;
+		step_value = 10;
+		dynamic_button = true;
+		has_scroll_buttons = true;
+		[messages] { onchange=notify(slider_scroll_characters); }
+		[t:window,n:scroll_wheel_listen]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 2;
+			rect = 44,100,756,300;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[messages]
+			{
+				onwheelup = notify(scroll_characters_up);
+				onwheeldown = notify(scroll_characters_down);
+			}
+		}
+	}
+
+
+	[t:window,n:character1_sel]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 3;
+		rect = 50,131,730,170;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_border = true;
+		border_color = 0xFF00FF00;
+	}
+	[t:window,n:character1_bg]
+	{
+		alpha = 0.300000;
+		common_control = false;
+		draw_order = 2;
+		rect = 50,134,730,166;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tag = 0;
+		[messages]
+		{
+			onlbuttondown = notify(on_select_character);
+			onldoubleclick = notify(staging_select_character_ok);
+		}
+	}
+	[t:window,n:character1_portrait]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 59,134,86,166;
+		texture = none;
+		uvcoords = 0.0, 0.28125, 0.609375, 1.0;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character1_name]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 90,142,240,158;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:text,n:character1_class]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 250,142,370,158;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:text,n:character1_skills]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 380,142,530,158;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:window,n:character1_icon_melee]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 530,142,546,158;
+		texture = b_gui_ig_mnu_combat;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character1_melee]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 550,142,580,158;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:character1_icon_ranged]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 580,142,596,158;
+		texture = b_gui_ig_mnu_ranged;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character1_ranged]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 600,142,630,158;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:character1_icon_nmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 630,142,646,158;
+		texture = b_gui_ig_mnu_nature-magic;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character1_nmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 650,142,680,158;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:character1_icon_cmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 680,142,696,158;
+		texture = b_gui_ig_mnu_combat-magic;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character1_cmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 700,142,730,158;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+
+	[t:window,n:character2_sel]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 3;
+		rect = 50,171,730,210;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_border = true;
+		border_color = 0xFF00FF00;
+	}
+	[t:window,n:character2_bg]
+	{
+		alpha = 0.200000;
+		common_control = false;
+		draw_order = 2;
+		rect = 50,174,730,206;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tag = 1;
+		[messages]
+		{
+			onlbuttondown = notify(on_select_character);
+			onldoubleclick = notify(staging_select_character_ok);
+		}
+	}
+	[t:window,n:character2_portrait]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 59,174,86,206;
+		texture = none;
+		uvcoords = 0.0, 0.28125, 0.609375, 1.0;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character2_name]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 90,182,240,198;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:text,n:character2_class]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 250,182,370,198;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:text,n:character2_skills]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 380,182,530,198;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:window,n:character2_icon_melee]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 530,182,546,198;
+		texture = b_gui_ig_mnu_combat;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character2_melee]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 550,182,580,198;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:character2_icon_ranged]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 580,182,596,198;
+		texture = b_gui_ig_mnu_ranged;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character2_ranged]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 600,182,630,198;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:character2_icon_nmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 630,182,646,198;
+		texture = b_gui_ig_mnu_nature-magic;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character2_nmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 650,182,680,198;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:character2_icon_cmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 680,182,696,198;
+		texture = b_gui_ig_mnu_combat-magic;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character2_cmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 700,182,730,198;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	
+	
+	[t:window,n:character3_sel]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 3;
+		rect = 50,211,730,250;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_border = true;
+		border_color = 0xFF00FF00;
+	}
+	[t:window,n:character3_bg]
+	{
+		alpha = 0.300000;
+		common_control = false;
+		draw_order = 2;
+		rect = 50,214,730,246;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tag = 2;
+		[messages]
+		{
+			onlbuttondown = notify(on_select_character);
+			onldoubleclick = notify(staging_select_character_ok);
+		}
+	}
+	[t:window,n:character3_portrait]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 59,214,86,246;
+		texture = none;
+		uvcoords = 0.0, 0.28125, 0.609375, 1.0;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character3_name]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 90,222,240,238;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:text,n:character3_class]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 250,222,370,238;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:text,n:character3_skills]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 380,222,530,238;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:window,n:character3_icon_melee]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 530,222,546,238;
+		texture = b_gui_ig_mnu_combat;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character3_melee]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 550,222,580,238;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:character3_icon_ranged]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 580,222,596,238;
+		texture = b_gui_ig_mnu_ranged;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character3_ranged]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 600,222,630,238;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:character3_icon_nmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 630,222,646,238;
+		texture = b_gui_ig_mnu_nature-magic;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character3_nmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 650,222,680,238;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:character3_icon_cmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 680,222,696,238;
+		texture = b_gui_ig_mnu_combat-magic;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character3_cmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 700,222,730,238;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+
+
+	[t:window,n:character4_sel]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 3;
+		rect = 50,251,730,290;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_border = true;
+		border_color = 0xFF00FF00;
+	}
+	[t:window,n:character4_bg]
+	{
+		alpha = 0.200000;
+		common_control = false;
+		draw_order = 2;
+		rect = 50,254,730,286;
+		texture = b_gui_fe_m_mp_staging_player_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		tag = 3;
+		[messages]
+		{
+			onlbuttondown = notify(on_select_character);
+			onldoubleclick = notify(staging_select_character_ok);
+		}
+	}
+	[t:window,n:character4_portrait]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 59,254,86,286;
+		texture = none;
+		uvcoords = 0.0, 0.28125, 0.609375, 1.0;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character4_name]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 90,262,240,278;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:text,n:character4_class]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 250,262,370,278;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:text,n:character4_skills]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 380,262,530,278;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:window,n:character4_icon_melee]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 530,262,546,278;
+		texture = b_gui_ig_mnu_combat;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character4_melee]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 550,262,580,278;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:character4_icon_ranged]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 580,262,596,278;
+		texture = b_gui_ig_mnu_ranged;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character4_ranged]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 600,262,630,278;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:character4_icon_nmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 630,262,646,278;
+		texture = b_gui_ig_mnu_nature-magic;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character4_nmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 650,262,680,278;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:character4_icon_cmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 5;
+		rect = 680,262,696,278;
+		texture = b_gui_ig_mnu_combat-magic;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:character4_cmagic]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 700,262,730,278;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+
+	
+	[t:button,n:staging_character_create]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;		
+		draw_order = 18;
+		rect = 346,76,546,92;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x99555555;
+		[messages] { onbuttonpress=playsound(s_e_frontend_tiny_button) & notify(staging_create_character); }
+		[t:text,n:staging_character_create_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 44,200,300,216;
+			text = "Create New Character...";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:staging_character_import]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;		
+		draw_order = 18;
+		rect = 556,76,756,92;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { onbuttonpress=playsound(s_e_frontend_tiny_button) & notify(staging_import_character); }
+		[t:text,n:staging_character_import_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 44,200,300,216;
+			text = "Import Character...";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:staging_character_delete]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;		
+		draw_order = 18;
+		rect = 580,108,748,124;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { onbuttonpress=playsound(s_e_frontend_tiny_button) & notify(staging_delete_character); }
+		[t:text,n:staging_character_delete_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 44,200,300,216;
+			text = "Delete Character";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+
+	[t:button,n:staging_character_ok]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;		
+		draw_order = 18;
+		rect = 252,308,392,324;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { onbuttonpress=playsound(s_e_frontend_tiny_button) & notify(staging_select_character_ok); }
+		[t:text,n:ok_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "Accept";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:staging_character_cancel]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;		
+		draw_order = 18;
+		rect = 408,308,548,324;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { onbuttonpress=playsound(s_e_frontend_tiny_button) & notify(staging_select_character_cancel); }
+		[t:text,n:cancel_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "Cancel";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+
+}

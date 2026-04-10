@@ -1,0 +1,67 @@
+// exactly the same as the farmboy, I just need this for multiplayer
+[t:template,n:utraean_boy]
+{
+	doc = "Utraean boy";
+	specializes = base_farmboy;
+	[actor]
+	{
+		screen_class = "Novice";
+	}
+	[aspect]
+	{
+		megamap_override = true; // RAID#7185: MP: Teammates in MP should be non-Line of Sight on map.  -MM 02.03.2002
+	}
+	[inventory]
+	{
+		[equipment]
+		{
+			es_weapon_hand=dg_g_d_1h_fun;
+			es_feet = bo_bo_le_light;
+			es_spellbook = book_glb_magic_01;
+		}
+        	[pcontent]
+        	{
+			[gold*]
+			{
+				chance = 1.0;
+				max = 80;
+				min = 80;
+			}
+        	}
+	}
+	[water_effects] {}
+}
+
+// exactly the same as the farmgirl, I just need this for multiplayer
+[t:template,n:utraean_girl]
+{
+	doc = "Utraean girl";
+	specializes = base_farmgirl;
+	[actor]
+	{
+		screen_class = "Novice";
+	}
+	[aspect]
+	{
+		megamap_override = true; // RAID#7185: MP: Teammates in MP should be non-Line of Sight on map.  -MM 02.03.2002
+	}
+	[inventory]
+	{
+		[equipment]
+		{
+			es_weapon_hand=dg_g_d_1h_fun;
+			es_feet = bo_bo_le_light;
+			es_spellbook = book_glb_magic_01;
+		}
+        	[pcontent]
+        	{
+			[gold*]
+			{
+				chance = 1.0;
+				max = 80;
+				min = 80;
+			}
+        	}
+	}
+	[water_effects] {}
+}

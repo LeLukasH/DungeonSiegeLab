@@ -1,0 +1,273 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_charm.skrit
+// Author(s):  Rick Saenz, Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property string effect_script$		= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string effect_params$		= ""   	doc = "Parameters to send to SiegeFx script";
+property string description$		= ""	doc = "Description of enchantment being applied";
+property string caster_description$	= ""	doc = "Description of enchantment being applied to the caster";
+property string immunity$					doc = "If the target contains this membership then it is immune to this spell.";
+
+
+owner = GoSkritComponent;
+Goid target$;
+Goid caster$;
+float spell_duration$;
+SFxSID	active_effect$ = 0;
+
+eActorAlignment OriginalAlignment$;
+PlayerId		OriginalPlayer$;
+
+trigger OnGoHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+{
+	if( WorldState.CurrentState == WS_SP_NIS )
+	{
+		if( target$.IsValid )
+		{
+			GoDb.SMarkGoAndChildrenForDeletion( target$ );
+		}
+		SetState RestoreState$;
+	}
+}
+
+event OnGoHandleCcMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( ( e$ == WE_KILLED ) && ( target$ == msg$.GetSendTo() ) ) 
+	{
+		SetState RestoreState$;
+	}
+}
+
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) {
+
+			////////////////////
+			// Normal Go
+			
+			caster$ = msg$.GetSendFrom();
+			
+			if ( Owner.go.Parent != NULL )
+			{
+				// create Omni version of the spell.
+				GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.go.Parent.Goid, owner.goid );
+				cloneReq$.Omni = true;
+				Goid new_spell$ = GoDb.SCloneGo( cloneReq$ );
+				
+				// send Omni version an Activate to get it started.
+				PostWorldMessage( WE_REQ_ACTIVATE, caster$, new_spell$, msg$.GetData1(), 0 );
+			}
+			
+			// delete normal version of the spell.
+			SetState Finished$;
+		
+		} else if ( e$ == WE_REQ_ACTIVATE ) {
+		
+			////////////////////
+			// Omni Go
+			
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+			
+			if( !target$.IsValid || !caster$.Isvalid )
+			{
+				SetState RestoreState$;
+				return;
+			}
+			
+			spell_duration$ = owner.Go.Magic.EvaluateEffectDuration(caster$.Go, target$.Go);
+
+			if(caster$.IsValid() && target$.IsValid() )
+			{                                         
+				// Filter out bogus targets
+				if( !target$.go.hasactor || !caster$.go.hasactor ) {
+					report.genericf( "%s being cast on invalid target!!\n", description$ );
+					SetState( Abort$ );
+					return;
+				}
+				
+				// Check to see if the enchantment has already been cast on this go
+				if( target$.Go.Actor.HasGenericState( owner.Go.Magic.StateName ) || caster$.Go.Actor.HasGenericState( owner.Go.Magic.CasterStateName ) )
+				{
+					SetState( Abort$ );
+					return;
+				}
+				
+				if( !StringTool.IsEmpty( immunity$ ) )
+				{
+					if( target$.Go.Common.Membership.Contains( immunity$ ) )
+					{
+						SetState( Abort$ );
+						return;
+					}
+				}
+				
+				if( target$.Go.Player.Controller != PC_COMPUTER  )
+				{
+					SetState( Abort$ );
+					return;
+				}
+				
+				target$.go.Mind.TempGopColl1.clear;
+				target$.go.Mind.GetEngagedMeEnemies( target$.go.Mind.TempGopColl1 );
+				
+				int j$ = 0;
+				int jend$ = target$.go.Mind.TempGopColl1.Size();
+				
+				Go Enemy$;
+				
+				while( j$ < jend$ )
+				{
+					Enemy$ = target$.go.Mind.TempGopColl1.Get( j$ );
+					if( Enemy$ != NULL )
+					{
+						Enemy$.Mind.SDoJob( MakeJobReq( JAT_STOP, JQ_ACTION, QP_CLEAR, AO_COMMAND ));
+						Enemy$.Mind.ResetSensors();
+					}
+					j$ += 1;   
+				}
+				
+				// Get caster alignment
+				eActorAlignment caster_alignment$ = caster$.go.actor.getalignment;
+
+				// Save the old alignment so we can restore it later when the actor is un-charmed
+				OriginalAlignment$ = target$.go.actor.alignment;
+
+				if( caster_alignment$ != OriginalAlignment$ ) {
+					// Set the alignment to the casters alignment
+					target$.go.actor.ssetalignment( caster$.go.actor.getalignment );
+				}
+				
+				// set the right playerID so the creature will attack in a multiplayer competative game.
+				OriginalPlayer$ = target$.Go.PlayerID;
+				target$.Go.SSetPlayer( caster$.Go.PlayerID );
+
+				// Start the visual
+				if(effect_script$ != "")
+				{
+					active_effect$ = SiegeFx.SRunMpScript( effect_script$, target$, caster$, effect_params$, owner.Goid, e$ );
+				}
+				// Give the charmed actor new orders
+				target$.Go.Mind.SDoJob( MakeJobReq( JAT_STOP, JQ_ACTION, QP_CLEAR, AO_REFLEX ));
+				
+				if( target$.Go.Mind.UnderstandsJob( JAT_GUARD ) )
+				{
+					target$.Go.Mind.SDoJob( MakeJobReq( JAT_GUARD, JQ_ACTION, QP_CLEAR, AO_REFLEX, caster$ ) );
+				}
+				
+				target$.Go.Mind.ResetSensors();
+	
+				// Add the effected state so this can only happen once
+				target$.Go.Actor.SAddGenericState( owner.Go.Magic.StateName, description$, spell_duration$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+				caster$.Go.Actor.SAddGenericState( owner.Go.Magic.CasterStateName, caster_description$, spell_duration$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+				
+				// we want to be able to see the dude's health
+				target$.Go.Actor.SSetCanShowHealth( true );
+				
+				// Setup where experience will go from who this actor damages
+				target$.Go.aspect.SetExperienceBenefactor( caster$ );
+				target$.Go.aspect.SetExperienceBenefactorSkill( owner.go.magic.skillclass );
+				
+				this.CreateTimer( 1, spell_duration$ );
+				
+				// Make it have the same membership as the caster
+				target$.Go.Common.SCopyMembership( caster$ );
+
+				// watch out pet, so if he dies we can control a new pet.
+				GoDb.StartWatching( owner.Goid, target$);
+			}
+			else
+			{
+				SetState Finished$;
+			}
+		}
+	}
+	transition -> RestoreState$ :  OnTimer( 1 );
+}
+
+
+
+state RestoreState$
+{
+	////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+		if( caster$.IsValid )
+		{
+			caster$.Go.Actor.SRemoveGenericState( owner.Go.Magic.CasterStateName );
+		}
+		
+		// If the go is still alive then restore his state
+		if( target$.IsValid )
+		{
+			// Attempt to restore the game object based on his alignment
+			target$.go.actor.ssetalignment( OriginalAlignment$ );
+
+			// Restore original player ID.
+			target$.Go.SSetPlayer( OriginalPlayer$ );
+
+			// Now tell the actor to defend himself
+			
+			target$.Go.Mind.SDoJob( MakeJobReq( JAT_STOP, JQ_ACTION, QP_CLEAR, AO_REFLEX ));
+			target$.Go.Mind.ResetSensors();
+		
+			target$.Go.Aspect.ClearExperienceBenefactor();
+			
+			// remove the state so this can be affected again
+			target$.Go.Actor.SRemoveGenericState( owner.Go.Magic.StateName );	
+			
+			// we dont want to be able to see the dude's health
+			target$.Go.Actor.SSetCanShowHealth( false );
+			
+			GoDb.StopWatching( owner.Goid, target$);
+
+			// Restore the targets original membership before this spell was cast on him
+			target$.Go.Common.SRestoreLastMembership();
+					
+			if (active_effect$ != 0)
+			{
+				SiegeFx.SStopScript( active_effect$ );
+			}
+		}
+		SetState( Finished$ );
+	}
+}
+
+
+state Abort$
+{
+	////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+		// Refund the players mana
+		Rules.ChangeMana( caster$, owner.go.getmagic.manacost );
+
+		SetState( Finished$ );
+	}
+}
+
+
+state Finished$
+{
+	////////////////////
+	// Both Gos
+	
+	event OnEnterState$
+	{
+		// Delete this skrit
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

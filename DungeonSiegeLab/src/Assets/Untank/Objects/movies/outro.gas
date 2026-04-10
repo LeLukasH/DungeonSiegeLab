@@ -1,0 +1,7 @@
+[outro]
+{
+	[movie*]
+	{
+		movie_file = movies\outro.bik;
+	}
+}

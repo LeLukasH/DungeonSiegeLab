@@ -1,0 +1,138 @@
+[mini_map]
+{
+	interface = true;
+	intended_resolution_width = 1024;
+	intended_resolution_height = 768;
+	[t:button,n:button_mini_map_exit]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+		consumable = true;
+	  i draw_order = 9000;
+		is_right_anchor = true;
+		rect = 624,3,640,19;
+		right_anchor = 16;
+		rollover_help = map_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			onbuttonpress = notify(exit_mini_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:window,n:map_border_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		group = map_border;
+		normalize_resize = true;
+		rect = -42,0,213,768;
+		texture = b_gui_ig_mnu_mmap_l;
+		uvcoords = 0.000000,-1.074219,1.000000,1.917969;
+		wrap_mode = tiled;
+		background_color = 0x00999999;
+	}
+	[t:window,n:map_border_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2;
+		group = map_border;
+		normalize_resize = true;
+		rect = 811,0,1067,768;
+		texture = b_gui_ig_mnu_mmap_r;
+		uvcoords = 0.000000,-1.148438,1.000000,1.843750;
+		wrap_mode = tiled;
+		background_color = 0x00999999;
+	}
+	[t:window,n:map_border_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 3;
+		group = map_border;
+		normalize_resize = true;
+		rect = 202,-42,458,85;
+		texture = b_gui_ig_mnu_mmap_top;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		background_color = 0x00999999;
+	}
+	[t:window,n:map_border_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 10;
+		group = map_border;
+		normalize_resize = true;
+		rect = 563,-42,819,85;
+		texture = b_gui_ig_mnu_mmap_top;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		background_color = 0x00999999;
+	}
+	[t:window,n:map_border_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 11;
+		group = map_border;
+		normalize_resize = true;
+		rect = 432,-42,589,85;
+		texture = b_gui_ig_mnu_mmap_top;
+		uvcoords = 0.070313,0.000000,0.683594,1.000000;
+		wrap_mode = clamp;
+		background_color = 0x00999999;
+	}
+	[t:window,n:map_border_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 5;
+		group = map_border;
+		normalize_resize = true;
+		rect = 203,683,459,811;
+		texture = b_gui_ig_mnu_mmap_bot;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		background_color = 0x00999999;
+	}
+	[t:window,n:map_border_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 30;
+		group = map_border;
+		normalize_resize = true;
+		rect = 440,683,656,811;
+		texture = b_gui_ig_mnu_mmap_bot;
+		uvcoords = 0.089844,0.000000,0.933594,1.000000;
+		wrap_mode = clamp;
+		background_color = 0x00999999;
+	}
+	[t:window,n:map_border_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 15;
+		group = map_border;
+		normalize_resize = true;
+		rect = 565,683,821,811;
+		texture = b_gui_ig_mnu_mmap_bot;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		background_color = 0x00999999;
+	}
+}

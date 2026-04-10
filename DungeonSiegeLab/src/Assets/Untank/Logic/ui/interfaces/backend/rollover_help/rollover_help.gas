@@ -1,0 +1,37 @@
+
+[rollover_help] {
+
+	type = interface;
+	intended_resolution_height = 480;
+	intended_resolution_width = 640;
+
+	[t:text_box,n:gui_rollover_textbox]
+	{
+		alpha = 0.800000;
+		common_control = false;
+		common_template = ;
+		draw_order = 2;
+		fixed_location = false;
+		has_slider = false;
+		justify = center;
+		rect = 216,148,398,275;
+		scroll_rate = 0.000000;
+		texture = b_gui_cmn_textbox_bg;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = tiled;
+		font_size = 15;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		border_color = 0xffffffff;
+		has_border = true;
+		border_padding = 5;
+		center_height = true;
+		max_width = 350;
+
+		[messages]
+		{
+			oncreated = SetVisible(false);
+		}
+	}
+}
+

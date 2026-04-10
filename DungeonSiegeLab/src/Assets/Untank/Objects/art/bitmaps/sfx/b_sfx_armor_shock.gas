@@ -1,0 +1,5 @@
+[t:tsd,n:b_sfx_armor_shock]
+{
+	layer1texture1 = b_sfx_armor_shock;
+  i texturedetail = 1;
+}

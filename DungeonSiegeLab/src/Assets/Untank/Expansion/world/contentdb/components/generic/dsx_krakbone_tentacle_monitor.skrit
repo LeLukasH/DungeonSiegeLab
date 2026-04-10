@@ -1,0 +1,76 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	dsx_krakbone_tentacle_monitor.skrit
+
+	Author(s)	: 	Tim Jones
+
+	(C)opyright 2003 Mad Doc Software
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+property float life_limit$ = 12					doc = "Number of seconds to allow this guy to live.";
+
+owner = GoSkritComponent;
+
+// globals
+Goid sender$;
+
+startup state Initial$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		// wait until we get an activate event
+		if( e$ == WE_REQ_ACTIVATE )
+		{
+			// start watchign the guy who sent it to us
+			sender$ = msg$.GetSendFrom();
+			GoDb.StartWatching( owner.Goid, sender$ );
+
+			// wait until our time expires
+			this.CreateTimer( 1, life_limit$ );
+		}
+		else if( e$ == WE_KILLED )
+		{
+			SetState Done$;
+		}
+	}
+
+	event OnGoHandleCCMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == WE_KILLED )
+		{
+			SetState Done$;
+		}
+	}
+
+	trigger OnTimer$( 1 )
+	{
+		SetState Done$;
+	}
+}
+
+// we're all done 
+state Done$
+{
+	event OnEnterState$
+	{
+		// stop watching the sender and kill ourselves
+		GoDb.StopWatching( owner.Goid, sender$ );
+
+		// if we're not dead, kill us
+		if( IsAlive( owner.Go.Aspect.GetLifeState() ) )
+		{
+			float health$;
+
+			// get the character's health
+			health$ = owner.Go.Aspect.GetCurrentLife();
+
+			// do damage to it
+			Rules.DamageGo( owner.Go.Goid, owner.Go.Goid, NULL, health$, false, false );
+		}
+	}
+}

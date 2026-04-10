@@ -1,0 +1,131 @@
+[t:template,n:3W_jaelyan]
+{
+	category_name = "3W_character";
+	doc = "3W_jaelyan";
+	specializes = base_pm_fg;
+	
+	[actor]
+		{
+			[skills]
+				{
+					strength 	= 3, 0, 10;
+					dexterity 	= 6.7, 0, 10;
+					intelligence 	= 0, 0, 10;
+			
+					melee 		= 0, 0, 0;
+					ranged		= 75, 0, 0;
+					combat_magic	= 0, 0, 0;
+					nature_magic 	= 74, 0, 0;
+					uber		= 4, 0, 0;
+
+				}
+			can_level_up = true;
+			race = human;
+			portrait_icon = b_gui_ig_i_ic_c_jaelyan;
+		}
+
+	
+	[aspect]
+		{
+			[textures]
+			{
+				0 = b_c_gah_fg_skin_23;
+				1 = b_c_pos_a1_024;
+			}
+      [voice]
+	{
+	[die]		{ priority = high; * = s_v_jaelyan_die; }
+//	[hit_critical]	{ priority = low; * = s_v_jaelyan_hit_03_SED;  }
+//	[hit_glance]	{ priority = low; * = s_v_jaelyan_hit_01_SED;  }
+//	[hit_solid]	{ priority = low; * = s_v_jaelyan_hit_02_SED;  }
+	}
+      [vo_voice]
+	{
+	  [select_char]
+	    { 
+	      priority = vo; 
+	      * = s_v_jaelyan_select_01;
+	      * = s_v_jaelyan_select_02;
+	      * = s_v_jaelyan_select_03;
+	      * = s_v_jaelyan_select_04;
+	      * = s_v_jaelyan_select_05;
+	      * = s_v_jaelyan_select_06;
+	      * = s_v_jaelyan_select_07;
+	      * = s_v_jaelyan_select_08;
+	      * = s_v_jaelyan_select_09;
+	      * = s_v_jaelyan_select_10;
+	      * = s_v_jaelyan_select_11;
+	      * = s_v_jaelyan_select_12;
+	      * = s_v_jaelyan_select_13;
+	      * = s_v_jaelyan_select_14;
+	      * = s_v_jaelyan_select_15;
+	    }
+	  [order_move]
+	    {
+	      priority = vo; 
+	      * = s_v_jaelyan_ack_01;
+	      * = s_v_jaelyan_ack_02;
+	      * = s_v_jaelyan_ack_03;
+	      * = s_v_jaelyan_ack_04;
+	      * = s_v_jaelyan_ack_05;
+	      * = s_v_jaelyan_ack_06;
+	      * = s_v_jaelyan_ack_07;
+	      * = s_v_jaelyan_ack_08;
+	      * = s_v_jaelyan_ack_09;
+	      * = s_v_jaelyan_ack_10;
+	      * = s_v_jaelyan_ack_11;
+	      * = s_v_jaelyan_ack_12;
+	      * = s_v_jaelyan_ack_13;
+	      * = s_v_jaelyan_ack_14;
+	      * = s_v_jaelyan_ack_15;
+	    }
+	  [order_attack]
+	    {
+	      priority = vo; 
+	      * = s_v_jaelyan_attack_01;
+	      * = s_v_jaelyan_attack_02;
+	      * = s_v_jaelyan_attack_03;
+	      * = s_v_jaelyan_attack_04;
+	      * = s_v_jaelyan_attack_05;
+	      * = s_v_jaelyan_attack_06;
+	      * = s_v_jaelyan_attack_07;
+	      * = s_v_jaelyan_attack_08;
+	      * = s_v_jaelyan_attack_09;
+	      * = s_v_jaelyan_attack_10;
+	      * = s_v_jaelyan_attack_11;
+	      * = s_v_jaelyan_attack_12;
+	      * = s_v_jaelyan_attack_13;
+	      * = s_v_jaelyan_attack_14;
+	      * = s_v_jaelyan_attack_15;
+	    }
+	}
+    }	
+[common]
+		{
+			screen_name = "Jaelyan";
+		}
+	[conversation]
+		{
+		}
+	[inventory]
+		{
+			selected_active_location = il_active_ranged_weapon;
+			custom_head = m_c_gah_fg_hlmt_head-02;
+			[equipment]
+				{
+					es_feet = #boots/-no_mod/6-10;
+					es_shield_hand = bw_g_c_s_m_c_avg;
+				}
+			[other]
+				{
+					il_active_primary_spell = #nmagic/2-4;
+					il_active_secondary_spell = spell_zap;					
+					il_main = #nmagic/1-4;
+					il_main = #nmagic/1-4;
+					il_main = #nmagic/2-5;
+					il_main = scroll_resurrect;
+					il_main = #bd_br_r_g_c_avg_bark_dsx/+ofthebadger;
+
+				}
+		}
+}

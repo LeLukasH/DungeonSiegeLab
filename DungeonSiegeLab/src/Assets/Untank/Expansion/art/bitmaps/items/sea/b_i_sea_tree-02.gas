@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_sea_tree-02]
+{
+	layer1texture1 = b_i_sea_tree-02;
+  i texturedetail = 2;
+}

@@ -1,0 +1,1044 @@
+// The shadow jumper's spells! -- MRC 8/14/2003
+
+[t:template,n:spell_sj_chain_tornado]
+{
+	category_name = "magic";
+	doc = "spell gom ground lightning";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 130;
+		damage_min = 100;
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 0;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+		usage_context_flags = uc_offensive;
+		cast_sub_animation = 1;
+	}
+	[spell_chain_attack]
+	{
+		jumps			= 3;
+		radius 			= 15;
+		attack_script	= dsx_sj_tornado_small;
+		effect_script	= dsx_sj_tornado_chain_caster;
+		dur				= 4.7;
+		falloff			= 2;
+	}
+}
+
+[t:template,n:spell_sj_chain_lightning]
+{
+	category_name = "magic";
+	doc = "spell gom ground lightning";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 130;
+		damage_min = 100;
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 0;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+		usage_context_flags = uc_offensive;
+		cast_sub_animation = 1;
+	}
+	[spell_chain_attack]
+	{
+		jumps			= 3;
+		radius 			= 15;
+		attack_script	= dsx_sj_chain_lightning;
+		effect_script	= dsx_sj_chain_lightning_caster;
+		dur				= 4.7;
+		falloff			= 2;
+	}
+}
+
+[t:template,n:spell_sj_chubby_rain]
+{
+	category_name = "magic";
+	doc = "spell_sj_chubby_rain";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		area_damage_radius = 4;
+		damage_max = 70;
+		damage_min = 50;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script( "dsx_sj_chubby_rain_charge" );
+				condition* = receive_world_message("we_req_cast_charge");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 12;
+		cast_reload_delay = 2;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+		usage_context_flags = uc_offensive;
+		cast_sub_animation = 4;
+	}
+	[spell_deathrain]
+	{
+		drop_freq_max = .05;
+		drop_freq_min = .025;
+		drop_script = "dsx_sj_chubby_rain";
+		max_drops = 50;
+		spawn_height = 15.0;
+		spawn_radius = 6.0;
+	}
+	[physics]
+	{
+		explosion_magnitude = 4;
+	}
+}
+
+[t:template,n:spell_sj_snowstorm]
+{
+	category_name = "magic";
+	doc = "spell_sj_snowstorm";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 110;
+		damage_min = 90;
+	}
+	[magic]
+	{
+		cast_range = 14;
+		cast_reload_delay = 2;
+		effect_duration = 2;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+		usage_context_flags = uc_offensive;
+		cast_sub_animation = 2;
+	}
+	[spell_turret]
+	{
+		initial_delay = 0.4;
+		shot_rate = 0.2;
+		effect_script = dsx_sj_snowstorm_fire;
+		charge_effect = dsx_sj_snowstorm_charge;
+	}
+}
+
+[t:template,n:spell_sj_flurry]
+{
+	category_name = "magic";
+	doc = "spell_sj_flurry";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 130;
+		damage_min = 100;
+		area_damage_radius = 2;
+	}
+	[magic]
+	{
+		cast_range = 8;
+		cast_reload_delay = 0;
+		effect_duration = 1;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+		usage_context_flags = uc_offensive;
+		cast_sub_animation = 0;
+	}
+	[spell_damage_volume]
+	{
+		target_center = true;
+		effect_script = dsx_sj_flurry;
+	}
+}
+
+[t:template,n:spell_sj_tornado]
+{
+	category_name = "magic";
+	doc = "spell_sj_tornado";
+	specializes = base_spell_monster;
+	[attack]
+	{
+		damage_max = 130;
+		damage_min = 100;
+		area_damage_radius = 8;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("dsx_sj_tornado_charge");
+				condition* = receive_world_message("we_req_cast");
+			}
+		}
+	}
+	[magic]
+	{
+		cast_range = 8;
+		cast_reload_delay = 0;
+		effect_duration = 4.7;
+		mana_cost = 0;
+		requires_line_of_sight = true;
+		speed_bias = 1;
+		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+		usage_context_flags = uc_offensive;
+		cast_sub_animation = 1;
+	}
+	[spell_damage_volume]
+	{
+		effect_script = dsx_sj_tornado_large;
+		start_radius = 1.5;
+		length = 9.0;
+	}
+}
+
+// These are Gom's spells from the first game.  I'm using them for ideas and
+// as a reference.  I will eventually make them go away, but there's nothing
+// wrong with them being here.  -- MRC 8/14/2003
+
+//[t:template,n:spell_super_gom_summon]
+//{
+//	category_name = "magic";
+//	doc = "spell_super_gom_summon";
+//	specializes = base_spell_monster;
+//	[inventory]
+//	{
+//		[delayed_pcontent]
+//		{
+//			[oneof*]
+//			{
+//				[all*]
+//				{
+//					chance = 0.33;
+//					il_main = lava_imp_03_summon;
+//				}
+//				[all*]
+//				{
+//					chance = 0.33;
+//					il_main = lava_imp_04_summon;
+//				}
+//				[all*]
+//				{
+//					chance = 0.34;
+//					il_main = molten_golem_summon_gom;
+//				}
+//			}
+//		}
+//	}
+//	[magic]
+//	{
+//		cast_range = 10;
+//		cast_reload_delay = 0;
+//		effect_duration = 20;
+//		requires_line_of_sight = true;
+//		require_state_check = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 4;
+//		state_name = "Controlling";
+//		caster_state_name = "Controlling";
+//	}
+//	[spell_summon_multiple]
+//	{
+//		flee = true;
+//		watch_summoned  = true;
+//		spawn_num		= 6;
+//		effect_script	= "fire_summon";
+//		spawn_radius	= 10.0;
+//		spawn_rate		= .75;
+//		description = "Summoned Creature";
+//		caster_description = "Controlling Summoned";
+//	}
+//}
+//[t:template,n:2w_spell_super_gom_summon]
+//{
+//	category_name = "magic";
+//	doc = "spell_super_gom_summon";
+//	specializes = base_spell_monster;
+//	[inventory]
+//	{
+//		[delayed_pcontent]
+//		{
+//			[oneof*]
+//			{
+//				[all*]
+//				{
+//					chance = 0.33;
+//					il_main = 2w_lava_imp_03_summon;
+//				}
+//				[all*]
+//				{
+//					chance = 0.33;
+//					il_main = 2w_lava_imp_04_summon;
+//				}
+//				[all*]
+//				{
+//					chance = 0.34;
+//					il_main = 2w_molten_golem_summon_gom;
+//				}
+//			}
+//		}
+//	}
+//	[magic]
+//	{
+//		cast_range = 10;
+//		cast_reload_delay = 0;
+//		effect_duration = 20;
+//		requires_line_of_sight = true;
+//		require_state_check = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 4;
+//		state_name = "Controlling";
+//		caster_state_name = "Controlling";
+//	}
+//	[spell_summon_multiple]
+//	{
+//		flee = true;
+//		watch_summoned  = true;
+//		spawn_num		= 6;
+//		effect_script	= "fire_summon";
+//		spawn_radius	= 10.0;
+//		spawn_rate		= .75;
+//		description = "Summoned Creature";
+//		caster_description = "Controlling Summoned";
+//	}
+//}
+//[t:template,n:3w_spell_super_gom_summon]
+//{
+//	category_name = "magic";
+//	doc = "3w spell_super_gom_summon";
+//	specializes = base_spell_monster;
+//	[inventory]
+//	{
+//		[delayed_pcontent]
+//		{
+//			[oneof*]
+//			{
+//				[all*]
+//				{
+//					chance = 0.33;
+//					il_main = 3w_lava_imp_03_summon;
+//				}
+//				[all*]
+//				{
+//					chance = 0.33;
+//					il_main = 3w_lava_imp_04_summon;
+//				}
+//				[all*]
+//				{
+//					chance = 0.34;
+//					il_main = 3w_molten_golem_summon_gom;
+//				}
+//			}
+//		}
+//	}
+//	[magic]
+//	{
+//		cast_range = 10;
+//		cast_reload_delay = 0;
+//		effect_duration = 20;
+//		requires_line_of_sight = true;
+//		require_state_check = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 4;
+//		state_name = "Controlling";
+//		caster_state_name = "Controlling";
+//	}
+//	[spell_summon_multiple]
+//	{
+//		flee = true;
+//		watch_summoned  = true;
+//		spawn_num		= 6;
+//		effect_script	= "fire_summon";
+//		spawn_radius	= 10.0;
+//		spawn_rate		= .75;
+//		description = "Summoned Creature";
+//		caster_description = "Controlling Summoned";
+//	}
+//}
+//[t:template,n:spell_gom_heal]
+//{
+//	category_name = "magic";
+//	doc = "spell_gom_heal";
+//	specializes = base_spell_monster;
+//
+//	[common]
+//	{
+//		[template_triggers]
+//		{
+//			[*]
+//			{
+//				action* = call_sfx_script("gom_heal");
+//				condition* = receive_world_message("we_req_cast");
+//			}
+//		}
+//	}
+//	[magic]
+//	{
+//		cast_range = 10;
+//		cast_reload_delay = 4;
+//		is_one_shot = true;
+//		mana_cost = 0;
+//		max_level = 21;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_injured_friend | tt_self;
+//		usage_context_flags = uc_life_giving;
+//
+//		[enchantments]
+//		{
+//			[*]
+//			{
+//				alteration = alter_life;
+//				description = "monster heal spell";
+//				initial_delay = 0.35;
+//				duration = 2.0;
+//				frequency = .5;
+//				value = 27;
+//
+//			}
+//		}
+//	}
+//	[spell_default] {}
+//}
+//[t:template,n:spell_gom_throw]
+//{
+//	category_name = "magic";
+//	doc = "spell gom throw";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		damage_max = 220;
+//		damage_min = 180;
+//	}
+//	[common]
+//	{
+//		[template_triggers]
+//		{
+//			[*]
+//			{
+//				action* = call_sfx_script("gom_throw");
+//				condition* = receive_world_message("we_req_cast");
+//			}
+//			[*]
+//			{
+//				action* = call_sfx_script("gom_throw_charge");
+//				condition* = receive_world_message("we_req_cast_charge");
+//			}
+//		}
+//	}
+//	[magic]
+//	{
+//		cast_range = 12;
+//		cast_reload_delay = 0;
+//		mana_cost = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 1;
+//	}
+//	[spell_default] {}
+//}
+//[t:template,n:spell_gom_ground_lightning]
+//{
+//	category_name = "magic";
+//	doc = "spell gom ground lightning";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		damage_max = 210;
+//		damage_min = 180;
+//	}
+//	[magic]
+//	{
+//		cast_range = 12;
+//		cast_reload_delay = 0;
+//		mana_cost = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 1;
+//	}
+//	[spell_fire]
+//	{
+//		effect_script = gom_ground_lightning;
+//		ignite = false;
+//		particle_fit = 0.7;
+//	}
+//}
+//[t:template,n:spell_gom_icesnake]
+//{
+//	category_name = "magic";
+//	doc = "spell gom icesnake";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		damage_max = 220;
+//		damage_min = 180;
+//	}
+//	[magic]
+//	{
+//		cast_range = 12;
+//		cast_reload_delay = 0;
+//		mana_cost = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 4;
+//	}
+//	[spell_fire]
+//	{
+//		effect_script	= gom_icesnake;
+//		particle_fit	= 0.2;
+//		ignite			= false;
+//	}
+//}
+//[t:template,n:spell_gom_force]
+//{
+//	category_name = "magic";
+//	doc = "spell gom force";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		damage_max = 220;
+//		damage_min = 180;
+//	}
+//	[common]
+//	{
+//		[template_triggers]
+//		{
+//			[*]
+//			{
+//				action* = call_sfx_script("gom_force");
+//				condition* = receive_world_message("we_req_cast");
+//			}
+//		}
+//	}
+//	[magic]
+//	{
+//		cast_range = 12;
+//		cast_reload_delay = 0;
+//		mana_cost = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 2;
+//	}
+//	[spell_default] {}
+//}
+//[t:template,n:spell_super_gom_force]
+//{
+//	category_name = "magic";
+//	doc = "spell super gom force";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		damage_max = 220;
+//		damage_min = 180;
+//	}
+//	[common]
+//	{
+//		[template_triggers]
+//		{
+//			[*]
+//			{
+//				action* = call_sfx_script("super_gom_force");
+//				condition* = receive_world_message("we_req_cast");
+//			}
+//		}
+//	}
+//	[magic]
+//	{
+//		cast_range = 12;
+//		cast_reload_delay = 0;
+//		mana_cost = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 7;
+//	}
+//	[spell_default] {}
+//}
+//[t:template,n:spell_gom_flamethrower]
+//{
+//	category_name = "magic";
+//	doc = "spell gom flamethrower";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		damage_max = 220;
+//		damage_min = 180;
+//	}
+//	[magic]
+//	{
+//		cast_range = 8;
+//		cast_reload_delay = 0;
+//		effect_duration = 3;
+//		mana_cost = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 3;
+//	}
+//	[spell_fire]
+//	{
+//		effect_script = gom_flamethrower;
+//		particle_fit = 0.2;
+//		watch_caster = true;
+//	}
+//}
+//[t:template,n:spell_gom_firebreath]
+//{
+//	category_name = "magic";
+//	doc = "spell gom firebreath";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		damage_max = 220;
+//		damage_min = 180;
+//	}
+//	[magic]
+//	{
+//		cast_range = 8;
+//		cast_reload_delay = 0;
+//		effect_duration = 3;
+//		mana_cost = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 3;
+//	}
+//	[spell_fire]
+//	{
+//		effect_script = gom_firebreath;
+//		particle_fit = 0.2;
+//		watch_caster = true;
+//	}
+//}
+//[t:template,n:spell_gom_big_bolt]
+//{
+//	category_name = "magic";
+//	doc = "spell gom big bolt";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		damage_max = 220;
+//		damage_min = 180;
+//	}
+//	[common]
+//	{
+//		[template_triggers]
+//		{
+//			[*]
+//			{
+//				action* = call_sfx_script( "big_bolt_charge" );
+//				condition* = receive_world_message("we_req_cast_charge");
+//			}
+//		}
+//	}
+//	[magic]
+//	{
+//		cast_range = 8;
+//		cast_reload_delay = 0;
+//		effect_duration = 2.5;
+//		mana_cost = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 5;
+//	}
+//	[spell_lightning]
+//	{
+//		dur = 1.5;
+//		effect_script = gom_big_bolt;
+//	}
+//}
+//[t:template,n:spell_gom_laser]
+//{
+//	category_name = "magic";
+//	doc = "spell gom laser";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		damage_max = 220;
+//		damage_min = 180;
+//		area_damage_radius = 8;
+//	}
+//	[magic]
+//	{
+//		cast_range = 8;
+//		cast_reload_delay = 0;
+//		effect_duration = 2.5;
+//		mana_cost = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 6;
+//	}
+//	[spell_damage_volume]
+//	{
+//		effect_script = gom_laser;
+//		start_radius = 1.5;
+//		length = 9.0;
+//	}
+//}
+//[t:template,n:spell_gom_summon]
+//{
+//	category_name = "magic";
+//	doc = "spell gom summon";
+//	specializes = base_spell_monster;
+//	[inventory]
+//	{
+//		[delayed_pcontent]
+//		{
+//			[oneof*]
+//			{
+//				[all*]
+//				{
+//					chance = 1.000;
+//					il_main = suicide_elemental;
+//				}
+//			}
+//		}
+//	}
+//	[magic]
+//	{
+//		cast_range = 10;
+//		cast_reload_delay = 0;
+//		effect_duration = 12;
+//		state_name = "Controlling";
+//		caster_state_name = "Controlling";
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 4;
+//		require_state_check = true;
+//	}
+//	[spell_summon_multiple]
+//	{
+//		flee = true;
+//		watch_summoned = true;
+//		effect_script	= "fire_summon";
+//		spawn_radius	= 10.0;
+//		spawn_rate		= .75;
+//		description = "Summoned Creature";
+//		caster_description = "Controlling Summoned";
+//	}
+//}
+//[t:template,n:2w_spell_gom_summon]
+//{
+//	category_name = "magic";
+//	doc = "spell gom summon";
+//	specializes = base_spell_monster;
+//	[inventory]
+//	{
+//		[delayed_pcontent]
+//		{
+//			[oneof*]
+//			{
+//				[all*]
+//				{
+//					chance = 1.000;
+//					il_main = 2w_suicide_elemental;
+//				}
+//			}
+//		}
+//	}
+//	[magic]
+//	{
+//		cast_range = 10;
+//		cast_reload_delay = 0;
+//		effect_duration = 12;
+//		state_name = "Controlling";
+//		caster_state_name = "Controlling";
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 4;
+//		require_state_check = true;
+//	}
+//	[spell_summon_multiple]
+//	{
+//		flee = true;
+//		watch_summoned = true;
+//		effect_script	= "fire_summon";
+//		spawn_radius	= 10.0;
+//		spawn_rate		= .75;
+//		description = "Summoned Creature";
+//		caster_description = "Controlling Summoned";
+//	}
+//}
+//[t:template,n:3w_spell_gom_summon]
+//{
+//	category_name = "magic";
+//	doc = "spell gom summon";
+//	specializes = base_spell_monster;
+//	[inventory]
+//	{
+//		[delayed_pcontent]
+//		{
+//			[oneof*]
+//			{
+//				[all*]
+//				{
+//					chance = 1.000;
+//					il_main = 3w_suicide_elemental;
+//				}
+//			}
+//		}
+//	}
+//	[magic]
+//	{
+//		cast_range = 10;
+//		cast_reload_delay = 0;
+//		effect_duration = 12;
+//		state_name = "Controlling";
+//		caster_state_name = "Controlling";
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 4;
+//		require_state_check = true;
+//	}
+//	[spell_summon_multiple]
+//	{
+//		flee = true;
+//		watch_summoned = true;
+//		effect_script	= "fire_summon";
+//		spawn_radius	= 10.0;
+//		spawn_rate		= .75;
+//		description = "Summoned Creature";
+//		caster_description = "Controlling Summoned";
+//	}
+//}
+//[t:template,n:spell_gom_spikes]
+//{
+//	category_name = "magic";
+//	doc = "spell gom summon";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		damage_max = 200;
+//		damage_min = 160;
+//	}
+//	[inventory]
+//	{
+//		[delayed_pcontent]
+//		{
+//			[oneof*]
+//			{
+//				[all*]
+//				{
+//					chance = 0.500;
+//					il_main = spike_glb_rock_01;
+//				}
+//				[all*]
+//				{
+//					chance = 0.500;
+//					il_main = spike_glb_rock_02;
+//				}
+//			}
+//		}
+//	}
+//	[magic]
+//	{
+//		cast_range = 10;
+//		cast_reload_delay = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 4;
+//	}
+//	[spell_summon_multiple]
+//	{
+//		effect_script = "gom_spikes";
+//		spawn_radius	= 2.0;
+//		summon_script = "gom_spikes_fire";
+//		particle_fit = 0.2;
+//	}
+//}
+//[t:template,n:spell_skull_rain]
+//{
+//	category_name = "magic";
+//	doc = "spell gom skull rain";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		area_damage_radius = 4;
+//		damage_max = 220;
+//		damage_min = 180;
+//	}
+//	[magic]
+//	{
+//		cast_range = 12;
+//		cast_reload_delay = 0;
+//		mana_cost = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 1;
+//	}
+//	[spell_deathrain]
+//	{
+//		drop_freq_max = .25;
+//		drop_freq_min = .2;
+//		drop_script = "gom_skull_rain";
+//		max_drops = 4;
+//		spawn_height = 15.0;
+//		spawn_radius = 6.0;
+//	}
+//	[physics]
+//	{
+//		explosion_magnitude = 4;
+//	}
+//}
+//[t:template,n:spell_gom_skull_storm]
+//{
+//	category_name = "magic";
+//	doc = "spell gom skull storm";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		area_damage_radius = 4;
+//		damage_max = 220;
+//		damage_min = 180;
+//	}
+//	[common]
+//	{
+//		[template_triggers]
+//		{
+//			[*]
+//			{
+//				action* = call_sfx_script("gom_skull_storm_charge");
+//				condition* = receive_world_message("we_req_cast");
+//			}
+//		}
+//	}
+//	[magic]
+//	{
+//		cast_range = 12;
+//		cast_reload_delay = 0;
+//		mana_cost = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 5;
+//	}
+//	[spell_deathrain]
+//	{
+//		drop_freq_max = .2;
+//		drop_freq_min = .2;
+//		drop_script = "gom_skull_storm";
+//		max_drops = 6;
+//		spawn_height = 15.0;
+//		spawn_radius = 4.0;
+//	}
+//	[physics]
+//	{
+//		explosion_magnitude = 4;
+//	}
+//}
+//[t:template,n:spell_gom_turret_fire]
+//{
+//	category_name = "magic";
+//	doc = "spell gom staff";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		damage_max = 190;
+//		damage_min = 170;
+//	}
+//	[magic]
+//	{
+//		cast_range = 14;
+//		cast_reload_delay = 0;
+//		effect_duration = 2;
+//		mana_cost = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 0;
+//	}
+//	[spell_turret]
+//	{
+//		initial_delay = 0.4;
+//		shot_rate = 0.2;
+//		effect_script = gom_turret_fire;
+//		charge_effect = gom_turret_fire_charge;
+//	}
+//}
+//[t:template,n:spell_gom_turret_lightning]
+//{
+//	category_name = "magic";
+//	doc = "spell gom staff";
+//	specializes = base_spell_monster;
+//	[attack]
+//	{
+//		damage_max = 180;
+//		damage_min = 170;
+//	}
+//	[magic]
+//	{
+//		cast_range = 14;
+//		cast_reload_delay = 0;
+//		effect_duration = 2;
+//		mana_cost = 0;
+//		requires_line_of_sight = true;
+//		speed_bias = 1;
+//		target_type_flags = tt_conscious_enemy | tt_unconscious_enemy;
+//		usage_context_flags = uc_offensive;
+//		cast_sub_animation = 0;
+//	}
+//	[spell_turret]
+//	{
+//		initial_delay = 0.4;
+//		lightning_dur = 0.33;
+//		shot_rate = 0.2;
+//		effect_script = gom_turret_lightning;
+//		charge_effect = gom_turret_lightning_charge;
+//	}
+// }

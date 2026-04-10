@@ -1,0 +1,20 @@
+//////////////////////////////////////////////////////////////////////////////
+//  dev-only commands
+//////////////////////////////////////////////////////////////////////////////
+[dev,t:template,n:cmd_report_gameplay_screen_player]
+{
+	specializes 	= cmd_const;
+	doc				= "cmd_report_gameplay_screen_player";
+   	extra_doc   	= "This will dump a status report for the screen party to the gameplay report context.";
+    category_name 	= "command";
+
+	[gizmo] { diffuse_color=1.000000,1.000000,1.000000; texture=; }
+
+	[cmd_report_gameplay_screen_player]{}
+
+	[common]
+	{
+		forced_expiration_class = immediate;
+		auto_expiration_class = immediate;
+	}
+}

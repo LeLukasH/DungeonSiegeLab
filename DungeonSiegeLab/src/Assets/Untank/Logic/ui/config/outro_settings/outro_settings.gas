@@ -1,0 +1,10 @@
+[outro_settings]
+{	
+	// note: all durations are in seconds
+
+	fade_after_duration = 5.0;
+	fade_out_duration = 2.5;
+	fade_in_duration = 2.5;
+	// credits_sample = s_m_credits;
+	credits_sample = s_m_credits;
+}

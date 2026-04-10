@@ -1,0 +1,49 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	job_stop.skrit
+
+	Author(s)	: 	Bartosz Kijanka
+
+	Purpose		: 	Stop an actor and start to fidget
+ 
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+Job		m_Job$;
+
+#include "k_job_c_mcp_fidget_utils"
+
+startup state Unknown$
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.GetGo;
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+
+	if( m_Go$.Mind.ActorAutoFidgets )
+	{
+		InterruptAndStartFidgetIfRequired$();
+	}
+
+	m_Job$.MarkForDeletion();
+}
+
+

@@ -1,0 +1,97 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  special_defense.skrit
+// Author(s):  Tara Teich
+//
+// Copyright © 2003 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+//	This is sneaky... dont try this at home kids.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property float damage_min$ = 2.0		doc = "Min damage done by spell";
+property float damage_max$ = 10.0		doc = "Max damage done by spell";
+property string effect_script$ = "fireshot"	doc = "Effect script to run to attack attacker";
+property bool is_lightning$ = false		doc = "Is this a lightning effect?  We pass damage through differently for those";
+property float area_damage_radius$ = 0.0	doc = "Area of effect for damage, if we do area damage";
+//property float explosion_magnitude$ = 0.0	doc = "Size of explosion, if we do explosive damage";
+
+property float reset_time$ = 2.5		doc = "Time before we can fire again";
+
+
+Goid manager$;
+float last_fire_time$ = 0;
+
+on_add_special_defense$( Go owner$ )
+{
+	// create the omni object that handles the damage we deal
+	GoCloneReq cloneReq$ = MakeGoCloneReq( owner$.goid, "dsx_special_defense_object" );
+	cloneReq$.Omni = true;
+	cloneReq$.ForceClientAllowed = true;
+	manager$ = GoDb.SCloneGo( cloneReq$ );
+	
+	// set the min and max damage
+	manager$.Go.Attack.SetDamageMinNatural( damage_min$ );
+	manager$.Go.Attack.SetDamageMaxNatural( damage_max$ );
+	
+	// if we do area damage, send a message tell this object the amount
+	if ( area_damage_radius$ > 0.0 )
+	{
+		int packed_radius$ = Math.Round( area_damage_radius$ * 1000 );
+		SendWorldMessage( WE_REQ_ACTIVATE, owner$.goid, manager$, packed_radius$ );
+	}
+	
+}
+
+on_remove_special_defense$( /*some params*/ )
+{
+	// nix omni GO.
+	if( manager$.IsValid )
+	{    		
+		PostWorldMessage( WE_REQ_DELETE, manager$, manager$, 1.0 );
+	}
+}
+
+on_special_defense$( Go victim$, Go attacker$, Go /*weapon$*/, float /*damage_amount$*/ )
+{
+	string params$ = "";
+	
+	// Is it time to fire again yet?
+	if ( last_fire_time$ + reset_time$ > WorldTime.GetTime )
+	{
+		return;
+	}	
+	
+	// MRC 8/13/2003 Bug 1727 Make sure attacker and victim are not NULL.
+	if( attacker$ == NULL || victim$ == NULL )
+	{
+		return;
+	}
+	
+	// TAT - we only attack things with actors
+	if ( !attacker$.HasActor )
+	{
+		return;
+	}
+
+	// MRC 8/1/2003 Bug 2250 Don't attack your friends!  Sometimes friends do damage to you
+	// when they break exploding barrels.
+	if( victim$.Mind.IsFriend( attacker$ ))
+	{
+		return;
+	}
+	
+	// we're firing, so set the time
+	last_fire_time$ = WorldTime.GetTime;
+		
+	// lightning needs to pass damage in
+	if ( is_lightning$ )
+	{
+		StringTool.AppendF( params$, "[damage(%g,%g,0)][dur(%g)]", damage_min$, damage_max$, 0.2 );
+	}
+	
+	Siegefx.SRunScript( effect_script$, attacker$.Goid, victim$.Goid, params$, manager$, WE_UNKNOWN );
+}

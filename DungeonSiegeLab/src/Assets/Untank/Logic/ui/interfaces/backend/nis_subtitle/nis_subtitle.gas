@@ -1,0 +1,27 @@
+[nis_subtitle]
+{
+	interface = true;
+	intended_resolution_height = 480;
+	intended_resolution_width = 640;
+	
+	[t:text_box,n:text_subtitle]
+	{
+		alpha = 1.00000;
+		common_control = false;
+		common_template = ;
+		draw_order = 2;
+		fixed_location = true;
+		has_slider = false;
+		justify = center;
+		rect = 50,425,550,470;
+		scroll_rate = 0.000000;		
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		font_size = 15;
+		font_type = b_gui_fnt_14p_copperplate-light;		
+		is_bottom_anchor = true;
+		bottom_anchor = 55;
+		center_x = true;
+		loc_font = subtitle_font;
+	}
+}

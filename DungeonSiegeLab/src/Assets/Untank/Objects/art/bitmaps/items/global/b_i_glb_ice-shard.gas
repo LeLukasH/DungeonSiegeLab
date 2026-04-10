@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_ice-shard]
+{
+	layer1texture1 = b_i_glb_ice-shard;
+  i texturedetail = 1;
+}

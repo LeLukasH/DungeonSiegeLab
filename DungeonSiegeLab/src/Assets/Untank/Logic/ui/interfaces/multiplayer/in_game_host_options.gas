@@ -1,0 +1,361 @@
+[in_game_host_options]
+{
+	centered = background;
+	interface = true;
+	modal = true;
+	[t:dialog_box,n:background]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox_wide;
+	  i draw_order = 1;
+		rect = 90,100,550,380;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:background_options]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 4;
+		rect = 110,160,530,336;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:background_password]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 5;
+		rect = 140,250,500,320;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:button,n:button_change_password_accept]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 60;
+		rect = 370,284,460,300;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_change_password_accept_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 395,286,460,300;
+			text = "Accept";
+			texture = none;
+			truncate = true;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(accept_change_game_password);
+		}
+	}
+	[t:button,n:button_ok]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 60;
+		rect = 200,348,310,364;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_ok_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 247,350,310,364;
+			text = "Accept";
+			texture = none;
+			truncate = true;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(multiplayer_options_ok);
+		}
+	}
+	[t:button,n:button_cancel]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 2003;
+		rect = 328,348,438,364;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[t:text,n:button_cancel_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 2004;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 334,350,428,363;
+			text = "Cancel";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(multiplayer_options_cancel);
+			onescape = notify(multiplayer_options_cancel);
+		}
+	}
+	[t:edit_box,n:change_game_password_edit_box]
+	{
+	  f alpha = 1.000000;
+	  b clear_select = false;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 6;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		max_string_size = 20;
+	  b permanent_focus = false;
+		rect = 184,284,356,300;
+		text = "";
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		allow_ime = false;
+		[messages]
+		{
+			oneditselect = notify(accept_change_game_password);
+		}
+		[prompt]
+		{
+			texture = b_gui_fe_m_single_prompt;
+			width = 1;
+		}	
+	}
+	[t:checkbox,n:checkbox_allow_player_joining]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1296;
+		rect = 130,182,146,198;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text_box,n:checkbox_allow_player_joining_text]
+		{
+		  f alpha = 1.000000;
+		  b center_height = true;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  b fixed_location = true;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+		  b has_slider = false;
+			justify = left;
+		  i max_height = 240;
+		  i max_width = 320;
+			rect = 154,174,500,206;
+		  f scroll_rate = 0.000000;
+			text = "Allow players to join game in progress";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[t:window,n:checkbox_allow_player_joining_texture]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 2000;
+			rect = 130,182,146,198;
+			texture = b_gui_cmn_checkbox_x;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:checkbox,n:checkbox_allow_player_pausing]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1296;
+		rect = 130,214,146,230;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text_box,n:checkbox_allow_player_pausing_text]
+		{
+		  f alpha = 1.000000;
+		  b center_height = true;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  b fixed_location = true;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+		  b has_slider = false;
+			justify = left;
+		  i max_height = 240;
+		  i max_width = 320;
+			rect = 154,206,500,238;
+		  f scroll_rate = 0.000000;
+			text = "Allow players to pause the game";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[t:window,n:checkbox_allow_player_pausing_texture]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 2000;
+			rect = 130,214,146,230;
+			texture = b_gui_cmn_checkbox_x;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:dialog_box,n:password_background]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 5;
+		rect = 180,282,360,302;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:password_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 68;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 180,260,460,276;
+		text = "Set Game Password";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:tab,n:tab_game_settings]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 2;
+		enabled = false;
+		radio_group = mp_options_tabs;
+		rect = 110,144,260,160;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oncheck = notify(show_host_game_settings);
+		}
+		[t:text,n:tab_game_settings_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 3;
+		  i font_color = -1;
+		  i font_size = 14;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 143,146,260,160;
+			text = "Game Settings";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:tab,n:tab_kick_players]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 2;
+		radio_group = mp_options_tabs;
+		rect = 260,147,410,163;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oncheck = notify(show_host_kick_players);
+		}
+		[t:text,n:tab_kick_players_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 3;
+		  i font_color = -1;
+		  i font_size = 14;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 297,149,410,163;
+			text = "Kick Players";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:text,n:title]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 79;
+	  i font_color = -1;
+	  i font_size = 22;
+		font_type = b_gui_fnt_20p_copperplate-light;
+		justify = center;
+		rect = 110,110,530,130;
+		text = "Multiplayer Options";
+		truncate = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+}

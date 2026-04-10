@@ -1,0 +1,36 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  dsx_gear_door_skrit.skrit
+// Author(s):  Jason Dunlop
+//
+// Copyright © 2003 Mad Doc Software, LLC  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+owner                                = GoSkritComponent;
+
+startup state Wait$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == WE_ANIM_DONE )
+		{
+			// when the cog door is opened, make it non collidable
+			// this will allow arrows and such to travel through it
+			#only( game )
+			[[
+			owner.Go.Aspect.SetIsCollidable( false );
+	       		]]
+	       	}
+	       	else if( e$ == WE_DESTRUCTED )
+	       	{
+	       		SetState Finished$;
+	       	}
+	}
+}
+
+state Finished$
+{
+}

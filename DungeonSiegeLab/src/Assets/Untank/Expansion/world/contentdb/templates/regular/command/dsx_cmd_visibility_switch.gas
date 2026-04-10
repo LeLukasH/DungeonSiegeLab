@@ -1,0 +1,9 @@
+[t:template,n:dsx_cmd_visibility_switch]
+{
+	specializes	= cmd_const;
+	doc			= "dsx_cmd_visibility_switch";
+	category_name = "zurb";
+	extra_doc = "use this to switch a character's visibility";
+
+	[dsx_cmd_visibility_switch] {}
+}

@@ -1,0 +1,312 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  skrev_a3_r2_hassat_controller.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: To controller the hassat at the hub in a3_r2.  Causes the three hassat
+//		shaman to cast a protective spell effect around the chest in the center of
+//		the hub until attacked.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "skrev A3_R2 Hassat Controller";
+
+// external properties
+property scid		shaman1_scid$					doc = "First shaman to control.";
+property scid		shaman2_scid$					doc = "Second shaman to control.";
+property scid		shaman3_scid$					doc = "Third shaman to control.";
+property int		shaman_fourcc$	= 'cast'		doc = "FourCC for the shaman to use before attacked.";
+property float		search_radius$	= 15			doc = "Radius to search within for an enemy if the attacker can't be found.";
+
+owner = GoSkritComponent;
+
+// globals
+SiegePos controller_pos$;
+Goid the_shaman$;
+bool started$ = false;
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// Support functions
+
+// attempt to change the character's animation
+float change_anim$(goid target$, int fourcc$)
+{
+	// see if we're in the frustrum
+	if(!target$.Go.IsInAnyWorldFrustum())
+	{
+		return 0;
+	}
+
+	// no fidgeting please!
+	target$.Go.Mind.SetActorAutoFidgets(false);
+
+	// clear the mcp
+	MCPManager.Flush(target$);
+
+	// get the correct animation
+	int anim$ = target$.Go.Aspect.AspectHandle.Blender.GetSubAnimIndex(CHORE_MISC, fourcc$);
+		
+	// make sure we got one
+	if (anim$ >= 0)
+	{
+		// make the request for the action
+		eReqRetCode ret$ = MCPManager.MakeRequest( target$, PL_PLAYANIM, CHORE_MISC, anim$, 0 );
+	}
+	else
+	{
+		report.genericf("The animation could not be found\n");
+		return 0;
+	}
+
+	// return the length of the animation
+	return target$.Go.Aspect.AspectHandle.Blender.GetDuration(anim$);
+}
+
+// attack the character who's coming after us
+do_attack$(Goid attacker$)
+{
+	// make sure the shaman is still alive and valid
+	if(!the_shaman$.IsValid() || IsDead(the_shaman$.Go.Aspect.GetLifeState()))
+	{
+		return;
+	}
+
+	// clear their mind
+	the_shaman$.Go.Mind.Clear(JQ_ACTION);
+
+	// attack the attacker
+	JobReq the_job$ = MakeJobReq(JAT_ATTACK_OBJECT, JQ_ACTION, QP_FRONT, AO_COMMAND, attacker$);
+	the_shaman$.Go.Mind.SDoJob(the_job$);
+}
+
+// causes the shamn to attack their attacker
+start_attack$(Goid attacker$, eWorldEvent e$)
+{
+	// is the attacker valid.  if not, the event was WE_KILLED.
+	// this will be a rare case since stats will not likely be so high as to kill
+	// the enemy with one hit
+	if(!attacker$.IsValid())
+	{
+		//report.genericf("The attacker is invalid...finding an enemy!\n");
+
+		// see if you can find any enemies 
+		if(AIQuery.GetEnemiesOfGoInSphere(the_shaman$.Go.Placement.GetPosition(), search_radius$, the_shaman$.Go, the_shaman$.Go.Mind.TempGopColl1))
+		{
+			// get the new attacker
+			attacker$ = the_shaman$.Go.Mind.TempGopColl1.Get(0).Goid;
+		}
+	}
+
+	// don't want to send kill events on
+	if(e$ == WE_KILLED)
+	{
+		// switch to a melee attack
+		e$ = WE_ATTACKED_MELEE;
+	}
+
+	// send a message to everyone to start the attack
+	PostWorldMessage(e$, the_shaman$, shaman1_scid$.Goid, MakeInt(attacker$), 0);
+	PostWorldMessage(e$, the_shaman$, shaman2_scid$.Goid, MakeInt(attacker$), 0);
+	PostWorldMessage(e$, the_shaman$, shaman3_scid$.Goid, MakeInt(attacker$), 0);
+
+	// the message to the attacked guy will get lost so just tell him to attack
+	// should i bother checking above?
+	do_attack$(attacker$);
+}
+
+// plays the cast effect sound
+play_sound$
+{
+	// I'm just a sound...
+	//SiegeFX.SRunScript( "runemaster_chant", main_caster$.Goid, main_caster$.Goid, "", main_caster$.Goid, WE_REQ_ACTIVATE );
+}
+
+// creates an omni version of component
+create_omni$(Goid target$)
+{
+	// make sure the target is valid
+	if(!target$.IsValid())
+	{
+		report.genericf("Invalid target while creating omni version\n");
+	}
+
+	// set the shaman
+	the_shaman$ = target$;
+
+	// clone the controller
+	GoCloneReq cloneReq$ = MakeGoCloneReq(Owner.go.Goid, owner.goid);
+	cloneReq$.Omni = true;
+	Goid temp_goid$ = GoDb.SCloneGo(cloneReq$);
+
+	// send Omni version an Activate to get it started.
+	PostWorldMessage(WE_REQ_ACTIVATE, owner.goid, temp_goid$, 0);
+}
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+// wait until we get a WE_REQ_ACTIVATE event and then jump into the start state
+event OnGoHandleMessage$(eWorldEvent e$, WorldMessage msg$)
+{
+	// wait for activate events
+	if(e$ == WE_REQ_ACTIVATE)
+	{
+		// if the shaman is valid we want to control it
+		if(the_shaman$.IsValid() && owner.Go.Parent != NULL)
+		{
+			// want to make sure we got the message from the owner after it created the omni
+			// version and not from one of the other triggers
+			if(msg$.GetSendFrom() == owner.Go.Parent.Goid)
+			{
+				// start watching the shaman
+				GoDb.StartWatching(owner.Goid, the_shaman$);
+
+				SetState ControllingShaman$;
+			}
+			return;
+		}
+
+		// make sure we haven't started already (multi-triggered)
+		if(started$)
+		{
+			return;
+		}
+
+		// starting up
+		started$ = true;
+
+		// otherwise, jump into the start state to create the omni versions
+		SetState Start$;
+	}
+}
+
+// state for controlling each of the shaman
+state ControllingShaman$
+{
+	// wait for attack events
+	event OnGoHandleCCMessage$(eWorldEvent e$, WorldMessage msg$)
+	{
+		// did we get one?
+		if(e$ == WE_ATTACKED_MELEE || e$ == WE_ATTACKED_RANGED || e$ == WE_KILLED)
+		{
+			// get the attacker
+			Goid attacker$ = MakeGoid(msg$.GetData1());
+
+			// if the message is from one of the three hassat, just do the attack to the player
+			// starting the attack again would create loops
+			if(msg$.GetSendFrom() == shaman1_scid$.Goid || msg$.GetSendFrom() == shaman2_scid$.Goid || msg$.GetSendFrom() == shaman3_scid$.Goid)
+			{
+				// attack our attacker
+				do_attack$(attacker$);
+			}
+			else
+			{
+				// start the group attack
+				start_attack$(attacker$, e$);
+			}
+
+			// stop controlling them
+			SetState Done$;
+		}
+	}
+
+	// step in here
+	event OnEnterState$
+	{
+		bool doit$ = true;
+
+		// get the front job and make sure we're not just waking up
+		Job action$ = the_shaman$.Go.Mind.GetFrontJob(JQ_ACTION);
+		if(action$ != NULL)
+		{
+			if(action$.JobAbstractType == JAT_STARTUP)
+			{
+				doit$ = false;
+			}
+		}
+
+		// see if we're in the frustrum
+		if(!the_shaman$.Go.IsInAnyWorldFrustum())
+		{
+			doit$ = false;
+		}
+	
+		// are we all set?
+		if(doit$)
+		{
+			// debug
+			//the_shaman$.Go.Common.SSetScreenName("Controlled Hassat");
+
+			//float change_animation$(goid target$, eAnimChore chore$, int fourcc$)
+			float pause$ = change_anim$(the_shaman$, shaman_fourcc$);
+	
+			// run the effect and play the sound
+			SiegeFX.SRunScript("hassat_shaman_guard", owner.Go.Parent.Goid, the_shaman$, "", the_shaman$, WE_REQ_ACTIVATE);
+			play_sound$();
+
+			// change the animation
+			this.CreateTimer(1, pause$);
+		}
+		else
+		{
+			// create the timer before trying again
+			this.CreateTimer(1, .5);
+		}
+	}
+
+	// jump back into this state
+	transition->ControllingShaman$:OnTimer(1);
+}
+
+// chill here until we get an activate event
+startup state Wait$
+{
+}
+
+// starts up here.  gets the shaman casting and starts watching them to wait for an attack
+state Start$
+{
+
+	// real stuff starts here
+	event OnEnterState$
+	{
+		// make sure all the scids are valid
+		if(!shaman1_scid$.Goid.IsValid() || !shaman2_scid$.Goid.IsValid() || !shaman3_scid$.Goid.IsValid())
+		{
+			report.genericf("Invalid scids!\n");
+			return;
+		}
+
+		// get the controller position
+		controller_pos$ = owner.Go.Placement.GetPosition();
+
+		// create an omni version
+		create_omni$(shaman1_scid$.Goid);
+		create_omni$(shaman2_scid$.Goid);
+		create_omni$(shaman3_scid$.Goid);
+	}
+}
+
+// finishing state.  cleans everything up
+state Done$
+{
+	event OnEnterState$
+	{
+		// start watching the shaman
+		GoDb.StopWatching(owner.Goid, the_shaman$);
+
+		// delete ourselves
+		PostWorldMessage(WE_REQ_DELETE, owner.Goid, owner.Goid, 1);
+	}
+}

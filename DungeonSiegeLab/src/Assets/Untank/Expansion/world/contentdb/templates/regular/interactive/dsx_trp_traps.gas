@@ -1,0 +1,137 @@
+[t:template,n:trp_dsx_generator_arrow_barrel]
+{
+	category_name = "trap";
+	doc = "dsx_trap_generator_arrow_barrel";
+	specializes = trap;
+	[generator_object_pcontent]
+	{
+		auto_drop = FALSE;
+		create_msg = we_entered_world;
+		send_goid = TRUE;
+		throw_object = FALSE;
+	}
+	[inventory]
+	{
+		[delayed_pcontent]
+		{
+			[oneof*]
+			{
+				[all*]
+				{
+                    chance = 0.15;
+					il_main = trp_arrow;
+				}
+			}
+		}
+	}
+}
+[t:template,n:trp_dsx_generator_arrow_chest]
+{
+	category_name = "trap";
+	doc = "dsx_trap_generator_arrow_chest";
+	specializes = trap;
+	[generator_object_pcontent]
+	{
+		auto_drop = FALSE;
+		create_msg = we_entered_world;
+		send_goid = TRUE;
+		throw_object = FALSE;
+	}
+	[inventory]
+	{
+		[delayed_pcontent]
+		{
+			[oneof*]
+			{
+				[all*]
+				{
+                    chance = 0.3;
+					il_main = trp_arrow;
+				}
+			}
+		}
+	}
+}
+[t:template,n:trp_dsx_generator_arrow_crate]
+{
+	category_name = "trap";
+	doc = "dsx_trap_generator_arrow_crate";
+	specializes = trap;
+	[generator_object_pcontent]
+	{
+		auto_drop = FALSE;
+		create_msg = we_entered_world;
+		send_goid = TRUE;
+		throw_object = FALSE;
+	}
+	[inventory]
+	{
+		[delayed_pcontent]
+		{
+			[oneof*]
+			{
+				[all*]
+				{
+                    chance = 0.22;
+					il_main = trp_arrow;
+				}
+			}
+		}
+	}
+}
+
+[t:template,n:trp_dsx_generator_explosion_crate]
+{
+	category_name = "trap";
+	doc = "dsx_trap_generator_explosion_crate";
+	specializes = trap;
+	[generator_object_pcontent]
+	{
+		auto_drop = FALSE;
+		create_msg = we_entered_world;
+		send_goid = TRUE;
+		throw_object = FALSE;
+	}
+	[inventory]
+	{
+		[delayed_pcontent]
+		{
+			[oneof*]
+			{
+				[all*]
+				{
+                    chance = 0.22;
+					il_main = trp_explosion;
+				}
+			}
+		}
+	}
+}
+[t:template,n:trp_dsx_generator_explosion_urn]
+{
+	category_name = "trap";
+	doc = "dsx_trap_generator_explosion_urn";
+	specializes = trap;
+	[generator_object_pcontent]
+	{
+		auto_drop = FALSE;
+		create_msg = we_entered_world;
+		send_goid = TRUE;
+		throw_object = FALSE;
+	}
+	[inventory]
+	{
+		[delayed_pcontent]
+		{
+			[oneof*]
+			{
+				[all*]
+				{
+					chance = 0.4;
+					il_main = trp_explosion;
+				}
+			}
+		}
+	}
+}
+

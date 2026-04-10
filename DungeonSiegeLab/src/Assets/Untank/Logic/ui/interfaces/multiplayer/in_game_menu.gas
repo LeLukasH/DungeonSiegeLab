@@ -1,0 +1,335 @@
+[in_game_menu]
+{
+	centered = center_menu;
+  b disable_camera = true;
+	interface = true;
+	modal = true;
+	
+	[t:window,n:center_menu]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 67;
+		rect = 320,240,320,240;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		visible = false;
+		wrap_mode = clamp;
+	}
+
+	[t:dialog_box,n:background_settings]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox_wide;
+	  i draw_order = 2;
+		rect = 180,30,460,160;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_game_name]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 12;
+	  i font_color = -1;
+	  i font_size = -842150451;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = center;
+		rect = 190,40,450,56;
+		text = ;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+	[t:listbox,n:in_game_settings_listbox]
+	{
+		alpha = 1.00000;
+		common_control = true;
+		common_template = ;
+		draw_order = 500;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		rect = 190,63,450,147;
+		text_color = 0xffffffff;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		consumable = true;
+		[messages]
+		{
+			oncreated = setelementheight(16);
+		}
+	}
+
+
+	[t:button,n:resume_button]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_5;
+	  i draw_order = 37;
+		group = server_menu;
+		rect = 220,176,420,208;
+		rollover_help = ig_resume;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(resume_game);
+		}
+		[t:text,n:text_resume]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 38;
+		  i font_color = -1;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 286,172,435,194;
+			text = "RESUME GAME";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:options_button]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_5;
+	  i draw_order = 38;
+		group = server_menu;
+		rect = 220,208,420,240;
+		rollover_help = ig_options;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(options);
+		}
+		[t:text,n:text_options]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 38;
+		  i font_color = -1;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 301,204,435,226;
+			text = "OPTIONS";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:game_settings_button]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_5;
+	  i draw_order = 39;
+		group = server_menu;
+		rect = 220,240,420,272;
+		rollover_help = ig_host_options;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:game_settings_button_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 40;
+		  i font_color = -1;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 242,236,435,258;
+			text = "MULTIPLAYER HOST OPTIONS";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(multiplayer_options);
+		}
+	}
+/*	[t:button,n:exit_to_staging_button]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_5;
+	  i draw_order = 40;
+		group = server_menu;
+		rect = 215,258,435,290;
+		rollover_help = ig_exit_to_staging_area;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:exit_to_staging_button_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 41;
+		  i font_color = -1;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 256,268,435,290;
+			text = "EXIT TO STAGING AREA";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(multiplayer_exit_to_staging_area);
+		}
+	}*/
+	[t:button,n:exit_game_button]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_5;
+	  i draw_order = 18;
+		group = server_menu;
+		rect = 220,272,420,304;
+		rollover_help = ig_exit_game;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(show_exit_game_dialog);
+		}
+		[t:text,n:text_exit_game_button]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 19;
+		  i font_color = -1;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 253,300,435,322;
+			text = "EXIT TO GAME SUMMARY";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+
+
+	[t:button,n:resume_button_client]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_5;
+	  i draw_order = 65;
+		group = client_menu;
+		rect = 250,192,390,224;
+		rollover_help = ig_resume;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(resume_game);
+		}
+		[t:text,n:resume_button_client_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 66;
+		  i font_color = -1;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 287,204,406,226;
+			text = "RESUME GAME";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:options_button_client]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_5;
+	  i draw_order = 66;
+		group = client_menu;
+		rect = 250,224,390,256;
+		rollover_help = ig_options;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(options);
+		}
+		[t:text,n:options_button_client_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 67;
+		  i font_color = -1;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 302,236,406,258;
+			text = "OPTIONS";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:exit_game_button_client]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_5;
+	  i draw_order = 41;
+		group = client_menu;
+		rect = 250,256,390,288;
+		rollover_help = ig_exit_game_client;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:exit_game_button_client_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 42;
+		  i font_color = -1;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 282,268,406,290;
+			text = "SAVE AND EXIT";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(show_exit_game_dialog);
+		}
+	}	
+}

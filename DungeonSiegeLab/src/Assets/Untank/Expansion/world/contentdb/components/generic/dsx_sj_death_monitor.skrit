@@ -1,0 +1,84 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	dsx_sj_death_monitor.skrit
+
+	Author(s)	: 	Jason Dunlop
+
+	Purpose		:	Monitors when SJ dies and kills the minion
+	
+	Expected Behavior	: minions die when SJ dies
+
+	(C)opyright 2003 Mad Doc Software
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+property goid summonedCreature$=0 doc="The summon that we are going to kill when the SJ dies.";
+property goid shadowJumperGoid$=0 doc="The summon watches this goid for its death.";
+
+owner = GoSkritComponent;
+
+startup state Initial$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		// When we are told to activate, pop to monitoring state
+		if( e$ == WE_REQ_ACTIVATE )
+		{	
+		//	report.genericf("SJ MONITOR: we are watching.\n");
+			// set the shadow jumper scid
+			shadowJumperGoid$ = MakeGoid( msg$.GetData1() );
+			// set the summoned goid
+			summonedCreature$ = msg$.GetSendFrom();
+			
+			// start watching both of them
+			GoDb.StartWatching(owner.goid, shadowJumperGoid$);
+			GoDb.StartWatching(owner.goid, summonedCreature$);
+			
+			SetState Monitoring$;
+			return;
+		}
+	}
+}
+
+state Monitoring$
+{	
+	// listen for messages to SJ or summon
+	event OnGoHandleCCMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{	
+		if( e$ == WE_KILLED )
+		{
+			if( msg$.GetSendTo() == shadowJumperGoid$ )
+			{
+			//	report.genericf("SJ MONITOR: SJ killed\n");
+				SetState Cleanup$;
+			}
+			else
+			{
+			//	report.genericf("SJ MONITOR: SUMMON killed\n");
+				SetState Finished$;
+			}
+		}
+	}
+}
+
+// That's all folks.  
+state CleanUp$
+{
+	// when SJ is killed, we want to kill its minions
+	event OnEnterState$
+	{
+	//	report.genericf("SJ MONITOR: killing summon.\n");
+		// do enough damage to gib it
+		Rules.DamageGo(summonedCreature$, NULL, NULL, summonedCreature$.go.Aspect.GetMaxLife()*2, false, false);
+		SetState Finished$;
+	}
+}
+
+state Finished$
+{
+//	PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+}

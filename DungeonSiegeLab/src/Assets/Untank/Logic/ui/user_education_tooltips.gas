@@ -1,0 +1,234 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  user_education_tooltips.gas
+// Author(s):  Chad Queen
+//
+// Summary  :  Appends information to existing tooltips or rollovers when 
+//			   user education is enabled in the game.  These tips are meant
+//			   for novice users.
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+
+[user_education_tooltips]
+{
+	[item_rollover]
+	{
+		// inventory
+		item_equippable				= "Drag to Equipment Panel or right-click to equip";
+		item_spell_inv				= "Drag to Spell Book or right-click to add to equipped Spell Book";
+		item_spell_book_slot		= "Drag to Active Spell slots above to prepare. Drag to Inventory to remove from Spell Book";
+		item_spell_book_active_slot	= "Drag to Inventory to remove from Spell Book";
+		item_store					= "Drag to Inventory to purchase. Ctrl+click to quickly buy and sell.";
+		item_spellbook				= "Drag to Equipment Panel to equip or right-click to read";
+		
+		// paperdoll
+		item_paperdoll_rollover				= "Drag to Inventory to unequip";
+		item_paperdoll_spellbook_rollover	= "Drag to Inventory to unequip";
+			
+		// world rollover
+		right_breakable		= "Right-click to break";
+		right_usable		= "Right-click to open or use";
+		right_potion		= "Right-click to use";
+		right_creature		= "Right-click to attack";
+		right_ground_item	= "Right-click to pick up item";
+
+		left_breakable		= "Left-click to break";
+		cant_break			= "You must equip a weapon before you can break that.";
+
+		left_usable			= "Left-click to open or use";
+		left_potion			= "Left-click to use";
+		left_creature		= "Left-click to attack";
+		left_ground_item	= "Left-click to pick up item";
+
+		lore_book			= "Right-click to read";
+		
+		// Interface windows
+		awp_character_slot_1	= "Click to select melee weapon (Hotkey: <weapon_binding_get>). To assign hotkey, press Ctrl+key.";
+		awp_character_slot_2	= "Click to select ranged weapon (Hotkey: <weapon_binding_get>). To assign hotkey, press Ctrl+key.";
+		awp_character_slot_3	= "Click to select Active Spell 1. Hold button down for a list of spells.";
+		awp_character_slot_4	= "Click to select Active Spell 2. Hold button down for a list of spells.";
+		awp_portrait_rollover	= "Click to select character (Hotkey: <portrait_binding_get>), or drag to change party order.";
+		team_portrait_rollover	= "Click to guard this character. Issuing other orders will cancel this command.";
+		active_item_weapon		= "Weapon you are currently using. To attack, click on a target.";
+		active_item_spell		= "Spell you are currently using. To cast, click on a target.";
+	}
+	
+	[gui_rollover]
+	{		
+		// Character Panel		
+		character_name = "Character's name";
+		character_class = "Current class, based on highest skill rating";		
+		
+		status_bar_health = "Current health";
+		status_bar_mana = "Current mana";
+		character_mana_value = "Current/maximum mana; increases with attributes";
+		character_health_value = "Current/maximum health; increases with attributes";
+		
+		text_dex = "Higher Dexterity increases ranged weapon accuracy and Armor Rating.";		
+		character_dex_value = "Use ranged weapons to increase Dexterity.";
+
+		text_int = "Higher Intelligence increases mana reserves.";
+		character_int_value = "Cast spells to increase Intelligence.";	
+
+		text_str = "Higher Strength increases melee damage.";
+		character_str_value = "Use melee weapons to increase Strength.";
+				
+		text_skill_melee = "Gray bar indicates progress toward next Melee skill level";
+		text_skill_nature = "Gray bar indicates progress toward next Nature Magic skill level";
+		text_skill_combat = "Gray bar indicates progress toward next Combat Magic skill level";
+		text_skill_ranged = "Gray bar indicates progress toward next Ranged skill level";
+		character_combat_magic_value = "Combat Magic skill increases when you use Combat Magic spells.";
+		character_nature_magic_value = "Nature Magic skill increases when you use Nature Magic spells.";
+		character_melee_value = "Melee skill increases when you use melee weapons, such as swords, axes, and maces.";
+		character_ranged_value = "Ranged skill increases when you use projectile weapons, such as bows and crossbows.";
+
+		text_skills = "Current level of each combat skill";
+		
+		text_armor = "Defensive value of equipped armor plus Dexterity bonus";
+		character_armor_value = "Higher Armor Rating reduces damage taken in combat.";	
+		text_melee_damage = "Melee damage is based on Strength and the weapon's damage rating.";
+		melee_damage_value = "Current melee damage range against an unarmored target";
+		text_ranged_damage = "Ranged damage is based on the weapon's damage rating.";
+		ranged_damage_value = "Current ranged damage range against an unarmored target";
+
+		spellbook_hide = "Close Spell Book";
+		spellbook_show = "Open Spell Book";
+		button_view = "Click and hold to view character, and then move mouse to rotate character.";		
+
+		empty_amulet = "Drag amulet here to equip";
+		empty_ring = "Drag ring here to equip";
+		empty_armor = "Drag armor here to equip";
+		empty_boots = "Drag boots here to equip";
+		empty_gauntlets = "Drag gauntlets here to equip";
+		empty_helmet = "Drag helmet here to equip";
+		empty_melee = "Drag melee weapon here to equip";
+		empty_shield = "Drag shield here to equip";
+		empty_ranged = "Drag ranged weapon here to equip.";
+		empty_spellbook = "Drag Spell Book here to equip. Spell Book must be equipped to cast spells.";
+
+		// Status Bar
+		awp_maximize = "Maximize character Weapon Panels (Hotkey: <expert_gui_mode>)";
+		awp_minimize = "Minimize character Weapon Panels (Hotkey: <expert_gui_mode>)";		
+		button_health_potions = "Make all party members drink health potions (Hotkey: <party_heal_body_with_potions>). In combat, only members below 50% health will drink.";
+		button_mana_potions = "Make all party members drink mana potions (Hotkey: <party_heal_magic_with_potions>). In combat, only members below 50% mana will drink.";
+		button_mega_map_on = "Open Megamap (Hotkey: <toggle_mini_map>)";		
+		button_mega_map_off = "Close Megamap (Hotkey: <toggle_mini_map>)";
+		button_menu = "Open Game Menu (Hotkey: Esc)";
+		button_quest_log_open = "Read Journal (Hotkey: <toggle_quest_log>)";
+		button_quest_log_close = "Close Journal (Hotkey: <toggle_quest_log>)";
+		button_play = "Pause Dungeon Siege (Hotkey: <game_pause>)";
+		button_pause = "Resume Dungeon Siege (Hotkey: <game_pause>)";
+		labels_indicator_on = "Hide labels for items on the ground (Hotkey: <toggle_item_labels>)";
+		labels_indicator_off = "View labels for items on the ground (Hotkey: <toggle_item_labels>)";
+		tracking_indicator = "Camera moves independently of character. Press <camera_track_toggle> to track camera movement to character.";
+		slow_network = "Clients are synchronizing data with the host.\nGame will automatically unpause.";
+
+		// Compass
+		compass_hide = "Hide compass";
+		compass_show = "View compass";
+		compass_drag_window = "Compass shows the direction the camera is pointing.";
+		
+		// Field Commands
+		formation_circle = "Arrange party in a circle formation.";
+		formation_column = "Arrange party in a column formation.";
+		formation_double_column = "Arrange party in a double-column formation.";
+		formation_double_row = "Arrange party in a double-row formation.";
+		formation_pyramid = "Arrange party in a wedge formation.";
+		formation_row = "Arrange party in a row formation.";
+		button_formations = "View or hide formations";
+				
+		button_movement_engage = "Movement Commands - Engage:\nCharacter stays in the vicinity to pursue enemy";
+		button_movement_freely = "Movement Commands - Move Freely:\nCharacter moves anywhere to pursue enemy";
+		button_movement_holdground = "Movement Commands - Hold Ground:\nCharacter does not move but fights back if attacked";
+
+		button_attack_fightback = "Attack Commands - Defend:\nCharacter does not attack, only fights back";
+		button_attack_free = "Attack Commands - Attack Freely:\nCharacter attacks any enemy";
+		button_attack_holdfire = "Attack Commands - Hold Fire:\nCharacter does not fight, even if attacked";
+
+		button_target_strongest = "Targeting Commands - Target Strongest:\nCharacter attacks strongest enemy in view";
+		button_target_weakest = "Targeting Commands - Target Weakest:\nCharacter attacks weakest enemy in view";
+		button_target_closest = "Targeting Commands - Target Closest:\nCharacter attacks closest enemy in view";
+
+		button_chat = "Click to talk with other players";
+		
+		// button_movement = "Set movement behavior for selected party members.";
+		// button_attack = "Set attack behavior for selected party members.";
+		// button_targeting = "Set targeting behavior for selected party members.";
+
+		button_field_commands_max = "View Engagement and Formation Standing Orders";
+		button_field_commands_min = "Hide Engagement and Formation Standing Orders";
+		button_maximize_fc = "View Field Command Buttons (Hotkey: <field_commands>)";
+		button_minimize_fc = "Hide Field Command Buttons (Hotkey: <field_commands>)";
+		button_selectall = "Select all party members (Hotkey: <select_all_party_members>)";
+		button_disband = "Disband selected party members. You must keep at least one human or dwarven member in your party.";
+		attack_fightback = "Defend - Character does not attack, only fights back.";
+		attack_free = "Attack Freely - Character attacks any enemy.";
+		attack_holdfire = "Hold Fire - Character does not fight, even if attacked.";
+		movement_free = "Move Freely - Character moves anywhere to pursue enemy.";
+		movement_engage = "Engage - Character stays in the vicinity to pursue enemy.";
+		movement_holdground = "Hold Ground - Character holds position.";
+		target_strongest = "Target Strongest - Character attacks strongest enemy in view.";
+		target_weakest = "Target Weakest - Character attacks weakest enemy in view.";
+		target_closest = "Target Closest - Character attacks closest enemy in view.";
+		collect_loot = "Order selected member(s) to collect items. If party includes a packmule, items are loaded on the packmule first.";
+		collect_loot_mp = "Order character to collect items.";
+		follow_off = "Engage follow mode";
+		follow_on = "Disengage follow mode";
+		
+		// Inventory
+		inventory_arrange = "Auto-arrange Inventory (Hotkey: <sort_inventory>)";	
+		button_gold = "Click to select an amount of gold from Inventory.";
+		inventory_exit = "Close Inventory";
+
+		// Spellbook
+		spellbook_exit = "Close Spell Book";
+		active_spell_1 = "Currently available spell appearing in slot 3 on Weapons Panel";
+		active_spell_2 = "Currently available spell appearing in slot 4 on Weapons Panel";
+		spellbook_header = "Currently selected Spell Book (highlighted in gray)";
+
+		// Mega Map
+		map_exit = "Close Megamap";
+
+		// Character AWP
+		toggle_inventory = "Open or close Inventory and Character Attributes. (Hotkey: <inventory>)";
+		active_item = "Weapon or spell you are currently using";
+
+		// Dialogue Box
+		accept = "Accept this person's offer to join your party";
+		buy_packmule = "Buy a packmule";
+		close_dialogue = "Close this dialogue window";
+		shop = "View this merchant's inventory";
+		decline = "Decline this person's offer to join your party";
+		replay = "Replay dialogue";
+		stop = "Stop dialogue";
+		sound_toggle = "Toggle sound on/off";
+		more_dialogue = "Continue conversation";	
+		show_stats = "View this person's statistics and skills";
+		
+		// Journal
+		journal_show_dialog = "Show the dialogue for this entry.";
+		journal_close = "Close Journal";
+		journal_back = "Return to the Table of Contents";
+
+		// In-game menus
+		ig_resume = "Return to the current game";
+		ig_options = "View the Options Menu";
+		ig_host_options = "View the Host Options Menu";
+		ig_exit_to_staging_area = "Save your character and return all players to the Staging Area";
+		ig_exit_game = "Save characters and exit all players to Game Summary";
+		ig_exit_game_client = "Save your character and exit to games list";
+		ig_save = "Save the current game";
+		ig_load = "Load a saved game";
+
+		// Trade
+		trade_destination = "This is the offering of the person you are trading with.";
+		trade_source = "Place items in this window to offer them in trade.";
+		trade_accept = "Accept this trade";
+		trade_cancel = "Cancel trade; items and gold will return to your Inventory.";
+	}
+}

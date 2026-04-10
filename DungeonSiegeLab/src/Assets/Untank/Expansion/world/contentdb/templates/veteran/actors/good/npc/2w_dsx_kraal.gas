@@ -1,0 +1,212 @@
+[t:template,n:2W_kraal]
+{
+	category_name = "2W_character";
+	doc = "2W_kraal";
+	specializes = base_pm_fb;
+	[actor]
+		{ 
+			portrait_icon = b_gui_ig_i_ic_c_kraal; 
+			[skills]
+				{ 
+					strength		= 12.2, 0, 10;
+					dexterity		= 4.1, 0, 10;
+					intelligence	= 1.1, 0, 10;
+
+					melee			= 49, 0, 0;
+					uber			= 9, 0, 0;
+				}
+		}	
+	[aspect]
+		{
+			[textures]
+				{
+					0 = b_c_gah_fb_skin_16;
+					1 = b_c_pos_a1_031;
+				}
+			[voice]
+				{
+					[die]		{ priority = high; * = s_v_kraal_die; }
+					//	[hit_critical]	{ priority = low; * = s_v_kraal_hit_03_SED;	 }
+					//	[hit_glance]	{ priority = low; * = s_v_kraal_hit_01_SED;	 }
+					//	[hit_solid]	{ priority = low; * = s_v_kraal_hit_02_SED;	 }
+				}
+			[vo_voice]
+				{
+					[select_char]
+						{ 
+							priority = vo; 
+							* = s_v_kraal_select_01;
+							* = s_v_kraal_select_02;
+							* = s_v_kraal_select_03;
+							* = s_v_kraal_select_04;
+							* = s_v_kraal_select_05;
+							* = s_v_kraal_select_06;
+							* = s_v_kraal_select_07;
+							* = s_v_kraal_select_08;
+							* = s_v_kraal_select_09;
+							* = s_v_kraal_select_10;
+							* = s_v_kraal_select_11;
+							* = s_v_kraal_select_12;
+							* = s_v_kraal_select_13;
+							* = s_v_kraal_select_14;
+							* = s_v_kraal_select_15;
+						}
+					[order_move]
+						{
+							priority = vo; 
+							* = s_v_kraal_ack_01;
+							* = s_v_kraal_ack_02;
+							* = s_v_kraal_ack_03;
+							* = s_v_kraal_ack_04;
+							* = s_v_kraal_ack_05;
+							* = s_v_kraal_ack_06;
+							* = s_v_kraal_ack_07;
+							* = s_v_kraal_ack_08;
+							* = s_v_kraal_ack_09;
+							* = s_v_kraal_ack_10;
+							* = s_v_kraal_ack_11;
+							* = s_v_kraal_ack_12;
+							* = s_v_kraal_ack_13;
+							* = s_v_kraal_ack_14;
+							* = s_v_kraal_ack_15;
+						}
+					[order_attack]
+						{
+							priority = vo; 
+							* = s_v_kraal_attack_01;
+							* = s_v_kraal_attack_02;
+							* = s_v_kraal_attack_03;
+							* = s_v_kraal_attack_04;
+							* = s_v_kraal_attack_05;
+							* = s_v_kraal_attack_06;
+							* = s_v_kraal_attack_07;
+							* = s_v_kraal_attack_08;
+							* = s_v_kraal_attack_09;
+							* = s_v_kraal_attack_10;
+							* = s_v_kraal_attack_11;
+							* = s_v_kraal_attack_12;
+							* = s_v_kraal_attack_13;
+							* = s_v_kraal_attack_14;
+							* = s_v_kraal_attack_15;
+						}
+				}
+	}
+	[body]
+	{
+		armor_version = gah_fb;
+		avg_move_velocity = 4.500000;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine2;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_gah_fb_fs;
+			[chore_attack]
+			{
+				chore_stances = 0,1,2,3,4,5,6,7;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					qffg = dff;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0,1,2,3,4,5,6,7;
+				skrit = infinite_loop;
+				[anim_files]
+				{
+					00 = ds;
+				}
+			}
+			[chore_die]
+			{
+				chore_stances = 0,1,2,3,4,5,6,7;
+				skrit = select_transition;
+				[anim_files]
+				{
+					00 = di;
+				}
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0,1,2,3,4,5,6,7;
+				skrit = select_fidget;
+				[anim_files]
+				{
+					00 = dsf;
+				}
+			}
+			[chore_magic]
+			{
+				chore_stances = 0,5;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = mg;
+					01 = mg-02;
+				}
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				[anim_files]
+				{
+					bed1 = a_c_gah_fb_fs0_dsf-05;
+					bed2 = a_c_gah_fb_fs0_dsf-06;
+					bed3 = a_c_gah_fb_fs0_dsf-07;
+					bed4 = a_c_gah_fb_fs0_dsf-11;
+					bed5 = a_c_gah_fb_fs0_dsf-12;
+					bed6 = a_c_gah_fb_fs0_dsf-13;
+					bed7 = a_c_gah_fb_fs0_dsf-14;
+					look = a_c_gah_fb_fs1_dff-02;
+					sit1 = a_c_gah_fb_fs0_dsf-01;
+					sit2 = a_c_gah_fb_fs0_dsf-10;
+					sit3 = a_c_gah_fb_fs0_dsf-15;
+					talk = a_c_gah_fb_fs2_dff;
+					wyme = a_c_gah_fb_fs0_dsf-02;
+					lsn2 = a_c_gah_fb_fs0_dsf-18;
+					hoe1 = a_c_gah_fb_fs5_dsf-02;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 0,1,2,3,4,5,6;
+				skrit = select_walk;
+				[anim_files]
+				{
+					00 = rl;
+				}
+			}
+		}
+	}
+	[common]
+		{
+			screen_name = "Kraal Yellowtalon";
+		}
+	[conversation]
+		{
+		}
+	[inventory]
+		{
+			[equipment]
+				{
+					es_chest = bd_le_r_g_c_avg;
+					es_feet = #boots/-no_mod/6-10;
+					es_weapon_hand = dg_g_d_1h_fun;
+				}
+			[other]
+				{
+					il_main = bw_g_c_s_s_r_avg;
+				}
+		}
+}
+

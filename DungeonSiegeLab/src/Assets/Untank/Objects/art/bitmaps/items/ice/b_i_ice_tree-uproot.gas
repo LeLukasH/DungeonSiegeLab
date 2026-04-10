@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_ice_tree-uproot]
+{
+	layer1texture1 = b_i_ice_tree-uproot;
+  i texturedetail = 2;
+}

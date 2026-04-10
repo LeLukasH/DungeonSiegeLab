@@ -1,0 +1,160 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: job_equip.skrit
+
+	Author(s)	: Bartosz Kijanka
+
+	Purpose		: Get an item.
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+GoMind	m_Mind$;
+GoBody  m_Body$;
+Job		m_Job$;
+
+#include "k_job_c_mcp_fidget_utils" 
+
+startup state Startup$
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.GetGo;
+	m_Mind$		= job$.GetGo.GetMind;
+	m_Body$		= job$.GetGo.GetBody;
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+
+	if( m_Job$.GoalObject == Goid.NoneGoid )
+	{
+		m_Go$.Inventory.RSUnequip( m_Job$.GoalSlot, m_Job$.Origin );
+		SetState Exiting$;
+	}
+	else
+	{
+		SetState Approaching$;
+	}
+}
+
+
+state Approaching$
+{
+	transition
+	{
+		->Equipping$:	OnWorldMessage( WE_MCP_SECTION_COMPLETED );
+		->Exiting$:		OnWorldMessage( WE_MCP_INVALIDATED );
+		->Exiting$:		OnWorldMessage( WE_MCP_DEPENDANCY_BROKEN );
+	}
+
+	event OnEnterState$
+	{
+		if( m_Mind$.GetDistance( m_Job$.GoalObject.Go ) > 0.5 )
+		{
+			// Approach the object, rather than the position so that the MCP can exploit use_points
+			//MCPManager.MakeRequest( m_Go$.Goid, PL_APPROACH, m_Job$.GoalPosition, 0.5 );
+			eReqRetCode ret$ = MCPManager.MakeRequest(
+													m_Go$.Goid,
+													PL_APPROACH,
+													m_Job$.GoalObject,
+													0,			   	// no lookahead	
+													15,			   	// 15 seconds max travel time
+													0.5				// get within a half meter
+													);
+			
+			report.ReportF("aimove","[%s] EQUIP (PL_APPROACH) [%s] returned [%s]\n",
+				m_Go$.TemplateName,
+				m_Job$.GoalObject.GetGo.TemplateName,//	 MakeSiegePosString(m_Job$.GoalPosition),
+				 ToString(ret$) );
+				 
+			if( RequestFailed(ret$) )
+			{
+				Report.Genericf("[%s] EQUIP - FAILED could not get to target [%s]. Aborting job.\n",
+					m_Go$.TemplateName, m_Job$.GoalObject.GetGo.TemplateName);
+				SetState( Exiting$ );
+			}
+			else if (ret$ == REQUEST_OK_IN_RANGE)
+			{
+				SetState( Equipping$ );
+			}
+			else if ( (ret$ == REQUEST_OK) || (ret$ == REQUEST_OK_CROWDED) )
+			{
+				// just stay in this state we are going to make it to our goal in this move.
+			}
+			else // anything else we just want to try to get closer.
+			{
+				SetState( MovingCloser$ );
+			}
+		}
+		else
+		{
+			SetState Equipping$;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//	
+state MovingCloser$
+{
+	transition
+	{
+		// For some reason we could not reach the target in one move request, will need to 
+		// approach again when we finish
+		-> Approaching$: 	OnWorldMessage( WE_MCP_SECTION_COMPLETED );
+		// Check WE_ANIM_DONE for safety, if you finish playing an anim, you are NOT in a walk loop
+		-> Approaching$: 	OnWorldMessage( WE_ANIM_DONE );
+		-> Exiting$:		OnWorldMessage( WE_MCP_DEPENDANCY_BROKEN );	// path blockage
+
+		// Don't send a new request on a warning --biddle
+		//-> Approaching$: 	OnWorldMessage( WE_MCP_SECTION_COMPLETE_WARNING );
+		-> Approaching$: 	OnWorldMessage( WE_MCP_SECTION_COMPLETED );
+	}
+}
+
+
+state Equipping$
+{
+	event OnEnterState$
+	{
+		// use the item
+		m_Go$.Inventory.RSAutoEquip( m_Job$.GoalSlot, m_Job$.GoalObject, m_Job$.Origin, false );
+
+		StartFidgetIfRequired$();
+/*
+		if( m_Job$.GoalObject.Go.Parent != m_Go$.Parent )
+  		{
+			// stop walking
+ 
+			// $$$ bad; this breaks command q-ing -bk
+			//MCPManager.Flush(m_Go$.Goid);
+			//MCPManager.MakeRequest( m_Go$.Goid, PL_FIDGET );
+		}
+*/
+		SetState Exiting$;
+	}
+}
+
+
+state Exiting$
+{
+	event OnEnterState$
+	{
+		m_Job$.MarkForDeletion();
+	}
+}

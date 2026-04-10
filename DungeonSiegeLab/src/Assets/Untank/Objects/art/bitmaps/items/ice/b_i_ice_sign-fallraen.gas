@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_ice_sign-fallraen]
+{
+	layer1texture1 = b_i_ice_sign-fallraen;
+  i texturedetail = 2;
+}

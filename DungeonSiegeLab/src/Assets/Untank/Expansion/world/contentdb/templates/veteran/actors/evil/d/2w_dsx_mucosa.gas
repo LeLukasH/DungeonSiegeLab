@@ -1,0 +1,1032 @@
+[t:template,n:2W_base_twisted_mucosa]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_Base Twisted Mucosa";
+	specializes = actor_evil;
+	[aspect]
+		{				
+		
+			model = m_c_edm_twmu_pos_1;
+			is_collidable = true;
+		}
+	[body]
+		{
+			min_move_velocity = 2.5;
+			avg_move_velocity = 3.0;
+			max_move_velocity = 3.5;
+			[bone_translator]
+				{
+					body_anterior = jawbone;
+					body_mid = spine1;
+					body_posterior = abdomen_upper;
+					kill_bone = abdomen_upper;
+					shield_bone = lt_pincher;
+					weapon_bone = rt_pincher;
+				}
+			[chore_dictionary]
+				{
+					chore_prefix = a_c_edm_twmu_fs;
+					[chore_attack]
+						{
+							chore_stances = 0;
+							skrit = select_attack;
+				
+							[anim_files]
+								{
+				
+									00 = at;
+									01 = at-02;
+			
+								}
+							[anim_durations]
+								{
+									fs0 = 0.9;			
+					
+								}
+				
+						}
+					[chore_magic]
+						{
+							chore_stances = 0;
+							skrit = select_attack;
+							[anim_files]
+								{
+				
+									00 = at-03;
+								}
+							[anim_durations]
+								{
+									fs0 = 0.9;			
+				
+								}
+						}
+					[chore_default]
+						{
+							chore_stances = 0;
+							skrit = infinite_loop;
+							[anim_files] { 00=dfs; }
+						}
+					[chore_die]
+						{
+							chore_stances = 0;
+							skrit = select_transition;
+							[anim_files] { 00=di; }
+						}
+					[chore_fidget]
+						{
+							chore_stances = 0;
+							skrit = select_fidget;
+							[anim_files] { 00=dff; }
+						}
+					[chore_walk]
+						{
+							chore_stances = 0;
+							skrit = select_walk;
+							[anim_files] { 00=wl; }
+						}
+				}
+		}
+	[common] { screen_name= "Twisted Mucosa"; }
+	[mind]
+		{
+			jat_fidget							= world\ai\jobs\common\job_fidget.skrit
+				?still								= false
+				&curious							= 0.75
+				&wander								= 0.8
+				&social								= 0.2
+				&interest							= interest
+				&delay_min							= 1
+				&delay_max							= 6;
+
+
+			on_enemy_spotted_alert_friends = FALSE;
+			on_enemy_spotted_attack = TRUE;
+			on_enemy_entered_ocz_flee = FALSE;
+			on_engaged_lost_consciousness_abort_attack = FALSE;
+			inner_comfort_zone_range = 3;
+			melee_engage_range = 14.0;
+			outer_comfort_zone_range = 4;
+			personal_space_range = 1;
+			ranged_engage_range = 14.0;
+			sight_range = 14.0;
+		}
+	[physics]
+		{
+			explode_when_killed = true;
+			explosion_magnitude = 1.0;
+		}
+}
+
+[t:template,n:2W_twisted_mucosa_base]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_Twisted Mucosa Base";
+	specializes = 2W_base_twisted_mucosa;
+	[body]
+		{
+		
+		}
+	[actor]
+		{
+			[skills]
+				{
+					strength =	30.4, 0;
+					intelligence =	6.8, 0;
+					dexterity =	 22, 0;
+					melee =	 47,0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 26600;
+			life = 94;
+			max_life = 94;
+			mana = 94;
+			max_mana = 94;
+
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_twisted_mucosa_medium_SED;	}
+					[enemy_spotted]	{ priority = high; * = s_e_call_twisted_mucosa_big_SED;		}
+					[hit_glance]					{ priority = low; * = s_e_hit_twisted_mucosa_medium_SED;	}
+				}
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 227.5;
+			damage_min = 152.3;
+		}
+	[defend] { defense=399.5; }
+
+	[common]
+		{
+			membership = party_mucosa_boss, monster;
+		}
+	[generator_in_object]
+		{
+			spawn_chance = 0.5;
+			child_template_name = body_glb_twisted_mucosa;
+		}
+	[mind]
+		{
+			jat_brain							 = world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party		 = true;
+
+			jat_attack_object_melee				= world\ai\jobs\common\job_attack_object_melee.skrit
+				?run_chance						= 1.0;
+		}
+	[physics]
+		{
+			[break_particulate]
+				{
+					frag_glb_twisted_mucosa_01 = 1;
+					frag_glb_twisted_mucosa_02 = 1;
+					frag_glb_twisted_mucosa_03 = 2;
+					frag_glb_twisted_mucosa_04 = 3;
+					frag_glb_twisted_mucosa_05 = 1;
+					frag_glb_twisted_mucosa_06 = 1;
+					frag_glb_twisted_mucosa_07 = 3;
+				}
+		}
+	[inventory] 
+		/* Generated: Sat Jun 14 14:21:56 2003
+			 Level 4, Medium */
+		{
+			drop_at_use_point = true;
+			
+		}
+}
+
+[t:template,n:2W_dsx_twisted_mucosa]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_twisted_mucosa";
+	specializes = 2W_twisted_mucosa_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength =	24.3, 0;
+			intelligence =	9.5, 0;
+			dexterity =	 14, 0;
+			melee =	 45,0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 26600;
+		life = 780.2;
+		max_life = 780.2;
+		mana = 94;
+		max_mana = 94;
+
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_twisted_mucosa_medium_SED;	}
+			[enemy_spotted]	{ priority = high; * = s_e_call_twisted_mucosa_big_SED;		}
+			[hit_glance]					{ priority = low; * = s_e_hit_twisted_mucosa_medium_SED;	}
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 206.8;
+		damage_min = 126.9;
+	}
+	[defend] { defense = 388.5; }
+}
+
+[t:template,n:2W_dsx_twisted_mucosa_summon]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_twisted_mucosa_summon";
+	specializes = 2W_twisted_mucosa_base;
+ aspect:experience_value = 0;
+}
+
+[t:template,n:2W_dsx_twisted_mucosa_boss]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_twisted_mucosa_boss";
+	specializes = 2W_twisted_mucosa_base;
+	[body]
+		{
+		
+		}
+	[actor]
+		{
+			[skills]
+				{
+					strength	=	 27.3, 0;
+					intelligence	=	 9.5, 0;
+					dexterity	 =	16, 0;
+					melee	 =	46, 0;
+				}
+		}
+	[aspect]
+		{
+		textures:0 = b_c_edm_twisted_mucosa;
+		experience_value = 32775;
+		life = 1240.8;
+		max_life = 1240.8;
+		mana = 94;
+		max_mana = 94;
+		[voice]
+			{
+				[die]			{ priority = high; * = s_e_die_twisted_mucosa_medium_SED;	}
+				[enemy_spotted]	{ priority = high; * = s_e_call_twisted_mucosa_big_SED;		}
+				[hit_glance]	{ priority = low; * = s_e_hit_twisted_mucosa_medium_SED;	}
+			}
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 310.2;
+			damage_min = 186.1;
+		}
+	[defend] { defense=429.3; }
+	[common]
+		{
+			screen_name="Twisted Mucosa Brute";
+			membership = monster,immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;
+			[template_triggers]
+				{
+					[*]
+						{
+							condition* = receive_world_message("WE_ENTERED_WORLD");
+							single_shot = true;
+							no_trig_bits = true;
+							action* = call_sfx_script("unique_ray_red(sgx)");
+						}
+				}
+		}
+	[generator_in_object]
+		{
+			spawn_chance = 0.5;
+			child_template_name = body_glb_twisted_mucosa;
+		}
+		[inventory]
+{
+	drop_at_use_point = true;
+	[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 4, Strong */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 25709;
+				max = 49989;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_large;
+				il_main = potion_health_large;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = #weapon/117;
+				il_main = #armor/38-320;
+				il_main = #*/117;
+			}
+		}
+	}
+}
+	[mind]
+		{
+			jat_brain	 = world\ai\jobs\common\brain_hero.skrit
+				?actor_creates_own_party	= true
+				&party_template						= "party_mucosa_boss";
+
+			jat_fidget			= world\ai\jobs\common\job_fidget.skrit
+				?social				= 0.8
+				&approach_dist		= 3
+				&friend_template	= false
+				&friends			= party_mucosa_boss
+				&still				= false;
+
+			jat_attack_object_melee				= world\ai\jobs\common\job_attack_object_melee.skrit
+				?run_chance						= 1.0;
+		}
+	[physics]
+		{
+			[break_particulate]
+				{
+					frag_glb_mucosa_01 = 1;
+					frag_glb_mucosa_02 = 1;
+					frag_glb_mucosa_03 = 2;
+					frag_glb_mucosa_04 = 3;
+					frag_glb_mucosa_05 = 1;
+					frag_glb_mucosa_06 = 1;
+					frag_glb_mucosa_07 = 3;
+				}
+		}
+}
+
+
+[t:template,n:2W_dsx_twisted_mucosa_small]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_twisted_mucosa_sm";
+	specializes = 2W_base_twisted_mucosa;
+	[actor]
+		{
+			[skills]
+				{
+					strength =	28.3, 0;
+					intelligence =	9.6, 0;
+					dexterity =	 16.2, 0;
+					melee =	 46, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 24225;
+			life = 1012;
+			max_life = 1012;
+			mana = 115;
+			max_mana = 115;
+			scale_base = 0.80;
+		textures:0 = b_c_edm_vile_twisted_mucosa;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_twisted_mucosa_small_SED;				}
+					[enemy_spotted]	{ priority = high; * = s_e_call_twisted_mucosa_small_SED;	}
+					[hit_glance]	{ priority = low; * = s_e_hit_twisted_mucosa;				}
+				}
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 303.6;
+			damage_min = 186.3;
+		damage_bonus_min_cmagic = 132;
+		damage_bonus_max_cmagic = 208;
+		}
+	[common]
+		{
+			screen_name="Twisted Mucosa Larvae";
+			membership = party_mucosa_boss, monster;
+		}
+	[defend] { defense=352.7; }
+	[inventory]
+		{
+			selected_active_location = il_active_primary_spell;
+			[other] { il_active_primary_spell = dsx_spell_mucosa_poison_small; }
+			[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 4, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 36261;
+				max = 70507;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_large;
+				il_main = potion_health_large;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/109;
+				il_main = #armor/23-288;
+				il_main = #*/109;
+			}
+		}
+	}
+		}
+	[generator_in_object]
+		{
+			spawn_chance = 0.5;
+			child_template_name = body_glb_twisted_mucosa;
+		}
+	[inventory]
+		{
+		}
+
+	[mind]
+		{
+			jat_brain							 = world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party		 = true;
+
+			actor_weapon_preference			= WP_MAGIC;
+			actor_auto_switches_to_magic	= true;
+			actor_auto_switches_to_karate	= false;
+			actor_auto_switches_to_melee	= false;
+
+			personal_space_range = 0.75;
+		}
+	[physics]
+		{
+			[break_particulate]
+				{
+					frag_glb_mucosa_small_01 = 1;
+					frag_glb_mucosa_small_02 = 1;
+					frag_glb_mucosa_small_03 = 2;
+					frag_glb_mucosa_small_04 = 3;
+					frag_glb_mucosa_small_05 = 1;
+					frag_glb_mucosa_small_06 = 1;
+					frag_glb_mucosa_small_07 = 3;
+				}
+		}
+}
+
+[t:template,n:2W_dsx_twisted_mucosa_large]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_twisted_mucosa_lg";
+	specializes = 2W_base_twisted_mucosa;
+	[actor]
+		{
+			[skills]
+				{
+					strength =	27.3, 0;
+					intelligence =	9.5, 0;
+					dexterity =	 16, 0;
+					melee =	 46, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 24225;
+			life = 827.2;
+			max_life = 827.2;
+			mana = 94;
+			max_mana = 94;
+			scale_base = 1.20;
+		textures:0 = b_c_edm_twisted_mucosa_raider;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_twisted_mucosa_large_SED;	}
+					[enemy_spotted]	{ priority = high; * = s_e_call_twisted_mucosa_big_SED;	}
+					[hit_glance]	{ priority = low; * = s_e_hit_twisted_mucosa_large_SED;	}
+				}
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 268.8;
+			damage_min =160.7;
+		}
+	[common]
+		{
+			screen_name="Large Twisted Mucosa";
+			membership = party_mucosa_boss, monster;
+		}
+	[defend] { defense=372.9; }
+	[generator_in_object]
+		{
+			spawn_chance = 0.5;
+			child_template_name = body_glb_twisted_mucosa;
+		}
+	[inventory]
+		{
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 4, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 25709;
+				max = 49989;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_large;
+				il_main = potion_health_large;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/92;
+				il_main = #armor/19-235;
+				il_main = #*/92;
+			}
+		}
+	}
+		}
+
+	[mind]
+		{
+			jat_brain							 = world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party		 = true;
+
+			personal_space_range = 1.1;
+		}
+	[physics]
+		{
+			[break_particulate]
+				{
+					frag_glb_mucosa_large_01 = 1;
+					frag_glb_mucosa_large_02 = 1;
+					frag_glb_mucosa_large_03 = 2;
+					frag_glb_mucosa_large_04 = 3;
+					frag_glb_mucosa_large_05 = 1;
+					frag_glb_mucosa_large_06 = 1;
+					frag_glb_mucosa_large_07 = 3;
+				}
+		}
+}
+
+[t:template,n:2W_dsx_twisted_mucosa_raider]
+//These are generated from the Lost Queen
+//...and do NOT give any experience!!!
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_twisted_mucosa_raider";
+	specializes = 2W_base_twisted_mucosa;
+	[actor]
+		{
+			[skills]
+				{
+					strength =	27.3, 0;
+					intelligence =	9.5, 0;
+					dexterity =	 16, 0;
+					melee =	 46, 0;
+				}
+		}
+	[aspect]
+		{
+		
+			[textures]	{ 0 = b_c_edm_twisted_mucosa_raider; }
+			experience_value = 0;
+			life = 1240.8;
+			max_life = 1240.8;
+			mana = 94;
+			max_mana = 94;
+			scale_base = 1.3;
+		
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_twisted_mucosa_large_SED;	}
+					[enemy_spotted]	{ priority = high; * = s_e_call_twisted_mucosa_big_SED;		}
+					[hit_glance]	{ priority = low; * = s_e_hit_twisted_mucosa_large_SED;	}
+				}
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 258.5;
+			damage_min = 152.3;
+		}
+	[common] 
+		{ 
+			screen_name = "Twisted Mucosa Raider"; 
+			[template_triggers]
+				{
+					[*]
+						{
+							action* = call_sfx_script("twisted_mucosa_raider");
+							condition* = receive_world_message("WE_ENTERED_WORLD");
+							single_shot = true;
+						}
+				}
+		}
+	[defend] { defense = 391.7; }
+	[generator_in_object]
+		{
+			spawn_chance = 0.5;
+			child_template_name = body_glb_twisted_mucosa;
+		}
+	[inventory]
+		{
+						 
+		}
+	[mind]
+		{
+			jat_fidget							= world\ai\jobs\common\job_fidget.skrit
+				?still								= false
+				&curious							= 0.75
+				&wander								= 0.8
+				&social								= 0.2
+				&interest							= interest
+				&delay_min							= 1
+				&delay_max							= 6;
+
+
+			on_enemy_spotted_alert_friends = FALSE;
+			on_enemy_spotted_attack = TRUE;
+			on_enemy_entered_ocz_flee = FALSE;
+			on_engaged_lost_consciousness_abort_attack = FALSE;
+			inner_comfort_zone_range = 5;
+			melee_engage_range = 20.0;
+			outer_comfort_zone_range = 6;
+			personal_space_range = 1;
+			ranged_engage_range = 20.0;
+			sight_range = 20.0;
+		}
+	[physics]
+		{
+			[break_particulate]
+				{
+					frag_glb_twisted_mucosa_raider_01 = 1;
+					frag_glb_twisted_mucosa_raider_02 = 1;
+					frag_glb_twisted_mucosa_raider_03 = 2;
+					frag_glb_twisted_mucosa_raider_04 = 3;
+					frag_glb_twisted_mucosa_raider_05 = 1;
+					frag_glb_twisted_mucosa_raider_06 = 1;
+					frag_glb_twisted_mucosa_raider_07 = 3;
+				}
+		}
+}
+
+[t:template,n:2W_vile_twisted_mucosa_base]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_Vile Twisted Mucosa Base";
+	specializes = 2W_base_twisted_mucosa;
+	[actor]
+		{
+			[skills]
+				{
+					strength =		45.5, 0;
+					intelligence =	27.2, 0;
+					dexterity =		20, 0;
+					combat_magic =	72, 0;
+				}
+		}
+	[aspect]
+		{
+		
+			[textures]	{ 0 = b_c_edm_vile_twisted_mucosa; }
+			experience_value = 23750;
+			life = 112.8;
+			max_life = 112.8;
+			mana = 94;
+			max_mana = 94;
+			scale_base = 1.0;
+		
+			[voice]
+				{
+					[cast]			{ * = s_e_attack_mucosa_small;		}
+					[die]			{ priority = high; * = s_e_die_twisted_mucosa;				}
+					[enemy_spotted]	{ priority = high; * = s_e_call_twisted_mucosa_small_SED;	}
+					[hit_glance]	{ priority = low; * = s_e_hit_twisted_mucosa;				}
+				}
+		}
+	[attack]
+		{
+			attack_range = 0.2;
+			damage_max = 113.7;
+			damage_min = 59.2;
+		damage_bonus_min_cmagic = 129;
+		damage_bonus_max_cmagic = 231;
+		}
+	[common] { screen_name = "Vile Twisted Mucosa"; }
+	[defend] { defense = 225.6; }
+	[inventory]
+		{
+			selected_active_location = il_active_primary_spell;
+			[other] { il_active_primary_spell = dsx_spell_mucosa_poison; }
+
+			
+		}
+	[generator_in_object]
+		{
+			spawn_chance = 0.5;
+			child_template_name = body_glb_twisted_mucosa;
+		}
+
+	[mind]
+		{
+			actor_weapon_preference			= WP_MAGIC;
+			actor_auto_switches_to_magic	= true;
+			actor_auto_switches_to_karate	= false;
+			actor_auto_switches_to_melee	= false;
+
+			personal_space_range = 0.75;
+		}
+	[physics]
+		{
+			[break_particulate]
+				{
+					frag_glb_vile_twisted_mucosa_01 = 1;
+					frag_glb_vile_twisted_mucosa_02 = 1;
+					frag_glb_vile_twisted_mucosa_03 = 2;
+					frag_glb_vile_twisted_mucosa_04 = 3;
+					frag_glb_vile_twisted_mucosa_05 = 1;
+					frag_glb_vile_twisted_mucosa_06 = 1;
+					frag_glb_vile_twisted_mucosa_07 = 3;
+				}
+		}
+}
+
+[t:template,n:2W_dsx_vile_twisted_mucosa]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_vile_twisted_mucosa";
+	specializes = 2W_vile_twisted_mucosa_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength =		24.3, 0;
+			intelligence =	9.5, 0;
+			dexterity =		14, 0;
+			combat_magic =	45, 0;
+			nature_magic =	45, 0;
+		}
+	}
+	[aspect]
+	{
+	
+		[textures]	{ 0 = b_c_edm_vile_twisted_mucosa; }
+		experience_value = 23275;
+		life = 611;
+		max_life = 611;
+		mana = 94;
+		max_mana = 94;
+		scale_base = 1.0;
+	
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_twisted_mucosa_SED;				}
+			[enemy_spotted]	{ priority = high; * = s_e_call_twisted_mucosa_small_SED;	}
+			[hit_glance]	{ priority = low; * = s_e_hit_twisted_mucosa;				}
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.2;
+		damage_max = 258.5;
+		damage_min = 143.8;
+		damage_bonus_min_cmagic = 129;
+		damage_bonus_max_cmagic = 231;
+	}
+	[common] { screen_name = "Vile Twisted Mucosa"; }
+	[defend] { defense = 294.5; }
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell = dsx_spell_mucosa_poison; }
+
+	}
+	[generator_in_object]
+	{
+		spawn_chance = 0.5;
+		child_template_name = body_glb_twisted_mucosa;
+	}
+	[mind]
+	{
+		actor_weapon_preference			= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+		actor_auto_switches_to_karate	= false;
+		actor_auto_switches_to_melee	= false;
+
+		personal_space_range = 0.75;
+	}
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_vile_twisted_mucosa_01 = 1;
+			frag_glb_vile_twisted_mucosa_02 = 1;
+			frag_glb_vile_twisted_mucosa_03 = 2;
+			frag_glb_vile_twisted_mucosa_04 = 3;
+			frag_glb_vile_twisted_mucosa_05 = 1;
+			frag_glb_vile_twisted_mucosa_06 = 1;
+			frag_glb_vile_twisted_mucosa_07 = 3;
+		}
+	}
+}
+
+
+
+[t:template,n:2W_dsx_vile_twisted_mucosa_summon]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_vile_twisted_mucosa_summon";
+	specializes = 2W_vile_twisted_mucosa_base;
+ aspect:experience_value = 0;
+	[inventory]
+		{
+			selected_active_location = il_active_primary_spell;
+			[other] { il_active_primary_spell = dsx_spell_mucosa_poison; }
+		}
+}
+
+// This one changes only stats from the first game.
+[t:template,n:2W_dsx_mucosa]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_mucosa";
+	specializes = mucosa_base;
+	[body]
+		{
+			max_move_velocity = 4.75;
+		}
+	[actor]
+		{
+			[skills]
+				{
+					strength =	25.1, 0;
+					intelligence =	9.6, 0;
+					dexterity =	 16.2, 0;
+					melee =		45,0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 29925;
+			life = 805;
+			max_life = 805;
+			mana = 0;
+			max_mana = 0;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_mucosa_medium_SED;	}
+					[enemy_spotted]	{ priority = high; * = s_e_call_mucosa_big_SED;		}
+					[hit_glance]	{ priority = low; * = s_e_hit_mucosa_medium_SED;	}
+				}
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 253;
+			damage_min = 155.3;
+		}
+	[common]
+		{
+			membership = monster;
+			screen_name="Mucosa"; 
+		}
+
+	[defend] { defense = 364.2; }
+	[inventory] 
+		/* Generated: Sat Jun 14 14:21:56 2003
+			 Level 4, Medium */
+		{
+			drop_at_use_point = true;
+			[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 4, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 36261;
+				max = 70507;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_large;
+				il_main = potion_health_large;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/109;
+				il_main = #armor/23-288;
+				il_main = #*/109;
+			}
+		}
+	}
+		}
+}
+
+[t:template,n:2W_dsx_mucosa_small]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_vile_mucosa";
+	specializes = base_mucosa;
+	[actor]
+		{
+			[skills]
+				{
+					strength =	25.1, 0;
+					intelligence =	9.6, 0;
+					dexterity =	 14.2, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 25935;
+			life = 540.5;
+			max_life = 540.5;
+			mana = 115;
+			max_mana = 115;
+			scale_base = 0.80;
+		textures:0 = b_c_edm_mu-02;
+			[voice]
+				{
+					[cast]			{ * = s_e_attack_mucosa_small;		}
+					[die]			{ priority = high; * = s_e_die_mucosa;				}
+					[enemy_spotted]	{ priority = high; * = s_e_call_mucosa_small_SED;	}
+					[hit_glance]	{ priority = low; * = s_e_hit_mucosa;				}
+				}
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 151.8;
+			damage_min = 82.8;
+		damage_bonus_min_cmagic = 132;
+		damage_bonus_max_cmagic = 208;
+		}
+	[common]
+		{
+			screen_name="Vile Mucosa";
+			membership = party_mucosa_boss, monster;
+		}
+	[defend] { defense=337.3; }
+	[inventory] 
+		/* Generated: Sat Jun 14 14:21:56 2003
+			 Level 4, Medium */
+		{
+			selected_active_location = il_active_primary_spell;
+			[other] { il_active_primary_spell=dsx_spell_mucosa_poison_small; }
+
+			drop_at_use_point = true;
+			
+		}
+	[generator_in_object]
+		{
+			spawn_chance = 0.5;
+			child_template_name = body_glb_mucosa_02;
+		}
+
+	[mind]
+		{
+			jat_brain							 = world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party		 = true;
+
+			actor_weapon_preference			= WP_MAGIC;
+			actor_auto_switches_to_magic	= true;
+			actor_auto_switches_to_karate	= false;
+			actor_auto_switches_to_melee	= false;
+
+			personal_space_range = 0.75;
+		}
+	[physics]
+		{
+			[break_particulate]
+				{
+					frag_glb_mucosa_small_01 = 1;
+					frag_glb_mucosa_small_02 = 1;
+					frag_glb_mucosa_small_03 = 2;
+					frag_glb_mucosa_small_04 = 3;
+					frag_glb_mucosa_small_05 = 1;
+					frag_glb_mucosa_small_06 = 1;
+					frag_glb_mucosa_small_07 = 3;
+				}
+		}
+}

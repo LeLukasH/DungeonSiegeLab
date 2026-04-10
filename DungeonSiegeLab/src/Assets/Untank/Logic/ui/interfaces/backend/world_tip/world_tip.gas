@@ -1,0 +1,403 @@
+[world_tip]
+{
+	centered = dialog_tip_main_bg;
+  b interface = true;
+  b modal = true;
+
+	[t:button,n:button_tip_resume]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 9;
+		rect = 270,382,370,398;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(close_tips);
+		}
+		[t:text,n:text_tip_resume]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 15;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 460,383,525,398;
+			text = "Resume";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+
+			group = tip_database;
+		}
+
+		group = tip_popup;
+	}
+
+	[t:button,n:button_tip_close]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 9;
+		rect = 425,382,525,398;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(close_tips);
+		}
+		[t:text,n:text_tip_close]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 15;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 460,383,525,398;
+			text = "Resume";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+
+			group = tip_database;
+		}
+
+		group = tip_database;
+	}
+	[t:button,n:button_tip_next]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 8;
+		rect = 223,382,323,398;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(tip_next);
+		}
+		[t:text,n:text_tip_next]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 14;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 247,383,323,398;
+			text = "Next Tip";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			group = tip_database;
+		}
+		group = tip_database;
+	}
+	[t:button,n:button_tip_previous]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 7;
+		rect = 114,382,214,398;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(tip_previous);
+		}
+		[t:text,n:text_tip_previous]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 13;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 126,383,214,398;
+			text = "Previous Tip";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			group = tip_database;
+		}
+
+		group = tip_database;
+	}
+	[t:button,n:button_tip_x]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  i draw_order = 11;
+		rect = 516,57,532,73;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(close_tips);
+		}
+	}
+	[t:window,n:checkbox_tip_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 12;
+		rect = 115,406,131,418;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.250000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:checkbox,n:checkbox_tip_toggle]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 12;
+		rect = 115,406,131,418;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.250000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oncheck = loadtexture(b_gui_cmn_checkbox_x) &
+					  notify(tip_off);
+			onuncheck = loadtexture(b_gui_cmn_checkbox) &
+						notify(tip_on);
+		}
+	}
+	[t:dialog_box,n:dialog_tip_main_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 2;
+		rect = 105,55,535,425;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_tip_text_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 6;
+		rect = 114,92,526,377;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_tip_title_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 3;
+		rect = 114,62,508,90;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text_box,n:text_box_bullet_1]
+	{
+	  f alpha = 1.000000;
+	  b center_height = true;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 71;
+	  b fixed_location = true;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = tip_bullet_1;
+	  b has_slider = false;
+		justify = left;
+	  i max_height = -421075225;
+	  i max_width = -421075225;
+		rect = 160,100,520,160;
+	  f scroll_rate = 0.000000;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text_box,n:text_box_bullet_2]
+	{
+	  f alpha = 1.000000;
+	  b center_height = true;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 72;
+	  b fixed_location = true;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = tip_bullet_2;
+	  b has_slider = false;
+		justify = left;
+	  i max_height = -421075225;
+	  i max_width = -421075225;
+		rect = 160,169,520,229;
+	  f scroll_rate = 0.000000;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text_box,n:text_box_bullet_3]
+	{
+	  f alpha = 1.000000;
+	  b center_height = true;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 73;
+	  b fixed_location = true;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = tip_bullet_3;
+	  b has_slider = false;
+		justify = left;
+	  i max_height = -421075225;
+	  i max_width = -421075225;
+		rect = 160,238,520,298;
+	  f scroll_rate = 0.000000;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text_box,n:text_box_bullet_4]
+	{
+	  f alpha = 1.000000;
+	  b center_height = true;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 35;
+	  b fixed_location = true;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = tip_bullet_4;
+	  b has_slider = false;
+		justify = left;
+	  i max_height = -421075225;
+	  i max_width = -421075225;
+		rect = 160,307,520,367;
+	  f scroll_rate = 0.000000;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text_box,n:text_box_tip]
+	{
+	  f alpha = 1.000000;
+	  b center_height = false;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 19;
+	  b fixed_location = true;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = tip_text_only;
+	  b has_slider = false;
+		justify = left;
+	  i max_height = 240;
+	  i max_width = 320;
+		rect = 119,95,520,373;
+	  f scroll_rate = 0.000000;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_tip_disable]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 17;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 134,405,234,419;
+		text = "Disable tips";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(toggle_tips);
+		}
+	}
+	[t:text,n:text_tip_number]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 75;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 257,405,357,419;
+		text = "Tip: 1 of 10";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_tip_title]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 4;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = center;
+		rect = 118,65,504,85;
+		text = "Adventurer's Handbook";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_image_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 43;
+		group = tip_bullet_1;
+		rect = 124,112,156,144;
+		texture = b_gui_ig_mnu_gen_friend;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_image_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 44;
+		group = tip_bullet_2;
+		rect = 124,183,156,215;
+		texture = b_gui_ig_mnu_gen_friend;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_image_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 45;
+		group = tip_bullet_3;
+		rect = 124,252,156,284;
+		texture = b_gui_ig_mnu_gen_friend;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_image_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 21;
+		group = tip_bullet_4;
+		rect = 124,320,156,352;
+		texture = b_gui_ig_mnu_gen_friend;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+}

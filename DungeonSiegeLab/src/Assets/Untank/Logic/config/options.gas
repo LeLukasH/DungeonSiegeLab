@@ -1,0 +1,55 @@
+[options]
+{
+	[video]
+	{
+		[allowed_res]
+		{
+			* = 640x480x16;
+			* = 640x480x32;
+			* = 800x600x16;
+			* = 800x600x32;
+			* = 1024x768x16;
+			* = 1024x768x32;
+		}
+		screen_res = 640x480x32;
+		screen_res_alternate = 640x480x16;
+		gamma = 1.0;
+		video_shadows = complex_party;
+		texture_filtering = bilinear;
+		object_detail = 1.0;
+	}
+	[audio]
+	{
+		sound_enabled = true;
+		eax_enabled = false;
+						 //0-127
+		master_volume =		108; // was 100 -MM 01.23.02
+		music_volume = 		108; // was  84 -MM 01.23.02
+		sfx_volume = 		74;
+		ambient_volume = 	90;
+		voice_volume = 		85; // was 80 -MM 06.14.2002
+	}
+	[input]
+	{
+		invert_camera_x_axis = false;
+		invert_camera_y_axis = false;
+		lock_camera_x_axis	 = false;
+		lock_camera_y_axi	 = false;
+		screen_edge_tracking = true;
+		camera_rate = 50; // 0-100
+		mouse_rate = 50;
+	}
+	[game]
+	{
+		show_framerate = false;
+		show_tooltips = true;
+		game_speed = 1.0;
+		text_scroll = 5.0;
+		max_text	= 6.0;
+		tutorial_tips = true;
+		difficulty = normal;
+		blood = red; // red, green, disabled
+		dismemberment = true;
+		priority_boost = false;
+	}
+}

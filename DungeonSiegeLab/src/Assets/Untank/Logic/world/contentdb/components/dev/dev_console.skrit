@@ -1,0 +1,29 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  dev_console.skrit
+// Author(s):  Scott Bilas
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+property string _doc$ = "Sends a command to the console";
+property string _required_component$ = "placement";
+
+property string command$ doc = "Command to execute when receive WE_REQ_ACTIVATE (prefix with / for Skrit)";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+trigger OnGoHandleMessage$( WE_REQ_ACTIVATE )
+{
+	GpConsole.Execute( command$ );
+}
+
+//////////////////////////////////////////////////////////////////////////////

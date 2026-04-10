@@ -1,0 +1,30 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  activate_chapter.skrit
+// Author(s):  Chad Queen
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool			_server_only$			= true;
+property string			_doc$					= "Activates and updates chapter information.";
+
+owner = GoSkritComponent;
+
+// external properties
+property string			chapter$;
+property int			order$;
+
+//////////////////////////////////////////////////////////////////////////////
+
+trigger OnGoHandleMessage$( WE_REQ_ACTIVATE )
+{
+	Victory.RSActivateChapter( chapter$, order$ );
+}

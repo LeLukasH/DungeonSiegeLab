@@ -1,0 +1,9 @@
+[t:template,n:dsx_cmd_party_wrangler]
+{
+	specializes	= cmd_const;
+	doc			= "dsx command wrangle party";
+    category_name = "zurb";
+    extra_doc = "use this to make the party behave durring an NIS";
+
+	[dsx_cmd_party_wrangler] {}
+}

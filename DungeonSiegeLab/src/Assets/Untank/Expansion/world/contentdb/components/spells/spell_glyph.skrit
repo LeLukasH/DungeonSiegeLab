@@ -1,0 +1,384 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_glyph.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Creates a rune at ground level which will harm enemies when they are within
+// a given distance.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string cast_script$	= "glyph_cast"			doc = "Name of the SiegeFx script that will be providing the visual.";
+property string effect_script$	= ""				doc = "Name of the SiegeFx script that will be played at the end of the spell.";
+property int radius$		= 10				doc = "Distance from the rune where enemies will be effected";
+property float damage_falloff$	= .1				doc = "Amount the damage amount falls off with each unit of radius";	
+property int wait_for_enemies$	= 1				doc = "Number of enemies needed in the bounding sphere before detonation";
+property string rune_template$	= "rune_glb_glyph_01"		doc = "Template to use for summoned rune.";
+property string description$	= ""				doc = "Description of enchantment being applied";
+property float explosion_length$= 2				doc = "Length of explosion animation.  Only for timing, doesn't effect duration.";
+property bool ex_duration$	= false				doc = "Does this last for an extended duration?";
+
+property int max_glyph_count$	= 10				doc = "Max number of glyphs a caster can have at a time.";
+property string caster_description$ = ""			doc = "Description of the caster while glyphs exist.";
+
+property float timeout$		= 30				doc = "The maximum amount of time this glyph should last.";
+property string glyphStateName$	= "DSX_glyph_timer"		doc = "The name of the state to add to the glyph for displaying its timer.";
+property string state_description$ = "Time remaining"		doc = "Description of the time remaning on the glyph.";
+
+property string glyphDetonatingStateName$ = "DSX_glyph_detonating"	doc = "The name of the state to add when the glyph is detonating.";
+property string other_description$ = "Detonating" 			doc = "The description when the glyph is detonating.";
+
+owner = GoSkritComponent;
+
+// key goids
+Goid caster_goid$;
+Goid target_goid$;
+Goid rune_goid$;
+
+// starting pos for the rune
+int starting_pos$;
+
+// damage amount for the spell
+float damage_amount$;
+
+////////////////////////////////////////
+// Support Functions
+
+// does damage to enemies in the collection.  damage based on distance from source using damage_falloff$
+DamageEnemies$(SiegePos source$)
+{
+
+	int i$, iend$;
+	Go enemy_go$;
+	float damage$, distance$;
+	GopColl enemies$;
+
+	// get the caster's gopcoll and clear it
+	enemies$ = caster_goid$.Go.Mind.TempGopColl1;
+	enemies$.Clear();
+
+	// get the enemies in the radius (have to do it twice because we need to wait for
+	// explosion effect to finish.  caster's mind gets cleared in that time). 
+	// any other solutions?
+	#only(game)[[
+	AIQuery.GetEnemiesOfGoInSphere(source$, radius$, caster_goid$.Go, enemies$);
+	]];
+
+	// loop through the enemies
+	i$ = 0;
+	iend$ = enemies$.Size();
+	while(i$ < iend$)
+	{
+		// get the enemy
+		enemy_go$ = enemies$.Get(i$);
+
+		// make sure it's there
+		if( enemy_go$ != NULL )
+		{
+			// set the damage
+			damage$ = damage_amount$;
+
+			// are we doing falloff damage?
+			if(damage_falloff$ != 0)
+			{
+				// find the distance from source to the enemy
+				distance$ = AIQuery.GetDistance(source$, enemy_go$.Placement.GetPosition());
+
+				// determine the damage
+				damage$ = damage$ - (distance$ * damage_falloff$);
+
+				// we don't want to go less than zero
+				if(damage$ < 0)
+				{
+					damage$ = 0;
+				}
+			}
+
+			// who throws a shoe? honestly...that really hurt!
+			Rules.DamageGo( enemy_go$.Goid, rune_goid$, owner.goid, damage$, true, false );
+		}
+
+		// increment
+		i$ = i$ + 1;
+	}
+}
+
+////////////////////////////////////////
+//	State Machine
+	
+// wait for any left world messages from the rune
+event OnGoHandleCCMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+{
+	if( e$ == WE_LEFT_WORLD )
+	{
+		SetState OutOfFrustum$;
+	}
+	else if( e$ == WE_ENTERED_WORLD )
+	{
+		SetState OnGround$;
+	}
+}
+
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$(eWorldEvent e$, WorldMessage msg$)
+	{
+		if(e$ == WE_REQ_CAST)
+		{
+			// get the caster and the target
+			caster_goid$ = msg$.GetSendFrom();
+			target_goid$ = MakeGoid( msg$.GetData1() );
+			
+			// make sure they're valid
+			if(!target_goid$.IsValidMp || !caster_goid$.IsValidMp)
+			{
+				SetState Abort$;
+				return;
+			}
+				
+			//Make the omni version of the spell to run things.
+			GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.go.Parent.Goid, owner.goid );
+			cloneReq$.Omni = true;
+			Goid new_spell$ = GoDb.SCloneGo( cloneReq$ );
+
+			// send Omni version an Activate to get it started.
+			PostWorldMessage( WE_REQ_ACTIVATE, caster_goid$, new_spell$, MakeInt( target_goid$ ), 0 );
+
+			SetState Finished$;
+
+		}
+		else if(e$ == WE_REQ_ACTIVATE)
+		{
+			// get the caster and the target
+			caster_goid$ = msg$.GetSendFrom();
+			target_goid$ = MakeGoid( msg$.GetData1() );
+			
+			// make sure they're valid
+			if(!target_goid$.IsValidMp || !caster_goid$.IsValidMp)
+			{
+				SetState Abort$;
+				return;
+			}
+
+			// copy the reference to the starting position into SiegeFx persistant storage
+			starting_pos$ = SiegeFx.AddVariable(target_goid$.go.placement.position, owner.Goid);
+			
+			// run the effect
+			SiegeFx.SRunScript(cast_script$, target_goid$, caster_goid$, "", owner.Goid, e$);
+		}
+		else if(e$ == WE_SPELL_SYNC_MID)
+		{
+			// do the clone request
+			GoCloneReq req$ = MakeGoCloneReq(rune_template$);
+			req$.StartingPos = SiegeFx.GetVariable( starting_pos$, owner.goid );
+			req$.SnapToTerrain = true;
+			req$.Fadein = true;
+			req$.SetForceClientAllowed(true);
+			
+			// create the clone
+			rune_goid$ = GoDb.SCloneGo(req$);
+
+			// no expire and not lodfi
+			rune_goid$.Go.DisableAutoExpiration();
+			#only(game) [[
+			rune_goid$.Go.SetLodfi( false );
+			]];
+
+			// watch the new rune
+			Godb.StartWatching( owner.goid, rune_goid$);	
+
+			// MRC 8/11/2003 Add a state counter for the glyphs to the caster.
+			#only(game) [[
+			caster_goid$.go.actor.SAddGenericState(owner.go.Magic.CasterStateName, caster_description$, max_glyph_count$, caster_goid$);
+			]];
+			
+			// make sure the rune is valid
+			if(rune_goid$.IsValid())
+			{				
+				// switch to the on ground state
+				SetState OnGround$;
+			}
+			else
+			{
+				// oops!
+				report.genericf("Rune clone could not be created! Go see Tim");
+				SetState Abort$;
+			}
+		}
+	}	
+}
+
+// state the spell remains in when the rune is on the ground
+state OnGround$
+{
+	SiegePos rune_pos$;
+
+	// gets kicked off with timer 1.  looks for enemies within the radius and detonates if necessary (kaboom!)
+	trigger OnTimer$(1)
+	{
+		GopColl enemies_in_sphere$;
+
+		// make sure the rune is still valid
+		if( !rune_goid$.IsValid() || rune_goid$.Go == NULL ) { SetState OutOfFrustum$; }
+		else if( !rune_goid$.Go.IsInActiveWorldFrustum() ) { SetState OutOfFrustum$; }
+
+		// get the caster's gopcoll and clear it
+		enemies_in_sphere$ = caster_goid$.Go.Mind.TempGopColl1;
+		enemies_in_sphere$.Clear();
+
+		// get the rune's position
+		rune_pos$ = rune_goid$.Go.Placement.GetPosition();
+
+		#only(game)[[
+		// get the enemies in the radius
+		AIQuery.GetEnemiesOfGoInSphere(rune_pos$, radius$, caster_goid$.Go, enemies_in_sphere$);
+
+		// are there enough in range?
+		if(enemies_in_sphere$.Size() >= wait_for_enemies$)
+		{
+			// Switch to the exploding state.
+			SetState Exploding$;
+		}
+		else
+		{
+			// not enough, reset the timer
+			this.CreateTimer(1, .1);
+		}
+		]];
+	}
+
+	// The glyph timed out, just blow it up.
+	trigger OnTimer$(2)
+	{
+		SetState Exploding$;
+	}
+
+	// create the timer when entering the state
+	event OnEnterState$
+	{
+		// calculate the damage amount
+		damage_amount$ = Math.RandomFloat( owner.Go.Magic.EvaluateAttackDamageModifierMin( caster_goid$.Go, target_goid$.Go ), owner.Go.Magic.EvaluateAttackDamageModifierMax( caster_goid$.Go, target_goid$.Go ) );
+
+		// make sure it's reasonable
+		if(damage_amount$ < 1)
+		{
+			damage_amount$ = 1;
+		}
+
+		// Add a generic state to the rune so that it can display it's timer.
+		rune_goid$.go.Actor.SAddGenericState(glyphStateName$, state_description$, timeout$, caster_goid$, owner.goid, owner.go.magic.GetMagicLevel( caster_goid$.go ));
+
+		this.CreateTimer(1, .1);
+		this.CreateTimer(2, timeout$);
+	}
+}
+
+state Exploding$
+{
+	// The first part of the explosion.  This starts the effect, which does the damage
+	// to nearby enemies.
+	event OnEnterState$
+	{
+		// create the param string					
+		string params$ = "";
+
+		// see if this is an effect with a duration (acid cloud)
+		float duration$ = explosion_length$;
+		if(ex_duration$)
+		{
+			// find the duration
+			duration$ = owner.Go.Magic.EvaluateEffectDuration(rune_goid$.Go, target_goid$.Go);
+
+			StringTool.AppendF(params$, "[%g][%g][%g]", damage_amount$, duration$ - 1, duration$ - 1.5);
+		}
+
+		// run the explosion effect
+		SiegeFx.SRunMpScript(effect_script$, rune_goid$, rune_goid$, params$, owner.Goid, WE_REQ_ACTIVATE);
+
+		// Remove the timer state from the glyph.
+		rune_goid$.go.Actor.SRemoveGenericState(glyphStateName$);	
+
+		// Add a generic state to the rune to show that it's detonating.
+		rune_goid$.go.Actor.SAddGenericState(glyphDetonatingStateName$, other_description$, duration$, caster_goid$, owner.goid, owner.go.magic.GetMagicLevel( caster_goid$.go ));
+
+		// create a timer to transition to the finished state
+		this.CreateTimer(2, duration$);
+	}
+	// The second part of the explosion does some cleanup when the explosion is finishing.
+	trigger OnTimer$(2)
+	{
+		// TAT 9/22/2003 - clean up the effect
+		SiegeFx.SStopScript(owner.goid, effect_script$);
+		
+		// destroy the rune
+		rune_goid$.Go.Aspect.SSetIsVisible(false);
+		PostWorldMessage(WE_REQ_DELETE, rune_goid$, rune_goid$, 1);
+
+		// if there is an effect duration, the damage is done in the spell effect so don't worry about it
+		if(ex_duration$ == 0)
+		{
+			// do damage to the enemies
+			DamageEnemies$(rune_pos$);
+		}
+
+		// MRC 8/11/2003 Remove the state from the caster.
+		caster_goid$.go.Actor.SRemoveGenericState(owner.go.Magic.GetCasterStateName());
+		
+		// JCD 8/14/03
+		// stop watching the glyph
+		Godb.StopWatching( owner.goid, rune_goid$);
+
+		// jump to finished
+		SetState Finished$;
+	}
+
+}
+
+state OutOfFrustum$
+{
+	// wait until we get an entered world message
+	event OnGoHandleCCMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == WE_ENTERED_WORLD )
+		{
+			this.CreateTimer( 1, 0 );
+		}
+	}
+
+	transition->OnGround$:OnTimer( 1 );
+}
+
+
+state Finished$
+{
+	event OnEnterState$
+	{
+		// clear the siegefx variables
+		SiegeFx.ClearVariables(owner.goid);
+
+		PostWorldMessage(WE_REQ_DELETE, owner.Goid, owner.Goid, 1);
+	}
+}
+
+state Abort$
+{
+	////////////////////
+	// Normal Go
+	
+	event OnEnterState$
+	{
+		// Refund the players mana
+		Rules.ChangeMana( caster_goid$, owner.go.getmagic.manacost );
+
+		// Get rid of any temporary storage
+		SiegeFx.ClearVariables( owner.goid );
+
+		// get rid of the spell
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

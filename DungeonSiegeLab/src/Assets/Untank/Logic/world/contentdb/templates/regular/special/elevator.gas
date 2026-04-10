@@ -1,0 +1,149 @@
+//////////////////////////////////////////////////////////////////////////
+
+// Simple 2-stage 1-connection 1-node platform
+[t:template,n:elevator_2s_1c_1n]
+{
+	specializes = elevator;
+	doc = [elevator_2s_1c_1n];
+	extra_doc = "Activate to move, Deactivate disables forever";
+    category_name       = "elevator";
+
+	[elevator_2s_1c_1n]  {  }
+}
+
+// 2-stage 1-connection 1-node platform
+// Activate to move to connection 2
+// Deactivate to move back to connection 1
+// It receives messages while in transit
+[t:template,n:elevator_2s_1c_1n_act_deact]
+{
+	specializes = elevator;
+	doc = "2-state, 1-connection, 1-node pressure_plate";
+	extra_doc = "activate to move to L2, deactivate to move back to L1";
+    category_name       = "elevator";
+
+	[elevator_2s_1c_1n_act_deact]  {  }
+}
+
+// 2-stage 1-connection 2-node platform
+[t:template,n:elevator_2s_1c_2n]
+{
+	specializes = elevator;
+	doc = [elevator_2s_1c_2n];
+	extra_doc = "Activate to move, Deactivate disables forever";
+    category_name       = "elevator";
+
+	[elevator_2s_1c_2n]  {  }
+}
+
+// 2-stage 2-connection 1-node platform
+[t:template,n:elevator_2s_2c_1n]
+{
+	specializes = elevator;
+	doc = [elevator_2s_2c_1n];
+	extra_doc = "Activate to move, Deactivate disables forever";
+    category_name       = "elevator";
+
+	[elevator_2s_2c_1n]  {  }
+}
+
+// 2-stage 2-connection 2-node platform
+[t:template,n:elevator_2s_2c_2n]
+{
+	specializes = elevator;
+	doc = [elevator_2s_2c_2n];
+	extra_doc = "Activate to move, Deactivate disables forever";
+    category_name       = "elevator";
+
+	[elevator_2s_2c_2n]  {  }
+}
+
+// 2-stage 3-connection 1-node platform
+[t:template,n:elevator_2s_3c_1n]
+{
+	specializes = elevator;
+	doc = [elevator_2s_3c_1n];
+	extra_doc = "Activate to move, Deactivate disables forever";
+    category_name       = "elevator";
+
+	[elevator_2s_3c_1n]  {  }
+}
+
+// 2-stage 4-connection 2-node platform
+[t:template,n:elevator_2s_4c_2n]
+{
+	specializes = elevator;
+	doc = [elevator_2s_4c_2n];
+	extra_doc = "Activate to move, Deactivate disables forever";
+    category_name       = "elevator";
+
+	[elevator_2s_4c_2n]  {  }
+}
+
+// 3-stage 1-connection 1-node platform
+[t:template,n:elevator_3s_1c_1n]
+{
+	specializes = elevator;
+	doc = [elevator_3s_1c_1n];
+	extra_doc = "Activate to move, Deactivate disables forever";
+    category_name       = "elevator";
+
+	[elevator_3s_1c_1n]  {  }
+}
+
+// 3-stage 2-connection 1-node platform
+[t:template,n:elevator_3s_2c_1n]
+{
+	specializes = elevator;
+	doc = [elevator_3s_2c_1n];
+	extra_doc = "Activate to move, Deactivate disables forever";
+    category_name       = "elevator";
+
+	[elevator_3s_2c_1n]  {  }
+}
+
+// Specialty hidden stairwell
+[t:template,n:elevator_hidden_stairwell]
+{
+	specializes = elevator;
+	doc = [elevator_hidden_stairwell];
+    category_name       = "elevator";
+    extra_doc = "Activate to move, Deactivate disables forever";
+
+	[elevator_hidden_stairwell]  {  }
+}
+
+// Even more special hidden stairwell: takes 
+// activate to go to location 2, and 
+// deactivate to go to location 1
+[t:template,n:elevator_hidden_stairwell_act_deact]
+{
+	specializes = elevator;
+	doc = "specialty_hidden_stairwell_act_deact";
+	extra_doc = "activate to move to L2, deactivate to move back to L1";
+    category_name       = "elevator";
+
+	[elevator_hidden_stairwell_act_deact]  {  }
+}
+
+// Specialty instant elevator
+[t:template,n:elevator_instant]
+{
+	specializes = elevator;
+	doc = [elevator_instant];
+	extra_doc = "Elevator for instantly moving nodes, not for transporting players";
+    category_name       = "elevator";
+
+	[elevator_instant_1c]  {  }
+}
+
+// Extra special instant elevator to be used for the hub elevators.
+[t:template,n:elevator_instant_4s_1c]
+{
+	specializes = elevator;
+	doc = "elevator_instant_4s_1c_hub";
+	extra_doc = "Extra special instant elevator to be used for the hub elevators.";
+    category_name       = "elevator";
+
+	[elevator_instant_4s_1c]  {  }
+}

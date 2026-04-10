@@ -1,0 +1,18 @@
+// The polygon map tells us the max number of polygons a level of detail setting can have.
+// LOD can be a float between 0.0 and 1.0
+
+[debug_polymap]
+{
+	// LOD = MAX NUMBER OF POLYGONS
+	0.0 = 7000;
+	0.1 = 8000;
+	0.2 = 9000;
+	0.3 = 10000;
+	0.4 = 11000;
+	0.5 = 12000;
+	0.6 = 13000;
+	0.7 = 14000;
+	0.8 = 15000;
+	0.9 = 16000;
+	1.0 = 17000;
+}

@@ -1,0 +1,375 @@
+[t:template,n:2W_dsx_blacksmith_base] {
+	specializes = base_npc_bs;
+	category_name = "2W_shopkeep";
+	doc = "2W_DSX Blacksmith BASE";
+ common:screen_name = "Blacksmith BASE";
+	
+	[aspect]
+		{
+			use_range = 1.0;
+			is_ghost_usable = TRUE;
+			model = m_c_gbn_bs_BS2;
+			[textures] { 0=b_c_gbn_bs-03; }
+		}
+
+	[actor]	{portrait_icon = b_gui_ig_i_ic_c_blacksmith;}
+
+	[respawn_shrine]
+		{
+		}
+	[store]
+		{
+			item_markup = 2;
+		}
+}
+
+[t:template,n:2W_dsx_blacksmith_SOMEONE-WHO-NEEDS-A-REAL-NAME] {
+	specializes = 2W_dsx_blacksmith_base;
+	category_name = "2W_shopkeep";
+	doc = "2W_DSX Blacksmith SOMEONE";
+ common:screen_name = "Blacksmith SOMEONE DON'T PLACE ME YET GET ME A NAME REALLY";
+	
+	[aspect]
+		{
+			use_range = 1.0;
+			is_ghost_usable = TRUE;
+			model = m_c_gbn_bs_BS2;
+			[textures] { 0=b_c_gbn_bs-04; }
+		}
+
+	[actor]	{portrait_icon = b_gui_ig_i_ic_c_blacksmith;}
+
+	[inventory]
+		{
+			[store_pcontent]
+				{
+					full_ratio = 0;
+					[armor]
+						{
+							[all*]
+								{
+									il_main = #body/15-21;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #body/21-60;
+									max = 10;
+									min = 10;
+								}
+							[all*]
+								{
+									il_main = #body/63-75;
+									max = 9;
+									min = 9;
+								}
+
+							[all*]
+								{
+									il_main = #helm/15-21;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #helm/21-60;
+									max = 10;
+									min = 10;
+								}
+							[all*]
+								{
+									il_main = #helm/63-75;
+									max = 9;
+									min = 9;
+								}
+
+							[all*]
+								{
+									il_main = #gloves/15-21;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #gloves/21-60;
+									max = 3
+									min = 3 ;
+								}
+							[all*]
+								{
+									il_main = #gloves/63-75;
+									max = 3;
+									min = 3;
+								}
+
+							[all*]
+								{
+									il_main = #boots/15-21;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #boots/21-60;
+									max = 3;
+									min = 3;
+								}
+							[all*]
+								{
+									il_main = #boots/63-75;
+									max = 2;
+									min = 2;
+								}
+
+
+						}
+					[shields]
+						{
+							[all*]
+								{
+									il_main = #shield/6-9;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #shield/9-30;
+									max = 10;
+									min = 10;
+								}
+							[all*]
+								{
+									il_main = #shield/30-36;
+									max = 9;
+									min = 9;
+								}
+
+						}
+					[weapons]
+						{
+							[all*]
+								{
+									il_main = #melee/6-9;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #melee/9-29;
+									max = 10;
+									min = 10;
+								}
+							[all*]
+								{
+									il_main = #melee/29-35;
+									max = 9;
+									min = 9;
+								}
+
+							[all*]
+								{
+									il_main = #ranged/6-9;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #ranged/9-29;
+									max = 10;
+									min = 10;
+								}
+							[all*]
+								{
+									il_main = #ranged/29-35;
+									max = 9;
+									min = 9;
+								}
+
+						}
+				}
+		}
+	[respawn_shrine]
+		{
+		}
+	[store]
+		{
+			item_markup = 2;
+		}
+}
+
+
+[t:template,n:2W_dsx_blacksmith_lharnob] {
+	specializes = 2W_dsx_blacksmith_base;
+	category_name = "2W_shopkeep";
+	doc = "2W_DSX Blacksmith Lharnob";
+ common:screen_name = "Blacksmith Lharnob";
+	
+	[aspect]
+		{
+			use_range = 1.0;
+			is_ghost_usable = TRUE;
+			model = m_c_gbn_bs_BS2;
+			[textures] { 0=b_c_gbn_bs-04; }
+		}
+
+	[actor]	{portrait_icon = b_gui_ig_i_ic_c_lharnob;}
+
+	[respawn_shrine]
+		{
+		}
+	[store]
+		{
+			item_markup = 2;
+		}
+	[inventory]
+		{
+			[store_pcontent]
+				{
+					full_ratio = 0;
+					[armor]
+						{
+							[all*]
+								{
+									il_main = #body/208-222;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #body/224-273;
+									max = 10;
+									min = 10;
+								}
+							[all*]
+								{
+									il_main = #body/275-305;
+									max = 2;
+									min = 2;
+								}
+
+							[all*]
+								{
+									il_main = #helm/208-222;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #helm/224-273;
+									max = 10;
+									min = 10;
+								}
+							[all*]
+								{
+									il_main = #helm/275-305;
+									max = 2;
+									min = 2;
+								}
+
+							[all*]
+								{
+									il_main = #gloves/208-222;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #gloves/224-273;
+									max = 10;
+									min = 10;
+								}
+							[all*]
+								{
+									il_main = #gloves/275-305;
+									max = 2;
+									min = 2;
+								}
+
+							[all*]
+								{
+									il_main = #boots/208-222;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #boots/224-273;
+									max = 10;
+									min = 10;
+								}
+							[all*]
+								{
+									il_main = #boots/275-305;
+									max = 2;
+									min = 2;
+								}
+
+
+						}
+					[shields]
+						{
+							[all*]
+								{
+									il_main = #shield/208-222;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #shield/224-273;
+									max = 10;
+									min = 10;
+								}
+							[all*]
+								{
+									il_main = #shield/275-305;
+									max = 2;
+									min = 2;
+								}
+
+						}
+					[weapons]
+						{
+							[all*]
+								{
+									il_main = #melee/104-111;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #melee/112-136;
+									max = 10;
+									min = 10;
+								}
+							[all*]
+								{
+									il_main = #melee/137-153;
+									max = 2;
+									min = 2;
+								}
+
+							[all*]
+								{
+									il_main = #ranged/104-111;
+									max = 2;
+									min = 2;
+								}
+							[all*]
+								{
+									il_main = #ranged/112-136;
+									max = 10;
+									min = 10;
+								}
+							[all*]
+								{
+									il_main = #ranged/137-153;
+									max = 2;
+									min = 2;
+								}
+
+						}
+				}
+		}
+}

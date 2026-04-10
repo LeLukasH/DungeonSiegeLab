@@ -1,0 +1,104 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_party.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+//
+// Give a command to the party of the data1 component of the activate message.
+//
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+property string _doc$ = "Party command (trigger with WE_ACTIVATED)";
+property string _required_component$ = "placement";
+
+
+property bool	stop_party$				= false		doc = "Tell the entire party to stop.";
+property bool	move_party$				= false		doc = "Tell the entire party to move to a location.";
+property bool	move_to_point$			= false		doc = "If moving, move to a use point instead of using approach distances.";
+property float	aproach_distance_min$	= 2.0		doc = "min distance to move from the move point, use with move_party.";
+property float	aproach_distance_max$	= 4.0		doc = "max distance to move from the move point, use with move_party.";
+property Scid   FacePoint$							doc = "Scid of a point to face after finishing the other action.";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		Goid Player$ = MakeGoid( msg$.GetData1() );
+
+		if(player$.IsValid())
+		{
+			Go Party$ = Player$.Go.OwningParty;
+			if (Party$ != NULL)
+			{
+				GopColl partyMembers$ = Party$.Children;
+				
+				int i$ = 0;
+				Go temp$;
+				
+				while( i$ < partyMembers$.Size() )
+				{
+					if( partyMembers$.Get( i$ ).IsInActiveScreenWorldFrustum() )
+					{
+						partyMembers$.Get( i$ ).select;
+					}
+					i$ += 1;
+				}
+				i$ = 0;
+				
+				if( move_party$ && !move_to_point$ )
+				{
+					Party$.Party.Formation.Shape = "wedge";
+					if( FacePoint$.Goid.IsValid )
+					{
+						GetSiegeDifference( Party$.Party.Formation.Direction, owner.go.placement.position, FacePoint$.Go.placement.position );
+					}
+					Party$.Party.Formation.Position = owner.go.placement.position;
+					Party$.Party.Formation.Move( QP_CLEAR, AO_COMMAND, false);	
+				}
+				
+				 
+				while( i$ < partyMembers$.Size() )
+				{
+					temp$ = partyMembers$.Get( i$ );
+					if( temp$.hasmind() && temp$.IsInActiveScreenWorldFrustum() )
+					{
+						if( stop_party$ )
+						{
+							temp$.Mind.SDoJob( MakeJobReq( JAT_STOP, JQ_ACTION, QP_CLEAR, AO_COMMAND ));
+						}
+						if( move_party$ )
+						{
+							if( move_to_point$ )
+							{
+								temp$.Mind.SDoJob( MakeJobReq( JAT_USE, JQ_ACTION, QP_CLEAR, AO_COMMAND, owner.Goid ) );
+							}
+						}
+						if( FacePoint$.Goid.IsValid )
+						{
+							if( temp$.Mind.CanOperateOn( FacePoint$.Goid.Go ) )
+							{
+								JobReq face_req$;
+								face_req$ = MakeJobReq( JAT_FACE, JQ_ACTION, QP_BACK, AO_COMMAND, FacePoint$.Goid );
+								temp$.Mind.SDoJob( face_req$ );
+							}
+						}
+					}
+					i$ += 1;
+				}
+			}
+		}
+	}
+}
+    
+
+//////////////////////////////////////////////////////////////////////////

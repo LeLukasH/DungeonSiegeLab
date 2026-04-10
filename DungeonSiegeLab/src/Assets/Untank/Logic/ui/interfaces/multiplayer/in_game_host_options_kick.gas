@@ -1,0 +1,264 @@
+[in_game_host_options_kick]
+{
+	interface = true;
+	centered = background;
+	modal = true;
+
+	[t:dialog_box,n:background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_wide;
+		draw_order = 1;
+		rect = 90,70,550,350;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:title]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 79;
+		rect = 110,80,530,100;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		font_color = -1;
+		font_size = 22;
+		font_type = b_gui_fnt_20p_copperplate-light;
+		justify = center;
+		text = "Multiplayer Options";
+		truncate = true;
+	}
+
+	[t:dialog_box,n:background_options]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 4;
+		rect = 110,130,530,306;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+
+	[t:button,n:button_ok]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 60;
+		rect = 200,318,310,334;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_ok_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 247,350,310,364;
+			text = "Accept";
+			texture = none;
+			truncate = true;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(multiplayer_options_ok);
+		}
+	}
+	[t:button,n:button_cancel]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 2003;
+		rect = 328,318,438,334;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[t:text,n:button_cancel_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 2004;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 334,350,428,363;
+			text = "Cancel";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(multiplayer_options_cancel);
+			onescape = notify(multiplayer_options_cancel);
+		}
+	}
+
+	[t:tab,n:tab_game_settings]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 2;
+		radio_group = mp_options_tabs;
+		rect = 110,117,260,133;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { oncheck=notify(show_host_game_settings); }
+		[t:text,n:tab_game_settings_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = button_4;
+			draw_order = 3;
+			font_size = 14;
+			font_color = -1;
+			font_type = b_gui_fnt_12p_copperplate-light;			
+			justify = center;
+			rect = 334,65,423,80;
+			text = "Game Settings";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:tab,n:tab_kick_players]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 2;
+		radio_group = mp_options_tabs;
+		rect = 260,114,410,130;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		enabled = false;
+		[messages] { oncheck=notify(show_host_kick_players); }
+		[t:text,n:tab_kick_players_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 3;
+			font_size = 14;
+			font_color = -1;
+			font_type = b_gui_fnt_12p_copperplate-light;			
+			justify = center;
+			rect = 435,65,524,80;
+			text = "Kick Players";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	
+
+	[t:dialog_box,n:background_players]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 4;
+		rect = 260,150,490,286;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:listbox,n:kick_players_listbox]
+	{
+		alpha = 1.00000;
+		common_control = true;
+		common_template = ;
+		draw_order = 500;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		rect = 263,153,487,283;
+		text_color = 0xffffffff;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		consumable = true;
+		[t:selection_box,n:selection_box]
+		{
+			alpha = 0.5;
+			texture = b_gui_cmn_selection;
+		}
+		[messages]
+		{
+			oncreated = setelementheight(16);
+		}
+	}
+	[t:button,n:button_kick]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 60;
+		rect = 140,150,240,166;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x99555555;
+		[messages] { onbuttonpress=notify(host_kick_player); }
+		[t:text,n:button_kick_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "Kick";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:button_ban]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 60;
+		rect = 140,180,240,196;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x99555555;
+		[messages] { onbuttonpress=notify(host_ban_player); }
+		[t:text,n:button_ban_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "Ban";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+
+}

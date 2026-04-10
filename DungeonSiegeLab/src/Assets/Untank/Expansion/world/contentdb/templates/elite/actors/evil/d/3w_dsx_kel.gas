@@ -1,0 +1,58 @@
+[t:template,n:3W_dsx_kel]
+{
+  category_name = "3W_evil_d";
+  doc = "3W_dsx_kel";
+  specializes = actor_evil;
+  [actor]
+    {
+      [skills]
+	{
+	  strength = 		468.9, 0;
+	  intelligence = 	146.2, 0;
+	  dexterity = 		255.6, 0;
+	  melee =               160, 0;
+	}
+    }
+  [aspect]
+    {
+      experience_value = 1012680;
+      life = 12354;
+      max_life = 12354;
+      mana = 12354;
+      max_mana = 12354;
+    textures:0	= b_c_edm_ph_melee;
+    }
+  [attack]
+    {
+      attack_range = 0.5;
+      damage_max = 5467;
+      damage_min = 4473;
+      reload_delay = 0;
+    }
+  [common] { screen_name="Kel"; }
+  [defend] { defense=32873; }
+  [mind]
+    {
+      jat_guard = world\ai\jobs\common\job_guard.skrit;
+      melee_engage_range = 14;
+      personal_space_range = 0.7;
+      ranged_engage_range = 14.0;
+      sight_range = 14.0;
+    }
+  [physics]
+    {
+      break_effect = mine_worm_die_dust;
+      /*
+	BROKEN
+      [break_particulate]
+	{
+	  frag_glb_dsx_golem_crystal_01 = 1;
+	  frag_glb_dsx_golem_crystal_02 = 6;
+	  frag_glb_dsx_golem_crystal_03 = 1;
+	  frag_glb_dsx_golem_crystal_04 = 2;
+	  frag_glb_dsx_golem_crystal_05 = 1;
+	}
+      */
+    }
+}
+

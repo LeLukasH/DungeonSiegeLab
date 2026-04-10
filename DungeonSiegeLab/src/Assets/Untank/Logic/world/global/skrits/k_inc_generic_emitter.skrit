@@ -1,0 +1,87 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  k_inc_generic_emitter.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+string params$;
+string effect$;
+
+PackParams$
+{
+	params$ = "[";
+ 			
+	StringTool.Appendf( params$, "ts(%g)", time_scale$ );
+	StringTool.Appendf( params$, "scale(%g)]", scale$ );
+	
+	if( other_params$ != "" )
+	{
+		StringTool.Append( params$, other_params$ );
+	}
+	
+	effect$ = "";
+	// choose the effect.
+	
+	if( other_effect$ != "" ) {
+		effect$ = other_effect$;
+	} else if( geyser$ ) {
+		effect$ = "geyser";
+	} else if( geyser_red$ ) {
+		effect$ = "geyser_red";
+	} else if( geyser_white$ ) {
+		effect$ = "geyser_white";
+	} else if( geyser_green$ ) {
+		effect$ = "geyser_green";
+	} else if( geyser_orange$ ) {
+		effect$ = "geyser_orange";
+	} else if( geyser_dorange$ ) {
+		effect$ = "geyser_dorange";
+	} else if( geyser_yellow$ ) {
+		effect$ = "geyser_yellow";
+	} else if( geyser_purple$ ) {
+		effect$ = "geyser_purple";
+	} else if( geyser_drizzle$ ) {
+		effect$ = "geyser_drizzle";
+	} else if( geyser_drizzle_red$ ) {
+		effect$ = "geyser_drizzle_red";
+	} else if( geyser_drizzle_white$ ) {
+		effect$ = "geyser_drizzle_white";
+	} else if( geyser_drizzle_green$ ) {
+		effect$ = "geyser_drizzle_green";
+	} else if( geyser_drizzle_orange$ ) {
+		effect$ = "geyser_drizzle_orange";
+	} else if( geyser_drizzle_dorange$ ) {
+		effect$ = "geyser_drizzle_dorange";
+	} else if( geyser_drizzle_yellow$ ) {
+		effect$ = "geyser_drizzle_yellow";
+	} else if( geyser_drizzle_purple$ ) {
+		effect$ = "geyser_drizzle_purple";
+	} else if( water_splash$ ) {
+		effect$ = "water_splash";
+	} else if( water_wave$ ) {
+		effect$ = "water_wave";
+	} else if( ice_explosion$ ) {
+		effect$ = "ice_explosion";
+	} else if( dust_explosion$ ) {
+		effect$ = "dust_explosion";
+	} else if( dust_explosion_small$ ) {
+		effect$ = "dust_explosion_small";
+	} else if( generic_explosion$ ) {
+		effect$ = "generic_explosion";
+	} else if( coil_explosion$ ) {
+		effect$ = "coil_explosion";
+	} else if( barrel_explosion$ ) {
+		effect$ = "barrel_explosion";
+	} else if( pebbles$ ) {
+		effect$ = "pebbles";
+	} else if( pebbles_directional$ ) {
+		effect$ = "pebbles_directional";
+	} else if( swamp_gas_puff$ ) {
+		effect$ = "swamp_gas_puff";
+	}
+}

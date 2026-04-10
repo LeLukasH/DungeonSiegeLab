@@ -1,0 +1,49 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  vis_toggle.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+//
+// goes visible/invisible on recieving certain messages
+//
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = true;
+property string _doc$                = "hides a GO when It gets a message.";
+property string _required_component$ = "placement";
+
+property eWorldEvent	invis_msg$		= WE_LIFE_RATIO_REACHED_LOW	doc = "message to invis on";
+property eWorldEvent	vis_msg$									doc = "message to vis on";
+property string			invis_effect$								doc = "effect to play when going invis.";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+// local states
+
+startup state Start$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if ( e$ == invis_msg$)
+		{
+			owner.Go.Aspect.AspectHandle.SetHideMeshFlag( true );
+			if( !StringTool.IsEmpty( invis_effect$ ) )
+			{
+				SiegeFx.SRunScript( invis_effect$, owner.goid, owner.goid, "", owner.Goid, WE_KILLED );
+			}
+		}
+		else if ( e$ == vis_msg$)
+		{
+			owner.Go.Aspect.AspectHandle.SetHideMeshFlag( false );
+		}
+	}
+}

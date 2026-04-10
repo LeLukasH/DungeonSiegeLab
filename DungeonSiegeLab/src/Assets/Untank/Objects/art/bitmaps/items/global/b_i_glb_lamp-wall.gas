@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_lamp-wall]
+{
+	layer1texture1 = b_i_glb_lamp-wall;
+  i texturedetail = 1;
+}

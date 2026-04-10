@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_cmn_button_fforward_dwn]
+{
+	layer1texture1 = b_gui_cmn_button_fforward_dwn;
+  i texturedetail = 0;
+}

@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_grs_reed]
+{
+	layer1texture1 = b_i_grs_reed;
+  i texturedetail = 2;
+}

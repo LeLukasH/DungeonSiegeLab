@@ -1,0 +1,628 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	dsx_shadow_jumper_heal_monitor.skrit
+
+	Author(s)	: 	Mathew Corthell
+
+	Purpose		:	Special monitor for the shadow jumper to watch it's health
+					and heal itself near the dark generators from time to time.
+	
+	Expected Behavior	: 
+
+	(C)opyright 2003 Mad Doc Software
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+property string darkGeneratorScids$="" doc="Comma-delimited list of the scids that may heal the shadow-jumper.";
+
+property string healEffect$="" doc="The effect to play when healing the shadow jumper.";
+property string interGeneratorEffect$="" doc="The effect to play between the generators.";
+
+property float initialDelay$=.1 doc="Initial delay before starting to check it's health.";
+property float checkInterval$=1 doc="Interval between checks for health.";
+property float justHealedDelay$=20 doc="Time to wait after just healing before checking again.";
+
+property float healThreshold$=.5 doc="If the SJumper is below this percentage of health, he wants to heal.";
+property float chanceToHeal$=.5 doc="If the SJumper is below the threshold, his chance to seek healing is this much.";
+
+property float healAmountMin$=100 doc="Min amount to heal at once.";
+property float healAmountMax$=100 doc="Max amount to heal at once.";
+
+property bool multiplyByGeneratorCount$=false doc="Multiply the healing amount by the number of valid generators.";
+
+property float approachDistance$=5 doc="How close should the SJumper get to a generator.";
+
+owner = GoSkritComponent;
+
+// When we enter the monitor state, the delay before starting to check health again.
+float m_monitorDelay$=0;
+
+// The current dark generator that we're going for.
+Goid m_currentTargetGenerator$=0;
+int m_currentGeneratorCount$=0;
+
+float m_originalVelocity$=0;
+
+void PlayAnim$( int FourCC$ )
+{
+	MCPManager.Flush( owner.Goid );
+					
+	int Anim$ = owner.Go.Aspect.AspectHandle.Blender.GetSubAnimIndex(CHORE_MISC,FourCC$);
+		
+	if (Anim$ >= 0)
+	{
+		eReqRetCode ret$ = MCPManager.MakeRequest( owner.Goid, PL_PLAYANIM, CHORE_MISC, Anim$, 0 );
+	}
+}
+
+// Slurp up the scids in the string list and stick them in a gopcoll in the mind of the
+// owner of this skrit.
+SlurpScids$()
+{
+	int numScids$ = StringTool.GetNumDelimitedValues(darkGeneratorScids$);
+	int i$ = 0;
+	Goid currentGoid$ = MakeGoid(0);
+	owner.Go.Mind.TempGopColl1.Clear;
+	while(i$ < numScids$)
+	{
+		// Get the goid for the current scid.
+		currentGoid$ = GoDb.FindGoidByScid(MakeScid(StringTool.GetDelimitedInt(darkGeneratorScids$, i$)));
+
+		// If this goid is valid, then add it to the list.
+		if(currentGoid$.IsValid())
+		{
+			owner.Go.Mind.TempGopColl1.Add(currentGoid$.Go);
+		}
+		i$ = i$ + 1;
+	}
+
+//	report.genericf("SJumper heal monitor: Slurping scids. Found: %d\n", owner.Go.Mind.TempGopColl1.Size);
+}
+
+// Find the farthest working generator. Returns 0 (or GOID_INVALID) if there's no good generators.
+Goid FindFarthestGenerator$()
+{
+	SlurpScids$();
+
+	Goid farthest$ = MakeGoid(0);
+
+	int i$ = 0;
+	float farthestDistance$ = -1;
+	float currentDistance$ = 0;
+	m_currentGeneratorCount$ = owner.Go.Mind.TempGopColl1.Size;
+	while(i$ < owner.Go.Mind.TempGopColl1.Size)
+	{
+		// Get the distance to the current generator.
+		currentDistance$ = owner.Go.Mind.GetDistance(owner.Go.Mind.TempGopColl1.Get(i$));
+		// Do we have a closest distance?  Is this generator closest so far?
+		if(farthestDistance$ < 0 || currentDistance$ > farthestDistance$)
+		{
+			farthest$ = owner.Go.Mind.TempGopColl1.Get(i$).GetGoid();	
+			farthestDistance$ = currentDistance$;
+		}
+
+		i$ = i$ + 1;
+	}
+
+	// Debug statements.  Can be safely commented out for normal operation.
+//	if(closest$.IsValid())
+//	{
+//		Report.genericf("SJumper heal monitor: Found a generator. Goid: 0x%x Scid: 0x%x\n", MakeInt(closest$), MakeInt(closest$.scid));
+//	}
+//	else
+//	{
+//		report.generic("SJumper heal monitor: No generator found.\n");
+//	}
+
+	return farthest$;
+}
+
+// Move toward the current generator.
+void MoveToGenerator$()
+{
+	// If there's not current generator, return.  (This is a problem.  It shouldn't happen!
+	if(!m_currentTargetGenerator$.IsValid())
+	{
+		report.generic("SJumper heal monitor: No current generator!  What am I doing?!\n");
+		return;
+	}
+
+//	Report.genericf("SJumper heal monitor: Approaching generator. Goid: 0x%x Scid: 0x%x\n", MakeInt(m_currentTargetGenerator$), MakeInt(m_currentTargetGenerator$.scid));
+
+	// Clear our mind of everything.  It's kind of zen.
+	owner.Go.Mind.Clear();
+
+	// Build a stack of jobs to do.  Fidget is the foundation.
+	if( owner.go.Mind.UnderstandsJob( JAT_FIDGET ))
+	{
+		owner.go.Mind.SDoJob( MakeJobReq( JAT_FIDGET, JQ_ACTION, QP_FRONT, AO_REFLEX, m_currentTargetGenerator$ ) );
+	}
+
+	// Then facing the generator
+	if( owner.go.Mind.UnderstandsJob( JAT_FACE ))
+	{
+		owner.go.Mind.SDoJob( MakeJobReq( JAT_FACE, JQ_ACTION, QP_FRONT, AO_REFLEX, m_currentTargetGenerator$ ) );
+	}	
+
+	// And try to approach the specified object.
+	if(owner.Go.Mind.UnderstandsJob(JAT_APPROACH))
+	{
+		JobReq req$ = MakeJobReq( JAT_APPROACH, JQ_ACTION, QP_FRONT, AO_COMMAND, m_currentTargetGenerator$ );
+		req$.Int1 = 0;
+		req$.Float1 = approachDistance$;
+		owner.Go.Mind.SDoJob(req$);
+	}
+}
+
+// Coordinates identifying and moving toward a generator.
+bool FindGenerator$()
+{
+	// First things first, get the nearest generator.  It's our target.
+	m_currentTargetGenerator$ = FindFarthestGenerator$();
+
+	// If we can't find a good generator, then we can't get healed, so we're done.
+	if(!m_currentTargetGenerator$.IsValid())
+	{
+//		report.generic("SJumper heal monitor: No generator found.  Switching to finished state.\n");
+
+		owner.go.mind.Clear();
+		
+		owner.go.Mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+
+		SetState Finished$;
+
+		return false;
+	}
+	// Otherwise, get near the generator.
+	else
+	{
+		// Start watching the generator.  We need to know if it blows up.
+		GoDb.StartWatching(owner.goid, m_currentTargetGenerator$);
+	}
+
+	return true;
+}
+
+// Okay effects between the generators.
+void PlayInterGeneratorEffects$()
+{
+//	report.generic("Playing inter-generator effects.\n");
+
+	// Get the list of scids
+	SlurpScids$();
+
+	// Go through the list of generators.
+	int i$ = 0;
+	while(i$ < owner.Go.Mind.TempGopColl1.Size)
+	{
+		// If this is not the current generator, then play an effect between 
+		// it and the current generator.
+		if(owner.Go.Mind.TempGopColl1.Get(i$).GetGoid() != m_currentTargetGenerator$)
+		{
+			SiegeFx.SRunMPScript(interGeneratorEffect$, m_currentTargetGenerator$, owner.Go.Mind.TempGopColl1.Get(i$).GetGoid(), "", owner.goid, WE_REQ_CAST);
+		}
+
+		i$ = i$ + 1;
+	}
+}
+
+// Get healed by the current dark generator.
+bool GetHealed$()
+{
+	// If we got here and there's no generator, then
+	// we need to stop.
+	if(!m_currentTargetGenerator$.IsValid())
+	{
+		return false;
+	}
+
+	// Determine how much he's gonna get
+	float healAmount$ = Math.RandomFloat(healAmountMin$, healAmountMin$);
+
+	// if we're supposed to, multiply by the number of remaining generators
+	if(multiplyByGeneratorCount$)
+	{
+		healAmount$ = m_currentGeneratorCount$ * healAmount$;
+	}
+
+//	report.genericf("SJumper heal monitor: Getting healed by generator. Goid: 0x%x Scid: 0x%x Amount:%g\n", MakeInt(m_currentTargetGenerator$), MakeInt(m_currentTargetGenerator$.scid), healAmount$);
+
+	// Heal him.
+	Rules.ChangeLife(owner.goid, healAmount$);
+	
+	// Play the effects.
+	if(!StringTool.IsEmpty(healEffect$))
+	{
+		SiegeFx.SRunMPScript(healEffect$, owner.goid, m_currentTargetGenerator$, "", owner.goid, WE_REQ_CAST);
+	}
+	if(!StringTool.IsEmpty(interGeneratorEffect$))
+	{
+		PlayInterGeneratorEffects$();
+	}
+
+	// And start the animation
+	PlayAnim$('heal');
+	
+	return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// STATE MACHINE
+//
+// This is what the state machine looks like:
+//
+//    Initial
+//       |
+//       V
+//	Monitoring->HideMe->OnTheMove->ShowMe->GettinSomeHealin
+//       ^                                        |
+//       +----------------------------------------+
+// 
+// The skrit is in the Monitoring state while it is waiting to heal the SJ.  After
+// every animation completes, it checks to see if he should heal.  If he is going to
+// heal, it moves to the hide state while he does his disappear.  Then it goes to the
+// move state to move to the new dark generator.  Then it goes to the show state while
+// he is revealed.  Then he is in the heal state while he gets better.  Then it's
+// back to the monitor state.
+//
+// A number of states can kick to the Finished state if they discover that there are
+// no more dark generators.
+
+// Whenever we die, that's the end.
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+{
+	if( e$ == WE_KILLED )
+	{
+//		report.generic("SJumper heal monitor: SJumper killed, time to exit\n");
+
+		SetState Finished$;
+	}
+}
+
+startup state Initial$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		// When we see the enemy for the first time, kick off this skrit.
+		if( e$ == WE_ENEMY_SPOTTED )
+		{
+//			report.generic("SJumper heal monitor: Enemy spotted, switch to monitor state\n");
+
+			m_monitorDelay$ = initialDelay$;
+			SetState Monitoring$;
+		}
+	}
+}
+
+state Monitoring$
+{
+	event OnEnterState$
+	{
+//		report.generic("SJumper heal monitor: Starting to monitor\n");
+		// As soon as we enter this state, start a short timer before 
+		This.CreateTimer(1, m_monitorDelay$);
+	}
+
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if(e$ == WE_ANIM_DONE)
+		{
+			float generatedNum$ = Math.RandomFloat(0,1);
+//			report.genericf("SJumper heal monitor: Check timer fired.  Current health: %g threshold:%g Random num: %g Chance: %g\n", owner.Go.Aspect.LifeRatio, healThreshold$, generatedNum$, chanceToHeal$);
+		
+			// If we're below the threshold ratio, then maybe switch to the healing state.
+			if(owner.Go.Aspect.LifeRatio < healThreshold$ &&  generatedNum$ < chanceToHeal$)
+			{
+//				report.generic("SJumper heal monitor: Starting to heal.\n");
+				
+				// Get the generator.  If we can find a generator, then start hiding ourself.
+				if(FindGenerator$())
+				{
+					// If we're already close enough, then we don't need to disappear and reappear,
+					// So go right to the healing state.
+					if(owner.go.mind.GetDistance(m_currentTargetGenerator$.go) < approachDistance$)
+					{
+						SetState FaceGeneratorWithoutMove$;
+					}
+					// Otherwise, we need to hide to move to a generator.
+					else
+					{
+						SetState HideMe$;
+					}
+				}
+				// Otherwise, there's no generator, so abort.
+				else
+				{
+					SetState Finished$;
+				}
+			}
+		}
+	}
+}
+
+// Hide the Shadow Jumper so he can 'jump' to a dark generator.
+state HideMe$
+{
+	event OnEnterState$
+	{
+//		report.generic("SJumper heal monitor: Entered the hide state\n");
+
+		// The SJ may not beattacked while he's jumping.
+		owner.Go.Mind.SetMayBeAttacked(false);
+		owner.Go.Aspect.SetIsInvincible(true);
+		owner.Go.Aspect.SetIsCollidable(false);
+
+		// Play the hide effect and animation.
+		SiegeFx.SRunScript("dsx_shadow_jumper_hide_brief", owner.goid, owner.goid, "", owner.goid, WE_REQ_CAST);
+		PlayAnim$('slep');
+
+		// And start a timer to wait for the animation to play
+		this.CreateTimer(1, 1.25);
+	}
+
+	event OnTimer$(int id$, float /*delta$*/)
+	{
+		SiegeFx.SStopScript(owner.goid, "shadow_jumper_boss");
+
+		// The animation is done, time to go to the move state.
+		if(id$ == 1)
+		{
+			SetState OnTheMove$;
+		}
+	}
+
+	// Clear the mind as soon as the animation is complete so that 
+	// we circumvent any thinking.  Thinking is bad, he might cast spells or something.
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if(e$ == WE_ANIM_DONE)
+		{
+			owner.Go.Mind.Clear();
+		}
+	}
+
+	// Watch for generator destruction.
+	event OnGoHandleCcMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if(e$ == WE_KILLED || e$ == WE_DESTRUCTED)
+		{
+			// Our precious generator died!
+			if(m_currentTargetGenerator$.IsValid() && m_currentTargetGenerator$ == msg$.GetSendTo())
+			{
+//				Report.genericf("SJumper heal monitor: Current target died. Goid: 0x%x Scid: 0x%x\n", MakeInt(m_currentTargetGenerator$), MakeInt(m_currentTargetGenerator$.scid));
+
+				// Stop watching this generator, and look for another one.
+				GoDb.StopWatching(owner.goid, m_currentTargetGenerator$);
+
+				// Get a new generator.  If we can't find one, then we need to reveal ourself
+				// right now.
+				if(!FindGenerator$())
+				{
+					SetState ShowMe$;
+				}
+			}
+		}
+	}	
+}
+
+// Moving toward one of the dark generators.
+state OnTheMove$
+{
+	event OnEnterState$
+	{
+//		report.generic("SJumper heal monitor: Entered the move state\n");
+
+		// Speed up the SJ and move him toward the chosen generator.
+		m_originalVelocity$ = owner.Go.Body.GetAvgMoveVelocity();
+		owner.Go.Body.SetAvgMoveVelocity(m_originalVelocity$ * 10);
+
+		MoveToGenerator$();
+
+		// Enter timer state to wait until we get to the generator.
+		this.CreateTimer(1, .1);
+	}
+
+	event OnTimer$(int id$, float /*delta$*/)
+	{
+		if(id$ == 1)
+		{
+			// If we're close enough, then we're done moving.
+			if(owner.go.mind.GetDistance(m_currentTargetGenerator$.go) < approachDistance$)
+			{
+				// Slow SJ down again.
+				owner.Go.Body.SetAvgMoveVelocity(m_originalVelocity$);
+
+				owner.Go.Mind.RSStop(AO_REFLEX);
+
+				// Set to the show state.
+				SetState ShowMe$;
+			}
+			// Otherwise, we start the timer again and check in a moment.
+			else
+			{
+				this.CreateTimer(1, .1);
+			}
+		}
+	}
+
+	// Watch for generator destruction.
+	event OnGoHandleCcMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if(e$ == WE_KILLED || e$ == WE_DESTRUCTED)
+		{
+			// Our precious generator died!
+			if(m_currentTargetGenerator$.IsValid() && m_currentTargetGenerator$ == msg$.GetSendTo())
+			{
+//				Report.genericf("SJumper heal monitor: Current target died. Goid: 0x%x Scid: 0x%x\n", MakeInt(m_currentTargetGenerator$), MakeInt(m_currentTargetGenerator$.scid));
+
+				// Stop watching this generator, and look for another one.
+				GoDb.StopWatching(owner.goid, m_currentTargetGenerator$);
+
+				// Get a new generator.
+				if(FindGenerator$())
+				{
+					// And move toward the new generator.
+					MoveToGenerator$();
+				}
+				// If we can't find a new generator, then resume our original velocity,
+				// stop where we are, and show ourself.
+				else
+				{
+					// Slow SJ down again.
+					owner.Go.Body.SetAvgMoveVelocity(m_originalVelocity$);
+
+					owner.Go.Mind.RSStop(AO_REFLEX);
+
+					// Set to the show state.
+					SetState ShowMe$;
+				}
+			}
+		}
+	}	
+}
+
+// State in which we reveal the shadow jumper.
+state ShowMe$
+{
+	event OnEnterState$
+	{
+//		report.generic("SJumper heal monitor: Entered the show state\n");
+
+		// Start playing the reveal effect.
+		SiegeFx.SRunScript("dsx_shadow_jumper_nis_reveal", owner.goid, owner.goid, "", owner.goid, WE_REQ_CAST);
+
+		// Timer to wait to reveal the jumper.
+		this.CreateTimer(1, 1);
+	}
+
+	event OnTimer$(int id$, float /*delta$*/)
+	{
+		if(id$ == 1)
+		{
+			// Play the reveal animation, and wait for it to finish.
+			PlayAnim$('wake');
+			// Play the shadow Jumper's effect again.
+			SiegeFx.SRunScript("shadow_jumper_boss", owner.goid, owner.goid, "", owner.goid, WE_REQ_CAST);
+
+			this.CreateTimer(2, .5);
+		}
+		if(id$ == 2)
+		{
+			// The SJ may be attacked now that he's reappeared.
+			owner.Go.Mind.SetMayBeAttacked(true);
+			owner.Go.Aspect.SetIsInvincible(false);
+			owner.Go.Aspect.SetIsCollidable(true);
+
+			// Time to actually get healed.
+			SetState GettinSomeHealin$;
+		}
+	}
+
+	// Watch for generator destruction.
+	event OnGoHandleCcMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if(e$ == WE_KILLED || e$ == WE_DESTRUCTED)
+		{
+			// Our precious generator died!
+			if(m_currentTargetGenerator$.IsValid() && m_currentTargetGenerator$ == msg$.GetSendTo())
+			{
+//				Report.genericf("SJumper heal monitor: Current target died. Goid: 0x%x Scid: 0x%x\n", MakeInt(m_currentTargetGenerator$), MakeInt(m_currentTargetGenerator$.scid));
+
+				// Stop watching this generator, and look for another one.
+				GoDb.StopWatching(owner.goid, m_currentTargetGenerator$);
+
+				// The generator is dying as we're revealing.  That's too bad for me.
+				m_currentTargetGenerator$ = MakeGoid(0);
+			}
+		}
+	}	
+}
+
+state FaceGeneratorWithoutMove$
+{
+	event OnEnterState$
+	{
+		owner.go.Mind.Clear();
+
+		if( owner.go.Mind.UnderstandsJob( JAT_FIDGET ))
+		{
+			owner.go.Mind.SDoJob( MakeJobReq( JAT_FIDGET, JQ_ACTION, QP_FRONT, AO_REFLEX, m_currentTargetGenerator$ ) );
+		}
+
+		if( owner.go.Mind.UnderstandsJob( JAT_FACE ))
+		{
+			owner.go.Mind.SDoJob( MakeJobReq( JAT_FACE, JQ_ACTION, QP_FRONT, AO_REFLEX, m_currentTargetGenerator$ ) );
+		}	
+
+	}
+
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if(e$ == WE_ANIM_DONE)
+		{
+			SetState GettinSomeHealin$;
+		}
+	}
+}
+
+// It's time to get our healing on!! 
+state GettinSomeHealin$
+{
+	event OnEnterState$
+	{
+//		report.generic("SJumper heal monitor: Entered the heal state\n");
+
+		// Get healed.  If it fails, then restart the brain and start monitoring again.
+		if(!GetHealed$())
+		{
+//			report.generic("SJumper heal monitor: Healing failed.  Returning to monitoring state.\n");
+
+			// Restart the brain.
+			owner.go.Mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+
+			// Stop watching the current target generator.
+			GoDb.StopWatching(owner.goid, m_currentTargetGenerator$);
+
+			// Set the delay before possibly healing again
+			m_monitorDelay$ = justHealedDelay$;
+
+			// Start monitoring again.
+			SetState Monitoring$;
+		}
+	}
+
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if(e$ == WE_ANIM_DONE)
+		{
+//			report.generic("SJumper heal monitor: Healing animation complete.  Returning to monitoring state.\n");
+
+			// Restart the brain.
+			owner.go.Mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+
+			// Stop watching the current target generator.
+			GoDb.StopWatching(owner.goid, m_currentTargetGenerator$);
+
+			// Set the delay before possibly healing again
+			m_monitorDelay$ = justHealedDelay$;
+
+			// Start monitoring again.
+			SetState Monitoring$;
+		}
+	}
+}
+
+// That's all folks.  
+state Finished$
+{
+	event OnEnterState$
+	{
+
+//		report.generic("SJumper heal monitor: Entered the finished state\n");
+	}
+}

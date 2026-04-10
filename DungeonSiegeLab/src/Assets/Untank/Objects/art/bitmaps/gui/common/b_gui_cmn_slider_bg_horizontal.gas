@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_cmn_slider_bg_horizontal]
+{
+	layer1texture1 = b_gui_cmn_slider_bg_horizontal;
+  i texturedetail = 0;
+}

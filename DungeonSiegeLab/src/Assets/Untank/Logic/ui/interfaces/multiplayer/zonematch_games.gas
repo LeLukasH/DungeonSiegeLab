@@ -1,0 +1,600 @@
+[zonematch_games]
+{
+	interface = true;
+	[t:dialog_box,n:backgound_games_area]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = graytrim;
+	  i draw_order = 3;
+		rect = 24,52,616,428;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:background_gamelist_commands]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = browntrim;
+	  i draw_order = 4;
+		rect = 26,54,614,100;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:background_gamelist_commands_btm_trim]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 6;
+		rect = 28,90,612,92;
+		texture = b_gui_cmn_trim_subtab-beside;
+		uvcoords = 0.000000,0.000000,1.000000,0.500000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:background_gamelist_commands_fill]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 5;
+		rect = 28,56,612,98;
+		texture = b_gui_cmn_brownbar;
+		uvcoords = 0.000000,0.000000,36.500000,2.250000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:background_gamelist_commands_gradient_lt]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 6;
+		rect = 28,58,40,74;
+		texture = b_gui_cmn_black-gradient-rt;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:background_gamelist_commands_gradient_rt]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 6;
+		rect = 600,58,612,90;
+		texture = b_gui_cmn_black-gradient-lt;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:text,n:refreshing_games_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 200;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 30,118,610,154;
+		text = "Refreshing Games List...";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		visible = false;
+		wrap_mode = clamp;
+	}
+	[t:slider,n:slider_games_list]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = ;
+		consumable = true;
+	  i draw_order = 100;
+		dynamic_button = true;
+		has_scroll_buttons = true;
+		max_value = 100;
+		min_value = 0;
+		rect = 596,106,612,348;
+		repeater_buttons = false;
+		step_value = 1;
+		texture = b_gui_cmn_slider_bg;
+		uvcoords = 0.000000,0.000000,1.000000,3.781250;
+		wrap_mode = tiled;
+		[messages]
+		{
+			onchange = notify(slider_scroll_games_list);
+			onlbuttondown = notify(start_slider_scroll_games_list);
+			onlbuttonup = notify(end_slider_scroll_games_list);
+			ongloballbuttonup = notify(end_slider_scroll_games_list);
+		}
+	}
+	[t:tab,n:tab_chat]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		radio_group = zonematch_tabs;
+		rect = 280,20,408,52;
+		texture = b_gui_cmn_tab_chatlist-dis;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oncheck = notify(zonematch_show_chat);
+			ongloballbuttonup = loadtexture(b_gui_cmn_tab_chatlist-dis);
+			onlbuttondown = loadtexture(b_gui_cmn_tab_chatlist-dwn);
+			onrolloff = loadtexture(b_gui_cmn_tab_chatlist-dis);
+			onrollover = loadtexture(b_gui_cmn_tab_chatlist-hov);
+		}
+	}
+	[t:text,n:tab_chat_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 280,36,404,48;
+		text = "Chat";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:tab,n:tab_games]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		enabled = false;
+		radio_group = zonematch_tabs;
+		rect = 152,20,280,52;
+		texture = b_gui_cmn_tab_gameslist-up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oncheck = notify(zonematch_show_games);
+		}
+	}
+	[t:text,n:tab_games_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 152,36,276,48;
+		text = "Games";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:tab,n:tab_news]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		radio_group = zonematch_tabs;
+		rect = 24,20,152,52;
+		texture = b_gui_cmn_tab_news-dis;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oncheck = notify(zonematch_show_news);
+			ongloballbuttonup = loadtexture(b_gui_cmn_tab_news-dis);
+			onlbuttondown = loadtexture(b_gui_cmn_tab_news-dwn);
+			onrolloff = loadtexture(b_gui_cmn_tab_news-dis);
+			onrollover = loadtexture(b_gui_cmn_tab_news-hov);
+		}
+	}
+	[t:text,n:tab_news_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 24,36,148,48;
+		text = "News";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:button,n:zonematch_button_game_details]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_inset;
+	  i draw_order = 22;
+		group = zone_gamelist_commands;
+		rect = 320,58,461,74;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_show_game_details);
+		}
+		[t:text,n:zonematch_button_game_details_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = zone_gamelist_commands;
+			justify = center;
+			rect = 360,60,461,74;
+			text = "Game Details";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:zonematch_button_games_refresh]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_inset;
+	  i draw_order = 21;
+		group = zone_gamelist_commands;
+		rect = 461,58,600,74;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_games_refresh);
+		}
+		[t:text,n:zonematch_button_games_refresh_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = zone_gamelist_commands;
+			justify = center;
+			rect = 512,60,600,74;
+			text = "Refresh";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:zonematch_button_host]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_inset;
+	  i draw_order = 21;
+		group = zone_gamelist_commands;
+		rect = 179,58,320,74;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_host_game);
+		}
+		[t:text,n:zonematch_button_host_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = zone_gamelist_commands;
+			justify = center;
+			rect = 225,60,320,74;
+			text = "Host Game";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:zonematch_button_join]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_inset;
+	  i draw_order = 20;
+		group = zone_gamelist_commands;
+		rect = 40,58,179,74;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_join_game) & playsound(s_e_interface_close);
+		}
+		[t:text,n:zonematch_button_join_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = zone_gamelist_commands;
+			justify = center;
+			rect = 87,60,179,74;
+			text = "Join Game";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:zonematch_button_show_all_games]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_subtab;
+	  i draw_order = 22;
+		rect = 300,76,400,92;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_show_all_games);
+		}
+		[t:text,n:zonematch_button_show_all_games_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = zone_gamelist_commands;
+			justify = center;
+			rect = 342,78,400,92;
+			text = "All";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:zonematch_button_show_filtered_games]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_subtab;
+	  i draw_order = 21;
+		rect = 500,76,600,92;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_show_filtered_games);
+		}
+		[t:text,n:zonematch_button_show_filtered_games_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = zone_gamelist_commands;
+			justify = center;
+			rect = 529,78,600,92;
+			text = "Custom...";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:zonematch_button_show_friends_games]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_subtab;
+	  i draw_order = 22;
+		rect = 400,76,500,92;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x99555555;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_show_friends_games);
+		}
+		[t:text,n:zonematch_button_show_friends_games_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = zone_gamelist_commands;
+			justify = center;
+			rect = 432,78,500,92;
+			text = "Friends";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:text,n:zonematch_games_count]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 68;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		group = zone_gamelist_commands;
+		justify = left;
+		rect = 48,75,200,91;
+		text = "";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:listreport,n:zonematch_games_list]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = ;
+		custom_column_sort = true;
+	  i draw_order = 70;
+		dual_column_sort = false;
+		element_type = text;
+	  x font_color = 0xFFFFFFFF;
+	  i font_size = 12;
+		font_type = b_gui_fnt_11p_chat;
+		rect = 27,94,612,348;
+		selection_color = 0xff008190;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = tiled;
+		[messages]
+		{
+			onchange = notify(zonematch_sort_games);
+			onselect = notify(zonematch_show_game_details);
+			onkeypress = notify(games_list_key_press);
+		}
+	}
+	[t:button,n:zonematch_games_list_search_map]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+		consumable = true;
+	  i draw_order = 71;
+		rect = 60,68,76,84;
+		tag = 2;
+		texture = b_gui_cmn_colheader-drop-up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_show_games_popup_search);
+			onlbuttondown = loadtexture(b_gui_cmn_colheader-drop-dwn);
+			onrolloff = notify(zonematch_show_games_button_rolloff);
+			onrollover = notify(zonematch_show_games_button_rollover);
+		}
+	}
+	[t:button,n:zonematch_games_list_search_name]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+		consumable = true;
+	  i draw_order = 71;
+		rect = 60,68,76,84;
+		tag = 0;
+		texture = b_gui_cmn_colheader-drop-up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_show_games_popup_search);
+			onlbuttondown = loadtexture(b_gui_cmn_colheader-drop-dwn);
+			onrolloff = notify(zonematch_show_games_button_rolloff);
+			onrollover = notify(zonematch_show_games_button_rollover);
+		}
+	}
+	[t:button,n:zonematch_games_list_search_players]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+		consumable = true;
+	  i draw_order = 71;
+		rect = 60,68,76,84;
+		tag = 1;
+		texture = b_gui_cmn_colheader-drop-up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_show_games_popup_search);
+			onlbuttondown = loadtexture(b_gui_cmn_colheader-drop-dwn);
+			onrolloff = notify(zonematch_show_games_button_rolloff);
+			onrollover = notify(zonematch_show_games_button_rollover);
+		}
+	}
+	[t:button,n:zonematch_games_list_search_world]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+		consumable = true;
+	  i draw_order = 71;
+		rect = 60,68,76,84;
+		tag = 3;
+		texture = b_gui_cmn_colheader-drop-up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_show_games_popup_search);
+			onlbuttondown = loadtexture(b_gui_cmn_colheader-drop-dwn);
+			onrolloff = notify(zonematch_show_games_button_rolloff);
+			onrollover = notify(zonematch_show_games_button_rollover);
+		}
+	}
+	[t:window,n:zonematch_show_games_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 6;
+		rect = 230,77,300,90;
+		texture = b_gui_cmn_black-gradient-rt;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:text,n:zonematch_show_games_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 68;
+	  i font_color = -6946818;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = zone_gamelist_commands;
+		justify = right;
+		rect = 200,75,280,91;
+		text = "Show Games";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+}

@@ -1,0 +1,94 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	job_fidget_wander.skrit
+
+	Author(s)	: 	Eric Tams orig Bartosz Kijanka
+
+	Purpose		: 	Wander around in a circle
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+GoMind	m_Mind$;
+GoBody  m_Body$;
+Job		m_Job$;
+float	m_Move_Distance$;
+float	m_Min_Distance$;
+float	m_Delay_Min$;
+float	m_Delay_Max$;
+
+
+#include "k_job_c_mcp_fidget_utils"
+	
+////////////////////////////////////////////////////////////////////////////////
+
+startup state Unknown$
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$					= job$;
+	m_Go$					= job$.Go;
+	m_Mind$					= job$.Go.Mind;
+	m_Body$					= job$.Go.Body;
+	m_Move_Distance$		= 5.0;				// How far we will move from where we started
+	m_Min_Distance$			= 3.0;				// minimum distance to move from where we started
+	m_Delay_Min$			= 10.0;
+	m_Delay_Max$			= 20.0;
+}
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+	
+	SetState RequestAction$;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//	
+state RequestAction$
+{
+	trigger OnWorldMessage$( WE_ANIM_DONE )
+	{
+		StartFidgetIfRequired$();
+	}
+	
+	trigger OnTimer$( 1 )
+	{
+		if( ( m_Mind$.MovementOrders == MO_FREE ) && m_Go$.WasInViewFrustumRecently )
+		{
+			if( m_Mind$.MovementOrders != MO_HOLD )
+			{
+				MCPManager.Flush(m_Go$.Goid);
+				if( AIQuery.FindSpotRelativeToSource( 	m_Job$.InitPosition,
+														1,
+														m_Min_Distance$,
+														m_Move_Distance$,
+														2.0,
+														m_Go$.IsHuded,
+														m_Mind$.TempPos1 ) )
+		   		{
+					MCPManager.MakeRequest( m_Go$.Goid, PL_APPROACH, m_Mind$.TempPos1, 0.2 );
+				}
+			}
+		}
+		This.CreateTimer( 1 , Math.RandomFloat( m_Delay_Min$, m_Delay_Max$ ) );
+	}
+	
+	event OnEnterState$
+	{
+		StartFidgetIfRequired$();
+		
+		This.CreateTimer( 1 , Math.RandomFloat( m_Delay_Min$, m_Delay_Max$ ) );
+	}
+}

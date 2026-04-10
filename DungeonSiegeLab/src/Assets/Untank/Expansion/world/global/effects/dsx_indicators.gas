@@ -1,0 +1,121 @@
+//
+//	Indicator effect scripts
+//
+//	Scripts used for indication/feedback of a state change
+//
+
+[effect_script*]
+{
+	name	=magenta_charmed_line;
+
+	script	=[[
+			sound play s_e_spell_charm_cast at #TARGET_POSITION;
+				
+			sfx create fire #SOURCE 
+				"scale(.66)texture(b_sfx_sparkle01)scale(.6)velocity(0,20,0)
+				accel(0,-20,0)line()dur(.5)color0(.93,0,.54)color1(0,0,0)
+				count(30)min_displace(0)max_displace(0)flamesize(2)
+				instant()";
+			sfx attach_point #PEEK @weapon_bone target;
+			set $line2 #POP;
+			sfx target $line2 target;
+			sfx start $line2;
+			]];
+}
+
+
+// TAT - used to indicate radius of beneficial area effects (around caster)
+[effect_script*]
+{
+	name	=beneficial_aoe_volume;
+
+	script	=[[
+			sfx create cylinder #TARGET
+				"pause_immune()color0(0,0,.25)dur(.5)tin(.25)tout(.25)
+                rp0(0,0,0)rp1([0],[0],0)hp0(.5,.5,0)hp1(.5,.5,0)
+                texture(b_i_glb_blue)";
+			sfx snap_to_ground #PEEK;
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+    			"pause_immune()color0(0,0,.25)dur(.5)tin(.25)tout(.25)
+                rp0([0],[0],0)rp1([0],[0],0)hp0(0,0,0)hp1(.5,.5,0)
+                texture(b_i_glb_blue)";
+			sfx snap_to_ground #PEEK;
+			sfx start #POP;
+
+			]];
+}
+
+[effect_script*]
+{
+	name	=harmful_aoe_volume;
+
+	script	=[[
+			sfx create cylinder #TARGET
+				"pause_immune()color0(.45,0,0)dur(.5)tin(.25)tout(.25)
+                rp0(0,0,0)rp1([0],[0],0)hp0(.5,.5,0)hp1(.5,.5,0)
+                texture(b_i_glb_red)";
+			sfx snap_to_ground #PEEK;
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+    			"pause_immune()color0(.45,0,0)dur(.5)tin(.25)tout(.25)
+                rp0([0],[0],0)rp1([0],[0],0)hp0(0,0,0)hp1(.5,.5,0)
+                texture(b_i_glb_red)";
+			sfx snap_to_ground #PEEK;
+			sfx start #POP;
+
+			]];
+}
+
+[effect_script*]
+{
+	name	=sleepy_line;
+
+	script	=[[
+			sound play s_e_spell_charm_cast at #TARGET_POSITION;
+				
+			sfx create fire #SOURCE 
+				"scale(1)grey_tex()dark()color0(.7,.1,.7)velocity(0,20,0)
+				accel(0,-20,0)line()dur(.5)
+				count(30)min_displace(.2)max_displace(.4)flamesize(4)
+				instant()";
+			sfx attach_point #PEEK @weapon_bone target;
+			set $line2 #POP;
+			sfx target $line2 target;
+			sfx start $line2;
+			]];
+}
+
+[effect_script*]
+{
+	name	=unique_light_dsx_cyan;
+
+	script	=[[
+			sfx create lightsource #TARGET 
+				"color0(0,3,3)color1(0,3,3)frequency(1)iradius(2)radius(4)";
+			sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=unique_ray_dsx_cyan;
+
+	script	=[[
+			sfx create cylinder #TARGET_KB
+			"segments(10)alpha(.1)hp0(2.5,2.5,0)hp1(0,0,0)rp1(1,1,.1)
+			rp0(1,1,.2)texture(b_sfx_lightray_01)spin(.2)color0(.25,1,.75)";
+			
+				
+			sfx start #POP;
+			
+			sfx create cylinder #TARGET_KB
+			"segments(10)alpha(.1)hp0(2.5,2.5,0)hp1(0,0,0)rp1(1,1,.1)
+			rp0(1,1,.2)texture(b_sfx_lightray_01)spin(-.3)color0(.25,.75,1)";
+			
+				
+			sfx start #POP;
+			]];
+}

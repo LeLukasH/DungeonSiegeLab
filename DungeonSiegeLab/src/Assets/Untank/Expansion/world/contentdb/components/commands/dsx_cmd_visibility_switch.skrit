@@ -1,0 +1,62 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  dsx_cmd_visibility_switch.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: Reverse the visibility of a scid
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "dsx_cmd_visibility_switch";
+
+// external properties
+property scid target_scid$								doc = "Scid to use as target for change";
+property eWorldEvent event$ = WE_REQ_ACTIVATE			doc = "Event to wait for";
+property bool make_selectable$ = false					doc = "Should we make him selectable.";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+// chill here until we get an activate event
+startup state Wait$
+{
+	// look for activates
+	event OnGoHandleMessage$(eWorldEvent e$, WorldMessage /*msg$*/)
+	{
+		// activate?
+		if(e$ == event$)
+		{
+			// check the scids
+			if( !target_scid$.Goid.IsValid() ) { report.genericf("target_scid$ is invalid!\n"); }
+
+			// change the visibility
+			target_scid$.Go.Aspect.SSetIsVisible( !target_scid$.Go.Aspect.GetIsVisible() );
+
+			// should we make him selectable?
+			if( make_selectable$ && target_scid$.Go.HasAspect() )
+			{
+				target_scid$.Go.Aspect.SSetIsSelectable( true );
+			}
+
+			SetState Done$;
+		}
+	}
+}
+
+
+// finishing state.  cleans everything up
+state Done$
+{
+}

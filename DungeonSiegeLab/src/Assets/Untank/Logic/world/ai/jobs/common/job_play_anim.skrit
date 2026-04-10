@@ -1,0 +1,74 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	job_play_anim.skrit
+
+	Author(s)	: 	Bartosz Kijanka
+
+	Purpose		: 	Just play a particular anim.
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+Job		m_Job$;
+
+
+startup state STARTUP$
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.GetGo;
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+
+	SetState Animating$;
+}
+
+
+state Animating$
+{
+	transition
+	{
+		-> Exiting$:	OnWorldMessage( WE_ANIM_DONE );
+	}
+
+	event OnEnterState$
+	{
+//		m_Job$.EnterAtomicState( 1.5 ); // $$$ this should be based on the animation duration
+		eAnimChore ch$ = MakeAnimChore( m_Job$.Int1 );
+		int subanim$ = m_Go$.Aspect.AspectHandle.Blender.GetSubAnimIndex(ch$,m_Job$.Int2 );
+		if (subanim$ < 0)
+		{
+			subanim$ = 0;
+		}
+		MCPManager.MakeRequest( m_Go$.Goid, PL_PLAYANIM, ch$ , subanim$, 0 );
+	}
+}
+
+
+state Exiting$
+{
+	event OnEnterState$
+	{
+//		m_Job$.LeaveAtomicState();
+		m_Job$.MarkForDeletion();
+	}
+}
+
+

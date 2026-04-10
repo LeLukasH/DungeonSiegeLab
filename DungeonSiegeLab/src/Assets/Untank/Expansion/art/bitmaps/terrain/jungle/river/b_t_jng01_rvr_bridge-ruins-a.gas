@@ -1,0 +1,26 @@
+[t:tsd,n:b_t_jng01_rvr_bridge-ruins-a]
+{
+	dither = false;
+	hasalpha = false;
+	layer1alphaarg1 = texture;
+	layer1alphaarg2 = diffuse;
+	layer1alphaop = modulate;
+	layer1colorarg1 = texture;
+	layer1colorarg2 = diffuse;
+	layer1colorop = modulate;
+	layer1numframes = 1;
+	layer1secondsperframe = 0.0;
+	layer1texture1 = b_t_jng01_rvr_bridge-ruins-a;
+	layer1ushiftpersecond = 0.0;
+	layer1uwrap = true;
+	layer1vshiftpersecond = 0.0;
+	layer1vwrap = true;
+	numlayers = 1;
+	texturedetail = 1;
+}
+[t:tsd,n:b_t_jng01_rvr_bridge-ruins-a]
+{
+  b hasalpha = false;
+	layer1texture1 = b_t_jng01_rvr_bridge-ruins-a;
+  i texturedetail = 2;
+}

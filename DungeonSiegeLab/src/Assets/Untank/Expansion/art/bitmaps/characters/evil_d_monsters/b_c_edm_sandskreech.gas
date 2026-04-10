@@ -1,0 +1,6 @@
+[t:tsd,n:b_c_edm_sandskreech]
+{
+  b hasalpha = true;
+	layer1texture1 = b_c_edm_sandskreech;
+  i texturedetail = 3;
+}

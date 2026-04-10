@@ -1,0 +1,80 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  firecolumn_emitter.skrit
+// Author(s):  Mathew Corthell
+//
+// Copyright © 2001 Mad Doc Software, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property bool	_server_only$		= false;
+
+property bool randomTiming$ = true doc = "Randomize the time between fire?";
+property float minDelayRand$ = 5.0 doc = "Mimimun time between random fire.";
+property float maxDelayRand$ = 15.0 doc = "Maximum time between random fire.";
+property float fixedDelay$ = 2.0 doc = "Amount of time between fire without random timing.";
+
+owner = GoSkritComponent;
+
+//The time to delay before firing the next bolt.
+float delay$;
+
+//Function to determine the delay before the next bolt.
+GetDelay$
+{
+    if(randomTiming$)
+    {
+        delay$ = Math.RandomFloat(minDelayRand$, maxDelayRand$);
+    }
+    else
+    {
+        delay$ = fixedDelay$;
+    }
+}
+
+//First state, when we're created.
+startup state Init$
+{
+
+    //Delay before firing the first flame.
+	trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+	{
+        GetDelay$();
+		this.CreateTimer(1, delay$);
+	}
+	
+	trigger OnTimer$(1)
+	{		
+        SetState(Loop$);
+    }
+}
+
+//Sit here and loop, firing fire over intervals.
+state Loop$
+{
+    event OnEnterState$
+    {
+		this.CreateTimer(1, 0);
+	}
+    trigger OnTimer$(1)
+	{
+		SiegeFx.SRunScript( "fire_column_emitter", owner.Goid, owner.Goid, "", owner.Goid, WE_ENTERED_WORLD );
+        GetDelay$();
+		this.CreateTimer(1, delay$);
+	}
+
+    trigger OnGoHandleMessage$(WE_LEFT_WORLD)
+    {
+        SetState(Cleanup$);
+    }
+}
+
+state Cleanup$
+{
+    event OnEnterState$
+    {
+        SetState(Init$);
+    }
+}

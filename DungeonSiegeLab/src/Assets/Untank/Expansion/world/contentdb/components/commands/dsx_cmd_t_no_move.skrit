@@ -1,0 +1,70 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  dsx_cmd_t_no_move.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: dont' allow any new move jobs
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "dsx_cmd_t_no_move";
+
+// external properties
+property scid target_scid$								doc = "Scid to use as target for change";
+
+owner = GoSkritComponent;
+
+bool allow_new_jobs$;
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+// chill here until we get an activate event
+startup state Wait$
+{
+	// look for activates
+	event OnGoHandleMessage$(eWorldEvent e$, WorldMessage /*msg$*/)
+	{
+		// activate?
+		if( e$ == WE_REQ_ACTIVATE )
+		{
+			// check the scids
+			if( !target_scid$.Goid.IsValid() ) { report.genericf("target_scid$ is invalid!\n"); }
+
+			#only(game) [[
+			// get the old value
+			allow_new_jobs$ = target_scid$.Go.Mind.GetAllowNewMovementJobs();
+
+			// set it to false
+			target_scid$.Go.Mind.SetAllowNewMovementJobs( false );
+			]];
+		}
+		else if( e$ == WE_REQ_DEACTIVATE )
+		{
+			if( !target_scid$.Goid.IsValid() ) { report.genericf("target_scid$ is invalid!\n"); }
+
+			#only(game) [[
+			// restore the old value
+			target_scid$.Go.Mind.SetAllowNewMovementJobs( allow_new_jobs$ );
+			]];
+
+			SetState Done$;
+		}
+	}
+}
+
+
+// finishing state.  cleans everything up
+state Done$
+{
+}

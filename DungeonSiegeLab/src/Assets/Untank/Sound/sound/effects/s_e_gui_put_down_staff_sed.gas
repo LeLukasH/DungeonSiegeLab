@@ -1,0 +1,7 @@
+[t:sed,n:s_e_gui_put_down_staff_SED]
+{
+	sound_effect_file = "s_e_gui_put_down_staff";
+	max_simultaneous_samples = 2;
+	min_playback_rate = 0.75;
+	max_playback_rate = 0.75;
+}

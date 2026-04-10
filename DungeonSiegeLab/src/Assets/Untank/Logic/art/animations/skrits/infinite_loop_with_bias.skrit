@@ -1,0 +1,99 @@
+// Animation Skrit: Infinite_Loop_with_bias
+//
+// History:
+//		VERSION 1.0:	Initial implementation
+//		VERSION 2.0:	Converted to WorldMessages 
+//						Added SFX event tests
+//						Uses owner, rather than ASPECT arg
+//		VERSION 3.0:	Customized into new skrit for
+//						Gob Inv fans.
+
+property int MAJORVERSION$ = 3;
+property int MINORVERSION$ = 0;
+
+owner = Aspect;
+float bias1$ = 1.0;
+float bias2$ = 1.0;
+float duration$ = 1.0;
+float time$  = 0.0;
+
+/////////////////////////////////////////////////////////////////////////////
+// Utilities
+
+/////////////////////////////////////////////////////////////////////////////
+// States
+
+//----------------------------
+
+startup state Init$ 
+{
+	event OnEnterState$
+	{
+		//report.genericf("             0x%08x\n",this);
+		SetState LoopForever$;
+	}
+}
+
+state LoopForever$ 
+{
+	event OnStartChore$ ( int subanim$, int /*flags$*/ )
+	{
+		int bg$ = owner.blender.OpenBlendGroup();
+		owner.blender.AddAnimToBlendGroup(subanim$,1);
+		owner.blender.CloseBlendGroup();
+		owner.blender.SetBlendGroupWeight(bg$,1);
+		
+		bias1$ = Math.RandomFloat( 0.3, 0.4);
+		bias2$ = Math.RandomFloat( 1.4, 1.7);
+		duration$ = Math.RandomFloat( 3.0, 6.0);
+		time$ = Math.RandomFloat( 2 * Math.Pi * duration$);
+		
+		//report.genericf("Start Chore: 0x%08x\n",this);
+		//report.genericf("bias1: %g   bias2: %g   duration: %g   time: %g\n",bias1$,bias2$,duration$,time$);
+	}
+
+	event OnUpdate$( float delta_t$ )
+	{
+		//report.genericf("abias1: %g   bias2: %g   duration: %g   time: %g\n",bias1$,bias2$,duration$,time$);
+		
+		time$ += delta_t$;
+		if(time$ > (2 * Math.Pi * duration$))
+		{
+			time$ -= (2 * Math.Pi * duration$);
+		}
+		float t$ = (1 + Math.Cos(time$ / duration$)) / 2;
+				
+		float bias$ = (t$ * bias1$) + ((1-t$) * bias2$);
+		
+ 	 	float biased_time$ = delta_t$ * bias$;
+ 	 	//report.genericf("bias1: %g   bias2: %g   duration: %g   time: %g\n",bias1$,bias2$,duration$,time$);
+		//report.genericf("bias: %g   time: %g   biased_time: %g   t: %g\n",bias$,time$,biased_time$,t$);
+		
+ 	 	int events$ = owner.UpdateBlender(biased_time$);
+
+		if (AnimEventBitTest(events$,ANIMEVENT_SFX_1)) {
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  1, 0 );
+		}
+		if (AnimEventBitTest(events$,ANIMEVENT_SFX_2)) {
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  2, 0 );
+		}
+		if (AnimEventBitTest(events$,ANIMEVENT_SFX_3)) {
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  3, 0 );
+		}
+		if (AnimEventBitTest(events$,ANIMEVENT_SFX_4)) {
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  4, 0 );
+		}
+ 		if (AnimEventBitTest(events$,ANIMEVENT_FIRE_WEAPON)) {
+			PostWorldMessage( WE_ANIM_WEAPON_FIRE, owner.goid, owner.goid, owner.CurrentReqBlock, 0 );
+		}
+		if (AnimEventBitTest(events$,ANIMEVENT_HIDE_MESH)) {
+			owner.SetHideMeshFlag(true);
+		}
+		if (AnimEventBitTest(events$,ANIMEVENT_SHOW_MESH)) {
+			owner.SetHideMeshFlag(false);
+		}
+		if (AnimEventBitTest(events$,ANIMEVENT_FINISH)) {
+			PostWorldMessage( WE_ANIM_LOOPED, owner.goid, owner.goid, owner.CurrentReqBlock, 0 );
+		}
+	}
+}

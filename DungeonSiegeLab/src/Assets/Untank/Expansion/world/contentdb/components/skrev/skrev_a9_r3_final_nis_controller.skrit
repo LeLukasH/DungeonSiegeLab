@@ -1,0 +1,439 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  skrev_a9_r3_final_nis_controller.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: To control the ziggurat nis
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "skrev A9_R3 Final NIS Controller";
+
+// external properties
+property scid sj_scid$					doc = "Scid of shadow jumper.";
+property scid cgm_scid$					doc = "Scid of dsx_clock_gear_mechanism.";
+property scid cgm_b_scid$				doc = "Scid of dsx_clock_gear_mechanism_b.";
+property scid cgm_c_scid$				doc = "Scid of dsx_clock_gear_mechanism_c.";
+property scid cgm_d_scid$				doc = "Scid of dsx_clock_gear_mechanism_d.";
+property scid final_door_scid$			doc = "Scid of final door.";
+property scid camera_scid$				doc = "Scid of camera to follow shadow jumper death.";
+//property scid sound_emitter_scid$		doc = "Scid of sound emitter to stop.";
+
+owner = GoSkritComponent;
+
+// globals
+goid current_character$;
+bool stop_animation$;
+int start_chore$;
+int loop_chore$;
+SiegePos new_camera_pos$;
+SiegePos sj_pos$;
+string gear_effect_name$ = "clock_gear_mechanism_b_continuous";
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// Support functions
+
+// drops an equipped when from a slot
+drop_from_slot$( goid character$, eEquipSlot es$ )
+{
+	// get the weaopn in that slot
+	Go weapon$ = character$.Go.Inventory.GetEquipped( es$ );
+
+	// drop it
+	character$.Go.Inventory.RSRemove( weapon$, true );
+}
+
+// starts the character into the slow state by creating a new version of the skrev
+slow_character$( goid character$, int s_c$, int l_c$, bool stop$ )
+{
+	// set the values
+	start_chore$ = s_c$;
+	loop_chore$ = l_c$;
+	stop_animation$ = stop$;
+
+	// create the omni version to control the new character
+	GoCloneReq cloneReq$ = MakeGoCloneReq( owner.goid, owner.goid );
+	cloneReq$.Omni = true;
+	Goid new_controller$ = GoDb.SCloneGo( cloneReq$ );
+	
+	// send Omni version a activate to get it started
+	PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, new_controller$, MakeInt( character$ ), 0 );
+}
+
+// switches to the reveal animation
+float switch_animation$(eAnimChore chore$, int fourcc$, goid character$)
+{
+	//report.genericf( "switching animation!\n" );
+
+	// if we have a mind we want to stop fidgeting
+	if( character$.Go.HasMind() )
+	{
+		// turn off auto fidget
+		character$.Go.Mind.SetActorAutoFidgets( false );
+	}
+
+	// clear the mcp
+	MCPManager.Flush( character$ );
+
+	// get the correct animation
+	int anim$ = character$.Go.Aspect.AspectHandle.Blender.GetSubAnimIndex( chore$, fourcc$ );
+		
+	// make sure we got one
+	if (anim$ >= 0)
+	{
+		// make the request for the action
+		eReqRetCode ret$ = MCPManager.MakeRequest( character$.Go.Goid, PL_PLAYANIM, chore$, anim$, 0 );
+	}
+	else
+	{
+		report.genericf( "The animation could not be found\n" );
+		return 0;
+	}
+
+	// return the duration
+	return character$.Go.Aspect.AspectHandle.Blender.GetDuration( chore$, AS_PLAIN, anim$ );
+	//return character$.Go.Aspect.AspectHandle.Blender.GetDuration( anim$ );
+}
+
+// orient the camera from the given position to face the character + the y_offset(focus_offset)
+orient_camera$( SiegePos pos$, SiegePos character_pos$, eCameraOrder order$, float duration$, float focus_offset$, int camera_number$ )
+{
+	int i$ = 0;
+
+	// if the camera doesn't exist, we're in multiplayer so bail
+	if( !camera_scid$.Goid.IsValid() )
+	{
+		return;
+	}
+
+	// set the position for the owner so we can orient from it
+	owner.Go.Placement.SSetPosition( pos$, true );
+	owner.Go.Placement.AdjustPosition( 0.0, focus_offset$, 0.0, false ); // offset vertically
+
+	// clear the camera orders
+	CameraAgent.ClearOrders();
+
+	// turn to the owner to face the character
+	#only(game) [[
+		owner.Go.Placement.OrientToPosition( character_pos$ );
+		]];
+
+	// make a camera position name
+	string positionName$ = MakeStringF( "cmd_camera_%08X_%d_%d", owner.Scid, camera_number$ );
+
+	// create the camera position and move to it
+	CameraAgent.SubmitCameraPosition( positionName$, MakeCameraPosition( owner.Go.Placement.Position,  owner.Go.Placement.Orientation ) );
+	CameraAgent.SubmitOrder( positionName$, order$, duration$, false, Scid.InvalidScid );
+}
+
+// move the camera to look at the character
+SiegePos move_camera$( goid character$, eCameraOrder order$, float min_distance$, float max_distance$, float duration$, float focus_offset$, int camera_number$ )
+{
+	SiegePos pos$;
+	bool pos_not_found$ = true;
+	int i$ = 0;
+
+	// if the camera doesn't exist, we're in multiplayer so bail
+	if( !camera_scid$.Goid.IsValid() )
+	{
+		return pos$;
+	}
+
+	// loop until we find a spot or take too long
+	while( pos_not_found$ && i$ < 100)
+	{
+		// find a good place to put the camera
+		if( AIQuery.FindSpotRelativeToSource( character$.Go, min_distance$, max_distance$, 3.0, character$.Go.Mind.TempPos1 ) )
+		{
+			// set the pos$
+			pos$ = character$.Go.Mind.TempPos1;
+
+			// set the position for the owner so we can orient from it
+			owner.Go.Placement.SSetPosition( pos$, true );
+			owner.Go.Placement.AdjustPosition( 0.0, 1.5, 0.0, false ); // offset vertically
+
+			// do we have a clear los?
+			if( AIQuery.IsLOSClear( owner.Go, character$.Go ) )
+			{
+				// clear the camera orders
+				CameraAgent.ClearOrders();
+
+				// get the position of the character we want to orient to and add the offset
+				// don't care where the old camera is so let's move it around
+				camera_scid$.Go.Placement.SSetPosition( character$.Go.Placement.Position, true );
+				camera_scid$.Go.Placement.AdjustPosition( 0.0, focus_offset$, 0.0, false );
+
+				// turn to the owner to face the character
+				#only(game) [[
+					owner.Go.Placement.OrientToPosition( camera_scid$.Go.Placement.Position );
+					]];
+
+				// make a camera position name
+				string positionName$ = MakeStringF( "cmd_camera_%08X_%d_%d", owner.Scid, camera_number$ );
+
+				// create the camera position and move to it
+				CameraAgent.SubmitCameraPosition( positionName$, MakeCameraPosition( owner.Go.Placement.Position,  owner.Go.Placement.Orientation ) );
+				CameraAgent.SubmitOrder( positionName$, order$, duration$, false, Scid.InvalidScid );
+
+				pos_not_found$ = false;
+			}
+		}
+		i$ += 1;
+	}
+
+	return owner.Go.Placement.Position;
+}
+
+// force them to face and stop fidgeting
+force_face$( goid character$, goid target$ )
+{
+	if( !character$.IsValid() ) { return; }
+	else
+	{
+		if( !character$.Go.HasMind() ) { return; }
+	}
+
+	// get rid of all control
+	MCPManager.Flush( character$ );
+
+	// make sure they will face
+	if( character$.Go.Mind.UnderstandsJob( JAT_FACE ) )
+	{
+		// clear their mind and add the job
+		character$.Go.Mind.Clear( JQ_ACTION );
+		character$.Go.Mind.SDoJob( MakeJobReq( JAT_FACE, JQ_ACTION, QP_CLEAR, AO_COMMAND, target$ ) );
+	}
+}
+
+get_nearby_characters_to_face$( goid character$, float radius$ )
+{
+	int iend$;
+	int i$ = 0;
+	goid temp$;
+	bool doit$ = true;
+
+	// get all the characters within the radius
+	character$.Go.Mind.TempGopColl1.Clear();
+	character$.Go.Mind.GetEnemiesInSphere( radius$, character$.Go.Mind.TempGopColl1 );
+
+	// loop
+	iend$ = character$.Go.Mind.TempGopColl1.Size();
+	while( i$ < iend$ && i$ < 100 )
+	{
+		// get the temp character
+		temp$ = character$.Go.Mind.TempGopColl1.Get( i$ ).Goid;
+	
+		// make sure they have a mind
+		if( temp$.Go.HasMind() )
+		{
+
+			// see if they're already doing something
+			Job action$ = temp$.Go.Mind.GetFrontJob( JQ_ACTION );
+			if( action$ != NULL )
+			{
+				if( action$.JobAbstractType == JAT_STARTUP )
+				{
+					doit$ = false;
+				}
+			}
+			
+			if( temp$.Go.Player.Controller != PC_COMPUTER  )
+			{
+				doit$ = false;
+			}
+
+			// make sure they know how to face
+			if( temp$.Go.Mind.UnderstandsJob( JAT_FACE ) && temp$.Go.Actor.GetAlignment() == AA_GOOD )
+			{
+				// make them face
+				force_face$( temp$, character$ );
+			}
+		}
+
+		i$ += 1;
+	}
+}
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+// chill here until we get an activate event
+startup state Wait$
+{
+	// look for activates
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		// activate?
+		if(e$ == WE_REQ_ACTIVATE)
+		{
+			// get the current character
+			current_character$ = MakeGoid( msg$.GetData1() );
+
+			// if it's not valid, we're not a cloned version
+			if( !current_character$.IsValid() )
+			{
+				// check the scids
+				if( !sj_scid$.Goid.IsValid() ) { report.genericf( "sj_scid$ is not valid!\n" ); }
+				if( !cgm_scid$.Goid.IsValid() ) { report.genericf( "cgm_scid$ is not valid!\n" ); }
+				if( !cgm_b_scid$.Goid.IsValid() ) { report.genericf( "cgm_b_scid$ is not valid!\n" ); }
+				if( !cgm_c_scid$.Goid.IsValid() ) { report.genericf( "cgm_c_scid$ is not valid!\n" ); }
+				if( !cgm_d_scid$.Goid.IsValid() ) { report.genericf( "cgm_d_scid$ is not valid!\n" ); }
+				if( !final_door_scid$.Goid.IsValid() ) { report.genericf( "final_door_scid$ is not valid!\n" ); }
+				if( !camera_scid$.Goid.IsValid() ) { report.genericf( "camera_scid$ is not valid!\n" ); }
+
+				// jump into the start state
+				SetState Start$;
+			}
+			else
+			{
+				//float duration$;
+				//float current_time$;
+
+				/*******/
+				// scratch this, i'm just going to cover the switch the a fade or something
+
+				// how much time is left in the current anim?
+				//duration$ = current_character$.Go.Aspect.AspectHandle.Blender.DurationOfCurrentTimeWarp();
+				//current_time$ = current_character$.Go.Aspect.AspectHandle.Blender.TimeOfCurrentTimeWarp();
+
+				// wait until it's all set
+				this.CreateTimer( 1, 0 /*duration$ - current_time$*/ );
+			}
+		}
+	}
+
+	// jump into the animation state
+	transition->PlayStartAnimation$:OnTimer( 1 );
+}
+
+// real stuff starts here
+state Start$
+{
+	set_pos$ at ( 0.1 ) { sj_pos$ = sj_scid$.Go.Placement.Position; }
+
+	// make all the characters around and make them face the sj
+	face$ at ( 0.5 ) { get_nearby_characters_to_face$( sj_scid$.Goid, 10.0 ); }
+
+	// move the camera to watch the shadowjumper and turn the sj to the camera
+	camera$ at ( 0.5 ) { new_camera_pos$ = move_camera$( sj_scid$.Goid, COR_SNAP, 3.0, 5.0, 3.0, 0.0, 0 ); }
+
+	// pry the staff from his cold dead hands
+	drop$ at ( 4.0 ) { drop_from_slot$( sj_scid$.Goid, ES_WEAPON_HAND ); }
+
+	// move the camera up to follow the ghost
+	pan_camera$ at ( 4.0 ) { orient_camera$( new_camera_pos$, sj_pos$, COR_PAN, 4.0, 6.0, 1 ); }
+
+	// change lodfis
+	change_lodfi$ at ( 4.4 )
+	{
+		#only(game) [[
+			//sound_emitter_scid$.Go.SetLodfi( false );
+			cgm_b_scid$.Go.SetLodfi( false );
+			cgm_scid$.Go.SetLodfi( false );
+		]];
+	}
+
+	// stop sound
+	//stop_clock_sound$ at ( 4.5 ) { PostWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, sound_emitter_scid$.Goid, 0 ); }
+
+	// stop the effects on the gears
+	stop_effect_1$ at ( 5.0 ) { PostWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, cgm_scid$.Goid, 0 ); }
+	stop_effect_2$ at ( 5.0 ) { PostWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, cgm_b_scid$.Goid, 0 ); }
+	stop_effect_3$ at ( 5.0 ) { SiegeFX.SStopScript( cgm_b_scid$.Goid, gear_effect_name$ ); } 
+
+	// slow each element of the clock ( for whatever reason i can't clone myself all at once so we'll have to offset slightly )
+	slow_clock_a$ at ( 5.0 )
+	{
+		slow_character$( cgm_scid$.Goid, 'slow', 'slol', false );
+		slow_character$( cgm_b_scid$.Goid, 'slow', 'slol', false );
+		slow_character$( cgm_c_scid$.Goid, 'stop', '', true );
+		slow_character$( cgm_d_scid$.Goid, 'slow', 'slol', false );
+	}
+
+	// open the door
+	unlock_door$ at ( 20.0 ) { PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, final_door_scid$.Goid, 0 ); }
+	//open_door$ at ( 20.0 ) { PostWorldMessage( WE_REQ_USE, owner.Goid, final_door_scid$.Goid, 0 ); }
+
+	// we're done
+	end$ at ( 21.0 ) { SetState Done$; }
+}
+
+// plays the start chore
+state PlayStartAnimation$
+{
+	event OnEnterState$
+	{
+		float duration$;
+
+		// start the animation
+		duration$ = switch_animation$( CHORE_MISC, start_chore$, current_character$ );
+
+		//report.genericf("starting slow down! %f\n", duration$);
+
+		// if we're a stop animation we want to end a little early.  this prevents the last swing of the faces
+		if( start_chore$ == 'stop' ) { duration$ -= 4.5; }
+
+		// jump into the next state at the end of the chore
+		this.CreateTimer( 1, duration$ );
+	}
+
+	transition->PlayLoopAnimation$:OnTimer( 1 );
+}
+
+// loops the animation for the current_character$
+state PlayLoopAnimation$
+{
+	event OnEnterState$
+	{
+		float duration$;
+
+		// are we supposed to be looping
+		if( stop_animation$ )
+		{
+			// lock the mesh
+			current_character$.Go.Aspect.AspectHandle.SetLockMeshFlag( true );
+
+			// bail into the done state
+			this.CreateTimer( 1, 0 );
+			return;
+		}
+		else
+		{
+			// if the current character isn't valid for whatever reason, bail
+			if( !current_character$.IsValid() )
+			{
+				this.CreateTimer( 1, 0 );
+				return;
+			}
+
+			// switch the animation
+			duration$ = switch_animation$( CHORE_MISC, loop_chore$, current_character$ );
+
+			this.CreateTimer( 2, duration$ );
+		}
+	}
+
+	transition->Done$:OnTimer( 1 );
+	transition->PlayLoopAnimation$:OnTimer( 2 );
+}
+
+// finishing state.  cleans everything up
+state Done$
+{
+	event OnEnterState$
+	{
+		// delete ourselves
+		PostWorldMessage(WE_REQ_DELETE, owner.Goid, owner.Goid, 1);
+	}
+}

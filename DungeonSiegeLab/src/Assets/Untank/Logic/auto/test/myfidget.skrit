@@ -1,0 +1,242 @@
+/*
+	10/26/2001  - new file
+	
+	args passed: skritbot=auto\test\myFidget map=Halo_test_map  teleport=start  fullscreen=false   skrit_retry=true
+
+*/
+
+//////////////////////////////////////////////////////////////////////////////
+
+owner = GoSkritComponent;
+
+#include "LogOut.skrit"
+
+property	float	period$		=  0.82 			doc = "Sample period, in seconds."; // had been  0.02
+property	bool	meander$	= false				doc = "Lower speed to MinMoveVelocity when wandering around";
+
+goActor			m_Actor$;
+SiegePos		heroPos$, newPos$;    // initial placement of our hero
+Go				m_Go$;
+string          m_statement$, sSiegeP$;  // for log output    //  , sResp$
+goMind			m_Mind$;
+goInventory		m_GO_Inv$;
+GoAspect		m_Aspect$;
+bool			bResponse$, BExiting$, bPassFail$;
+float			f_MAXTime$ = 18.024, m_OrigSpeed$;  
+Job				m_Jobtmp$;
+
+startup state S$ trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+{
+	if ( (WorldState.CurrentState == WS_SP_INGAME) || (WorldState.CurrentState == WS_MP_INGAME) )
+	{
+		myinit$(__NAME__);
+		
+		setstate SInGame2$;
+	}
+}
+/*
+float nextRandom$()
+{
+	return( math.randomFloat(-6.64, +6.64) );
+}
+*/  
+state SInGame2$
+{
+ 	FInGame$ at ( 5 frames )
+	{
+		Go party$ = Server.GetScreenParty();
+			
+//		logState$("SInGame2$");
+		debug.AssertF(party$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+		
+		m_Go$ = party$.Children.Get( 0 );
+		if ( m_Go$ == NULL  )
+		{
+//			report.generic("HERO returned NULL\n");
+			logout$(nFAIL$, "SETUP", "Could not find Screen Party [essential]");
+			setstate Ext$;
+		}
+		else
+		{				
+			heroPos$ = m_Go$.placement.position;
+			 // make clone req
+
+			m_Mind$ = m_Go$.Mind;
+			debug.AssertF(m_Mind$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+
+			m_GO_Inv$ = m_Go$.Inventory;    // Get  goinventory
+			debug.AssertF(m_GO_Inv$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+
+			m_Aspect$ = m_Go$.Aspect;
+			debug.AssertF(m_Aspect$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+			
+			m_Actor$  = m_Go$.Actor;
+			debug.AssertF(m_Actor$  != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+			
+			m_OrigSpeed$ = m_Go$.Body.AvgMoveVelocity;
+			bPassFail$ = false;
+			
+			setstate Wait$;
+		}
+	}
+}
+////////////////////////////////////////
+//	Wait$
+state Wait$
+{
+	transition -> TakeSample$ :  OnTimer( 1 );
+
+	event OnEnterState$
+	{
+		if ( (WorldState.CurrentState == WS_SP_OUTRO ) || (WorldState.CurrentState == WS_MP_SESSION_LOST ) )
+		{	
+			BExiting$ = true;
+		}
+		else
+		{
+			this.CreateTimer( 1, period$ );
+		}
+	}
+}
+
+void ChangeSpeed$()
+{
+	if ( meander$ )
+	{
+		m_Go$.Body.SetAvgMoveVelocity( m_Go$.Body.MinMoveVelocity );
+	}
+}
+
+void ResetSpeed$()
+{
+	if ( meander$ )
+	{
+		if( m_OrigSpeed$ > 0.0 )
+		{
+			m_Go$.Body.SetAvgMoveVelocity( m_OrigSpeed$ );
+		}
+	}
+}
+
+////////////////////////////////////////
+//	TakeSample$
+state TakeSample$	
+{
+//	eReqRetCode ret$;
+	
+	event OnEnterState$
+	{
+		if (! m_Mind$.AmBusy() )
+		{
+			// try the wander:
+			if ( AIQuery.FindSpotRelativeToSource( m_Go$, 0.66, 1.33, 2.0, m_Mind$.TempPos1 ) )
+			{
+				newPos$ = m_Mind$.TempPos1;
+				heroPos$ = m_Go$.placement.position;
+			} else {
+				newPos$ = heroPos$;
+			}
+			MCPManager.Flush(m_Go$.Goid);
+			
+			sSiegeP$ = MakeSiegePosString(newPos$);
+/*			Stringtool.AssignF(m_statement$, "About to request face new position %s :", sResp$);
+			logout$(nINFO$, "AUTOMATION", m_statement$);	
+			ChangeSpeed$();
+	//		MCPManager.MakeRequest(m_Go$.goid, PL_APPROACH, newPos$);
+
+			ret$ = MCPManager.MakeRequest(m_Go$.goid, PL_FACE, newPos$);
+			sResp$ = ToString(ret$);
+			Stringtool.AssignF(m_statement$, "The response from the request to face this position is %s", sResp$);
+			logout$(nINFO$, "AUTOMATION", m_statement$);	
+			if (ret$ == request_failed_bad_type)
+			{
+				BExiting$ = true;  // exit on first failed "bad type" error...
+			}
+*/			
+// ???			m_Jobtmp$ = m_Mind$.SDoJob( MakeJobReq( JAT_MOVE, JQ_ACTION, QP_FRONT_FINISH, AO_HUMAN, newPos$ ) );
+			m_Jobtmp$ = m_Mind$.SDoJob( MakeJobReq( JAT_MOVE, JQ_ACTION, QP_FRONT, AO_HUMAN, newPos$ ) );
+	 		debug.AssertF(m_Jobtmp$ != NULL, "state TakeSample$ %s line %d", __NAME__, __LINE__);
+			
+			if (! m_Jobtmp$.GetJobSuccessful())
+			{
+				StringTool.AssignF(m_statement$, "walk to position %s status is %d", sSiegeP$, m_Jobtmp$.JobResult ); 
+				logout$(nINFO$, "ATTRIBUTES", m_statement$);				
+			}
+/*
+			ret$ = MCPManager.MakeRequest(m_Go$.goid, PL_APPROACH, newPos$, 0.2);
+			sResp$ = ToString(ret$);
+			Stringtool.AssignF(m_statement$, "The response from the request to move to this position is %s", sResp$);
+			logout$(nINFO$, "AUTOMATION", m_statement$);	
+			if (ret$ == request_failed_bad_type)
+			{
+				BExiting$ = true;  // exit on first failed "bad type" error...
+			}
+			ResetSpeed$();
+*/
+		}
+		if (WorldTime.Time > f_MAXTime$ )  //    
+		{
+			Stringtool.AssignF(m_statement$, "exiting because TIME exceeds %f seconds", f_MAXTime$ );
+			bPassFail$ = true;
+			logout$(nINFO$, "AUTOMATION", m_statement$);
+			BExiting$ = true;
+		}
+		if (BExiting$)
+		{
+			setstate Ext$;
+		}
+		else
+		{
+			setstate Wait$;		// re-evaluate in period$ secs.			
+		}
+	}
+}	
+
+state Ext$
+{
+	event OnEnterState$
+	{
+		if (bPassFail$)
+		{
+			logout$(nPass$, "CRITERIA", "Terminated normally.");
+		}
+		else
+		{
+			logout$(nFail$, "CRITERIA", "Premature Termination.");
+		}
+		mydeinit$(__NAME__);
+		bResponse$ = GpConsole.Execute( "exit\n");          // out of here
+		debug.AssertF(bResponse$, "state TakeSample$ %s line %d", __NAME__, __LINE__);		
+	}
+}
+  
+/* no repro on the following : tested build 10.2502 date 10/26/01  BW
+  
+  error:
+Type         : Error
+Module       : H:\PreCompiled\10.2502\CDimage_BITS_01.10.2502_DEV\DungeonSiegeR.exe
+Location     : GoFollower.cpp line 1367 (at P:\vss_db_tattoo\GPG\Projects\Tattoo\World\)
+Fail Count   : 1
+Exe timestamp: Oct 25 2001 22:19:09
+
+KNOWN ISSUE: At time 97.256935, [farmboy:0x02000002] has velocity  4.50015, but it's next chore is [chore_fidget] and not [chore_walk]. You can ignore this error, though it may result in an actor that will appear to be skating to it's destination.Please log this occurrence in raid ONLY if you can easily reproduce this situation.
+
+  
+  trace:
+  
+0x005F2D5F DungeonSiegeR.exe: GoFollower::Update + 4176 bytes ( GoFollower.cpp, Line 1367 + 158 bytes )
+0x00591998 DungeonSiegeR.exe: Go::Update + 134 bytes ( Go.cpp, Line 1424 + 12 bytes )
+0x00532DAD DungeonSiegeR.exe: GoDb::Update + 264 bytes ( GoDb.cpp, Line 1208 )
+0x0054E91B DungeonSiegeR.exe: Server::Update + 47 bytes ( Server.cpp, Line 189 )
+0x00480400 DungeonSiegeR.exe: TattooGame::UpdateFrame + 877 bytes ( TattooGame.cpp, Line 3173 )
+0x0047FE35 DungeonSiegeR.exe: TattooGame::OnFrame + 25 bytes ( TattooGame.cpp, Line 2978 )
+0x00434F30 DungeonSiegeR.exe: AppModule::OnUpdate + 1086 bytes ( AppModule.cpp, Line 2281 )
+0x00436029 DungeonSiegeR.exe: AppModule::PrivateExecute + 441 bytes ( AppModule.cpp, Line 2821 + 10 bytes )
+0x00433689 DungeonSiegeR.exe: AppModule::Run + 63 bytes ( AppModule.cpp, Line 1081 + 5 bytes )
+0x00433760 DungeonSiegeR.exe: AppModule::AutoRun + 25 bytes ( AppModule.cpp, Line 1133 )
+0x004026B1 DungeonSiegeR.exe: WinMain + 31 bytes ( main.cpp, Line 68 + 21 bytes )
+0x00409FCE DungeonSiegeR.exe: WinMainCRTStartup + 224 bytes
+0x77E97D08 KERNEL32.dll: 0001:00016D08
+
+
+*/

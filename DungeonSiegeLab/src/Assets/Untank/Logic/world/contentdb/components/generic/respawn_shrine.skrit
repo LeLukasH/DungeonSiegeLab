@@ -1,0 +1,72 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  respawn_shrine.skrit
+// Author(s):  Chad Queen
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = true;
+property string _doc$                = "Basic Multiplayer Ghost-To-Living Shrine";
+property string _required_component$ = "placement";
+
+property eWorldEvent 	resurrect_msg$	= WE_REQ_USE			doc = "message to look for to un-undead a player";
+property bool		 	use_data$		= false					doc = "use the goid packed in Data1 instead of the sender of the message.";
+
+owner                                = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+#option -explicit_states
+
+startup state StartUp$
+{
+	transition -> Waiting$ : OnGoHandleMessage( WE_ENTERED_WORLD );
+}
+
+state Waiting$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == resurrect_msg$ )		
+		{
+			Goid ghost$;
+			
+			if( use_data$ ) {
+				ghost$ = MakeGoid( msg$.GetData1() );
+			} else {
+				ghost$ = msg$.GetSendFrom();
+			}
+			//report.genericf("trying to ressurect %s\n", ghost$.Go.TemplateName);
+			
+			if( ghost$.IsValid() )
+			{
+				if(ghost$.Go == NULL)
+				{
+					report.generic("Someone is bad and isn't sending the result of condition to the resurrect shrine\n");
+					return;
+				}
+			   
+				//report.generic("It's a valid dead thing.\n");
+				if ( ghost$.Go.IsGhost() )
+				{					
+					//report.generic("And a ghost!!\n");
+					ghost$.Go.Aspect.SSetLifeState( LS_ALIVE_CONSCIOUS );
+					
+					if( ghost$.go.aspect.currentlife < 0)
+					{
+						float n$ = 1.0 - ghost$.go.aspect.currentlife;
+						Rules.ChangeLife( ghost$, n$ );
+					}				
+				}
+			}
+		}
+	}
+}

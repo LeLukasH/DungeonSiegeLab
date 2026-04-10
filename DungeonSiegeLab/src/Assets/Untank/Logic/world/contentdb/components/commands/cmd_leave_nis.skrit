@@ -1,0 +1,71 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_leave_nis.skrit
+// Author(s):  Scott Bilas
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+property string _doc$ = "NIS mode_leave (trigger with WE_REQ_ACTIVATE)";
+property string _required_component$ = "placement";
+
+property float normalscreen_delay$ = 1.0	doc = "Delay for leaving widescreen mode (0 for instant)";
+property float duration$           = 2.0	doc = "How fast we attempt to pan back to a reasonable track position before ending NIS";
+property float music_fade_time$    = 1.0    doc = "Time to fade music volume back to normal";
+
+
+owner = GoSkritComponent;
+int orig_speed$ = -1;
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnGoHandleMessage$( eWorldEvent event$, WorldMessage msg$ )
+{
+	if ( event$ == WE_REQ_ACTIVATE)
+	{
+		orig_speed$ = msg$.Data1;
+	
+		// start world restoring
+		World.RestoreWorldViewport( normalscreen_delay$ );
+	
+		// restore sound
+		Mood.ResetMoodVolume( music_fade_time$ );
+	
+		// select first party member
+		Go party$ = Server.ScreenParty;
+		if ( party$ != NULL )
+		{
+			if ( !party$.Children.Empty )
+			{
+				// select first member of party
+				GoDb.Select( party$.Children.Get( 0 ).Goid );
+			}
+		}
+	
+		// setup a snap order to put the camera in the new location
+		CameraAgent.SubmitOrder( "ui_trackpos", COR_PAN, duration$, false, owner.Scid );
+	}
+}
+
+trigger OnGoHandleMessage$( WE_CAMERA_COMMAND_DONE )
+{
+	// change state back from nis
+	WorldState.Request( WorldState.PreviousState );
+	// I'm setting the gamespeed back to the original after all camera commands.
+	float e$ = Math.Abs( (orig_speed$ / 1000.0) - WorldOptions.GameSpeed);
+	if( ( orig_speed$ > 0 ) && ( e$ > .05 ) )
+	{
+		float new_speed$ = orig_speed$ / 1000.0;
+		WorldOptions.SetGameSpeed( new_speed$ );
+	}
+	// $$$$$$$$$$$$$$$ lower back to one second once we get the deal with trigger actions deleting sorted out. -ET
+	PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 35.0);
+}
+
+//////////////////////////////////////////////////////////////////////////////

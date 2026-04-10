@@ -1,0 +1,383 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+//Go		m_Go$;
+//GoMind	m_Mind$;
+//GoParty 	m_Party$;
+//Job		m_Job$;
+//
+//property	int	min_party_size$			= 2		doc = "How many friends must be nearby to form a party";
+//property	int	max_party_size$			= 8		doc = "What is the larget size I will leat a party be to join, or add into my own.?";
+//
+//property	float	heal$				= 0.30		doc = "What ratio of the time will the party try to heal members";
+//property	int	heal_charges$			= 2		doc	= "How many times the party can heal before it must recharge";
+//property	float	heal_recharge$			= 15.00		doc = "Seconds before the party will try to heal members";
+//
+//property	float	reanimate$			= 0.30		doc = "What ratio of the time will the party try to re-animate dead members";
+//property	int	reanimate_charges$		= 2			doc	= "How many times the party can re-animate before it must recharge";
+//property	float	reanimate_recharge$		= 15.00		doc = "Seconds before the party will try to re-animate dead members";
+//
+//property	float	formation_change$		= 0.02		doc	= "Chance to change the formation shape each time it moves.";
+//property	int	formation_charges$		= 1		doc	= "How many times the party can move in formation before it must recharge";
+//property	float	formation_recharge$		= 5.00		doc = "Seconds before the party will try to move in formation again";
+//
+//property	float	approach_distance$		= 1.66		doc = "Meters to try to approach by when approaching in formation.";
+//property	float	min_approach_distance$		= 5.00		doc = "Minimum distance before the party will approach.";
+//
+//property	float	party_sight_distance$		= -1.0		doc = "Set to a positive value to allow the party to see an enemy farther away (usefull for get friends) -1 to use sight range.";
+//
+//property	bool	free_move_on_enemy_enter_ICZ$	= true 		doc = "if enemy enters ICZ allow party to freely attack";
+//property	bool	free_move_on_enemy_enter_OCZ$	= false		doc = "if enemy enters OCZ allow party to freely attack";
+//property	bool	free_move_on_life_low$	 	= false		doc = "if a party reaches life low allow party to freely attack";
+//property	bool	free_move_if_cant_respond$ 	= true 		doc = "allow characters to move freely if the can't attack back when in formation.";
+//property	bool	move_ranged_in_formation$ 	= true 		doc = "move ranged attackers in formation even if they are allowed free movment.";
+//
+//property	bool	free_move$ 			= false 	doc = "allow free movement by default";
+//property	bool	use_loose_formation$ 		= false 	doc = "move in a disorganized formation (used for archers to prevent them from standing on each other)";
+//property	string	formation_list$ 				doc = "comma delimited list of possible formations to use (If empty will use default monster formations)";
+//
+//property	int	required_party_members_to_hold_formation$	= 2 		doc = "Number of party members required to approach in formation.";
+//property	int	required_ranged_attackers_to_hold_formation$	= 1 		doc = "Number of ranged attackers required in the party to approach in formation.";
+//property	int	required_ranged_attackers_to_hold_ground$	= 9 		doc = "Number of ranged attackers required in the party to hold ground in formation.";
+//property	int	required_members_for_all_out_attack$		= -1		doc = "Mumber of party members required for an all out attack. (useful for getting friends or pack attacks.";		
+//property	int	required_alive_members_for_all_out_attack$	= -1		doc = "Mumber of alive party members required for an all out attack. (useful for getting friends or pack attacks.";
+//
+//property	bool	flee_when_member_killed$			= false		doc = "Party members flee when a party member is killed.";
+
+
+//This file contains party AI information that is referenced inside specific actor templates
+
+[t:template,n:party_nosirrom]
+{
+	specializes = party_computer;
+	doc = "Party formed by Nosirrom.";
+
+	[common]
+	{
+		membership = party_nosirrom;
+	}
+	[mind]
+	{
+			jat_brain										= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation							= true
+			&heal											= 1
+			&heal_charges									= 1
+			&heal_recharge									= .1
+			&reanimate										= 1
+			&reanimate_charges								= 1
+			&reanimate_recharge								= .1
+			&min_approach_distance							= 8
+			&free_move_on_enemy_enter_OCZ					= true
+			&required_ranged_attackers_to_hold_formation	= 1
+			&formation_recharge								= 2.4;
+	}
+}
+
+[t:template,n:party_dsx_hassat]
+{
+	specializes = party_computer;
+	doc = "Party of Hassat.";
+
+	[common]
+	{
+		membership = hassat;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00;
+	}
+}
+
+[t:template,n:party_dsx_zaurask]
+{
+	specializes = party_computer;
+	doc = "Party of Zaurask.";
+
+	[common]
+	{
+		membership = zaurask;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00;
+	}
+}
+
+[t:template,n:party_dsx_goblin]
+{
+	specializes = party_computer;
+	doc = "Party of Goblins.";
+
+	[common]
+	{
+		membership = goblin;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00;
+	}
+}
+
+[t:template,n:party_dsx_gobbot]
+{
+	specializes = party_computer;
+	doc = "Party of Gobbots.";
+
+	[common]
+	{
+		membership = gobbot;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00;
+	}
+}
+
+[t:template,n:party_dsx_chitterskrag]
+{
+	specializes = party_computer;
+	doc = "Party of Chitterskrags.";
+
+	[common]
+	{
+		membership = chitterskrag;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00;
+	}
+}
+
+[t:template,n:party_dsx_droc]
+{
+	specializes = party_computer;
+	doc = "Party of Drocs.";
+
+	[common]
+	{
+		membership = droc;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00;
+	}
+}
+
+[t:template,n:party_dsx_kikclaw]
+{
+	specializes = party_computer;
+	doc = "Party of Kikclaws.";
+
+	[common]
+	{
+		membership = kikclaw;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00;
+	}
+}
+
+[t:template,n:party_dsx_troll]
+{
+	specializes = party_computer;
+	doc = "Party of Trolls.";
+
+	[common]
+	{
+		membership = troll;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00;
+	}
+}
+
+[t:template,n:party_dsx_automaton]
+{
+	specializes = party_computer;
+	doc = "Party of Automatons.";
+
+	[common]
+	{
+		membership = automaton;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00;
+	}
+}
+
+[t:template,n:party_dsx_bubber]
+{
+	specializes = party_computer;
+	doc = "Party of Bubbers.";
+
+	[common]
+	{
+		membership = bubber;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00;
+	}
+}
+
+[t:template,n:party_dsx_swarmling]
+{
+	specializes = party_computer;
+	doc = "Party of Swarmling.";
+
+	[common]
+	{
+		membership = swarmling;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00;
+	}
+}
+
+[t:template,n:party_dsx_krakbone]
+{
+	specializes = party_computer;
+	doc = "Party of Krakbones.";
+
+	[common]
+	{
+		membership = krakbone;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00;
+	}
+}
+
+[t:template,n:party_dsx_ice]
+{
+	specializes = party_computer;
+	doc = "Party in Ice Giant Cave.";
+
+	[common]
+	{
+		membership = ice;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00;
+	}
+}
+
+
+[t:template,n:party_dsx_cicatrix]
+{
+	specializes = party_computer;
+	doc = "Party of cicatrix minions.";
+
+	[common]
+	{
+		membership = cicatrix;
+	}
+
+	[mind]
+	{
+			jat_brain		= world\ai\jobs\common\brain_party.skrit
+			?use_loose_formation	= true
+			&reanimate_charges	= 0
+			&formation_recharge	= 2
+			&min_approach_distance	= 7
+			&approach_distance	= 2
+			&formation_recharge	= 3.00
+			&max_party_size		= 40;
+	}
+}

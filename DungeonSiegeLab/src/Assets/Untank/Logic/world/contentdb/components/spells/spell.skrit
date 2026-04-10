@@ -1,0 +1,326 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// when you get a message send a message to yourself.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property bool	_server_only$		= false;
+
+owner = GoSkritComponent;
+Goid Caster$;
+
+bool cast$( bool pause_frame$ )
+{
+	if( Caster$.IsValid )
+	{
+//		report.generic("casting!!\n");
+		goid Target$;
+		
+		goid engaged$ = Caster$.Go.Mind.EngagedObject;
+		
+		if( engaged$.IsValid )
+		{
+			Target$ = engaged$;
+		}
+		else if( Caster$.Go.Follower.IsOrientModeDefined )
+		{
+			Target$ = Caster$.Go.Follower.CurrentOrientTarget;
+		}
+		else
+		{
+			Target$ = Caster$;
+		}
+		
+		if( Target$.IsValid )
+		{	
+			// do a little extra verification to make sure we are casting on the right target.
+			// If we aren't valid see if we are castable on the caster and try to target him
+			
+			if( !owner.Go.Magic.IsCastableOn( Target$.Go, true ) )
+			{
+				if( owner.Go.Magic.IsCastableOn( Caster$.Go, true ) )
+				{
+					Target$ = Caster$;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			
+//			report.genericf("Casting\n");
+			
+			float cost$ = owner.Go.Magic.EvaluateManaCost( Caster$.Go, Target$.Go );
+			
+			// mana might not be at the right value on the client. only subtract the mana on the client if we have enough.
+			// if we don't subtract it then the server will fix us in a few seconds.
+			if( pause_frame$ )
+			{
+				PostWorldMessage( WE_REQ_CAST, Caster$, owner.Goid, MakeInt( Target$ ), 0 );
+			}
+			else
+			{
+				SendWorldMessage( WE_REQ_CAST, Caster$, owner.Goid, MakeInt( Target$ ) );
+			}
+			if( owner.Go.Magic.ApplyEnchantmentsOnCast && Target$.Go.HasAspect )
+			{
+//				report.genericf("Trying to apply enchantments\n");
+				owner.Go.Magic.ApplyEnchantments( Target$, Caster$ );
+			}
+			
+			// subtract the cost *after* casting the spell in case our alteration is based on the the ammount of mana we have.
+			// example: spell_healing_hands 
+			if( IsServerLocal || ( Caster$.Go.Aspect.CurrentMana > cost$ ) )
+			{
+				Rules.ChangeManaLocal( Caster$, -1.0 * cost$ );
+			}
+			
+			return true;
+		}
+	}
+	return false;
+}
+
+cleanup$
+{
+	if( Caster$.IsValid )
+	{
+		if( Godb.IsBeingWatched( owner.goid ) )
+		{
+			Godb.StopWatching( owner.goid, Caster$ );
+		}
+	}
+	// only delete the spell from the server, but send all spells into an inactive state.
+	if( IsServerLocal() )
+	{
+		Godb.SMarkForDeletion( owner.goid );
+	}
+}
+
+// There are several times that spells are created. We need to make sure that we are only watching the caster at the right time.
+// We want to make sure that we aren't in the inventory, and we have a valid parent, and that the parent isn't in the inventory.
+		
+bool IsCastSpell$
+{
+	// We don't have a parent, we must be on the ground.
+	if( owner.Go.Parent == NULL ) 
+	{
+//		report.generic("no parent!!\n");
+		return false;
+	}
+	Caster$ = owner.Go.Parent.goid;
+	
+//	if( !Caster$.IsValid )
+//	{
+//		report.generic("Invalid Caster!!\n");
+//	}
+//	if( owner.go.IsInsideInventory )
+//	{
+//		report.generic("In Inventory!!\n");
+//	}
+	
+	if( Caster$.IsValid && !owner.go.IsInsideInventory )
+	{
+		return true;
+	}
+	return false;
+}
+
+Trigger OnGoHandleMessage$( WE_LEFT_WORLD )
+{
+	if( !IsCastSpell$ )
+	{
+		SetState Done$;
+		return;
+	}
+	if( IsServerLocal )
+	{
+		Godb.SMarkForDeletion( owner.goid );
+	}
+}	
+
+startup state Active$
+{
+	Trigger OnGoHandleMessage$( WE_CONSTRUCTED )
+	{
+//		report.generic("constructed\n");
+		if( owner.Go.IsOmni )
+		{
+//			report.generic("Omni Spell going into inactive state\n");
+			SetState done$;
+		}
+	}
+
+	Trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+	{
+//		report.generic("entered world\n");
+
+		if( !IsCastSpell$ )
+		{
+			SetState Done$;
+			return;
+		}
+			
+		// If we are a One Use spell we should cast right now. We are going to delete the spell, so we won't be able to play the cast animation.
+		if( Owner.Go.Magic.IsOneUse )
+		{
+			if( cast$( true ) )
+			{
+				SetState Done$;
+			}
+			else
+			{
+				SetState Abort$;
+			}
+			return;
+		}
+		
+		// Try to detect if we missed our cast event.
+		if( AnimEventBitTest( Caster$.Go.Aspect.AspectHandle.Blender.GetRecentEvents(), ANIMEVENT_FIRE_WEAPON ) )
+		{
+//			report.generic("Missed Fire detected!! Casting!\n");
+			if( cast$( true ) )
+			{
+				SetState Done$;
+			}
+			else
+			{
+				SetState Abort$;
+			}
+			return;
+		}
+
+//		report.generic("I think that I'm owned!!\n");
+
+		int numofevents$ = Caster$.Go.Aspect.AspectHandle.Blender.GetNumberOfEvents(ANIMEVENT_ATTACH_AMMO);
+		if (numofevents$ == 0) 
+		{
+			goid target$ = Caster$.Go.Follower.CurrentOrientTarget;
+			if( target$.IsValid )
+			{
+//				report.generic("charge!!\n");
+				PostWorldMessage( WE_REQ_CAST_CHARGE, Caster$, owner.Goid, MakeInt( target$ ), 0 );
+			}
+		}
+		
+		if( !GoDb.IsWatching( owner.goid ) )
+		{
+			Godb.StartWatching( owner.goid, Caster$ );
+		}
+	}
+
+	Trigger OnGoHandleCCMessage$( WE_ANIM_WEAPON_FIRE )
+	{
+//		report.generic("Casting.!!\n");
+			
+		if( Caster$.IsValid )
+		{
+//			report.generic("Not watching anymore!!\n");
+			Godb.StopWatching( owner.goid, Caster$ );
+		}
+//		else
+//		{
+//			report.generic("Caster Invalid couldn't stop the watch, We are boned!!\n");
+//		}
+		if( cast$( false ) )
+		{
+			SetState Done$;
+		}
+		else
+		{
+			SetState Abort$;
+		}
+	}
+	
+	Trigger OnGoHandleCCMessage$( WE_ANIM_DONE )
+	{
+		// We missed out cast... oh well, better late then never, cast anyway.
+		if( Caster$.IsValid )
+		{
+			Godb.StopWatching( owner.goid, Caster$ );
+		}
+		if( cast$( false ) )
+		{
+			SetState Done$;
+		}
+		else
+		{
+			SetState Abort$;
+		}
+		return;
+	}
+	
+	Trigger OnGoHandleCCMessage$( WE_KILLED )
+	{
+//		report.generic("Killed.!!\n");
+		// We got killed before we could cast, we don't need to cast anymore.
+		cleanup$;
+		SetState Done$;
+	}
+	
+	Trigger OnGoHandleCCMessage$( WE_LOST_CONSCIOUSNESS )
+	{
+//		report.generic("Killed.!!\n");
+		// We lost consciousness before we could cast, we don't need to cast anymore.
+		cleanup$;
+		SetState Done$;
+	}
+	
+	Trigger OnGoHandleCCMessage$( WE_MCP_CHORE_CHANGING )
+	{
+		if( Caster$.IsValid )
+		{
+			if( Caster$.Go.Follower.IsOrientModeDefined )
+			{
+				eAnimChore ch$ = Caster$.Go.Aspect.AspectHandle.GetCurrentChore();
+				
+				if( ch$ != CHORE_MAGIC )
+				{
+//					report.error("Deleting.!!\n");
+					cleanup$;
+					SetState Done$;
+				}
+//				else
+//				{
+//					report.generic("Chore Change ok!!\n");
+//				}
+			}
+		}
+	}
+	Trigger OnGoHandleCCMessage$( WE_ANIM_ATTACH_AMMO )
+	{
+		if( Caster$.IsValid )
+		{
+			goid target$ = Caster$.Go.Follower.CurrentOrientTarget;
+			if( target$.IsValid )
+			{
+//				report.generic("attaching?!!\n");
+				SendWorldMessage( WE_REQ_CAST_CHARGE, Caster$, owner.Goid, MakeInt( target$ ) );
+			}
+		}
+	}
+}
+
+state done$
+{
+
+}
+
+state Abort$
+{
+	event OnEnterState$
+	{
+		if( IsServerLocal() )
+		{
+			Godb.SMarkForDeletion( owner.goid );
+		}
+	}
+}

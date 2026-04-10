@@ -1,0 +1,504 @@
+[t:template,n:2W_dsx_spider_emerald]
+{
+  category_name = "2W_evil_d";
+  doc = "2W_dsx_spider_emerald";
+  specializes = actor_evil;
+
+  [actor]
+    {
+      [skills]
+	{
+	  strength =  25.1, 0;
+	  intelligence =  9.6, 0;
+	  dexterity =  16.2, 0;
+	  melee = 45, 0;
+	}
+    }
+  [aspect]
+    {
+      [textures]	{ 0 = b_c_edm_emerald_spider; }
+
+      experience_value = 23750;
+      life = 1219;
+      max_life = 1219;
+      mana = 0;
+      max_mana = 0;
+      model = m_c_edm_sp_pos_1;
+            scale_base = 1.5;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_spider_SED; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_spider_emerald_SED; }
+			[attack]	{ priority = high; * = s_e_attack_spider_SED; }
+		}
+    }
+  [attack]
+    {
+      attack_range = 0.5;
+      damage_min = 186.3;
+      damage_max = 303.6;
+      reload_delay = 1;
+    }
+  [defend] { defense = 375.7; }
+
+  [body]
+    {
+      avg_move_velocity = 2.350000;
+      [bone_translator]
+	{
+	  body_anterior = bone02;
+	  body_mid = bone04;
+	  body_posterior = bone04;
+	  kill_bone = bone04;
+	  shield_bone = bone01;
+	  weapon_bone = bone02;
+	}
+      [chore_dictionary]
+	{
+	  chore_prefix = a_c_edm_sp_fs;
+	  [chore_attack]
+	    {
+	      chore_stances = 0;
+	      skrit = select_attack;
+	      [anim_files] { 00=at; }
+	    }
+	  [chore_default]
+	    {
+	      chore_stances = 0;
+	      skrit = infinite_loop;
+	      [anim_files] { 00=dfs; }
+	    }
+	  [chore_die]
+	    {
+	      chore_stances = 0;
+	      skrit = select_transition;
+	      [anim_files] { 00=di; }
+	    }
+	  [chore_fidget]
+	    {
+	      chore_stances = 0;
+	      skrit = select_fidget;
+	      [anim_files] { 00=dff; }
+	    }
+	  [chore_walk]
+	    {
+	      chore_stances = 0;
+	      skrit = select_walk;
+	      [anim_files] { 00=wl; }
+	    }
+	}
+    }
+
+  [common] { screen_name = "Emerald Spider"; }
+
+  [mind]
+    {
+      melee_engage_range = 14.0;
+      personal_space_range = 0.7;
+      ranged_engage_range = 14.0;
+      sight_range = 14.0;
+    }
+  [physics]
+    {
+      break_effect = spider_guts_black;
+      explode_when_killed = true;
+      explosion_magnitude = 1.0;
+      gib_gore_good = true;
+      [break_particulate]
+				{
+					frag_glb_emerald_spider_01 = 1;
+					frag_glb_emerald_spider_02 = 3;
+					frag_glb_emerald_spider_03 = 5;
+					frag_glb_emerald_spider_04 = 5;
+					frag_glb_emerald_spider_05 = 1;
+				}
+    }
+	[inventory] 
+		{
+			drop_at_use_point = true;
+			[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 4, Strong */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 36261;
+				max = 70507;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_large;
+				il_main = potion_health_large;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = #weapon/139;
+				il_main = #armor/46-391;
+				il_main = #*/139;
+			}
+		}
+	}
+		}
+}
+
+[t:template,n:2W_dsx_spider_frost]
+{
+  category_name = "2W_evil_d";
+  doc = "2W_dsx_spider_frostnid";
+  specializes = spider_frostnid_base;
+  [actor]
+    {
+      [skills]
+	{
+	  strength =  26, 0;
+	  intelligence =  9.6, 0;
+	  dexterity =  14.3, 0;
+	  melee =  43,  0;
+	}
+    }
+  [aspect]
+    {
+      experience_value = 21190;
+      life = 690;
+      max_life = 690;
+      mana = 0;
+      max_mana = 0;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_spider_SED; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_spider_SED; }
+			[attack]	{ priority = high; * = s_e_attack_spider_SED; }
+		}
+    }
+  [attack]
+    {
+      attack_range = 0.5;
+      damage_min = 135;
+      damage_max = 231;
+    }
+  [common] { screen_name="Frostnid"; }
+  [defend] { defense = 260; }
+
+	[inventory] 
+		{
+			drop_at_use_point = true;
+			
+		}
+}
+
+[t:template,n:2W_dsx_spider_frost_range]
+{
+  category_name = "2W_evil_d";
+  doc = "2W_dsx_spider_frostnid_ranged";
+  specializes = spider_frostnid_base;
+  [actor]
+    {
+      [skills]
+	{
+	  strength =  22.8, 0;
+	  intelligence =  9.6, 0;
+	  dexterity =  14.3, 0;
+	  combat_magic =  44,  0;
+	  nature_magic =  44,  0;
+	}
+    }
+  [aspect]
+    {
+      experience_value = 21190;
+      life = 585;
+      max_life = 585;
+      mana = 0;
+      max_mana = 0;
+      [voice]
+	{
+	  [cast]			{ * = s_e_attack_frostnid_SED; }
+	  [die]			{ priority = high; * = s_e_die_spider_SED; }
+	  [enemy_spotted]	{ priority = high; * = s_e_call_spider_SED; }
+	}
+    }
+  [attack]
+    {
+      attack_range = 0.5;
+      damage_min = 229.5;
+      damage_max = 363;
+		damage_bonus_min_cmagic = 214;
+		damage_bonus_max_cmagic = 339;
+    }
+  [inventory]
+    {
+      selected_active_location = il_active_primary_spell;
+      [other] { il_active_primary_spell=dsx_spell_frostnid_freeze; }
+    }
+  [common] { screen_name = "Frostnid Spitter"; }
+  [defend] { defense = 155; }
+  [mind]
+    {
+      actor_weapon_preference			= WP_MAGIC;
+      actor_auto_switches_to_magic	= true;
+      actor_auto_switches_to_karate	= false;
+      actor_auto_switches_to_melee	= false;
+    }
+
+		[inventory] 
+		{
+				drop_at_use_point = true;
+				
+		}
+}
+
+[t:template,n:2W_dsx_spider_sm] {
+  category_name = "2W_evil_d";
+  doc = "2W_dsx_spider_sm";
+  specializes = actor_evil;
+  [actor]
+    {
+      [skills]
+	{
+	  strength =  25.1, 0;
+	  intelligence =  9.6, 0;
+	  dexterity =  16.2, 0;
+	  melee =  45, 0;
+	}
+    }
+  [aspect]
+    {
+      experience_value = 19950;
+      life = 230;
+      max_life = 230;
+      mana = 0;
+      max_mana = 0;
+      model = m_c_edm_as_pos_1;
+      scale_base = 0.5;
+      [textures] { 0=b_c_edm_as-yel; }
+      [voice]
+	{
+	  [die]			{ priority = high; * = s_e_die_spider_small_SED; }
+	  [enemy_spotted]	{ priority = high; * = s_e_call_spider_small_SED; }
+	}
+    }
+  [defend] { defense = 168.7; }
+  [attack]
+    {
+      attack_range = 0.5;
+      damage_min = 72.5;
+      damage_max = 240.4;
+    }
+  [body]
+    {
+      min_move_velocity = 2.0;
+      avg_move_velocity = 4.430000;
+
+      terrain_movement_permissions = lf_dirt;
+
+      [bone_translator]
+	{
+	  body_anterior = bone01;
+	  body_mid = bone01;
+	  body_posterior = bone01;
+	  kill_bone = bone01;
+	  shield_bone = bone01;
+	  weapon_bone = bone01;
+	}
+      [chore_dictionary]
+	{
+	  chore_prefix = a_c_edm_as_fs;
+	  [chore_attack]
+	    {
+	      chore_stances = 0;
+	      skrit = select_attack;
+	      [anim_files]
+		{
+		  00 = at;
+		  01 = at-02;
+		  02 = at-03;
+		}
+	    }
+	  [chore_default]
+	    {
+	      chore_stances = 0;
+	      skrit = infinite_loop;
+	      [anim_files] { 00=ds; }
+	    }
+	  [chore_die]
+	    {
+	      chore_stances = 0;
+	      skrit = select_transition;
+	      [anim_files]
+		{
+		  00 = di;
+		  01 = di-02;
+		  02 = di-03;
+		}
+	    }
+	  [chore_fidget]
+	    {
+	      chore_stances = 0;
+	      skrit = select_fidget;
+	      [anim_files] { 00=dff; }
+	    }
+	  [chore_walk]
+	    {
+	      chore_stances = 0;
+	      skrit = select_walk;
+	      [anim_files] { 00=wl; }
+	    }
+	}
+    }
+  [common] { screen_name="Swarmer"; }
+  [mind]
+    {
+      jat_fidget	= world\ai\jobs\common\job_fidget.skrit
+	?social		= 0.35
+	&still		= false;
+
+      melee_engage_range = 14.0;
+      personal_space_range = 0.1;
+      ranged_engage_range = 14.0;
+      sight_range = 14.0;
+    }
+  [physics]
+    {
+      break_effect = spider_guts_yellow;
+      break_sound = ;
+      explode_when_killed = true;
+      explosion_magnitude = 1.0;
+      gib_gore_good = true;
+      [break_particulate]
+	{
+	  frag_glb_adolescent_spider_yel_01 = 1;
+	  frag_glb_adolescent_spider_yel_02 = 1;
+	  frag_glb_adolescent_spider_yel_03 = 1;
+	  frag_glb_adolescent_spider_yel_04 = 1;
+	  frag_glb_adolescent_spider_yel_05 = 2;
+	}
+    }
+}
+
+[t:template,n:2W_dsx_spider_med] {
+  category_name = "2W_evil_d";
+  doc = "2W_dsx_spider_med";
+  specializes = actor_evil;
+  [actor]
+    {
+      [skills]
+	{
+	  strength =  24.3, 0;
+	  intelligence =  9.5, 0;
+	  dexterity =  16, 0;
+	  melee =  45, 0;
+	}
+    }
+  [aspect]
+    {
+      experience_value =20375;
+      life = 329;
+      max_life = 329;
+      mana = 0;
+      max_mana = 0;
+      model = m_c_edm_as_pos_1;
+      [voice]
+	{
+	  [die]			{ priority = high; * = s_e_die_grub_SED; }
+	  [enemy_spotted]	{ priority = high; * = s_e_call_spider_SED; }
+	  [attack]	{ priority = high; * = s_e_attack_spider_SED; }
+	}
+    }
+  [defend] { defense = 203.7; }
+  [attack]
+    {
+      attack_range = 0.5;
+      damage_min = 143.8;
+      damage_max = 206.8;
+    }
+  [body]
+    {
+      min_move_velocity = 1.85;
+      avg_move_velocity = 2.430000;
+      [bone_translator]
+	{
+	  body_anterior = bone01;
+	  body_mid = bone01;
+	  body_posterior = bone01;
+	  kill_bone = bone01;
+	  shield_bone = bone01;
+	  weapon_bone = bone01;
+	}
+      [chore_dictionary]
+	{
+	  chore_prefix = a_c_edm_as_fs;
+	  [chore_attack]
+	    {
+	      chore_stances = 0;
+	      skrit = select_attack;
+	      [anim_files]
+		{
+		  00 = at;
+		  01 = at-02;
+		  02 = at-03;
+		}
+	    }
+	  [chore_default]
+	    {
+	      chore_stances = 0;
+	      skrit = infinite_loop;
+	      [anim_files] { 00=ds; }
+	    }
+	  [chore_die]
+	    {
+	      chore_stances = 0;
+	      skrit = select_transition;
+	      [anim_files]
+		{
+		  00 = di;
+		  01 = di-02;
+		  02 = di-03;
+		}
+	    }
+	  [chore_fidget]
+	    {
+	      chore_stances = 0;
+	      skrit = select_fidget;
+	      [anim_files] { 00=dff; }
+	    }
+	  [chore_walk]
+	    {
+	      chore_stances = 0;
+	      skrit = select_walk;
+	      [anim_files] { 00=wl; }
+	    }
+	}
+    }
+  [common] { screen_name = "Dust Spider"; }
+  [mind]
+    {
+      jat_fidget						= world\ai\jobs\common\job_fidget.skrit
+	?social							= 0.45
+	&still							= false;
+
+      melee_engage_range = 14.0;
+      personal_space_range = 0.5;
+      ranged_engage_range = 14.0;
+      sight_range = 14.0;
+    }
+  [physics]
+    {
+      break_effect = spider_guts_pink;
+      break_sound = ;
+      explode_when_killed = true;
+      explosion_magnitude = 1.0;
+      gib_gore_good = true;
+      [break_particulate]
+	{
+	  frag_glb_adolescent_spider_01 = 1;
+	  frag_glb_adolescent_spider_02 = 1;
+	  frag_glb_adolescent_spider_03 = 1;
+	  frag_glb_adolescent_spider_04 = 2;
+	  frag_glb_adolescent_spider_05 = 1;
+	}
+    }
+}

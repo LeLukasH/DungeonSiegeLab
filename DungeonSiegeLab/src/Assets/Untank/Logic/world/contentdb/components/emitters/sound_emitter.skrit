@@ -1,0 +1,162 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  sound_emitter_lw.skrit
+// Author(s):  Chad Queen, Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property string _doc$                = "A basic 3D sound emitter";
+property string _required_component$ = "placement";
+property bool	_server_only$		 = false;
+
+// $$$ left in to aid in transition to non-interactive emitters -ET
+//property bool	start_on_creation$	= true		doc = "Start Emitter when it enters the world";
+property bool	repeat$				= true		doc = "Will continually keep playing based on repeat rate";
+property float	repeat_rate$		= 2.0		doc = "Number of seconds before starting to play sound again";
+property float	max_repeat_rate$	= -1.0		doc = "Maximum Number of seconds before starting to play sound again (use to make a range), if -1 will just use repeat rate.";
+property string event_sound$					doc = "Name of voice event sound to play";
+property float  min_dist$			= 6.0		doc = "Minimum sound distance";
+property float  max_dist$			= 50.0		doc = "Maximum sound distance";
+property int 	start_hour$			= 0			doc = "Starting hour 0 - 23 inclusive";
+property int  	stop_hour$			= 23		doc = "Stoppin hour 0 - 23 inclusive, Note: stop time can be sooner then start, and it will do what you want.";
+property bool	continual_loop$		= false		doc = "Continually loop ( ignore repeat variables )";
+property bool	stop_instantly$		= false		doc = "Stop sound instantly on De-Activation, instead of waiting for the end of the sample.";
+property int	time_chunk$			= -1		doc = "1 = night(1-4), 2 = sun-rise(5-11), 3 = day(12-19), 4 = sunset(20-0), set to override start/stop hour.";
+
+owner = GoSkritComponent;
+
+trigger OnGoHandleMessage$( WE_POST_RESTORE_GAME )
+{
+	SetState Active$;
+}
+
+event OnGoDrawDebugHud$
+{
+	string temp_sound$ = "";
+	string temp_loop$ = "";
+	string continuous$ = "";
+	if (!StringTool.IsEmpty( event_sound$ ) )
+	{
+		temp_sound$ = event_sound$;
+	}
+	if(repeat$)
+	{
+		temp_loop$ = "Looping";
+	} else {
+		temp_loop$ = "Playing once";
+	}
+
+	if(continual_loop$)
+	{
+		continuous$ = "Continuous play";
+	} else {
+		continuous$ = "Non-continuous play";
+	}
+
+	World.DrawDebugSphere( owner.Go.Placement.Position,
+						   min_dist$,
+						   MakeColor( 0.0, 1.0, 0.0 ),
+						   Debug.Format( "Sound: %s\nMin Distance: %g\nStart time: %d Stop time: %d Current time: %d\nMin rep time: %g Max rep time: %g\nSound is: %s\nPlay mode: %s",
+										 temp_sound$, min_dist$,start_hour$,stop_hour$,TimeOfDay.Hour,repeat_rate$,max_repeat_rate$,temp_loop$,continuous$ ) );
+
+	World.DrawDebugSphere( owner.Go.Placement.Position,
+						   max_dist$,
+						   MakeColor( 0.0, 1.0, 1.0 ),
+						   Debug.Format( "Max Distance %g\n",
+										 max_dist$  ) );
+
+}
+
+startup state Idle$
+{
+	trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+	{
+		if ( !StringTool.IsEmpty( event_sound$ ) )
+		{
+			if( time_chunk$ == 1)
+			{
+				start_hour$ = 1;
+				stop_hour$ = 4;
+			} else if( time_chunk$ == 2)
+			{
+				start_hour$ = 5;
+				stop_hour$ = 11;
+			} else if( time_chunk$ == 3)
+			{
+				start_hour$ = 12;
+				stop_hour$ = 19;
+			} else if( time_chunk$ == 4)
+			{
+				start_hour$ = 20;
+				stop_hour$ = 0;
+			}
+			SetState Active$;
+		}
+		else
+		{
+			Report.ErrorF( "Sound emitter used in '%s' has no sound configured!", owner.Go.TemplateName );
+		}
+	}
+}
+
+
+state Active$
+{
+	int last_sound$ = -1;
+
+	event OnEnterState$
+	{
+		float delay$ = ( max_repeat_rate$ > 0.0 ) ?  Math.RandomFloat( 0, max_repeat_rate$ ) :  Math.RandomFloat( 0, repeat_rate$ );
+		this.CreateTimer( 1, delay$ );
+	}
+
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == WE_LEFT_WORLD )
+		{
+			if( last_sound$ != -1 )
+			{
+				owner.Go.StopSound( last_sound$ );
+			}
+		}
+	}
+
+	trigger OnTimer$( 1 )
+	{
+		int time$ = TimeOfDay.Hour;
+		if ( continual_loop$ )
+		{
+			if( ( ( start_hour$ <= stop_hour$ ) && ( start_hour$ <= time$ ) && ( stop_hour$ >= time$ ) ) ||
+				( ( start_hour$ > stop_hour$ ) && ( ( start_hour$ <= time$ ) || ( stop_hour$ >= time$ ) ) ) )
+			{
+				last_sound$ = owner.Go.PlayVoiceSound( event_sound$, min_dist$, max_dist$, true );
+			}
+			// If the sound failed to play, create a frame timer that attempts to play
+			// the sound again every 10 frames
+			if( last_sound$ == -1 )
+			{
+				this.CreateFrameTimer( 1, 10 );
+			}
+		}
+		else
+		{
+			if( ( ( start_hour$ <= stop_hour$ ) && ( start_hour$ <= time$ ) && ( stop_hour$ >= time$ ) ) ||
+				( ( start_hour$ > stop_hour$ ) && ( ( start_hour$ <= time$ ) || ( stop_hour$ >= time$ ) ) ) )
+			{
+				last_sound$ = owner.Go.PlayVoiceSound( event_sound$, min_dist$, max_dist$, false );
+			}
+
+			// Don't play again until we want to repeat
+			float delay$ = repeat_rate$;
+			if ( max_repeat_rate$ > 0.0 )
+			{
+				delay$ = Math.RandomFloat( repeat_rate$, max_repeat_rate$ );
+			}
+			this.CreateTimer( 1, delay$ );
+		}
+	}
+}

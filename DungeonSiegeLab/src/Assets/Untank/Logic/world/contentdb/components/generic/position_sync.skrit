@@ -1,0 +1,33 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  position_sync.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$			= true;
+property string _doc$					= "made to sync positions between objects";
+property string _required_component$	= "placement";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+startup state Startup$
+{
+	event OnGoUpdate$( float /*delta_t*/ )
+	{
+		if( Owner.Go.Parent != NULL )
+		{
+			Owner.Go.Placement.SSetPlacement ( Owner.Go.Parent.Placement.Position, Owner.Go.Parent.Placement.Orientation, false );
+		}
+	}
+}

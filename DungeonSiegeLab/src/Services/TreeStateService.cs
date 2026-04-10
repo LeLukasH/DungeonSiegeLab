@@ -36,10 +36,18 @@ public class TreeStateService
         return new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     }
 
+    /// <summary>Saves expansion state AND updates LastBitsPath (use for the user's Bits folder).</summary>
     public void SaveExpansionState(string bitsPath, IEnumerable<string> expandedPaths)
     {
         _state.LastBitsPath = bitsPath;
         _state.ExpandedPaths[bitsPath] = expandedPaths.ToList();
+        WriteFile();
+    }
+
+    /// <summary>Saves expansion state for a secondary root (e.g. Untank) without touching LastBitsPath.</summary>
+    public void SaveExpansionOnly(string key, IEnumerable<string> expandedPaths)
+    {
+        _state.ExpandedPaths[key] = expandedPaths.ToList();
         WriteFile();
     }
 

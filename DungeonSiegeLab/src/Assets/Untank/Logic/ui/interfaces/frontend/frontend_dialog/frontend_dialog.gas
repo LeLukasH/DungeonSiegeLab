@@ -1,0 +1,148 @@
+[frontend_dialog]
+{
+	interface = true;
+	centered = background;
+	modal = true;
+	[t:dialog_box,n:background]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox_wide;
+	  x draw_order = 0x00000000;
+		rect = 195,170,445,310;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		consumable = true;
+		topmost = true;
+	}
+	[t:button,n:fe_dialog_button_ok]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000001;
+		rect = 280,274,360,290;
+		uvcoords = 0.000000,0.150000,0.200000,0.300000;
+		wrap_mode = clamp;
+		topmost = true;
+		[t:text,n:fe_dialog_button_ok_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x00000044;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x0000000C;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 327,199,365,214;
+			text = "OK";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			topmost = true;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(fe_dialog_ok);
+			onenter = notify(fe_dialog_ok);
+			onescape = notify(fe_dialog_ok);
+		}
+	}
+	[t:button,n:fe_dialog_button_yes]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000001;
+		rect = 230,274,310,290;
+		uvcoords = 0.000000,0.150000,0.200000,0.300000;
+		wrap_mode = clamp;
+		visible = false;
+		topmost = true;
+		[t:text,n:fe_dialog_button_yes_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x00000044;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x0000000C;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 327,199,365,214;
+			text = "Yes";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			topmost = true;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(fe_dialog_yes);
+			onenter = notify(fe_dialog_yes);
+			onescape = notify(fe_dialog_ok);
+		}
+	}
+	[t:button,n:fe_dialog_button_no]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000001;
+		rect = 330,274,410,290;
+		uvcoords = 0.000000,0.150000,0.200000,0.300000;
+		wrap_mode = clamp;
+		visible = false;
+		topmost = true;
+		[t:text,n:fe_dialog_button_no_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x00000044;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x0000000C;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 327,199,365,214;
+			text = "No";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			topmost = true;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(fe_dialog_no);
+			onescape = notify(fe_dialog_no);
+		}
+	}
+	[t:text_box,n:fe_dialog_text_box]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000046;
+	  b fixed_location = true;
+		font_color = 0xffffffff;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+	  b has_slider = false;
+		justify = center;
+	  x max_height = 0x000000F0;
+	  x max_width = 0x00000140;
+		rect = 208,191,432,262;
+	  f scroll_rate = 0.000000;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		center_height = true;
+		topmost = true;
+	}
+}

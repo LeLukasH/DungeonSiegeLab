@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_cmn_button_right_up]
+{
+	layer1texture1 = b_gui_cmn_button_right_up;
+  i texturedetail = 0;
+}

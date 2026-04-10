@@ -1,0 +1,42 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		:	dev_path_point.skrit
+
+	Author(s)	: 	Chad Queen
+
+	(C)opyright 2001 Gas Powered Games, Inc.
+
+
+	Usage:
+	======
+
+	A dev path point is just a bunch of properties for the path points that
+	can be connected to form a path in the world.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// exported properties
+property string _doc$ 					= "path point component used to form a path in the game";
+property string _required_component$ 	= "placement";
+
+property Scid next_scid$ 				doc = "Scid of next object in sequence, 0 to terminate";
+
+owner = GoSkritComponent;
+
+////////////////////////////////////////
+//	queue control
+property float radius$					doc = "The radius from the central position of the point";
+property string path_name$				doc = "Name of the path this point belongs to";
+property string point_name$				doc = "Name of the path point - Optional";
+
+//////////////////////////////////////////////////////////////////////////////
+
+

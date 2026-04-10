@@ -1,0 +1,469 @@
+[journal]
+{
+  b disable_camera = true;
+  b interface = true;
+	[t:button,n:button_journal_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x disable_color = 0x555f5f5f;
+	  i draw_order = 20;
+		group = journal_button_1;
+		rect = 182,410,325,430;
+		rollover_help = journal_show_dialog;
+		texture = b_gui_cmn_jbox_fill;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(button_journal_1);
+			onlbuttondown = vertexcolor(0xff555555);
+			onlbuttonup = vertexcolor(0xffffffff);
+			onrolloff = vertexcolor(0xffffffff);
+			onrollover = vertexcolor(0xff999999);
+		}
+		[t:text,n:text_journal_1]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 21;
+		  i font_color = -1;
+		  i font_size = 10;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = journal_button_1;
+			justify = center;
+			rect = 211,414,325,430;
+			text = "Show Dialogue";
+			texture = none;			
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:button_journal_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 21;
+		rect = 331,410,474,430;
+		rollover_help = journal_close;
+		texture = b_gui_cmn_jbox_fill;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(button_journal_2);
+			onlbuttondown = vertexcolor(0xff555555);
+			onlbuttonup = vertexcolor(0xffffffff);
+			onrolloff = vertexcolor(0xffffffff);
+			onrollover = vertexcolor(0xff999999);
+		}
+		[t:text,n:text_journal_2]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 22;
+		  i font_color = -1;
+		  i font_size = 10;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 387,414,474,430;
+			text = "Close";
+			texture = none;			
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:button_x]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 38;
+		rect = 468,24,484,40;
+		rollover_help = journal_close;
+		texture = b_gui_cmn_jbox_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(button_journal_exit);
+			onlbuttondown = loadtexture(b_gui_cmn_jbox_x_down);
+			onlbuttonup = loadtexture(b_gui_cmn_jbox_x_up);
+			onrolloff = loadtexture(b_gui_cmn_jbox_x_up);
+			onrollover = loadtexture(b_gui_cmn_jbox_x_hov);
+		}
+	}
+	[t:dialog_box,n:dialog_box_0]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 16;
+		rect = 181,56,260,135;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 16;
+		rect = 59,223,59,223;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_button_1_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 14;
+		group = journal_button_1;
+		rect = 181,409,326,431;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_button_2_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 15;
+		rect = 330,409,475,431;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_desc_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 18;
+		rect = 265,56,475,135;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_header_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 9;
+		rect = 177,52,479,139;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_journal_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 90;
+		rect = 177,19,455,48;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_lb_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 12;
+		rect = 181,147,475,405;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_main_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 11;
+		rect = 177,143,479,437;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_slider_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = jbox;
+	  i draw_order = 27;
+		rect = 448,151,471,401;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:listbox,n:listbox_quests]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 23;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = quest_listbox;
+		rect = 185,150,443,402;
+	  x text_color = 0xFFFFFFFF;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		
+		[messages]
+		{
+			oncreated = setelementheight(15);
+			onselect = notify(journal_select);
+		}
+		[t:selection_box,n:selection_box]
+		{
+			alpha = 0.5;
+			texture = b_gui_cmn_selection;
+		}
+		[t:slider,n:slider_quests]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 28;
+			group = quest_listbox;
+			rect = 449,173,470,379;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[t:button,n:button_quests_down]
+			{
+			  f alpha = 1.000000;
+			  b common_control = false;
+				common_template = ;
+			  i draw_order = 61;
+				group = quest_listbox;
+				rect = 449,379,470,401;
+				texture = b_gui_ig_mnu_jnl_arrow_down;
+				uvcoords = 0.000000,0.312500,0.656250,1.000000;
+				wrap_mode = clamp;
+				[messages]
+				{
+					onbuttonpress = parentmessage(increment_slider);
+					onlbuttondown = setalpha(0.5);
+					onlbuttonup = setalpha(1.0);
+					onrolloff = setalpha(1.0);
+					onrollover = setalpha(0.8);
+				}
+			}
+			[t:button,n:button_quests_up]
+			{
+			  f alpha = 1.000000;
+			  b common_control = false;
+				common_template = ;
+			  i draw_order = 88;
+				group = quest_listbox;
+				rect = 449,152,470,174;
+				texture = b_gui_ig_mnu_jnl_arrow_up;
+				uvcoords = 0.000000,0.312500,0.656250,1.000000;
+				wrap_mode = clamp;
+				[messages]
+				{
+					onbuttonpress = parentmessage(decrement_slider);
+					onlbuttondown = setalpha(0.5);
+					onlbuttonup = setalpha(1.0);
+					onrolloff = setalpha(1.0);
+					onrollover = setalpha(0.8);
+				}
+			}
+			[t:slider_button,n:slider_button]
+			{
+				texture_bot = b_gui_cmn_slider_jnl_bot;
+				texture_mid = b_gui_cmn_slider_jnl_mid;
+				texture_top = b_gui_cmn_slider_jnl_top;
+			}
+		}
+	}
+	
+	[t:text_box,n:text_box_desc]
+	{
+	  f alpha = 1.000000;
+	  b center_height = true;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 36;
+	  b fixed_location = true;
+		font_type = b_gui_fnt_12p_copperplate-light;
+	  b has_slider = false;
+		justify = center;
+	  i max_height = 240;
+	  i max_width = 320;
+		rect = 270,57,470,134;
+	  f scroll_rate = 0.000000;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_journal]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 91;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_20p_copperplate-light;
+		justify = center;
+		rect = 181,22,451,46;
+		text = "Journal";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text_box,n:textbox_dialogues]
+	{
+	  f alpha = 1.000000;
+	  b center_height = false;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 23;
+	  b fixed_location = true;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = quest_dialogues;
+	  b has_slider = true;
+		justify = left;
+	  i max_height = 240;
+	  i max_width = 320;
+		rect = 185,150,443,402;
+	  f scroll_rate = 0.000000;
+	  x text_color = 0xFFFFFFFF;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:slider,n:slider_dialogues]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 28;
+			group = quest_dialogues;
+			rect = 449,173,470,379;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			[t:button,n:button_dialogues_down]
+			{
+			  f alpha = 1.000000;
+			  b common_control = false;
+				common_template = ;
+			  i draw_order = 61;
+				group = quest_dialogues;
+				rect = 449,379,470,401;
+				texture = b_gui_ig_mnu_jnl_arrow_down;
+				uvcoords = 0.000000,0.312500,0.656250,1.000000;
+				wrap_mode = clamp;
+				[messages]
+				{
+					onbuttonpress = parentmessage(increment_slider);
+					onlbuttondown = setalpha(0.5);
+					onlbuttonup = setalpha(1.0);
+					onrolloff = setalpha(1.0);
+					onrollover = setalpha(0.8);
+				}
+			}
+			[t:button,n:button_dialogues_up]
+			{
+			  f alpha = 1.000000;
+			  b common_control = false;
+				common_template = ;
+			  i draw_order = 88;
+				group = quest_dialogues;
+				rect = 449,152,470,174;
+				texture = b_gui_ig_mnu_jnl_arrow_up;
+				uvcoords = 0.000000,0.312500,0.656250,1.000000;
+				wrap_mode = clamp;
+				[messages]
+				{
+					onbuttonpress = parentmessage(decrement_slider);
+					onlbuttondown = setalpha(0.5);
+					onlbuttonup = setalpha(1.0);
+					onrolloff = setalpha(1.0);
+					onrollover = setalpha(0.8);
+				}
+			}
+			[t:slider_button,n:slider_button]
+			{
+				texture_bot = b_gui_cmn_slider_jnl_bot;
+				texture_mid = b_gui_cmn_slider_jnl_mid;
+				texture_top = b_gui_cmn_slider_jnl_top;
+			}
+		}
+	}
+	[t:window,n:window_0]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+		consumable = true;
+	  i draw_order = 1;
+		rect = 149,8,405,264;
+		texture = b_gui_ig_mnu_jnl_01;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+		consumable = true;
+	  i draw_order = 2;
+		rect = 405,8,533,264;
+		texture = b_gui_ig_mnu_jnl_02;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+		consumable = true;
+	  i draw_order = 3;
+		rect = 149,263,405,519;
+		texture = b_gui_ig_mnu_jnl_03;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+		consumable = true;
+	  i draw_order = 4;
+		rect = 405,264,533,520;
+		texture = b_gui_ig_mnu_jnl_04;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_quest_completed]
+	{
+	  f alpha = 0.500000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 19;
+		rect = 182,57,259,134;		
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		visible = false;
+		wrap_mode = clamp;
+		background_color = 0x776A4528;
+		background_fill = true;
+				
+		[messages]
+		{
+			onstartanim = alphaanimation(1.0,0.0,0.6);
+		}
+	}
+	[t:window,n:window_quest_picture]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 18;
+		rect = 182,57,259,134;
+		uvcoords = 0.000000,0.398438,0.601563,1.000000;
+		wrap_mode = clamp;
+	}
+}

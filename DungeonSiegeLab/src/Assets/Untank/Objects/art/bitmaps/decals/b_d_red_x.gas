@@ -1,0 +1,5 @@
+[t:tsd,n:b_d_red_x]
+{
+	layer1texture1 = b_d_red_x;
+  i texturedetail = 1;
+}

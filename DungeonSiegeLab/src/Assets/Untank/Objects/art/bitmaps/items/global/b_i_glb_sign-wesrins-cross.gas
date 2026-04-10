@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_sign-wesrins-cross]
+{
+	layer1texture1 = b_i_glb_sign-wesrins-cross;
+  i texturedetail = 2;
+}

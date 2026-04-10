@@ -1,0 +1,59 @@
+[t:tsd,n:b_c_ebb_sjb-04-static]
+{
+  b alphaformat = true;
+  b hasalpha = true;
+	layer1alphaarg1 = texture;
+	layer1alphaarg2 = diffuse;
+	layer1alphaop = blendcurrentalpha;
+	layer1colorarg1 = texture;
+	layer1colorarg2 = diffuse;
+	layer1colorop = modulate;
+  i layer1numframes = 1;
+  f layer1secondsperframe = 0.0;
+	layer1texture1 = b_c_ebb_sjb-04-static;
+  f layer1ushiftpersecond = 0.0;
+  b layer1uwrap = true;
+  f layer1vshiftpersecond = 0.0;
+  b layer1vwrap = true;
+	layer2alphaarg1 = texture;
+	layer2alphaarg2 = current;
+	//layer2alphaop = blendcurrentalpha2x;
+	layer2alphaop = BLENDCURRENTALPHA;
+	layer2colorarg1 = texture;
+	layer2colorarg2 = current;
+	layer2colorop = modulate2x;
+  i layer2numframes = 1;
+  f layer2secondsperframe = 0.0;
+	layer2texture1 = b_c_ebb_sjb-04-dynamic;
+  f layer2ushiftpersecond = 0.1;
+  b layer2uwrap = true;
+  f layer2vshiftpersecond = 0.3;
+  b layer2vwrap = true;
+	layer3alphaarg1 = texture;
+	layer3alphaarg2 = current;
+	layer3alphaop = blendcurrentalpha;
+	layer3colorarg1 = texture;
+	layer3colorarg2 = current;
+	layer3colorop = modulate;
+  i layer3numframes = 1;
+	layer3texture1 = b_c_ebb_sjb-04-static;
+  f layer3ushiftpersecond = 0.0;
+  b layer3uwrap = true;
+  f layer3vshiftpersecond = 0.0;
+  b layer3vwrap = true;
+  i numlayers = 3;
+  i texturedetail = 1;
+  b timesyncanimation = true;
+}
+
+[t:tsd,n:b_c_ebb_sjb-04-static-simple]
+{
+  b hasalpha = false;
+	layer1texture1 = b_c_ebb_sjb-04-static;
+	layer1uwrap = false;
+	layer1vwrap = false;
+	numlayers = 1;
+  i texturedetail = 0;
+	timesyncanimation = true;
+}
+

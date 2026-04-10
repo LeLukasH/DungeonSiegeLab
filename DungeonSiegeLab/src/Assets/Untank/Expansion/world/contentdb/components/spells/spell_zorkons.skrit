@@ -1,0 +1,155 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_zek.skrit
+// Author(s):  Mathew Corthell
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// 
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property bool  splashDamage$=false	doc="Do splash damage to nearby enemies on impact?";
+property float sdMinPercent$=0.1	doc="The low-end percentage of the impact damage to deal as splash damage. Range 0 to 1.";
+property float sdMaxPercent$=0.5	doc="The high-end percentage of the impact damage to deal as splash damage. Range 0 to 1.";
+property float sdMaxRadius$=4		doc="The radius of the splash damage area.";
+property float sdMagnitude$=5		doc="The rate at which the radius glows.  (I have no idea what the units are for this.  Maybe m/s)";
+property string targetType$=""		doc="If set to a monster group - monsters of that type will take a lot more damage from this attack";
+property float groupDamage$=5		doc="Multiply the damage by this amount if using targetType";
+//property float lifeMaxKill$=0.0		doc="Only for bonecrusher: if monster's max health is below this, they are instantly killed";
+property string immunity$=""		doc="The type of immunity for creatures to avoid receiving damage from this spell.";
+
+property string effect$="" doc="The effect to play for this spell.";
+
+
+owner = GoSkritComponent;
+
+Goid m_Target$;
+Goid m_Caster$;
+Goid impactPoint$;
+
+//Default state.  Waiting to be cast.
+startup state Active$
+{
+	//Handle messages
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{	
+		//We got cast.  Goody!
+		if( e$ == WE_REQ_CAST )
+		{
+			m_Target$ 			= MakeGoid( msg$.GetData1() );
+			m_Caster$ 			= msg$.GetSendFrom();
+
+			//Is the target valid?  If not, then punt right now.
+			if( !m_Target$.IsValid || !m_Caster$.IsValid)
+			{
+				SetState Finished$;
+				return;
+			}
+
+			//Check for immunity to this spell.
+			if( !StringTool.IsEmpty(immunity$))
+			{
+				if( m_Target$.Go.Common.Membership.Contains( immunity$ ) )
+				{
+					SetState Finished$;
+					return;
+				}
+			}
+
+			SiegeFX.SRunScript(effect$, m_Target$, m_Caster$, "", owner.Goid, WE_REQ_CAST);
+
+			float damage$;
+
+			// JCD 6/02/03
+			// string isn't empty -- we are targetting a monster group type
+			//currently only used for bonecrusher
+			if( !StringTool.IsEmpty(targetType$) )
+			{ 
+
+				//this is the damage done to non-group monsters, which we might be attacking
+				damage$ = Math.RandomFloat( owner.Go.Attack.DamageMin, owner.Go.Attack.DamageMax );
+				
+				// if the hit creature is a member of the group type, multiply the damage
+				if( Rules.IsMemberofGroup( m_Target$, targetType$ ) )
+				{
+
+					damage$ = damage$ * groupDamage$;
+/*											
+MAJOR SIMPLIFICATION -- JUST MULTIPLY THE DAMAGE, NO INSTANT KILLS UNLESS THE DAMAGE IS ENOUGH TO JUST KILL IT
+
+					float level$ = Math.MinFloat( m_Caster$.Go.Actor.GetSkillLevel( owner.Go.Magic.SkillClass ), owner.Go.Magic.MaxCastLevel );
+					float lifeMaxKill$ = 100 + 10 * level$; //100 + 10* IS NOT BALANCED
+
+					// if this monster has a low enough life to instantly die, set the damage to the amount of life it has left
+					if( lifeMaxKill$ > m_Target$.go.aspect.GetMaxLife() )
+					{
+						damage$ = m_Target$.go.aspect.GetCurrentLife();
+					}
+					// do damage from min -> max
+					else
+					{
+					}
+				}
+				else
+				{
+					// do damage from 0 -> min  -- we don't hurt non-group monsters as much
+					damage$ = Math.RandomFloat( 0, owner.Go.Attack.DamageMin );
+				}
+*/											
+				}
+			}
+			else if(m_Target$.go.HasPlacement) //not group affecting spell, i.e. not bonecrusher
+			{
+				// MRC 7/24/2003 Bug 1188.  Make the target invisible...
+				m_Target$.Go.Aspect.SSetIsVisible(false);
+
+				damage$ = m_Target$.go.aspect.GetCurrentLife();
+
+				if(splashDamage$)
+				{
+					//Hold onto the amount of life the target has for the moment.
+					float splashDamageAmount$ = Math.RandomFloat(sdMinPercent$ * damage$, sdMaxPercent$ * damage$);					
+					GoCloneReq cloneReq$ = MakeGoCloneReq( "point" );
+					cloneReq$.StartingPos = m_Target$.go.GetPlacement().GetPosition();
+					impactPoint$ = GoDb.SCloneGo( cloneReq$ );   
+
+					//Create an explosion.
+					Physics.CreateExplosion(impactPoint$.go.placement.position, 
+																	sdMaxRadius$, 
+																	sdMagnitude$, 
+																	splashDamageAmount$, 
+																	m_Caster$, 
+																	owner.goid);
+
+				}
+			}
+			// award experience and damage the creature
+			// MRC 9/10/2003 Only do experience and damage if there is damage to be done.
+			// AwardExperience may throw an error if damage is not greater than zero.
+			if(damage$ >= 0)
+			{
+				Rules.AwardExperience( m_Caster$, owner.goid, Rules.CalculateExperience( m_Caster$, owner.goid, m_Target$, damage$ ) );
+				Rules.DamageGo( m_Target$, m_Caster$, owner.goid, damage$, true, false );
+			}
+
+			SetState Finished$;
+		} 
+	}
+}			
+
+state Finished$
+{       
+	event OnEnterState$
+		{   
+			// Get rid of any temporary storage
+			SiegeFx.ClearVariables( owner.goid );
+        
+			// Since this skrit is the component of a spell and all spells are cloned before being executed
+			// then it is safe to destroy ourself after finishing execution
+			PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 10 );			
+		}   
+}       

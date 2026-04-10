@@ -1,0 +1,38 @@
+[character_camera]
+{
+	target_pos = 0.0,-0.32,0.0;
+	distance = 8.38;
+	orbit = 0.12;
+	azimuth = 0.24799;
+}
+
+
+[portrait_camera]
+{
+	[farmboy]
+	{
+		viewer_location_offset	= 0.5,3.0,-0.5;
+		target_position_offset	= 0.1,0.0,0.0;
+		up_vector				= 1.0,0.0,0.0;				
+	}
+	[farmgirl]
+	{
+		viewer_location_offset	= 0.5,3.0,-0.5;
+		target_position_offset	= 0.1,0.0,0.0;
+		up_vector				= 1.0,0.0,0.0;
+	}
+	[dwarf]
+	{
+		viewer_location_offset	= 0.5,3.0,-0.5;
+		target_position_offset	= 0.1,0.0,0.0;
+		up_vector				= 1.0,0.0,0.0;			
+		ortho_matrix			= 0.0075;
+	}
+	[skeleton_good]
+	{
+		viewer_location_offset	= 0.5,3.0,-0.5;
+		target_position_offset	= 0.1,0.5,-0.09;
+		up_vector				= 1.0,0.0,0.0;
+		ortho_matrix			= 0.0055;
+	}
+}

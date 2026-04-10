@@ -1,0 +1,67 @@
+[single_player]
+{
+	interface = true;
+	[t:button,n:button_load_game]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1;
+		rect = 280,318,518,367;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{	
+			onbuttonpress = notify(load_single_player);
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);		
+		}
+
+		index = 2;
+	}
+	[t:button,n:button_sp_back]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 3;
+		rect = 360,568,439,597;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			onbuttonpress = notify(back_to_main);
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);				
+		}
+
+		index = 1;
+	}
+	[t:button,n:button_start_new_game]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 3;
+		rect = 280,241,518,290;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{	
+			onbuttonpress = notify(show_character_selection);
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);		
+		}
+
+		index = 2;
+	}
+}

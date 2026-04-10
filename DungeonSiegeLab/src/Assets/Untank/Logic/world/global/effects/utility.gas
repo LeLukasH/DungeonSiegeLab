@@ -1,0 +1,1184 @@
+//
+//	Utility effect scripts
+//
+//	Test scripts
+//
+
+
+[effect_script*]
+{
+	name	=explosion_volume;
+
+	script	=[[
+			sfx create sphere #TARGET 
+				"color0(.5,0,0)color1(.04,.04,.04)lines()dur(1)tin(0)
+				tout(1)[0]";
+			sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=bone_offset_test;
+
+	script	=[[
+			sfx create orbiter #TARGET 
+				"scale(.2)radius(0)color0(1,0,0)bone_orient()offset(0,1,0)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			
+			sfx create fireb #TARGET 
+				"scale(.2)color0(0,1,0)bone_orient()offset(0,1,0)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			]];
+}
+
+
+
+[effect_script*]
+{
+	name	=exp_test_1;
+
+	script	=[[
+			sfx create explosion #TARGET 
+				"dur(5)color0(1,0,0)";
+			sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=exp_test_2;
+
+	script	=[[
+			sfx create explosion #TARGET 
+				"dur(5)color0(0,1,0)srate(.01)";
+			sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=zap_test;
+
+	script	=[[
+			sfx create lightning #SOURCE 
+				"scale(.5)bolt_life(1)mindisplace(-.2)maxdisplace(.2)
+				color0(.7,.7,1)[0][1]";
+			set $bolt #POP;
+			sfx attach_point $bolt @weapon_bone target;
+			sfx target $bolt target;
+			sfx freeze_targets #PEEK;
+			sfx start $bolt;
+
+			sfx create lightning #SOURCE 
+				"scale(.5)bolt_life(1)mindisplace(-.2)maxdisplace(.2)
+				color0(.8,1,.8)[1]";
+			set $bolt2 #POP;
+			sfx attach_point $bolt2 @weapon_bone target;
+			sfx target $bolt2 target;
+			sfx freeze_targets #PEEK;
+			sfx start $bolt2;
+
+			sfx create explosion #TARGET 
+				"vmin(2)vmax(3)ivel(0,1,0)rvel(2,1,2)scale_range(0,.3,0)
+				texture(b_sfx_sparkle01)color0(.5,.75,.75)color1(0,.25,.25)
+				dur(2)radius(.4)fade_range(0,1,0)count(16)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=crash_game;
+
+	script	=[[
+			frandrange 0.35 0.45;	set $trail_size	#POP;
+		
+			sfx create curve #SOURCE 
+				"curvature(.8)model(0)scale($trail_size)ts(1.125)color(1,.4,.4)";
+			sfx target #PEEK target;
+			sfx start #POP;
+			
+			
+			sfx create curve #SOURCE 
+				"curvature(.8)model(0)scale($trail_size)ts(1.125)color(1,.4,.4)";
+			sfx target #PEEK target;
+			sfx start #POP;
+			
+			
+			sfx create curve #SOURCE 
+				"curvature(.8)model(0)scale($trail_size)ts(1.125)color(1,.4,.4)";
+			sfx target #PEEK target;
+			sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=crash_game_2;
+
+	script	=[[
+			sound play crash;
+			]];
+}
+
+[effect_script*]
+{
+	name	=crash_game_3;
+
+	script	=[[
+			sfx create fire #TARGET 
+				"delay(1 )";
+			sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=memory_error;
+
+	script	=[[
+			sfx create lightning #TARGET 
+				"delay(1)scale(2)mindisplace(0)maxdisplace(0)ts(1)dur(.4)";
+			sfx target #PEEK source;
+			sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=memory_error_no;
+
+	script	=[[
+			sfx create lightning #TARGET 
+				"scale(2)mindisplace(0)maxdisplace(0)ts(1)dur(.4)";
+			sfx target #PEEK source;
+			sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=fire_ring_error;
+
+	script	=[[
+			sfx create fire #TARGET
+			"instant()scale(1)dur(.3)flamesize(3)count(50)color0(1,.5,.2)
+			color1(0,0,0)velocity(0,10,0)accel(0,10,0)alphafade(.3)
+			min_displace(.1)max_displace(.1)radius(3)max_radius(1)";
+			
+			
+			sfx start #POP;
+			
+			pause .1;
+			
+			call fire_ring_error;
+			]];
+}
+
+[effect_script*]
+{
+	name	=fire_ring;
+
+	script	=[[
+			sfx create fire #TARGET
+			"scale(1)dur(.3)flamesize(3)count(50)color0(1,.5,.2)
+			color1(0,0,0)velocity(0,10,0)accel(0,10,0)alphafade(.3)
+			min_displace(.1)max_displace(.1)radius(3)max_radius(1)";
+			
+			
+			sfx start #POP;
+			
+			pause .1;
+			
+			call fire_ring;
+			]];
+}
+
+
+[effect_script*]
+{
+	// Run on two targets - creates a line of fire between the two of them
+
+	name	=line_fire;
+
+	script	=[[
+			sfx create fire #TARGET 
+				"line()count(200)flamesize(2)instant()";
+			sfx target #PEEK source;
+
+			sfx snap_to_ground #PEEK;
+
+			sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	// Run on two targets - creates a rectangle of fire between the two of them
+
+	name	=area_fire;
+
+	script	=[[
+			sfx create fire #TARGET 
+				"area()count(600)flamesize(2)instant()";
+			sfx target #PEEK source;
+
+			sfx start #POP;
+			]];
+}
+
+
+[effect_script*]
+{
+	// Run on two targets - creates a line of smoke between the two of them
+
+	name	=line_smoke;
+
+	script	=[[
+			sfx create steam #TARGET 
+				"dark()line()count(200)instant()";
+			sfx target #PEEK source;
+
+			sfx start #POP;
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=area_smoke;
+
+	// Run on two targets - creates a rectangle of smoke between the two of them
+
+	script	=[[
+			sfx create steam #TARGET 
+				"dark()area()count(600)instant()";
+			sfx target #PEEK source;
+
+			sfx start #POP;
+			]];
+}
+
+
+
+[effect_script*]
+{
+	name	=bone_test;
+
+	// Creates spheres around each translated bone of a model
+
+	script	=[[
+			sfx create sphere #TARGET 
+				"scale(.25)color0(1,0,0)";
+			sfx attach_point #PEEK @kill_bone target;
+			sfx start #POP;
+			sfx create sphere #TARGET 
+				"scale(.125)color0(1,0,0)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			sfx create sphere #TARGET 
+				"scale(.125)color0(0,1,0)";
+			sfx attach_point #PEEK @shield_bone target;
+			sfx start #POP;
+			sfx create sphere #TARGET 
+				"scale(.25)color0(1,1,0)";
+			sfx attach_point #PEEK @body_anterior target;
+			sfx start #POP;
+			sfx create sphere #TARGET 
+				"scale(.25)color0(1,1,1)";
+			sfx attach_point #PEEK @body_mid target;
+			sfx start #POP;
+			sfx create sphere #TARGET 
+				"scale(.25)color0(1,0,1)";
+			sfx attach_point #PEEK @body_posterior target;
+			sfx start #POP;
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=big_light;
+
+	// Creates a big dynamic light
+
+	script	=[[
+			sfx create lightsource #TARGET 
+				"color0(1,1,1)radius(200)";
+			sfx start #POP;
+			]];
+}
+
+
+
+
+//
+// Test scripts for the polygonal tracer effect
+//
+
+[effect_script*]
+{
+	name	=trace;
+
+	// Run on two targets - white tracer draws between the two targets
+
+	script	=[[
+			sfx create linetracer #TARGET;
+			sfx target #PEEK source;
+			sfx start #POP;
+			]];
+}
+
+
+
+[effect_script*]
+{
+	name	=test_ring;
+
+	script	=[[
+
+			sfx create orbiter	#TARGET "scale(.5)radius(8)color0(.8,.6,.3)";
+			set $orb #POP;
+
+			sfx create fire		#TARGET	"alphafade(.2)count(600)flamesize(.65)ts(3)
+										 accel		(0,	.0,	0)
+										 velocity	(0,	.2,	0)
+										 must_update()
+										 ";
+			set $fire #POP;
+
+			sfx rat $fire;
+			sfx target $fire $orb;
+								  
+			sfx start $orb;
+
+			sfx attach $orb $fire;
+
+			sfx start $fire;
+
+
+			]];
+}
+
+
+
+[effect_script*]
+{
+	name	=trace_test1;
+
+	// Spinning green tracer
+
+	script	=[[
+			sfx create orbiter		#TARGET 	"scale(.25)	radius(1)	iphi(4.75)";
+			sfx create orbiter		#TARGET		"scale(.25)	radius(4.5)	iphi(4.75)";
+			set $outer #POP;
+			set $inner #POP;
+	
+			sfx create linetracer	#TARGET 	"must_update()fade_rate(1.15)color0(.2,1,.2)color1(.1,.35,.1)";
+			set $tracer #POP;
+
+			sfx rat $tracer;
+			sfx target $tracer $outer;
+			sfx target $tracer $inner;
+
+			sfx start $tracer;
+
+			sfx start $inner;
+			sfx start $outer;
+
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=trace_test2;
+
+	// Two spinning tracers, one red and one blue
+
+	script	=[[
+			sfx create orbiter #TARGET 
+				"color0(1,.15,.15)scale(.25)radius(2.5)";
+			sfx create orbiter #TARGET 
+				"color0(1,.15,.15)scale(.25)radius(6.5)theta(2)iphi(-2)
+				itheta(3)";
+			set $large1 #POP;
+			set $small1 #POP;
+
+			sfx create linetracer #TARGET 
+				"fade_rate(.65)color0(1,.15,.15)color1(.5,.075,.075)";
+			sfx rat #PEEK;
+			sfx target #PEEK $large1;
+			sfx target #PEEK $small1;
+
+			sfx start $large1;
+			sfx start $small1;
+			sfx start #POP;
+
+
+			sfx create orbiter #TARGET 
+				"color0(.15,.15,1)scale(.25)radius(2.5)iphi(-2.2)";
+			sfx create orbiter #TARGET 
+				"color0(.15,.15,1)scale(.25)radius(6.5)theta(2.74)iphi(3)
+				itheta(-1.7)";
+			set $large2 #POP;
+			set $small2 #POP;
+
+			sfx create linetracer #TARGET 
+				"fade_rate(.65)color0(.15,.15,1)color1(.075,.075,.5)";
+			sfx rat #PEEK;
+			sfx target #PEEK $large2;
+			sfx target #PEEK $small2;
+
+			sfx start $large2;
+			sfx start $small2;
+			sfx start #POP;
+			]];
+}
+
+
+
+//
+// Test scripts for the point tracer effect
+//
+
+[effect_script*]
+{
+	name	=tracer_test;
+
+	// Recursively calls line_tracer_p using a different color
+
+	script	=[[
+			frandrange 0 1; 	frandrange 0 1; frandrange 0 1;
+			frandrange 8 18;
+			call line_tracer_p <#POP><color0(#POP,#POP,#POP)><[0]>;
+			pause .075;
+
+			call tracer_test;
+			]];
+}
+
+[effect_script*]
+{
+	name	=line_tracer_p;
+
+	// Creates a point tracer effect from the two specified targets
+
+	script	=[[
+			sfx create pointtracer #TARGET 
+				"velocity([0])sup()[1][2]";
+			sfx position #PEEK #SOURCE_POSITION;
+			sfx setnode #PEEK source;
+			sfx start #POP;
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=line_tracer;
+
+	script	=[[
+			sfx create pointtracer #TARGET 
+				"velocity(17)sup()";
+			sfx position #PEEK #SOURCE_POSITION;
+			sfx setnode #PEEK source;
+			sfx start #POP;
+			]];
+}
+
+// The "dave" scripts below are scripts that exist simply
+// to give me experience with creating special effects.  --DT
+
+[effect_script*]
+{
+	name	=dave_rain_test;
+
+	script	=[[
+	
+			set $primary_duration 3;
+			set $secondary_duration 3;
+			set $full_time 6;
+
+			sfx create orbiter #TARGET 
+				"offset(0,0,5)iphi(0)invisible()dur($secondary_duration)
+				delay($primary_duration)";
+			set $ground_target #POP;
+			
+			sfx create orbiter #TARGET 
+				"offset(0,5,5)iphi(0)invisible()dur($full_time)";
+			set $air_target #POP;
+			
+			sfx create charge #TARGET 
+				"scale(.25)color0(0,0,1)dur($primary_duration)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			
+			sfx create charge #TARGET 
+				"scale(.25)color0(0,0,1)dur($primary_duration)";
+			sfx attach_point #PEEK @shield_bone target;
+			sfx start #POP;
+			
+			sfx create fire #TARGET 
+				"scale(1.5)color0(.4,.4,.4)color1(0,0,0)velocity(0,.3,0)
+				accel(0,.5,0)count(80)";
+			set $cloud #POP;
+			sfx rat $cloud;
+			sfx target $cloud $air_target;
+			sfx attach $air_target $cloud;
+			
+			sfx create sparkles #TARGET 
+				"delay($primary_duration)dur($secondary_duration)color0(1,.4,1)";
+			set $spark #POP;
+			sfx rat $spark;
+			sfx target $spark $ground_target;
+			sfx attach $ground_target $spark;
+
+			sfx create fire #TARGET 
+				"texture(b_sfx_sparkle01)alphafade(.3)color0(.2,.2,1)
+				color1(0,0,.5)velocity(0,-14,0)accel(0,-3,0)";
+			set $drops #POP;
+			sfx rat $drops;
+			sfx target $drops $air_target;
+			sfx attach $air_target $drops;
+
+			//sfx create trackball -homing() #SOURCE
+			//set $ball1 #POP
+			//sfx rat $ball1
+			//sfx attach_point $ball1 @weapon_bone #SOURCE
+			//sfx target $ball1 $air_target
+			//sfx attach $air_target $ball1
+
+			sfx start $ground_target;
+			sfx start $air_target;
+			
+			]];
+}
+
+[effect_script*]
+{
+	name	=dave_test1;
+
+	script	=[[
+		//sfx create sparkles -texture(b_sfx_sparkle01)color0(.5,.5,1)yvel(1) #TARGET
+		sfx create sparkles #TARGET 
+			"color0(1,.2,.2)radius(2.0)yvel(3)dur(4)";
+		sfx start #POP;
+		sfx create charge #TARGET 
+			"color0(1,.2,.2)dur(4)radius(2.0)";
+		sfx start #POP;
+		sfx create fireb #TARGET 
+			"scale(1)color0(.6,.6,1)velocity(0,40,0)accel(0,0,0)
+			cvel(1)ts(.6)alphafade(1.5)lower_r0(1)lower_r1(1)upper_r0(-1)
+			upper_r1(-1)count(50)flamesize(9)lightspawn()dur(4)";
+		sfx start #POP;
+		sfx create flurry #TARGET 
+			"color0(1,.2,.2)dur(4)radius(2)";
+		sfx start #POP;
+
+		
+	]];
+}
+
+[effect_script*]
+{
+
+	name	=dave_test2;
+	
+	script	=[[
+		set $shot_life 10;
+
+		set $rcolor 1;
+		set $gcolor .4;
+		set $bcolor .4;
+
+		sfx create orbiter #SOURCE 
+			"offset(0,0,5)iphi(0)invisible()dur($shot_life)";
+		set $reference_point #POP;
+		sfx start $reference_point;
+		//yep--I got that from somewhere else
+				
+		sfx create orbiter #SOURCE 
+			"color0($rcolor,$gcolor,$bcolor)dur($shot_life)iphi(0)";
+		set $sparkleball #POP;
+		sfx rat $sparkleball;
+		sfx target $sparkleball $reference_point;
+		sfx start $sparkleball; 
+
+		sfx create charge #SOURCE 
+			"offset(1,0,0)color0(0,0,0)";
+		sfx rat #PEEK;
+		sfx target #PEEK $sparkleball;
+		sfx attach $sparkleball #PEEK;
+		sfx start #POP;
+
+		sfx create charge #SOURCE 
+			"offset(-1,0,0)color0(1,0,0)dur($shot_life)";
+		sfx rat #PEEK;
+		sfx target #PEEK $sparkleball;
+		sfx attach $sparkleball #PEEK;
+		sfx start #POP;
+
+		sfx create charge #SOURCE 
+			"offset(0,0,1)tout(5)dur($shot_life)color0(0,1,0)";
+		sfx rat #PEEK;
+		sfx target #PEEK $sparkleball;
+		sfx attach $sparkleball #PEEK;
+		sfx start #POP;
+
+		sfx create charge #SOURCE 
+			"offset(0,0,-1)color0(0,0,1)";
+		sfx rat #PEEK;
+		sfx target #PEEK $sparkleball;
+		sfx attach $sparkleball #PEEK;
+		sfx start #POP;
+
+		]];
+}
+
+[effect_script*]
+{
+
+	name	=dave_test_fart;
+	
+	script	=[[
+			sfx create fire #TARGET 
+				"scale(.5)alphafade(.07)count(20)color0(.1,.9,.1)color1(0,.1,0)
+				dur(1.5)velocity(0,-1,0)accel(0,-.3,-.3)offset(0,-.2,0)
+				bone_orient()";
+			set $fart #POP;
+			sfx attach_point $fart @body_posterior target;
+			sfx start $fart;
+
+			]];
+}
+
+[effect_script*]
+{
+
+	name	=dave_sharpen_wit;
+	
+	script	=[[
+			sfx create lightsource #TARGET 
+				"dur(8)color0(.7,.7,.2)color1(0,.1,0)tin(1)tout(3)";
+			sfx attach_point #PEEK @body_anterior target;
+			sfx start #POP;
+			
+			sfx create sray #TARGET 
+				"dur(2)color0(.7,.7,.2)color1(.7,.7,.7)color2(0,0,.1)
+				radius(.6)scale(.5)lmin(1)lmax(1.5)offset(0,.1,0)";
+			sfx attach_point #PEEK @body_anterior target;
+			sfx start #POP;
+			
+			sfx create orbiter #TARGET 
+				"iphi(0)dur(8)color0(.7,.7,.2)tin(1)tout(3)offset(0,.1,-1.25)
+				scale(1.25)";
+			sfx attach_point #PEEK @body_anterior target;
+			sfx start #POP;
+			]];
+			
+}
+
+[effect_script*]
+{
+
+	name	=dave_sleep;
+	
+	script	=[[
+			//sfx create sparkles -dur(5)yvel(-1)color0(.5,.2,.2) #TARGET
+			//sfx start #POP
+			
+			sfx create orbiter #target 
+				"offset(0,.1,0)scale(.3)dur(8)theta(-0.7)color0(.7,.2,.2)";
+			set $orb1 #POP;
+			sfx attach_point $orb1 @body_anterior target;
+			sfx start $orb1;
+
+			sfx create linetracer #TARGET 
+				"fade_rate(.5)lock()color0(.7,.2,.2)color2(.7,.2,.2)
+				dur(8)tout(1)";
+			set $line1 #POP;
+			sfx rat $line1;
+			sfx target $line1 $orb1;
+			sfx target $line1 $orb1;
+			sfx offset_bone $line1 v<0 .01 0> target;
+			sfx offset_bone $line1 v<0 -.01 0> source;
+			sfx target $line1 target;
+			sfx start $line1;
+
+			sfx create orbiter #target 
+				"offset(0,.1,0)scale(.3)phi(1)theta(.7)dur(8)color0(.7,.2,.2)";
+			set $orb2 #POP;
+			sfx attach_point $orb2 @body_anterior target;
+			sfx start $orb2;
+
+			sfx create linetracer #TARGET 
+				"fade_rate(.5)lock()color0(.7,.2,.2)color2(.7,.2,.2)
+				dur(8)tout(1)";
+			set $line2 #POP;
+			sfx rat $line2;
+			sfx target $line2 $orb2;
+			sfx target $line2 $orb2;
+			sfx offset_bone $line2 v<0 .01 0> target;
+			sfx offset_bone $line2 v<0 -.01 0> source;
+			sfx target $line2 target;
+			sfx start $line2;	
+			
+			]];
+			
+}
+
+
+[effect_script*]
+{
+
+	name	=dave_weaken;
+	
+	script	=[[
+			
+			sfx create sphere #TARGET 
+				"dur(8)tin(.5)tout(2)color0(.6,.6,.2)";
+			//set $sphere #POP
+			//sfx start $sphere
+			sfx start #POP;
+
+			sfx create cylinder #TARGET 
+				"dur(3)tout(0)color0(.3,.4,.7)rp0(.6,.6,0)rp1(.6,.6,0)
+				hp0(.75,.75,0)hp1(.75,-1.25,-.8)";
+			set $cylinder1 #POP;
+			sfx attach_point $cylinder1 @body_mid target;
+			sfx start $cylinder1;
+
+			sfx create cylinder #TARGET 
+				"delay(2.92)tin(0)dur(3)color0(.3,.4,.7)rp0(.6,.6,0)
+				rp1(.6,.6,0)hp0(-1.25,-1.25,0)hp1(.75,-1.25,-.8)";
+			set $cylinder2 #POP;
+			sfx attach_point $cylinder2 @body_mid target;
+			sfx start $cylinder2;
+
+			]];
+}
+
+[effect_script*]
+{
+
+	name	=dave_spin;
+	
+	script	=[[
+			
+			//sfx create sphere -dur(8)tin(.5)tout(2)color0(.6,.6,.2) #TARGET
+			//sfx start #POP
+			
+			//set $sphere #POP
+			//sfx start $sphere
+			
+			if ([0] == 0)
+			{
+				call dave_spin u<1>;
+				call dave_spin u<1>;
+				call dave_spin u<1>;
+				call dave_spin u<1>;
+				call dave_spin u<1>;
+				call dave_spin u<1>;
+				call dave_spin u<1>;
+				call dave_spin u<1>;
+			}
+
+			if ([0] > 0)
+			{
+				frandrange 0 .4;
+				frandrange .4 1;
+				randrange 3 5;
+				randrange -180 180;
+				randrange -180 180; 
+				randrange -180 180;
+				randrange -180 180; 
+				sfx create cylinder #TARGET 
+					"texture(b_sfx_cyl_01)rotate(0,#POP,#POP)irotate(0,#POP,#POP)
+					segments(#POP)tout(0.3)tin(0.3)dur(5)color0(#PEEK,#POP,#POP)
+					alpha(0.9)rp0(.4,.4,0)rp1(.4,.4,0)hp0(.75,.75,0)hp1(1,1,0)
+					bone_orient()";
+				set $cylinder #POP;
+				sfx attach_point $cylinder @body_mid target;
+				sfx start $cylinder;
+			}
+
+
+			]];
+}
+
+//[effect_script*]
+//{
+//
+//	name	=dave_snowflake;
+//	
+//	script	="
+//			sfx create orbiter -radius(2)phi(0)invisible()iphi(1)offset(0,0,3)dur(5) #TARGET
+//			set $ball1 #POP
+//			sfx start $ball1
+//			
+//			sfx create orbiter -radius(2)phi(1.05)invisible()iphi(1)offset(0,0,3)dur(5) #TARGET
+//			set $ball2 #POP
+//			sfx start $ball2
+//			
+//			sfx create orbiter -radius(2)phi(2.1)invisible()iphi(1)offset(0,0,3)dur(5) #TARGET
+//			set $ball3 #POP
+//			sfx start $ball3
+//			
+//			sfx create orbiter -radius(2)phi(3.14)invisible()iphi(1)offset(0,0,3)dur(5) #TARGET
+//			set $ball4 #POP
+//			sfx start $ball4
+//			
+//			sfx create orbiter -radius(2)phi(4.2)invisible()iphi(1)offset(0,0,3)dur(5) #TARGET
+//			set $ball5 #POP
+//			sfx start $ball5
+//			
+//			sfx create orbiter -radius(2)phi(5.24)invisible()iphi(1)offset(0,0,3)dur(5) #TARGET
+//			set $ball6 #POP
+//			sfx start $ball6
+//			
+//			sfx create fire -texture(b_sfx_blueflame_01)color0(.1,.1,1)velocity(0,2,0)accel(0,0,0)line()min_radius(1)max_radius(2)offset(0,0,0)count(45)dur(5) #TARGET
+//			sfx rat #PEEK
+//			sfx target #PEEK $ball1
+//			sfx target #PEEK $ball4
+//			sfx start #POP
+//			
+//			sfx create fire -texture(b_sfx_blueflare_01)color0(.1,.1,1)velocity(0,2,0)accel(0,0,0)line()min_radius(1)max_radius(2)offset(0,0,0)count(45)dur(5) #TARGET
+//			sfx rat #PEEK
+//			sfx target #PEEK $ball2
+//			sfx target #PEEK $ball5
+//			sfx start #POP
+//			
+//			sfx create fire -texture(b_sfx_bluestars_01)color0(.1,.1,1)velocity(0,2,0)accel(0,0,0)line()min_radius(1)max_radius(2)offset(0,0,0)count(45)dur(5) #TARGET
+//			sfx rat #PEEK
+//			sfx target #PEEK $ball3
+//			sfx target #PEEK $ball6
+//			sfx start #POP
+//			
+//			//sfx create fireb -offset(2,0,2)dur(5) #TARGET
+//			//sfx start #POP
+//				
+//			";
+//			
+//
+//
+//}
+
+//[effect_script*]
+//{
+//
+//	name	=dave_flame;
+//	
+//	script	="
+//			sfx create orbiter -radius(.8)phi(0)invisible()iphi(1)dur(5) #TARGET
+//			set $ball1 #POP
+//			sfx start $ball1
+//			
+//			sfx create orbiter -radius(.8)phi(1.05)invisible()iphi(1)dur(5) #TARGET
+//			set $ball2 #POP
+//			sfx start $ball2
+//			
+//			sfx create orbiter -radius(.8)phi(2.1)invisible()iphi(1)dur(5) #TARGET
+//			set $ball3 #POP
+//			sfx start $ball3
+//			
+//			sfx create orbiter -radius(.8)phi(3.14)invisible()iphi(1)dur(5) #TARGET
+//			set $ball4 #POP
+//			sfx start $ball4
+//			
+//			sfx create orbiter -radius(.8)phi(4.2)invisible()iphi(1)dur(5) #TARGET
+//			set $ball5 #POP
+//			sfx start $ball5
+//			
+//			sfx create orbiter -radius(.8)phi(5.24)invisible()iphi(1)dur(5) #TARGET
+//			set $ball6 #POP
+//			sfx start $ball6
+//			
+//			sfx create fire -texture(b_sfx_dust_01)color0(.1,.1,1)velocity(0,2,0)accel(0,0,0)line()min_radius(1)max_radius(2)offset(0,0,0)count(15)dur(5) #TARGET
+//			sfx rat #PEEK
+//			sfx target #PEEK $ball1
+//			sfx target #PEEK $ball2
+//			sfx start #POP
+//			
+//			sfx create fire -texture(b_sfx_dust_01)color0(.1,.1,1)velocity(0,4,0)accel(0,0,0)line()min_radius(1)max_radius(2)offset(0,0,0)count(15)dur(5) #TARGET
+//			sfx rat #PEEK
+//			sfx target #PEEK $ball2
+//			sfx target #PEEK $ball3
+//			sfx start #POP
+//			
+//			sfx create fire -texture(b_sfx_dust_01)color0(.1,.1,1)velocity(0,6,0)accel(0,0,0)line()min_radius(1)max_radius(2)offset(0,0,0)count(15)dur(5) #TARGET
+//			sfx rat #PEEK
+//			sfx target #PEEK $ball3
+//			sfx target #PEEK $ball4
+//			sfx start #POP
+//				
+//			sfx create fire -texture(b_sfx_flameball)color0(.1,.1,1)velocity(0,8,0)accel(0,0,0)line()min_radius(1)max_radius(2)offset(0,0,0)count(15)dur(5) #TARGET
+//			sfx rat #PEEK
+//			sfx target #PEEK $ball4
+//			sfx target #PEEK $ball5
+//			sfx start #POP
+//			
+//			sfx create fire -texture(b_sfx_flameball)color0(.1,.1,1)velocity(0,10,0)accel(0,0,0)line()min_radius(1)max_radius(2)offset(0,0,0)count(15)dur(5) #TARGET
+//			sfx rat #PEEK
+//			sfx target #PEEK $ball5
+//			sfx target #PEEK $ball6
+//			sfx start #POP
+//			
+//			sfx create fire -texture(b_sfx_flameball)color0(.1,.1,1)velocity(0,12,0)accel(0,0,0)line()min_radius(1)max_radius(2)offset(0,0,0)count(15)dur(5) #TARGET
+//			sfx rat #PEEK
+//			sfx target #PEEK $ball6
+//			sfx target #PEEK $ball1
+//			sfx start #POP
+//			
+//			";
+//			
+//
+//
+//}
+
+[effect_script*]
+{
+
+	//This could actually be a cool, usable effect.  It needs help, though.  If it had bone orientation and was rotatable,
+	//the world would be a better place.  It being the sphere effect.  (Magic shield?) --DT
+
+	name	=dave_shield;
+	
+	script	=[[
+			sfx create sphere #TARGET 
+				"bone_orient()sides(5)subd(2)dur(7)tin(2)tout(2)color0(.8,0,.8)
+				color1(.2,0,.8)lines()";
+			sfx start #POP;
+			
+			sfx create lightsource #TARGET 
+				"color0(.8,0,.8)dur(7)";
+			sfx start #POP;
+			]];
+			
+}
+
+[effect_script*]
+{
+
+	name	=dave_blast;
+	
+	script	=[[
+			sfx create orbiter #TARGET 
+				"free()rot_inc(1,0,0)phi(0)theta(1.6)radius(2)radiusi(-.3)
+				iphi(3)dur(6)color0(.8,.3,0)";
+			set $target1 #POP;
+						
+			sfx create orbiter #TARGET 
+				"free()phi(2.1)theta(1.6)radius(2)radiusi(-.3)iphi(3)
+				dur(6)color0(.8,.3,0)";
+			set $target2 #POP;
+			
+			sfx create orbiter #TARGET 
+				"free()phi(4.2)theta(1.6)radius(2)radiusi(-.3)iphi(3)
+				dur(6)color0(.8,.3,0)";
+			set $target3 #POP;
+			
+			sfx create fireb #TARGET 
+				"color0(0.8,0.3,0)dur(6)";
+			set $blast1 #POP;
+			sfx rat $blast1;
+			sfx target $blast1 $target1;
+			sfx attach $target1 $blast1;
+
+			sfx start $target1;
+			sfx start $target2;
+			sfx start $target3;
+			]];
+			
+}
+
+
+[effect_script*]
+{
+//rather unfinished
+	name	=dave_ring_of_flame;
+	
+	script	=[[
+			sfx create fire #TARGET 
+				"min_radius(2)max_radius(2.4)";
+			sfx start #POP;
+
+			]];
+			
+}
+
+[effect_script*]
+{
+
+	name	=dave_ring;
+	
+	script	=[[
+			sfx create orbiter #TARGET 
+				"smooth()shistory(2)free()vdisplace(-.1)dur(8)offset(0,.2,0)
+				color0(.8,.8,.8)radius(2)phi(0)iphi(.5)";
+			set $orb1 #POP;
+			sfx create orbiter #TARGET 
+				"smooth()shistory(2)free()vdisplace(-.1)dur(8)offset(0,.2,0)
+				color0(.8,.8,.8)radius(2)phi(.79)iphi(.5)";
+			set $orb2 #POP;
+			sfx create orbiter #TARGET 
+				"smooth()shistory(2)free()vdisplace(-.1)dur(8)offset(0,.2,0)
+				color0(.8,.8,.8)radius(2)phi(1.57)iphi(.5)";
+			set $orb3 #POP;
+			sfx create orbiter #TARGET 
+				"smooth()shistory(2)free()vdisplace(-.1)dur(8)offset(0,.2,0)
+				color0(.8,.8,.8)radius(2)phi(2.35)iphi(.5)";
+			set $orb4 #POP;
+			sfx create orbiter #TARGET 
+				"smooth()shistory(2)free()vdisplace(-.1)dur(8)offset(0,.2,0)
+				color0(.8,.8,.8)radius(2)phi(3.14)iphi(.5)";
+			set $orb5 #POP;
+			sfx create orbiter #TARGET 
+				"smooth()shistory(2)free()vdisplace(-.1)dur(8)offset(0,.2,0)
+				color0(.8,.8,.8)radius(2)phi(3.93)iphi(.5)";
+			set $orb6 #POP;
+			sfx create orbiter #TARGET 
+				"smooth()shistory(2)free()vdisplace(-.1)dur(8)offset(0,.2,0)
+				color0(.8,.8,.8)radius(2)phi(4.71)iphi(.5)";
+			set $orb7 #POP;
+			sfx create orbiter #TARGET 
+				"smooth()shistory(2)free()vdisplace(-.1)dur(8)offset(0,.2,0)
+				color0(.8,.8,.8)radius(2)phi(5.49)iphi(.5)";
+			set $orb8 #POP;
+
+			sfx create linetracer #TARGET 
+				"fade_rate(1.9)dur(8)color0(.8,.8,.8)color1(.8,.8,.2)";
+			set $line1 #POP;
+			sfx rat $line1;
+			sfx target $line1 $orb1;
+			sfx target $line1 $orb4;
+
+			sfx create linetracer #TARGET 
+				"fade_rate(1.9)dur(8)color0(.8,.8,.8)color1(.8,.8,.2)";
+			set $line2 #POP;
+			sfx rat $line2;
+			sfx target $line2 $orb2;
+			sfx target $line2 $orb5;
+
+			sfx create linetracer #TARGET 
+				"fade_rate(1.9)dur(8)color0(.8,.8,.8)color1(.8,.8,.2)";
+			set $line3 #POP;
+			sfx rat $line3;
+			sfx target $line3 $orb3;
+			sfx target $line3 $orb6;
+
+			sfx create linetracer #TARGET 
+				"fade_rate(1.9)dur(8)color0(.8,.8,.8)color1(.8,.8,.2)";
+			set $line4 #POP;
+			sfx rat $line4;
+			sfx target $line4 $orb4;
+			sfx target $line4 $orb7;
+
+			sfx create linetracer #TARGET 
+				"fade_rate(1.9)dur(8)color0(.8,.8,.8)color1(.8,.8,.2)";
+			set $line5 #POP;
+			sfx rat $line5;
+			sfx target $line5 $orb5;
+			sfx target $line5 $orb8;
+
+			sfx create linetracer #TARGET 
+				"fade_rate(1.9)dur(8)color0(.8,.8,.8)color1(.8,.8,.2)";
+			set $line6 #POP;
+			sfx rat $line6;
+			sfx target $line6 $orb6;
+			sfx target $line6 $orb1;
+
+			sfx create linetracer #TARGET 
+				"fade_rate(1.9)dur(8)color0(.8,.8,.8)color1(.8,.8,.2)";
+			set $line7 #POP;
+			sfx rat $line7;
+			sfx target $line7 $orb7;
+			sfx target $line7 $orb2;
+
+			sfx create linetracer #TARGET 
+				"fade_rate(1.9)dur(8)color0(.8,.8,.8)color1(.8,.8,.2)";
+			set $line8 #POP;
+			sfx rat $line8;
+			sfx target $line8 $orb8;
+			sfx target $line8 $orb3;
+
+			sfx create fireb #TARGET 
+				"color0(.4,.4,.9)color1(0,0,.3)count(20)dur(8)";
+			set $fire1 #POP;
+			sfx rat $fire1;
+			sfx target $fire1 $orb1;
+			sfx attach $orb1 $fire1;
+
+			sfx create fireb #TARGET 
+				"color0(.4,.4,.9)color1(0,0,.3)count(20)dur(8)";
+			set $fire2 #POP;
+			sfx rat $fire2;
+			sfx target $fire2 $orb2;
+			sfx attach $orb2 $fire2;
+
+			sfx create fireb #TARGET 
+				"color0(.4,.4,.9)color1(0,0,.3)count(20)dur(8)";
+			set $fire3 #POP;
+			sfx rat $fire3;
+			sfx target $fire3 $orb3;
+			sfx attach $orb3 $fire3;
+
+			sfx create fireb #TARGET 
+				"color0(.4,.4,.9)color1(0,0,.3)count(20)dur(8)";
+			set $fire4 #POP;
+			sfx rat $fire4;
+			sfx target $fire4 $orb4;
+			sfx attach $orb4 $fire4;
+
+			sfx create fireb #TARGET 
+				"color0(.4,.4,.9)color1(0,0,.3)count(20)dur(8)";
+			set $fire5 #POP;
+			sfx rat $fire5;
+			sfx target $fire5 $orb5;
+			sfx attach $orb5 $fire5;
+
+			sfx create fireb #TARGET 
+				"color0(.4,.4,.9)color1(0,0,.3)count(20)dur(8)";
+			set $fire6 #POP;
+			sfx rat $fire6;
+			sfx target $fire6 $orb6;
+			sfx attach $orb6 $fire6;
+
+			sfx create fireb #TARGET 
+				"color0(.4,.4,.9)color1(0,0,.3)count(20)dur(8)";
+			set $fire7 #POP;
+			sfx rat $fire7;
+			sfx target $fire7 $orb7;
+			sfx attach $orb7 $fire7;
+
+			sfx create fireb #TARGET 
+				"color0(.4,.4,.9)color1(0,0,.3)count(20)dur(8)";
+			set $fire8 #POP;
+			sfx rat $fire8;
+			sfx target $fire8 $orb8;
+			sfx attach $orb8 $fire8;
+
+			sfx start $orb1;
+			sfx start $orb2;
+			sfx start $orb3;
+			sfx start $orb4;
+			sfx start $orb5;
+			sfx start $orb6;
+			sfx start $orb7;
+			sfx start $orb8;
+			sfx start $line1;
+			sfx start $line2;
+			sfx start $line3;
+			sfx start $line4;
+			sfx start $line5;
+			sfx start $line6;
+			sfx start $line7;
+			sfx start $line8;
+
+			]];
+			
+}

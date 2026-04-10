@@ -1,0 +1,29 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  object_settings.gas
+// Author(s):  Chad Queen
+//
+// Copyright c 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+[object_settings]
+{
+	// This is pretty much ignored in an orthographic projection
+	[camera]
+	{			
+		distance = 6.15575;
+		orbit = 0.0;
+		azimuth = 0.0;
+	}
+
+	// Change this to alter the view
+	// width in meters / screen width
+	ortho_meter_per_pixel = 0.004125;
+
+	// Doesn't matter in an orthographic projection.
+	// camera distance = ( width of scene / 2 ) / tan fov
+	width_of_scene = 3;
+}

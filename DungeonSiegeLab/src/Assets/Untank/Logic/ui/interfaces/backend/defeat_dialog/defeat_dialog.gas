@@ -1,0 +1,233 @@
+[defeat_dialog]
+{
+	centered = dialog_main_bg;
+  b interface = true;
+	modal = true;
+	[t:button,n:button_help]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 76;
+		group = defeat_yesnohelp;
+		rect = 386,276,476,292;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(defeat_help) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_help]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 80;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = defeat_yesnohelp;
+			justify = center;
+			rect = 419,278,476,292;
+			text = "Help";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:button_no]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 75;
+		group = defeat_yesnohelp;
+		rect = 263,276,353,292;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(defeat_no) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_no]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 79;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = defeat_yesnohelp;
+			justify = center;
+			rect = 301,278,353,292;
+			text = "No";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:button_no_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 75;
+		group = defeat_yesno;
+		rect = 327,276,417,292;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(defeat_no) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_no_2]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 79;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = defeat_yesno;
+			justify = center;
+			rect = 365,277,417,291;
+			text = "No";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:button_ok]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 20;
+		group = defeat_ok;
+		rect = 273,276,363,292;
+		topmost = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		visible = false;
+		wrap_mode = clamp;
+		[t:text,n:backend_button_ok_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = defeat_ok;
+			justify = center;
+			rect = 310,278,363,292;
+			text = "OK";
+			texture = none;
+			topmost = true;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(defeat_no) & playsound(s_e_frontend_tiny_button);
+			onenter = notify(defeat_no) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:button_yes]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 74;
+		group = defeat_yesnohelp;
+		rect = 160,276,250,292;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(defeat_yes) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_yes]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 78;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = defeat_yesnohelp;
+			justify = center;
+			rect = 195,278,250,292;
+			text = "Yes";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:button_yes_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 74;
+		group = defeat_yesno;
+		rect = 223,276,313,292;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(defeat_yes) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_yes_2]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 78;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = defeat_yesno;
+			justify = center;
+			rect = 258,278,313,292;
+			text = "Yes";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:dialog_box,n:dialog_main_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 2;
+		rect = 130,170,510,310;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_text_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 72;
+		rect = 150,190,490,258;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_defeat_game]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 77;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 155,215,484,232;
+		text = "";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+}

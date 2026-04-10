@@ -1,0 +1,43 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  trp_particle.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property bool _server_only$ = true;
+
+property string	effect_script$		= ""	doc = "Effect script to call for effect";
+property float	particle_fit$		= 0.1	doc = "size of the damage area compared to the life of a particle 0 - 1";
+property float	duration$			= 1.0	doc = "durration of the trap.";
+property bool	ignite$				= true	doc = "fire can catch things on fire in adition to doing damage";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		float damage$ = msg$.GetData1() / 1000.0;
+		
+		string params$ = "";
+		
+		if( ignite$ )
+		{
+			StringTool.Append( params$, "[ignite()" );
+		} else {
+			StringTool.Append( params$, "[damage()" );
+		}
+		StringTool.AppendF( params$, "fdamage(%g,%g,%g)dur(%g)]", damage$, damage$, particle_fit$ , duration$ );
+		
+		SiegeFx.SRunScript( effect_script$, owner.Goid, owner.Goid, params$ , owner.Goid, WE_REQ_ACTIVATE );
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////

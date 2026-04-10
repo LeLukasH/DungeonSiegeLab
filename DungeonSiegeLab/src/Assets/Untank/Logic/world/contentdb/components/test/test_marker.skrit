@@ -1,0 +1,40 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  test_marker.skrit
+// Author(s):  Scott Bilas
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = false;
+property string _doc$                = "Special marker";
+property string _required_component$ = "placement";
+
+// exported properties
+property string text$		= "<Configure me>";
+property float  radius$		= 1.0;
+property int    color$		= 0xFFFFFFFF;
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+trigger OnGoDraw$
+{
+	World.DrawDebugTriangle( owner.Go.Placement.Position, radius$, color$, "" );
+	World.DrawDebugTriangle( owner.Go.Placement.Position, radius$ - 0.05, color$, "" );
+	World.DrawDebugTriangle( owner.Go.Placement.Position, radius$ + 0.05, color$, "" );
+
+	SiegePos p$ = SiegePos.Copy( owner.Go.Placement.Position );
+	p$.pos.y = p$.pos.y + 1.0;
+	World.DrawDebugScreenLabel( p$, text$ );
+}
+
+//////////////////////////////////////////////////////////////////////////////

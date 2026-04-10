@@ -1,0 +1,142 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: job_approach.skrit
+
+	Author(s)	: Mathew Corthell
+
+	Purpose		: Get close to someone.
+
+	(C)opyright 2003 Mad Doc Software, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+Job		m_Job$;
+bool 	m_redistPotions$;
+float   m_distance$;
+Goid	m_Target$;
+
+////////////////////////////////////////////////////////////////////////////////
+
+#include "k_job_c_mcp_path_utils" 
+
+////////////////////////////////////////////////////////////////////////////////
+
+startup state Startup$
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.GetGo;
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+
+	if(0 == m_Job$.GetInt1())
+    {
+		m_redistPotions$ = false;
+    }
+	else
+    {
+        m_redistPotions$ = true;
+    }
+    m_distance$ = m_Job$.GetFloat1();
+
+	m_Target$ = m_Job$.GoalObject;
+
+	ResetPathFindingParameters$();
+
+	SetState RequestAction$;	
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	global event handler
+trigger OnWorldMessage$( WE_DESTRUCTED         ) { SetState Exiting$ ; }
+trigger OnWorldMessage$( WE_JOB_DESTRUCTED     ) { SetState Exiting$ ; }
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	
+state RequestAction$
+{
+	transition
+	{
+		->TargetMoved$:          OnWorldMessage( WE_MCP_DEPENDANCY_BROKEN );
+		->MoveCompleted$:               OnWorldMessage( WE_ANIM_DONE             );
+		->MoveCompleted$:               OnWorldMessage( WE_MCP_SECTION_COMPLETED );
+		->Exiting$: OnWorldMessage( WE_MCP_INVALIDATED       );
+	}
+
+	event OnEnterState$
+	{
+		eReqRetCode ret$ = MCPManager.MakeRequest(	m_Go$.Goid,
+													PL_APPROACH,
+													m_Target$,
+													m_LookAhead$, 
+                                                    m_MaxApproachTime$,
+													m_distance$ );
+
+		report.ReportF(	"aimove","[%s] GIVE (PL_APPROACH) [%s] returned [%s]\n",
+						m_Go$.TemplateName,
+						m_Target$.go.TemplateName,
+						ToString(ret$) );
+
+		if( RequestFailed(ret$) )
+		{
+			Report.reportf(	"aiskrit", "'%s' - job_approach - FAILED could not get to target [%s]. Aborting job.\n",
+							m_Go$.TemplateName, MakeSiegePosString(m_Job$.GoalPosition) );
+			SetState(Exiting$);
+		}
+		else if (ret$ == REQUEST_OK_IN_RANGE)
+		{
+			SetState( MoveCompleted$ );
+		}
+		else if ( (ret$ == REQUEST_OK) || (ret$ == REQUEST_OK_CROWDED) )
+		{
+			// just stay in this state we are going to make it to our goal in this move.
+		}
+		else // anything else we just want to try to get closer.
+		{
+			SetState( MovingCloser$ );
+		}
+	}
+}
+
+
+state MoveCompleted$
+{
+	event OnEnterState$
+	{
+		#only( game )
+		[[
+	        if(m_redistPotions$)
+	        {
+	            UIPartyManager.RedistributePotions(true, MakeGoid(0));
+		    }
+		]]
+
+        SetState(Exiting$);
+    }
+}
+
+state Exiting$
+{
+	event OnEnterState$
+	{
+		m_Job$.MarkForDeletion();
+	}
+}

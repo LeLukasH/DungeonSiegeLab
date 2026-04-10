@@ -1,0 +1,198 @@
+[gold_transfer]
+{
+	centered = background;
+	intended_resolution_height = 480;
+	intended_resolution_width = 640;
+	interface = true;
+	modal = true;
+	passive_modal = true;
+	[t:dialog_box,n:background]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  i draw_order = 0;
+		group = transfer_gold;
+		rect = 200,187,440,293;
+		texture = none;
+		topmost = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:button,n:button_cancel]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+		consumable = true;
+	  i draw_order = 8;
+		group = transfer_gold;
+		rect = 332,264,424,280;
+		texture = none;
+		topmost = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer_cancel) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_cancel]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 9;
+		  i font_color = -1;
+		  i font_size = 10;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = transfer_gold;
+			justify = center;
+			rect = 358,266,424,280;
+			text = "Cancel";
+			texture = none;
+			topmost = true;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:button_confirm]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+		consumable = true;
+	  i draw_order = 7;
+		group = transfer_gold;
+		rect = 222,264,314,280;
+		texture = none;
+		topmost = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer_complete) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_confirm]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 10;
+		  i font_color = -1;
+		  i font_size = 10;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = transfer_gold;
+			justify = center;
+			rect = 247,266,314,280;
+			text = "Confirm";
+			texture = none;
+			topmost = true;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:button_down]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_down;
+		consumable = true;
+	  i draw_order = 2;
+		group = transfer_gold;
+		rect = 222,240,238,256;
+		repeat_rate = 0.1;
+		repeater = true;
+		texture = b_gui_cmn_button_down_up;
+		topmost = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer_down) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:button_up]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_up;
+		consumable = true;
+	  i draw_order = 3;
+		group = transfer_gold;
+		rect = 222,224,238,240;
+		repeat_rate = 0.1;
+		repeater = true;
+		texture = b_gui_cmn_button_up_up;
+		topmost = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(gold_transfer_up) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:edit_box,n:edit_gold]
+	{
+		allow_ime = false;
+	  f alpha = 1.000000;
+		ascii_high_bound = 57;
+		ascii_low_bound = 48;
+	  b clear_select = true;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 11;
+	  i font_color = -1;
+	  i font_size = 15;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = transfer_gold;
+	  i max_string_size = 7;
+	  b permanent_focus = true;
+		rect = 261,235,412,248;
+		restrict_input = true;
+		text = "";
+		texture = none;
+		topmost = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oneditselect = notify(gold_transfer_complete) & playsound(s_e_frontend_tiny_button);
+		}
+		[prompt]
+		{
+			texture = b_gui_fe_m_single_prompt;
+			width = 1;
+		}	
+	}
+	[t:dialog_box,n:gold_tbox]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  i draw_order = 4;
+		group = transfer_gold;
+		rect = 250,224,424,256;
+		texture = none;
+		topmost = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text_box,n:text_box_gold_transfer]
+	{
+	  f alpha = 1.000000;
+	  b center_height = true;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 13;
+	  b fixed_location = true;
+	  b has_slider = false;	  
+		rect = 221,191,422,222;
+	  f scroll_rate = 0.000000;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text = "How much gold would you like to drop?";
+		justify = center;
+	}
+}

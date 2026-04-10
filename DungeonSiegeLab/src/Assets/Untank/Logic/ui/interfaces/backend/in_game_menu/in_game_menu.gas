@@ -1,0 +1,173 @@
+[in_game_menu]
+{
+	centered = save_button;
+  b disable_camera = true;
+	intended_resolution_height = 480;
+	intended_resolution_width = 640;
+  b modal = true;
+	type = interface;
+	[t:button,n:exit_game_button]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_5;
+	  i draw_order = 22;
+		rect = 240,287,400,319;
+		rollover_help = ig_exit_game;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(show_exit_game_dialog) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_exit_game_button]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 23;
+		  i font_color = -1;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 290,297,400,319;
+			text = "EXIT GAME";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:load_button]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_5;
+	  i draw_order = 46;
+		rect = 240,255,400,287;
+		rollover_help = ig_load;
+		type = button;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(load_game) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_load]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 47;
+		  i font_color = -1;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 287,264,400,286;
+			text = "LOAD GAME";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:options_button]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_5;
+	  i draw_order = 21;
+		rect = 240,191,400,223;
+		rollover_help = ig_options;
+		type = button;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(options) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_options]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 22;
+		  i font_color = -1;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 296,201,400,223;
+			text = "OPTIONS";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:resume_button]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_5;
+	  i draw_order = 18;
+		rect = 240,159,400,191;
+		rollover_help = ig_resume;
+		type = button;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(resume_game) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_resume]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 19;
+		  i font_color = -1;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 281,169,400,191;
+			text = "RESUME GAME";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:save_button]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_5;
+	  i draw_order = 45;
+		rect = 240,223,400,255;
+		rollover_help = ig_save;
+		type = button;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(save_game) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_save]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 46;
+		  i font_color = -1;
+		  i font_size = -842150451;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 287,233,400,255;
+			text = "SAVE GAME";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+}

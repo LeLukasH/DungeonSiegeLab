@@ -1,0 +1,80 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	job_die_explode.skrit
+
+	Author(s)	: 	Eric Tams
+
+	Purpose		: 	explode actor on die/explode key in animation.
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+GoMind	m_Mind$;
+GoBody  m_Body$;
+Job		m_Job$;
+
+
+startup state STARTUP$
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.GetGo;
+	m_Mind$		= job$.GetGo.GetMind;
+	m_Body$		= job$.GetGo.GetBody;
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+
+	SetState Collapsing$;
+}
+
+
+state Collapsing$
+{
+	transition
+	{
+		-> Explode$:	OnWorldMessage( WE_ANIM_DONE );
+		-> Explode$:	OnWorldMessage( WE_ANIM_DIE );
+	}
+
+	event OnEnterState$
+	{
+		// Pick a Random animation to used
+		eAnimStance stance$ = m_Go$.inventory.animstance;
+		int subanim$ = m_Go$.Aspect.AspectHandle.Blender.GetNumSubAnims(CHORE_DIE,stance$);
+		subanim$ = Math.RandomInt(0, Math.MaxInt( 0, subanim$-1 ) );
+
+		MCPManager.Flush(m_Go$.Goid);
+		MCPManager.MakeRequest( m_Go$.Goid, PL_DIE, subanim$ );
+	}
+}
+
+state Explode$
+{
+	event OnEnterState$
+	{
+		m_Mind$.Clear();
+		if (!Physics.ExplodeGoWithDamage( m_Go$.GetGoid, m_Go$.GetGoid, m_Go$.GetGoid ))
+		{
+			GoDb.SMarkGoAndChildrenForDeletion( m_Go$.GetGoid );	
+		}
+		m_Job$.MarkForDeletion();
+	}
+}
+

@@ -1,0 +1,78 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  speed_gui_lookup.gas
+// Author(s):  Chad Queen
+//
+// Purpose  :  This file contains the speed ranges necessary to match a 
+//			   speed string for the gui to find when it adds the animation
+//			   speed with the weapon's reload delay.  The numbers in here now
+//			   are temporary until Jake cleans them up.
+//			   Also, max_range is assumed to be 100 for now, just for the hell
+//			   of it.
+//
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+
+[speed_gui_lookup]
+{
+	[super]
+	{
+		screen_name = "Super Attack Speed";
+		min_range = 0.0;
+		max_range = 0.47;
+	}
+
+	[fastest]
+	{
+		screen_name = "Fastest Attack Speed";
+		min_range = 0.48;
+		max_range = 0.61;
+	}
+
+	[faster]
+	{
+		screen_name = "Faster Attack Speed";
+		min_range = 0.62;
+		max_range = 0.77;
+	}
+
+	[fast]
+	{
+		screen_name = "Fast Attack Speed";
+		min_range = 0.78;
+		max_range = 0.92;
+	}
+
+	[normal]
+	{
+		screen_name = "Normal Attack Speed";
+		min_range = 0.93;
+		max_range = 1.07;
+	}
+
+	[slow]
+	{
+		screen_name = "Slow Attack Speed";
+		min_range = 1.08;
+		max_range = 1.2;
+	}
+
+	[slower]
+	{
+		screen_name = "Slower Attack Speed";
+		min_range = 1.21;
+		max_range = 1.27;
+	}
+
+	[slowest]
+	{
+		screen_name = "Slowest Attack Speed";
+		min_range = 1.28;
+		max_range = 100;
+	}
+}

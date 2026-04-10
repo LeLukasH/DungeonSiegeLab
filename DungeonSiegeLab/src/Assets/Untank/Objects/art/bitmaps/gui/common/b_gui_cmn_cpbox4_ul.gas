@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_cmn_cpbox4_ul]
+{
+	layer1texture1 = b_gui_cmn_cpbox4_ul;
+  i texturedetail = 0;
+}

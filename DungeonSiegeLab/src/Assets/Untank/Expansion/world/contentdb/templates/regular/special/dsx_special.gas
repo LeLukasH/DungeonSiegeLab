@@ -1,0 +1,233 @@
+// Omni Go Managers
+
+[t:template,n:doppelganger_manager]
+{
+	specializes = special;
+	doc			= "[don't place] doppelganger manager";
+
+	category_name       = "special";
+
+	[doppelganger_manager] {}
+}
+
+// Redistribute potion monitor skrit.
+[t:template,n:redistribute_potions_monitor]
+{
+	specializes = special;
+	doc			= "[don't place] redistribute potions monitor";
+
+	category_name       = "special";
+
+	[redistribute_potions_monitor] 
+	{
+	}
+}
+
+// TAT - for weapons that do poison damage
+[t:template,n:dsx_base_poison_manager]
+{
+	specializes = special;
+	doc = "[don't place] DSX Base poison manager";
+	category_name = "special";
+	[poison_manager] 
+	{
+		damageAmt = 5.0;
+		damageInterval = 1.0;
+		
+		// need these here for localization
+		state_name = "Poisoned";
+		description = "Poisoned";
+	}
+}
+
+// TRJ - weapons with acid damage
+[t:template,n:dsx_base_acid_manager]
+{
+	specializes = dsx_base_poison_manager;
+	doc = "[don't place] dsx base acid manager";
+	category_name = "special";
+	[poison_manager]
+	{
+		damageAmt = 1.0;
+		damageInterval = 0.1;
+		description = "Acidified";
+		effect_script = "poisoned_target_effect";
+		// If we DO want you to be able to be poisoned and acidified at the same
+		//	time, uncomment the next line and comment out the one after it
+		//state_name = "Acidified";
+		state_name = "Poisoned";
+	}
+}
+
+// TAT - for items with special defense - they fight back
+[t:template,n:dsx_special_defense_object]
+{
+	specializes = special;
+	doc = "[don't place] DSX Special Defense Object";
+	category_name = "special";
+	
+	// we have an attack block, because we determine
+	//	how much damage things do by setting damage values in here
+	[attack]
+	{
+		damage_max = 0.0;
+		damage_min = 0.0;
+		
+		// this means that when giving experience, it just
+		//	uses whatever weapon the owner is actually using, so if
+		//	the player has a melee weapon equipped when this does damage,
+		//	melee skill will increase
+		use_equipped_experience = true;
+	}
+	
+	[magic] { }
+	
+	[special_defense_trackball] { }
+}
+
+// TAT - for weapons that petrify
+[t:template,n:dsx_hold_manager]
+{
+	specializes = special;
+	doc = "[don't place] DSX Hold Manager";
+	category_name = "special";
+	[dsx_hold_manager] { }
+}
+
+[t:template,n:monster_magnet_object]
+{
+	specializes = base_farmboy;
+	[aspect]
+	{
+		force_no_render = true;
+		is_collidable = false;
+		does_block_path = false;
+		draw_shadow = false;
+	}
+	[common]
+	{
+		rollover_life = false;
+		screen_name	= "Monster Magnet";
+	}
+}
+
+[t:template,n:spectral_image_object]
+{
+	specializes = base_farmboy;
+	[aspect]
+	{
+		draw_shadow = false;
+		draw_selection_indicator = false;
+		textures:0 = b_i_glb_spectral_summoning;
+		textures:1 = b_i_glb_spectral_summoning;
+	}
+	[common]
+	{
+		rollover_life = false;
+		screen_name	= "Spectral Image";
+	}
+}
+
+[t:template,n:dimension_gate_object]
+{
+	specializes = base_farmboy;
+	[actor]
+	{
+		alignment = aa_neutral;
+	}
+	[aspect]
+	{
+		draw_shadow = false;
+		draw_selection_indicator = false;
+		force_no_render = true;
+		force_no_render_click = true;
+		megamap_icon	= <none>;
+	}
+	[common]
+	{
+		rollover_life = false;
+		screen_name	= "dimension_gate_object";
+	}
+	[mind]
+	{
+		actor_may_attack = false;
+		actor_may_be_attacked = false;
+	}
+}
+
+[t:template,n:effect_aftereffect_manager]
+{
+	specializes = point;
+
+	[effect_aftereffect] 
+	{
+		isAfterEffectTemplate=true;
+	}
+}
+
+[t:template,n:dsx_healing_well_manager]
+{
+	specializes = point;
+	doc = "dsx_healing_well_manager";
+	category_name = "special";
+	[gizmo]			{ model = m_i_glb_object-trigger;  texture = b_i_glb_yellow; }
+
+	[healing_well_healing]	
+	{
+		effectNameHealing = "healing_well_bless";
+		healAmount = 5;
+		healDelay = 1;
+		healDuration = 300;
+		radius = 40;
+	}
+}
+
+[t:template,n:dsx_a9_clock_watcher]
+{
+	specializes = point;
+	doc = "dsx_a9_clock_watcher";
+	category_name = "special";
+	[gizmo]			{ model = m_i_glb_object-trigger;  texture = b_i_glb_yellow; }
+
+	[dsx_a9_clock_watcher]	
+	{
+	}
+}
+
+[t:template,n:dsx_party_membership_checker]
+{
+	specializes = point;
+	doc = "dsx_party_membership_checker";
+	category_name = "special";
+	[gizmo]			{ model = m_i_glb_object-trigger;  texture = b_i_glb_yellow; }
+
+	[dsx_party_membership_check]	
+	{
+	}
+}
+
+// JCD 9/18/03
+// this template is used to kill SJ minions when the SJ is defeated
+[t:template,n:dsx_sj_minion_monitor]
+{
+	specializes = special;
+	
+	doc = "dsx_sj_minion_monitor";
+	category_name = "special";
+	
+	[dsx_sj_death_monitor]
+	{		
+	}
+}
+
+// TAT 9/19/2003
+//	This kills cicatrix minions when it's dead
+[t:template,n:dsx_cicatrix_spawn_helper]
+{
+	specializes = special;
+	
+	doc = "dsx_cicatrix_spawn_helper";
+	category_name = "special";
+	
+	[dsx_cicatrix_spawn_helper] { }
+}

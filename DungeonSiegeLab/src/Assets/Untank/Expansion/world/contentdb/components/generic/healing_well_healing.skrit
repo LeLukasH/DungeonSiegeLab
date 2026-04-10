@@ -1,0 +1,177 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  healing_well_healing.skrit
+// Author(s):  Mathew Corthell
+//
+// Copyright © 2001 Mad Doc Software, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property bool	_server_only$		= false;
+
+property string effectNameHealing$ = "" doc = "The effect to play on the person that's getting healed.";
+property float healDuration$ = 300 doc="The number of seconds that this spell should last.";
+property string stateName$ = "dsx_hw_blessed" doc="The generic state to play on the target actor.";
+property string state_description$ = "Blessed" doc="The description of the generic state.";
+property float healAmount$ = 5 doc="The amount to heal at a time.";
+property float healDelay$ = 1 doc="The time between healing the player.";
+property float radius$ = 20 doc="The area around the well to look for characters to bless.";
+
+owner = GoSkritComponent;
+
+Goid m_target$;
+SFxSID m_effectID$;
+
+// Search for human-controlled characters in the radius.
+Bless$(Goid activator$)
+{
+	// Get all Gos that are close to me
+	GopColl nearbyObjects$ = AIQuery.GetTempGopColl1();
+	nearbyObjects$.Clear();
+	AIQuery.GetOccupantsInSphere(owner.Go.Placement.Position, radius$, nearbyObjects$);
+
+	// Look through the gos.
+	int i$ = 0;
+	Go object$;
+	while(i$ < nearbyObjects$.size())
+	{
+		object$ = nearbyObjects$.Get(i$);
+
+		// Is this an actor
+		if(object$.IsActor())
+		{
+			// Is it controlled by a human?
+			if(object$.IsAnyHumanPartyMember())
+			{
+				// Is this a friend and a team member?
+				if(activator$.Go.Mind.IsFriend(object$)
+				   || object$.IsTeamMember(activator$))
+				{
+					// Make an omni copy of myself to watch this guy, and activate it.
+					GoCloneReq cloneReq$ = MakeGoCloneReq("dsx_healing_well_manager");
+					cloneReq$.ForceServerOnly = false;
+					cloneReq$.Omni = true;
+					Goid manager$ = GoDb.SCloneGo( cloneReq$ );				
+
+					PostWorldMessage( WE_REQ_ACTIVATE, object$.goid, manager$, 0, 0 );
+				}
+			}
+		}
+
+		i$ += 1;
+	}
+
+}
+
+//First state, when we're created.
+startup state Init$
+{
+	// Look for an activate message
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{	
+		if(e$ == WE_REQ_ACTIVATE)
+		{
+			// If this is an omni version of the manager, then we need to start healing the
+			// target.
+			if(owner.Go.IsOmni())
+			{
+
+				m_target$ = msg$.GetSendFrom();
+				if(!m_target$.IsValid())
+				{
+					SetState Finished$;
+				}
+
+				SetState Healing$;
+			}
+			// Otherwise we're the in-world copy and we need to look for people to bless.
+			else
+			{
+				#only(game)[[
+				Bless$(msg$.GetActivator());
+				]];
+			}
+		}
+	}
+}
+
+// We're healing someone,
+state Healing$
+{
+	// When we enter the state start healing
+	event OnEnterState$
+	{
+		// Safety checl
+		if(!m_target$.IsValid())
+		{
+			SetState Finished$;
+		}
+
+		// If we have an effect, play it on the target
+		if(!StringTool.IsEmpty(effectNameHealing$))
+		{
+			m_effectID$ = SiegeFx.SRunScript( effectNameHealing$, m_target$, m_target$, "", owner.Goid, WE_REQ_CAST );
+		}
+
+		// Add a generic state for the target
+		m_target$.Go.Actor.SAddGenericState( stateName$, state_description$, healDuration$, owner.goid, owner.goid, 0);		
+
+		// Start watching the target in case he snuffs it.
+		GoDb.StartWatching( owner.Goid, m_target$);					
+
+		// Start 2 timers, one to heal, and the other for duration
+		this.CreateTimer(1, .1);
+		this.CreateTimer(2, healDuration$);
+	}
+	// Time to heal
+	trigger OnTimer$(1)
+	{
+		// Heal by the increment
+		Rules.ChangeLife(m_target$, healAmount$);
+		// Then delay before healing again
+		this.CreateTimer(1, healDelay$);
+	}
+	// Time's up, head to the finished state
+	trigger OnTimer$(2)
+	{
+		SetState FinishHealing$;
+	}
+	// The target got a message
+	event OnGoHandleCCMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{	
+		// If he died or got knocked unconscious, then that's it.
+		if(e$ == WE_KILLED || e$ == WE_LOST_CONSCIOUSNESS)
+		{
+			SetState FinishHealing$;
+		}
+	}
+}
+
+// Cleaning up
+state FinishHealing$
+{
+	event OnEnterState$
+	{
+		// If the target is still valid, then remove the state and 
+		// stop the effect and stop watching him
+		if(m_target$.IsValid())
+		{
+			m_target$.Go.Actor.SRemoveGenericState(stateName$);
+			if(!StringTool.IsEmpty(effectNameHealing$))
+			{
+				SiegeFx.SStopScript(m_effectID$);
+			}
+			GoDb.StopWatching(owner.goid, m_target$);
+		}
+
+		SetState Finished$;
+	}
+}
+
+// Bye!!
+state Finished$
+{
+
+}

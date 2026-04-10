@@ -1,0 +1,142 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		:	cmd_report_gameplay_screen_player.skrit
+
+	Author(s)	: 	Bartosz Kijanka
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// exported properties
+property string _doc$ 						= "dumps a report to gameplay context regarging screen player stats";
+property string _required_component$ 		= "placement";
+
+property string report_name$				= "<set my name>";
+
+property Scid next_scid$ 					doc = "Scid of next object in sequence, 0 to terminate";
+property bool nextCommandJobFinished$		= true;
+property bool nextCommandOnSectionWarning$	= false;
+
+owner = GoSkritComponent;
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+void DumpTimeStamp$()
+{
+	report.reportf( "gameplay", "//--------------------------------------------------------------------\n" );
+	report.reportf( "gameplay", "[gametime=%2.2f] - Screen Party Report COMMAND - '%s'\n", WorldTime.Time, report_name$ );
+}
+
+
+void DumpActor$( Go member$ )
+{
+	report.report(  "gameplay", "\n\n//-------------------------------------------------------------------------------------------------------\n" );
+	report.report(  "gameplay", "//STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS\n\n" ) ;
+	AIQuery.DumpActorStats( member$, GamePlayContext() );
+
+	report.report(  "gameplay", "\n\n//-------------------------------------------------------------------------------------------------------\n" );
+	report.report(  "gameplay", "//MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND\n\n" );
+	member$.Mind.Dump( true, GamePlayContext() );
+
+	report.report(  "gameplay", "\n\n//-------------------------------------------------------------------------------------------------------\n" );
+	report.report(  "gameplay", "//INVENTORY  INVENTORY INVENTORY INVENTORY INVENTORY INVENTORY INVENTORY INVENTORY INVENTORY INVENTORY\n\n" );
+	member$.Inventory.Dump( true, GamePlayContext() );
+
+	report.report(  "gameplay", "\n\n//-------------------------------------------------------------------------------------------------------\n" );
+	report.report(  "gameplay", "//ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT\n\n" );
+	MCPManager.Dump( member$.Goid, GamePlayContext() );
+
+	report.report(  "gameplay", "//-------------------------------------------------------------------------------\n" );
+}
+
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		////////////////////////////////////////
+		//	check validity of next command
+
+		if( next_scid$ != next_scid$.InvalidScid )
+		{
+			if( !next_scid$.IsValid )
+			{
+				report.errorf( "cmd_report_gameplay_screen_player.skrit - BAD CONTENT. command scid 0x%08x has a BAD next_scid.  BAD.\n", owner.Scid );
+				return;
+			}
+		}
+
+		////////////////////////////////////////
+		//	dump report for each party member
+
+		DumpTimeStamp$();
+
+		Go party$ = Server.GetScreenParty();
+		if( party$ != NULL )
+		{		 
+			report.reportf( "gameplay", "\tscreen party size = %d actors\n", party$.Children.Size );
+
+			int i$ = 0;
+			while( i$ != party$.Children.Size )
+			{
+				Go child$ = party$.Children.Get( i$ );
+				DumpActor$( child$ );
+				i$+=1;
+			}
+		}
+
+		////////////////////////////////////////
+		//	start next command
+		if( next_scid$.IsValid )
+		{
+			Goid nextGoid$ = GoDb.FindGoidByScid( next_scid$ );
+			SendWorldMessage( WE_REQ_ACTIVATE, owner.Goid, next_scid$ );
+		}
+	}
+}
+
+
+event OnGoDrawDebugHud$
+{
+	////////////////////////////////////////
+	//	check validity of next command
+
+	Goid nextGoid$ = GoDb.FindGoidByScid( next_scid$ );
+
+	if( nextGoid$.IsValid )
+	{
+		if ( !nextGoid$.Go.IsCommand )
+		{
+			World.DrawDebugSphere( owner.go.Placement.Position,
+										 5.0,
+										 0xFFFF0000,
+										 "" );
+
+			World.DrawDebugSphere( owner.go.Placement.Position,
+										 5.5,
+										 0xFFFF0000,
+										 "next_command NOT a command" );
+			return;
+		}
+	}
+
+	if ( nextGoid$.IsValid )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 nextGoid$.go.Placement.Position,
+									 0xFFFFCC66, "next" );
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////

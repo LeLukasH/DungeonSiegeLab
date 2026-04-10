@@ -1,0 +1,129 @@
+[t:template,n:dsx_wizcty_jug]
+{
+	category_name = "indoor";
+	doc = "dsx_jug";
+	specializes = non_interactive_nonblocking;
+	[aspect] { model=m_i_glb_wizcty-jug; }
+}
+[t:template,n:dsx_wizcty_rug]
+{
+	category_name = "indoor";
+	doc = "dsx_rug";
+	specializes = non_interactive_nonblocking;
+	[aspect] { model=m_i_glb_wizcty-rug; }
+}
+
+[t:template,n:dsx_base_rune]
+{
+	category_name = "treasure";
+	doc = "dsx_base_rune";
+	specializes = non_interactive_nonblocking;
+	// This has an actor component so that it can have a generic state and display
+	// some useful rollover info.
+	[actor] {}
+	[aspect]
+	{
+		draw_shadow = false;
+		draw_selection_indicator = false;
+		is_selectable = true;
+		lodfi_lower = 0.2;
+		lodfi_upper = 0.2;
+		model = m_i_glb_runic_glyph-01;
+	}
+	// It has these other components so it can have an actor component.
+	[attack] {}
+	[body] {}
+	[defend] {}
+	[inventory] {}
+	[physics] {}
+}
+[t:template,n:dsx_rune_detonating]
+{
+	category_name = "treasure";
+	doc = "dsx_rune_detonating";
+	specializes = dsx_base_rune;
+	[common]
+	{
+		screen_name = "Detonating Glyph";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script( "glyph_effect", "", "[.75][0][0]" );
+				condition* = receive_world_message("we_entered_world");
+			}
+		}
+	}
+}
+[t:template,n:dsx_rune_flame]
+{
+	category_name = "treasure";
+	doc = "dsx_rune_flame";
+	specializes = dsx_base_rune;
+	[common]
+	{
+		screen_name = "Flame Glyph";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script( "glyph_effect", "", "[.85][.4][.1]" );
+				condition* = receive_world_message("we_entered_world");
+			}
+		}
+	}
+}
+[t:template,n:dsx_rune_zap]
+{
+	category_name = "treasure";
+	doc = "dsx_run_zap";
+	specializes = dsx_base_rune;
+	[common]
+	{
+		screen_name = "Zap Glyph";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script( "glyph_effect", "", "[.4][.4][.6]" );
+				condition* = receive_world_message("we_entered_world");
+			}
+		}
+	}
+}
+[t:template,n:dsx_rune_shockwave]
+{
+	category_name = "treasure";
+	doc = "dsx_rune_shockwave";
+	specializes = dsx_base_rune;
+	[common]
+	{
+		screen_name = "Shockwave Glyph";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script( "glyph_effect", "", "[.1][.2][.7]" );
+				condition* = receive_world_message("we_entered_world");
+			}
+		}
+	}
+}
+[t:template,n:dsx_rune_acid]
+{
+	category_name = "treasure";
+	doc = "dsx_rune_acid";
+	specializes = dsx_base_rune;
+	[common]
+	{
+		screen_name = "Acid Glyph";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script( "glyph_effect", "", "[.1][.5][.2]" );
+				condition* = receive_world_message("we_entered_world");
+			}
+		}
+	}
+}

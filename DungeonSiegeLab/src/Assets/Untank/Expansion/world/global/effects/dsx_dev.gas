@@ -1,0 +1,35 @@
+[effect_script*]
+{
+	name	=z_infinite_monster_constant;
+
+	script	=[[
+
+            sfx create sphere #TARGET_KB "color0(1,1,0)dur(5)offset(0,1,0)grow_params(0.25,0.25,0.25)";
+            sfx start #POP;
+
+			]];
+}
+
+[effect_script*]
+{
+	name	=z_infinite_monster_alert;
+
+	script	=[[
+
+            sfx create sphere #TARGET_KB "color0(1,0,0)dur(0.5)offset(0,2,0)grow_params(0.25,0.25,0.25)";
+            sfx start #POP;
+
+			]];
+}
+
+[effect_script*]
+{
+	name	=z_little_blue_ball;
+
+	script	=[[
+
+            sfx create sphere #TARGET_KB "color0(0,0,1)grow_params(0.15,0.15,0.15)";
+            sfx start #POP;
+
+			]];
+}

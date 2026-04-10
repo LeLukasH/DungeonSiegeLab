@@ -1,0 +1,74 @@
+[zonematch_games_popup_search]
+{
+	interface = true;
+	modal = true;
+	
+	[t:window,n:background]
+	{
+		alpha = 1.000000;
+		draw_order = 1;
+		rect = 0,0,600,800;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(zonematch_games_search_cancel);
+			onrbuttondown = notify(zonematch_games_search_cancel);
+		}
+	}
+
+	[t:dialog_box,n:games_search_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_thin_dark;
+		draw_order = 3;
+		rect = 24,44,616,420;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		consumable = true;
+	}
+	
+	[t:text,n:games_search_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 200;
+		font_color = 0xffffffff;
+		font_size = 12;
+		font_type = b_gui_fnt_10p_chat;
+		justify = left;
+		rect = 30,299,610,315;
+		text = "Search For:";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		auto_size = true;
+	}
+
+	[t:edit_box,n:games_search_edit_box]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 80;
+		rect = 243,299,557,315;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_10p_chat;
+		max_string_size = 256;
+		allow_ime = true;
+		[prompt] { draw_order=26; texture=b_gui_fe_m_single_prompt; width=1; }
+		[messages]
+		{
+			oneditselect = notify(zonematch_games_search);
+			onescape = notify(zonematch_games_search_cancel);
+		}
+	}
+}

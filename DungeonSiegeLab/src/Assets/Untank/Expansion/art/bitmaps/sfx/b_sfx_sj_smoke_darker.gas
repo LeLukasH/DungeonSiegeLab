@@ -1,0 +1,8 @@
+// Smoke texture for the shadow jumper effects.
+[t:tsd,n:b_sfx_sj_smoke_darker]
+{
+  b dither = true;
+  b hasalpha = true;
+	layer1texture1 = b_sfx_sj_smoke_darker;
+  i texturedetail = 1;
+}

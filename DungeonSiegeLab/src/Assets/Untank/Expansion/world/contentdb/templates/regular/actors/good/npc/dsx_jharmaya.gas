@@ -1,0 +1,129 @@
+[t:template,n:dsx_jharmaya]
+{
+	category_name = "1W_character";
+	doc = "dsx_jharmaya";
+	specializes = base_pm_fg;
+	[actor]
+		{
+			portrait_icon = b_gui_ig_i_ic_c_jharmaya;
+			[skills]
+				{ 
+					strength		= 1.26, 0, 10;
+					dexterity		= 2.52, 0, 10;
+					intelligence	= 10.22, 0, 10;
+		
+					nature_magic	= 14, 0, 0;
+					uber			= 14, 0, 0;
+				}
+		}
+	[aspect]
+		{
+			[textures]
+				{
+					0 = b_c_gan_utraean_skin_04;
+					1 = b_c_pos_a1_utraean-04;
+				}
+						[voice]
+							{
+							[die]		{ priority = high; * = s_v_jharmaya_die; }
+							//[hit_critical]	{ priority = low; * = s_v_jharmaya_hit_03_SED;	}
+							//[hit_glance]	{ priority = low; * = s_v_jharmaya_hit_01_SED;	}
+							//[hit_solid]	{ priority = low; * = s_v_jharmaya_hit_02_SED;	}
+							}
+							[vo_voice]
+							{
+							[select_char]
+							{ 
+							priority = vo; 
+							* = s_v_jharmaya_select_01;
+							* = s_v_jharmaya_select_02;
+							* = s_v_jharmaya_select_03;
+							* = s_v_jharmaya_select_04;
+							* = s_v_jharmaya_select_05;
+							* = s_v_jharmaya_select_06;
+							* = s_v_jharmaya_select_07;
+							* = s_v_jharmaya_select_08;
+							* = s_v_jharmaya_select_09;
+							* = s_v_jharmaya_select_10;
+							* = s_v_jharmaya_select_11;
+							* = s_v_jharmaya_select_12;
+							* = s_v_jharmaya_select_13;
+							* = s_v_jharmaya_select_14;
+							* = s_v_jharmaya_select_15;
+							}
+							[order_move]
+							{
+							priority = vo; 
+							* = s_v_jharmaya_ack_01;
+							* = s_v_jharmaya_ack_02;
+							* = s_v_jharmaya_ack_03;
+							* = s_v_jharmaya_ack_04;
+							* = s_v_jharmaya_ack_05;
+							* = s_v_jharmaya_ack_06;
+							* = s_v_jharmaya_ack_07;
+							* = s_v_jharmaya_ack_08;
+							* = s_v_jharmaya_ack_09;
+							* = s_v_jharmaya_ack_10;
+							* = s_v_jharmaya_ack_11;
+							* = s_v_jharmaya_ack_12;
+							* = s_v_jharmaya_ack_13;
+							* = s_v_jharmaya_ack_14;
+							* = s_v_jharmaya_ack_15;
+							}
+							[order_attack]
+							{
+							priority = vo; 
+							* = s_v_jharmaya_attack_01;
+							* = s_v_jharmaya_attack_02;
+							* = s_v_jharmaya_attack_03;
+							* = s_v_jharmaya_attack_04;
+							* = s_v_jharmaya_attack_05;
+							* = s_v_jharmaya_attack_06;
+							* = s_v_jharmaya_attack_07;
+							* = s_v_jharmaya_attack_08;
+							* = s_v_jharmaya_attack_09;
+							* = s_v_jharmaya_attack_10;
+							* = s_v_jharmaya_attack_11;
+							* = s_v_jharmaya_attack_12;
+							* = s_v_jharmaya_attack_13;
+							* = s_v_jharmaya_attack_14;
+							* = s_v_jharmaya_attack_15;
+							}
+							}
+			
+		}
+
+	[common]
+		{
+			screen_name = "Jharmaya";
+		}
+	
+	[conversation]{}
+	
+	[mind]
+		{
+			jat_talk = world\ai\jobs\actors\good\job_talk_jharmaya.skrit;
+		}
+
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[equipment]
+		{
+			es_feet = #bo_sh_sc_m_g_c_avg_woven_dsx;
+			es_weapon_hand = #staff/30-41;
+			es_chest = #body,m/60-90/+oflightning_special_defense;
+			es_spellbook = #book_glb_magic_04/+shimmering;
+		}
+		[other]
+		{
+			il_active_primary_spell = spell_shock;
+			il_active_secondary_spell = spell_orb_lightning;
+			il_main = #nmagic/0-3;
+			il_main = #nmagic/2-4;
+			il_main = #nmagic/5-7;
+			il_main = #nmagic/8-10;			
+			il_main = #nmagic/11-12;			
+		}
+	}
+}

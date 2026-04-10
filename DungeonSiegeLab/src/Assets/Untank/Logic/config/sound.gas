@@ -1,0 +1,15 @@
+[sound_settings]
+{
+	// Amount of time, in seconds, before cached files and SED's are dumped from the system.
+	f sound_cache_time			= 30.0f;
+
+	// Amount of time, in milliseconds, to mix ahead the sound buffers.  Lowering this value
+	// will increase the responsiveness of the sounds, but will cause skipping.  Raising
+	// this value increased sound lag but significantly reduces the chance that sound
+	// will skip.
+	i sound_latency				= 100;
+
+	// Minimum and maximum default falloff ranges
+	f default_minimum_falloff	= 6.0f;
+	f default_maximum_falloff	= 30.0f;
+}

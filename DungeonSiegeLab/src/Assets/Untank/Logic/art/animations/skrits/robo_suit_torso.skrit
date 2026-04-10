@@ -1,0 +1,106 @@
+// Animation Skrit: robo_suit_attack
+//
+// History:
+//		VERSION 1.0:	Initial implementation
+//
+// Custon skrit made just for the robo_suit
+//												
+
+property int MAJORVERSION$ = 1;
+property int MINORVERSION$ = 0;
+
+owner = Aspect;
+goid Target$;
+float fire_time$ = -5.0;
+float last_angle$ = 0.0;
+goid m_Owner$;
+
+////////////////////////////////////////////////////////////////////////////
+// Utilities
+
+float ComputeOrbit$ ( Goid targ$ )
+{
+	if( targ$.IsValid && m_Owner$.IsValid() )
+	{
+		if( m_Owner$.Go.Parent != NULL )
+		{
+			return GoMath.OrbitAngleToTarget( m_Owner$.Go.Parent.Goid, targ$ );
+		}
+	}
+	return( last_angle$ );
+}
+
+RestartChore$ ( int newanim$ )
+{  
+	Target$ = m_Owner$.Go.Mind.EngagedObject;
+	
+//	report.genericf("Target %s\n",Target$.Go.templatename );
+	
+	owner.blender.ResetTimeWarp();
+
+ 	int bg$ = owner.blender.OpenBlendGroup();
+	owner.blender.AddAnimToBlendGroup(newanim$,1);
+	owner.blender.CloseBlendGroup();
+	owner.blender.SetBlendGroupWeight(bg$,1);
+
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// States
+
+//----------------------------
+
+startup state InitialState$ 
+{
+
+	event OnStartChore$ ( int /*subanim$*/, int /*flags$*/ )
+	{
+		m_Owner$ = owner.Goid;
+		owner.blender.ResetTimeWarp();
+		
+		RestartChore$ ( 1 );
+		
+		SetState LinearTransition$;
+	}
+
+}
+
+//----------------------------
+
+state LinearTransition$	
+{
+ 
+	event OnStartChore$ ( int /*subanim$*/, int /*flags$*/ )
+	{
+		m_Owner$ = owner.Goid;
+ 	}
+
+	event OnUpdate$( float delta_t$ )
+	{
+		if( owner.parent == NULL ) // our parent is dead, we will be destroyed shortly
+		{
+			return;
+		}
+		
+		fire_time$ += delta_t$;
+	
+		if( fire_time$ > 6.0 )
+		{
+			fire_time$ = 0.0;
+			RestartChore$ ( 1 );
+		}
+	
+		int events$ = owner.UpdateBlender(delta_t$);
+		
+		if (AnimEventBitTest(events$,ANIMEVENT_FIRE_WEAPON)) {
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  1, 0 );
+		}
+		
+		float new_angle$ = ComputeOrbit$ ( Target$ );
+		last_angle$ = new_angle$;
+		
+		int root$ = owner.GetBoneIndex("Torso_Root_rotator");	
+	
+ 	 	owner.RotateIndexedBoneX(root$, new_angle$);
+ 	}
+}

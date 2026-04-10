@@ -1,0 +1,122 @@
+[end_game_summary_timeline]
+{
+	interface = true;
+	
+	[t:button,n:button_stats]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 18;
+		rect = 626,38,776,54;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { onbuttonpress=notify(end_game_view_stats); }
+		[t:text,n:button_stats_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "View Stats";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:window,n:timeline_background]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 195,68,755,404;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:player1color]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 100,124,170,127;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		background_fill = true;
+	}
+	[t:window,n:player2color]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 100,160,170,163;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		background_fill = true;
+	}
+	[t:window,n:player3color]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 100,196,170,199;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		background_fill = true;
+	}
+	[t:window,n:player4color]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 100,232,170,235;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		background_fill = true;
+	}
+	[t:window,n:player5color]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 100,268,170,271;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		background_fill = true;
+	}
+	[t:window,n:player6color]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 100,304,170,307;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		background_fill = true;
+	}
+	[t:window,n:player7color]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 100,340,170,343;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		background_fill = true;
+	}
+	[t:window,n:player8color]
+	{
+		alpha = 1.000000;
+		draw_order = 70;
+		rect = 100,376,170,379;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		background_fill = true;
+	}
+}

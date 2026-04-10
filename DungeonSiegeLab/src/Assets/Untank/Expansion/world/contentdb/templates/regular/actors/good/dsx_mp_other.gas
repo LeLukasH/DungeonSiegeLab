@@ -1,0 +1,155 @@
+// File create 9/12/03
+// to allow MP start character to have 80 gold instead of 30.
+// overrode farmboy and farmgirl, and changed the templates you start with
+// in config/mulitplayer.gas
+
+
+[t:template,n:dsx_mp_farmboy]
+{
+	doc = "Farmboy";
+	specializes = base_farmboy;
+	[actor]
+	{
+		screen_class = "Farmer";
+	}
+	[aspect]
+	{
+		megamap_override = true; 
+	}
+	[inventory]
+	{
+		[equipment]
+		{
+        	 es_weapon_hand=dg_g_d_1h_fun;
+             es_feet = bo_bo_le_light;
+             es_spellbook = book_glb_magic_01;
+
+		}
+        [pcontent]
+        {
+			[gold*]
+			{
+				chance = 1.0;
+				max = 80;
+				min = 80;
+			}
+        }
+	}
+	[water_effects] {}
+}
+[t:template,n:dsx_mp_farmgirl]
+{
+	doc = "Farmgirl";
+	specializes = base_farmgirl;
+	[actor]
+	{
+		screen_class = "Farmer";
+	}
+	[aspect]
+	{
+		megamap_override = true; // RAID#7185: MP: Teammates in MP should be non-Line of Sight on map.  -MM 02.03.2002
+	}
+	[inventory]
+	{
+		[equipment]
+		{
+			 es_weapon_hand=dg_g_d_1h_fun;
+             es_feet = bo_bo_le_light;
+			 es_spellbook = book_glb_magic_01;
+
+		}
+        [pcontent]
+        {
+			[gold*]
+			{
+				chance = 1.0;
+				max = 80;
+				min = 80;
+			}
+        }
+	}
+	[water_effects] {}
+}
+[t:template,n:dsx_mp_skeleton]
+{
+	category_name = "1W_character";
+	doc = "Skeleton (good alignment)";
+	specializes = base_skeleton_good;
+	[actor]
+	{
+		screen_class = "Corpse";
+	}
+	[aspect]
+	{
+		megamap_override = true; // RAID#7185: MP: Teammates in MP should be non-Line of Sight on map.  -MM 02.03.2002
+	}
+	[inventory]
+	{
+		[equipment]
+		{
+    		 es_feet = bo_bo_le_light;
+			 es_weapon_hand=dg_g_d_1h_fun;
+			 es_spellbook = book_glb_magic_01;
+		}
+        [pcontent]
+        {
+			[gold*]
+			{
+				chance = 1.0;
+				max = 80;
+				min = 80;
+			}
+        }
+	}
+}
+[t:template,n:dsx_mp_dwarf]
+{
+	category_name = "1W_character";
+	doc = "dwarf";
+	specializes = base_pm_dwarf;
+	[actor]
+	{
+		portrait_icon = b_gui_ig_i_ic_c_df;
+		screen_class = "Miner";
+		[skills]
+		{
+			dexterity = 0, 0, 10;
+			intelligence = 0, 0, 10;
+			strength = 0, 0, 10;
+		}
+	}
+	[aspect]
+	{
+		megamap_override = true; // RAID#7185: MP: Teammates in MP should be non-Line of Sight on map.  -MM 02.03.2002
+		[textures]
+		{
+			0 = b_c_gan_df_skin_01;
+			1 = b_c_pos_a1_005;
+		}
+	}
+	[inventory]
+	{
+		[equipment]
+		{
+			es_feet = bo_bo_le_light;
+			es_spellbook = book_glb_magic_01;
+			es_weapon_hand = dg_g_d_1h_fun;
+		}
+        [pcontent]
+        {
+			[gold*]
+			{
+				chance = 1.0;
+				max = 80;
+				min = 80;
+			}
+        }
+	}
+	[mind]
+	{
+		actor_auto_defends_others = TRUE;
+		melee_engage_range = 1.9;
+		ranged_engage_range = 9;
+		sight_range = 12;
+	}
+}

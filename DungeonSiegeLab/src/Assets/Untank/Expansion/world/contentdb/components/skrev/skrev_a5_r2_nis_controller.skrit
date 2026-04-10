@@ -1,0 +1,270 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  skrev_a5_r2_nis_controller.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: To control the ziggurat nis
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "skrev A5_R5 NIS Controller";
+
+// external properties
+property scid sj_scid$					doc = "Scid of shadow jumper.";
+property float stop_radius$ = 20.0		doc = "Radius within which to stop the characters.";
+
+owner = GoSkritComponent;
+
+// globals
+goid new_character$;
+Job last_job$;
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// Support functions
+
+get_nearby_characters$( goid character$, float radius$ )
+{
+	int iend$;
+	int i$ = 0;
+	goid temp$;
+	bool doit$ = true;
+
+	// get all the characters within the radius
+	character$.Go.Mind.TempGopColl1.Clear();
+	character$.Go.Mind.GetFriendsInSphere( radius$, character$.Go.Mind.TempGopColl1 );
+
+	// loop
+	iend$ = character$.Go.Mind.TempGopColl1.Size();
+	while( i$ < iend$ && i$ < 100 )
+	{
+		// get the temp character
+		temp$ = character$.Go.Mind.TempGopColl1.Get( i$ ).Goid;
+	
+		// we need an aspect
+		if( temp$.Go.HasAspect() )
+		{
+			// make sure they have a mind
+			if( temp$.Go.HasMind() && IsAlive( temp$.Go.Aspect.GetLifeState() ) )
+			{
+			
+				// see if they're already doing something
+				Job action$ = temp$.Go.Mind.GetFrontJob( JQ_ACTION );
+				if( action$ != NULL )
+				{
+					if( action$.JobAbstractType == JAT_STARTUP )
+					{
+						doit$ = false;
+					}
+				}
+				
+				if( temp$.Go.Player.Controller != PC_COMPUTER  )
+				{
+					doit$ = false;
+				}
+
+				// are we going 
+				// make sure they know how to face
+				if( temp$.Go.Mind.UnderstandsJob( JAT_FACE ) && temp$.Go.Actor.GetAlignment() == AA_EVIL )
+				{
+					// create the omni version to control the new character
+					GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.goid, owner.goid );
+					cloneReq$.Omni = true;
+					Goid new_controller$ = GoDb.SCloneGo( cloneReq$ );
+					
+					// send Omni version a activate to get it started
+					PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, new_controller$, MakeInt(temp$), 0 );
+				}
+			}
+		}
+
+		i$ += 1;
+	}
+}
+
+// save the characters front job in last_job$
+save_job$( goid character$ )
+{
+	// get the front job
+	last_job$ = character$.Go.Mind.GetFrontJob( JQ_ACTION );
+}
+
+// force them to face and stop fidgeting
+force_face$( goid character$, goid target$ )
+{
+	if( !character$.IsValid() ) { return; }
+	else
+	{
+		if( !character$.Go.HasMind() ) { return; }
+		if( !character$.Go.HasAspect() ) { return; }
+		if( !IsAlive( character$.Go.Aspect.GetLifeState() ) ) { return; }
+	}
+
+	// get rid of all control
+	MCPManager.Flush( character$ );
+
+	// give them a figdet request to get them to stop walking
+	MCPManager.MakeRequest( character$, PL_FIDGET );
+
+	// no fidgeting.  will start when last fidget ends
+	character$.Go.Mind.SetActorAutoFidgets( false );
+
+	if( character$.Go.Mind.UnderstandsJob( JAT_FACE ) )
+	{
+		// clear their mind and add the job
+		character$.Go.Mind.Clear( JQ_ACTION );
+		character$.Go.Mind.SDoJob( MakeJobReq( JAT_FACE, JQ_ACTION, QP_CLEAR, AO_COMMAND, target$ ) );
+	}
+}
+
+// restore the old job
+restore_job$( goid character$ )
+{
+	Scid initial_command$;
+	JobReq req$;
+	eJobAbstractType jat$;
+	Goid goal$;
+	Goid modifier$;
+	SiegePos pos$;
+
+	// make sure we got a job
+	if( last_job$ != NULL )
+	{
+		// make sure the character is still alive
+		if( !character$.Go.HasAspect() ) { return; }
+		else if( !IsAlive( character$.Go.Aspect.GetLifeState() ) ) { return; }
+
+		// get the job type
+		jat$ = last_job$.GetJobAbstractType();
+
+		// are we patrolling?
+		if( jat$ == JAT_PATROL || character$.Go.Mind.GetInitialCommand() != NULL )
+		{
+			// get their initial command
+			initial_command$ = character$.Go.Mind.GetInitialCommand();
+
+			// make sure it's valid
+			if( !initial_command$.Goid.IsValid() )
+			{
+				report.genericf( "initial command wasn't valid!\n" );
+			}
+			else
+			{
+				// send a message to that command
+				PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, initial_command$.Goid, MakeInt( character$ ), 0 ); 
+			}
+		}
+		else
+		{
+			// get the goal, modifier, and position
+			goal$ = last_job$.GetGoalObject();
+			modifier$ = last_job$.GetGoalModifier();
+			pos$ = last_job$.GetGoalPosition();
+
+			if( character$.Go.Mind.UnderstandsJob( jat$ ) )
+			{
+				// pick up where we left off
+				req$ = MakeJobReq( jat$, JQ_ACTION, QP_FRONT, AO_COMMAND, goal$, modifier$, pos$ );
+				character$.Go.Mind.SDoJob( req$ );
+			}
+		}
+	}
+
+	// we can fidget again
+	character$.Go.Mind.SetActorAutoFidgets( true );
+}
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+// chill here until we get an activate event
+startup state Wait$
+{
+	// look for activates
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		// activate?
+		if(e$ == WE_REQ_ACTIVATE)
+		{
+			// is it omni or not?
+			if( !owner.Go.IsOmni() )
+			{
+				// check the scids
+				if( !sj_scid$.Goid.IsValid() ) { report.genericf( "sj_scid is invalid!\n" ); }
+
+				// jump into the start state
+				SetState Start$;
+			}
+			else
+			{
+				// get the new character
+				new_character$ = MakeGoid( msg$.GetData1() );
+			
+				// make sure it's valid and move on
+				if( new_character$.IsValid() )
+				{
+					// start watching messages to the character
+					GoDb.StartWatching( owner.Goid, new_character$ );
+
+					SetState ControlCharacter$;
+				}
+			}
+		}
+	}
+}
+
+// start doing real events here
+state Start$
+{
+	// stop all the characters nearby
+	get_characters$ at ( 0.0 ) { get_nearby_characters$( sj_scid$.Goid, stop_radius$ ); }
+}
+
+// controls the selected character
+state ControlCharacter$
+{
+	// save their last job
+	job$ at ( 0.0 ) { save_job$( new_character$ ); }
+
+	// make them face the sj
+	face$ at ( 7.0 ) { force_face$( new_character$, sj_scid$.Goid ); }
+
+	// restore the last job
+	restart_job$ at ( 29.0 ) { restore_job$( new_character$ ); }
+
+	// jump states
+	change_state$ at ( 29.5 ) { SetState StopControlling$; }
+}
+
+// stops controlling the character
+state StopControlling$
+{
+	event OnEnterState$
+	{
+		// stop watching them
+		GoDb.StopWatching( owner.Goid, new_character$ );
+
+		// we're all set
+		SetState Done$;
+	}
+}
+
+// finishing state.  cleans everything up
+state Done$
+{
+	event OnEnterState$
+	{
+		// delete ourselves
+		PostWorldMessage(WE_REQ_DELETE, owner.Goid, owner.Goid, 1);
+	}
+}

@@ -1,0 +1,112 @@
+[t:template,n:lyssa] //first ranger to join the party
+{
+	category_name = "1W_character";
+	doc = "lyssa";
+	specializes = base_pm_fg;	
+	[actor]
+	{
+		portrait_icon = b_gui_ig_i_ic_c_lyssa;
+		[skills]
+		{
+			strength 		=   0.50, 0, 10;
+			dexterity 		=   3, 0, 10;
+			intelligence 	=  	0.26, 0, 10;
+			
+			Ranged 			= 	2, 0, 0;
+			uber 			= 	2, 0, 0;
+		}
+	}	
+	[aspect]
+	{
+		[textures]
+		{
+			0 = b_c_gan_fg_skin_lyssa;
+			1 = b_c_pos_a1_lyssa;
+		}
+		[voice]
+		{
+			[die]		{ priority = high; * = s_v_lyssa_die; }
+			//	[hit_critical]	{ priority = low; * = s_v_lyssa_hit_03_SED;  }
+			//	[hit_glance]	{ priority = low; * = s_v_lyssa_hit_01_SED;  }
+			//	[hit_solid]	{ priority = low; * = s_v_lyssa_hit_02_SED;  }
+		}
+		[vo_voice]
+		{
+			[select_char]
+			{ 
+				priority = vo; 
+				* = s_v_lyssa_select_01;
+				* = s_v_lyssa_select_02;
+				* = s_v_lyssa_select_03;
+				* = s_v_lyssa_select_04;
+				* = s_v_lyssa_select_05;
+				* = s_v_lyssa_select_06;
+				* = s_v_lyssa_select_07;
+				* = s_v_lyssa_select_08;
+				* = s_v_lyssa_select_09;
+				* = s_v_lyssa_select_10;
+				* = s_v_lyssa_select_11;
+				* = s_v_lyssa_select_12;
+				* = s_v_lyssa_select_13;
+				* = s_v_lyssa_select_14;
+				* = s_v_lyssa_select_15;
+			}
+			[order_move]
+			{
+				priority = vo; 
+				* = s_v_lyssa_ack_01;
+				* = s_v_lyssa_ack_02;
+				* = s_v_lyssa_ack_03;
+				* = s_v_lyssa_ack_04;
+				* = s_v_lyssa_ack_05;
+				* = s_v_lyssa_ack_06;
+				* = s_v_lyssa_ack_07;
+				* = s_v_lyssa_ack_08;
+				* = s_v_lyssa_ack_09;
+				* = s_v_lyssa_ack_10;
+				* = s_v_lyssa_ack_11;
+				* = s_v_lyssa_ack_12;
+				* = s_v_lyssa_ack_13;
+				* = s_v_lyssa_ack_14;
+				* = s_v_lyssa_ack_15;
+			}
+			[order_attack]
+			{
+				priority = vo; 
+				* = s_v_lyssa_attack_01;
+				* = s_v_lyssa_attack_02;
+				* = s_v_lyssa_attack_03;
+				* = s_v_lyssa_attack_04;
+				* = s_v_lyssa_attack_05;
+				* = s_v_lyssa_attack_06;
+				* = s_v_lyssa_attack_07;
+				* = s_v_lyssa_attack_08;
+				* = s_v_lyssa_attack_09;
+				* = s_v_lyssa_attack_10;
+				* = s_v_lyssa_attack_11;
+				* = s_v_lyssa_attack_12;
+				* = s_v_lyssa_attack_13;
+				* = s_v_lyssa_attack_14;
+				* = s_v_lyssa_attack_15;
+			}
+		}
+	}
+	[common]
+	{
+		screen_name = "Lyssa";
+	}
+	[conversation]{}
+	[inventory]
+	{
+		selected_active_location = il_active_ranged_weapon;
+		[equipment]
+		{
+			es_feet = #boots/-no_mod/6-10;
+			es_shield_hand = #bw_g_c_s_s_r_avg;
+		}
+		[other]
+		{
+			il_main = bd_sl_m_g_c_avg;
+		}
+	}
+}

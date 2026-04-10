@@ -1,0 +1,227 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_transmogrification.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Give commands to all enemies in radius or spell.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string effect_script$	= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string script_params$	= ""   	doc = "Parameters to send to SiegeFx script";
+property string enchant_script$	= ""   	doc = "Name of the SiegeFx script that will be providing the visual.";
+property float	radius$			= 15.0	doc = "Radius of the effect, centered on the caster.";
+property string description$	= ""	doc = "Description of enchantment being applied";
+property float	effect_delay$	= 0		doc = "Extra time to wait before removing the enchant_script";
+
+owner = GoSkritComponent;
+#include "k_inc_spl_utils"
+#include "k_inc_spl_utils_DSX"
+
+
+Goid	target$;
+Goid	caster$;
+Goid	potion$;
+
+float	alt_time$ = 0;   
+
+
+////////////////////////////////////////
+//	State Machine
+			
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) {
+			
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+			
+			if( target$.isvalid && caster$.isvalid && ( Owner.go.Parent != NULL ) )
+			{
+				// we need to find all the potions in radius of the cast target
+				if ( target$.Go.Hasmind )
+				{
+					target$.Go.Mind.TempGopColl1.Clear;
+					
+					target$.Go.Mind.GetVisible( QT_POTION, target$.Go.Mind.TempGopColl1, radius$ );
+					
+					//target$.Go.Mind.TempGopColl1.Add( target$.Go );
+					
+					int i$ = 0;
+					int iend$ = target$.Go.Mind.TempGopColl1.Size();
+					
+					int enchanted$ = 0;
+					Go temp$;
+
+					// now loop through the potions
+					while(i$ < iend$)
+					{
+						temp$ = target$.Go.Mind.TempGopColl1.Get( i$ );
+					
+						// if this is a health or mana potion
+						if( temp$.Goid.Go.Magic.IsHealthPotion() || temp$.Goid.Go.Magic.IsManaPotion() )
+						{
+							// create Omni version of the spell.
+							GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.go.Parent.Goid, owner.goid );
+							cloneReq$.Omni = true;
+							Goid new_spell$ = GoDb.SCloneGo( cloneReq$ );
+							
+							// send Omni version an Activate to get it started.
+							PostWorldMessage( WE_REQ_ACTIVATE, caster$, new_spell$, MakeInt(temp$.Goid), 0 );
+							enchanted$ += 1;
+						}
+				        i$ += 1;
+				    }
+				    if( ( enchanted$ > 0 ) && ( effect_script$ != "" ) )
+				    {
+				    	// Start the visual
+						SiegeFx.SRunScript( effect_script$, target$, caster$, script_params$, owner.Goid, e$ );
+				    }
+				    alt_time$ = 20;
+				    SetState InActive$;
+				    return;	
+				}
+			} 
+			SetState Finished$;
+			return;
+		} else if ( e$ == WE_REQ_ACTIVATE ) {
+			
+			/////////////////////////////
+			// Omni Go
+			
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			if( !target$.IsValid || !caster$.Isvalid )
+			{
+				SetState RestoreState$;
+				return;
+			}
+		
+			// Change the potion
+
+			// make it invisible
+			target$.Go.Aspect.SSetIsVisible( false );
+
+			float level$ = Math.MinFloat( caster$.Go.Actor.GetSkillLevel( owner.Go.Magic.SkillClass ), owner.Go.Magic.MaxCastLevel );
+			
+			// this formula comes from the original transmute spell - figure we should scale the same as the original did
+			float efficiency$ = (0.346-((1.0/(( level$ /10.0)+6.0))*1.5))*2.5;
+				//(0.346-((1.0/(( level$ /10.0)+6.0))*1.5));
+
+			// what's the potion conversion rate? - use efficiency and then subtract 10%
+			int potionAmt$ = Math.ToInt( (target$.Go.Magic.GetPotionAmount(false) * efficiency$ * .9) + 1 );
+
+			// we already made sure this is a health or mana potion - which is it?
+			//		create a potion of the opposite type to what we are - the func wants to know if we're making a health potion
+			potion$ = CreatePotion$( !target$.Go.Magic.IsHealthPotion(), potionAmt$, target$ );
+
+			// remove the original potion
+			GoDb.SMarkForDeletion( target$ );
+			
+			// Start the visual
+			if( enchant_script$ != "" )
+			{
+				SiegeFx.SRunMpScript( enchant_script$, potion$, caster$, "", owner.Goid, e$ );
+			}
+			
+			Godb.StartWatching( owner.goid, target$);
+			
+			
+			this.CreateTimer( 1, alt_time$ );
+		
+		} else if ( e$ == WE_SPELL_EXPIRATION_TIMER_RESET )
+		{
+			/////////////////////////////
+			// Omni Go
+			
+			if(target$.IsValid)
+			{
+				if( msg$.GetData1() == -1)
+				{
+					SetState( Finished$ );
+				} else {				
+					float unpacked_duration$ = msg$.GetData1() / 1000.0;
+				
+					This.SetNewTimerSeconds( 1, unpacked_duration$ );
+				}
+			}
+		}
+		
+	}
+	transition -> RestoreState$ :  OnTimer( 2 );
+	transition -> RestoreState$ :  OnGoHandleCCMessage( WE_KILLED );
+}
+
+state RestoreState$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	transition -> Finished$ :  OnTimer( 1 );
+	
+	event OnEnterState$
+	{
+		// If the go is still alive then restore his state
+		if( target$.IsValid )
+		{
+			Godb.StopWatching( owner.goid, target$);			
+		}
+		
+		this.CreateTimer( 1, effect_delay$ );
+	}
+}
+
+
+state Abort$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+		// Refund the players mana
+		Rules.ChangeMana( caster$, owner.go.getmagic.manacost );
+
+		SetState( Finished$ );
+	}
+}
+
+state InActive$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	trigger OnTimer$(1)
+	{
+		SetState( Finished$ );
+	}
+	
+	event OnEnterState$
+	{
+		this.CreateTimer( 1, alt_time$ );
+	}
+}
+
+state Finished$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+		if( target$.IsValid ) {
+			SiegeFx.SStopScript( target$, effect_script$ );
+		}
+		
+		// Delete this skrit
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

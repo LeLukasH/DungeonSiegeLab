@@ -1,0 +1,491 @@
+//***************************************************************************/
+//*
+//* File     :  pcontent_weapons.skrit
+//* Author(s):  Bryce Jones
+//*
+//* Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//*--------------------------------------------------------------------------/
+//*  $Revision:: $              $Date:$
+//*--------------------------------------------------------------------------/
+//***************************************************************************/
+
+
+
+
+/****************************************************************************/
+/*Properties                                                                */
+/****************************************************************************/
+
+
+property Int 	Iterations$				doc="Number of Iterations that you would like to generate pcontent";
+property string FileName$				doc="This is the name of the logfile which is passed in on the command line";
+property string PContentQueryString$	doc="This expects a fully qualified Pcontent Query #sword/100-200 etc..";
+property bool	UseCreature$			doc="if This bool is on, then no item is generated, rather a creatures inventory is scanned.";
+
+
+/****************************************************************************/
+/*Variables                                                                 */
+/****************************************************************************/
+
+
+GoId	ItemGoid$;	//"Once we get the Item, this holds it's goid";
+String	TemplateName$;	//="The Template name returned for the content generated";
+Float	DamageMin$;	//="damage_min value as returned by ContentDB";
+Float	DamageMax$;	//="damage_max value as returned by ContentDB";
+Float	PowerLevel$;	//="go.gui.itempower..What the system thinks an item's powerlevel is";
+string 	VariantName$;	//="This is the Variant name base on the template i.e ax_g_c_1h1b_avg:[Variant]";
+string	MagicPrefix$;	//="Value for holding go.magic.prefixmodifiername";
+string	MagicSuffix$;	//="Value for holding go.magic.suffixmodifiername";
+string	TempString$;
+string	TempLogString$;
+string 	ItemScreenName$;
+float	ModifierMin$;
+float	ModifierMax$;
+float	Defense$;
+int		Counter$;
+float	SuffixPower$;
+float	PrefixPower$;
+float	AverageDamage$;
+float	BaseItemPower$;
+GoId	CritterGoid$;
+int		Criterator$;
+Go		HeroGo$;
+/*begin functions*/
+
+/* get actor mind */
+gomind GetActorMind$()
+{
+	//server.get.screenhero.placement.position();
+	Go party$ = Server.GetScreenParty();
+
+	if( party$ != NULL  )
+	{
+		HeroGo$ = party$.children.Get(0);
+		GoMind TempMind$ = party$.children.Get(0).Mind;
+		return TempMind$;
+	}
+	return NULL;
+}
+
+/*initialize sink and log (report stream) */
+bool OpenReportSink$(string FileName$)
+{
+	Report.enable("testlog");
+	Report.AddNewSinkToContext("testlog", "", "file", FileName$);
+	Report.enable("Generic");
+
+	report.genericf( "Opening report sink 'testlog', filename = %s\n", FileName$ );
+
+	return TRUE;
+}
+
+
+
+
+/*build string for gpconsole.execute add pcontent, not used currently, may be useful in the future*/
+void CreateAddStringFromProps$(string ItemType$, int LBoundPower$, int UBoundPower$)
+	{
+		if (LBoundPower$ > 0 && UboundPower$ > 0)
+		{
+			TempString$ = "";
+			StringTool.Appendf(TempString$, "#%s/%d-%d", ItemType$,LBoundPower$,UBoundPower$);
+		}
+	}
+
+
+/*  add pcontent */
+
+goid GeneratePcontent$()
+	{
+		// get the hero
+		Go hero$ = Server.GetScreenHero;
+		SiegePos heroPos$ = hero$.placement.position;
+
+		// make clone req
+		GoCloneReq cloneReq$ = MakeGoCloneReq();
+		cloneReq$.StartingPos = heroPos$;
+		cloneReq$.SnapToTerrain = true;
+
+		// make go
+		Goid newGoid$	= GoDb.SCloneGo( cloneReq$, PcontentQueryString$ );
+		return newGoid$;
+	}
+
+goid GenerateCritter$()
+	{
+		Go hero$ = Server.GetScreenHero;
+		SiegePos heroPos$ = hero$.placement.position;
+		gomind TempActorMind$ = GetActorMind$();
+		SiegePos CritterPos$;
+		
+		bool RelSpot$ = AIQuery.FindSpotRelativeToSource(heropos$,1.0,1.0,3.0,1.0,false, TempActorMind$.TempPos1);
+		While (!relspot$)
+		{
+			Relspot$ = AIQuery.FindSpotRelativeToSource(heropos$,1.0,1.0,3.0,1.0,false, TempActorMind$.TempPos1);
+		}
+		
+		CritterPos$ = TempActorMind$.TempPos1;
+		
+		
+		GoCloneReq cloneReq$ = MakeGoCloneReq();
+		cloneReq$.StartingPos = CritterPos$;
+		cloneReq$.SnapToTerrain = true;
+
+		// make go
+		Goid newGoid$	= GoDb.SCloneGo( cloneReq$, PcontentQueryString$ );
+		return newGoid$;		 
+	}
+
+
+
+
+/* get closest item --- Polls for nearest thing to the Hero*/
+goid GetClosestItem$(GoMind ActorMind$)
+	{
+		ActorMind$.GetOccupantsInSphere( ActorMind$.SightRange, ActorMind$.TempGopColl1);
+		int i$ = 0;
+			while( i$ < ActorMind$.TempGopColl1.Size() )
+			{
+				if(ActorMind$.TempGopColl1.Get( i$ ).IsBreakable() && !ActorMind$.TempGopColl1.Get( i$ ).IsActor())
+				{
+					return ActorMind$.TempGopColl1.Get( i$ ).goid;
+				}
+			i$ += 1;
+			}
+		return NULL;
+	}
+
+
+/*Get Average Damage from Pcontent*/
+float GetAverageDamage$(float DamageMin$, float DamageMax$)
+	{
+		float AvgDamage$ =  (DamageMax$ - DamageMin$)/2;
+		return AvgDamage$;
+	}
+
+
+/*Query pcontent */
+void GetItemDefenseAttributes$(goid ItemGoid$)
+	{
+		if(ItemGoid$.Go.HasDefend())
+		{
+			DamageMin$ 	= 0.0;
+			DamageMax$	= 0.0;
+			Defense$ 	= ItemGoid$.go.defend.GetDefense();
+			AverageDamage$	= 0.0;
+		}
+		else
+		{
+
+			Defense$ 	= 0.0;
+
+		}
+	}
+
+void GetItemAttackAttributes$(goid ItemGoid$)
+	{
+
+		if (ItemGoid$.go.HasAttack())
+		{
+			if(ItemGoid$.go.attack.GetIsWeapon())
+			{
+				DamageMin$ 	= ItemGoid$.go.attack.GetDamageMin();
+				DamageMax$	= ItemGoid$.go.attack.GetDamageMax();
+				Defense$ = 0.0;
+				AverageDamage$ = GetAverageDamage$(DamageMin$,DamageMax$);
+			}
+		}
+
+		else
+		{
+			DamageMin$ 	= 0.0;
+			DamageMax$	= 0.0;
+			AverageDamage$	= 0.0;
+		}
+	}
+
+
+
+
+void GetItemMagicAttributes$(goid ItemGoid$)
+	{
+		/*Initialize Prefix and Suffix Power*/
+		PrefixPower$ = 0.0;
+		SuffixPower$ = 0.0;
+
+		if (ItemGoid$.go.hasmagic)
+		{
+			MagicPrefix$ = ItemGoid$.go.magic.prefixmodifiername;
+			if (MagicPrefix$ != "")
+			{
+				PrefixPower$  = PContentDb.GetModifierPower(MagicPrefix$);
+			}
+			MagicSuffix$ = ItemGoid$.go.magic.suffixmodifiername;
+			if (MagicSuffix$ != "")
+			{
+				SuffixPower$ = PContentDb.GetModifierPower(MagicSuffix$);
+			}
+			BaseItemPower$ = PowerLevel$ - (PrefixPower$ + SuffixPower$);
+
+		}
+		Else
+		{
+			MagicPrefix$ = "";
+			MagicSuffix$ = "";
+			BaseItemPower$ = PowerLevel$;
+		}
+	}
+
+
+void GetAllItemAttributes$(goid ItemGoid$)  /*this lives local to this skrit, takes the globals above and is the wrapper for all the other functions*/
+	{
+
+		ItemScreenName$	= PcontentQueryString$;//WeaponType$;//ItemGoid$.go.ScreenName;
+
+		TemplateName$ 	= ItemGoid$.go.templatename;
+		VariantName$	= ItemGoid$.go.gui.variation;
+
+
+
+		GetItemAttackAttributes$(ItemGoid$);
+		GetItemMagicAttributes$(ItemGoid$);
+		GetItemDefenseAttributes$(ItemGoid$);
+
+
+		PowerLevel$	= ItemGoid$.go.gui.GetItemPower();
+		ModifierMax$ = Pcontentdb.GetModifierMax (TemplateName$, VariantName$);
+		ModifierMin$ = Pcontentdb.GetModifierMin (TemplateName$, VariantName$);
+
+		return;
+	}
+
+
+
+/*Use the globals from above to build what gets outputted to the logs*/
+void BuildLogString$()
+	{
+
+		TempLogString$ ="";
+		if (ModifierMax$ > 10000.00)
+		{
+			stringtool.appendf(TempLogString$,"%i,%s,%s:%s,%f,%f,%f,%f,%s,%s,%f,%f,%f,%f,%f,%s",Criterator$,ItemScreenName$,TemplateName$,VariantName$,DamageMin$,DamageMax$,Defense$,PowerLevel$,MagicPrefix$, MagicSuffix$, PrefixPower$, SuffixPower$,AverageDamage$,BaseItemPower$,ModifierMin$,"<Infinite>");
+		}
+		else
+		{
+			stringtool.appendf(TempLogString$,"%i,%s,%s:%s,%f,%f,%f,%f,%s,%s,%f,%f,%f,%f%,%f,%f",Criterator$,ItemScreenName$,TemplateName$,VariantName$,DamageMin$,DamageMax$,Defense$,PowerLevel$,MagicPrefix$, MagicSuffix$, PrefixPower$, SuffixPower$,AverageDamage$,BaseItemPower$,ModifierMin$, ModifierMax$);
+		}
+	}
+/* add query result to log */
+void BuildHeaderString$()
+	{
+		TempLogString$="";
+		if (UseCreature$ == False)
+		{
+			stringtool.appendf(TempLogString$,"Iterations,ScreenName,Template,Damage_Min,Damage_Max,Defense,Power Level,Prefix,Suffix,Prefix Power,Suffix Power,Average Damage,Base Power,Modifier_Min,Modifier_Max");
+		}
+		if (UseCreature$ == True)
+		{
+			stringtool.appendf(TempLogString$,"Creature Number,ScreenName,Template,Damage_Min,Damage_Max,Defense,Power Level,Prefix,Suffix,Prefix Power,Suffix Power,Average Damage,Base Power,Modifier_Min,Modifier_Max");
+		}
+		
+	}
+
+/*QueryCritterInventory--Iterates through critter's inventory and catalogs pcontent therein*/
+
+
+
+
+
+
+/* destroy pcontent in world, verify go*/
+bool DestroyPcontent$(goid ItemGoid$)
+	{
+		if (ItemGoid$ != NULL)
+		{
+
+			godb.SMarkfordeletion(ItemGoid$);
+			if (ItemGoid$ == NULL)
+			{
+				return TRUE;
+			}
+		}
+
+		return FALSE;
+
+	}
+bool DestroyCritter$(goid CritterGoid$)
+	{
+		if ( CritterGoid$ != Goid.InvalidGoid )
+		{
+
+			godb.SMarkGoAndChildrenFordeletion(CritterGoid$.Go);
+			if (CritterGoid$ == NULL)
+			{
+				return TRUE;
+			}
+		}
+
+		return FALSE;
+
+	}
+
+
+
+/*****************************************************************/
+/* State Machine Section                                                   			 */
+/* InitialState$ -- Initial State Machine----make sure hero is in the game  */
+/* InGame$ -- Sets Up the log stuff                                         		*/
+/* CreatePcontent$ -- create stuff                                          			*/
+/* QueryPcontent$ -- interrogate Stuff                                      		*/
+/* DestroyPcontent$ -- Get rid of stuff	                                    		*/
+/****************************************************************/
+
+startup state InitialState$ trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+	{
+		if ( (WorldState.CurrentState == WS_SP_INGAME) || (WorldState.CurrentState == WS_MP_INGAME) )
+		{
+			setstate Init$;
+		}
+	}
+
+/* In game State Machine*/
+
+state Init$
+	{
+		event OnEnterState$
+		{
+			Counter$ = 1;
+			Criterator$ = 1;
+			gomind HeroMind$ = GetActorMind$();
+			HeroGo$.Aspect.SetIsInvincible( true );
+			
+			//GetActorMind$.GetGoid.Go.Aspect.SetIsInvincible( true );			
+			
+			OpenReportSink$(FileName$);	/*Open the report Sink*/
+			BuildHeaderString$;
+			report.testlogf("%s\n",TempLogString$);
+			setstate CreatePcontent$;
+		}
+
+	}
+
+state CreatePcontent$
+
+	{
+		event OnEnterState$
+		{
+			ItemGoid$ = NULL;
+			if (UseCreature$ == false)
+			{
+				ItemGoid$ = GeneratePcontent$;
+				if (ItemGoid$.IsValid())
+				{
+					setstate QueryPcontent$;
+				}
+				else
+				{
+					report.testlog("Got a Tell Jake Error, see log for details\n");
+					setstate CreatePcontent$;
+				}
+			}
+			else if (UseCreature$ == True)
+			{
+				ItemGoid$ = NULL;
+				CritterGoid$ = GenerateCritter$;
+				if (CritterGoid$.IsValid())
+				{
+					setstate QueryPcontent$;
+				}
+				else
+				{
+					report.testlog("\nHad a problem creating a monster\n");
+					setstate CreatePcontent$;
+				}
+			}
+		}
+	}
+	
+state QueryPcontent$
+	{
+		QueryPcontent_Start$ at ( 5 frames )
+		{
+			gomind ActorMind2$ = GetActorMind$();
+			if (UseCreature$ == False)
+			{
+				GetAllItemAttributes$(ItemGoid$);
+				BuildLogString$;
+				report.testlogf("%s\n",TempLogString$);
+				setstate CleanupPcontent$;
+			}
+
+			else if (UseCreature$ == True)
+			{
+				go CritterGo$ = CritterGoid$.Go;
+				ActorMind2$.TempGopcoll1.clear();
+				if (CritterGo$.Inventory.ListItems(il_all, ActorMind2$.TempGopcoll1))
+				{
+					int i$ = 0;
+					while( i$ < ActorMind2$.TempGopcoll1.Size() )
+					{	
+						if( ActorMind2$.TempGopcoll1.Get(i$).TemplateName == "book_glb_magic_01" || CritterGo$.Inventory.IsEquipped(ActorMind2$.TempGopcoll1.Get( i$ )) )
+						{
+							setstate CleanupPcontent$;
+						}
+						else if (ActorMind2$.TempGopcoll1.Get( i$ ).HasAttack() || ActorMind2$.TempGopcoll1.Get( i$ ).HasDefend())
+						{
+							ItemGoid$ = ActorMind2$.TempGopcoll1.Get(i$).GetGoid();
+							GetAllItemAttributes$(ItemGoid$);
+							BuildLogString$;
+							report.testlogf("%s\n",TempLogString$);
+							setstate CleanupPcontent$;
+						}
+						//else if (CritterGo$.Inventory.GetGold() > 0)
+						//{
+						//	report.testlogf("%d,%s,%s,%d\n",Criterator$, ItemScreenName$, "Gold", CritterGo$.Inventory.GetGold());
+						//	setstate CleanupPcontent$;							
+						//}
+						else
+						{
+							report.testlogf("%d,%s,%s\n",Criterator$, ItemScreenName$, ActorMind2$.TempGopcoll1.Get(i$).TemplateName);
+							setstate CleanupPcontent$;
+						}
+						
+					i$+=1;
+					}
+				
+				}
+			}	
+		}
+	}
+
+state CleanupPContent$
+	{
+		event OnEnterState$
+		{
+			if (UseCreature$)
+			{
+				bool Destroyed$ = DestroyCritter$(CritterGoid$);
+			}
+			else
+			{
+				bool Destroyed$ = DestroyPcontent$(ItemGoid$);
+			}
+
+			if (Counter$ <= Iterations$)
+			{
+				Counter$ += 1;
+				Criterator$ += 1;
+				setstate CreatePcontent$;
+			}
+			else
+			{
+				gpconsole.execute("exit");
+			}
+		}
+	}
+
+
+
+
+/*End state stuff*/
+

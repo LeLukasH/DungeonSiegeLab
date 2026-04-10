@@ -1,0 +1,91 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  chipper.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = true;
+property string _doc$                = "Rock chipper which spews goodies and gibbies at the spewpoint";
+property string _required_component$ = "placement";
+
+// exported properties
+//----Positions--------
+property float 			exp_x$ 		= 0              			doc = "x direction of guts explosion";
+property float 			exp_y$ 		= 0              			doc = "y direction of guts explosion";
+property float 			exp_z$ 		= 3             			doc = "z direction of guts explosion";
+
+//----Sound-----------
+
+//----Effects----
+
+//----funtionality----
+property float			Gib_delay_min$	= 0.2						doc = "minimum time before spitting out giblets";
+property float			Gib_delay_max$	= 1.3						doc = "maximum time before spitting out giblets";
+property eWorldEvent	gib_msg$		= WE_REQ_ACTIVATE			doc = "message a potential gibbee will send";
+property float 			damage$ 		= 500              			doc = "Amount to damage the gibbee if we cant explode him.";
+
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+// global state
+
+event OnGoDrawDebugHud$
+{
+	World.DrawDebugPoint( owner.Go.Placement.Position,
+						   .3,
+						   MakeColor( 1.0, 0.0, 0.0 ),
+						   Debug.Format( "Min delay: %f\nmax delay: %f",Gib_delay_min$, Gib_delay_max$ ) );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// local states
+
+startup state Start$
+{
+	transition -> Active$: OnGoHandleMessage( WE_ENTERED_WORLD );
+}
+
+
+state Active$
+{
+    event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == gib_msg$ )
+		{
+			// When we recieve a msg from a go to pop him send a delayed msg so we don't crunch everyone at once.
+			
+			float random_delay$ = Math.RandomFloat( Gib_delay_min$, Gib_delay_max$ );
+			PostWorldMessage( WE_GO_TIMER_DONE, owner.Goid, owner.Goid, msg$.GetData1(), random_delay$ );
+		} else if( e$ == WE_GO_TIMER_DONE ) {
+			Goid Gibbed$ = MakeGoid( msg$.GetData1() );
+			if( Gibbed$.IsValid() )
+			{
+				// set position of Go and pop him
+				
+				Gibbed$.Go.Placement.SSetPosition( owner.go.placement.position, false );
+				Gibbed$.Go.Placement.SSetOrientation( owner.Go.Placement.Orientation );
+				
+				if( Gibbed$.Go.HasInventory )
+				{
+					Gibbed$.Go.Inventory.DropItemsAroundBody();
+				}
+				
+				if( !Physics.SExplodeGo( Gibbed$, 1, MakeVector(exp_x$,exp_y$,exp_z$) ) ) 
+				{
+					Gibbed$.Go.Placement.SSetPosition( owner.go.placement.position, true );
+					Rules.DamageGo( Gibbed$, Gibbed$, Gibbed$, damage$, true ,true);
+				}
+			}
+		}
+	}
+}

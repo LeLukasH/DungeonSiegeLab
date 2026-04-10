@@ -1,0 +1,141 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  decal_fade.skrit
+// Author(s):  James Loe
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool		_server_only$			= false;
+property string		_doc$					= "Fade out/in decal";
+
+// exported properties
+property DecalId	siege_decal$			= 0					doc = "Identifier of siege decal to attach this effect to";
+property float		duration$				= 0.0				doc = "Duration of the fade in seconds (0 for instant)";
+
+owner = GoSkritComponent;
+
+// globals
+float initial_alpha$;
+float time$;
+bool  bFade$;
+
+//////////////////////////////////////////////////////////////////////////////
+
+startup state Constructed$
+{
+	// $ wait in this state until the siege light is in the world
+
+	event OnGoUpdate$( float /*deltaTime$*/ )
+	{
+		if( siege_decal$.IsValid )
+		{
+			initial_alpha$ = Math.ToFloat( siege_decal$.Alpha );
+			setstate Wait$;
+		}
+	}
+}
+
+state Wait$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( (e$ == WE_REQ_ACTIVATE) && siege_decal$.IsValid )
+		{
+			if( (duration$ > 0) && (siege_decal$.Active == false) )
+			{
+				// Fade in the decal
+				time$	= 0;
+				bFade$	= false;
+
+				// Set it active
+				siege_decal$.SetActive( true );
+
+				SetState Play$;
+			}
+			else
+			{
+				// Immediately activate the decal
+				siege_decal$.SetActive( true );
+			}
+		}
+
+		if( (e$ == WE_REQ_DEACTIVATE) && siege_decal$.IsValid )
+		{
+			if( (duration$ > 0) && (siege_decal$.Active == true) )
+			{
+				// Fade in the decal
+				time$	= 0;
+				bFade$	= true;
+
+				SetState Play$;
+			}
+			else
+			{
+				// Immediate deactivate the decal
+				siege_decal$.SetActive( false );
+			}
+		}
+	}
+}
+
+state Play$
+{
+	event OnGoUpdate$( float deltaTime$ )
+	{
+		time$ += deltaTime$;
+
+		// Calculate and clamp linear scale
+		float t$	= (time$ / duration$);
+		t$			= (t$ > 1.0) ? 1.0 : t$;
+
+		// apply result
+		if( siege_decal$.IsValid )
+		{
+			if( bFade$ )
+			{
+				siege_decal$.Alpha	= Math.ToInt( initial_alpha$ * (1.0 - t$) );
+			}
+			else
+			{
+				siege_decal$.Alpha	= Math.ToInt( initial_alpha$ * t$ );
+			}
+		}
+
+		// Update state
+		if( t$ == 1.0 )
+		{
+			if( bFade$ )
+			{
+				siege_decal$.SetActive( false );
+			}
+
+			SetState Wait$;
+		}
+	}
+
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( (e$ == WE_REQ_ACTIVATE) && (bFade$ == true) )
+		{
+			// Reset time
+			bFade$	= false;
+			time$	= duration$ * ( (initial_alpha$ - Math.ToFloat( siege_decal$.Alpha )) / initial_alpha$ );
+		}
+		if( (e$ == WE_REQ_DEACTIVATE) && (bFade$ == false) )
+		{
+			// Reset time
+			bFade$	= true;
+			time$	= duration$ * (Math.ToFloat( siege_decal$.Alpha ) / initial_alpha$);
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,310 @@
+[t:template,n:2W_base_lava_spirit]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_base_lava_spirit";
+	specializes = actor_evil;
+	[aspect]
+	{
+		model = m_c_edm_ls_pos_1;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_lava_spirit; }
+			[hit_critical]	{ priority = low; * = s_e_hit_lava_spirit_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_lava_spirit_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_lava_spirit_SED; }
+		}
+	}
+	[body]
+	{
+		[bone_translator]
+		{
+			body_anterior 	= head_bone;
+			body_mid 		= Mid_torso;
+			body_posterior 	= Spine_end;
+			kill_bone 		= Mid_torso;
+			shield_bone 	= shield_grip;
+			weapon_bone 	= weapon_grip;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ecm_wr_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00=at;
+					01=at-02;
+					02=at-05;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=dfs; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dff; }
+			}
+			[chore_misc]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files]
+				{
+					slep = ds;
+					wake = up;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+			[chore_magic]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00=mg;
+					01=mg-02;
+				}
+			}
+		}
+	}
+	[common]
+	{
+		screen_name="Lava Spirit";
+	}
+	[effect_manager_server]
+	{
+		effect_name	= "lava_spirit_flames";
+	    repeat		= false;
+
+	    start_msg	= WE_ENEMY_SPOTTED;
+	    stop_msg	= WE_KILLED;
+	}
+	mind:actor_auto_fidgets = false;
+	mind:jat_startup = world\ai\jobs\common\job_startup_reveal.skrit;
+	[physics]
+	{
+		explode_when_killed = true;
+		explosion_magnitude = 1.0;
+		[break_particulate]
+		{
+			frag_glb_lava_spirit_01 = 1;
+			frag_glb_lava_spirit_02 = 3;
+			frag_glb_lava_spirit_03 = 1;
+			frag_glb_lava_spirit_04 = 1;
+			frag_glb_lava_spirit_05 = 1;
+			frag_glb_lava_spirit_06 = 2;
+			frag_glb_lava_spirit_07 = 1;
+			frag_glb_lava_spirit_08 = 1;
+			frag_glb_lava_spirit_09 = 3;
+			frag_glb_lava_spirit_10 = 1;
+		}
+	}
+}
+[t:template,n:2W_lava_spirit]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_lava_spirit";
+	specializes = 2W_base_lava_spirit;
+	[actor]
+	{
+		[skills]
+		{
+			strength = 		80, 0;
+			intelligence = 	19, 0;
+			dexterity = 	31, 0;
+			melee =  		91, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 360000;
+		life = 2536;
+		max_life = 2536;
+		mana = 1140;
+		max_mana = 1140;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 440.6;
+		damage_min = 384.2;
+	}
+	[defend] { defense=1383.7; }
+   	[inventory]
+	{
+    	[pcontent]
+		{
+			[oneof*]
+			{
+				[oneof*]
+				{
+					chance = 0.45;
+					il_main = #*/175-265;
+					il_main = #armor/112-552;
+	                il_main = #cmagic/45-59;
+				}
+				[oneof*]
+				{
+	            	chance = 0.004;
+	                il_main = #weapon/-rare(1)/262-290;
+	                il_main = #armor/-rare(1)/570-712;
+                    il_main = #*/-rare(1)/262-290;
+                }
+				[oneof*]
+				{
+                	chance = 0.002;
+	                il_main = #weapon/-unique(2)/262-290;
+	                il_main = #armor/-unique(2)/570-712;
+                    il_main = #*/-unique(2)/262-290;
+	            }
+				[gold*]
+				{
+					chance = 0.125;
+					max = 293331;
+					min = 213496;
+				}
+			}
+		}
+	}
+	[mind]
+	{
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14;
+	}
+}
+[t:template,n:2W_lava_spirit_magic_base]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_lava_spirit";
+	specializes = 2W_base_lava_spirit;
+	[actor]
+	{
+		[skills]
+		{
+			strength = 		78.1, 0;
+			intelligence = 	19.9, 0;
+			dexterity = 	37.7, 0;
+			combat_magic = 	92, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 360000;
+		life = 2136;
+		max_life = 2136;
+		mana = 24.9;
+		max_mana = 24.9;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 440.6;
+		damage_min = 184.2;
+		damage_bonus_min_cmagic = 144;
+		damage_bonus_max_cmagic = 210;
+	}
+	[defend] { defense=1183.7; }
+   	[inventory]
+	{
+    	selected_active_location = il_active_primary_spell;
+		[other]
+		{
+			il_active_primary_spell=spell_lava_spirit_fire;
+		}
+
+    	[pcontent]
+		{
+			[oneof*]
+			{
+				[oneof*]
+				{
+					chance = 0.45;
+					il_main = #*/175-265;
+					il_main = #armor/112-552;
+	                il_main = #cmagic/45-59;
+				}
+				[oneof*]
+				{
+	            	chance = 0.004;
+	                il_main = #weapon/-rare(1)/262-290;
+	                il_main = #armor/-rare(1)/570-712;
+                    il_main = #*/-rare(1)/262-290;
+                }
+				[oneof*]
+				{
+                	chance = 0.002;
+	                il_main = #weapon/-unique(2)/262-290;
+	                il_main = #armor/-unique(2)/570-712;
+                    il_main = #*/-unique(2)/262-290;
+	            }
+				[gold*]
+				{
+					chance = 0.125;
+					max = 263331;
+					min = 223496;
+				}
+			}
+		}
+	}
+	[mind]
+	{
+		actor_weapon_preference			= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+		actor_auto_switches_to_karate	= false;
+		actor_auto_switches_to_melee	= false;
+
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14;
+	}
+}
+
+[t:template,n:2W_lava_spirit_magic]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_lava_spirit magic";
+	specializes = 2W_lava_spirit_magic_base;
+}
+
+[t:template,n:2W_lava_spirit_magic_summon]
+{
+	category_name = "2W_evil_d";
+	doc = "[summon] lava_spirit";
+	specializes = 2W_lava_spirit_magic_base;
+	aspect:experience_value = 0;
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=spell_lava_spirit_fire; }
+		[pcontent]
+		{
+			[gold*]
+			{
+				chance = 0;
+			}
+		}
+	}
+	mind:jat_startup = jat_none;
+	mind:actor_auto_fidgets = true;
+}

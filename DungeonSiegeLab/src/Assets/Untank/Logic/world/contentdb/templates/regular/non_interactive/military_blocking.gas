@@ -1,0 +1,539 @@
+[t:template,n:banner_glb_bandit_01]
+{
+	category_name 	= "outdoor";
+	doc 			= "banner_bandits";
+	specializes 	= non_interactive_blocking;
+	[aspect] 
+	{ 
+		model		= m_i_glb_banner-bandit-01; 
+		textures:0	= b_i_glb_banner-bandit-01;
+	}
+}
+[t:template,n:banner_glb_bandit_02]
+{
+	category_name 	= "outdoor";
+	doc 			= "banner_bandits_evil";
+	specializes 	= non_interactive_blocking;
+	[aspect] 
+	{ 
+		model		= m_i_glb_banner-bandit-02; 
+		textures:0	= b_i_glb_banner-bandit-02;
+	}
+}
+[t:template,n:banner_glb_legion]
+{
+	category_name = "outdoor";
+	doc = "banner_legion";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model = m_i_glb_legion-banner; 
+		textures:0 = b_i_glb_legion-banner;
+	}
+}
+[t:template,n:banner_glb_legion_02]
+{
+	category_name = "outdoor";
+	doc = "banner_legion_tattered_sway";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model = m_i_glb_legion-banner-02; 
+		textures:0 = b_i_glb_legion-banner-02;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_i_glb;
+			[chore_default]
+			{
+				skrit = infinite_loop;
+				[anim_files]
+				{
+					00 = legion-banner-02-flap;
+				}
+			}
+		}
+	}
+}
+[t:template,n:barrier_glb_01]
+{
+	category_name = "outdoor";
+	doc = "barrier_a-line_med";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_barrier-01; }
+}
+[t:template,n:barrier_glb_02]
+{
+	category_name = "outdoor";
+	doc = "barrier_triangle_sm";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_barrier-02; }
+}
+[t:template,n:barrier_glb_03]
+{
+	category_name = "outdoor";
+	doc = "barrier_a-line_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_barrier-03; }
+}
+[t:template,n:body_cav_carcass_02]
+{
+	category_name = "dead";
+	doc = "body_carcass_krugdog";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_carcass-02; }
+}
+[t:template,n:body_cav_carcass_03]
+{
+	category_name = "dead";
+	doc = "body_carcass_packmule";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_carcass-03; }
+}
+[t:template,n:body_cav_stone_01]
+{
+	category_name = "dead";
+	doc = "body_stone_run";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_body-stone-01; }
+}
+[t:template,n:body_cav_stone_02]
+{
+	category_name = "dead";
+	doc = "body_stone_fear";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_body-stone-02; }
+}
+[t:template,n:body_cav_stone_03]
+{
+	category_name = "dead";
+	doc = "body_stone_monster";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_body-stone-03; }
+}
+[t:template,n:body_cav_stone_04]
+{
+	category_name = "dead";
+	doc = "body_stone_help";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_body-stone-04; }
+}
+[t:template,n:body_cav_stone_05]
+{
+	category_name = "dead";
+	doc = "body_stone_fall";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_body-stone-05; }
+}
+[t:template,n:body_cav_stone_06]
+{
+	category_name = "dead";
+	doc = "body_stone_broken_plate";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_body-stone-06; }
+}
+[t:template,n:body_cav_stone_07]
+{
+	category_name = "dead";
+	doc = "body_stone_broken";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_body-stone-07; }
+}
+[t:template,n:body_cav_stone_08]
+{
+	category_name = "dead";
+	doc = "body_stone_broken_leather";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_body-stone-08; }
+}
+
+[t:template,n:body_grs_cow_dead]
+{
+	category_name = "dead";
+	doc = "body_cow";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_grs_deadcow; }
+}
+[t:template,n:boiler_gob_01]
+{
+	category_name = "indoor";
+	doc = "boiler_with_pipes";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_boiler-01; }
+}
+[t:template,n:boiler_gob_02]
+{
+	category_name = "indoor";
+	doc = "boiler";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_boiler-02; }
+}
+[t:template,n:bolt_gob_01]
+{
+	category_name = "indoor";
+	doc = "bolt";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_bolt; }
+}
+[t:template,n:cage_csl_01]
+{
+	category_name = "container";
+	doc = "cage_metal_sm";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_csl_cage-01; }
+}
+[t:template,n:cage_csl_02]
+{
+	category_name = "container";
+	doc = "cage_metal_long";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_csl_cage-02; }
+}
+[t:template,n:cage_csl_03]
+{
+	category_name = "container";
+	doc = "cage_metal_round";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_csl_cage-03; }
+}
+[t:template,n:cart_grs_krug]
+{
+	category_name = "outdoor";
+	doc = "cart_krug";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_grs_cart-krug; }
+}
+[t:template,n:chains_csl_curved]
+{
+	category_name = "indoor";
+	doc = "chain_curved";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_csl_chains-curved; }
+}
+[t:template,n:chains_csl_hook]
+{
+	category_name = "indoor";
+	doc = "chain_with hook";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_csl_chains-hook; }
+}
+[t:template,n:chains_csl_straight]
+{
+	category_name = "indoor";
+	doc = "chain_straight";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_csl_chains-straight; }
+}
+[t:template,n:chains_csl_wall]
+{
+	category_name = "indoor";
+	doc = "chain_straight_wall";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_csl_chains-wall; }
+}
+[t:template,n:coil_gob_broken_01]
+{
+	category_name = "indoor";
+	doc = "coil_broken_01";
+	specializes = non_interactive_nonblocking;
+	[aspect] { model=m_i_gob_tesla-coil-broken-01; }
+}
+[t:template,n:coil_gob_broken_02]
+{
+	category_name = "indoor";
+	doc = "coil_broken_02";
+	specializes = non_interactive_nonblocking;
+	[aspect] { model=m_i_gob_tesla-coil-broken-02; }
+}
+[t:template,n:coil_gob_broken_03]
+{
+	category_name = "indoor";
+	doc = "coil_broken_03";
+	specializes = non_interactive_nonblocking;
+	[aspect] { model=m_i_gob_tesla-coil-broken-03; }
+}
+[t:template,n:drill_cav_01]
+{
+	category_name = "outdoor";
+	doc = "mines_drill";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model=m_i_cav_drill-01;
+		is_collidable = true;
+	}
+}
+[t:template,n:gauge_gob_01]
+{
+	category_name = "indoor";
+	doc = "gauge_3_dials";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_gauge-01; }
+}
+[t:template,n:gauge_gob_02]
+{
+	category_name = "indoor";
+	doc = "gauge_1_dial";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_gauge-02; }
+}
+[t:template,n:gauge_gob_03]
+{
+	category_name = "indoor";
+	doc = "gauge_2_dials";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_gauge-03; }
+}
+[t:template,n:gauge_gob_04]
+{
+	category_name = "indoor";
+	doc = "gauge_group";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_gauge-04; }
+}
+[t:template,n:gear_cav_01]
+{
+	category_name = "node";
+	doc = "cav_gear";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_gear-01; }
+}
+[t:template,n:gear_gob_04]
+{
+	category_name = "indoor";
+	doc = "gear_ornate_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_gear-04; }
+}
+[t:template,n:hook_csl_wall]
+{
+	category_name = "indoor";
+	doc = "chain_with hook";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_csl_hook-wall; }
+}
+[t:template,n:ironmaiden_csl]
+{
+	category_name = "indoor";
+	doc = "iron maiden";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_csl_ironmaiden; }
+}
+[t:template,n:nut_gob_01]
+{
+	category_name = "indoor";
+	doc = "nut";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_nut; }
+}
+[t:template,n:pipe_gob_01]
+{
+	category_name = "indoor";
+	doc = "pipe_straight_sm";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_pipe-01; }
+}
+[t:template,n:pipe_gob_02]
+{
+	category_name = "indoor";
+	doc = "pipe_straight_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_pipe-02; }
+}
+[t:template,n:pipe_gob_03]
+{
+	category_name = "indoor";
+	doc = "pipe_turn_center";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_pipe-03; }
+}
+[t:template,n:pipe_gob_04]
+{
+	category_name = "indoor";
+	doc = "pipe_turn_end";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_pipe-04; }
+}
+
+[t:template,n:flag_glb_legion]
+{
+	category_name = "outdoor";
+	doc = "legion_flag";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model=m_i_glb_legion-flag; 
+		[textures]	{0=b_i_glb_legion-flag;}
+	}
+}
+
+[t:template,n:gravemaker]
+{
+	category_name = "outdoor";
+	doc = "gravemaker";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_gravemaker; }
+}
+
+[t:template,n:metal_glb_pile_01]
+{
+	category_name = "outdoor";
+	doc = "metal scraps";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model=m_i_glb_metal-01; 
+		[textures]	{0=b_i_glb_metal-01;}
+	}
+}
+
+[t:template,n:post_csl_whipping]
+{
+	category_name = "indoor";
+	doc = "post_whipping";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_csl_post-whipping; }
+}
+[t:template,n:rack_csl_torture]
+{
+	category_name = "indoor";
+	doc = "rack_torture";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_csl_torture-rack; }
+}
+[t:template,n:rack_csl_armor]
+{
+	category_name = "indoor";
+	doc = "rack_armor";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model = m_i_csl_rack-armor; 
+		[textures]	{0=b_i_csl_rack-armor;}
+	}
+}
+[t:template,n:rack_csl_weapons]
+{
+	category_name = "indoor";
+	doc = "rack_weapons";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model = m_i_csl_rack-weapon; 
+		[textures]	
+		{
+			0 = b_w_weapons;
+			1 = b_i_csl_rack-weapon;
+		}
+	}
+}
+[t:template,n:rack_csl_weapons_02]
+{
+	category_name = "indoor";
+	doc = "rack_weapons_empty";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model = m_i_csl_rack; 
+		[textures]	
+		{
+			0 = b_w_weapons;
+			1 = b_i_csl_rack-weapon;
+		}
+	}
+}
+[t:template,n:rack_csl_weapons_03]
+{
+	category_name = "indoor";
+	doc = "rack_weapons_empty";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model = m_i_csl_rack-weapon-empty; 
+		[textures]	
+		{
+			0 = b_i_csl_rack-weapon-empty;
+		}
+	}
+}
+[t:template,n:roller_cav_01]
+{
+	category_name = "node";
+	doc = "mines_roller";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_roller-01; }
+}
+
+[t:template,n:spit_grs_01]
+{
+	category_name = "dead";
+	doc = "spit_deer";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_grs_spit-01; }
+}
+[t:template,n:stick_des_skull_01]
+{
+	category_name = "dead";
+	doc = "post_with skulls";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_des_pole-skull-01; }
+}
+[t:template,n:stick_glb_head_01]
+{
+	category_name = "dead";
+	doc = "post_head";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_stick-head-01; }
+}
+[t:template,n:strawman_glb_01]
+{
+	category_name = "outdoor";
+	doc = "target_strawman_sword";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_strawman-01; }
+}
+[t:template,n:strawman_glb_02]
+{
+	category_name = "outdoor";
+	doc = "target_strawman_old";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_strawman-02; }
+}
+[t:template,n:table_glb_stump]
+{
+	category_name = "indoor";
+	doc = "table_stump with phoenix";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_table-stump; }
+}
+[t:template,n:target_glb_01]
+{
+	category_name = "outdoor";
+	doc = "target_bullseye";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_target-01; }
+}
+[t:template,n:tent_grs_camp]
+{
+	category_name = "outdoor";
+	doc = "tent_hide";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_grs_tent-camp; }
+}
+[t:template,n:tripod_grs_01]
+{
+	category_name = "outdoor";
+	doc = "tripod";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_grs_tripod-01; }
+}
+[t:template,n:valve_gob_01]
+{
+	category_name = "indoor";
+	doc = "valve_sm";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_gob_valve-01; }
+}

@@ -1,0 +1,91 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :	gameplaymon.skrit (Skritbot)
+// Author(s):  	Bartosz Kijanka
+//
+// Summary  :  	Log basic party stats during gameplay
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property float	period$	= 60			doc = "Sample period, in seconds.";
+
+
+
+
+////////////////////////////////////////
+//	Startup$
+startup state STARTUP$
+{
+	event OnEnterState$
+	{
+		GpConsole.Execute( "report enable gameplay" );
+		GpConsole.Execute( "report filelog gameplay" );
+		SetState Wait$;
+	}
+}
+
+
+////////////////////////////////////////
+//	Wait$
+state Wait$
+{
+	transition -> TakeSample$ :  OnTimer( 1 );
+
+	event OnEnterState$
+	{
+		this.CreateTimer( 1, period$ );
+	}
+}
+
+
+////////////////////////////////////////
+//	TakeSample$
+state TakeSample$
+{
+	event OnEnterState$
+	{
+		Go party$ = Server.GetScreenParty();
+		if( party$ == NULL  )
+		{
+			return;
+		}
+
+		report.report(  "gameplay", "\n\n\n\n" );
+		report.report(  "gameplay", "//===============================================================================\n" );
+		report.reportf( "gameplay", "[gametime=%2.2f] - Screen Party Skritbot Report\n", WorldTime.Time );
+		report.report(  "gameplay", "//-------------------------------------------------------------------------------\n" );
+
+		int i$ = 0;
+
+		while( i$ != party$.Children.Size )
+		{
+			Go member$ = party$.Children.Get( i$ );
+
+			report.report(  "gameplay", "\n\n//-------------------------------------------------------------------------------------------------------\n" );
+			report.report(  "gameplay", "//STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS STATS\n\n" ) ;
+			AIQuery.DumpActorStats( member$, GamePlayContext() );
+
+			report.report(  "gameplay", "\n\n//-------------------------------------------------------------------------------------------------------\n" );
+			report.report(  "gameplay", "//MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND MIND\n\n" );
+			member$.Mind.Dump( true, GamePlayContext() );
+
+			report.report(  "gameplay", "\n\n//-------------------------------------------------------------------------------------------------------\n" );
+			report.report(  "gameplay", "//INVENTORY  INVENTORY INVENTORY INVENTORY INVENTORY INVENTORY INVENTORY INVENTORY INVENTORY INVENTORY\n\n" );
+			member$.Inventory.Dump( true, GamePlayContext() );
+
+			report.report(  "gameplay", "\n\n//-------------------------------------------------------------------------------------------------------\n" );
+			report.report(  "gameplay", "//ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT ASPECT\n\n" );
+			MCPManager.Dump( member$.Goid, GamePlayContext() );
+
+			report.report(  "gameplay", "//-------------------------------------------------------------------------------\n" );
+
+			i$ += 1;
+		}
+
+		SetState Wait$;
+	}
+}

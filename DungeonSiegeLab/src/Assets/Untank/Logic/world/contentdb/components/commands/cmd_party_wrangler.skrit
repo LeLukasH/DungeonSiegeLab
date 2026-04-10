@@ -1,0 +1,148 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_party_wrangler.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$       	= true;
+property string _doc$               	= "Get the party to behave durring an NIS.";
+property string _required_component$	= "placement";
+
+property bool	neutralize$				= true		doc = "make the party neutral.";
+property bool	freeze$					= false		doc = "freeze the party.";
+property bool	invisible$				= false		doc = "make the party invisible";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+// local states
+
+#only( dev ) 
+[[ 
+event OnGoDrawDebugHud$
+{
+	if( neutralize$ )
+    {
+    	World.DrawDebugPoint( owner.Go.Placement.Position, 0.3, MakeColor( 0.0, 1.0, 0.0 ), 0.333 , "Neutralizing" , MakeColor( 1.0, 1.0, 1.0 ));
+	}
+	
+	if( freeze$ )
+    {
+    	World.DrawDebugPoint( owner.Go.Placement.Position, 0.3, MakeColor( 0.0, 1.0, 0.0 ), 0.5 , "Freezing" , MakeColor( 1.0, 1.0, 1.0 ));
+	}
+	
+	if( invisible$ )
+    {
+    	World.DrawDebugPoint( owner.Go.Placement.Position, 0.3, MakeColor( 0.0, 1.0, 0.0 ), 0.666 , "Hiding" , MakeColor( 1.0, 1.0, 1.0 ));
+	}
+}
+]] 
+
+trigger OnGoHandleMessage$( WE_REQ_ACTIVATE )
+{
+	Go party$ = Server.ScreenParty;
+	if ( party$ == NULL )
+	{
+		// we are boned.
+		return;	
+	}
+	
+	int i$ = 0;
+	int iend$ = party$.Children.Size();
+	Go Child$;
+	while( i$ < iend$ )
+	{
+		Child$ = party$.Children.Get( i$ );
+	
+		if( Child$ != NULL )
+		{
+			if( neutralize$ )
+			{
+				Child$.Mind.TempGopColl1.clear;
+				Child$.Mind.GetEngagedMeEnemies( Child$.Mind.TempGopColl1 );
+				
+				int j$ = 0;
+				int jend$ = Child$.Mind.TempGopColl1.Size();
+				
+				Go Enemy$;
+				
+				while( j$ < jend$ )
+				{
+					Enemy$ = Child$.Mind.TempGopColl1.Get( j$ );
+					if( Enemy$ != NULL )
+					{
+						Enemy$.Mind.SDoJob( MakeJobReq( JAT_STOP, JQ_ACTION, QP_CLEAR, AO_COMMAND ));
+						Enemy$.Mind.ResetSensors();
+				
+					}
+					j$ += 1;   
+				}	
+				
+				Child$.Actor.SSetalignment( AA_NEUTRAL );
+				Child$.Aspect.SetIsInvincible( true );
+				Child$.Mind.ResetSensors();
+				Child$.Mind.SDoJob( MakeJobReq( JAT_STOP, JQ_ACTION, QP_CLEAR, AO_COMMAND ));
+			}
+			
+			if( freeze$ )
+			{
+				Child$.Mind.SetActorAutoFidgets( false );
+				Child$.Aspect.AspectHandle.SetLockMeshFlag(true);
+			}
+			
+			if( invisible$ )
+			{
+				Child$.Aspect.AspectHandle.SetHideMeshFlag( true );
+			}
+		}
+		i$ += 1;
+	}
+}
+
+trigger OnGoHandleMessage$( WE_REQ_DEACTIVATE )
+{
+	Go party$ = Server.ScreenParty;
+	if ( party$ == NULL )
+	{
+		// we are boned.
+		return;	
+	}
+	
+	int i$ = 0;
+	int iend$ = party$.Children.Size();
+	Go Child$;
+	while( i$ < iend$ )
+	{
+		Child$ = party$.Children.Get( i$ );
+
+		if( Child$ != NULL )
+		{	
+			if( neutralize$ )
+			{
+				Child$.Actor.SSetalignment( AA_GOOD );
+				Child$.Aspect.SetIsInvincible( false );
+				Child$.Mind.ResetSensors();
+			}
+			if( freeze$ )
+			{
+				Child$.Mind.SetActorAutoFidgets( true );
+				Child$.Aspect.AspectHandle.SetLockMeshFlag( false );
+			}
+			
+			if( invisible$ )
+			{
+				Child$.Aspect.AspectHandle.SetHideMeshFlag( false );
+			}
+		}
+		i$ += 1;
+	}
+}

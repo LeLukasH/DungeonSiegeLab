@@ -1,0 +1,7 @@
+[t:sed,n:s_e_call_zaurask_zombie_archer_SED]
+{
+	sound_effect_file = "s_e_call_zaurask_zombie";
+	//max_simultaneous_samples = 2;
+	min_playback_rate = 1.05;
+	max_playback_rate = 1.50;
+}

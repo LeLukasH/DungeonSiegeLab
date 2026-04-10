@@ -1,0 +1,6 @@
+[t:tsd,n:b_i_glb_mist-small-a]
+{
+	hasalpha = true;
+	layer1texture1 = b_i_glb_mist-small-a;
+	texturedetail = 1;
+}

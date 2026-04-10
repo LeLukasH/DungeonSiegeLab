@@ -1,0 +1,117 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	job_do_se_command.skrit
+
+	Author(s)	: 	Bartosz Kijanka
+
+	Purpose		: 	Try to start the SE command, an if it's not available,
+					improvise by just wandering about.
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+GoMind	m_Mind$;
+GoBody  m_Body$;
+Job		m_Job$;
+
+
+startup state Startup$
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.GetGo;
+	m_Mind$		= job$.GetGo.GetMind;
+	m_Body$		= job$.GetGo.GetBody;
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+
+	SetState AttemptingToStartCommand$;
+}
+
+
+event OnWorldMessage$( eWorldEvent /*e$*/, WorldMessage /*message$*/ )
+{
+}
+
+
+state AttemptingToStartCommand$
+{
+	event OnEnterState$
+	{
+		if( !MakeScid( m_Job$.Int1 ).IsValid() )
+		{
+			report.warningf( "Job 'job_do_se_command.skrit' for %s ( Scid 0x%08x ) - was asked to execute invalid command Scid ( 0x%08x ).  Check your content.", 
+								m_Go$.TemplateName,
+								MakeInt( m_Go$.Scid ),
+								m_Job$.Int1
+							);
+			m_Job$.MarkForDeletion();
+			return;
+		}
+
+		Goid commandGoid$ = GoDb.FindGoidByScid( MakeScid( m_Job$.Int1 ) );
+		Go nextCommand$ = commandGoid$.Go;
+
+		if( nextCommand$ != NULL )
+		{
+			if( !nextCommand$.IsCommand )
+			{
+				report.errorf( "Job 'job_do_se_command.skrit' for %s:scid 0x%08x - next command is not a command Go.\nCheck content: make sure this Go's command or command chain are all valid Command Gos.",
+								m_Go$.TemplateName, m_Go$.Scid );
+				return;
+			}
+
+			if( nextCommand$.IsInAnyWorldFrustum )
+			{
+				SendWorldMessage( WE_REQ_ACTIVATE, m_Go$.Goid, commandGoid$, MakeInt( m_Go$.Goid ) );
+				m_Job$.MarkForDeletion();
+				return;
+			}
+		}
+		else
+		{
+			SetState( Wandering$ );
+		}
+	}
+}
+
+
+state Wandering$
+{
+	transition
+	{
+		-> AttemptingToStartCommand$:	OnWorldMessage( WE_MCP_SECTION_COMPLETED );
+		-> AttemptingToStartCommand$:	OnWorldMessage( WE_MCP_INVALIDATED );
+		-> Wandering$:					OnWorldMessage( WE_JOB_TIMER_DONE );
+	}
+
+	event OnEnterState$
+	{
+		if( AIQuery.GetTerrainPosition( m_Job$.InitPosition, Math.RandomFloat( 1.0, 2.0 ), m_Mind$.TempPos1 ) )
+		{
+//			m_Job$.ReqPlan( MakePlanReq( m_Go$.Goid, PL_WALK, m_Mind$.TempPos1, 0.01 ) );
+			MCPManager.MakeRequest( m_Go$.Goid, PL_APPROACH, m_Mind$.TempPos1, 0.01 );
+		}
+		else
+		{
+			m_Job$.SetTimer( 0.1 );
+		}
+	}
+}

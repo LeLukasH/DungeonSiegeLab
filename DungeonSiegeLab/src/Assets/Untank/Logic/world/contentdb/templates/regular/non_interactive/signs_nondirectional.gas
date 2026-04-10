@@ -1,0 +1,646 @@
+[t:template,n:base_sign_nondirectional]
+{
+	category_name = "sign";
+	doc = "base template for directional signs";
+	specializes = interactive;
+	[aspect]
+	{
+		lodfi_lower = 0;
+		lodfi_upper = 0;
+
+		draw_selection_indicator = false;
+		is_selectable = true;
+	}
+	[common]
+	{
+		rollover_display = true;
+	}
+}
+[t:template,n:sign_glb_barn_01]
+{
+	doc = "barn_jack and mare";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-barn-01;
+	}
+	[common]
+	{
+		screen_name = "The Jack & Mare";
+	}
+}
+[t:template,n:sign_glb_barn_02]
+{
+	doc = "sign_glb_barn";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-barn-01;
+		[textures]
+		{
+			0 = b_i_glb_sign-barn-02;
+		}
+	}
+	[common]
+	{
+		screen_name = "Corral";
+	}
+}
+[t:template,n:sign_glb_barn_03]
+{
+	doc = "sign_glb_barn_grnd";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-generic;
+		[textures]
+		{
+			0 = b_i_glb_sign-barn-03;
+		}
+	}
+	[common]
+	{
+		screen_name = "Corral";
+	}
+}
+[t:template,n:sign_glb_blacksmith_01]
+{
+	doc = "blcksmth_blck hammer forge";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-blksmith-01;
+	}
+	[common]
+	{
+		screen_name = "Black Hammer Forge";
+	}
+}
+[t:template,n:sign_glb_blacksmith_02]
+{
+	doc = "sign_glb_blcksmith";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-blksmith-01;
+		[textures]
+		{
+			0 = b_i_glb_sign-blksmith-02;
+		}
+	}
+	[common]
+	{
+		screen_name = "Smithy";
+	}
+}
+[t:template,n:sign_glb_blacksmith_03]
+{
+	doc = "sign_glb_blcksmith_grnd";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-generic;
+		[textures]
+		{
+			0 = b_i_glb_sign-blksmith-03;
+		}
+	}
+	[common]
+	{
+		screen_name = "Smithy";
+	}
+}
+[t:template,n:sign_glb_generalstore_01]
+{
+	doc = "sign_glb_generalstore_grnd";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-generic;
+		[textures]
+		{
+			0 = b_i_glb_sign-generalstore-01;
+		}
+	}
+	[common]
+	{
+		screen_name = "General Store";
+	}
+}
+[t:template,n:sign_glb_hallskull]
+{
+	doc = "hall_of_skulls";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+
+		model = m_i_glb_sign-hallskulls;
+	}
+	[common]
+	{
+		screen_name = "Hall of Skulls";
+	}
+}
+[t:template,n:sign_glb_inn_01]
+{
+	doc = "inn_etans roost";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+
+		model = m_i_glb_sign-inn-01;
+	}
+	[common]
+	{
+		screen_name = "Etan's Roost";
+	}
+}
+[t:template,n:sign_glb_inn_02]
+{
+	doc = "sign_glb_inn";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-inn-01;
+		[textures]
+		{
+			0 = b_i_glb_sign-inn-02;
+		}
+	}
+	[common]
+	{
+		screen_name = "Inn";
+	}
+}
+[t:template,n:sign_glb_inn_03]
+{
+	doc = "sign_glb_inn_grnd";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-generic;
+		[textures]
+		{
+			0 = b_i_glb_sign-inn-03;
+		}
+	}
+	[common]
+	{
+		screen_name = "Inn";
+	}
+}
+[t:template,n:sign_glb_magicshop_01]
+{
+	doc = "sign_glb_magic_grnd";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-generic;
+		[textures]
+		{
+			0 = b_i_glb_sign-magicshop-01;
+		}
+	}
+	[common]
+	{
+		screen_name = "Ye Olde Magic Shoppe";
+	}
+}
+[t:template,n:sign_glb_wesrins_cross]
+{
+	doc = "sign_glb_wesrins_cross";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-wesrins-cross;
+	}
+	[common]
+	{
+		screen_name = "Wesrin Cross";
+	}
+}
+[t:template,n:sign_grs_blacksmith]
+{
+	doc = "sign_blacksmith";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-blacksmith;
+	}
+	[common]
+	{
+		screen_name = "Smithy";
+	}
+}
+[t:template,n:sign_grs_tavern]
+{
+	doc = "sign_tavern";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-tavern;
+	}
+	[common]
+	{
+		screen_name = "Tavern";
+	}
+}
+[t:template,n:sign_ice_barn_01]
+{
+	doc = "glacern_barn";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-barn-01;
+	}
+	[common]
+	{
+		screen_name = "Frozen Yak Corral";
+	}
+}
+[t:template,n:sign_ice_barn_02]
+{
+	doc = "sign_ice_barn_grnd";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-barn-01;
+		[textures]
+		{
+			0 = b_i_ice_sign-barn-02;
+		}
+	}
+	[common]
+	{
+		screen_name = "Corral";
+	}
+}
+[t:template,n:sign_ice_blacksmith_01]
+{
+	doc = "sign_ice_blacksmith_grnd";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-barn-01;
+		[textures]
+		{
+			0 = b_i_ice_sign-blksmith-01;
+		}
+	}
+	[common]
+	{
+		screen_name = "Smithy";
+	}
+}
+[t:template,n:sign_ice_blacksmith_02]
+{
+	doc = "ice_molten iron smithery";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-barn-01;
+		[textures]
+		{
+			0 = b_i_ice_sign-blksmith-02;
+		}
+	}
+	[common]
+	{
+		screen_name = "Molten Iron Smithery";
+	}
+}
+[t:template,n:sign_ice_generalstore_01]
+{
+	doc = "sign_ice_generalstore_grnd";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-barn-01;
+		[textures]
+		{
+			0 = b_i_ice_sign-generalstore-01;
+		}
+	}
+	[common]
+	{
+		screen_name = "General Store";
+	}
+}
+[t:template,n:sign_ice_glacern_gate]
+{
+	doc = "glacern";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-glacern-gate;
+	}
+	[common]
+	{
+		screen_name = "Glacern";
+	}
+}
+[t:template,n:sign_ice_inn_01]
+{
+	doc = "glacern_inn";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-inn-01;
+	}
+	[common]
+	{
+		screen_name = "Lucky Hurggis Inn";
+	}
+}
+[t:template,n:sign_ice_inn_02]
+{
+	doc = "sign_ice_inn";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-inn-01;
+		[textures]
+		{
+			0 = b_i_ice_sign-inn-02;
+		}
+	}
+	[common]
+	{
+		screen_name = "Inn";
+	}
+}
+[t:template,n:sign_ice_inn_03]
+{
+	doc = "sign_ice_inn_grnd";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-barn-01;
+		[textures]
+		{
+			0 = b_i_ice_sign-inn-03;
+		}
+	}
+	[common]
+	{
+		screen_name = "Inn";
+	}
+}
+[t:template,n:sign_ice_magicshop_01]
+{
+	doc = "glacern_magicatorium";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model 			= m_i_ice_sign-magicshop-01;
+		is_collidable   = true;
+		does_block_path = true;
+	}
+	[common]
+	{
+		screen_name = "Onoc's Magicatorium";
+	}
+}
+[t:template,n:sign_ice_magicshop_02]
+{
+	doc = "sign_ice_magic_grnd";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-magicshop-01;
+		[textures]
+		{
+			0 = b_i_ice_sign-magicshop-02;
+		}
+	}
+	[common]
+	{
+		screen_name = "Ye Olde Magic Shoppe";
+	}
+}
+[t:template,n:sign_ice_mountainman]
+{
+	doc = "Jeriahs_trading_post";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-mountainman;
+	}
+	[common]
+	{
+		screen_name = "Jeriah's Trading Post";
+	}
+}
+[t:template,n:sign_glb_coughin_jak]
+{
+	doc = "sign_glb_coughin_jak";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-coughin-jak;
+		textures:0 = b_t_dm00_Stove-n-Sign;
+	}
+	[common]
+	{
+		screen_name = "Coughin Jak";
+	}
+}
+[t:template,n:sign_glb_stonebridge_gate]
+{
+	doc = "sign_glb_stonebridge_gate";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-stonebridge-gate;
+		textures:0 = b_t_bt_facemaps-1;
+	}
+	[common]
+	{
+		screen_name = "Stonebridge";
+	}
+}
+[t:template,n:sign_glb_shrine_of_passion]
+{
+	doc = "sign_glb_shrine_of_passion";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-shrineofpassion;
+		textures:0 = b_t_bt_chapel-sign;
+	}
+	[common]
+	{
+		screen_name = "Shrine of Passion";
+	}
+}
+[t:template,n:sign_glb_fortress_kroth_03]
+{
+	doc = "sign_glb_fortress_kroth_03";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-fortress-kroth-03;
+		textures:0 = b_i_glb_sign-fortress-kroth-03;
+	}
+	[common]
+	{
+		screen_name = "Fortress Kroth";
+	}
+}
+[t:template,n:sign_cav_glitterdelve_03]
+{
+	doc = "glitterdelve";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_cav_sign-glitterdelve-03;
+		[textures]
+		{
+			0 = b_i_cav_sign-glitterdelve-03;
+		}
+	}
+	[common]
+	{
+		screen_name = "Glitterdelve";
+	}
+}
+[t:template,n:sign_glb_beware]
+{
+	doc = "beware";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-beware;
+		textures:0 = b_i_glb_sign-beware;
+	}
+	[common]
+	{
+		screen_name = "Beware!";
+	}
+}
+[t:template,n:sign_glb_no_return]
+{
+	doc = "no_return";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_glb_sign-no-return;
+		textures:0 = b_i_glb_sign-no-return;
+	}
+	[common]
+	{
+		screen_name = "No Return!";
+	}
+}
+[t:template,n:sign_grs_elddim]
+{
+	doc = "plaque_elddim";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-glacern-gate;
+		textures:0 = b_i_grs_sign-elddim;
+	}
+	[common]
+	{
+		screen_name = "Elddim";
+	}
+}
+[t:template,n:sign_grs_crystwind]
+{
+	doc = "plague_crystwind";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-glacern-gate;
+		textures:0 = b_i_grs_sign-crystwind;
+	}
+	[common]
+	{
+		screen_name = "Crystwind";
+	}
+}
+[t:template,n:sign_ice_fallraen]
+{
+	doc = "plaque_fallraen";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-glacern-gate;
+		textures:0 = b_i_ice_sign-fallraen;
+	}
+	[common]
+	{
+		screen_name = "Fallraen";
+	}
+}
+[t:template,n:sign_grs_meren]
+{
+	doc = "plaque_meren";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-glacern-gate;
+		textures:0 = b_i_grs_sign-meren;
+	}
+	[common]
+	{
+		screen_name = "Meren";
+	}
+}
+[t:template,n:sign_swp_lang]
+{
+	doc = "plaque_lang";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-glacern-gate;
+		textures:0 = b_i_swp_sign-lang;
+	}
+	[common]
+	{
+		screen_name = "Lang";
+	}
+}
+[t:template,n:sign_des_quillrabe]
+{
+	doc = "plaque_quillrabe";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-glacern-gate;
+		textures:0 = b_i_des_sign-quillrabe;
+	}
+	[common]
+	{
+		screen_name = "Quillrabe";
+	}
+}
+[t:template,n:sign_grs_hiroth]
+{
+	doc = "plaque_hiroth";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-glacern-gate;
+		textures:0 = b_i_grs_sign-hiroth;
+	}
+	[common]
+	{
+		screen_name = "Hiroth";
+	}
+}
+[t:template,n:sign_des_grescal]
+{
+	doc = "plaque_grescal";
+	specializes = base_sign_nondirectional;
+	[aspect]
+	{
+		model = m_i_ice_sign-glacern-gate;
+		textures:0 = b_i_des_sign-grescal;
+	}
+	[common]
+	{
+		screen_name = "Grescal";
+	}
+}

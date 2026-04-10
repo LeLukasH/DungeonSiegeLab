@@ -1,0 +1,147 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  DSX_k_inc_spl_utils.skrit
+// Author(s):  Tara Teich
+//
+// Copyright © 2003 Mad Doc Software.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+
+//string get_potion_type$( int amount$ )
+//{
+	// looks like I'll have to hard-code the amounts of the potions - my query doesn't seem to work
+	//string template_query$ = "";
+	//int potion_amt$ = 0.0;
+	//StringTool.Appendf(template_query$, "potion_health_%s:enchantments:max_value", "super");
+	//potion_amt$ = contentdb.GetTemplateInt( template_query$, 0 );
+	//return potion_amt$;
+//}
+
+// Clears the minds of all creatures that are currently engaging the target.
+void ClearEngaged$(Goid target$)
+{
+	// clear the go collection and refill it with the enemies that are engaging.
+	target$.Go.Mind.TempGopColl1.Clear;
+	target$.Go.Mind.GetEngagedMeEnemies(target$.Go.Mind.TempGopColl1);
+
+	int i$ = 0;
+	int iend$ = target$.Go.Mind.TempGopColl1.Size();
+	Go temp$;
+
+	// loop through the engaged characters
+	while( i$ < iend$ )
+	{
+		// get the character
+		temp$ = target$.Go.Mind.TempGopColl1.Get( i$ );
+
+		// free their mind and their arse will follow
+		temp$.Mind.Clear(JQ_ACTION);
+
+		// increment i$
+		i$ = i$ + 1;
+	}
+}
+
+void StopFriendsAttackingMe$(Goid target$, float radius$)
+{
+	// clear the go collection and refill it with the friends within the given radius
+	target$.Go.Mind.TempGopColl1.Clear;
+	target$.Go.Mind.GetFriendsInSphere( radius$, target$.Go.Mind.TempGopColl1 );
+
+	int i$ = 0;
+	int iend$ = target$.Go.Mind.TempGopColl1.Size();
+	Go temp$;
+
+	while( i$ < iend$ )
+	{
+		temp$ = target$.Go.Mind.TempGopColl1.Get( i$ );
+
+		// if my friend has a mind
+		if (temp$.hasmind)
+		{
+			// clear its action queue, it's attacking me
+			temp$.Mind.Clear(JQ_ACTION);
+					
+			//Report.Genericf("Stopping friend %s from attacking %s\n", temp$.templatename, target$.go.templatename);
+		}
+		
+		// increment i$
+		i$ += 1;		
+	}	
+}
+
+// Functionality used by several of the potion functions
+//		given if it's health or mana potion, the potion amount, and a target used for the location
+Goid CreatePotion$( bool makeHealth$, float potionAmt$, Goid target$ )
+{
+	string potionType$;
+
+	// if it is supposed to be a health potion --
+	if (makeHealth$)
+	{
+		if (potionAmt$ <= 200)
+		{
+			StringTool.Assign(potionType$, "potion_health_small");
+		}
+		else if (potionAmt$ <= 400)
+		{
+			StringTool.Assign(potionType$, "potion_health_medium");
+		}
+		else if (potionAmt$ <= 1000)
+		{
+			StringTool.Assign(potionType$, "potion_health_large");
+		}
+		else
+		{
+			StringTool.Assign(potionType$, "potion_health_super");
+			// don't let the potion amount be over the max amount for the potion
+			if (potionAmt$ > 2000)
+			{
+				potionAmt$ = 2000;
+			}
+		}
+	}
+	else
+	{
+		// we're making a mana potion - what size?
+		if (potionAmt$ <= 200)
+		{
+			StringTool.Assign(potionType$, "potion_mana_small");
+		}
+		else if (potionAmt$ <= 500)
+		{
+			StringTool.Assign(potionType$, "potion_mana_medium");
+		}
+		else if (potionAmt$ <= 1400)
+		{
+			StringTool.Assign(potionType$, "potion_mana_large");
+		}
+		else
+		{
+			StringTool.Assign(potionType$, "potion_mana_super");
+			// don't let the potion amount be over the max amount for the potion
+			if (potionAmt$ > 2500)
+			{
+				potionAmt$ = 2500;
+			}
+		}
+	}
+
+	// clone request
+	GoCloneReq cloneReq$ = MakeGoCloneReq( potionType$ );
+
+	// set the location to that of the passed in object
+	cloneReq$.StartingPos = target$.go.placement.position;
+	cloneReq$.SnapToTerrain = true;
+
+	// create the potion
+	Goid potion$ = GoDb.SCloneGo( cloneReq$ );
+	// set the amount of the potion to the appropriate amt
+	potion$.Go.Magic.SSetPotionAmountReally(potionAmt$);
+
+	// return the created object
+	return potion$;
+}

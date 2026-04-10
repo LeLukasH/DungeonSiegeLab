@@ -1,0 +1,145 @@
+// purpose:  TestWAV ...  BW  11/16/2001
+
+/* use cmd line args - skritbot=auto\test\testWAV  skrit_retry=true  map=Halo_Test_Map teleport=start wav=#s_e_ambient_bird1
+				       skritbot=auto\test\testWAV skrit_retry=true   map=Halo_Test_Map teleport=start wav=#S_E_call_spider
+   wav can be any name without extension in sound\Effects subfolder of bits
+   
+   test newly fex'd functions for ensuring game is not paused in event of assert or error
+   bw  1/25/02 time f_MAXTime$ under control of db harness
+*/
+
+owner = GoSkritComponent;
+
+#include "LogOut.skrit"
+
+property float	period$	=   0.02			doc = "Sample period, in seconds.";
+
+Go				m_Go$;
+string          m_statement$;  // for log output
+property string	wav$ = "";
+string			sWavName$;
+bool			BExiting$ = false, bResponse$;
+int				i$;
+float           f_MAXTime$ = 17.0;
+
+startup state S$ trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+{
+	if ( (WorldState.CurrentState == WS_SP_INGAME) || (WorldState.CurrentState == WS_MP_INGAME) )
+	{
+		myinit$(__NAME__);
+		
+		setstate SInGame2$;
+	}
+}
+
+state SInGame2$
+{
+ 	FInGame$ at ( 5 frames )
+	{
+		Go party$ = Server.GetScreenParty();
+			
+//		logState$("SInGame2$");
+		debug.AssertF(party$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+		
+		m_Go$ = party$.Children.Get( 0 );
+		if ( m_Go$ == NULL  )
+		{
+//			report.generic("HERO returned NULL\n");
+			logout$(nFAIL$, "SETUP", "Could not find Screen Party [essential]");
+			setstate Ext$;
+		}
+		else
+		{				
+			// in this config ref, looking for arg passed by vb app; default is killing fist, if no arg is found
+			if (wav$ > "") 
+			{
+				sWavName$ = wav$;
+			}
+			else
+			{
+				sWavName$ = config.GetString("wav", "#ambient_bird1/");
+			}
+			f_MAXTime$ = config.GetFloat("MAXTime", 0.00);
+			if (f_MAXTime$ < 0.2) // ensure reasonable values
+			{
+				f_MAXTime$ = 17.000;
+			}  
+		
+			StringTool.AssignF(m_statement$, "asking to play %s...", sWavName$);
+			logout$(nINFO$, "AUTOMATION", m_statement$);	
+		
+			m_Go$.playVoiceSound(sWavName$, true);
+
+			setstate wait$;
+		}
+	}
+}
+
+
+////////////////////////////////////////
+//	Wait$
+state Wait$
+{
+	transition -> TakeSample$ :  OnTimer( 1 );
+
+	event OnEnterState$
+	{
+		if ( (WorldState.CurrentState == WS_SP_OUTRO ) || (WorldState.CurrentState == WS_MP_SESSION_LOST ) )
+		{	
+			BExiting$ = true;
+		}
+		else
+		{
+			this.CreateTimer( 1, period$ );
+			i$ += 1;
+		}
+	}
+}
+
+////////////////////////////////////////
+//	TakeSample$
+state TakeSample$	
+{
+	event OnEnterState$
+	{
+// last chance to guarantee completion, ready or not, within f_MAXTime$ seconds
+		ensure_game_not_paused$();
+		if (WorldTime.Time > f_MAXTime$ )  //    
+		{
+			Stringtool.AssignF(m_statement$, "exiting because TIME exceeds %f seconds", f_MAXTime$ );
+			logout$(nINFO$, "AUTOMATION", m_statement$);
+			BExiting$ = true;
+		}
+		if (BExiting$)
+		{
+			setstate Ext$;
+		}
+		else
+		{
+			setstate Wait$;		// re-evaluate in period$ secs.			
+		}
+	}
+}
+
+state Ext$
+{
+	event OnEnterState$
+	{
+/*		if (bOpptDead$)
+		{
+			StringTool.AssignF(m_statement$, "%s was broken / killed / damaged.", m_OpptTemp$);
+			logout$(nPass$, "CRITERIA", m_statement$);
+		}
+		else
+		{
+			StringTool.AssignF(m_statement$, "%s was not broken / killed / damaged.", m_OpptTemp$);
+			logout$(nFail$, "CRITERIA", m_statement$);
+		}
+*/
+
+		mydeinit$(__NAME__);
+		bResponse$ = GpConsole.Execute( "exit\n");          // out of here
+		debug.AssertF(bResponse$, "state TakeSample$ %s line %d", __NAME__, __LINE__);		
+	}
+}
+

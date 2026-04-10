@@ -1,0 +1,5 @@
+[t:tsd,n:b_d_rug-yellow]
+{
+	layer1texture1 = b_d_rug-yellow;
+  i texturedetail = 2;
+}

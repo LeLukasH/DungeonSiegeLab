@@ -1,0 +1,311 @@
+// Animation Skrit: robo_suit_flamethrower
+//
+// History:
+//		VERSION 1.0:	Initial implementation
+//		VERSION 2.0:	Added support to aim at an enemy.
+//
+// Custon skrit made just for the robo_suit
+//												
+
+property int MAJORVERSION$ = 2;
+property int MINORVERSION$ = 0;
+
+owner = Aspect;
+
+float angle1$ = 0;
+float angle2$ = 0;
+float angle3$ = 0;
+float angle4$ = 0;
+float angle5$ = 0;
+float angle6$ = 0;
+float angle7$ = 0;
+float angle8$ = 0;
+float time$ = 0;
+float time2$ = 0;
+float dif1$ = 0.0;
+float dif2$ = 0.0;
+bool  pos1$ = true;
+bool  pos2$ = true;
+
+/////////////////////////////////////////////////////////////////////////////
+// States
+
+startup state Animating$	
+{
+ 
+	event OnStartChore$ ( int /*subanim$*/, int /*flags$*/ )
+	{
+ 	}
+
+	event OnUpdate$( float delta_t$ )
+	{
+		float mult1$ = 0.02; 
+		float mult2$ = 0;
+		float mult3$ = 0;
+		float mult4$ = 0;
+		float mult5$ = 0;
+		float mult6$ = 0;
+		float mult7$ = 0;
+		float mult8$ = 0;
+		
+		if( time$ >= 22.0 )
+		{
+			mult1$ = 0.164;
+			mult2$ = 0.152;
+			mult3$ = 0.140;
+			mult4$ = 0.128;
+			mult5$ = 0.116;
+			mult6$ = 0.104;
+			mult7$ = 0.092;
+			mult8$ = 0.08;
+		} 
+		else if( time$ >= 20.0 )
+		{
+			mult1$ = 0.152;
+			mult2$ = 0.140;
+			mult3$ = 0.128;
+			mult4$ = 0.116;
+			mult5$ = 0.104;
+			mult6$ = 0.092;
+			mult7$ = 0.08;
+			mult8$ = 0.068;
+		} 
+		else if( time$ >= 18.0 )
+		{
+			mult1$ = 0.140;
+			mult2$ = 0.128;
+			mult3$ = 0.116;
+			mult4$ = 0.104;
+			mult5$ = 0.092;
+			mult6$ = 0.08;
+			mult7$ = 0.068;
+			mult8$ = 0.056;
+		}
+		else if( time$ >= 18.0 )
+		{
+			mult1$ = 0.128;
+			mult2$ = 0.116;
+			mult3$ = 0.104;
+			mult4$ = 0.092;
+			mult5$ = 0.08;
+			mult6$ = 0.068;
+			mult7$ = 0.056;
+			mult8$ = 0.044;
+		}
+		else if( time$ >= 16.0 )
+		{
+			mult1$ = 0.10;
+			mult2$ = 0.09;
+			mult3$ = 0.08;
+			mult4$ = 0.07;
+			mult5$ = 0.06;
+			mult6$ = 0.05;
+			mult7$ = 0.04;
+			mult8$ = 0.03;
+		}
+		else if( time$ >= 14.0 )
+		{
+			mult1$ = 0.09;
+			mult2$ = 0.08;
+			mult3$ = 0.07;
+			mult4$ = 0.06;
+			mult5$ = 0.05;
+			mult6$ = 0.04;
+			mult7$ = 0.03;
+			mult8$ = 0.02;
+		} 
+		else if( time$ >= 12.0 )
+		{
+			mult1$ = 0.08;
+			mult2$ = 0.07;
+			mult3$ = 0.06;
+			mult4$ = 0.05;
+			mult5$ = 0.04;
+			mult6$ = 0.03;
+			mult7$ = 0.02;
+		}
+		else if( time$ >= 10.0 )
+		{
+			mult1$ = 0.07;
+			mult2$ = 0.06;
+			mult3$ = 0.05;
+			mult4$ = 0.04;
+			mult5$ = 0.03;
+			mult6$ = 0.02;
+		}
+		else if( time$ >= 8.0 )
+		{
+			mult1$ = 0.06;
+			mult2$ = 0.05;
+			mult3$ = 0.04;
+			mult4$ = 0.03;
+			mult5$ = 0.02;
+		}
+		else if( time$ >= 6.0 )
+		{
+			mult1$ = 0.05;
+			mult2$ = 0.04;
+			mult3$ = 0.03;
+			mult4$ = 0.02;
+		}
+		else if( time$ >= 4.0 )
+		{
+			mult1$ = 0.04;
+			mult2$ = 0.03;
+			mult3$ = 0.02;
+		}
+		else if( time$ >= 2.0 )
+		{
+			mult1$ = 0.03;
+			mult2$ = 0.02;
+		}
+		
+		
+		if( time$ < 22.0 )
+		{	
+			time$ += delta_t$;
+		} 
+		else 
+		{
+			time2$ += ( delta_t$ * .1 );
+		}
+		
+		if (time2$ > 6.2832)
+		{
+			time2$ -= 6.2832;
+		}
+		
+		angle1$ += delta_t$ * mult1$ * 18.0 * Math.Cos( time2$ + .175 );
+		angle2$ += delta_t$ * mult2$ * 18.0 * Math.Cos( time2$ + .35 );
+		angle3$ += delta_t$ * mult3$ * 18.0 * Math.Cos( time2$ + .525 );
+		angle4$ += delta_t$ * mult4$ * 18.0 * Math.Cos( time2$ + .7 );
+		angle5$ += delta_t$ * mult5$ * 18.0 * Math.Cos( time2$ + .875 );
+		angle6$ += delta_t$ * mult6$ * 18.0 * Math.Cos( time2$ + 1.05 );
+		angle7$ += delta_t$ * mult7$ * 18.0 * Math.Cos( time2$ + 1.225 );
+		angle8$ += delta_t$ * mult8$ * 18.0 * Math.Cos( time2$ + 1.4 );
+		
+		dif1$ += delta_t$ * mult2$ * 18.0 * Math.Cos( time2$ + .35 );
+		dif2$ += delta_t$ * mult5$ * 18.0 * Math.Cos( time2$ + .875 );
+		
+		if( pos1$ && ( dif1$ < 0.0 ) )
+		{
+			pos1$ = false;
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  1, 0 );
+		}
+		if( !pos1$ && ( dif1$ > 0.0 ) )
+		{
+			pos1$ = true;
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  1, 0 );
+		}
+		if (dif1$ > 3.1416)
+		{
+			pos1$ = true;
+			dif1$ -= 3.1416;
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  1, 0 );
+		} 
+		else if (dif1$ < -3.1416)
+		{
+			pos1$ = false;
+			dif1$ += 3.1416;
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  1, 0 );
+		}
+		
+		
+		if( pos2$ && ( dif2$ < 0.0 ) )
+		{
+			pos2$ = false;
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  2, 0 );
+		}
+		if( !pos2$ && ( dif2$ > 0.0 ) )
+		{
+			pos2$ = true;
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  2, 0 );
+		}
+		if (dif2$ > 3.1416)
+		{
+			pos2$ = true;
+			dif2$ -= 3.1416;
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  2, 0 );
+		}
+		else if (dif2$ < -3.1416)
+		{
+			pos2$ = false;
+			dif2$ += 3.1416;
+			PostWorldMessage( WE_ANIM_SFX, owner.goid, owner.goid,  2, 0 );
+		}
+
+		if (angle1$ > 6.2832)
+		{
+			angle1$ -= 6.2832;
+		}
+		
+		if (angle2$ > 6.2832)
+		{
+			angle2$ -= 6.2832;
+		}
+		
+		if (angle3$ > 6.2832)
+		{
+			angle3$ -= 6.2832;
+		}
+		
+		if (angle4$ > 6.2832)
+		{
+			angle4$ -= 6.2832;
+		}
+		
+		if (angle5$ > 6.2832)
+		{
+			angle5$ -= 6.2832;
+		}
+		
+		if (angle6$ > 6.2832)
+		{
+			angle6$ -= 6.2832;
+		}
+		
+		if (angle7$ > 6.2832)
+		{
+			angle7$ -= 6.2832;
+		}
+		
+		if (angle8$ > 6.2832)
+		{
+			angle8$ -= 6.2832;
+		}
+				
+		owner.RotateBoneY("inner_ring", angle1$);
+
+		owner.RotateBoneX("inner_barring", angle2$);
+			owner.RotateBoneX("inner_ring", angle2$);
+
+		owner.RotateBoneY("inner_barring", angle3$);
+			owner.RotateBoneY("inner_ring", angle3$);
+
+		owner.RotateBoneY("middle_ring", angle4$);
+			owner.RotateBoneY("inner_barring", angle4$);
+			owner.RotateBoneY("inner_ring", angle4$);
+
+//		owner.RotateBoneX("middle_ring", angle5$);
+//			owner.RotateBoneX("inner_barring", angle5$);
+//			owner.RotateBoneX("inner_ring", angle5$);
+
+		owner.RotateBoneX("outter_barring", angle5$);		
+			owner.RotateBoneX("middle_ring", angle5$);
+			owner.RotateBoneX("inner_barring", angle5$);
+			owner.RotateBoneX("inner_ring", angle5$);
+		
+		owner.RotateBoneY("outter_barring", angle6$);		
+			owner.RotateBoneY("middle_ring", angle6$);
+			owner.RotateBoneY("inner_barring", angle6$);
+			owner.RotateBoneY("inner_ring", angle6$);
+
+		owner.RotateBoneY("outter_ring", angle7$);
+			owner.RotateBoneY("outter_barring", angle7$);		
+			owner.RotateBoneY("middle_ring", angle7$);
+			owner.RotateBoneY("inner_barring", angle7$);
+			owner.RotateBoneY("inner_ring", angle7$);
+
+		owner.RotateBoneZ("Bone02_base_rot", angle8$);			
+ 	}
+}

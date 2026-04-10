@@ -1,0 +1,24 @@
+[compass_settings]
+{
+	// Set radius of the compass
+	compass_radius		= 54;
+
+	// Set basic compass settings
+	compass_isactive	= true;
+	compass_alpha		= 255;
+
+	// Set compass textures
+	compass_needle		= "b_gui_ig_mnu_compass_spinner";
+	compass_direction	= "b_gui_ig_mnu_compass_cover";
+
+	// Compass cardinal direction information
+	compass_cardinal_dist	= 28;
+	
+	compass_north		= "b_gui_ig_mnu_compass_N";
+	compass_east		= "b_gui_ig_mnu_compass_E";
+	compass_south		= "b_gui_ig_mnu_compass_S";
+	compass_west		= "b_gui_ig_mnu_compass_W";
+
+	// Hotpoint directional indicator
+	compass_hotpoint	= "b_gui_ig_mnu_compass_spinner-02";
+}

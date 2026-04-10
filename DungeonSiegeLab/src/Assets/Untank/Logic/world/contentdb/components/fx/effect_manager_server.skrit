@@ -1,0 +1,108 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  effect_manager.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// turn effects off and on, also supprorts periodic effects.
+//
+//////////////////////////////////////////////////////////////////////////////
+property bool			_server_only$		= true;
+
+property float			repeat_rate$		= 0.2					doc = "Number of seconds before starting to fire again";
+property float			repeat_rate_max$	= -1.0					doc = "If greater then zero will use a random time between min and max rate";
+
+property string 		effect_name$		= "" 					doc = "name of the effect script to run.";
+property string 		effect_params$		= ""					doc = "Parameters to pass along to the SiegeFx script";
+
+property bool			repeat$				= true					doc = "Repeat the repeat effect at the repeat rate frequency.";
+property bool			run_once$			= false					doc = "After stop message don't play the effect again if recieve the start message.";
+
+property string 		rep_effect_name$	= ""				 	doc = "name of repeating effect script to run.";
+property string 		rep_effect_params$	= ""					doc = "Parameters to pass along to the repeating SiegeFx script";
+				
+property eWorldEvent 	start_msg$			= WE_EQUIPPED			doc = "when to start effect";
+property eWorldEvent 	stop_msg$			= WE_UNEQUIPPED			doc = "when to stop effect";
+property eWorldEvent 	stop_msg2$			= WE_INVALID			doc = "when to stop effect";
+
+
+owner = GoSkritComponent;
+
+SFxSID active_script_id$;
+
+startup state Startup$
+{
+	trigger OnGoHandleMessage$( WE_CONSTRUCTED )
+	{
+		SetState Idle$;
+	}
+}
+
+state Idle$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == start_msg$ )
+		{
+			active_script_id$ = null;
+			if( effect_name$ != "")
+			{
+				active_script_id$ =	SiegeFx.SRunScript( effect_name$, owner.Goid, owner.Goid, effect_params$, owner.Goid, e$ );
+			}
+			SetState Loop$;
+		}
+	}
+}
+
+
+state Loop$
+{
+	trigger OnTimer$( 1 )
+	{
+		SetState Loop$;
+	}
+	
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( (e$ == stop_msg$) || ((e$ == stop_msg2$) && (WE_INVALID != stop_msg2$)))
+		{
+			if ( run_once$)
+			{
+				SetState Exit$;
+			} else {
+				SetState Idle$;
+			}
+			if ( active_script_id$ != 0)
+			{
+				SiegeFx.SStopScript( active_script_id$ );
+			}
+		}
+	}
+	
+	event OnEnterState$
+	{
+		if (repeat$)
+		{
+			if( rep_effect_name$ != "")
+			{
+				SiegeFx.SRunScript( rep_effect_name$, owner.Goid, owner.Goid, "", owner.Goid, WE_REQ_ACTIVATE );
+			}
+			
+			// Don't play again until repeat_rate$ expires
+			float delay$ = repeat_rate$;
+			if (repeat_rate_max$ > 0)
+			{
+				delay$ = Math.RandomFloat( repeat_rate$, repeat_rate_max$ );
+			}
+			this.CreateTimer( 1, delay$ );
+		}
+	}
+}
+
+state Exit$
+{
+}

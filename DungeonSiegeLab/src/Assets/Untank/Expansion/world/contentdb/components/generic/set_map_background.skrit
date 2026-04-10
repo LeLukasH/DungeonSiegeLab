@@ -1,0 +1,55 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  set_map_background.skrit
+// Author(s):  Tara Teich
+//
+// Copyright © 2003 Mad Doc Software  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+//property bool			_server_only$			= true;
+property string			_doc$				= "Updates the world map background upon receiving we_req_activate";
+
+// exported properties
+property string			background_name$							doc = "Name of the background to use";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		// need to have a marker name
+		if ( StringTool.IsEmpty( background_name$ ) )
+		{
+			report.errorf("Trying to set a map background without specifying a background name!  Scid = 0x%x\n", owner.Scid );
+		}
+		else
+		{
+			// Need to get who we're triggering this for
+			//Goid player$ = Server.ScreenHero;
+			// Need to make sure people pass the catalyst through, or this won't work
+			Goid player$ = MakeGoid( msg$.GetData1() );
+
+			if (player$.go == NULL)
+			{
+				Report.Errorf( "set_map_background (Scid = 0x%x) didn't receive catalyst player - need to pass through the trigger condition, talk to Tara.\n",
+					owner.Scid );
+				return;
+			}
+
+		#only( game )
+		[[
+			OverheadMap.RSSetCurrentBackground( background_name$, player$ );
+		]]
+		}
+	}
+}

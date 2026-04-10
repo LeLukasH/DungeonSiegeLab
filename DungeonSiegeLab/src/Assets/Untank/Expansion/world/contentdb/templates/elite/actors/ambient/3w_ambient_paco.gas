@@ -1,0 +1,100 @@
+[t:template,n:3W_dsx_paco]
+{
+	category_name = "3W_ambients";
+	doc = "3W_paco";
+	specializes = actor_ambient;
+	[actor]
+	{
+		alignment = aa_good;
+		race = other;
+	}
+	[aspect] { model=m_c_na_pac_1; }
+	[body]
+	{
+		avg_move_velocity = 1.5;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine1;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_spine1;
+			shield_bone = bip01_l_hand;
+			weapon_bone = bip01_r_hand;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_na_pac_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=su; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] 
+				{ 
+					00=dsf;
+					01=dsf-02; 
+					02=dsf-03;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[common] { screen_name="Paco"; }
+	[mind]
+	{
+		jat_fidget				= world\ai\jobs\common\job_fidget.skrit
+			?curious			= 0.8
+			&move_distance 		= 50.0
+			&friend				= 0.8
+			&social				= 0.8
+			&social_limit 		= 8
+			&social_limit_dist 	= 20.0
+			&wander 			= 0.8
+			&wander_limit		= 8
+			&wander_limit_dist	= 20.0
+			&friends			= hero
+			&interest			= interest
+			&still				= false;
+			
+		on_enemy_spotted_alert_friends 				= false;
+		on_enemy_spotted_attack 					= false;
+		on_enemy_entered_ocz_attack 				= false;
+		on_enemy_entered_icz_attack 				= false;
+		on_enemy_entered_ocz_flee 					= true;
+		on_friend_entered_ocz_flee 					= false;
+		on_friend_entered_icz_flee 					= true;
+		on_enemy_entered_weapon_engage_range_attack = false;
+		inner_comfort_zone_range 					= 0.5;
+		melee_engage_range 							= 0.1;
+		outer_comfort_zone_range 					= 5.0;
+		personal_space_range 						= 0.4;
+		sight_range 								= 14.0;
+		flee_count									= 5;
+	}
+
+
+
+
+}

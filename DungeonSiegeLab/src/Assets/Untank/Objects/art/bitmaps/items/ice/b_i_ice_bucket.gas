@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_ice_bucket]
+{
+	layer1texture1 = b_i_ice_bucket;
+  i texturedetail = 1;
+}

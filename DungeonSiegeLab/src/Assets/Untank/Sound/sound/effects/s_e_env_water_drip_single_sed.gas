@@ -1,0 +1,7 @@
+[t:sed,n:s_e_env_water_drip_single_SED]
+{
+	sound_effect_file = "s_e_env_water_drip_single";
+	max_simultaneous_samples = 2;
+	min_playback_rate = 0.90;
+	max_playback_rate = 1.10;
+}

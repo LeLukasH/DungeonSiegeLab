@@ -1,0 +1,225 @@
+[world_map]
+{
+	interface = true;
+	intended_resolution_width = 1024;
+	intended_resolution_height = 768;
+
+	// TAT - don't want to be able to spin the camera
+	b disable_camera = true;
+	b modal = true;
+/*
+	[t:button,n:button_world_map_exit]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+		consumable = true;
+	  i draw_order = 9000;
+		is_right_anchor = true;
+		rect = 624,3,640,19;
+		right_anchor = 16;
+		rollover_help = worldmap_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			onbuttonpress = notify(exit_world_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	*/
+
+	[t:button,n:world_map_bkg1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		normalize_resize = true;
+		rect = 0, 0, 256, 256;
+		texture = b_gui_ig_mnu_wmap_bkg1;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_world_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:world_map_bkg2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		normalize_resize = true;
+		rect = 256,0,512,256;
+		texture = b_gui_ig_mnu_wmap_bkg2;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_world_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:world_map_bkg3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		normalize_resize = true;
+		rect = 512,0,768,256;
+		texture = b_gui_ig_mnu_wmap_bkg3;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_world_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:world_map_bkg4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		normalize_resize = true;
+		rect = 768,0,1024,256;
+		texture = b_gui_ig_mnu_wmap_bkg4;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_world_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:world_map_bkg5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		normalize_resize = true;
+		rect = 0,256,256,512;
+		texture = b_gui_ig_mnu_wmap_bkg5;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_world_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:world_map_bkg6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		normalize_resize = true;
+		rect = 256,256,512,512;
+		texture = b_gui_ig_mnu_wmap_bkg6;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_world_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:world_map_bkg7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		normalize_resize = true;
+		rect = 512,256,768,512;
+		texture = b_gui_ig_mnu_wmap_bkg7;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_world_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:world_map_bkg8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		normalize_resize = true;
+		rect = 768,256,1024,512;
+		texture = b_gui_ig_mnu_wmap_bkg8;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_world_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:world_map_bkg9]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		normalize_resize = true;
+		rect = 0,512,256,768;
+		texture = b_gui_ig_mnu_wmap_bkg9;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_world_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:world_map_bkg10]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		normalize_resize = true;
+		rect = 256,512,512,768;
+		texture = b_gui_ig_mnu_wmap_bkg10;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_world_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:world_map_bkg11]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		normalize_resize = true;
+		rect = 512,512,768,768;
+		texture = b_gui_ig_mnu_wmap_bkg11;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_world_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:button,n:world_map_bkg12]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		normalize_resize = true;
+		rect = 768,512,1024,768;
+		texture = b_gui_ig_mnu_wmap_bkg12;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_world_map) & playsound(s_e_frontend_tiny_button);
+		}
+	}
+}

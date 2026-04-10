@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_csl_corpse]
+{
+	layer1texture1 = b_i_csl_corpse;
+  i texturedetail = 3;
+}

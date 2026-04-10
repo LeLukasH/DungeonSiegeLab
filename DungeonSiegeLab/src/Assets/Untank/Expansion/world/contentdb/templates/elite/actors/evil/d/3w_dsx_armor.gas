@@ -1,0 +1,238 @@
+[t:template,n:3W_dsx_armor_deadly_base]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_armor_deadly";
+	specializes = actor_evil;
+	[actor]
+		{
+			[skills]
+				{
+					strength		 = 40.4, 0;
+					intelligence = 12.5, 0;
+					dexterity		 = 21.3, 0;
+					melee			 = 79, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1239660;
+			life		 = 2328;
+			max_life	 = 2328;
+			mana						 = 270;
+			max_mana				 = 270;
+
+			model = m_c_gah_fb_pos_a6;
+			[textures] {
+				0 = b_c_edm_darmor-glow;
+				1 = b_c_edm_darmor;
+			}
+
+		material = flesh;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_deadly_armor;	}
+					[enemy_spotted]	{ priority = high; * = s_e_call_deadly_armor_SED; }
+				}
+		}
+	[defend] { defense = 690; }
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 409.2;
+			damage_min = 291.6; 
+		}
+	[body]
+		{
+			avg_move_velocity = 2.5;
+			[bone_translator]
+				{
+					body_anterior = bip01_head;
+					body_mid = bip01_spine2;
+					body_posterior = bip01_pelvis;
+					kill_bone = bip01_spine2;
+					shield_bone = shield_grip;
+					weapon_bone = weapon_grip;
+				}
+			[chore_dictionary]
+				{
+					chore_prefix = a_c_gah_fb_fs;
+					[chore_attack]
+						{
+							chore_stances = 0,1,2,3,4,5,6,7,8;
+							skrit = select_attack;
+							[anim_files]
+								{
+									0mid = at;
+									high = at-02;
+									loww = at-03;
+									extr = at-04;
+									qffg = dff;
+								}
+							[anim_durations]
+								{
+									fs0 = 1.250;
+									fs1 = 0.830;
+									fs2 = 0.830;
+									fs3 = 1.250;
+									fs4 = 1.250;
+									fs5 = 1.250;
+									fs6 = 1.000;
+									fs7 = 0.125;
+									fs8 = 1.000;
+								}
+						}
+					[chore_default]
+						{
+							chore_stances = 0,1,2,3,4,5,6,7,8;
+							skrit = simple_loop;
+							[anim_files] { 00=dff; }
+						}
+					[chore_die]
+						{
+							chore_stances = 0,1,2,3,4,5,6,7,8;
+							skrit = select_transition;
+							[anim_files] { 00=di; }
+						}
+					[chore_fidget]
+						{
+							chore_stances = 0,1,2,3,4,5,6,7,8;
+							skrit = select_fidget;
+							[anim_files]
+								{
+									00 = dff;
+									01 = dff-02;
+								}
+						}
+					[chore_magic]
+						{
+							chore_stances = 0,5;
+							skrit = select_attack;
+							[anim_files]
+								{
+									00 = mg;
+									01 = mg-02;
+								}
+						}
+					[chore_misc]
+						{
+							chore_stances = ignore;
+							skrit = select_transition;
+							[anim_files]
+								{
+									drnk = a_c_gah_fb_fs1_dk;
+									gtup = a_c_gah_fb_fs0_up;
+									look = a_c_gah_fb_fs0_dsf;
+									wyme = a_c_gah_fb_fs0_dsf-02;
+									frtd = a_c_gah_fb_fs0_dsf-03;
+									talk = a_c_gah_fb_fs0_dsf-04;
+									bed1 = a_c_gah_fb_fs0_dsf-05;
+									bed2 = a_c_gah_fb_fs0_dsf-06;
+									bed3 = a_c_gah_fb_fs0_dsf-07;
+									mrik = a_c_gah_fb_fs0_dsf-08;
+									sit1 = a_c_gah_fb_fs0_dsf-09;
+									sit2 = a_c_gah_fb_fs0_dsf-10;
+									bed4 = a_c_gah_fb_fs0_dsf-11;
+									bed5 = a_c_gah_fb_fs0_dsf-12;
+									froz = a_c_gah_fb_fs0_dsf-16;
+									andi = a_c_gah_fb_fs0_dsf-17;
+									lsn2 = a_c_gah_fb_fs0_dsf-18;
+									knee = a_c_gah_fb_fs1_dsf-03;
+									lstn = a_c_gah_fb_fs1_dsf-04;
+									lblg = a_c_gah_fb_fs2_dsf-02;
+									hoe1 = a_c_gah_fb_fs5_dsf-02;
+								}
+						}
+					[chore_walk]
+						{
+							chore_stances = 0,1,2,3,4,5,6,7,8;
+							skrit = select_walk;
+							[anim_files] { 05=rl; }
+						}
+				}
+		}
+	[common]
+		{
+			screen_name = "Possessed Armor"; //--
+			membership = monster; //--
+		}
+
+
+	[mind]
+		{
+			jat_brain	 = world\ai\jobs\common\brain_hero.skrit
+				? actor_joins_existing_party	= true;
+
+			jat_fidget = world\ai\jobs\common\job_fidget.skrit;
+			melee_engage_range = 14;
+			personal_space_range = 0.7;
+			ranged_engage_range = 14.0;
+			sight_range = 14.0;
+		}
+}
+
+[t:template,n:3W_dsx_armor_deadly]
+{
+// Balanced to level 14, hard melee+
+//		there's only 2 of them, so they should be tough
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_armor_deadly";
+	specializes = 3W_dsx_armor_deadly_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength	= 48.8, 0;
+			intelligence	= 12.5, 0;
+			dexterity	= 26.1, 0;
+			melee		= 81, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 1334564;
+		life		 = 2412;
+		max_life	 = 2412;
+		mana		 = 270;
+		max_mana	= 270;
+
+		model = m_c_gah_fb_pos_a6;
+		[textures]
+		{
+			0 = b_c_edm_darmor-glow;
+			1 = b_c_edm_darmor;
+		}
+
+		material = flesh;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_deadly_armor;	}
+			[enemy_spotted]	{ priority = high; * = s_e_call_deadly_armor_SED; }
+		}
+	}
+	
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 580.8;
+		damage_min = 378; 
+	}
+	
+	[defend] { defense = 963; }
+
+}
+
+[t:template,n:3W_dsx_deadly_armor_summon]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_summon_dsx_armor_deadly";
+	specializes = 3W_dsx_armor_deadly_base;
+ aspect:experience_value = 0;
+	[inventory]
+		{
+			selected_active_location = il_active_primary_spell;
+			spew_equipped_kill_count = <ignore>;
+			
+		}
+		
+}

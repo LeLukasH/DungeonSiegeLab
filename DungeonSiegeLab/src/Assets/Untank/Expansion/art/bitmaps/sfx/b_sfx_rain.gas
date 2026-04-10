@@ -1,0 +1,7 @@
+[t:tsd,n:b_sfx_rain]
+{
+  b dither = true;
+  b hasalpha = true;
+	layer1texture1 = b_sfx_rain;
+  i texturedetail = 1;
+}

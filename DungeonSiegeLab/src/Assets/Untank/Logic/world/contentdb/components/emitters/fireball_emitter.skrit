@@ -1,0 +1,150 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  fireball_emitter.skrit
+// Author(s):  Rick Saenz
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//
+// $$$$ rewrite or rip out. -ET
+//
+
+property bool	start_on_creation$	= false		doc = "Start Emitter when it enters the world";
+
+property float	shot_life$	 		= 5.0		doc = "Life of fireball - timeout in seconds";
+
+property float	red$				= 0.86		doc = "Fire color Red intensity 0-1";
+property float	green$				= 0.4		doc = "Fire color Green intensity 0-1";
+property float	blue$				= 0.1		doc = "Fire color Blue intensity 0-1";
+
+property float	speed$			 	= 1.0		doc = "Speed fireball travels in scaled default velocity";
+
+property float	scale$				= 1.0		doc = "How big to make the fireball appear";
+
+property bool	do_fire_damage$		= true		doc = "Flames from fireball fire will ignite stuff";
+property bool	do_hit_damage$		= true		doc = "Upon collision damage to a go will be done";
+property bool	do_area_damage$		= false		doc = "Upon collision damage to an area will be initiated";
+
+property float  damage_min_fire$	= 3.0		doc = "Min damage for fire exposure in units per second";
+property float  damage_max_fire$	= 3.0		doc = "Max damage for fire exposure in units per second";
+property float	damage_min_hit$ 	= 5.0		doc = "Min damage for direct hit";
+property float	damage_max_hit$ 	= 10.0		doc = "Max damage for direct hit";
+property float	damage_min_area$	= 15.0		doc = "Min damage for explosion";
+property float	damage_max_area$	= 25.0		doc = "Max damage for explosion";
+
+property float	particle_fit$  		=  0.2		doc = "Emission volume fit for collision 0 is loose, 1 is tight";
+property float	fire_hit_dur$		= 1.75		doc = "Duration of collision starte fire";
+
+property float	area_damage_radius$ = 1.0		doc = "Radius of area damage on explosion";
+property float	exp_magnitude$		= 3.25		doc = "Magnitude of the explosion";
+
+property bool	repeat$				= true		doc = "Will continually keep firing based on repeat rate";
+property float	repeat_rate$		= 3.0		doc = "Number of seconds before starting to fire again";
+
+
+owner = GoSkritComponent;
+
+float shots_active$ = 0;
+bool deactivate_requested$ = false;
+
+startup state Idle$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( (e$ == WE_REQ_ACTIVATE) || (( e$ == WE_ENTERED_WORLD ) && (start_on_creation$ == true)) ) 
+		{
+			shots_active$ = 0;
+			deactivate_requested$ = false;
+			
+			SetState Fire$;
+		}
+	}
+}
+
+
+state Fire$
+{
+	event OnEnterState$
+	{
+		string params$;
+
+		// [0] - $fire_color
+		StringTool.AppendF( params$, "[%g,%g,%g]", red$, green$, blue$ );
+		// [1] - $shot_life
+		StringTool.AppendF( params$, "[%g]", shot_life$ );
+		// [2] - $speed
+		StringTool.AppendF( params$, "[%g]", speed$ );
+		// [3] - $fire_scale & [4] - $ball_scale
+		StringTool.AppendF( params$, "[%g][%g]", (1.25 * scale$), (0.25 * scale$) );
+		// [5] - $fire_hit_dir
+		StringTool.AppendF( params$, "[%g]", fire_hit_dur$ );
+
+		if( do_fire_damage$ )
+		{
+		// [6] - vapor trail fire damage
+			StringTool.AppendF( params$, "[ignite()fdamage(%g,%g,%g)]", damage_min_fire$, damage_max_fire$, particle_fit$ );
+		}
+
+		// Run the fireball emitter script
+		SiegeFx.RunScript( "fireball_emitter", owner.Goid, owner.Goid, params$, owner.Goid, WE_REQ_ACTIVATE );
+
+		// Don't shoot again until repeat_rate$ expires
+		PostWorldMessage( WE_GO_TIMER_DONE, owner.Goid, owner.Goid, repeat_rate$ );
+
+		shots_active$ = shots_active$ + 1;
+	}
+
+
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		// Handle fire repeat
+		if( e$ == WE_GO_TIMER_DONE )
+		{
+			shots_active$ = shots_active$ - 1;
+
+			if( (shots_active$ <= 0) && deactivate_requested$ )
+			{
+				SetState( Idle$ );
+			}
+			else if( !deactivate_requested$ && repeat$ )
+			{
+				SetState( Fire$ );
+			}
+			else if( !repeat$ && (shots_active$ <= 0 ) )
+			{
+				// Need to reset to an idle state after repeat duration
+				SetState( Idle$ );
+			}
+		}
+		// Handle a timeout - shot didn't hit anything
+		else if( e$ == WE_SPELL_SYNC_END )
+ 		{
+			shots_active$ = shots_active$ - 1;
+		}
+		// Handle a hit
+		else if( e$ == WE_SPELL_COLLISION )
+		{
+			shots_active$ = shots_active$ - 1;
+
+			if( do_hit_damage$ )
+			{
+				// For spell collisions the send from is game object that has been hit
+				Rules.DamageGoTrap( msg$.SendFrom, Owner.Goid, Owner.Goid, damage_min_hit$, damage_max_hit$ );
+			}
+			if( do_area_damage$ )
+			{
+				float damage$ = Math.RandomFloat( damage_min_area$, damage_max_area$ );
+				SiegePos position$ = ToSiegePosRef( msg$.Data1 );
+				Physics.CreateExplosion( position$, area_damage_radius$, exp_magnitude$, damage$, owner.goid, owner.goid );
+			}
+		}
+		else if( e$ == WE_REQ_DEACTIVATE )
+		{
+			deactivate_requested$ = true;
+		}
+	}
+}

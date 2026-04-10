@@ -1,0 +1,7 @@
+[t:tsd,n:b_gui_fnt_36p_mtcorsiva]
+{
+  b dither = true;
+  b hasalpha = true;
+	layer1texture1 = b_gui_fnt_36p_mtcorsiva;
+  i texturedetail = 0;
+}

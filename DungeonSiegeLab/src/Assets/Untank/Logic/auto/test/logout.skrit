@@ -1,0 +1,163 @@
+// owner = GoSkritComponent;
+
+// #include "LogFile.skrit"  no longer necessary as of build 9.2402
+
+property string  PASS_ID$   = "PASS"		doc = "How PASS will be shown in log file";
+property string  FAIL_ID$   = "FAIL"		doc = "How PASS will be shown in log file";
+property string  INFO_ID$   = "INFO"		doc = "How PASS will be shown in log file";
+property string  START_ID$  = "START"		doc = "Designate date time stamp at start of test";
+property string  END_ID$    = "END"			doc = "Designate date time stamp at end of test";
+property string  DELIMS_ID$ = "<<"			doc = "Designate start of tag";
+property string  DELIME_ID$ = ">>"			doc = "Designate end of tag";
+
+
+int nPASS$ = 0, nFail$ = 1, nINFO$ = 2, nSTART$ = 3, nEND$ = 4;
+
+string sThis$ = "UNKNOWN";
+
+	
+SetTag$(int tag$)  
+{
+	sThis$ = "UNKNOWN";
+
+	if (tag$ == nPASS$)
+	{
+		sThis$ = PASS_ID$;
+	}	
+	if (tag$ == nFail$)
+	{
+		sThis$ = FAIL_ID$;
+	}	
+	if (tag$ == nINFO$)
+	{
+		sThis$ = INFO_ID$;
+	}	
+	if (tag$ == nSTART$)
+	{
+		sThis$ = START_ID$;
+	}	
+	if (tag$ == nEND$)
+	{
+		sThis$ = END_ID$;
+	}
+}
+
+logout$(int tag$, string condition$, string statement$)
+{
+	SetTag$(tag$);
+	report.genericF("%s%s%s\t%s : %s\n", DELIMS_ID$, sThis$, DELIME_ID$, condition$, statement$);
+}
+
+myinit$(string sFN$)
+{
+	bool bResponse$;
+//	string sFileName$;
+	
+	SetTag$(nSTART$);
+
+	report.enable("generic" );
+	bResponse$ = GpConsole.Execute( "report filelog generic" );
+	debug.AssertF(bResponse$, "myinit$ %s line %d", __NAME__, __LINE__);  
+
+/*	sFileName$ = config.GetString("FileName", "default.log");
+	Report.AddNewSinkToContext("warning", "", "file", sFileName$);
+	Report.AddNewSinkToContext("error", "", "file", sFileName$);
+	Report.AddNewSinkToContext("fatal", "", "file", sFileName$);
+	Report.AddNewSinkToContext("generic", "", "file", sFileName$);   // sends ALL output to one log file!
+//	report.genericF("Trying to output to %s  !!\n", sFileName$);
+*/	
+	report.genericF("%s%s%s\tstarting %s at %02d:%02d\n", DELIMS_ID$, sThis$, DELIME_ID$, sFN$, TimeOfDay.Hour, TimeOfDay.Minute );
+//	report.MessageBoxF("received %s from CmdLine !", sFileName$);
+//	UIShell.SendUIMessage("MSG_ONBUTTONPRESS", "difficulty_hard"", "difficulty_menu");
+}
+
+
+mydeinit$(string sFN$)
+{
+	SetTag$(nEND$);
+	report.genericF("%s%s%s\t\tending %s at %02d:%02d\n", DELIMS_ID$, sThis$, DELIME_ID$, sFN$, TimeOfDay.Hour, TimeOfDay.Minute );
+}
+
+
+float myXPToLevel$(float fThisExp$)  // derived from float  Rules::XPToLevel( double xp ) const  on line 1441 of code..\projects\tattoo\world\Rules.cpp
+{
+	float fExpStart$, fExpEnd$, fLevel$ = 0.0, fMaxLevel$ = rules.MaxLevel;
+
+	while ( (fLevel$ < fMaxLevel$) && (fThisExp$ > rules.GetNextLevelXP(fLevel$) ) )
+	{
+		fLevel$ += 1.0000;
+	}
+	
+	if( fLevel$ < fMaxLevel$ )
+	{
+		if (math.abs(fLevel$ - 0.0) < 0.0005)
+		{
+			fExpStart$ = 0.00;
+		}
+		else
+		{
+			fExpStart$ = rules.GetNextLevelXP( fLevel$ - 1.00000 );
+		}
+		fExpEnd$   = rules.GetNextLevelXP( fLevel$ );
+
+		fLevel$ = fLevel$ + ( (fThisExp$ - fExpStart$) / (fExpEnd$ - fExpStart$) );
+	}
+	else
+	{
+		fLevel$ = 0.0;
+	}
+
+	return ( fLevel$ );	
+}
+
+float myParamSkill$(float fSkillDiscrep$)
+{
+	float fRtnVal$ = 0.0; // Note: no log 10 functionality in skrit as of 10/04/2001 ; distribution follows hysteresis curve
+	
+	if (fSkillDiscrep$ < 1.0)
+	{
+		fRtnVal$ = 100.0;
+	}
+	else
+	{
+		if (fSkillDiscrep$ < 15.0)
+		{
+			fRtnVal$ = 1.0e4;
+		}
+		else
+		{
+			if (fSkillDiscrep$ < 20.0)
+			{
+				fRtnVal$ = 1.0e5;
+			}
+			else
+			{
+				if (fSkillDiscrep$ < 40.0)
+				{
+					fRtnVal$ = 1.0e6;
+				}
+				else
+				{
+					if (fSkillDiscrep$ < 70.0)
+					{
+						fRtnVal$ = 1.0e8;
+					}
+					else
+					{
+						fRtnVal$ = 1.0e11;
+					}
+				}
+			}
+		}
+	}
+	return(fRtnVal$);
+}
+
+void ensure_game_not_paused$(void)
+{
+	if (AppModule.IsUserPaused() )
+	{
+		AppModule.UserPause(false);
+	}
+}
+

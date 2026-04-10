@@ -1,0 +1,107 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  napalm_emitter.skrit
+// Author(s):  Mathew Corthell
+//
+// Copyright © 2001 Mad Doc Software, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property bool	_server_only$		= true;
+
+property bool randomTiming$ = true doc = "Randomize the time between shots?";
+property float minDelayRand$ = 5.0 doc = "Mimimun time between random shots.";
+property float maxDelayRand$ = 15.0 doc = "Maximum time between random shots.";
+property float fixedDelay$ = 2.0 doc = "Amount of time between shots without random timing.";
+
+property string fireEffect$="" doc="Effect to play when shooting the napalm";
+
+property float minDistance$=5 doc="Minimum distance away to land the napalm.";
+property float maxDistance$=15 doc="Maximum distance away to land the napalm. (Recommend don't exceed fifteen)";
+
+owner = GoSkritComponent;
+
+//The time to delay before firing the next bolt.
+float delay$;
+
+//Function to determine the delay before the next bolt.
+GetDelay$
+{
+    if(randomTiming$)
+    {
+        delay$ = Math.RandomFloat(minDelayRand$, maxDelayRand$);
+    }
+    else
+    {
+        delay$ = fixedDelay$;
+    }
+}
+
+// Function to shoot a gob of napalm.
+void FireNapalm$()
+{
+	owner.Go.Attack.SPrepareAmmo;
+
+	AIQuery.FindSpotRelativeToSource(owner.go, minDistance$, maxDistance$, 2, AIQuery.TempPos1);
+
+	owner.Go.Attack.ComputeAimingError;
+	float x_error$ = owner.Go.Attack.GetAimingErrorX;
+	float y_error$ = owner.Go.Attack.GetAimingErrorY;
+
+	float velocity$ = 10;
+
+	float aiming_angle$ = owner.Go.Attack.ComputeAimingAngle( owner.Go.Placement.Position, AIQuery.TempPos1, velocity$ );
+
+	owner.Go.Attack.SLaunchAmmo( velocity$, owner.Go.Placement.Position, AIQuery.TempPos1, x_error$, y_error$, Goid.InvalidGoid );
+}
+
+//First state, when we're created.
+startup state Init$
+{
+
+    //Delay before firing the first flame.
+	trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+	{
+        GetDelay$();
+		this.CreateTimer(1, delay$);
+	}
+	
+	trigger OnTimer$(1)
+	{		
+        SetState(Loop$);
+    }
+}
+
+//Sit here and loop, firing fire over intervals.
+state Loop$
+{
+    event OnEnterState$
+    {
+		this.CreateTimer(1, 0);
+	}
+    trigger OnTimer$(1)
+	{
+		if(!StringTool.IsEmpty(fireEffect$))
+		{
+			SiegeFx.SRunScript( fireEffect$, owner.Goid, owner.Goid, "", owner.Goid, WE_ENTERED_WORLD );
+		}
+		FireNapalm$;
+        GetDelay$();
+		this.CreateTimer(1, delay$);
+	}
+
+    trigger OnGoHandleMessage$(WE_LEFT_WORLD)
+    {
+        SetState(Cleanup$);
+    }
+}
+
+state Cleanup$
+{
+    event OnEnterState$
+    {
+        SetState(Init$);
+    }
+}

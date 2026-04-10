@@ -1,0 +1,293 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_animation_command.skrit
+// Author(s):  Eric Tams and Uncle Ernsie
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// this skrit is set up to easily link up multiple animations on a character.
+
+// reserved tags
+property string _doc$ 					= "animation controller";
+property string _required_component$	= "placement";
+
+// exported properties
+property Scid			client_scid$ 		= 0					doc = "Scid of actor to animate.";
+property bool           animate_catalyst$   = false             doc = "If true, the catalyst of this command will be animated vs. the client_scid.";
+property Scid			next_scid$ 			= 0					doc = "Scid of next command in sequence, 0 to terminate";
+property eWorldEvent	next_scid_msg$		= WE_REQ_ACTIVATE	doc = "message to send to next scid to start it.";
+property eWorldEvent	start_msg$			= WE_REQ_ACTIVATE	doc = "start when this message is recieved";
+
+property float			duration$			= -1.0				doc = "If set when this amount of time is up will go to the next animation command";
+property eWorldEvent	stop_msg$			= WE_REQ_DEACTIVATE doc = "Go to the next animation when this message is recieved";
+property bool			repeat_animation$	= true				doc = "If set animation will repeat, else will go to the next animation command";
+property bool			hold_animation$		= false				doc = "Use for one frame animations. They will play once then hold their spot until they recieve a message or time out.";
+
+property bool			start_fidget$		= false				doc = "Start fidgeting when leaving this command";
+
+property eAnimChore 	Chore$				= CHORE_MISC		doc = "Animation Chore.";
+property int 			Animation$								doc = "Animation";
+
+property bool			initially_active$	= false				doc = "Does the animation start as soon as the command is loaded?";
+
+owner = GoSkritComponent;
+Goid client$;
+Goid catalyst$;
+
+//////////////////////////////////////////////////////////////////////////////
+
+trigger OnGoDrawDebugHud$
+{
+    Goid goid$ = next_scid$.Goid;
+	
+	if ( goid$.IsValid )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 goid$.go.Placement.Position,
+									 MakeColor( 0, 1.0, 0, 0.5 ),
+									 "Next Command" );
+	}
+
+	if (!animate_catalyst$)
+    {
+		goid$ = client_scid$.Goid;
+
+		if ( goid$.IsValid )
+		{
+			World.DrawDebugDirectedLine( owner.go.Placement.Position,
+										 goid$.go.Placement.Position,
+										 MakeColor( 1.0, 0, 0, 0.5 ),
+										 "Animate" );
+		}
+    }
+}
+
+startup state Waiting$
+{
+	trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+	{
+		SetState StartUp$;
+	}
+}
+
+state StartUp$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if ( e$ == start_msg$ )
+		{
+			SetState Init$;
+		}
+
+		catalyst$ = MakeGoid( msg$.GetData1() );
+	}
+	
+	event OnEnterState$
+	{
+		if( Godb.GetScidBit( owner.scid, 1 ) )
+		{
+			SetState Abort$;
+			return;
+		}
+	
+		if( !Godb.GetScidBit( owner.scid, 0 ) )
+		{
+			if ( !initially_active$ )
+			{
+				return; // We weren't left on, and don't start on, so we need to wait until we are activated.
+			}
+		}
+		SetState Init$;
+	}
+}
+
+trigger OnGoHandleCCMessage$( WE_LEFT_WORLD )
+{
+	GoDb.StopWatching( owner.Goid, client$ );
+	
+	SetState Init$;
+}
+
+state Init$
+{
+	trigger OnTimer$( 2 )
+	{
+		SetState Init$;
+	}
+	
+	event OnEnterState$
+	{
+		// remember that we want to be animating.
+		Godb.SetScidBit( owner.scid, 0, true);
+		
+		if (!animate_catalyst$)
+        {
+			client$ = client_scid$.goid;		}
+        else
+        {
+            client$ =  catalyst$;
+		}
+
+		if( !client$.IsValid() )
+		{
+			this.CreateFrameTimer( 2, 5 );
+			return;
+		}
+	
+		if( !client$.Go.Placement.Position.node.IsNodeInAnyFrustum )
+		{
+			this.CreateFrameTimer( 2, 5 );
+			return;
+		}
+		
+		Report.ReportF("jedi","Entered new animation command for: %s\n",client$.go.templatename);
+		
+		// set auto fidget
+		client$.Go.Mind.SetActorAutoFidgets( false );
+			
+		// watch scid for anim done
+		GoDb.StartWatching( owner.Goid, client$);
+		
+		// set up global timer.
+		if ( duration$ > 0.0 )
+		{
+			This.CreateTimer( 1 , duration$ );
+			This.SetTimerGlobal( 1, true );	
+		}
+		// go to animation state
+		SetState Animating$;		
+	}
+}
+
+state Animating$
+{
+	bool holding$ = false;
+	
+	transition -> Exiting$: OnTimer( 1 );
+	trigger OnTimer$( 2 )
+	{
+		// disable update
+		client$.Go.Aspect.AspectHandle.SetLockMeshFlag(true);
+	}
+	
+	event OnGoHandleCcMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if ( e$ == WE_ANIM_DONE)
+		{
+			Report.ReportF("jedi","Recieved Anim Done for: %s\n",client$.go.templatename);
+			if( hold_animation$ && !holding$ )
+			{
+				This.CreateTimer( 2, 0);
+				holding$ = true;
+			}
+				
+			// re-enter state or quit
+			if( repeat_animation$ )
+			{ 
+				SetState Animating$;
+			} else {
+				SetState Exiting$;
+			}
+		}
+	}
+	
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if ( e$ == stop_msg$ )
+		{
+		 	// finish
+			Report.ReportF("jedi","Recieved stop message for: %s\n",client$.go.templatename);
+			SetState Exiting$;
+		}
+	}
+		
+	event OnEnterState$
+	{
+		if( client$.IsValid() )
+		{
+			// play animation
+			MCPManager.Flush( client$ );
+			
+			int subanim$ = client$.Go.Aspect.AspectHandle.Blender.GetSubAnimIndex(Chore$, Animation$ );
+			Report.ReportF("jedi","trying Animation: %d    Subanim: %d    for: %s\n",Animation$,subanim$,client$.go.templatename);
+			
+			if (subanim$ < 0)
+			{
+				subanim$ = 0;
+			}
+			MCPManager.MakeRequest( client$, PL_PLAYANIM, Chore$ , subanim$, 0 );
+		} else {
+			SetState Exiting$;
+		}
+	}
+}
+
+state Exiting$
+{
+	event OnEnterState$
+	{
+		// we don't want to think that we are naimating anymore.
+		Godb.SetScidBit( owner.scid, 0, false );
+		
+		if( client$.IsValid() )
+		{
+			if( hold_animation$ )
+			{
+				// enable update
+				client$.Go.Aspect.AspectHandle.SetLockMeshFlag(false);
+			}
+			
+			// set fidget
+			MCPManager.Flush( client$ );
+			
+			client$.Go.Mind.SetActorAutoFidgets( start_fidget$ );
+			
+			// watch scid for anim done
+			GoDb.StopWatching( owner.Goid, client$);
+			
+			// activate next dudie.
+			Goid next$ = next_scid$.goid;
+			if ( next$.IsValid )
+			{
+				Report.ReportF("jedi","Activating animation command: 0x%x  for: %s\n",next_scid$,client$.go.templatename);
+		    
+                if (!animate_catalyst$)
+                {
+					SendWorldMessage( next_scid_msg$, owner.Goid, next$ );
+				}
+                else
+                {
+					int data$ = MakeInt( catalyst$ );
+					SendWorldMessage( next_scid_msg$, owner.Goid, next$, data$ );
+				}
+			}
+			if( initially_active$ )
+			{
+				SetState Abort$;
+			}
+			else
+			{
+				SetState StartUp$;
+			}
+		} else {
+			SetState Abort$;
+		}
+	}
+}
+
+state Abort$
+{ 
+	event OnEnterState$
+	{
+		Godb.SetScidBit( owner.scid, 1, true );		
+	}
+}
+
+////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,673 @@
+[multiplayer_load]
+{
+	centered = window_center;
+	intended_resolution_height = 480;
+	intended_resolution_width = 640;
+	interface = true;
+	[t:status_bar,n:loading_bar]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 639;
+		dynamic_edge = right;
+		rect = 322,246,509,262;
+		texture = b_gui_fe_m_mn_3d_progressbar;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = loading_bar;
+	}
+	[t:status_bar,n:load_bar_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 640;
+		dynamic_edge = right;
+		rect = 322,269,509,285;
+		texture = b_gui_fe_m_mn_3d_progressbar;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = load_bar_2;
+	}
+	[t:status_bar,n:load_bar_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 641;
+		dynamic_edge = right;
+		rect = 322,291,509,307;
+		texture = b_gui_fe_m_mn_3d_progressbar;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = load_bar_3;
+	}
+	[t:status_bar,n:load_bar_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 642;
+		dynamic_edge = right;
+		rect = 322,315,509,331;
+		texture = b_gui_fe_m_mn_3d_progressbar;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = load_bar_4;
+	}
+	[t:status_bar,n:load_bar_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 643;
+		dynamic_edge = right;
+		rect = 322,337,509,353;
+		texture = b_gui_fe_m_mn_3d_progressbar;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = load_bar_5;
+	}
+	[t:status_bar,n:load_bar_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 644;
+		dynamic_edge = right;
+		rect = 322,361,509,377;
+		texture = b_gui_fe_m_mn_3d_progressbar;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = load_bar_6;
+	}
+	[t:status_bar,n:load_bar_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 645;
+		dynamic_edge = right;
+		rect = 322,384,509,400;
+		texture = b_gui_fe_m_mn_3d_progressbar;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = load_bar_7;
+	}
+	[t:status_bar,n:load_bar_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 524;
+		dynamic_edge = right;
+		rect = 322,407,509,423;
+		texture = b_gui_fe_m_mn_3d_progressbar;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = load_bar_8;
+	}
+	[t:window,n:prep1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 647;
+		rect = 90,74,320,241;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.101563,0.218750,1.000000,0.871094;
+		wrap_mode = clamp;
+		group = loading_bar;
+	}
+	[t:window,n:prep2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 648;
+		rect = 320,76,550,241;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.218750,0.898438,0.863281;
+		wrap_mode = clamp;
+		group = loading_bar;
+	}
+	[t:text,n:text_loading]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2286;
+		font_1024x768 = b_gui_fnt_14p_copperplate-light;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 227,128,414,145;
+		text = "Loading Multiplayer Game...";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_player_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2217;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = loading_bar;
+		justify = left;
+		rect = 131,247,302,262;
+		text = "";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_player_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2221;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = load_bar_2;
+		justify = left;
+		rect = 131,269,302,284;
+		text = "";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_player_3]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2225;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = load_bar_3;
+		justify = left;
+		rect = 131,292,302,307;
+		text = "";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_player_4]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2229;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = load_bar_4;
+		justify = left;
+		rect = 131,315,302,330;
+		text = "";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_player_5]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2233;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = load_bar_5;
+		justify = left;
+		rect = 131,338,302,353;
+		text = "";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_player_6]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2237;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = load_bar_6;
+		justify = left;
+		rect = 131,361,302,376;
+		text = "";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_player_7]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2241;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = load_bar_7;
+		justify = left;
+		rect = 131,384,302,399;
+		text = "";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_player_8]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2245;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = load_bar_8;
+		justify = left;
+		rect = 131,407,302,422;
+		text = "";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_bar_bg_1_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 198;
+		rect = 320,241,415,266;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = loading_bar;
+	}
+	[t:window,n:window_bar_bg_1_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 206;
+		rect = 415,241,511,266;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = loading_bar;
+	}
+	[t:window,n:window_bar_bg_2_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 199;
+		rect = 320,264,415,289;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_2;
+	}
+	[t:window,n:window_bar_bg_2_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 207;
+		rect = 415,264,511,289;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_2;
+	}
+	[t:window,n:window_bar_bg_3_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 98;
+		rect = 320,287,415,312;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_3;
+	}
+	[t:window,n:window_bar_bg_3_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 208;
+		rect = 415,287,511,312;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_3;
+	}
+	[t:window,n:window_bar_bg_4_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 200;
+		rect = 320,310,415,335;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_4;
+	}
+	[t:window,n:window_bar_bg_4_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 209;
+		rect = 415,310,511,335;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_4;
+	}
+	[t:window,n:window_bar_bg_5_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 407;
+		rect = 320,333,415,358;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_5;
+	}
+	[t:window,n:window_bar_bg_5_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 210;
+		rect = 415,333,511,358;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_5;
+	}
+	[t:window,n:window_bar_bg_6_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 408;
+		rect = 320,356,415,381;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_6;
+	}
+	[t:window,n:window_bar_bg_6_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 211;
+		rect = 415,356,511,381;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_6;
+	}
+	[t:window,n:window_bar_bg_7_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 409;
+		rect = 320,379,415,404;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_7;
+	}
+	[t:window,n:window_bar_bg_7_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 212;
+		rect = 415,379,511,404;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_7;
+	}
+	[t:window,n:window_bar_bg_8_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 303;
+		rect = 320,402,415,427;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_8;
+	}
+	[t:window,n:window_bar_bg_8_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 99;
+		rect = 415,402,511,427;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_8;
+	}
+	[t:window,n:window_center]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		rect = 85,51,555,429;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:window_text_bg_1_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 847;
+		rect = 128,241,223,266;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = loading_bar;
+	}
+	[t:window,n:window_text_bg_1_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1515;
+		rect = 223,241,319,266;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = loading_bar;
+	}
+	[t:window,n:window_text_bg_2_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2150;
+		rect = 128,264,223,289;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_2;
+	}
+	[t:window,n:window_text_bg_2_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1516;
+		rect = 223,264,319,289;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_2;
+	}
+	[t:window,n:window_text_bg_3_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2151;
+		rect = 128,287,223,312;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_3;
+	}
+	[t:window,n:window_text_bg_3_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1517;
+		rect = 223,287,319,312;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_3;
+	}
+	[t:window,n:window_text_bg_4_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2152;
+		rect = 128,310,223,335;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_4;
+	}
+	[t:window,n:window_text_bg_4_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1518;
+		rect = 223,310,319,335;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_4;
+	}
+	[t:window,n:window_text_bg_5_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2153;
+		rect = 128,333,223,358;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_5;
+	}
+	[t:window,n:window_text_bg_5_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1519;
+		rect = 223,333,319,358;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_5;
+	}
+	[t:window,n:window_text_bg_6_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2154;
+		rect = 128,356,223,381;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_6;
+	}
+	[t:window,n:window_text_bg_6_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1520;
+		rect = 223,356,319,381;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_6;
+	}
+	[t:window,n:window_text_bg_7_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2155;
+		rect = 128,379,223,404;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_7;
+	}
+	[t:window,n:window_text_bg_7_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1521;
+		rect = 223,379,319,404;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_7;
+	}
+	[t:window,n:window_text_bg_8_1]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2156;
+		rect = 128,402,223,427;
+		texture = b_gui_fe_m_mn_3d_prep1;
+		uvcoords = 0.628906,0.578125,1.000000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_8;
+	}
+	[t:window,n:window_text_bg_8_2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1522;
+		rect = 223,402,319,427;
+		texture = b_gui_fe_m_mn_3d_prep2;
+		uvcoords = 0.000000,0.578125,0.375000,0.675781;
+		wrap_mode = clamp;
+		group = load_bar_8;
+	}
+}

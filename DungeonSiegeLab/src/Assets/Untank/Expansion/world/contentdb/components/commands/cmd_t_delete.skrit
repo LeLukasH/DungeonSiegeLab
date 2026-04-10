@@ -1,0 +1,129 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_t_delete.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: Deletes an object and all its inventory recursively to prevent
+// pcontent drops
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "cmd_t_delete";
+
+// external properties
+property scid target_scid$						doc = "Scid to delete.";
+property bool delete_inventory_only$ = false	doc = "Only delete the inventory.";
+
+owner = GoSkritComponent;
+
+// globals
+go target_go$;
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+// chill here until we get an activate event
+startup state Wait$
+{
+	// look for activates
+	event OnGoHandleMessage$(eWorldEvent e$, WorldMessage /*msg$*/)
+	{
+		// activate?
+		if(e$ == WE_REQ_ACTIVATE)
+		{
+			// check the scids
+			if(!target_scid$.Goid.IsValid()) { report.genericf("target_scid$ is invalid!\n"); }
+			target_go$ = target_scid$.Go;
+
+			// jump into the delete state
+			SetState Delete$;
+		}
+	}
+}
+
+// does the deleting
+state Delete$
+{
+	event OnEnterState$
+	{
+		// do we have an inventory
+		if(target_Go$.HasInventory())
+		{
+			// clear a collection to use
+			target_go$.Mind.TempGopColl1.Clear();
+
+			// get everything in the inventory
+			target_go$.Inventory.ListItems(IL_ALL, target_go$.Mind.TempGopColl1);
+
+			// get set to loop
+			int i$ = 0;
+			int iend$ = target_go$.Mind.TempGopColl1.Size();
+			Go temp$;
+
+			// loop through and search for items that have inventories.  then delete the item
+			while( i$ < iend$ )
+			{
+				// get the go
+				temp$ = target_go$.Mind.TempGopColl1.Get( i$ );
+
+				// do we have an inventory?  if yes, go one level deeper.  i hope no one
+				// is planning on going farther than that...
+				if( temp$.HasInventory() )
+				{
+					// get all the items in this inventory
+					target_go$.Mind.TempGopColl2.Clear();
+					temp$.Inventory.ListItems(IL_ALL, target_go$.Mind.TempGopColl2);
+
+					// loop and delete
+					int j$ = 0;
+					int jend$ = target_go$.Mind.TempGopColl2.Size();
+					Go temp2$;
+
+					while(j$ < jend$)
+					{
+						temp2$ = target_go$.Mind.TempGopColl2.Get( j$ );
+
+						// remove it from the inventory
+						temp$.Inventory.RSRemove(temp2$, false);
+						// delete it
+						PostWorldMessage(WE_REQ_DELETE, owner.Goid, temp2$.Goid, 0);
+
+						j$ = j$ + 1;
+					}
+				}
+
+				// delete the item itself
+				target_go$.Inventory.RSRemove(temp$, false);
+				PostWorldMessage(WE_REQ_DELETE, owner.Goid, temp$.Goid, 0);
+
+				i$ = i$ + 1;
+			}
+		}
+
+		// check the delete inventory flag
+		if( !delete_inventory_only$ )
+		{
+			// delete the target
+			PostWorldMessage(WE_REQ_DELETE, owner.Goid, target_scid$.Goid, 0);
+		}
+	}
+}
+
+// finishing state.  cleans everything up
+state Done$
+{
+	event OnEnterState$
+	{
+		// i suppose we don't really need to clean anything up in this case
+	}
+}

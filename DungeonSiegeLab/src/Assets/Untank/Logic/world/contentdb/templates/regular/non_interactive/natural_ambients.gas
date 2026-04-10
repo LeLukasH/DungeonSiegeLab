@@ -1,0 +1,275 @@
+[t:template,n:base_ambient]
+{
+	category_name = "ambients";
+	doc = "Base template for all non-interactive ambients";
+	specializes = non_interactive_nonblocking;
+	
+	[aspect]
+	{
+		draw_selection_indicator = false;
+		is_selectable = true;
+		lodfi_lower = 0;
+		lodfi_upper = 0;
+	}
+	common:rollover_display = true;
+}
+[t:template,n:cow_black_white_mp]
+{
+	category_name = "1w_ambients";
+	doc = "MP Black Cow";
+	specializes = base_ambient;
+	[aspect]
+	{
+		model = m_c_na_cw_pos_1;
+		
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_na_cw_fs0;
+			[chore_default]
+			{
+				skrit = random_infinite_loop;
+				[anim_files]
+				{
+					00 = gz;
+				}
+			}
+		}
+	}
+	[common] { screen_name="cow"; }
+}
+[t:template,n:cow_brown_mp]
+{
+	category_name = "1w_ambients";
+	doc = "MP Brown Cow";
+	specializes = base_ambient;
+	[aspect]
+	{
+		model = m_c_na_cw_pos_1;
+		[textures] { 0=b_c_na_cw; }
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_na_cw_fs0;
+			[chore_default]
+			{
+				skrit = random_infinite_loop;
+				[anim_files]
+				{
+					00 = gz;
+				}
+			}
+		}
+	}
+	[common] { screen_name="cow"; }
+}
+[t:template,n:fish_blue_mp]
+{
+	category_name = "1w_ambients";
+	doc = "MP Blue Fish";
+	specializes = base_ambient;
+	[aspect]
+	{
+		model = m_c_na_fi_pos_1;
+		[textures] { 0=b_c_na_fi; }
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_na_fi_fs0;
+			[chore_default]
+			{
+				skrit = random_infinite_loop;
+				[anim_files]
+				{
+					00 = dsf;
+					01 = dsf-02;
+				}
+			}
+		}
+	}
+	[common] { screen_name="fish"; }
+}
+[t:template,n:dog_mp]
+{
+	category_name = "1w_ambients";
+	doc = "MP dog";
+	specializes = base_ambient;
+	[aspect]
+	{
+		model = m_c_na_dg_pos_1;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_na_dg_fs0;
+			[chore_default]
+			{
+				skrit = random_infinite_loop;
+				[anim_files]
+				{
+					00 = dsf;
+				}
+			}
+		}
+	}
+	[common] { screen_name="dog"; }
+}
+[t:template,n:dog_sleeping_mp]
+{
+	category_name = "1w_ambients";
+	doc = "MP dog_sleeping";
+	specializes = base_ambient;
+	[aspect]
+	{
+		model = m_c_na_dg2_pos_1;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_na_dg2_fs0;
+			[chore_default]
+			{
+				skrit = random_infinite_loop;
+				[anim_files]
+				{
+					00 = dsf;
+				}
+			}
+		}
+	}
+	[common] { screen_name="dog"; }
+}
+[t:template,n:pig_mp]
+{
+	category_name = "1w_ambients";
+	doc = "MP pig";
+	specializes = base_ambient;
+	[aspect]
+	{
+		model = m_c_na_pg_pos_1;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_na_pg_fs0;
+			[chore_default]
+			{
+				skrit = random_infinite_loop;
+				[anim_files]
+				{
+					00 = dsf;
+				}
+			}
+		}
+	}
+	[common] { screen_name="pig"; }
+}
+[t:template,n:seagull_mp]
+{
+	category_name = "1w_ambients";
+	doc = "MP seagull";
+	specializes = base_ambient;
+	[aspect]
+	{
+		model = m_c_na_sg_pos_1;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_na_sg_fs0;
+			[chore_default]
+			{
+				skrit = random_infinite_loop;
+				[anim_files]
+				{
+					00 = fl;
+					01 = fl-02;
+					02 = fl-03;
+				}
+			}
+		}
+	}
+	[common] { screen_name="seagull"; }
+}
+[t:template,n:butterfly_mp]
+{
+	category_name = "1w_ambients";
+	doc = "MP butterfly";
+	specializes = base_ambient;
+	[aspect]
+	{
+		model = m_c_na_bf_pos_1;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_na_bf_fs0;
+			[chore_default]
+			{
+				skrit = random_infinite_loop;
+				[anim_files]
+				{
+					00 = fl;
+					01 = fl-02;
+				}
+			}
+		}
+	}
+	[common] { screen_name="butterfly"; }
+}
+
+[t:template,n:base_pupod]
+{
+	doc = "Pupod base template";
+	specializes = base_ambient;
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_pu_fs0;
+			[chore_default]
+			{
+				skrit = random_infinite_loop;
+				[anim_files]
+				{
+					00 = dsf;
+				}
+			}
+		}
+	}
+	[common] { screen_name="Pupod"; }
+}
+[t:template,n:pupod_01]
+{
+	category_name = "1w_ambients";
+	doc = "Pupod_lg";
+	specializes = base_pupod;
+	[aspect] { model=m_c_edm_pu_pos_1; }
+}
+[t:template,n:pupod_02]
+{
+	category_name = "1w_ambients";
+	doc = "Pupod_sm";
+	specializes = base_pupod;
+	[aspect] { model=m_c_edm_pu_pos_2; }
+}

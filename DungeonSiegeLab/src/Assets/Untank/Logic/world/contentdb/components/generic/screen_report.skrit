@@ -1,0 +1,62 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  screen_report.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = true;
+property string _doc$                = "Prints a message to the screen";
+property string _required_component$ = "placement";
+
+// exported properties
+property 	string		description$			= "message"			doc ="Message to print when event is recieved.";
+property	eWorldEvent message_event$			= WE_REQ_ACTIVATE	doc ="Message printed when this event is recieved.";
+property	float		resend_delay$			= 5.00				doc ="delay before message can be sent again.";
+property	bool		prepend_name$			= false				doc ="put the player name at the begining of the message.";
+
+
+owner = GoSkritComponent;
+
+startup state Waiting$
+{	
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == message_event$ )
+		{
+			if( prepend_name$ )
+			{
+				Goid Player$ = MakeGoid( msg$.GetData1() );
+				
+				if ( Player$.IsValid )
+				{
+					string name$;
+					Player$.Go.Common.GetScreenName( name$ );
+					Report.SScreenF( Report.Translate( description$ ), name$ );
+				}
+			} else {
+				Report.SScreen( Report.Translate( description$ ) );
+			}
+			
+			SetState DownTime$;
+	   	}
+	}
+}
+
+state DownTime$
+{
+	transition -> Waiting$: Ontimer( 1 );
+	
+	event OnEnterState$
+	{
+		this.createTimer(1, resend_delay$);
+   	}
+}

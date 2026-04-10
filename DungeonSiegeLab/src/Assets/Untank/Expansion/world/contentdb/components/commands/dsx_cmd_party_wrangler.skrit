@@ -1,0 +1,305 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  dsx_cmd_party_wrangler.skrit
+// Author(s):  Eric Tams ( Modified by Tim Jones - 7/30/03 )
+//
+// Copyright © 2003 Maddoc Software, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$       	= true;
+property string _doc$               	= "Get the party to behave during an NIS. Keep in mind, deactivate must come from same place as activate";
+property string _required_component$	= "placement";
+
+property bool	neutralize$		= true		doc = "make the party neutral.";
+property bool	freeze$			= false		doc = "freeze the party (puts them in a fidget and doesn't allow them to move).";
+property bool	invisible$		= false		doc = "make the party invisible";
+property bool	force_fidget$		= false		doc = "force the party to fidget.";
+
+property bool	disable_keyboard$	= true		doc = "Disable keyboard input";
+
+owner = GoSkritComponent;
+
+// globals
+Goid the_owner$;
+Scid orig_sender$;
+Goid the_child$;
+bool allow_new_jobs$;
+
+//////////////////////////////////////////////////////////////////////////////
+// local states
+
+#only( dev ) 
+[[ 
+event OnGoDrawDebugHud$
+{
+	if( neutralize$ )
+    {
+    	World.DrawDebugPoint( owner.Go.Placement.Position, 0.3, MakeColor( 0.0, 1.0, 0.0 ), 0.333 , "Neutralizing" , MakeColor( 1.0, 1.0, 1.0 ));
+	}
+	
+	if( freeze$ )
+    {
+    	World.DrawDebugPoint( owner.Go.Placement.Position, 0.3, MakeColor( 0.0, 1.0, 0.0 ), 0.5 , "Freezing" , MakeColor( 1.0, 1.0, 1.0 ));
+	}
+	
+	if( invisible$ )
+    {
+    	World.DrawDebugPoint( owner.Go.Placement.Position, 0.3, MakeColor( 0.0, 1.0, 0.0 ), 0.666 , "Hiding" , MakeColor( 1.0, 1.0, 1.0 ));
+	}
+}
+]] 
+
+startup state Wait$
+{
+}
+
+state Freezer$
+{
+	event OnEnterState$
+	{
+		// wait for a second for everyone to stop moving before you actually freeze them
+		this.CreateTimer( 1, .1 );
+	}
+
+	transition->Freezing$:OnTimer( 1 );
+}
+
+state Freezing$
+{
+	event OnEnterState$
+	{
+		Go party$ = Server.ScreenParty;
+		if ( party$ == NULL )
+		{
+			// we are boned.
+			return;	
+		}
+		
+		int i$ = 0;
+		int iend$ = party$.Children.Size();
+		Go Child$;
+		while( i$ < iend$ )
+		{
+			Child$ = party$.Children.Get( i$ );
+		
+			if( Child$ != NULL )
+			{
+				// stop the fidget and lock them up
+				Child$.Mind.SetActorAutoFidgets( false );
+				Child$.Aspect.AspectHandle.SetLockMeshFlag(true);
+
+				// make the omni version of the spell to run things.
+				GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.Goid, owner.goid );
+				cloneReq$.Omni = true;
+				Goid new_controller$ = GoDb.SCloneGo( cloneReq$ );
+
+				// start the omni version
+				PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, new_controller$, MakeInt( Child$.Goid ), 0 );
+			}
+			i$ += 1;
+		}
+	}
+}
+
+// stops the character moving
+state StopMovement$
+{
+	event OnEnterState$
+	{
+		if( freeze$ && the_child$.IsValid() )
+		{
+			// are we fidgeting?
+			if( force_fidget$ )
+			{
+				MCPManager.Flush( the_child$ );
+			}
+
+			#only(game) [[
+			// get the old value
+			allow_new_jobs$ = the_child$.Go.Mind.GetAllowNewMovementJobs();
+
+			// set it to false
+			the_child$.Go.Mind.SetAllowNewMovementJobs( false );
+			
+			// TAT 9/17/2003 - don't want "Black screen of doom" - if you hit
+			//		esc before NIS starts, but while screen is faded
+			//		so disabling keyboard input, Bug 3211
+			if ( disable_keyboard$ )
+			{
+				UIGame.SetGameInputBinderActive( false );
+			}
+			
+			]];
+		}
+	}
+}
+
+event OnGoHandleCCMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	// make sure the sender is the same as the one that activated us
+	if( e$ == WE_REQ_DEACTIVATE )
+	{
+		// get the sender
+		Goid sender$ = msg$.GetSendFrom();
+		if( !sender$.IsValid() ) { return; }
+		if( sender$.Scid == NULL ) { return; }
+
+		//report.genericf("sender: %X\n", sender$.scid);
+
+		// make sure it's the same as the original
+		if( sender$.Scid == orig_sender$ )
+		{
+			if( freeze$ )
+			{
+				// ok, we can do jobs again
+				#only(game) [[
+				the_child$.Go.Mind.SetAllowNewMovementJobs( allow_new_jobs$ );
+				]];
+
+				// fidgets etc
+				the_child$.Go.Mind.SetActorAutoFidgets( true );
+				the_child$.Go.Aspect.AspectHandle.SetLockMeshFlag( false );
+			}
+			if( neutralize$ )
+			{
+				the_child$.Go.Actor.SSetalignment( AA_GOOD );
+				the_child$.Go.Aspect.SetIsInvincible( false );
+			}
+			if( invisible$ )
+			{
+				the_child$.Go.Aspect.AspectHandle.SetHideMeshFlag( false );
+			}
+
+			// we're all set
+			SetState Done$;
+		}
+	}
+}
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	// wait for activate/deactivate events
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		// get the child goid
+		the_child$ = MakeGoid( msg$.GetData1() );
+
+		// if we got a goid along with everything, go to the stop state
+		if( the_child$.IsValid() )
+		{
+			// start watching the original owner so you can get deactivates
+			GoDb.StartWatching( owner.Goid, msg$.GetSendFrom() );
+
+			// set the owner
+			the_owner$ = msg$.GetSendFrom();
+
+			SetState StopMovement$;
+			return;
+		}
+
+		// record the original sender
+		orig_sender$ = msg$.GetSendFrom().Scid;
+
+		//report.genericf("orig_sender: %X\n", orig_sender$);
+
+		Go party$ = Server.ScreenParty;
+		if ( party$ == NULL )
+		{
+			// we are boned.
+			return;	
+		}
+
+		int i$ = 0;
+		int iend$ = party$.Children.Size();
+		Go Child$;
+		while( i$ < iend$ )
+		{
+			Child$ = party$.Children.Get( i$ );
+		
+			if( Child$ != NULL )
+			{
+				if( neutralize$ )
+				{
+
+					Child$.Mind.TempGopColl1.clear;
+					Child$.Mind.GetEngagedMeEnemies( Child$.Mind.TempGopColl1 );
+					
+					int j$ = 0;
+					int jend$ = Child$.Mind.TempGopColl1.Size();
+					
+					Go Enemy$;
+					
+					while( j$ < jend$ )
+					{
+						Enemy$ = Child$.Mind.TempGopColl1.Get( j$ );
+						if( Enemy$ != NULL )
+						{
+							MCPManager.Flush( Enemy$.Goid );
+							Enemy$.Mind.SDoJob( MakeJobReq( JAT_STOP, JQ_ACTION, QP_CLEAR, AO_COMMAND ));
+							Enemy$.Mind.ResetSensors();
+						}
+						j$ += 1;   
+					}	
+					
+					Child$.Actor.SSetalignment( AA_NEUTRAL );
+					Child$.Aspect.SetIsInvincible( true );
+					Child$.Mind.ResetSensors();
+					Child$.Mind.SDoJob( MakeJobReq( JAT_STOP, JQ_ACTION, QP_CLEAR, AO_COMMAND ));
+				}
+
+				if( invisible$ )
+				{
+					Child$.Aspect.AspectHandle.SetHideMeshFlag( true );
+				}
+
+				// are we doing a force fidget?
+				if( force_fidget$ )
+				{
+					MCPManager.Flush( Child$.Goid );
+				}
+
+				// if we're not freezing, create a new version of the controller
+				if( !freeze$ )
+				{
+					// make the omni version of the spell to run things.
+					GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.Goid, owner.goid );
+					cloneReq$.Omni = true;
+					Goid new_controller$ = GoDb.SCloneGo( cloneReq$ );
+
+					// start the omni version
+					PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, new_controller$, MakeInt( Child$.Goid ), 0 );
+				}
+			}
+			i$ += 1;
+		}
+
+		// if we're freezing, we'll need to wait a second for them to start fidgeting
+		if( freeze$ )
+		{
+			SetState Freezer$;
+		}
+	}
+	else if( e$ == WE_REQ_DEACTIVATE )
+	{
+		SetState Done$;
+	}
+}
+
+state Done$
+{
+	event OnEnterState$
+	{
+		// if the owner is valid, stop watching him
+		if( the_owner$.IsValid() )
+		{
+			GoDb.StopWatching( owner.Goid, the_owner$ );
+		}
+	}
+}

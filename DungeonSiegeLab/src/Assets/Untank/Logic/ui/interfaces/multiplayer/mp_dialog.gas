@@ -1,0 +1,181 @@
+[mp_dialog]
+{
+	interface = true;
+	centered = background;
+	modal = true;
+	[t:dialog_box,n:background]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox_thin_dark;
+	  x draw_order = 0x00000000;
+		rect = 145,155,495,350;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		consumable = true;
+		topmost = true;
+	}
+	[t:button,n:mp_dialog_button_ok]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000001;
+		rect = 280,314,360,330;
+		uvcoords = 0.000000,0.150000,0.200000,0.300000;
+		wrap_mode = clamp;
+		topmost = true;
+		[t:text,n:mp_dialog_button_ok_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x00000044;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x0000000C;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 327,249,365,264;
+			text = "OK";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			topmost = true;
+		}
+		[messages]
+		{
+			onbuttonpress = playsound(s_e_frontend_tiny_button) & notify(mp_dialog_ok);
+			onenter = notify(mp_dialog_ok);
+			onescape = notify(mp_dialog_ok);
+		}
+	}
+	[t:button,n:mp_dialog_button_yes]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000001;
+		rect = 230,314,310,330;
+		uvcoords = 0.000000,0.150000,0.200000,0.300000;
+		wrap_mode = clamp;
+		visible = false;
+		topmost = true;
+		[t:text,n:mp_dialog_button_yes_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x00000044;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x0000000C;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 327,249,365,264;
+			text = "Yes";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			topmost = true;
+		}
+		[messages]
+		{
+			onbuttonpress = playsound(s_e_frontend_tiny_button) & notify(mp_dialog_yes);
+			onenter = notify(mp_dialog_yes);
+			onescape = notify(mp_dialog_ok);
+		}
+	}
+	[t:button,n:mp_dialog_button_no]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000001;
+		rect = 330,314,410,330;
+		uvcoords = 0.000000,0.150000,0.200000,0.300000;
+		wrap_mode = clamp;
+		visible = false;
+		topmost = true;
+		[t:text,n:mp_dialog_button_no_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x00000044;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x0000000C;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 327,249,365,264;
+			text = "No";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			topmost = true;
+		}
+		[messages]
+		{
+			onbuttonpress = playsound(s_e_frontend_tiny_button) & notify(mp_dialog_no);
+			onescape = notify(mp_dialog_no);
+		}
+	}
+	[t:text,n:mp_dialog_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+	  x font_color = 0xFFFFFFFF;
+	  x font_size = 0x0000000C;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 158,170,482,262;
+		text = "";
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		topmost = true;
+	}
+	[t:text,n:mp_dialog_text2]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+	  x font_color = 0xFFFFFFFF;
+	  x font_size = 0x0000000C;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 158,208,482,300;
+		text = "";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		topmost = true;
+	}
+	[t:text_box,n:mp_dialog_text_box]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000046;
+	  b fixed_location = true;
+		font_color = 0xffffffff;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+	  b has_slider = false;
+		justify = center;
+	  x max_height = 0x000000F0;
+	  x max_width = 0x00000140;
+		rect = 158,166,482,312;
+	  f scroll_rate = 0.000000;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		center_height = true;
+		topmost = true;
+	}
+}

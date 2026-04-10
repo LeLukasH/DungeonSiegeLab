@@ -1,0 +1,68 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  weapon_poison.skrit
+// Author(s):  Tara Teich (modified from weapon_cold.skrit)
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+//	This is sneaky... dont try this at home kids.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string manager_template$ = "dsx_base_poison_manager"	doc = "Template name of the manager that will do the damage";
+property float duration$ = 2.0					doc = "Duration of the poison effect";
+Goid manager$;
+	
+on_add_custom_damage$( Go owner$ )
+{
+	// Create an Omni version of the spell. Note that it must run on clients as
+	// well due to the effects needing an owner on clients.
+	GoCloneReq cloneReq$ = MakeGoCloneReq( manager_template$ );
+	cloneReq$.Omni = true;
+	cloneReq$.ForceClientAllowed = true;
+	cloneReq$.ForceServerOnly = false;
+	manager$ = GoDb.SCloneGo( cloneReq$ );
+	
+	// Duration is passed in, but it is fixed for this component, it will never change
+	//		with a particular instance of this manager
+	//		So send a message setting the duration
+	
+	// pack duration here...
+	int packed_duration$ = Math.Round( duration$ * 1000 );
+	
+	// using talk message, I really doubt that the manager will every legitimately receive that message
+	SendWorldMessage( WE_REQ_TALK_BEGIN, owner$.goid, manager$, packed_duration$ );
+}
+
+on_remove_custom_damage$( /*some params*/ )
+{
+	// nix omni GO.
+	if( manager$.IsValid )
+	{    		
+		PostWorldMessage( WE_REQ_DELETE, manager$, manager$, duration$ + 1.0 );
+	}
+}
+
+on_custom_damage$( Go victim$, Go attacker$, Go weapon$, float /*damage_amount$*/ )
+{
+	//Siegefx.SRunScript( "cold_weapon", victim$.Goid, weapon$.Goid, "", attacker$.Goid, WE_UNKNOWN );
+	
+	if( victim$.Common.Membership.Contains( "immune_poison" ) )
+	{
+		return;
+	}
+	
+	if( victim$.Player.Controller != PC_COMPUTER  )
+	{
+		return;
+	}
+	
+	// send a message with the attacker - we need it for experience
+	SendWorldMessage( WE_REQ_TALK_END, attacker$.goid, manager$, 0 );
+
+	// pass the weapon through	
+	SendWorldMessage( WE_REQ_ACTIVATE, victim$.goid, manager$, MakeInt(weapon$.Goid) );
+}

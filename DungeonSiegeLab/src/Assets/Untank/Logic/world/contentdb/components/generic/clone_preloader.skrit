@@ -1,0 +1,55 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  clone_preloader.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = false;
+property string _doc$                = "preloads a go to prevent slowdown";
+property string _required_component$ = "placement";
+
+property string template_name$   	doc = "Template name of Go to pre-load";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+// local states
+
+startup state Start$
+{
+	transition -> Load$: OnGoHandleMessage( WE_ENTERED_WORLD );
+}
+
+event OnGoDrawDebugHud$
+{
+	if( !StringTool.IsEmpty( template_name$ ) )
+    {
+    	World.DrawDebugPoint( owner.Go.Placement.Position, 0.3, MakeColor( 0.0, 1.0, 0.0 ), 0.33 , template_name$ , MakeColor( 1.0, 1.0, 1.0 ));
+	}
+}	
+
+state Load$
+{
+    event OnEnterState$
+	{
+		if( !StringTool.IsEmpty( template_name$ ) )
+    	{
+    		This.CreateTimer(1,30);
+    	}
+	}
+    
+    trigger OnTimer$( 1 )
+    {
+    	GoDb.PreloadCloneSource( owner.Go, template_name$ );
+    	This.CreateTimer(1,30);
+   	}
+}

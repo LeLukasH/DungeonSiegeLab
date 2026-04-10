@@ -1,0 +1,344 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  dsx_a9_clock_watcher.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: When the SJ dies, the clock is supposed to stop.  Unfortunately,
+//			if the player leaves the frustum and returns, the clock starts to
+//			reanimate at it's full speed.  This is because that is the default
+//			behavior for the clock.  This skrit will wait and re-stop the clock
+//			whenever it re-enters the world, making sure that the clock is
+//			always stopped.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "dsx_a9_clock_watcher.skrit";
+
+// external properties
+property scid sj_scid$					doc = "Scid of shadow jumper.";
+property scid cgm_scid$					doc = "Scid of dsx_clock_gear_mechanism.";
+property scid cgm_b_scid$				doc = "Scid of dsx_clock_gear_mechanism_b.";
+property scid cgm_c_scid$				doc = "Scid of dsx_clock_gear_mechanism_c.";
+property scid cgm_d_scid$				doc = "Scid of dsx_clock_gear_mechanism_d.";
+
+property string sjDeadBoolean$ = "dsx_a9_clock_watcher_sj_dead" doc = "Name of global boolean.  Defaults to false, so he is alive to begin with.";
+
+owner = GoSkritComponent;
+
+// globals
+goid current_character$;
+bool stop_animation$;
+int start_chore$;
+int loop_chore$;
+string gear_effect_name$ = "clock_gear_mechanism_b_continuous";
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// Support functions
+
+// starts the character into the slow state by creating a new version of the skrev
+slow_character$( goid character$, int s_c$, int l_c$, bool stop$ )
+{
+//	report.genericf("dsx_a9_clock_watcher: Slow down one of the gears: %d\n", MakeInt(character$));
+	
+	// set the values
+	start_chore$ = s_c$;
+	loop_chore$ = l_c$;
+	stop_animation$ = stop$;
+
+	// create the omni version to control the new character
+	GoCloneReq cloneReq$ = MakeGoCloneReq( owner.goid, owner.goid );
+	cloneReq$.Omni = true;
+	Goid new_controller$ = GoDb.SCloneGo( cloneReq$ );
+	
+	// send Omni version a activate to get it started
+	PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, new_controller$, MakeInt( character$ ), 0 );
+}
+
+float switch_animation$(eAnimChore chore$, int fourcc$, goid character$)
+{
+	//report.genericf( "switching animation!\n" );
+
+	// if we have a mind we want to stop fidgeting
+	if( character$.Go.HasMind() )
+	{
+		// turn off auto fidget
+		character$.Go.Mind.SetActorAutoFidgets( false );
+	}
+
+	// clear the mcp
+	MCPManager.Flush( character$ );
+
+	// get the correct animation
+	int anim$ = character$.Go.Aspect.AspectHandle.Blender.GetSubAnimIndex( chore$, fourcc$ );
+		
+	// make sure we got one
+	if (anim$ >= 0)
+	{
+		// make the request for the action
+		eReqRetCode ret$ = MCPManager.MakeRequest( character$.Go.Goid, PL_PLAYANIM, chore$, anim$, 0 );
+	}
+	else
+	{
+		report.genericf( "The animation could not be found\n" );
+		return 0;
+	}
+
+	// return the duration
+	return character$.Go.Aspect.AspectHandle.Blender.GetDuration( chore$, AS_PLAIN, anim$ );
+	//return character$.Go.Aspect.AspectHandle.Blender.GetDuration( anim$ );
+}
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+startup state Wait$
+{
+	bool foundCGMA$ = false;
+	bool foundCGMB$ = false;
+	bool foundCGMC$ = false;
+	bool foundCGMD$ = false;
+
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		// When we enter the world, look for the shadow jumper.
+		if(e$ == WE_ENTERED_WORLD)
+		{
+			// Omni copies don't do this.
+			if(owner.go.IsOmni())
+			{
+				return;
+			}
+
+			if(sj_scid$ == 0)
+			{
+//				report.generic("dsx_a9_clock_watcher: No SJ scid provided.\n");
+				return;
+			}
+
+//			report.generic("dsx_a9_clock_watcher: Entered world.\n");
+
+			// If the shadow jumper is dead, then slow down the clock gears.
+			if(GameAuditor.GetDb.GetBool(sjDeadBoolean$))
+			{
+//				report.generic("dsx_a9_clock_watcher: SJ dead.  Start slowdown.\n");
+
+				foundCGMA$ = false;
+				foundCGMB$ = false;
+				foundCGMC$ = false;
+				foundCGMD$ = false;
+
+				this.CreateTimer(2, 0);
+			}
+			else
+			{
+				// If the SJ scid isn't valid, then loop until we find him
+				if(!sj_scid$.Goid.IsValid())
+				{
+//					report.generic("dsx_a9_clock_watcher: No SJ yet\n");
+					SetState SearchingForSJ$;
+				}
+				// Otherwise, start watching the SJ
+				else
+				{
+//					report.generic("dsx_a9_clock_watcher: Found SJ... watching\n");
+					SetState WatchingSJ$;
+				}
+			}	
+		}
+		if(e$ == WE_REQ_ACTIVATE)
+		{
+//			report.generic("dsx_a9_clock_watcher: Omni copy activated\n");
+			// get the current character
+			current_character$ = MakeGoid( msg$.GetData1() );
+
+			this.CreateTimer( 1, 0 );
+		}
+	}
+
+	// jump into the animation state
+	transition->PlayLoopAnimation$:OnTimer( 1 );
+
+	trigger OnTimer$(2)
+	{
+		if(!foundCGMA$)
+		{
+			if( !cgm_scid$.Goid.IsValid() ) { report.genericf( "dsx_a9_clock_watcher: cgm_scid$ is not valid!\n" ); }
+			else
+			{
+				foundCGMA$ = true;
+				PostWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, cgm_scid$.Goid, 0 );
+				slow_character$( cgm_scid$.Goid, 'slow', 'slol', false );
+			}
+		}
+
+		if(!foundCGMB$)
+		{
+			if( !cgm_b_scid$.Goid.IsValid() ) { report.genericf( "dsx_a9_clock_watcher: cgm_b_scid$ is not valid!\n" ); }
+			else
+			{
+				foundCGMB$ = true;
+				PostWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, cgm_b_scid$.Goid, 0 );
+				slow_character$( cgm_b_scid$.Goid, 'slow', 'slol', false );
+			}
+		}
+
+		if(!foundCGMC$)
+		{
+			if( !cgm_c_scid$.Goid.IsValid() ) { report.genericf( "dsx_a9_clock_watcher: cgm_c_scid$ is not valid!\n" ); }
+			else
+			{
+				foundCGMC$ = true;
+				slow_character$( cgm_c_scid$.Goid, 'stop', '', true );
+			}
+		}
+
+		if(!foundCGMD$)
+		{
+			if( !cgm_d_scid$.Goid.IsValid() ) { report.genericf( "dsx_a9_clock_watcher: cgm_d_scid$ is not valid!\n" ); }
+			else
+			{
+				foundCGMD$ = true;
+				slow_character$( cgm_d_scid$.Goid, 'slow', 'slol', false );
+			}
+		}
+		
+		if(!foundCGMA$ || !foundCGMB$ || !foundCGMC$ || !foundCGMD$)
+		{
+			this.CreateTimer(2, .1);
+		}
+	}
+}
+
+// We don't know where the SJ is, so search for him
+state SearchingForSJ$
+{
+	event OnEnterState$
+	{
+//		report.generic("dsx_a9_clock_watcher: In search state\n");
+		this.CreateTimer(1, 1);	
+	}
+
+	trigger OnTimer$(1)
+	{
+		// If the SJ scid isn't valid, then loop until we find him
+		if(!sj_scid$.Goid.IsValid())
+		{
+//			report.generic("dsx_a9_clock_watcher: No SJ yet\n");
+			this.CreateTimer(1, 1);	
+		}
+		// Otherwise, start watching the SJ
+		else
+		{
+//			report.generic("dsx_a9_clock_watcher: Found SJ... watching\n");
+			SetState WatchingSJ$;
+		}
+	}
+}
+
+// We see the SJ and we're watching for him do die
+state WatchingSJ$
+{
+	event OnEnterState$
+	{
+//		report.generic("dsx_a9_clock_watcher: In watching state\n");
+		GoDb.StartWatching(owner.goid, sj_scid$.Goid);
+	}
+
+	// If we leave the world, stop watching the SJ
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if(e$ == WE_LEFT_WORLD)
+		{
+//			report.generic("dsx_a9_clock_watcher: I Left world.  Stopping watch\n");
+			GoDb.StopWatching(owner.goid, sj_scid$.Goid);
+			SetState Wait$;
+		}
+	}
+	event OnGoHandleCCMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		// When the shadow jumper is killed, then we set the global boolean
+		// to indicate that he's dead.
+		if(e$ == WE_KILLED)
+		{
+//			report.generic("dsx_a9_clock_watcher: SJ killed... setting global bool\n");
+			GameAuditor.GetDb.SetBool(sjDeadBoolean$, true);
+			SetState Finished$;
+			return;
+		}
+		// If the shadow jumper leaves the world, then stop watching him, and return
+		// to the wait state
+		else if(e$ == WE_LEFT_WORLD)
+		{
+//			report.generic("dsx_a9_clock_watcher: SJ Left world.  Stopping watch\n");
+			GoDb.StopWatching(owner.goid, sj_scid$.Goid);
+			SetState SearchingForSJ$;
+		}
+	}
+}
+
+// loops the animation for the current_character$
+state PlayLoopAnimation$
+{
+	event OnEnterState$
+	{
+		float duration$;
+
+		if(current_character$ == cgm_b_scid$.Goid)
+		{
+			SiegeFX.SStopScript( cgm_b_scid$.Goid, gear_effect_name$ );
+		}
+
+		// are we supposed to be looping
+		if( stop_animation$ )
+		{
+			// lock the mesh
+			current_character$.Go.Aspect.AspectHandle.SetLockMeshFlag( true );
+
+			// bail into the done state
+			this.CreateTimer( 1, 0 );
+			return;
+		}
+		else
+		{
+			// if the current character isn't valid for whatever reason, bail
+			if( !current_character$.IsValid() )
+			{
+				this.CreateTimer( 1, 0 );
+				return;
+			}
+
+			// switch the animation
+			duration$ = switch_animation$( CHORE_MISC, loop_chore$, current_character$ );
+
+			this.CreateTimer( 2, duration$ );
+		}
+	}
+
+	transition->Done$:OnTimer( 1 );
+	transition->PlayLoopAnimation$:OnTimer( 2 );
+}
+
+// finishing state.  cleans everything up
+state Done$
+{
+	event OnEnterState$
+	{
+		// delete ourselves
+		PostWorldMessage(WE_REQ_DELETE, owner.Goid, owner.Goid, 1);
+	}
+}
+
+state Finished$
+{
+}

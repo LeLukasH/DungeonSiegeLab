@@ -1,0 +1,285 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  jipper.skrit (Skritbot)
+// Author(s):  Scott Bilas (biddle)
+//
+// Summary  :  Contains front-end automation for multiplayer JIP testing
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property string Action$					doc = "Host or client";
+property bool   Log$		= false		doc = "Log all net activity?";
+property int    Players$	= 2			doc = "Total players in game";
+property string Host$					doc = "Whose game to connect to";
+property string Password$				doc = "Password to get into game";
+property bool   Start$		= true		doc = "Start immediately after joining?";
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnConstruct$
+{
+	// set up defaults
+	if ( Action$ ~= "" )
+	{
+		if ( Host$ ~= "" )
+		{
+			Action$ = "host";
+		}
+		else
+		{
+			Action$ = "client";
+		}
+	}
+
+	// start up logging
+	if ( Log$ )
+	{
+		Report.Generic( "** BOT ** Enabling network logging to file and console...\n" );
+		GpConsole.Execute( "report enable net" );
+		GpConsole.Execute( "report filelog net" );
+	}
+}
+
+startup state Intro$ trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+{
+	if ( WorldState.CurrentState == WS_INTRO )
+	{
+		if ( (Action$ ~= "host") || (Action$ ~= "client") )
+		{
+			Report.Generic( "** BOT ** Skipping title screen...\n" );
+			UiShell.SendUiMessage( MSG_ONBUTTONPRESS, "panel_5", "title_screen" );
+		}
+	}
+	else if ( WorldState.CurrentState == WS_MAIN_MENU )
+	{
+		setstate Intro2$;
+	}
+}
+
+
+state Intro2$
+{
+	Intro2_Start$ at ( 5 frames )
+	{
+		if ( (Action$ ~= "host") || (Action$ ~= "client") )
+		{
+			Report.Generic( "** BOT ** Choosing multiplayer...\n" );
+			UiShell.SendUiMessage( MSG_ONBUTTONPRESS, "button_multi_player", "main_menu" );
+		}
+	}
+
+	trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+	{
+		if ( WorldState.CurrentState == WS_MP_PROVIDER_SELECT )
+		{
+			if ( Action$ ~= "none" )
+			{
+				// abort the rest
+				setstate Idle$;
+				return;
+			}
+
+			Report.Generic( "** BOT ** Choosing LAN game...\n" );
+			UiShell.SendUiMessage( MSG_ONBUTTONPRESS, "button_lan", "multiplayer_provider" );
+		}
+		else if ( WorldState.CurrentState == WS_MP_LAN_GAME )
+		{
+			if ( Action$ ~= "host" )
+			{
+				Report.Generic( "** BOT ** ACTION: HOST\n" );
+				setstate Server$;
+			}
+			else if ( Action$ ~= "client" )
+			{
+				Report.Generic( "** BOT ** ACTION: CLIENT\n" );
+				setstate Client$;
+			}
+			else
+			{
+				Report.ErrorF( "Unrecognized/missing Action '%s' in Skritbot %s\n", Action$, this.Name );
+			}
+		}
+	}
+}
+
+state Idle$ trigger OnEnterState$
+{
+	Report.Generic( "** BOT ** Finished, quitting.\n" );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+int ready$ = 0;
+
+state Server$
+{
+	S_0$ at ( 1 frames )
+	{
+		Report.Generic( "** BOT ** Hosting a game...\n" );
+		UiShell.SendUiMessage( MSG_ONBUTTONPRESS, "button_host", "lan_game_menu" );
+	}
+
+	S_1$ at ( 2 frames )
+	{
+		Report.Generic( "** BOT ** Hitting OK...\n" );
+		UiShell.SendUiMessage( MSG_ONBUTTONPRESS, "button_ok", "host_game" );
+	}
+
+	trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+	{
+		if ( (WorldState.CurrentState == WS_MP_STAGING_AREA_SERVER) && (Players$ == 1) )
+		{
+			setstate ServerGo$;
+		}
+	}
+
+	trigger OnBotHandleMessage$( WE_MP_PLAYER_READY )
+	{
+		Report.Generic( "** BOT ** Detected player ready...\n" );
+
+		ready$ += 1;
+		if ( ready$ == Players$ )
+		{
+			setstate ServerGo$;
+		}
+	}
+
+	trigger OnBotHandleMessage$( WE_MP_PLAYER_NOT_READY )
+	{
+		Report.Generic( "** BOT ** Detected player no longer ready...\n" );
+		ready$ -= 1;
+	}
+}
+
+state ServerGo$ SG_0$ at ( 1 frames )
+{
+	if ( Start$ )
+	{
+		Report.Generic( "** BOT ** Starting the game...\n" );
+		UIShell.SendUiMessage( MSG_ONBUTTONPRESS, "staging_area_button_start_game", "staging_area" );
+	}
+
+	setstate Idle$;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+bool IsReady$
+{
+	if ( Server.GetLocalHumanPlayer != NULL )
+	{
+		if ( Server.GetLocalHumanPlayer.IsHeroSpecReady )
+		{
+			return ( true );
+		}
+	}
+
+	return ( false );
+}
+
+state Client$ poll ( 0.5 )
+{
+	trigger OnBotHandleMessage$( WE_MP_SESSION_ADDED )
+	{
+		if ( StringTool.IsEmpty( Host$ ) )
+		{
+			Report.Generic( "** BOT ** No host specified, joining the first game I see...\n" );
+			UIShell.SendUiMessage( MSG_ONBUTTONPRESS, "button_join", "lan_game_menu" );
+		}
+		else
+		{
+			Report.GenericF( "** BOT ** Enumerated a new session, trying to join %s's Game...\n", Host$ );
+			UIMultiplayer.JoinLanGame( Host$, Password$, false );
+		}
+	}
+
+	trigger OnBotHandleMessage$( WE_MP_PLAYER_CREATED )
+	{
+		Report.Generic( "** BOT ** Machine was connected...\n" );
+	}
+
+	transition -> EnteringGame$: if ( IsReady$ ) =
+	{
+		if ( Start$ )
+		{
+			Report.Generic( "** BOT ** Joined! Checking READY...\n" );
+			UiShell.SendUiMessage( MSG_ONLBUTTONDOWN, "checkbox_ready_text",  "staging_area" );
+			UiShell.SendUiMessage( MSG_ONLBUTTONUP,   "checkbox_ready_text",  "staging_area" );
+		}
+	}
+}
+
+state EnteringGame$ poll ( 0.5 )
+{
+	transition -> LeaveGame$: if ( WorldState.CurrentState == WS_MP_INGAME ) =
+	{
+ 		Report.Generic( "** BOT ** Trying to bail out of the game ...\n" );
+	}
+}
+
+state LeaveGame$
+{
+	event OnEnterState$
+	{
+		Report.Generic( "** BOT ** Bring up in game menu...\n" );
+ 		UiShell.SendUiMessage( MSG_ONBUTTONPRESS, "button_menu" , "data_bar" );
+	}
+
+	exitgame$ at ( 3.0 )
+	{
+		Report.Generic( "** BOT ** Press exit...\n" );
+ 		UiShell.SendUiMessage( MSG_ONBUTTONPRESS, "exit_game_button_client", "in_game_menu" );
+	}
+
+	reallymeanit$ at ( 4.0 )
+	{
+		Report.Generic( "** BOT ** Acknowledge...\n" );
+ 		UiShell.SendUiMessage( MSG_ONBUTTONPRESS, "backend_button_yes", "backend_dialog" );
+		SetState WaitToLeaveGame$;
+  	}
+
+}
+
+state WaitToLeaveGame$
+{
+	dummy1$ at ( 5.0 )
+	{
+		SetState LeaveGame$;
+	}
+}
+
+
+state LeaveGame$ poll ( 0.5 )
+{
+	transition -> WaitToReturnToMain$: if ( WorldState.CurrentState == WS_GAME_ENDED ) =
+	{
+ 		Report.Generic( "** BOT ** RETURN TO MAIN MENU ...\n" );
+ 		UiShell.SendUiMessage( MSG_ONBUTTONPRESS, "end_game_close", "end_game_summary" );
+	}
+}
+
+state WaitToReturnToMain$
+{
+	dummy2$ at ( 5.0 )
+	{
+		SetState ReturnToMain$;
+	}
+}
+	 
+
+state ReturnToMain$	poll ( 0.5 )
+{
+	transition -> Intro2$: if ( WorldState.CurrentState == WS_MAIN_MENU ) =
+	{
+		Report.Generic( "** BOT ** ACTION: CLIENT RE-ENTERS GAME\n" );
+		setstate Intro2$;
+	}
+
+}
+
+
+//////////////////////////////////////////////////////////////////////////////

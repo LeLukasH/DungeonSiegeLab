@@ -1,0 +1,21 @@
+[character_defaults]
+{
+	character_name = "";
+	selected_character = farmgirl;
+	texture_dwarf_faces = b_c_gan_df_skin_01;
+	texture_dwarf_heads = default;
+	texture_dwarf_pants = b_c_pos_a1_pant_005;
+	texture_dwarf_shirts = b_c_pos_a1_shrt_012;
+	texture_farmboy_faces = b_c_gah_fb_skin_007;
+	texture_farmboy_hair = b_c_gah_fb_hair_002;
+	texture_farmboy_heads = default;
+	texture_farmboy_pants = b_c_pos_a1_pant_005;
+	texture_farmboy_shirts = b_c_pos_a1_shrt_009;
+	texture_farmgirl_faces = b_c_gah_fg_skin_010;
+	texture_farmgirl_hair = b_c_gah_fg_hair_007;
+	texture_farmgirl_heads = default;
+	texture_farmgirl_pants = b_c_pos_a1_pant_005;
+	texture_farmgirl_shirts = b_c_pos_a1_shrt_009;
+	texture_skeleton_good_faces = b_c_ecm_sk;
+	texture_skeleton_good_heads = default;
+}

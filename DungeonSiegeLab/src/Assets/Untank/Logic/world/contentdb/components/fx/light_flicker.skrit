@@ -1,0 +1,190 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  light_flicker.skrit
+// Author(s):  Scott Bilas, Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool		_server_only$			= false;
+property string		_doc$					= "Flickering light effect";
+
+// exported properties
+property LightId	siege_light$			= 0					doc = "Identifier of siege light to attach this effect to";
+property float		magnitude$				= 0.8				doc = "Magnitude of flicker (as a ratio) subtracted from initial light intensity";
+property float		duration$				= 0					doc = "Duration for effect to last in seconds (0 for infinite)";
+property float		flicker_frequency_min$	= 0					doc = "Minimum frequency of flickering (flickers per second), 0 for every frame";
+property float		flicker_frequency_max$	= 0					doc = "Maximum frequency of flickering (flickers per second), 0 for every frame";
+property bool		initially_active$		= true				doc = "Start this effect on construction?";
+property bool		self_destruct$			= false				doc = "Self-destruct on algorithm completion";
+property bool		random_flicker$			= true				doc = "Choose a random amount to flicker between 0 and magnitude";
+
+owner = GoSkritComponent;
+
+// globals
+float initial_intensity$;
+float time$;
+float next_flicker$;
+bool  flickering$ = false; // for non-random flickering.
+bool set_intensity$ = false;
+
+//////////////////////////////////////////////////////////////////////////////
+trigger OnGoDrawDebugHud$
+{
+	if ( siege_light$.IsValid )
+	{
+		SiegePos pos$ = SiegePos.MakeDefault;
+		siege_light$.GetPosition( pos$ );
+		World.DrawDebugLine( owner.go.Placement.Position,
+							 pos$,
+							 MakeColor( 1.0, 1.0, 1.0, 0.5 ),
+							 "flicker" );
+	}
+}
+
+trigger OnGoHandleMessage$( WE_LEFT_WORLD )
+{
+	if ( siege_light$.IsValid && set_intensity$ )
+	{
+		if ( siege_light$.Active )
+		{
+			siege_light$.Intensity = initial_intensity$;
+		}
+	}
+}
+
+float CalcNextFlicker$
+{
+	float when$ = 0;
+
+	if ( flicker_frequency_min$ > 0 )
+	{
+		if ( flicker_frequency_max$ < flicker_frequency_min$ )
+		{
+			flicker_frequency_max$ = flicker_frequency_min$;
+		}
+
+		when$ = 1.0 / Math.RandomFloat( flicker_frequency_min$, flicker_frequency_max$ );
+	}
+
+	return ( when$ );
+}
+
+startup state Constructed$
+{
+	#only( game )
+	[[
+	// $ wait in this state until the siege light is in the world
+
+	event OnGoUpdate$( float /*deltaTime$*/ )
+	{
+		if ( siege_light$.IsValid )
+		{
+			initial_intensity$ = siege_light$.Intensity;
+			set_intensity$ = true;
+			setstate Wait$;
+		}
+	}
+	]]
+}
+
+state Wait$
+{
+	transition -> WaitTillActive$: OnTimer( 1 );
+	event OnEnterState$
+	{
+		// wait a sec before starting to flicker.
+		This.CreateTimer(1, 2);
+	}
+}
+			
+state WaitTillActive$
+{
+	event OnGoUpdate$( float /*deltaTime$*/ )
+	{
+		if ( siege_light$.IsValid )
+		{
+			if ( siege_light$.Active )
+			{
+//				report.genericf( "intensity: %g\n", siege_light$.Intensity );
+				
+				time$ = 0;
+				next_flicker$ = CalcNextFlicker$;
+				setstate Play$;
+			}
+		}
+	}
+}
+
+state Play$
+{
+	event OnGoUpdate$( float deltaTime$ )
+	{
+		if ( siege_light$.IsValid )
+		{
+			if ( siege_light$.Active )
+			{
+				if( owner.Go.WasInViewFrustumRecently )
+				{
+					time$ += deltaTime$;
+					if ( next_flicker$ != 0 )
+					{
+						next_flicker$ -= deltaTime$;
+					}
+			
+					// see if we're supposed to flicker
+					if ( next_flicker$ <= 0 )
+					{
+						// choose the 't' function - either flat for infinite flicker or a sine
+						// wave for timed flicker.
+						float t$ = (duration$ == 0)
+								 ? 1.0
+								 : Math.Sin( (time$ / duration$) * Math.Pi );
+			
+						// apply a random flicker to the intensity.
+						
+						if( random_flicker$ )
+						{
+							if( Math.abs( siege_light$.Intensity - initial_intensity$ ) < magnitude$ )
+							{
+//								report.generic("using default flicker type\n");
+								siege_light$.Intensity = initial_intensity$ - Math.RandomFloat( 0, magnitude$ * t$ );
+							}
+							else
+							{
+//								report.genericf("have intensity %g, and magnitude %g\n", siege_light$.Intensity, magnitude$);
+								siege_light$.Intensity = siege_light$.Intensity + ( siege_light$.Intensity * Math.RandomFloat( -0.25 * magnitude$ * t$, 0.5*magnitude$ * t$ ) );
+//								report.genericf("changed intensity to %g\n", siege_light$.Intensity);
+							}
+						} else {
+							if( flickering$ )
+							{
+								siege_light$.Intensity = initial_intensity$;
+								flickering$ = false;
+							} else {
+								siege_light$.Intensity = initial_intensity$ - magnitude$;
+								flickering$ = true;
+							}
+						}
+			
+						// next flicker
+						next_flicker$ = CalcNextFlicker$;
+					}
+				}
+			}
+			else
+			{
+				SetState WaitTillActive$;
+			}
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////

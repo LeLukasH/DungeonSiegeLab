@@ -1,0 +1,296 @@
+[zonematch_chat]
+{
+	interface = true;
+	[t:dialog_box,n:backgound_chat_area]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = graytrim;
+	  i draw_order = 3;
+		rect = 24,52,616,428;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:background_chatlist_commands]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = browntrim;
+	  i draw_order = 4;
+		rect = 26,54,614,86;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:background_chatlist_commands_btm_trim]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 6;
+		rect = 28,76,612,78;
+		texture = b_gui_cmn_trim_subtab-beside;
+		uvcoords = 0.000000,0.000000,1.000000,0.500000;
+		wrap_mode = clamp;
+	}
+	[t:window,n:background_chatlist_commands_fill]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 5;
+		rect = 28,56,612,84;
+		texture = b_gui_cmn_brownbar;
+		uvcoords = 0.000000,0.000000,36.500000,2.250000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:background_chatlist_commands_gradient_lt]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 6;
+		rect = 70,58,110,74;
+		texture = b_gui_cmn_black-gradient-rt;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:window,n:background_chatlist_commands_gradient_rt]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 6;
+		rect = 530,58,570,74;
+		texture = b_gui_cmn_black-gradient-lt;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = tiled;
+	}
+	[t:button,n:button_join_chatroom]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_inset;
+		disable_color = 0x99555555;
+	  i draw_order = 20;
+		rect = 60,58,225,74;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_join_chatroom_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = zone_chatlist_commands;
+			justify = center;
+			rect = 92,60,225,74;
+			text = "Join Chat Room";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_join_chatroom);
+		}
+	}
+	[t:button,n:button_create_chatroom]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_inset;
+		disable_color = 0x99555555;
+	  i draw_order = 20;
+		rect = 225,58,415,74;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_create_chatroom_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = zone_chatlist_commands;
+			justify = center;
+			rect = 250,60,415,74;
+			text = "Create Chat Room";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(zonematch_create_chatroom);
+		}
+	}
+	[t:button,n:button_refresh_chatroom_list]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_inset;
+		disable_color = 0x99555555;
+	  i draw_order = 21;
+		rect = 415,58,580,74;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_refresh_chatroom_list_text]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 68;
+		  i font_color = -1;
+		  i font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			group = zone_chatlist_commands;
+			justify = center;
+			rect = 454,60,580,74;
+			text = "Refresh List";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			onbuttonpress = notify(refresh_chatroom_list);
+		}
+	}
+	[t:tab,n:tab_chat]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		enabled = false;
+		radio_group = zonematch_tabs;
+		rect = 280,20,408,52;
+		texture = b_gui_cmn_tab_chatlist-up;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oncheck = notify(zonematch_show_chat);
+		}
+	}
+	[t:text,n:tab_chat_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 280,36,404,48;
+		text = "Chat";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:tab,n:tab_games]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		radio_group = zonematch_tabs;
+		rect = 152,20,280,52;
+		texture = b_gui_cmn_tab_gameslist-dis;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oncheck = notify(zonematch_show_games);
+			ongloballbuttonup = loadtexture(b_gui_cmn_tab_gameslist-dis);
+			onlbuttondown = loadtexture(b_gui_cmn_tab_gameslist-dwn);
+			onrolloff = loadtexture(b_gui_cmn_tab_gameslist-dis);
+			onrollover = loadtexture(b_gui_cmn_tab_gameslist-hov);
+		}
+	}
+	[t:text,n:tab_games_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 152,36,276,48;
+		text = "Games";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:tab,n:tab_news]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 1;
+		radio_group = zonematch_tabs;
+		rect = 24,20,152,52;
+		texture = b_gui_cmn_tab_news-dis;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oncheck = notify(zonematch_show_news);
+			ongloballbuttonup = loadtexture(b_gui_cmn_tab_news-dis);
+			onlbuttondown = loadtexture(b_gui_cmn_tab_news-dwn);
+			onrolloff = loadtexture(b_gui_cmn_tab_news-dis);
+			onrollover = loadtexture(b_gui_cmn_tab_news-hov);
+		}
+	}
+	[t:text,n:tab_news_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 2;
+	  i font_color = -1;
+	  i font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 24,36,148,48;
+		text = "News";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:listreport,n:zonematch_chatroom_list]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = ;
+	  i draw_order = 50;
+		element_type = text;
+	  x font_color = 0xFFFFFFFF;
+	  i font_size = 12;
+		font_type = b_gui_fnt_11p_chat;
+		rect = 27,80,612,425;
+		selection_color = 0xff008190;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = tiled;
+		[messages]
+		{
+			onselect = notify(zonematch_join_chatroom);
+		}
+	}
+}

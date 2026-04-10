@@ -1,0 +1,974 @@
+[t:template,n:st_g_c_bl_1h_fun_nossirom_dsx]
+//unique for Nossirom; he used to have a sword.
+{
+	doc = "Nossirom's staff";
+	specializes = dsx_base_staff;
+	[aspect]
+		{
+			model = m_w_stf_402;
+			scale_base	 = 1.0;
+		}
+	[attack]
+		{
+			f damage_max = 133.000000;
+			f damage_min = 124.000000;
+		}
+	[common]
+		{
+			
+			is_pcontent_allowed = false;
+			b allow_modifiers = false;
+			screen_name = "Nosirrom's Staff";
+		}
+	[magic]
+	{
+		[enchantments]
+		{
+			[*]
+			{
+				alteration		= alter_max_life;
+				value			= 0;
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+				effect_script_hit   = nosirrom_staff_hit;
+			}
+		}
+	}
+	gui:is_droppable = false;
+	[gui]
+		{ //not intended for players to ever have, so most of this should not ever matter.
+			active_icon = b_gui_ig_i_ic_stf_004;
+			equip_requirements = strength:25;
+			inventory_height = 4;
+			inventory_icon = b_gui_ig_i_w_stf_010;
+			inventory_width = 1;
+		}
+}
+
+[t:template,n:st_un_toreck_dsx]
+//unique, for the scrub howlers in area 7
+{
+	doc = "Sickle Staff";
+	specializes = base_staff;
+	[aspect]
+		{
+			model = m_w_stf_012;
+		}
+	[attack]
+		{
+			damage_max = 90;
+			damage_min = 74;
+		}
+	[common]
+		{
+			is_pcontent_allowed = false;
+			screen_name = "Sickle Staff";
+		}
+	gui:is_droppable = false;
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_stf_004;
+			equip_requirements = strength:42;
+			inventory_height = 4;
+			inventory_icon = b_gui_ig_i_w_stf_010;
+			inventory_width = 1;
+			is_droppable = false;		
+		}
+}
+
+[t:template,n:dsx_base_staff]
+{
+	doc = "Staff or staff-like weapon.";
+	specializes = base_staff;
+	[aspect]
+		{
+			material = wood;
+			[voice]
+				{
+					[put_down]
+						{
+							* = s_e_gui_put_down_staff;
+						}
+				}
+		}
+	[attack]
+		{
+			attack_class = ac_staff;
+			is_melee = true;
+			is_two_handed = true;
+			reload_delay = 0;
+			skill_class = melee;
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_stf_001;
+			equip_slot = es_weapon_hand;
+		}
+	[magic]
+		{
+			[enchantments]
+				{
+					[*]
+						{
+							alteration = alter_chance_to_block_melee_damage;
+							description = "10% Chance to Block Melee Attack";
+							duration = #infinite;
+							innate_enchantment = true;
+							is_permanent = true;
+							is_single_instance = false;
+							value = 10;
+						}
+				}
+		}
+}
+
+
+[t:template,n:st_un_dsx_angk_base]
+{
+	doc = "DSX BASE rune_guardian_scythe";
+	specializes = dsx_base_staff;
+	[aspect]
+	{
+		model = m_w_stf_scythe;
+	}
+
+	[common]
+	{
+		allow_modifiers = false;
+		is_pcontent_allowed = false;
+		screen_name = "Scythe of Angk";
+	}
+	[gui]
+	{
+		active_icon = b_gui_ig_i_ic_stf_004;
+		inventory_height = 4;
+		inventory_icon = b_gui_ig_i_w_stf_319;
+		inventory_width = 1;
+	}
+	[single_pickup] {}
+}
+
+
+//Monster equipped version of Rune Guardian Scythe
+[t:template,n:st_un_dsx_angk_guardian]
+{
+	doc = "DSX rune_guardian_scythe -- Monster Version";
+	specializes = st_un_dsx_angk_base;
+	[aspect]
+	{
+		model = m_w_stf_rg100;
+	}
+	[attack]
+	{
+		damage_max = 90;
+		damage_min = 75;
+	}
+	gui:is_droppable = false;
+	[magic]
+	{
+		[enchantments]
+		{
+			[lightning_chance]
+			{
+				alteration		= alter_custom_damage_chance_melee;
+				custom_damage		= lightning;
+				value			= 35;
+				description		= "+35% Chance of Lightning Strike";
+				duration		= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+			[lightning_damage]
+			{
+				alteration		= alter_custom_damage_melee;
+				custom_damage		= lightning;
+				value			= 25;
+				max_value		= 35;
+				description		= " of 25 to 35 Damage";
+				duration		= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+				effect_script_hit	= hit_lightning_scythe;
+			}
+		}
+	}
+}
+
+//Hero equipped version of Rune Guardian Scythe
+[t:template,n:st_un_dsx_angk]
+{
+	doc = "dsx_rune_guardian_scythe : player version";
+	specializes = st_un_dsx_angk_base;
+
+	[attack]
+		{
+			damage_max = 71;
+			damage_min = 42;
+		}
+	[gui]
+		{
+			equip_requirements = strength:21;
+		}
+	[single_pickup] {}
+	[magic]
+		{
+			[enchantments]
+				{
+					[lightning_chance]
+						{
+							alteration		= alter_custom_damage_chance_melee;
+							custom_damage		= lightning;
+							value			= 25;
+							description		= "+25% Chance of Lightning Strike";
+							duration		= #infinite;
+							is_permanent		= true;
+							is_single_instance	= false;
+						}
+					[lightning_damage]
+						{
+							alteration		= alter_custom_damage_melee;
+							custom_damage		= lightning;
+							value			= 10;
+							max_value		= 19;
+							description		= " of 10 to 19 Damage";
+							duration		= #infinite;
+							is_permanent		= true;
+							is_single_instance	= false;
+							effect_script_equip	= lightning_scythe;
+							effect_script_hit	= hit_lightning_scythe;
+						}
+				}
+		}
+}
+
+//VETERAN
+//Hero equipped version of Rune Guardian Scythe
+[t:template,n:2w_st_un_dsx_angk]
+{
+	doc = "dsx_rune_guardian_scythe : player version VETERAN";
+	specializes = st_un_dsx_angk_base;
+
+ common:screen_name = "Super Scythe of Angk";
+	[attack]
+		{
+			damage_max = 213;
+			damage_min = 142;
+		}
+	[gui]
+		{
+			equip_requirements = strength:51;
+		}
+	[single_pickup] {}
+	[magic]
+		{
+			[enchantments]
+				{
+					[lightning_chance]
+						{
+							alteration		= alter_custom_damage_chance_melee;
+							custom_damage		= lightning;
+							value			= 25;
+							description		= "+25% Chance of Lightning Strike";
+							duration		= #infinite;
+							is_permanent		= true;
+							is_single_instance	= false;
+						}
+					[lightning_damage]
+						{
+							alteration		= alter_custom_damage_melee;
+							custom_damage		= lightning;
+							value			= 14;
+							max_value		= 21;
+							description		= " of 28 to 42 Damage";
+							duration		= #infinite;
+							is_permanent		= true;
+							is_single_instance	= false;
+							effect_script_equip	= lightning_scythe;
+							effect_script_hit	= hit_lightning_scythe;
+						}
+				}
+		}
+}
+
+//ELITE
+//Hero equipped version of Rune Guardian Scythe
+[t:template,n:3w_st_un_dsx_angk]
+{
+	doc = "dsx_rune_guardian_scythe : player version ELITE";
+	specializes = st_un_dsx_angk_base;
+
+ common:screen_name = "Supreme Scythe of Angk";
+	[attack]
+		{
+			damage_max = 390;
+			damage_min = 285;
+		}
+	[gui]
+		{
+			equip_requirements = strength:70;
+		}
+	[single_pickup] {}
+	[magic]
+		{
+			[enchantments]
+				{
+					[lightning_chance]
+						{
+							alteration		= alter_custom_damage_chance_melee;
+							custom_damage		= lightning;
+							value			= 25;
+							description		= "+25% Chance of Lightning Strike";
+							duration		= #infinite;
+							is_permanent		= true;
+							is_single_instance	= false;
+						}
+					[lightning_damage]
+						{
+							alteration		= alter_custom_damage_melee;
+							custom_damage		= lightning;
+							value			= 58;
+							max_value		= 78;
+							description		= " of 50 to 75 Damage";
+							duration		= #infinite;
+							is_permanent		= true;
+							is_single_instance	= false;
+							effect_script_equip	= lightning_scythe;
+							effect_script_hit	= hit_lightning_scythe;
+						}
+				}
+		}
+}
+
+[t:template,n:st_g_c_dsx_stars_base]
+{
+	doc = "DSX Staff of Stars";
+	specializes = dsx_base_staff;
+	[aspect]
+		{
+			model = m_w_stf_2072;
+			selection_indicator_scale = 0.65;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 229.0;
+			f damage_min = 203.0;
+			is_two_handed = true;
+		}
+	[common]
+		{
+			is_pcontent_allowed = false;
+			screen_name = "Staff of Stars";
+		
+			forced_expiration_class = never;
+			auto_expiration_class = never;
+		
+			// TAT - send a message the first time we're picked up to complete
+			//		the a1_staff quest
+			[instance_triggers]
+				{
+					[*]
+						{
+							action* = change_quest_state("a1_staff","active",11);
+							action* = change_quest_state("a1_staff","completed",0);
+							action* = victory_condition_met( "dsx_end_game" );
+							b can_self_destruct = true;
+							condition* = receive_world_message("we_picked_up",0,"on_first_message"), doc("[*one-shot check (trigger is one-shot)*]");
+							f delay = 0.000000;
+							b flip_flop = false;
+							b multi_player = true;
+							b no_trig_bits = false;
+							occupants_group = ;
+							f reset_duration = 0.000000;
+							b single_player = true;
+							b single_shot = true;
+							b start_active = true;
+						}
+				}		
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_st_c_b;
+			inventory_icon = b_gui_ig_i_w_stf_2072;
+			inventory_height = 4;
+			inventory_width = 1;
+			can_sell = false;
+		}	 
+	[magic]
+	{
+		[enchantments]
+		{
+			[health]
+			{
+				alteration			= alter_MAX_LIFE;
+				value				= 89;
+				description 		= "Adds 89 to Health";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+				effect_script_equip	= dam_fire_7_re;
+				effect_script_equip	= dam-arm_flyoff_15_or;
+				effect_script_hit	= hit_glow_10_lor;
+				effect_script_hit = hit_spark_10_lre;
+			}
+			[intelligence]
+			{
+				alteration			= alter_intelligence;
+				value				= 3;
+				description			= "Adds 3 to Intelligence";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+			[armor]
+			{
+				alteration 			= alter_armor;
+				value 				= 25;
+				description 		= "Adds 25 to Armor";
+				duration 			= #infinite;
+				is_permanent 		= true;
+				is_single_instance 	= false;
+			}
+			[mana]
+			{
+				alteration			= alter_MAX_MANA;
+				value				= 101;
+				description			= "Adds 101 to Mana";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+			[block_damage]
+			{
+				alteration			= alter_block_melee_damage;
+				value				= 10;
+				description			= "Melee Damage Reduced by 10%";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+		}
+	}
+	[pcontent]
+		{
+			[base]
+				{
+					f modifier_max = 0.0;
+					f modifier_min = 0.0;
+				}
+		}
+	[single_pickup] {}
+
+}
+
+//REGULAR WORLD
+[t:template,n:st_g_c_dsx_stars]
+{
+	doc = "DSX Staff of Stars";
+	specializes = st_g_c_dsx_stars_base;
+	[aspect]
+		{
+			model = m_w_stf_2072;
+			selection_indicator_scale = 0.65;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 229.0;
+			f damage_min = 203.0;
+			is_two_handed = true;
+		}
+	[common]
+		{
+			is_pcontent_allowed = false;
+			screen_name = "Staff of Stars";
+		
+			forced_expiration_class = never;
+			auto_expiration_class = never;
+		}
+	[magic]
+	{
+		[enchantments]
+		{
+			[health]
+			{
+				alteration			= alter_MAX_LIFE;
+				value				= 89;
+				description 		= "Adds 89 to Health";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+				effect_script_equip	= dam_fire_7_re;
+				effect_script_equip	= dam-arm_flyoff_15_or;
+				effect_script_hit	= hit_glow_10_lor;
+				effect_script_hit = hit_spark_10_lre;
+			}
+			[intelligence]
+			{
+				alteration			= alter_intelligence;
+				value				= 3;
+				description			= "Adds 3 to Intelligence";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+			[armor]
+			{
+				alteration 			= alter_armor;
+				value 				= 25;
+				description 		= "Adds 25 to Armor";
+				duration 			= #infinite;
+				is_permanent 		= true;
+				is_single_instance 	= false;
+			}
+			[mana]
+			{
+				alteration			= alter_MAX_MANA;
+				value				= 101;
+				description			= "Adds 101 to Mana";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+			[block_damage]
+			{
+				alteration			= alter_block_melee_damage;
+				value				= 10;
+				description			= "Melee Damage Reduced by 10%";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+		}
+	}
+}
+
+//VETERAN WORLD
+[t:template,n:2w_st_g_c_dsx_stars]
+{
+	doc = "DSX Staff of Stars";
+	specializes = st_g_c_dsx_stars_base;
+	[aspect]
+		{
+			model = m_w_stf_2072;
+			selection_indicator_scale = 0.65;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 340.0;
+			f damage_min = 245.0;
+			is_two_handed = true;
+		}
+	[common]
+		{
+			is_pcontent_allowed = false;
+			screen_name = "Super Staff of Stars";
+		
+			forced_expiration_class = never;
+			auto_expiration_class = never;
+		}
+	[magic]
+	{
+		[enchantments]
+		{
+			[health]
+			{
+				alteration			= alter_MAX_LIFE;
+				value				= 230;
+				description 		= "Adds 230 to Health";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+				effect_script_equip	= dam_fire_7_re;
+				effect_script_equip	= dam-arm_flyoff_15_or;
+				effect_script_hit	= hit_glow_10_lor;
+				effect_script_hit = hit_spark_10_lre;
+			}
+			[intelligence]
+			{
+				alteration			= alter_intelligence;
+				value				= 3;
+				description			= "Adds 3 to Intelligence";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+			[armor]
+			{
+				alteration 			= alter_armor;
+				value 				= 75;
+				description 		= "Adds 75 to Armor";
+				duration 			= #infinite;
+				is_permanent 		= true;
+				is_single_instance 	= false;
+			}
+			[mana]
+			{
+				alteration			= alter_MAX_MANA;
+				value				= 300;
+				description			= "Adds 300 to Mana";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+			[block_damage]
+			{
+				alteration			= alter_block_melee_damage;
+				value				= 10;
+				description			= "Melee Damage Reduced by 10%";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+		}
+	}
+}
+
+//ELITE WORLD
+[t:template,n:3w_st_g_c_dsx_stars]
+{
+	doc = "DSX Staff of Stars";
+	specializes = st_g_c_dsx_stars_base;
+	[aspect]
+		{
+			model = m_w_stf_2072;
+			selection_indicator_scale = 0.65;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 229.0;
+			f damage_min = 203.0;
+			is_two_handed = true;
+		}
+	[common]
+		{
+			is_pcontent_allowed = false;
+			screen_name = "Supreme Staff of Stars";
+		
+			forced_expiration_class = never;
+			auto_expiration_class = never;
+		}
+	[magic]
+	{
+		[enchantments]
+		{
+			[health]
+			{
+				alteration			= alter_MAX_LIFE;
+				value				= 360;
+				description 		= "Adds 360 to Health";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+				effect_script_equip	= dam_fire_7_re;
+				effect_script_equip	= dam-arm_flyoff_15_or;
+				effect_script_hit	= hit_glow_10_lor;
+				effect_script_hit = hit_spark_10_lre;
+			}
+			[intelligence]
+			{
+				alteration			= alter_intelligence;
+				value				= 3;
+				description			= "Adds 3 to Intelligence";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+			[armor]
+			{
+				alteration 			= alter_armor;
+				value 				= 100;
+				description 		= "Adds 100 to Armor";
+				duration 			= #infinite;
+				is_permanent 		= true;
+				is_single_instance 	= false;
+			}
+			[mana]
+			{
+				alteration			= alter_MAX_MANA;
+				value				= 400;
+				description			= "Adds 400 to Mana";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+			[block_damage]
+			{
+				alteration			= alter_block_melee_damage;
+				value				= 10;
+				description			= "Melee Damage Reduced by 10%";
+				duration			= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+		}
+	}
+}
+
+[t:template,n:st_un_seck_mage_dsx]
+{ // used by Necron
+	doc = "Death Staff";
+	specializes = base_staff;
+	[aspect]
+	{
+		model = m_w_stf_036;
+	}
+	[attack]
+	{
+		damage_max = 76;
+		damage_min = 70;
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		screen_name = "Necron Death Staff";
+	}
+	[gui]
+	{
+		is_droppable = false;
+		active_icon = b_gui_ig_i_ic_stf_004;
+		equip_requirements = strength:15;
+		inventory_height = 4;
+		inventory_icon = b_gui_ig_i_w_stf_076;
+		inventory_width = 1;
+	}
+}
+
+////////////////////////////////////////////////////////////
+// TEMPLATES PAST THIS POINT HAS BEEN AUTOGENERATED
+// PLEASE CONTACT JOHN C. / MATT N. WHEN MANUALLY EDITING
+////////////////////////////////////////////////////////////
+
+
+[t:template,n:st_g_c_dsx_cry_avg]
+{
+	doc = "DSX Crystal Staff";
+	specializes = dsx_base_staff;
+	[aspect]
+		{
+			model = m_w_stf_301;
+			selection_indicator_scale = 0.65;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 102.0;
+			f damage_min = 82.0;
+			is_two_handed = true;
+		}
+	[common]
+		{
+			screen_name = "Crystal Staff";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_stf_004; //PLACEHOLDER
+			inventory_icon = b_gui_ig_i_w_stf_301;
+			equip_requirements = intelligence:27;
+			inventory_height = 4;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{
+			[base]
+				{
+					f modifier_max = 26;
+					f modifier_min = 0;
+				}
+		}
+}
+
+[t:template,n:st_g_c_dsx_jad_avg]
+{
+	doc = "DSX Jade Staff";
+	specializes = dsx_base_staff;
+	[aspect]
+		{
+			model = m_w_stf_302;
+			selection_indicator_scale = 0.65;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 57.0;
+			f damage_min = 43.0;
+			is_two_handed = true;
+		}
+	[common]
+		{
+			screen_name = "Jade Staff";
+			pcontent_special_type = rare, unique, normal;
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_stf_004; //PLACEHOLDER
+			inventory_icon = b_gui_ig_i_w_stf_302;
+			equip_requirements = intelligence:20;
+			inventory_height = 4;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{
+			[base]
+				{
+					f modifier_max = 14;
+					f modifier_min = 0;
+				}
+		}
+}
+
+[t:template,n:st_g_c_dsx_ltn_avg]
+{
+	doc = "DSX Utraean Gemstaff";
+	specializes = dsx_base_staff;
+	[aspect]
+		{
+			model = m_w_stf_303;
+			selection_indicator_scale = 0.65;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 82.0;
+			f damage_min = 68.0;
+			is_two_handed = true;
+		}
+	[common]
+		{
+			screen_name = "Utraean Gemstaff";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_stf_004; //PLACEHOLDER
+			inventory_icon = b_gui_ig_i_w_stf_303;
+			equip_requirements = intelligence:25;
+			inventory_height = 4;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{
+			[base]
+				{
+					f modifier_max = 21;
+					f modifier_min = 0;
+				}
+		}
+}
+
+[t:template,n:st_g_c_dsx_hst_avg]
+{
+	doc = "DSX Hassat Staff";
+	specializes = dsx_base_staff;
+	[aspect]
+		{
+			model = m_w_stf_hassat-staff;
+			selection_indicator_scale = 0.65;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 58.0;
+			f damage_min = 50.0;
+			is_two_handed = true;
+		}
+	[common]
+		{
+			screen_name = "Hassat Staff";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_stf_004; //PLACEHOLDER
+			inventory_icon = b_gui_ig_i_w_stf_310;
+			equip_requirements = intelligence:20;
+			inventory_height = 4;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{
+			[base]
+				{
+					f modifier_max = 15;
+					f modifier_min = 0;
+				}
+		}
+}
+
+[t:template,n:st_g_c_dsx_bar_avg]
+{
+	doc = "DSX Clockwork Rod";
+	specializes = dsx_base_staff;
+	[aspect]
+		{
+			model = m_w_stf_300;
+			selection_indicator_scale = 0.65;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 84.0;
+			f damage_min = 75.0;
+			is_two_handed = true;
+		}
+	[common]
+		{
+			screen_name = "Clockwork Rod";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_stf_004; //PLACEHOLDER
+			inventory_icon = b_gui_ig_i_w_stf_300;
+			equip_requirements = intelligence:25;
+			inventory_height = 4;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{
+			[base]
+				{
+					f modifier_max = 23;
+					f modifier_min = 0;
+				}
+		}
+}
+
+[t:template,n:st_g_c_dsx_pcane]
+{
+	doc = "DSX Cane";
+	specializes = dsx_base_staff;
+	[aspect]
+		{
+			model = m_w_stf_cane;
+			selection_indicator_scale = 0.65;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			f damage_max = 84.0;
+			f damage_min = 75.0;
+			is_two_handed = true;
+		}
+	[common]
+		{
+			is_pcontent_allowed = false;
+			screen_name = "Cane";
+		}
+	[gui]
+		{
+			active_icon = b_gui_ig_i_ic_stf_004; //PLACEHOLDER
+			inventory_icon = b_gui_ig_i_w_stf_300;
+			equip_requirements = intelligence:25;
+			inventory_height = 4;
+			inventory_width = 1;
+		}
+	[pcontent]
+		{
+			[base]
+				{
+					f modifier_max = 23;
+					f modifier_min = 0;
+				}
+		}
+}

@@ -1,0 +1,561 @@
+[t:template,n:3W_dsx_darkgenerator_1]
+{
+	category_name = "3W_indoor";
+	doc = "3W_dsx_darkgenerator_1";
+	specializes = prop;
+
+	[aspect]
+	{
+		model = m_i_glb_dkgen;
+
+		[textures]							
+			{
+				0 = b_i_glb_dkgen-base;
+			}
+
+		is_usable	= false;
+		is_selectable	= true;
+		life_state	= LS_ALIVE_CONSCIOUS;
+		max_life	= 1979.2;
+		life		= 1979.2;
+		does_block_path = true;
+		is_collidable			= true;
+		draw_selection_indicator	= false;
+		megamap_icon = <none>;	
+		material = ice;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_dark_gen_01; }
+		}
+	}
+	[generator_in_object]
+	{
+		spawn_chance = 1;
+		child_template_name = dsx_darkgenerator_broken_1;
+	}
+	[physics]
+	{
+		break_effect = coil_explosion;
+		explode_when_killed = true;
+		explosion_magnitude = 1.75;
+		[break_particulate]
+		{
+			frag_glb_dkgen_01 = 3;
+			frag_glb_dkgen_02 = 3;
+			frag_glb_dkgen_03 = 3;
+			frag_glb_dkgen_04 = 3;
+			frag_glb_dkgen_05 = 3;
+			frag_glb_dkgen_06 = 3;
+			frag_glb_dkgen_07 = 3;
+			frag_glb_dkgen_08 = 3;
+			frag_glb_dkgen_09 = 3;
+			frag_glb_dkgen_10 = 3;
+			frag_glb_dkgen_11 = 3;
+			frag_glb_dkgen_12 = 3;
+		}
+	}
+	[common]
+	{
+		screen_name = "Dark Generator";
+		rollover_display = true;
+	}
+	[body]
+	{
+		initial_chore =	chore_default;
+		[chore_dictionary]
+		{
+			[chore_default]
+			{
+				skrit =	infinite_loop;
+				[anim_files] 
+					{ 
+						0 = a_i_glb_dkgen-running; 
+					}
+			}
+		}
+	}
+}
+
+[t:template,n:3W_dsx_darkgenerator_2]
+{
+	category_name = "3W_indoor";
+	doc = "3W_dsx_darkgenerator_2";
+	specializes = prop;
+
+	[aspect]
+	{
+		model = m_i_glb_dkgen2;
+		material = ice;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_dark_gen_02; }
+		}
+		[textures]							
+			{
+				0 = b_i_glb_dkgen-base;
+			}
+
+		is_usable	= false;
+		is_selectable	= true;
+		life_state	= LS_ALIVE_CONSCIOUS;
+		max_life	= 1979.2;
+		life		= 1979.2;
+		does_block_path = true;
+		is_collidable				= true;
+		draw_selection_indicator	= false;
+		megamap_icon = <none>;	
+	}
+	[generator_in_object]
+	{
+		spawn_chance = 1;
+		child_template_name = dsx_darkgenerator_broken_2;
+	}
+	[physics]
+	{
+		break_effect = coil_explosion;
+		explode_when_killed = true;
+		explosion_magnitude = 1.75;
+		[break_particulate]
+		{
+			frag_glb_dkgen2_01 = 3;
+			frag_glb_dkgen2_02 = 3;
+			frag_glb_dkgen2_03 = 3;
+			frag_glb_dkgen2_04 = 3;
+			frag_glb_dkgen2_05 = 3;
+			frag_glb_dkgen2_06 = 3;
+			frag_glb_dkgen2_07 = 3;
+			frag_glb_dkgen2_08 = 3;
+			frag_glb_dkgen2_09 = 3;
+			frag_glb_dkgen2_10 = 3;
+			frag_glb_dkgen2_11 = 3;
+			frag_glb_dkgen2_12 = 3;
+		}
+	}
+	[common]
+	{
+		screen_name = "Dark Generator";
+		rollover_display = true;
+	}
+	[body]
+	{
+		initial_chore =	chore_default;
+		[chore_dictionary]
+		{
+			[chore_default]
+			{
+				skrit =	infinite_loop;
+				[anim_files] 
+					{ 
+						0 = a_i_glb_dkgen-running; 
+					}
+			}
+		}
+	}
+}
+
+[t:template,n:3W_dsx_darkgenerator_2_a5_r4]
+{
+	category_name = "3W_indoor";
+	doc = "3W_dsx_darkgenerator_2_a5_r4";
+	specializes = 3W_dsx_darkgenerator_2;
+
+	[common]
+	{
+		screen_name = "Dark Generator";
+		rollover_display = true;
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("dark_generator_2_a5_r4_continuous");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:3W_dsx_darkgenerator_clockroom]
+//this is a version for the clockroom, which is identical to the dsx_darkgenerator_2 except for size.
+{
+	category_name = "3W_indoor";
+	doc = "3W_dsx_darkgenerator_clockroom";
+	specializes = prop;
+	[aspect]
+	{
+		// MRC 8/25/2003 Hey!  This should NOT block paths.  It is a special dark
+		// generator that's an actor.  It needs to not block paths so that it
+		// can be attacked.
+		does_block_path = false;
+		is_collidable				= true;
+		is_usable	= false;
+		is_selectable	= true;
+		life		= 1767.9;
+		life_state	= LS_ALIVE_CONSCIOUS;
+		lodfi_lower = -1;
+		lodfi_upper = -1;
+		material = ice;
+		max_life	= 1767.9;
+		megamap_icon = <none>;	
+		model = m_i_glb_dkgen2;
+		scale_base = 1.25; //bigger than other dark generators
+		[textures]							
+		{
+			0 = b_i_glb_dkgen-base;
+		}
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_dark_gen_02; }
+		}
+
+	}
+	[actor] 
+	{
+		alignment = aa_evil;
+	}
+	[attack] {}
+	[body]
+	{
+		initial_chore =	chore_default;
+		[chore_dictionary]
+		{
+			[chore_default]
+			{
+				skrit =	infinite_loop;
+				[anim_files] 
+					{ 
+						0 = a_i_glb_dkgen-running; 
+					}
+			}
+		}
+	}
+	[common]
+	{
+		membership = monster,immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;
+		rollover_display = true;
+		screen_name = "Dark Generator";
+	}
+	[defend] {}
+	[generator_in_object]
+	{
+		spawn_chance = 1;
+		child_template_name = dsx_darkgenerator_broken_clockroom;
+	}
+	[inventory] {}
+	[mind] 
+	{
+		actor_weapon_preference = WP_NONE;
+		jat_die           			= world\ai\jobs\common\job_die.skrit;
+		personal_space_range = 1;
+		sight_range = 2;
+	}
+	[physics]
+	{
+		break_effect = coil_explosion;
+		explode_when_killed = true;
+		explosion_magnitude = 1.75;
+		[break_particulate]
+		{
+			frag_glb_dkgen2_01 = 3;
+			frag_glb_dkgen2_02 = 3;
+			frag_glb_dkgen2_03 = 3;
+			frag_glb_dkgen2_04 = 3;
+			frag_glb_dkgen2_05 = 3;
+			frag_glb_dkgen2_06 = 3;
+			frag_glb_dkgen2_07 = 3;
+			frag_glb_dkgen2_08 = 3;
+			frag_glb_dkgen2_09 = 3;
+			frag_glb_dkgen2_10 = 3;
+			frag_glb_dkgen2_11 = 3;
+			frag_glb_dkgen2_12 = 3;
+		}
+	}
+	[dsx_darkgen_spawn_monitor]
+	{
+		creatureTemplate = "3w_dsx_shadow_jumper_boss";
+		maxTotalCreatures = 2;
+		maxCreatures = 1;
+		summonEffect = "";
+		initialDelay = .1;
+		waitInterval = 30;
+		minDistanceFromGenerator = 2;
+		maxDistanceFromGenerator = 3;
+	}
+}
+
+/*
+
+THIS IS ANCIENT STUFF WHICH I BELIEVE IS NO LONGER IN USE
+-jpc20sep2003
+
+[t:template,n:3W_dsx_dark_gen_01]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_dark_gen_01";
+	specializes = actor_evil;
+
+	[actor]
+	{
+		drops_spellbook = false;
+		[skills]
+		{
+			  combat_magic = 0, 0;
+		}
+	}
+	[attack] {}
+	[defend] {}
+
+	[aspect]
+	{
+		model=m_i_gob_tesla-coil-01;
+		is_usable	= false;
+		is_selectable	= true;
+		life_state	= LS_ALIVE_CONSCIOUS;
+		max_life	= 250;
+		life		= 250;
+		is_collidable				= true;
+		draw_selection_indicator	= false;
+		material = steel;
+		[voice]	{ [die]			{ priority = high; * = s_e_die_tesla_coil;  } }
+	}
+
+	[common]
+	{
+		screen_name	= "Tesla Coil";
+		rollover_display = true;
+	}
+
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=dsx_spell_dark_bolt; }
+	}
+	[generator_in_object]
+	{
+		spawn_chance = 1.0;
+		child_template_name = coil_gob_broken_01;
+	}
+	[physics]
+	{
+		break_effect = coil_explosion;
+		explode_when_killed = true;
+		explosion_magnitude = 1.75;
+		gib_gore_good = true;
+		[break_particulate]
+		{
+			frag_gob_tesla_coil_01 = 4;
+			frag_gob_tesla_coil_02 = 2;
+			frag_gob_tesla_coil_03 = 1;
+			frag_gob_tesla_coil_04 = ;
+			frag_gob_tesla_coil_05 = 2;
+			frag_gob_tesla_coil_06 = 1;
+			frag_glb_metal_05 =	5;
+			frag_glb_metal_06 = 5;
+		}
+	}
+	[mind]
+	{
+		actor_weapon_preference			= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+
+		jat_cast	    				= world\ai\jobs\common\job_cast.skrit
+			?no_moveturn				= true;
+
+		movement_orders					= mo_hold;
+
+
+		jat_flee_from_object		= jat_none;
+		jat_guard         			= jat_none;
+		jat_move          			= jat_none;
+		jat_patrol         			= jat_none;
+
+		melee_engage_range = 2;
+		personal_space_range = .5;
+		ranged_engage_range = 10.0;
+		sight_range = 10.0;
+	}
+
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_i_gob;
+			[chore_default]
+			{
+				skrit = coil_spin?speed=0.0;
+				[anim_files]
+				{
+					00=tesla-coil-01-rotate;
+				}
+			}
+			[chore_die]
+			{
+				skrit = coil_spin?speed=0.0;
+				[anim_files]
+				{
+					00=tesla-coil-01-rotate;
+				}
+			}
+			[chore_fidget]
+			{
+				skrit = coil_spin?speed=0.0;
+				[anim_files]
+				{
+					00=tesla-coil-01-rotate;
+				}
+			}
+			[chore_magic]
+			{
+				skrit = coil_spin;
+				[anim_files]
+				{
+					00=tesla-coil-01-rotate;
+				}
+			}
+		}
+	}
+}
+
+[t:template,n:3W_dsx_dark_gen_02]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_dark_gen_02";
+	specializes = actor_evil;
+
+	[actor]
+	{
+		drops_spellbook = false;
+		[skills]
+		{
+			  combat_magic = 0, 0;
+		}
+	}
+	[attack] {}
+	[defend] {}
+
+	[aspect]
+	{
+		model=m_i_gob_tesla-coil-03;
+		is_usable	= false;
+		is_selectable	= true;
+		life_state	= LS_ALIVE_CONSCIOUS;
+		max_life	= 250;
+		life		= 250;
+		is_collidable				= true;
+		draw_selection_indicator	= false;
+		material = steel;
+		[voice]	{ [die]			{ priority = high; * = s_e_die_tesla_coil;  } }
+	}
+
+	[common]
+	{
+		screen_name	= "Tesla Coil";
+		rollover_display = true;
+		membership = monster,coil;
+	}
+
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other]
+		{
+			il_active_primary_spell=dsx_spell_dark_heal;
+		}
+	}
+	[generator_in_object]
+	{
+		spawn_chance = 1.0;
+		child_template_name = coil_gob_broken_03;
+	}
+	[physics]
+	{
+		break_effect = coil_explosion;
+		explode_when_killed = true;
+		explosion_magnitude = 1.75;
+		gib_gore_good = true;
+		[break_particulate]
+		{
+			frag_gob_tesla_coil_01 = 3;
+			frag_gob_tesla_coil_02 = 2;
+			frag_gob_tesla_coil_03 = 1;
+			frag_gob_tesla_coil_04 = ;
+			frag_gob_tesla_coil_05 = 2;
+			frag_gob_tesla_coil_06 = 2;
+			frag_glb_metal_05 =	5;
+			frag_glb_metal_06 = 5;
+		}
+	}
+	[mind]
+	{
+		actor_weapon_preference					= WP_MAGIC;
+		actor_auto_switches_to_magic			= true;
+		
+		actor_may_attack 						= false;
+
+		jat_brain								= world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party			= true
+			&actor_creates_own_party			= true
+			&form_party_on_friend_entered_OCZ	= true
+			&form_party_on_damaged				= false
+			&form_party_on_enemy_spotted		= false
+			&form_party_on_alert_enemy_spotted	= false
+			&party_template						= "party_robo_suit";
+
+		jat_cast	    						= world\ai\jobs\common\job_cast.skrit;
+//			?no_moveturn						= true;
+
+		jat_flee_from_object					= jat_none;
+		jat_guard         						= jat_none;
+		jat_move          						= jat_none;
+		jat_patrol         						= jat_none;
+		jat_face								= jat_none;
+
+		movement_orders							= mo_hold;
+		melee_engage_range 						= 2;
+		personal_space_range 					= 3;
+		ranged_engage_range 					= 10.0;
+		sight_range 							= 10.0;
+		actor_auto_heals_others_life			= true;
+	}
+
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_i_gob;
+			[chore_default]
+			{
+				skrit = coil_spin?speed=0.0;
+				[anim_files]
+				{
+					00=tesla-coil-03-rotate;
+				}
+			}
+			[chore_die]
+			{
+				skrit = coil_spin?speed=0.0;
+				[anim_files]
+				{
+					00=tesla-coil-03-rotate;
+				}
+			}
+			[chore_fidget]
+			{
+				skrit = coil_spin?speed=0.0;
+				[anim_files]
+				{
+					00=tesla-coil-03-rotate;
+				}
+			}
+			[chore_magic]
+			{
+				skrit = coil_spin;
+				[anim_files]
+				{
+					00=tesla-coil-03-rotate;
+				}
+			}
+		}
+	}
+}
+*/

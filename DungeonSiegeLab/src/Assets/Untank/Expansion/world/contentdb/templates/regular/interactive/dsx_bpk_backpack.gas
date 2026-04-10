@@ -1,0 +1,138 @@
+[t:template,n:DSX_base_backpack]
+{
+	specializes = equippable;
+	doc = "base_backpack";
+	category_name = "backpack";
+
+	[aspect]
+    {
+			scale_base = 0.35;
+			model = m_i_glb_backpack;
+    	[textures] {0 = b_i_glb_backpack; }
+			gold_value = 200;
+    }
+	[common]
+    {
+			screen_name = "Backpack";
+
+			[template_triggers]
+				{
+					[*]
+						{
+							action* = call_sfx_script( "item_ring" );
+							condition* = receive_world_message("we_dropped");
+						}
+				}
+    }
+	[inventory]
+    {
+			grid_width = 4;
+			grid_height = 8;
+			is_backpack = true;
+    }
+	[gui]
+    {
+			inventory_icon = b_gui_ig_i_it_backpack_placeholder;
+			inventory_width = 2;
+			inventory_height = 2;
+    }
+
+}
+
+//Just an empty backpack.
+[t:template,n:DSX_backpack_empty]
+{
+	specializes = DSX_base_backpack;
+	doc = "DSX_backpack_empty";
+	category_name = "backpack";
+}
+
+[t:template,n:DSX_backpack_potions]
+{
+	specializes = DSX_base_backpack;
+	doc = "DSX_backpack_with_potions";
+	category_name = "backpack";
+
+	[inventory]
+	{
+		[other]
+		{
+			il_main = potion_health_small;
+			il_main = potion_health_small;
+			il_main = potion_health_small;
+			il_main = potion_health_small;
+			il_main = potion_health_small;
+			il_main = potion_health_small;
+			il_main = potion_health_small;
+			il_main = potion_mana_small;
+			il_main = potion_mana_small;
+			il_main = potion_mana_small;
+			il_main = scroll_resurrect;
+			il_main = scroll_resurrect;
+			il_main = scroll_resurrect;
+			il_main = scroll_resurrect;
+			il_main = scroll_resurrect;
+		}
+	}
+}
+
+//VETERAN
+[t:template,n:2w_DSX_backpack_potions]
+{
+	specializes = DSX_base_backpack;
+	doc = "2w_DSX_backpack_with_potions";
+	category_name = "backpack";
+
+	[inventory]
+	{
+		[other]
+		{
+			il_main = potion_health_medium;
+			il_main = potion_health_medium;
+			il_main = potion_health_medium;
+			il_main = potion_health_medium;
+			il_main = potion_health_medium;
+			il_main = potion_health_medium;
+			il_main = potion_health_medium;
+			il_main = potion_mana_medium;
+			il_main = potion_mana_medium;
+			il_main = potion_mana_medium;
+			il_main = scroll_resurrect;
+			il_main = scroll_resurrect;
+			il_main = scroll_resurrect;
+			il_main = scroll_resurrect;
+			il_main = scroll_resurrect;
+		}
+	}
+}
+
+//ELITE
+[t:template,n:3w_DSX_backpack_potions]
+{
+	specializes = DSX_base_backpack;
+	doc = "3w_DSX_backpack_with_potions";
+	category_name = "backpack";
+
+	[inventory]
+	{
+		[other]
+		{
+			il_main = potion_health_large;
+			il_main = potion_health_large;
+			il_main = potion_health_large;
+			il_main = potion_health_large;
+			il_main = potion_health_large;
+			il_main = potion_health_large;
+			il_main = potion_health_large;
+			il_main = potion_mana_large;
+			il_main = potion_mana_large;
+			il_main = potion_mana_large;
+			il_main = scroll_resurrect;
+			il_main = scroll_resurrect;
+			il_main = scroll_resurrect;
+			il_main = scroll_resurrect;
+			il_main = scroll_resurrect;
+		}
+	}
+}
+

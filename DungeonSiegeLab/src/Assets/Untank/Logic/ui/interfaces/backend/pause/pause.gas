@@ -1,0 +1,34 @@
+[pause]
+{
+	b interface = true;
+/*
+	[t:window,n:paused_window] 
+	{
+		alpha = 1.000000;
+		drag_delay = 0.5;
+		drag_x = 4;
+		drag_y = 4;
+		draggable = true;
+		draw_order = 34;
+		group = paused;
+		rect = 558,404,642,421;
+		texture = b_gui_c_paused;
+		uvcoords = 0.164063,0.000000,0.820313,1.062500;
+		wrap_mode = clamp;
+		consumable = true;
+		//dock_group = information_dockbar;			
+		center_x = true;	
+		topmost = true;
+
+		[messages] 
+		{
+			oncreated = flashanimation(0.35,true);
+		}
+
+
+		b is_bottom_anchor = true;
+		i bottom_anchor = 55;		
+	}
+*/
+
+}

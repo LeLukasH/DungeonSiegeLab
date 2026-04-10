@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_grs_sbridge-gear]
+{
+	layer1texture1 = b_i_grs_sbridge-gear;
+  i texturedetail = 2;
+}

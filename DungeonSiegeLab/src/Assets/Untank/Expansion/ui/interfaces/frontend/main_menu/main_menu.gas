@@ -1,0 +1,147 @@
+[main_menu]
+{
+	interface = true;
+	[t:button,n:button_continue]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 6;
+		rect = 280,355,517,401;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{	
+			onbuttonpress = notify(continue_button_press);
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);		
+		}
+
+		index = 2;
+	}
+	[t:button,n:button_exit]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 7;
+		rect = 361,567,440,598;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			onbuttonpress = notify(exit_button_press);
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);
+		}
+
+		index = 1;
+	}
+	[t:button,n:button_about]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1;
+		rect = 280,430,517,476;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);
+			onbuttonpress = notify(about_button_press);
+		}
+
+		index = 2;
+	}
+	[t:button,n:button_multi_player]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 4;
+		rect = 280,206,517,252;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			onbuttonpress = notify(multi_player_button_press);	
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);		
+		}
+
+		index = 2;
+	}
+	[t:button,n:button_options]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 5;
+		rect = 280,280,517,326;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			onbuttonpress = notify(show_options);
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);
+		}
+
+		index = 2;
+	}
+	[t:button,n:button_single_player]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 3;
+		rect = 280,132,517,178;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			onbuttonpress = notify(show_single_player_menu);
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);
+		}
+
+		index = 2;
+	}
+	[t:text_box,n:legal_info]
+	{
+		f alpha = 1.000000;
+		b common_control = false;
+		  common_template = ;
+		x draw_order = 0x00000005;
+		x font_color = 0xffffffff;
+		x font_size = 0x00000000;
+		  font_type = b_gui_fnt_12p_copperplate-light;
+		  justify = center;
+		  rect = 50,485,750,585;		  
+		  text = "(c) 2003 Gas Powered Games Corp. All rights reserved. Gas Powered Games, the GPG logo, and Dungeon Siege are the exclusive trademarks of Gas Powered Games Corp. Portions (c) 2003 Microsoft Corporation and Mad Doc Software, LLC. All rights reserved.";
+		  uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		  wrap_mode = clamp;
+		  fixed_location = true;
+		  center_height = true;
+	}
+}

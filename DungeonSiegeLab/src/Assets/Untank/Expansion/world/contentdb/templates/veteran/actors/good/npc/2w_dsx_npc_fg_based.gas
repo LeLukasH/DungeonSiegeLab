@@ -1,0 +1,109 @@
+[t:template,n:2W_dsx_base_npc_fg]
+{
+	doc = "2W_Base template for non-hero actors specializing FG resources";
+	specializes = npc;
+	[actor]
+	{
+		portrait_icon = b_gui_ig_i_ic_c_fg_blonde;
+	}
+	[aspect]
+	{
+		model = m_c_gah_fg_pos_a1;
+	}
+	[body]
+	{
+		armor_version = gah_fg;
+		avg_move_velocity = 4.500000;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine2;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_gah_fg_fs;
+			[chore_attack]
+			{
+				chore_stances = 0,1,2,3,4,5,6,7;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0,1,2,3,4,5,6,7;
+				skrit = infinite_loop;
+				[anim_files]
+				{
+					00 = ds;
+				}
+			}
+			[chore_die]
+			{
+				chore_stances = 0,1,2,3,4,5,6,7;
+				skrit = select_transition;
+				[anim_files]
+				{
+					00 = di;
+				}
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0,1,2,3,4,5,6,7;
+				skrit = select_fidget;
+				[anim_files]
+				{
+					00 = dsf;
+					01 = dsf-07;
+				}
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				[anim_files]
+				{
+					sit1 = a_c_gah_fg_fs0_dsf-08;
+					talk = a_c_gah_fg_fs0_dsf-02;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 0,1,2,3,4,5,6;
+				skrit = select_walk;
+				[anim_files]
+				{
+					00 = rl;
+				}
+			}
+		}
+	}
+    [mind]
+    {
+		actor_may_attack = false;
+        actor_may_be_attacked = false;
+	}
+}
+
+[t:template,n:2W_dsx_base_npc_fg_multiplayer]
+{
+	category_name = "2W_character";
+	doc = "2W_Base template for non-hero actors specializing FG resources";
+	specializes = 2W_dsx_base_npc_fg;
+	[aspect]
+	{
+		draw_selection_indicator = true;
+	}
+	[conversation]
+	{
+	}
+}
+
+
+

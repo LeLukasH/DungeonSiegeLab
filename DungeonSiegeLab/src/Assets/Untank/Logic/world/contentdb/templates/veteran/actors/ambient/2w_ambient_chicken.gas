@@ -1,0 +1,177 @@
+[t:template,n:2W_base_chicken]
+{
+	doc = "2W_Base template for all ambient chickens.";
+	specializes = actor_ambient;
+	[actor]
+	{
+		race=other;
+		drops_spellbook = false;
+	}
+	[aspect]
+	{
+		model = m_c_na_ckn_pos_1;
+		[voice]
+		{
+			[die]
+			{
+				  * = s_e_die_chicken;
+			}
+		}
+	}
+	[body]
+	{
+		avg_move_velocity = 3.000000;
+		[bone_translator]
+		{
+			body_anterior = bone03;
+			body_mid = bone02;
+			body_posterior = bone06;
+			kill_bone = bone02;
+			shield_bone = bone02;
+			weapon_bone = bone03;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_na_ckn_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_magic]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=mg; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files]
+				{
+					00 = dsf;
+					01 = dsf-02;
+					02 = dsf-03;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+		}
+	}
+	[common] { screen_name="Chicken"; }
+	[mind]
+	{
+		on_enemy_spotted_alert_friends 				= false;
+		on_enemy_spotted_attack 					= false;
+		on_enemy_entered_ocz_attack 				= false;
+		on_enemy_entered_icz_attack 				= false;
+		on_enemy_entered_ocz_flee 					= true;
+		on_friend_entered_ocz_flee 					= true;
+		on_enemy_entered_weapon_engage_range_attack = false;
+		inner_comfort_zone_range 					= 0.1;
+		melee_engage_range 							= 0.1;
+		outer_comfort_zone_range 					= 5.0;
+		personal_space_range 						= 0.4;
+		sight_range 								= 6.0;
+		flee_count									= 1000;
+	}
+}
+[t:template,n:2W_chicken_grey]
+{
+	category_name = "2W_ambients";
+	doc = "2W_chicken_grey";
+	specializes = 2W_base_chicken;
+	[aspect]
+	{
+		[textures] { 0=b_c_na_ckn_grey; }
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("feathers_flap_grey");
+				condition* = receive_world_message("we_anim_sfx",1);
+			}
+		}
+	}
+	[physics]
+	{
+		gib_gore_good = true;
+		break_effect = feathers_grey;
+		explode_when_killed = true;
+	}
+}
+[t:template,n:2W_chicken_red]
+{
+	category_name = "2W_ambients";
+	doc = "2W_chicken_red";
+	specializes = 2W_base_chicken;
+	[aspect]
+	{
+		[textures] { 0=b_c_na_ckn_red; }
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("feathers_flap_red");
+				condition* = receive_world_message("we_anim_sfx",1);
+			}
+		}
+	}
+	[physics]
+	{
+		gib_gore_good = true;
+		break_effect = feathers_red;
+		explode_when_killed = true;
+	}
+}
+[t:template,n:2W_chicken_white]
+{
+	category_name = "2W_ambients";
+	doc = "2W_chicken_white";
+	specializes = 2W_base_chicken;
+	[aspect]
+	{
+		[textures] { 0=b_c_na_ckn_white; }
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("feathers_flap_white");
+				condition* = receive_world_message("we_anim_sfx",1);
+			}
+		}
+	}
+	[physics]
+	{
+		gib_gore_good = true;
+		break_effect = feathers_white;
+		explode_when_killed = true;
+	}
+}

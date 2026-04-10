@@ -1,0 +1,140 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	job_fidget_fairy.skrit
+
+	Author(s)	: 	Eric Tams orig Bartosz Kijanka
+
+	Purpose		: 	Follow nearby creatues at a distance, heal or give mana if needed.
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+Go		m_Spell$;
+GoMind	m_Mind$;
+GoBody  m_Body$;
+Job		m_Job$;
+float	delay_min$;
+float	delay_max$;
+float	move_distance$;
+float	min_distance$;
+
+#include "k_job_c_mcp_fidget_utils"
+	
+////////////////////////////////////////////////////////////////////////////////
+// helper functions
+
+void GetSpell$( )
+{
+	m_Spell$ = m_Go$.Inventory.GetItem( il_active_primary_spell );
+}
+
+void TryHeal$( )
+{
+	m_Mind$.TempQtColl1.Clear;
+	m_Mind$.TempQtColl1.Add( QT_GOOD );
+	m_Mind$.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+	Go temp$ = m_Mind$.GetClosestVisible( m_Mind$.TempQtColl1 );
+	if (temp$ != NULL)
+	{
+		if ( m_Mind$.GetDistance( temp$ ) <= move_distance$ )
+		{
+			if( m_Spell$ != NULL )
+			{
+				if( m_Spell$.Magic.IsCastableOn( temp$ ) && ( temp$.Player.Controller == PC_HUMAN ))
+				{
+					m_Mind$.SDoJob( MakeJobReq( JAT_CAST, JQ_ACTION, QP_FRONT, AO_REFLEX, temp$.goid, m_Spell$.Goid ) );
+					return;
+				}
+			}
+		}
+	}
+}
+////////////////////////////////////////////////////////////////////////////////
+
+startup state Unknown$
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$					= job$;
+	m_Go$					= job$.Go;
+	m_Mind$					= job$.Go.Mind;
+	m_Body$					= job$.Go.Body;
+	delay_min$				= 10;
+	delay_max$				= 15;
+	move_distance$			= 5;
+	min_distance$			= 3;
+}
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+	
+	GetSpell$();
+	
+	SetState Wandering$;
+}
+
+state Wandering$
+{
+	trigger OnWorldMessage$( WE_ANIM_DONE )
+	{
+		StartFidgetIfRequired$();
+	}
+	
+	trigger OnTimer$( 2 )
+	{
+		This.CreateTimer( 2 , Math.RandomFloat( 1, 2 ) );
+		TryHeal$();
+	}
+	
+	
+	trigger OnTimer$( 1 )
+	{
+		This.CreateTimer( 1 , Math.RandomFloat( delay_min$, delay_max$ ) ); 
+		TryHeal$();
+		if( m_Go$.WasInViewFrustumRecently )
+		{
+			if( AIQuery.FindSpotRelativeToSource( 	m_Job$.InitPosition,
+														1,
+														min_distance$,
+														move_distance$,
+														2.0,
+														m_Go$.IsHuded,
+														m_Mind$.TempPos1 ) )
+		   		{
+				if ( m_Mind$.TempPos1.node.IsNodeInAnyFrustum && m_Go$.placement.position.node.IsNodeInAnyFrustum)
+				{
+					if( GetSiegeDistance(m_Mind$.TempPos1, m_Go$.placement.position ) > min_distance$ )
+					{
+						MCPManager.Flush(m_Go$.Goid);
+						eReqRetCode ret$ = MCPManager.MakeRequest( m_Go$.Goid, PL_APPROACH, m_Mind$.TempPos1, 0.2 );
+						if( RequestFailed(ret$) )
+						{
+							InterruptAndStartFidget$();
+						}
+					}
+				}
+			}
+		}
+		
+	}
+	
+	event OnEnterState$
+	{
+		StartFidgetIfRequired$();
+		
+		This.CreateTimer( 1 , Math.RandomFloat( delay_min$, delay_max$ ) );
+		This.CreateTimer( 2 , Math.RandomFloat( 3, 5 ) );
+	}
+}

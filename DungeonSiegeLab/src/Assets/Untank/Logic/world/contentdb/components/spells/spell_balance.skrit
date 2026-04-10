@@ -1,0 +1,283 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_balance.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+// Every Update this will even out the health of party members.
+
+
+property string effect_script$		= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string effect_params$		= ""   	doc = "Parameters to send to SiegeFx script";
+property string description$		= ""	doc = "Description of enchantment being applied";
+property bool	balance_life$		= false	doc = "This spell will balance life across all party members.";
+property bool	balance_mana$		= false	doc = "This spell will balance mana across all party members.";
+property bool	safe_balance$		= true	doc = "If the total health of the party would make everyone unconscious then just let the guy that got hit fall instead of taking everyone with him.";
+property float	effect_frequency$	= 6.28	doc = "How often to play the effect again.";
+
+owner = GoSkritComponent;
+#include "k_inc_spl_utils"
+
+Goid 	target$;
+Goid 	caster$;
+float 	spell_duration$;
+float	time$ = 10;   
+
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) {
+		
+			/////////////////////////////
+			// Normal Go
+			
+			caster$ = msg$.GetSendFrom();
+			target$ = MakeGoid( msg$.GetData1() );
+			
+			if( !target$.IsValid || !caster$.IsValid )
+			{
+				SetState Finished$;
+				return;
+			}
+
+			if( !GoodBuffTarget$( target$ ) )
+			{
+				SetState Finished$;
+				return;
+			}
+			
+			Go Party$ = target$.Go.OwningParty;
+			if (Party$ == NULL)
+			{
+				SetState Finished$;
+				return;
+			}
+			
+			report.genericf("size: %d\n", Party$.Children.Size );
+			
+			if( !(Party$.Children.Size > 1) )
+			{
+				SetState Finished$;
+				return;
+			}
+			 
+			if( Owner.go.Parent != NULL )
+			{
+				// Create an Omni version of the spell.
+				GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.go.Parent.Goid, owner.goid );
+				cloneReq$.Omni = true;
+				Goid new_spell$ = GoDb.SCloneGo( cloneReq$ );
+				
+				// Send a message to the omni version of the Spell to get it started.
+				PostWorldMessage( WE_REQ_ACTIVATE, caster$, new_spell$, msg$.GetData1(), 0 );
+			}
+				
+			// Delete Normal version of the spell.
+			SetState Finished$;
+			
+		} else if ( e$ == WE_REQ_ACTIVATE ) {			
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			if( !target$.IsValid || !caster$.Isvalid )
+			{
+				SetState RestoreState$;
+				return;
+			}
+			
+			spell_duration$ = owner.Go.Magic.EvaluateEffectDuration(caster$.Go, target$.Go);
+
+			// Check to see if the enchantment has already been cast on this go
+			if( target$.Go.Actor.HasGenericState( owner.Go.Magic.StateName ) ) {
+				
+				Goid old_spell$ = target$.Go.Actor.GetGenericStateSpellGoid ( owner.Go.Magic.StateName );
+				
+				if( StringTool.SameWithCase( old_spell$.Go.TemplateName, Owner.Go.TemplateName ))
+				{
+					int packed_speed$ = Math.Round( spell_duration$ * 1000 );
+					SendWorldMessage( WE_SPELL_EXPIRATION_TIMER_RESET, owner.Goid, old_spell$ ,packed_speed$);
+				
+					SetState Finished$;
+					return;
+				} else {
+					SendWorldMessage( WE_SPELL_EXPIRATION_TIMER_RESET, owner.Goid, old_spell$ , -1 );
+				}
+			} 
+			
+			// Add the effected state so this can only happen once
+			target$.Go.Actor.SAddGenericState( owner.Go.Magic.StateName, description$, spell_duration$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+			
+			Godb.StartWatching( owner.goid, target$);
+			
+			SetState Update$;
+		}
+	}
+}
+
+state Update$
+{	
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if ( e$ == WE_SPELL_EXPIRATION_TIMER_RESET )
+		{
+			if(target$.IsValid)
+			{
+				if( msg$.GetData1() == -1)
+				{
+					SetState RestoreState$;
+				} else {
+					// remove stale state...
+					target$.Go.Actor.SRemoveGenericState( owner.Go.Magic.StateName );
+					
+					spell_duration$ += msg$.GetData1() / 1000.0;
+					
+					// Add the effected state so this can only happen once
+					target$.Go.Actor.SAddGenericState( owner.Go.Magic.StateName, description$, spell_duration$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+				}
+			}
+		}
+	}
+	
+	event OnGoHandleCcMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( ( e$ == WE_KILLED ) && ( target$ == msg$.GetSendTo() ) ) 
+		{
+			SetState RestoreState$;
+		}
+	}
+	
+	transition -> RestoreState$ :  OnTimer( 1 );
+	
+	event OnGoUpdate$( float delta_t$ )
+	{
+		time$ += delta_t$;
+		
+		if(target$.IsValid())
+		{
+			spell_duration$ -= delta_t$;
+			
+			if( spell_duration$ <= 0.0 )
+			{
+				SetState RestoreState$;
+				return;
+			}
+			
+			Go Party$ = target$.Go.OwningParty;
+			if (Party$ != NULL)
+			{
+				GopColl partyMembers$ = Party$.Children;
+				
+				int i$ = 0;
+				float total_health$ = 0.0;
+				float max_health$ = 0.0;
+				float total_mana$ = 0.0;
+				float max_mana$ = 0.0;
+				Go temp$;
+						
+				while( i$ < partyMembers$.Size() )
+				{
+					temp$ = partyMembers$.Get( i$ );
+					if( !GoodBuffTarget$( temp$.goid ) )
+					{
+						i$ += 1;
+						continue;
+					}
+					
+					if( temp$.hasaspect() )
+					{	
+						if( (temp$.Aspect.MaxLife == 0.0) || (temp$.Aspect.MaxMana == 0.0))
+						{	
+							SetState RestoreState$;
+							report.generic("Bad actor in party.\n");
+							return;
+						}
+						
+						if( balance_life$ )
+						{
+							total_health$ += temp$.Aspect.CurrentLife;
+							max_health$ += temp$.Aspect.MaxLife;
+						}
+						if( balance_mana$ )
+						{
+							total_mana$ += temp$.Aspect.CurrentMana;
+							max_mana$ += temp$.Aspect.MaxMana;
+						}
+					}
+					i$ += 1;
+				}
+				
+				// if the total health of the party would make eveyone go unconscious and we are nice then bail.
+				if( balance_life$ && safe_balance$ && ( total_health$ < 20.0 ) )
+				{
+					return;
+				}
+				
+				i$ = 0;
+				
+				while( i$ < partyMembers$.Size() )
+				{
+					temp$ = partyMembers$.Get( i$ );
+					
+					if( !GoodBuffTarget$( temp$.goid ) )
+					{
+						i$ += 1;
+						continue;
+					}
+					
+					if( temp$.hasaspect() )
+					{
+						if( balance_life$ )
+						{
+							Rules.Changelife( temp$.goid, (temp$.Aspect.MaxLife * (total_health$ / max_health$)) - temp$.Aspect.CurrentLife);
+						}
+						if( balance_mana$ )
+						{
+							Rules.ChangeMana( temp$.goid, (temp$.Aspect.MaxMana * (total_mana$ / max_mana$)) - temp$.Aspect.CurrentMana);
+						}
+						
+						if( time$ > effect_frequency$ )
+						{
+							SiegeFx.SRunScript( effect_script$, temp$.goid, caster$, effect_params$, owner.Goid, WE_REQ_CAST );
+						}
+					}
+					i$ += 1;
+				}
+			}
+			if( time$ > effect_frequency$ )
+			{
+				time$ = 0;
+			}
+		}
+	}   
+}
+
+state RestoreState$
+{
+	event OnEnterState$
+	{
+		// If the go is still alive then restore his state
+		if( target$.IsValid ) 
+		{
+			Godb.StopWatching( owner.goid, target$);
+			
+			// remove the state so this can be affected again
+			target$.Go.Actor.SRemoveGenericState( owner.Go.Magic.StateName );	
+		}
+		SetState( Finished$ );
+	}
+}
+
+state Finished$
+{
+	event OnEnterState$
+	{
+		// Delete this skrit
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 5 );
+	}
+}

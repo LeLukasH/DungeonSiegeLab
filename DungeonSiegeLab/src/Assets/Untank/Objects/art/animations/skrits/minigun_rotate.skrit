@@ -1,0 +1,84 @@
+// Animation Skrit: minigun_rotate
+//
+// History:
+//		VERSION 1.0:	Initial implementation
+//
+
+property int MAJORVERSION$ = 1;
+property int MINORVERSION$ = 0;
+property float attack_duration$ = 0.5 doc = "after being in the attack for this long the minigun starts to slow down.";
+
+owner = Aspect;
+
+float time$;
+int m_MuzzleBone$;
+float m_MuzzleAngle$;
+
+////////////////////////////////////////////////////////////////////////////
+// Utilities
+
+RestartChore$ ( void ) 
+{ 
+	time$ = 0.0;
+	m_MuzzleAngle$ = 0;
+	m_MuzzleBone$ = -1;
+	m_MuzzleBone$ = owner.GetBoneIndex("bone_muzzle");
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// States
+
+//----------------------------
+
+startup state Idle$ 
+{
+	event OnStartChore$ ( int /*subanim$*/, int /*flags$*/ )
+	{
+		RestartChore$ (); 
+		SetState Rotate$;
+	}
+}
+
+//----------------------------
+
+state Rotate$	
+{
+ 
+	event OnStartChore$ (int /*subanim$*/ , int /*flags$*/ )
+	{
+		RestartChore$ ();
+ 	}
+
+	event OnUpdate$( float delta_t$ )
+	{
+		if ( m_MuzzleBone$ >= 0 ) 
+		{
+			time$ += delta_t$;
+			
+			float speed$ = 1.0;
+			
+			if ( time$ > attack_duration$ ) {
+				if( attack_duration$ > 0 )
+				{
+					speed$ = ( (attack_duration$ * 2.0) - time$);
+				}
+			}
+			
+			if ( time$ >= ( 2.0 * attack_duration$ ))
+			{
+				speed$ = 0.0;
+				time$ = 2.0 * attack_duration$;
+			}
+			
+			m_MuzzleAngle$ += delta_t$ * speed$ * 100.0 * (3.14159/30.0);
+			
+			if ( m_MuzzleAngle$ > 6.283185 )
+			{
+				m_MuzzleAngle$ -= 6.283185;
+			}
+			
+			// Spin the muzzle of the minigun
+			owner.RotateIndexedBoneY(m_MuzzleBone$, m_MuzzleAngle$);
+		}
+ 	}
+}

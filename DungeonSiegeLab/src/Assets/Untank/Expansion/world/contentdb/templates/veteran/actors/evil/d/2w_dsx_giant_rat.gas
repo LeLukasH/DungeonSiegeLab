@@ -1,0 +1,295 @@
+[t:template,n:2W_dsx_giant_rat_base]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_giant_rat";
+	specializes = actor_evil;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  26.5, 0;
+			intelligence =  9.5, 0;
+			dexterity =  15.8, 0;
+			melee =  46,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 31255;
+		life = 464;
+		max_life = 464;
+		mana = 32;
+		material = teeth;
+        	max_mana = 32;
+		model = m_c_edm_gr_pos_1;
+		[voice]
+		{
+			[die]{* = s_e_die_rat_SED;}
+			[hit_critical]{* = s_e_hit_rat_SED;}
+			[hit_glance]{* = s_e_hit_rat_SED;}
+			[hit_solid]{* = s_e_hit_rat_SED;}
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 211.2;
+		damage_min = 165.6;
+	}
+	[body]
+	{
+		avg_move_velocity = 3.000000;
+		max_move_velocity = 5;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine;
+			body_posterior = bip01_tail;
+			kill_bone = bip01_spine;
+			shield_bone = bip01_spine;
+			weapon_bone = bip01_head;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_gr_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=at; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dff; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+		}
+	}
+	[common]
+	{	screen_name="Giant Rat";
+		membership = rat, monster;
+	}
+	[defend] { defense=301.3; }
+   	[inventory]
+	{
+	}
+	[mind]
+	{
+		jat_brain						 = world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party		= true;
+
+		jat_attack_object_melee 			= world\ai\jobs\common\job_attack_object_melee.skrit
+			?run_chance 					= 1.0;
+
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit
+			?social				= 0.8
+			&social_limit		= 2
+			&move_distance		= 3.00
+			&delay_min			= 7.0
+			&delay_max			= 17.0
+			&approach_dist		= 1.75
+			&friends			= "rat"
+			&still				= false;
+
+		melee_engage_range = 14.0;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+		sight_origin_height = 1.5;
+	}
+	[physics]
+	{
+		break_effect = blood_mist;
+		break_sound = s_e_meat_explosion;
+		[break_particulate]
+		{
+			frag_glb_generic_01 = 1;
+			frag_glb_generic_02 = 1;
+			frag_glb_generic_03 = 1;
+			frag_glb_generic_04 = 1;
+			frag_glb_generic_05 = 1;
+			frag_glb_generic_06 = 1;
+			frag_glb_generic_07 = 1;
+			frag_glb_generic_08 = 1;
+		}
+	}
+	[water_effects] {}
+}
+
+[t:template,n:2W_dsx_giant_rat]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_giant_rat";
+	specializes = 2W_dsx_giant_rat_base;
+}
+
+[t:template,n:2W_dsx_giant_rat_summon]
+{
+  category_name = "2W_evil_d";
+  doc = "2W_dsx_summon_giant_rat";
+  specializes = 2W_dsx_giant_rat_base;
+ aspect:experience_value = 0;
+  [inventory]
+    {
+      selected_active_location = il_active_primary_spell;
+    }
+}
+
+[t:template,n:2W_dsx_giant_rat_monstrous]
+//balanced for Level 14
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_giant_rat_monstrous";
+	specializes = actor_evil;
+	[actor]
+	{
+		[skills]
+		{
+			strength 	 =  32, 0;
+			intelligence =  10.6, 0;
+			dexterity	 =  17.8, 0;
+			melee 	 	 =  54,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 48924;
+		life = 544.9;
+		max_life = 544.9;
+		mana = 13.9;
+		material = teeth;
+        	max_mana = 13.9;
+		model = m_c_edm_gr_pos_1;
+		textures:0 = b_c_edm_gr-02;
+		[voice]
+		{
+			[die]{* = s_e_die_rat_SED;}
+			[hit_critical]{* = s_e_hit_rat_SED;}
+			[hit_glance]{* = s_e_hit_rat_SED;}
+			[hit_solid]{* = s_e_hit_rat_SED;}
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 210;
+		damage_min = 153.1;
+	}
+	[body]
+	{
+		avg_move_velocity = 3.000000;
+		max_move_velocity = 5;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine;
+			body_posterior = bip01_tail;
+			kill_bone = bip01_spine;
+			shield_bone = bip01_spine;
+			weapon_bone = bip01_head;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_gr_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=at; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dff; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+		}
+	}
+	[common]
+	{	screen_name="Monstrous Rat";
+		membership = rat,monster;//immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;
+
+	}
+	[defend] { defense=329.7; }
+   	[inventory]
+	{
+	}
+	[mind]
+	{
+		jat_attack_object_melee 			= world\ai\jobs\common\job_attack_object_melee.skrit
+			?run_chance 					= 1.0;
+
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit
+			?social				= 0.8
+			&move_distance		= 3.00
+			&delay_min			= 7.0
+			&delay_max			= 17.0
+			&approach_dist		= 1.75
+			&friends			= "rat"
+			&still				= false;
+
+		jat_brain							 = world\ai\jobs\common\brain_hero.skrit
+			?actor_creates_own_party			= true
+			&party_template						= "party_giant_rat_boss";
+
+		melee_engage_range = 14.0;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+		sight_origin_height = 1.5;
+	}
+	[physics]
+	{
+		break_effect = blood_mist;
+		break_sound = s_e_meat_explosion;
+		[break_particulate]
+		{
+			frag_glb_generic_01 = 1;
+			frag_glb_generic_02 = 1;
+			frag_glb_generic_03 = 1;
+			frag_glb_generic_04 = 1;
+			frag_glb_generic_05 = 1;
+			frag_glb_generic_06 = 1;
+			frag_glb_generic_07 = 1;
+			frag_glb_generic_08 = 1;
+		}
+	}
+	[water_effects] {}
+}

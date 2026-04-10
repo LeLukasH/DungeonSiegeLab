@@ -1,0 +1,216 @@
+[t:template,n:2W_dsx_skrubb_base]
+{
+  category_name = "2W_evil_d";
+  doc = "2W_dsx_skrubb_base";
+  specializes = actor_evil;
+	  [actor]
+	    {
+		    [skills]
+			{
+			  strength =     29.4, 0;
+			  intelligence = 10.9, 0;
+			  dexterity =    13.8, 0;
+			  melee =        47, 0;
+			}
+	    }
+	  	[aspect]
+		    {
+		      experience_value = 26175;
+		      life             = 1128;
+		      max_life         = 1128;
+		      mana             = 184;
+		      max_mana         = 184;
+		      model = m_c_edm_sb_pos_1;
+		    textures:0 = b_c_edm_sb-03;
+		      //textures:0 = b_c_edm_ph_melee;
+		      draw_shadow = FALSE;
+		      [voice]
+				{
+				  [cast]			{ * = s_e_attack_skrubb; }
+				  [die]			{ priority = high; * = s_e_die_skrubb; }
+				  [enemy_spotted]	{ priority = high; * = s_e_call_skrubb_small_SED; }
+				  [hit_glance]	{ priority = low; * = s_e_hit_skrubb_SED; }
+				}
+		    }
+	  	[attack]
+		    {
+		      attack_range = 0.5;
+		      damage_max = 237.6; //! Do by hand, on a curve.  For low values, ~==XP (6xp => 6damage; 90xp=> 50damage)
+		      damage_min = 165.6; //! Same as damage_max
+		    }
+	  	[body]
+			{
+				avg_move_velocity = 1;
+				[bone_translator]
+				{
+					body_anterior = bone01;
+					body_mid = bone01;
+					body_posterior = bone01;
+					kill_bone = bone09;
+					shield_bone = bone01;
+					weapon_bone = bone01;
+				}
+				[chore_dictionary]
+				{
+					initial_chore = chore_none;
+					chore_prefix = a_c_edm_sb_fs;
+					[chore_attack]
+					{
+						chore_stances = 0;
+						skrit = select_attack;
+						[anim_files] { 00=at; }
+					}
+					[chore_default]
+					{
+						chore_stances = 0;
+						skrit = infinite_loop;
+						[anim_files] { 00=ds; }
+					}
+					[chore_die]
+					{
+						chore_stances = 0;
+						skrit = select_transition;
+						[anim_files] { 00=di; }
+					}
+					[chore_misc]
+					{
+						chore_stances = 0;
+						skrit = select_transition;
+						[anim_files]
+						{
+							slep = ds;
+							wake = rv;
+						}
+					}
+					[chore_magic]
+					{
+						chore_stances = 0;
+						skrit = select_attack;
+						[anim_files] { 00=at-02; }
+					}
+					[chore_fidget]
+					{
+						chore_stances = 0;
+						skrit = select_fidget;
+						[anim_files] { 00=dff; }
+					}
+					[chore_walk]
+					{
+						chore_stances = 0;
+						skrit = select_walk;
+						[anim_files] { 00=rv; }
+					}
+				}
+			}
+		  [common]
+		    {
+		      screen_name = "Placeholder Skrubb Base"; //--
+		      membership = monster;
+		    }
+	  	[defend] { defense = 362.7; }
+		
+		[mind]
+	{
+		jat_brain				= world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party		= false
+		&actor_creates_own_party		= false;
+		
+		jat_die 				= world\ai\jobs\actors\evil\job_die_delete.skrit;
+		jat_startup 							= world\ai\jobs\common\job_startup_reveal.skrit
+			?invisible 							= true;
+
+		jat_flee_from_object	= jat_none;
+		jat_guard         		= jat_none;
+		jat_move          		= jat_none;
+		jat_patrol         		= jat_none;
+	}
+}
+
+[t:template,n:2W_dsx_skrubb_jungle]
+{
+  category_name = "2W_evil_d";
+  doc = "2W_dsx_skrubb_jungle";
+  specializes = 2W_dsx_skrubb_base;
+	  [actor]
+	    {
+	      [skills]
+			{
+			  strength 	= 26.5, 0;
+			  intelligence 	= 9.5, 0;
+			  dexterity 	= 15.8, 0;
+			  ranged 	= 46, 0;
+			  combat_magic	= 46, 0;
+			  nature_magic	= 46, 0;
+			}
+	    }
+	  [aspect]
+	    {
+	      experience_value = 28967;
+	      life             = 960;
+	      max_life         = 960;
+	      mana             = 184;
+	      max_mana         = 184;
+	    textures:0 = b_c_edm_sb-03;
+	      //    textures:0 = b_c_edm_ph_melee;
+	
+	      scale_base = 0.20;
+	
+	    }
+	  [attack]
+	    {
+	      attack_range = 0.5;
+	      damage_max = 167.2; 
+	      damage_min = 108; 
+		damage_bonus_min_cmagic = 94;
+		damage_bonus_max_cmagic = 146;
+	    }
+	  [generator_in_object]  //pop up
+	    {
+	      child_template_name = hole_grs_01;
+	      spawn_event = WE_ENEMY_SPOTTED;
+	      spawn_chance = 1.0;
+	      spawn_delay = 0.5;
+	      fade_kid = true;
+	    }
+	  [inventory]
+	    {
+	      selected_active_location = il_active_primary_spell;
+	      [other] { il_active_primary_spell=dsx_spell_skrubb_spit_farm; }
+	    }
+	  [common]
+	    {
+	      screen_name = "Jungle Skrubb"; //--
+	      membership = monster;
+	
+	      [template_triggers] //for generator
+			{
+			  [*]
+			    {
+			      action* = call_sfx_script("skrubb_goo");
+			      condition* = receive_world_message("we_anim_sfx",1);
+			    }
+			}
+	    }
+	  [defend] { defense = 301.3; }
+		
+//DO NOT MAKE ANY CHANGES TO THIS SECTION (MIND) WITHOUT CHECKING WITH NORDEE				
+	  [mind]
+	{
+		actor_auto_fidgets = false;
+		movement_orders = mo_hold;
+		actor_weapon_preference			= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+		actor_auto_switches_to_karate	= false;
+		actor_auto_switches_to_melee	= false;
+
+		melee_engage_range = 10;
+		personal_space_range = 1.2;
+		on_enemy_entered_ocz_attack = true;
+		ranged_engage_range = 10.0;
+		sight_range = 10.0;
+		sight_origin_height	= 2;
+	}
+}
+
+
+

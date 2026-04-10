@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_wood-oak-dark]
+{
+	layer1texture1 = b_i_glb_wood-oak-dark;
+  i texturedetail = 1;
+}

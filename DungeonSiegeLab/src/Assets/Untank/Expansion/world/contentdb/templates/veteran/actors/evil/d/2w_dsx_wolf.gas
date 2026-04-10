@@ -1,0 +1,124 @@
+[t:template,n:2W_dsx_wolf_white_base]
+{
+  category_name = "2W_evil_d";
+  doc = "2W_dsx_wolf_white_base";
+  specializes = base_wolf;
+
+  [body]
+    {
+      max_move_velocity = 4.4;
+    }
+  [actor]
+    {
+      [skills]
+				{
+					strength =  24.7, 0;
+					intelligence =  9.6, 0;
+					dexterity =  14.7, 0;
+					melee =  43,  0;
+				}
+    }
+  [aspect]
+    {
+      experience_value = 11030;
+      life = 516;
+      max_life = 516;
+      mana = 0;
+      max_mana = 0;
+		[voice]
+		{
+			[die]
+				{ priority = high;
+					* = s_e_die_wolf_01_SED;
+					* = s_e_die_wolf_02_SED;
+				}
+			[enemy_spotted]
+				{ priority = high;
+					* = s_e_call_wolf_01_SED;
+					* = s_e_call_wolf_02_SED;
+					* = s_e_call_wolf_03_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_wolf_SED;  }
+			[hit_solid]	{ priority = low; * = s_e_hit_wolf_SED;  }
+			[hit_critical]	{ priority = low; * = s_e_hit_wolf_SED;  }
+		}      
+
+    textures:0 = b_c_edm_wf-03;
+      scale_base = 0.85;
+    }
+  [attack]
+    {
+      attack_range = 0.5;
+      damage_min = 503.1;
+      damage_max = 804.1;
+    }
+
+  [defend] { defense = 1046.3; }
+  [common] { screen_name = "Snow Wolf"; }
+  [mind]
+    {
+      jat_attack_object_melee 			= world\ai\jobs\common\job_attack_object_melee.skrit
+				?run_chance 					= 1.0;
+    }
+}
+
+
+[t:template,n:2W_dsx_wolf_white]
+{
+  category_name = "2W_evil_d";
+  doc = "2W_dsx_wolf_white";
+  specializes = 2W_dsx_wolf_white_base;
+}
+
+[t:template,n:2W_dsx_wolf_white_punk-ass]
+{
+  category_name = "2W_evil_d";
+  doc = "2W_dsx_wolf_white_punk-ass";
+  specializes = 2W_dsx_wolf_white_base;
+
+  [body]
+    {
+      max_move_velocity = 5;
+    }
+  [actor]
+    {
+      [skills]
+				{
+					strength =  17.6, 0;
+					intelligence =  9.6, 0;
+					dexterity =  14.7, 0;
+					melee =  43,  0;
+				}
+    }
+  [aspect]
+    {
+      experience_value = 11030;
+      life = 344;
+      max_life = 344;
+      scale_base = 0.55;
+		[voice]
+		{
+			[die]
+				{ priority = high;
+					* = s_e_die_wolf_cub_01_SED;
+					* = s_e_die_wolf_cub_02_SED;
+				}
+			[enemy_spotted]
+				{ priority = high;
+					* = s_e_call_wolf_cub_01_SED;
+					* = s_e_call_wolf_cub_02_SED;
+					* = s_e_call_wolf_cub_03_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_wolf_cub_SED;  }
+			[hit_solid]	{ priority = low; * = s_e_hit_wolf_cub_SED;  }
+			[hit_critical]	{ priority = low; * = s_e_hit_wolf_cub_SED;  }
+		}  
+    }
+  [attack]
+    {
+      attack_range = 0.5;
+      damage_min = 232.2;
+      damage_max = 473;
+    }
+  [defend] { defense = 444.3; }
+  [common] { screen_name = "Varg"; }
+
+}

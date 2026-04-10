@@ -1,0 +1,44 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  set_bool.skrit
+// Author(s):  David Tomandl
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool			_server_only$			= true;
+property string			_doc$					= "Sets boolean value upon receiving we_req_activate";
+
+// exported properties
+property string			bool_variable$								doc = "Name of the Bool variable";
+property eWorldEvent	message_true$			= WE_REQ_ACTIVATE	doc = "Set bool to true when this message is received";
+property eWorldEvent	message_false$			= WE_REQ_DEACTIVATE doc = "Set bool to true when this message is received";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage )
+{
+	if ( !StringTool.IsEmpty( bool_variable$ ) )
+	{
+		if ( e$ == message_true$ )
+		{
+			//report.genericf("Got %s, so setting %s to true!\n", ToString( message_true$ ), bool_variable$);
+			GameAuditor.RCSetBool( bool_variable$, true );
+		}
+		if ( e$ == message_false$ )
+		{
+			//report.genericf("Got %s, so setting %s to false!\n", ToString( message_false$ ), bool_variable$);
+			GameAuditor.RCSetBool( bool_variable$, false );
+		}
+	}
+}

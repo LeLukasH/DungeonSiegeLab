@@ -1,0 +1,5 @@
+[t:tsd,n:b_sfx_cyl_tornado_cloud]
+{
+	layer1texture1 = b_sfx_cyl_tornado_cloud;
+  i texturedetail = 1;
+}

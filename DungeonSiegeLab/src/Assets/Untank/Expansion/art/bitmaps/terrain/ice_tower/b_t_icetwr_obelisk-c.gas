@@ -1,0 +1,5 @@
+[t:tsd,n:b_t_icetwr_obelisk-c]
+{
+	layer1texture1 = b_t_icetwr_obelisk-c;
+  i texturedetail = 2;
+}

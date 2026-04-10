@@ -1,0 +1,86 @@
+[t:template,n:emt_lightning]
+{
+	specializes		= emitter_lightweight;
+    category_name	= "emitter";
+	doc				= "emt_lightning";
+	
+	extra_doc		= "Emitter for adding lightning bolts to maps.";
+	[lightning_emitter]	{}
+}
+
+[t:template,n:emt_fire_column]
+{
+	specializes		= emitter_lightweight;
+    category_name	= "emitter";
+	doc				= "emt_fire_column";
+	
+	extra_doc		= "Emitter for randomly firing columns of fire.";
+	[fire_column_emitter]	{}
+}
+
+[t:template,n:emt_healing_well]
+{
+	specializes		= emitter_lightweight;
+    category_name	= "emitter";
+	doc				= "emt_healing_well";
+	
+	extra_doc		= "Emitter for playing effects on the healing well.";
+	[healing_well_emitter]	{}
+}
+
+[t:template,n:emt_napalm]
+{
+	specializes		= emitter_lightweight;
+    category_name	= "emitter";
+	doc				= "emt_napalm";
+	
+	extra_doc		= "Emitter for randomly firing gobs of napalm.";
+	[aspect]
+	{
+		lodfi_upper = -1;
+		lodfi_lower = -1;
+	}
+	[attack]
+	{
+		aiming_error_range_x = 2.5;
+		aiming_error_range_y = 2.5;
+		ammo_template = grenade_napalm;
+		attack_range = 15;
+		ammo_appears_jit = true;
+		reload_delay = 2;
+		f damage_max = 68.0;
+		f damage_min = 60.0;
+	}
+	[napalm_emitter]	
+	{
+		fireEffect = "napalm_emitter_fire";
+		minDistance = 5;
+		maxDistance = 15;
+	}
+}
+
+[t:template,n:emt_dsx_rainbow]
+{
+	specializes	=	emitter_lightweight;
+    category_name = "emitter";
+	doc			=	"t_emt_dsx_rainbow";
+	
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				action*    = call_sfx_script("dsx_light_rays_multi");
+			}
+		}
+	}
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0.0, 1, 0.0;
+		use_diffuse_color	=	true;
+	}
+}

@@ -1,0 +1,457 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  skrev_a1_r1_nis_controller.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: To control the opening nis sequence and all characters involved
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "skrev A0_R0 NIS Controller";
+
+// external properties
+//property scid snow_sj_control_scid_run$		doc = "Snow shadow jumper control scid for run action.";
+property scid dummy_scid$					doc = "Scid of dummy for main character to attack";
+property scid bird1_control_scid$			doc = "Scid of first bird controller.";
+property scid bird2_control_scid$			doc = "Scid of second bird controller.";
+property scid main_character_control_scid$	doc = "Control scid for main character in town.";
+property scid friend_controller_scid$		doc = "Control scid for friend in town.";
+property scid sj_snow_scid$					doc = "Scid of shadow jumper in snow scene with wolves.";
+property scid sj_jungle_scid$				doc = "Scid of shadow jumper in jungle.";
+property scid sj_snow_grab_scid$			doc = "Scid of shadow jumper who picks up the staff.";
+property scid sj_kill_character_scid$		doc = "Scid of the character that the shadow jumper kills.";
+property scid wolf_control_scid_1$			doc = "Scid of wolf controller.";
+property scid wolf_control_scid_2$			doc = "Scid of wolf controller.";
+property scid anim_play_scid_1$				doc = "Scid of anim player 1.";
+property scid anim_play_scid_2$				doc = "Scid of anim player 2.";
+property scid anim_play_scid_3$				doc = "Scid of anim player 3. Grab animation.";
+property scid anim_play_scid_4$				doc = "Idle in jungle.";
+property scid staff_of_stars_scid$			doc = "Scid of the staff of stars.";
+property scid merik_unconscious_scid$		doc = "Scid of merik who becomes unconscious.";
+
+owner = GoSkritComponent;
+
+// globals
+goid main_character$;
+string main_character_bow$ = "bw_g_d_s_s_c_avg";
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// Support functions
+
+// attempt to change the character's animation
+change_anim$(goid character$, int fourcc$)
+{
+	// no fidgeting please!
+	character$.Go.Mind.SetActorAutoFidgets( false );
+
+	// clear the mcp
+	character$.Go.Mind.Clear(JQ_ACTION);
+	MCPManager.Flush(character$);
+
+	// get the correct animation
+	int anim$ = character$.Go.Aspect.AspectHandle.Blender.GetSubAnimIndex(CHORE_MISC, fourcc$);
+		
+	// make sure we got one
+	if (anim$ >= 0)
+	{
+		// make the request for the action
+		eReqRetCode ret$ = MCPManager.MakeRequest(character$, PL_PLAYANIM, CHORE_MISC, anim$, 0);
+	}
+	else
+	{
+		report.genericf("The animation could not be found\n");
+	}
+}
+
+// stop the character (clear their mind)
+stop_character$(goid character$)
+{
+	// clear the mind and the mcp
+	character$.Go.Mind.Clear(JQ_ACTION);
+	MCPManager.Flush(character$);
+}
+
+// moves a character from their current position to the location of the use point
+move_character$(goid character$, goid waypoint$)
+{
+	// clear the mcp
+	MCPManager.Flush(character$);
+
+	// get the location of the use point
+	SiegePos pos$ = waypoint$.Go.Placement.GetPosition();
+
+	// try the move
+	MCPManager.MakeRequest(character$, PL_APPROACH, pos$, 0.0);
+}
+
+// turn the character
+turn_character$(goid character$, goid waypoint$)
+{
+	// get the orientation
+	Quat orientation$ = waypoint$.Go.Placement.GetOrientation();
+
+	// change the character
+	character$.Go.Placement.RCSetOrientation(orientation$);
+}
+
+// attack the give object
+attack_character$(goid attacker$, goid target$)
+{
+	// attack the target
+	attacker$.Go.Mind.Clear(JQ_ACTION);
+	attacker$.Go.Mind.SDoJob(MakeJobReq(JAT_ATTACK_OBJECT, JQ_ACTION, QP_FRONT, AO_COMMAND, target$));
+}
+
+// plays any given effect
+play_effect$(string effect$, goid target$, goid source$, string params$, eWorldEvent e$)
+{
+	// play the effect
+	SiegeFX.SRunScript(effect$, target$, source$, params$, owner.Goid, e$);
+}
+
+// equips an item to a player by calling the equip item cmd object
+equip_item$(goid equip_cmd_goid$)
+{
+	// just send the message
+	PostWorldMessage(WE_REQ_ACTIVATE, owner.Goid, equip_cmd_goid$, 0);
+}
+
+// equips the given weapon to the given player in the give slot given...
+add_equip_weapon$( goid character$, string template_name$, eInventoryLocation il$, eEquipSlot es$ )
+{
+	Goid item_goid$;
+	GoCloneReq cloneReq$;
+
+	// clone the weapon
+	cloneReq$ = MakeGoCloneReq( template_name$ );
+	item_goid$ = GoDb.SCloneGo( cloneReq$ );
+
+	// make sure we're not dealing with a spell slot
+	if( il$ != il_active_primary_spell )
+	{
+		// add it to the character and equip
+		character$.Go.Inventory.RSAdd( item_goid$.Go, il$, AO_REFLEX, false );
+		character$.Go.Inventory.RSEquip( es$, item_goid$, AO_REFLEX );
+	}
+	else
+	{
+		#only(game) [[
+
+			// get the spell book
+			Go spellbook_go$ = character$.Go.Inventory.GetActiveSpellBook();
+
+			// we need to remove the active primary spell
+
+			// select the spell
+			character$.Go.Inventory.RSSelect( il_active_primary_spell, AO_REFLEX );
+			Go temp_spell$ = character$.Go.Inventory.GetSelectedItem();
+
+			// did we get it?
+			if( temp_spell$ != NULL )
+			{
+				spellbook_go$.Inventory.RSRemove( temp_spell$, false );
+			}
+
+			// add the spell to the spell book in the first slot
+			spellbook_go$.Inventory.RSAdd(item_goid$.Go, IL_SPELL_1, AO_REFLEX, false);
+
+			// select that slot
+			character$.Go.Inventory.RSSelect( il_active_primary_spell, AO_REFLEX );
+		]];
+	}
+}
+
+// equip a given weapon
+equip_weapon$( goid character$, eInventoryLocation il$, eEquipSlot es$ )
+{
+	Go weapon$;
+
+	// unequip the selected weapon
+	weapon$ = character$.Go.Inventory.GetSelectedWeapon();
+	if( weapon$ != NULL )
+	{
+		character$.Go.Inventory.RSUnequip( character$.Go.Inventory.GetEquippedSlot( weapon$ ), AO_REFLEX );
+	}
+
+	// select the item
+	character$.Go.Inventory.RSSelect( il$, AO_REFLEX );
+
+	// get the item in the melee slot
+	weapon$ = character$.Go.Inventory.GetSelectedWeapon();
+
+	// make sure you got something
+	if( weapon$ != NULL )
+	{
+		// equip the weapon
+		character$.Go.Inventory.RSEquip( es$, weapon$.Goid, AO_REFLEX );
+	}
+}
+
+// unequips a given weapon
+unequip_weapon$( goid character$, eEquipSlot es$ )
+{
+	// unequip
+	character$.Go.Inventory.RSUnequip(es$, AO_REFLEX);
+}
+
+// change the lodfi
+change_lodfi$( go character$, bool is_lodfi$ )
+{
+	#only(game) [[
+		// change it
+		character$.SetLodfi( is_lodfi$ );
+	]];
+}
+
+// kill a character
+kill_character$( goid character$ )
+{
+	float health$;
+
+	// make sure he's not invincible
+	character$.Go.Aspect.SetIsInvincible( false );
+
+	// get the character's health
+	health$ = character$.Go.Aspect.GetCurrentLife();
+
+	// do damage to it
+	Rules.DamageGo( character$.Go.Goid, owner.Go.Goid, NULL, health$, false, false );
+
+	// and stay down!
+	//character$.Go.Aspect.SSetLifeState( LS_DEAD_NORMAL );
+}
+
+// drops teh weapon from teh specified location
+drop_from_slot$( goid character$, eInventoryLocation il$ )
+{
+	Go item$;
+	
+	// get the item
+	item$ = character$.Go.Inventory.GetItem( il$ );
+	
+	// remove it
+	character$.Go.Inventory.RSRemove( item$, true );
+}
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+// chill here until we get an activate event
+startup state Wait$
+{
+	// look for activates
+	event OnGoHandleMessage$(eWorldEvent e$, WorldMessage msg$)
+	{
+		// activate?
+		if(e$ == WE_REQ_ACTIVATE)
+		{
+			// get the main character
+			main_character$ = MakeGoid(msg$.GetData1());
+
+			// make sure it's valid
+			if(!main_character$.IsValid())
+			{
+				report.genericf("Invalid main character!\n");
+				return;
+			}
+
+			// check the scids
+			if(!dummy_scid$) { report.genericf("dummy_scid is invalid!\n"); }
+			if(!bird1_control_scid$) { report.genericf("bird1_scid is invalid!\n"); }
+			if(!bird2_control_scid$) { report.genericf("bird2_scid is invalid!\n"); }
+			if(!main_character_control_scid$) { report.genericf("main_character_control_scid is invalid!\n"); }
+			if(!friend_controller_scid$) { report.genericf("friend_controller_scid is invalid!\n"); }
+			if(!sj_snow_scid$) { report.genericf("shadow jumper snow scid is invalid!\n"); }
+			if(!sj_jungle_scid$) { report.genericf("shadow jumper jungle scid is invalid!\n"); }
+			if(!sj_kill_character_scid$) { report.genericf("shadow jumper kill character scid is invalid!\n"); }
+
+			// jump into the start state
+			SetState Start$;
+		}
+	}
+}
+
+// start doing real events here
+state Start$
+{
+
+	//report$ at(0.1) { report.genericf("started nis!\n"); }
+
+	// start the sj effects
+	start_effect_1$ at ( 0.0 ) { PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, sj_snow_scid$.Goid, 0 ); }
+	start_effect_2$ at ( 0.0 ) { PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, sj_snow_grab_scid$.Goid, 0 ); }
+
+	/**********************************************/
+	///////////////  Tower Scene ///////////////////
+	/**********************************************/
+
+	fly1$ at (10.0) { PostWorldMessage(WE_REQ_ACTIVATE, owner.Goid, bird1_control_scid$.Go.Goid, 0); }
+	fly2$ at (10.5) { PostWorldMessage(WE_REQ_ACTIVATE, owner.Goid, bird2_control_scid$.Go.Goid, 0); }
+
+	/**********************************************/
+	///////////////   Jungle Scene //////////////////
+	/**********************************************/
+
+	// play the zap effect
+	run_effect_jungle_zap$ at (10.0) { play_effect$("a1_nis_jungle_zap", sj_jungle_scid$.Go.Goid, sj_jungle_scid$.Go.Goid, "", WE_REQ_ACTIVATE); }
+
+	// start the jungle idle
+	idle$ at ( 22.0 ) { PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, anim_play_scid_4$.Goid, 0 ); }
+	
+	// play the breath effect
+	play_breath$ at ( 24.0 ) { play_effect$( "dsx_shadowjumper_breath", sj_jungle_scid$.Goid, sj_jungle_scid$.Goid, "", WE_REQ_ACTIVATE ); }
+
+	// get the smoke going on the sj
+	play_smoke_effect$ at ( 24.0 ) { SiegeFX.SRunScript( "shadow_jumper_boss_nis", sj_jungle_scid$.Goid, sj_jungle_scid$.Goid, "", sj_jungle_scid$.Goid, WE_REQ_ACTIVATE); }
+
+	// stop the idle
+	stop_idle$ at ( 27.5 ) { PostWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, anim_play_scid_4$.Goid, 0 ); }
+
+	// play the disappear effect
+	play_disappear$ at ( 28.0 ) { play_effect$( "dsx_shadow_jumper_nis_hide", sj_jungle_scid$.Goid, sj_jungle_scid$.Goid, "", WE_REQ_CAST ); }
+
+	// stop the smoke effect
+	//stop_effect_1$ at ( 30.0 ) { SiegeFx.StopScript( sj_jungle_scid$.Goid, "shadow_jumper_boss_nis" ); }
+
+	// kill him here to start the disappear animation
+	disappear$ at ( 30.0 ) { kill_character$( sj_jungle_scid$.Goid ); }
+	make_invisible$ at ( 31.5 )
+	{
+		if( sj_jungle_scid$ != NULL )
+		{
+			if( sj_jungle_scid$.Goid.IsValid() )
+			{
+				sj_jungle_scid$.Go.Aspect.SSetIsVisible( false );
+			}
+		}
+	}
+
+
+	/**********************************************/
+	///////////////  Snow Scene  //////////////////
+	/**********************************************/
+
+	// remove the staff from the sjs
+	sj_remove_sos$ at ( 34.0 )
+	{
+		Go weapon$ = sj_snow_scid$.Go.Inventory.GetEquipped( ES_WEAPON_HAND );
+		unequip_weapon$( sj_snow_scid$.Goid, ES_WEAPON_HAND );
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, weapon$.Goid, 0 );
+	}
+	sj_remove_sos_2$ at ( 34.0 )
+	{
+		Go weapon$ = sj_snow_grab_scid$.Go.Inventory.GetEquipped( ES_WEAPON_HAND );
+		unequip_weapon$( sj_snow_grab_scid$.Goid, ES_WEAPON_HAND );
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, weapon$.Goid, 0 );
+	}
+
+	// sj plays attack animations
+	play_attacks$ at (36.0) { PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, anim_play_scid_1$.Go.Goid, 0 ); }
+
+	// get the wolves running in
+	run_with_wolves_1$ at (37.0) { PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, wolf_control_scid_1$.Go.Goid, 0 ); }
+	run_with_wolves_2$ at (37.0) { PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, wolf_control_scid_2$.Go.Goid, 0 ); }
+
+	// play a few effects
+	//run_effect_wolves$ at (37.0) { play_effect$("a1_nis_wolves", sj_snow_scid$.Go.Goid, sj_snow_scid$.Go.Goid, "", WE_REQ_ACTIVATE); }
+
+	// change the alignments of the two attackers
+	change_sj_alignment$ at (37.0) { sj_snow_scid$.Go.Actor.SSetAlignment( AA_EVIL ); }
+	change_attacked_alignment$ at (37.0) { sj_kill_character_scid$.Go.Actor.SSetAlignment( AA_GOOD ); }
+
+	// force the character to attack the sj
+	attack_sj$ at ( 37.1 ) { attack_character$( sj_kill_character_scid$.Goid, sj_snow_scid$.Goid ); }
+
+	// run the shadow jumper kill animation
+	stop_attacks_1$ at (41.25) { PostWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, anim_play_scid_1$.Go.Goid, 0 ); }
+	sj_kill_anim$ at (41.5) { PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, anim_play_scid_2$.Go.Goid, 0 ); }
+
+	// play the final blow effect
+	play_kill_effect$ at ( 42.0 ) { play_effect$( "a0_r0_shadowjumper_final_blow", sj_snow_scid$.Go.Goid, sj_snow_scid$.Go.Goid, "", WE_REQ_ACTIVATE); }
+
+	// kill the character
+	kill_character_drop$ at ( 42.0 ) { drop_from_slot$( sj_kill_character_scid$.Goid, IL_ACTIVE_MELEE_WEAPON ); }
+	sj_kill_character$ at (42.0) { kill_character$( sj_kill_character_scid$.Go.Goid ); }
+	//stop_attacks_2$ at (42.0) { PostWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, anim_play_scid_1$.Go.Goid, 0 ); }
+	sj_end_kill$ at (42.0) { PostWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, anim_play_scid_2$.Go.Goid, 0 ); }
+
+	// remove the staff from merik and knock him out
+	merik_remove$ at ( 42.0 )
+	{
+		Go weapon$ = merik_unconscious_scid$.Go.Inventory.GetEquipped( ES_WEAPON_HAND );
+		unequip_weapon$( merik_unconscious_scid$.Goid, ES_WEAPON_HAND );
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, weapon$.Goid, 0 );
+	}
+	merik_knock_out$ at ( 42.0 )
+	{
+		#only(game) [[
+		float health$ = merik_unconscious_scid$.Go.Aspect.GetCurrentLife();
+		Rules.DamageGo( merik_unconscious_scid$.Goid, owner.Goid, NULL, health$, false, false );
+		merik_unconscious_scid$.Go.Aspect.SSetCurrentLife( 0.0 );
+		merik_unconscious_scid$.Go.Aspect.SetLifeRecoveryUnit( 0.0 );
+		merik_unconscious_scid$.Go.Aspect.SetNaturalLifeRecoveryUnit( 0.0 );
+		merik_unconscious_scid$.Go.Aspect.SSetLifeState( LS_ALIVE_UNCONSCIOUS );
+		]];
+	}
+
+	// play the grab animation and the add/equip it
+	sj_grab$ at ( 45.0 ) { PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, anim_play_scid_3$.Go.Goid, 0 ); }
+	/*sj_equip$ at ( 44.5 )
+	{
+		sj_snow_grab_scid$.Go.Inventory.RSAdd( staff_of_stars_scid$.Go, IL_MAIN, AO_REFLEX, false );
+		sj_snow_grab_scid$.Go.Inventory.RSUnequip( ES_WEAPON_HAND, AO_REFLEX );
+		sj_snow_grab_scid$.Go.Inventory.RSEquip( ES_WEAPON_HAND, staff_of_stars_scid$.Goid, AO_REFLEX );
+	}*/
+
+	/**********************************************/
+	///////////////  Town Scene ////////////////////
+	/**********************************************/
+
+	// add and equip the bow after getting rid of the knife
+	unequip_knife$ at (44.9) { unequip_weapon$( main_character$, es_weapon_hand ); }
+	add_equip_bow$ at (44.9) { add_equip_weapon$( main_character$, main_character_bow$, il_active_ranged_weapon, es_shield_hand ); }
+
+	// change the lodfi of the dummy to match the lodfi of the main character
+	change_dummy_lodfi$ at (44.9) { change_lodfi$( dummy_scid$.Go, false ); }
+
+	// attack the dummy
+	attack_dummy$ at (45.0) { attack_character$( main_character$, dummy_scid$.Go.Goid ); }
+	stop_attack$ at (54.0) { stop_character$( main_character$ ); }
+
+	// switch back to the knife and uequip the bow
+	unequip_bow$ at (55.3) { unequip_weapon$( main_character$, es_shield_hand ); }
+	equip_knife$ at (55.3) { equip_weapon$( main_character$, il_active_melee_weapon, es_weapon_hand ); }
+
+	// move the characters around
+	//turn_main_character$ at (54.4) { turn_character$(main_character$, main_character_control_scid$.Go.Goid); }
+	move_friend_character$ at (53.4) { PostWorldMessage(WE_REQ_ACTIVATE, owner.Goid, friend_controller_scid$.Go.Goid, 0); }
+	move_main_character$ at (55.3) { move_character$(main_character$, main_character_control_scid$.Go.Goid); }
+
+	/**********************************************/
+	///////////////  Snow Scene 2 //////////////////
+	/**********************************************/
+
+	//turn_and_roar$ at (102.0) { PostWorldMessage(WE_REQ_ACTIVATE, owner.Goid, snow_sj_control_scid_roar$.Go.Goid, 0); }
+	//roar_effect$ at (102.0) { play_effect$("shadow_jumper_roar", sj_snow_scid_2$.Go.Goid, sj_snow_scid_2$.Go.Goid, "", WE_REQ_ACTIVATE); }
+}
+
+// finishing state.  cleans everything up
+state Done$
+{
+	event OnEnterState$
+	{
+		// delete ourselves
+		PostWorldMessage(WE_REQ_DELETE, owner.Goid, owner.Goid, 1);
+	}
+}

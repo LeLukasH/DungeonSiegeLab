@@ -1,0 +1,9 @@
+[t:template,n:dsx_cmd_t_no_move]
+{
+	specializes	= cmd_const;
+	doc			= "dsx_cmd_t_no_move";
+	category_name = "zurb";
+	extra_doc = "don't allow any new movement jobs from activate until deactivate";
+
+	[dsx_cmd_t_no_move] {}
+}

@@ -1,0 +1,1984 @@
+[effect_script*]
+{
+	name	=create_potion;
+
+	script	=[[
+
+
+			sound play s_e_spell_transmute_health_cast.wav at #TARGET_POSITION dist 3 20;
+
+			sfx create explosion #TARGET 
+				"dur(2.5)delay(.5)vmin(6)vmax(6)texture(b_sfx_sparkle01)color0(1,1,.8)
+				color1(0,.3,.3)omni_dir()fade_range(4,4,0)radius(0)
+				scale(2)count(40)";
+			sfx start #POP;
+		
+			sfx create fire #TARGET 
+				"dark()grey_tex()dur(.5)color0(.3,.3,.3)color1(0,0,0)
+				count(10)alphafade(.5)flamesize(2)max_radius(3)velocity(0,3,0)
+				accel(0,0,0)";
+			sfx start #POP;
+
+			]];
+}
+
+
+// TAT - copying the transmute effect from the original game, but using parameters for color and texture
+[effect_script*]
+{
+	name	=transmute_base;
+
+	script =[[
+			// the base color and texture are passed in
+			set $texture [0];	// b_sfx_sparkle01;
+			set $color1 [1];
+			set $color2 [2];
+			set $color3 [3];
+			set $color4 [4];
+			set $color5 [5];
+			set $color6 [6];
+			set $color7 [7];
+			set $color8 [8];
+			set $color9 [9];
+			set $color10 [10];
+			set $color11 [11];
+			set $color12 [12];
+			
+			set $height .4;
+			set $detail 16;
+			set $duration 3;
+
+			set $width .75;
+			
+			set $radius1 .4;
+			set $speed 4;
+			set $fade .35;
+			set $size .5;
+			
+			set $offset 0,.5,0;
+			
+			sfx create fire #TARGET 
+				"scale($size)count(50)radius($radius1)dur($duration)
+				color0(0,0,0)color1(1,1,1)alphafade($fade)flamesize($size)
+				max_radius(0)velocity(0,$speed,0)accel(0,$speed,0)min_displace(0)
+				max_displace(0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 	
+			sfx create cylinder #TARGET 
+				"offset($offset)texture($texture)alpha(.3)hp0(-$height,-$height,0)
+				hp1($height,$height,1)rp0($width,$width,0)rp1($width,$width,0)tin(.2)tout(1.5)
+				dur($duration)color0($color1)spin(-2)segments($detail)
+				bone_orient()irotate(60,60,180)rotate(0,0,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)texture($texture)alpha(.3)hp0(-$height,-$height,0)
+				hp1($height,$height,1)rp0($width,$width,0)rp1($width,$width,0)tin(.2)tout(1.5)
+				dur($duration)color0($color2)spin(-2)segments($detail)
+				bone_orient()irotate(60,60,180)rotate(0,30,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)texture($texture)alpha(.3)hp0(-$height,-$height,0)
+				hp1($height,$height,1)rp0($width,$width,0)rp1($width,$width,0)tin(.2)tout(1.5)
+				dur($duration)color0($color3)spin(-2)segments($detail)
+				bone_orient()irotate(60,60,180)rotate(0,60,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)texture($texture)alpha(.3)hp0(-$height,-$height,0)
+				hp1($height,$height,1)rp0($width,$width,0)rp1($width,$width,0)tin(.2)tout(1.5)
+				dur($duration)color0($color4)spin(-2)segments($detail)
+				bone_orient()irotate(60,60,180)rotate(0,90,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)texture($texture)alpha(.3)hp0(-$height,-$height,0)
+				hp1($height,$height,1)rp0($width,$width,0)rp1($width,$width,0)tin(.2)tout(1.5)
+				dur($duration)color0($color5)spin(-2)segments($detail)
+				bone_orient()irotate(60,60,180)rotate(0,120,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)texture($texture)alpha(.3)hp0(-$height,-$height,0)
+				hp1($height,$height,1)rp0($width,$width,0)rp1($width,$width,0)tin(.2)tout(1.5)
+				dur($duration)color0($color6)spin(-2)segments($detail)
+				bone_orient()irotate(60,60,180)rotate(0,150,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)texture($texture)alpha(.3)hp0(-$height,-$height,0)
+				hp1($height,$height,1)rp0($width,$width,0)rp1($width,$width,0)tin(.2)tout(1.5)
+				dur($duration)color0($color7)spin(-2)segments($detail)
+				bone_orient()irotate(60,60,180)rotate(0,180,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)texture($texture)alpha(.3)hp0(-$height,-$height,0)
+				hp1($height,$height,1)rp0($width,$width,0)rp1($width,$width,0)tin(.2)tout(1.5)
+				dur($duration)color0($color8)spin(-2)segments($detail)
+				bone_orient()irotate(60,60,180)rotate(0,210,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)texture($texture)alpha(.3)hp0(-$height,-$height,0)
+				hp1($height,$height,1)rp0($width,$width,0)rp1($width,$width,0)tin(.2)tout(1.5)
+				dur($duration)color0($color9)spin(-2)segments($detail)
+				bone_orient()irotate(60,60,180)rotate(0,240,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)texture($texture)alpha(.3)hp0(-$height,-$height,0)
+				hp1($height,$height,1)rp0($width,$width,0)rp1($width,$width,0)tin(.2)tout(1.5)
+				dur($duration)color0($color10)spin(-2)segments($detail)
+				bone_orient()irotate(60,60,180)rotate(0,270,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)texture($texture)alpha(.3)hp0(-$height,-$height,0)
+				hp1($height,$height,1)rp0($width,$width,0)rp1($width,$width,0)tin(.2)tout(1.5)
+				dur($duration)color0($color11)spin(-2)segments($detail)
+				bone_orient()irotate(60,60,180)rotate(0,300,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)texture($texture)alpha(.3)hp0(-$height,-$height,0)
+				hp1($height,$height,1)rp0($width,$width,0)rp1($width,$width,0)tin(.2)tout(1.5)
+				dur($duration)color0($color12)spin(-2)segments($detail)
+				bone_orient()irotate(60,60,180)rotate(0,330,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			
+			//pause $duration
+			
+			worldmsg WE_SPELL_SYNC_MID #OWNER_GOID #OWNER_GOID #TARGET_GOID;	
+			
+			sfx create explosion #TARGET
+			"omni_dir()count(50)fade_range(.3,.35,0)rand_scale()
+			ivel(0,6,0)scale_range(.3,1,0)no_noise()vmin(1)vmax(10)
+			color0(0,0,0)color1(1,1,1)";
+			
+				
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			
+			
+			pause $duration;
+			
+			worldmsg WE_SPELL_SYNC_END #OWNER_GOID #OWNER_GOID #TARGET_GOID;	
+			
+			
+		]];
+}
+
+[effect_script*]
+{
+	name	=transmute_mana;
+
+	script =[[
+
+		sound play s_e_spell_transmute_mana_cast at #TARGET_POSITION dist 3 20;
+
+		// - We have other possible textures we can use - I left some of them here for viewing purposes
+		//call transmute_base s<b_sfx_sparkle01> s<0,0,1>  s<.05,0,.95> s<.1,0,.90> s<.15,0,.85> s<.2,0,.80> s<.25,0,.75> s<.3,0,.7> s<.35,0,.65> s<.4,0,.6> s<.45,0,.55> s<.5,0,.5> s<.55,0,.45>;
+		//call transmute_base s<b_sfx_moon_01> s<0,0,1>  s<.05,0,.95> s<.1,0,.90> s<.15,0,.85> s<.2,0,.80> s<.25,0,.75> s<.3,0,.7> s<.35,0,.65> s<.4,0,.6> s<.45,0,.55> s<.5,0,.5> s<.55,0,.45>;
+
+		//call transmute_base s<b_sfx_sblueflare_02> s<0,0,1>  s<.05,0,.95> s<.1,0,.90> s<.15,0,.85> s<.2,0,.80> s<.25,0,.75> s<.3,0,.7> s<.35,0,.65> s<.4,0,.6> s<.45,0,.55> s<.5,0,.5> s<.55,0,.45>;
+
+		call transmute_base s<b_sfx_sblueflare_02> s<1,1,1> s<.8,.8,1> s<.6,.6,1> s<.4,.4,1> s<.2,.2,1> s<.1,.1,1> s<0,0,1> s<.1,.1,1> s<.3,.3,1> s<.5,.5,1> s<.7,.7,1> s<.9,9,1>;
+	]];
+}
+
+[effect_script*]
+{
+	name	=transmute_health;
+
+	script =[[
+
+		sound play s_e_spell_transmute_health_cast at #TARGET_POSITION dist 3 20;
+
+		//call transmute_base s<b_sfx_sblueflare_02> s<1,0,0>  s<.95,0,0> s<.9,.07,0> s<.85,.14,0> s<.8,.21,0> s<.75,.28,0> s<.7,.35,0> s<.65,.42,0> s<.6,.49,0> s<.55,.56,0> s<.5,.63,0> s<.45,.7,0>;
+
+		call transmute_base s<b_sfx_sblueflare_02> s<1,1,1>  s<1,.8,.8> s<1,.6,.6> s<1,.4,.4> s<1,.2,.2> s<1,.1,.1> s<1,0,0> s<1,.1,.1> s<1,.3,.3> s<1,.5,.5> s<1,.7,.7> s<1,.9,.9>;
+	]];
+}
+
+
+// TAT - transmute all effect played on the caster - $$$ in progress and not working right now
+[effect_script*]
+{
+	name	=transmuteall; 
+
+	script =[[
+
+			//set $texture b_sfx_sparkle01;
+
+			set $height1 .2;
+			set $height2 .03;
+			set $hinc -.2;
+			set $detail 24;
+			set $duration 1;
+			set $pausedur .01;
+			
+			set $radius1 .4;
+			set $speed 8;
+			set $fade .35;
+			set $size .5;
+
+			set $width1 10;
+			set $width2 10;
+			set $inc 12;
+			
+			set $offset 0,.5,0;
+			
+			//sfx create fire #TARGET 
+			//	"scale($size)count(50)radius($radius1)dur($duration)
+			//	color0(0,0,0)color1(1,1,1)alphafade($fade)flamesize($size)
+			//	max_radius(0)velocity(0,$speed,0)accel(0,$speed,0)min_displace(0)
+			//	max_displace(0)";
+			//sfx freeze_targets #PEEK;
+			//sfx start #POP; 
+	
+			sfx create cylinder #TARGET 
+				"offset($offset)alpha(.3)hp0($height1,$height2,$hinc)
+				hp1(0,0,0)rp0(0,$width1,$inc)rp1(.1,$width2,$inc)tin(.2)tout(1.5)
+				dur($duration)color0(1,0,0)spin(-4)segments($detail)
+				bone_orient()";
+				//bone_orient()irotate(60,60,180)rotate(0,0,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			pause $pausedur;
+
+			sfx create cylinder #TARGET 
+				"offset($offset)alpha(.3)hp0($height1,$height2,$hinc)
+				hp1(0,0,0)rp0(0,$width1,$inc)rp1(.1,$width2,$inc)tin(.2)tout(1.5)
+				dur($duration)color0(1,.5,0)spin(-4)segments($detail)
+				bone_orient()";
+//				bone_orient()irotate(60,60,180)rotate(0,30,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			pause $pausedur;
+
+			sfx create cylinder #TARGET 
+				"offset($offset)alpha(.3)hp0($height1,$height2,$hinc)
+				hp1(0,0,0)rp0(0,$width1,$inc)rp1(.1,$width2,$inc)tin(.2)tout(1.5)
+				dur($duration)color0(1,1,0)spin(-4)segments($detail)
+				bone_orient()";
+//				bone_orient()irotate(60,60,180)rotate(0,60,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			pause $pausedur;
+
+			sfx create cylinder #TARGET 
+				"offset($offset)alpha(.3)hp0($height1,$height2,$hinc)
+				hp1(0,0,0)rp0(0,$width1,$inc)rp1(.1,$width2,$inc)tin(.2)tout(1.5)
+				dur($duration)color0(.5,1,0)spin(-4)segments($detail)
+				bone_orient()";
+//				bone_orient()irotate(60,60,180)rotate(0,90,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP;
+			pause $pausedur;
+
+			sfx create cylinder #TARGET 
+				"offset($offset)alpha(.3)hp0($height1,$height2,$hinc)
+				hp1(0,0,0)rp0(0,$width1,$inc)rp1(.1,$width2,$inc)tin(.2)tout(1.5)
+				dur($duration)color0(0,1,0)spin(-4)segments($detail)
+				bone_orient()";
+//				bone_orient()irotate(60,60,180)rotate(0,120,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			pause $pausedur;
+
+			sfx create cylinder #TARGET 
+				"offset($offset)alpha(.3)hp0($height1,$height2,$hinc)
+				hp1(0,0,0)rp0(0,$width1,$inc)rp1(.1,$width2,$inc)tin(.2)tout(1.5)
+				dur($duration)color0(0,1,.5)spin(-4)segments($detail)
+				bone_orient()";
+//				bone_orient()irotate(60,60,180)rotate(0,150,0)";
+			sfx freeze_targets #PEEK;
+			pause $pausedur;
+
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)alpha(.3)hp0($height1,$height2,$hinc)
+				hp1(0,0,0)rp0(0,$width1,$inc)rp1(.1,$width2,$inc)tin(.2)tout(1.5)
+				dur($duration)color0(0,1,1)spin(-4)segments($detail)
+				bone_orient()";
+//				bone_orient()irotate(60,60,180)rotate(0,180,0)";
+			sfx freeze_targets #PEEK;
+			pause $pausedur;
+
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)alpha(.3)hp0($height1,$height2,$hinc)
+				hp1(0,0,0)rp0(0,$width1,$inc)rp1(.1,$width2,$inc)tin(.2)tout(1.5)
+				dur($duration)color0(0,.5,1)spin(-4)segments($detail)
+				bone_orient()";
+//				bone_orient()irotate(60,60,180)rotate(0,210,0)";
+			sfx freeze_targets #PEEK;
+			pause $pausedur;
+
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)alpha(.3)hp0($height1,$height2,$hinc)
+				hp1(0,0,0)rp0(0,$width1,$inc)rp1(.1,$width2,$inc)tin(.2)tout(1.5)
+				dur($duration)color0(0,0,1)spin(-4)segments($detail)
+				bone_orient()";
+//				bone_orient()irotate(60,60,180)rotate(0,240,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			pause $pausedur;
+
+			sfx create cylinder #TARGET 
+				"offset($offset)alpha(.3)hp0($height1,$height2,$hinc)
+				hp1(0,0,0)rp0(0,$width1,$inc)rp1(.1,$width2,$inc)tin(.2)tout(1.5)
+				dur($duration)color0(.5,0,1)spin(-4)segments($detail)
+				bone_orient()";
+//				bone_orient()irotate(60,60,180)rotate(0,270,0)";
+			sfx freeze_targets #PEEK;
+			pause $pausedur;
+
+			sfx start #POP; 
+			sfx create cylinder #TARGET 
+				"offset($offset)alpha(.3)hp0($height1,$height2,$hinc)
+				hp1(0,0,0)rp0(0,$width1,$inc)rp1(.1,$width2,$inc)tin(.2)tout(1.5)
+				dur($duration)color0(1,0,1)spin(-4)segments($detail)
+				bone_orient()";
+//				bone_orient()irotate(60,60,180)rotate(0,300,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			pause $pausedur;
+
+			sfx create cylinder #TARGET 
+				"offset($offset)alpha(.3)hp0($height1,$height2,$hinc)
+				hp1(0,0,0)rp0(0,$width1,$inc)rp1(.1,$width2,$inc)tin(.2)tout(1.5)
+				dur($duration)color0(1,0,.5)spin(-4)segments($detail)
+				bone_orient()";
+//				bone_orient()irotate(60,60,180)rotate(0,330,0)";
+			sfx freeze_targets #PEEK;
+			sfx start #POP; 
+			
+			//pause $duration
+			
+			//worldmsg WE_SPELL_SYNC_MID #OWNER_GOID #OWNER_GOID #TARGET_GOID;	
+			
+			//sfx create explosion #TARGET
+			//"omni_dir()count(50)fade_range(.3,.35,0)rand_scale()
+			//ivel(0,6,0)scale_range(.3,1,0)no_noise()vmin(1)vmax(10)
+			//color0(0,0,0)color1(1,1,1)";				
+			//sfx freeze_targets #PEEK;
+			//sfx start #POP; 
+			
+			
+			//pause $duration;
+			
+			worldmsg WE_SPELL_SYNC_END #OWNER_GOID #OWNER_GOID #TARGET_GOID;	
+			
+			
+		]];
+}
+
+
+// Effect played on the items during a transmute all
+[effect_script*]
+{
+	name	=transmuteall_item;
+
+	script =[[
+
+			sound play s_e_spell_transmute_gold_cast at #TARGET_POSITION dist 3 20;
+
+			set $duration 1;			
+			set $radius1 .4;
+			set $speed 8;
+			set $fade .35;
+			set $size .5;
+
+			sfx create fire #TARGET 
+				"scale($size)count(50)radius($radius1)dur($duration)
+				color0(0,0,0)color1(1,1,1)alphafade($fade)flamesize($size)
+				max_radius(0)velocity(0,$speed,0)accel(0,$speed,0)min_displace(0)
+				max_displace(0)";
+			sfx start #POP; 
+			
+			sfx create explosion #TARGET
+			"omni_dir()count(50)fade_range(.3,.35,0)rand_scale()
+			ivel(0,6,0)scale_range(.3,1,0)no_noise()vmin(1)vmax(10)
+			color0(0,0,0)color1(1,1,1)";			
+			sfx start #POP; 			
+			
+	]];
+}
+
+// Effect played on the items during a transmogrification
+[effect_script*]
+{
+	name	=transmogrification;
+
+	script =[[
+		// You REALLY don't want to call transmute_base 2x - it has too many effects in it already
+		//		All those numbers are the colors, so if you want a different color, mix those up
+		call transmute_base s<b_sfx_sblueflare_02> s<1,1,1>  s<1,.8,.8> s<1,.6,.6> s<1,.4,.4> s<1,.2,.2> s<1,.1,.1> s<1,0,0> s<1,.1,.1> s<1,.3,.3> s<1,.5,.5> s<1,.7,.7> s<1,.9,.9>;
+		//call transmute_base s<b_sfx_sblueflare_02> s<1,1,1> s<.8,.8,1> s<.6,.6,1> s<.4,.4,1> s<.2,.2,1> s<.1,.1,1> s<0,0,1> s<.1,.1,1> s<.3,.3,1> s<.5,.5,1> s<.7,.7,1> s<.9,9,1>;
+	
+			
+	]];
+}
+
+// Play the sound for transmogrification separately.  If we transmogrify 20 items, we
+// don't want 20 sound effects playing.
+[effect_script*]
+{
+	name	=transmogrification_sound;
+
+	script =[[
+
+		sound play s_e_spell_transmorgrification_cast at #TARGET_POSITION dist 3 20;	
+			
+	]];
+}
+
+[effect_script*]
+{
+	name	=animal_rage; 
+
+	script	=[[
+
+			sound play s_e_spell_animal_rage_cast at #TARGET_POSITION dist 3 20;
+
+			set $radius1 -.3,-.1,.5;
+			set $radius2 0,3,3;
+			set $scale 1;
+			set $alpha .15;
+
+			sfx create cylinder #TARGET
+			"must_update()alpha($alpha)texture(b_sfx_armor_fireshot)hp0(0,0,0)
+			hp1(1,1,0)spin(19)rp0($radius1)rp1($radius2)dur(1)scale($scale)
+			color0(1,0,0)offset(0,-1,0)";
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+			"must_update()alpha($alpha)texture(b_sfx_armor_fireshot)hp0(.25,.25,0)
+			hp1(.75,.75,0)spin(14)rp0($radius1)rp1($radius2)dur(1)
+			scale($scale)color0(1,0,0)offset(0,-1,0)";
+			sfx start #POP;
+
+			pause .1;
+
+			sfx create cylinder #TARGET
+			"must_update()alpha($alpha)texture(b_sfx_armor_fireshot)hp0(1,1,0)
+			hp1(0,0,0)spin(-17)rp0($radius1)rp1($radius2)dur(1)
+			scale($scale)color0(1,0,0)offset(0,-1,0)";
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+			"must_update()alpha($alpha)texture(b_sfx_armor_fireshot)hp0(.75,.75,0)
+			hp1(.25,.25,0)spin(-12)rp0($radius1)rp1($radius2)dur(1)
+			scale($scale)color0(1,0,0)offset(0,-1,0)";
+			sfx start #POP;
+
+			pause .2;
+
+			sfx create cylinder #TARGET
+			"must_update()alpha($alpha)texture(b_sfx_armor_fireshot)hp0(0,0,0)
+			hp1(1,1,0)spin(11)rp0($radius1)rp1($radius2)dur(1)scale($scale)
+			color0(1,0,0)offset(0,-1,0)";
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+			"must_update()alpha($alpha)texture(b_sfx_armor_fireshot)hp0(.25,.25,0)
+			hp1(.75,.75,0)spin(16)rp0($radius1)rp1($radius2)dur(1)
+			scale($scale)color0(1,0,0)offset(0,-1,0)";
+			sfx start #POP;
+
+			pause .1;
+
+			sfx create cylinder #TARGET
+			"must_update()alpha($alpha)texture(b_sfx_armor_fireshot)hp0(1,1,0)
+			hp1(0,0,0)spin(-17)rp0($radius1)rp1($radius2)dur(1)
+			scale($scale)color0(1,0,0)offset(0,-1,0)";
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+			"must_update()alpha($alpha)texture(b_sfx_armor_fireshot)hp0(.75,.75,0)
+			hp1(.25,.25,0)spin(-10)rp0($radius1)rp1($radius2)dur(1)
+			scale($scale)color0(1,0,0)offset(0,-1,0)";
+			sfx start #POP;
+
+			sfx create orbiter #TARGET 
+				"offset(0,1.5,0)color0(1,0,0)scale(.5)phi(4.17)iphi(7)
+				radius(1.5)";
+			sfx start #POP;	
+
+			worldmsg WE_SPELL_SYNC_END #OWNER_GOID #OWNER_GOID #TARGET_GOID;
+
+
+			]];
+}
+
+
+[effect_script*] 
+{
+	name	=dimunition;
+
+	script	=[[
+
+
+			sound play s_e_spell_dimunition_cast at #TARGET_POSITION dist 3 30;
+
+		
+			set $texture b_sfx_lightray01;
+			set $detail 16;
+
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(-2.5,-.75,0.5)hp1(0,0,0)
+				spin(-2)rp0(1.25,1.25,0)rp1(1.25,1.25,0)scale(.9)dur(.3)
+				color0(.8,1,0.5)segments($detail)";
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(-2,-.25,0.5)hp1(0,0,0)
+				spin(3)rp0(1.5,1.5,0)rp1(1.5,1.5,0)scale(.8)dur(.4)
+				color0(.3,.7,.2)segments($detail)";	
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(2,.25,-0.5)hp1(0,0,0)
+				spin(3)rp0(1.5,1.5,0)rp1(1.5,1.5,0)scale(.7)dur(.5)
+				color0(.3,1,0)segments($detail)";
+			sfx start #POP;
+
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(-2.5,-.75,0.5)hp1(0,0,0)
+				spin(-2)rp0(1.25,1.25,0)rp1(1.25,1.25,0)scale(.6)dur(.6)
+				color0(.8,1,0.5)segments($detail)";
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(-2,-.25,0.5)hp1(0,0,0)
+				spin(3)rp0(1.5,1.5,0)rp1(1.5,1.5,0)scale(.5)dur(.7)
+				color0(.3,.7,.2)segments($detail)";	
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(2,.25,-0.5)hp1(0,0,0)
+				spin(3)rp0(1.5,1.5,0)rp1(1.5,1.5,0)scale(.4)dur(.8)
+				color0(.3,1,0)segments($detail)";
+			sfx start #POP;
+
+
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(-2.5,-.75,0.5)hp1(0,0,0)
+				spin(-2)rp0(1.25,1.25,0)rp1(1.25,1.25,0)scale(.3)
+				color0(.8,1,0.5)segments($detail)";
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(-2,-.25,0.5)hp1(0,0,0)
+				spin(3)rp0(1.5,1.5,0)rp1(1.5,1.5,0)scale(.3)
+				color0(.3,.7,.2)segments($detail)";	
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(2,.25,-0.5)hp1(0,0,0)
+				spin(3)rp0(1.5,1.5,0)rp1(1.5,1.5,0)scale(.30)
+				color0(.3,1,0)segments($detail)";
+			sfx start #POP;
+
+			set $center .3;
+
+			set $height .2;
+
+			pause .5;
+
+			worldmsg WE_SPELL_SYNC_END #OWNER_GOID #OWNER_GOID #TARGET_GOID;
+
+			]];
+}
+
+[effect_script*]
+{
+	name	=rangeboost;
+
+	script	=[[	
+			sound play s_e_spell_range_boost_cast at #TARGET_POSITION;
+			
+			sfx create cylinder #TARGET
+				"spin(1)texture(b_sfx_lightray01)color0(.5,0,.5)rp1(.06,.06,0)
+				rp0(.1,.1,0)hp0(0,-.4,-.4)hp1(0,0,0)tin(.50)tout(.3)
+				bone_orient()rotate(0,0,90)segments(6)alpha(.15)";		
+			sfx attach_point #PEEK Bip01_L_Forearm target;
+			sfx start #POP;
+			
+			sfx create cylinder #TARGET
+				"spin(2)texture(b_sfx_lightray01)color0(1,0,1)rp1(.05,.05,0)
+				rp0(.066,.066,0)hp0(0,-.66,-.66)hp1(0,0,0)tin(.50)tout(.3)
+				bone_orient()rotate(0,0,90)segments(6)alpha(.25)";		
+			sfx attach_point #PEEK Bip01_L_Forearm target;
+			sfx start #POP;
+			
+			sfx create orbiter #TARGET
+				"texture(b_sfx_sparkle01)color0(.5,0,.5)radius(0)scale(.66)";		
+			sfx attach_point #PEEK Bip01_L_Forearm target;
+			sfx start #POP;
+			
+			sfx create orbiter #TARGET
+				"color0(1,0,1)radius(0)scale(.2)";		
+			sfx attach_point #PEEK Bip01_L_Forearm target;
+			sfx start #POP;
+			
+			
+			
+			sfx create cylinder #TARGET
+				"spin(1)texture(b_sfx_lightray01)color0(.5,0,.5)rp1(.06,.06,0)
+				rp0(.1,.1,0)hp0(0,-.4,-.4)hp1(0,0,0)tin(.50)tout(.3)
+				bone_orient()rotate(0,0,90)segments(6)alpha(.15)";		
+			sfx attach_point #PEEK Bip01_R_Forearm target;
+			sfx start #POP;
+			
+			sfx create cylinder #TARGET
+				"spin(2)texture(b_sfx_lightray01)color0(1,0,1)rp1(.05,.05,0)
+				rp0(.066,.066,0)hp0(0,-.66,-.66)hp1(0,0,0)tin(.50)tout(.3)
+				bone_orient()rotate(0,0,90)segments(6)alpha(.25)";		
+			sfx attach_point #PEEK Bip01_R_Forearm target;
+			sfx start #POP;
+			
+			sfx create orbiter #TARGET
+				"texture(b_sfx_sparkle01)color0(.5,0,.5)radius(0)scale(.66)";		
+			sfx attach_point #PEEK Bip01_R_Forearm target;
+			sfx start #POP;
+			
+			sfx create orbiter #TARGET
+				"color0(1,0,1)radius(0)scale(.2)";		
+			sfx attach_point #PEEK Bip01_R_Forearm target;
+			sfx start #POP;
+			
+			worldmsg WE_SPELL_SYNC_END #OWNER_GOID #OWNER_GOID #TARGET_GOID;
+
+			]];
+}
+
+[effect_script*]
+{
+	name	=lifeforce;
+	
+	script	=[[
+	
+			sound play s_e_spell_lifeforce_cast at #TARGET_POSITION dist 1 45;
+
+			// flame center effect
+			sfx create fire #TARGET 
+				"color0(.9,.9,1)color1(1,1,1)scale(.4)alphafade(3)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			
+			// flame center effect
+			sfx create fire #TARGET 
+				"color0(.9,.9,1)color1(1,1,1)scale(.4)alphafade(3)";
+			sfx attach_point #PEEK @shield_bone target;
+			sfx start #POP;
+			
+			// add a little explosion effect
+			sfx create explosion #TARGET 
+				"color0(.9,.9,1)color1(1,1,1)scale(.4)texture(b_sfx_snow_01)srate(.01)
+				vmin(5)vmax(8)omni_dir()rand_scale()radius(.1)fade_range(0,5,0)count(30)offset(0,0,0)ts(.7)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			
+			// add a little explosion effect
+			sfx create explosion #TARGET 
+				"color0(.9,.9,1)color1(1,1,1)scale(.4)texture(b_sfx_snow_01)srate(.01)
+				vmin(5)vmax(8)omni_dir()rand_scale()radius(.1)fade_range(0,5,0)count(30)offset(0,0,0)ts(.7)";
+			sfx attach_point #PEEK @shield_bone target;
+			sfx start #POP;
+			
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;			
+		]];
+}
+
+[effect_script*]
+{
+	name	=lightofchadek;
+
+	script	=[[
+
+			sfx create trackball #TARGET_KB 
+				"must_update()velocity(10)accel(0)
+				color0(.5,.5,0)dur(6)afterlife(0)scale(.66)";
+			sfx position_at #PEEK @weapon_bone source;
+			sfx friendly party #PEEK;
+			set $trackball #PEEK;
+			sfx start $trackball;
+			
+			sfx create fire #TARGET
+				"must_update()ts(3)scale(1)count(30)color0(.5,.5,.0)color1(1,0,0)
+				alphafade(1)velocity(0,0,0)accel(0,0,0)flamesize(5)max_displace(.8)
+				min_displace(-.8)max_radius(8)";
+			sfx rat #PEEK;
+			sfx target #PEEK $trackball;
+			sfx start #POP;
+
+          		sfx start $trackball;
+
+
+            waitfor collision $trackball #DEFAULT_TIMEOUT;
+			set $collisionType #POP;
+
+			get collision id $trackball;
+			set $collisionTarget #POP;
+
+			if($collisionType == #OBJECT_COLLISION)
+			{
+				get collision point $trackball;
+				set $collisionPoint #POP;
+
+				//Tell the parent spell that the trackball collided.
+				worldmsg WE_SPELL_SYNC_MID #OWNER_GOID #OWNER_GOID $collisionTarget;
+
+				sfx create fire $collisionPoint "color0(0.5,.5,0)dur(0.6)scale(0.75)velocity(0,4,0)";
+				set $expFireYellow #POP;
+				sfx start $expFireYellow;
+
+
+			sound play s_e_spell_light_of_chadek_cast at #TARGET_POSITION dist 1 45;
+
+			sfx create sray #TARGET 
+				"count(16)color0(.5,.5,0)color1(0,0,0)
+				lmin(0.8)lmax(0.8)";
+			sfx attach_point #PEEK @body_anterior target;
+			sfx start #POP;
+
+			sfx create flurry #TARGET
+				"radius(.4)count(40)tin(.2)tout(2)amplitude(.5)color0(.5,.5,0)";
+			sfx attach_point #PEEK @body_anterior target;
+			sfx start #POP;
+			worldmsg WE_SPELL_SYNC_END #OWNER_GOID #OWNER_GOID #TARGET_GOID;
+			}
+			else
+			{
+				worldmsg WE_SPELL_SYNC_MID #OWNER_GOID #OWNER_GOID #INVALID_GOID;
+			}
+
+			]];
+}
+
+[effect_script*]
+{
+	name	=transference;
+
+	script	=[[
+			sound play s_e_spell_transference_cast at #TARGET_POSITION;
+
+			set $delay .3;
+			
+			sfx create sray #TARGET 
+				"scale(.5)radius(.4)lmin(.3)lmax(.4)color0(.93,0,.54)color1(0,0,0)
+				count(20)";
+			sfx attach_point #PEEK @body_anterior target;
+			sfx start #POP;
+			
+			sfx create sray #TARGET 
+				"scale(.5)radius(.4)lmin(.3)lmax(.4)color0(.93,0,.54)color1(0,0,0)
+				count(20)";
+			sfx attach_point #PEEK @body_posterior target;
+			sfx start #POP;
+			
+			pause $delay;
+			
+			sfx create sray #TARGET 
+				"scale(.5)radius(.4)lmin(.3)lmax(.4)color0(.93,0,.54)color1(0,0,0)
+				count(20)";
+			sfx attach_point #PEEK @body_mid target;
+			sfx start #POP;
+
+			pause $delay;
+			
+			sfx create sray #TARGET 
+				"scale(.5)radius(.4)lmin(.3)lmax(.4)color0(.93,0,.54)color1(0,0,0)
+				count(20)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			
+			sfx create sray #TARGET 
+				"scale(.5)radius(.4)lmin(.3)lmax(.4)color0(.93,0,.54)color1(0,0,0)
+				count(20)";
+			sfx attach_point #PEEK @shield_bone target;
+			sfx start #POP;
+			
+			
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=purity; 
+
+	script	=[[
+
+			sound play s_e_spell_purity_cast at #SOURCE_POSITION dist 3 20;
+			
+			set $texture b_sfx_sparkle01;
+			set $width .75;
+			set $detail 5;
+			set $duration 10;
+
+
+			sfx create cylinder #TARGET 
+				"texture($texture)alpha(.3)hp0(-$width,-$width,0)hp1($width,$width,1)
+				rp0(1,1,0)rp1(1,1,0)tin(.2)tout(1.5)color0(1,1,1)spin(-2)
+				segments($detail)bone_orient()irotate(0,0,180)rotate(0,100,0)";
+			sfx start #POP;
+			sfx create cylinder #TARGET 
+				"texture($texture)alpha(.3)hp0(-$width,-$width,0)hp1($width,$width,1)
+				rp0(1,1,0)rp1(1,1,0)tin(.2)tout(1.5)dur(6)color0(1,1,1)
+				spin(-2)segments($detail)bone_orient()irotate(0,0,180)
+				rotate(0,115,0)";
+			sfx start #POP;
+			sfx create cylinder #TARGET 
+				"texture($texture)alpha(.3)hp0(-$width,-$width,0)hp1($width,$width,1)
+				rp0(1,1,0)rp1(1,1,0)tin(.2)tout(1.5)color0(1,1,1)
+				spin(-2)segments($detail)bone_orient()irotate(0,0,180)
+				rotate(0,130,0)";
+			sfx start #POP;
+			sfx create cylinder #TARGET 
+				"texture($texture)alpha(.3)hp0(-$width,-$width,0)hp1($width,$width,1)
+				rp0(1,1,0)rp1(1,1,0)tin(.2)tout(1.5)dur(8)color0(1,1,1)
+				spin(-2)segments($detail)bone_orient()irotate(0,0,180)
+				rotate(0,145,0)";
+			sfx start #POP;
+			sfx create cylinder #TARGET 
+				"texture($texture)alpha(.3)hp0(-$width,-$width,0)hp1($width,$width,1)
+				rp0(1,1,0)rp1(1,1,0)tin(.2)tout(1.5)color0(1,1,1)
+				spin(-2)segments($detail)bone_orient()irotate(0,0,180)
+				rotate(0,160,0)";
+			sfx start #POP;
+			sfx create cylinder #TARGET 
+				"texture($texture)alpha(.3)hp0(-$width,-$width,0)hp1($width,$width,1)
+				rp0(1,1,0)rp1(1,1,0)tin(.2)tout(1.5)dur(10)color0(1,1,1)
+				spin(-2)segments($detail)bone_orient()irotate(0,0,180)
+				rotate(0,175,0)";
+			sfx start #POP;
+			sfx create cylinder #TARGET 
+				"texture($texture)alpha(.3)hp0(-$width,-$width,0)hp1($width,$width,1)
+				rp0(1,1,0)rp1(1,1,0)tin(.2)tout(1.5)color0(1,1,1)
+				spin(-2)segments($detail)bone_orient()irotate(0,0,180)
+				rotate(0,190,0)";
+			sfx start #POP;
+			sfx create cylinder #TARGET 
+				"texture($texture)alpha(.3)hp0(-$width,-$width,0)hp1($width,$width,1)
+				rp0(1,1,0)rp1(1,1,0)tin(.2)tout(1.5)dur(12)color0(1,1,1)
+				spin(-2)segments($detail)bone_orient()irotate(0,0,180)
+				rotate(0,205,0)";
+			sfx start #POP;
+			sfx create cylinder #TARGET 
+				"texture($texture)alpha(.3)hp0(-$width,-$width,0)hp1($width,$width,1)
+				rp0(1,1,0)rp1(1,1,0)tin(.2)tout(1.5)color0(1,1,1)
+				spin(-2)segments($detail)bone_orient()irotate(0,0,180)
+				rotate(0,220,0)";
+			sfx start #POP;
+			sfx create cylinder #TARGET 
+				"texture($texture)alpha(.3)hp0(-$width,-$width,0)hp1($width,$width,1)
+				rp0(1,1,0)rp1(1,1,0)tin(.2)tout(1.5)dur(14)color0(1,1,1)
+				spin(-2)segments($detail)bone_orient()irotate(0,0,180)
+				rotate(0,235,0)";
+			sfx start #POP;
+			sfx create cylinder #TARGET 
+				"texture($texture)alpha(.3)hp0(-$width,-$width,0)hp1($width,$width,1)
+				rp0(1,1,0)rp1(1,1,0)tin(.2)tout(1.5)color0(1,1,1)
+				spin(-2)segments($detail)bone_orient()irotate(0,0,180)
+				rotate(0,250,0)";
+			sfx start #POP;
+			sfx create cylinder #TARGET 
+				"texture($texture)alpha(.3)hp0(-$width,-$width,0)hp1($width,$width,1)
+				rp0(1,1,0)rp1(1,1,0)tin(.2)tout(1.5)dur(16)color0(1,1,1)
+				spin(-2)segments($detail)bone_orient()irotate(0,0,180)
+				rotate(0,265,0)";
+			sfx start #POP;
+			sfx create cylinder #TARGET 
+				"texture($texture)alpha(.3)hp0(-$width,-$width,0)hp1($width,$width,1)
+				rp0(1,1,0)rp1(1,1,0)tin(.2)tout(1.5)color0(1,1,1)spin(-2)
+				segments($detail)bone_orient()irotate(0,0,180)rotate(0,280,0)";
+			sfx start #POP;
+
+			sfx create explosion #TARGET
+				"srate(0.01)omni_dir()ts(.05)scale(.3)vmin(8)vmax(8)scale_range(.75,.85,0)
+				texture(b_sfx_sparkle01)color0(.8,.8,1)color1(0,0,0)
+				radius(.4)fade_range(12,12,0)count(25)";
+			sfx start #POP;
+			
+			sfx create sparkles #TARGET 
+				"color0(.8,.8,1)psize(.6)radius(1.2)ts(1.5)yvel(-.1)count(12)
+				texture(b_sfx_sparkle01)offset(0,.2,0)";
+			sfx start #POP;
+
+		]];
+}
+
+[effect_script*]
+{
+	name	= respite_effect;
+
+	script	=[[
+	
+			sound play s_e_spell_respite_cast at #TARGET_POSITION dist 1 45;
+
+
+			set $duration [0];
+			set $egg_color 0,0,.2;
+
+			// create top cylinder
+			sfx create cylinder #TARGET "color0($egg_color)rp0([2],[2],0)rp1([1],[1],0)
+				hp0(0,0,0)hp1([3],[3],0)tin(1)";
+			sfx attach_point #PEEK @body_mid target;
+			sfx start #POP;
+
+			// create the cover cylinder
+			sfx create cylinder #TARGET "color0($egg_color)rp0([1],[1],0)rp1(0,0,0)
+				hp0([3],[3],0)hp1([6],[6],0)tin(1)";
+			sfx attach_point #PEEK @body_mid target;
+			sfx start #POP;
+
+			// create the middle cylinder
+			sfx create cylinder #TARGET "color0($egg_color)rp0([2],[2],0)rp1([2],[2],0)
+				hp0(0,0,0)hp1([5],[5],0)tin(1)";
+			sfx attach_point #PEEK @body_mid target;
+			sfx start #POP;
+
+			// create bottom cylinder
+			sfx create cylinder #TARGET "color0($egg_color)rp0([1],[1],0)rp1([2],[2],0)
+				hp0([4],[4],0)hp1([5],[5],0)tin(1)";
+			sfx attach_point #PEEK @body_mid target;
+			sfx start #POP;
+
+			pause .4;
+
+			// center sphere
+			sfx create orbiter #TARGET "color0(.7,.7,.7)radius(0)texture(b_sfx_sparkle01)scale(2)tin(.75)";
+			sfx attach_point #PEEK @body_mid target;
+			sfx start #POP;
+
+			// flame center effect
+			sfx create fire #TARGET "color0(0,0,.25)dur($duration)scale(.5)offset(0,-.2,0)alphafade(5)";
+			sfx attach_point #PEEK @body_mid target;
+			sfx start #POP;
+
+			pause .2;
+
+			// add a little explosion effect
+			sfx create explosion #TARGET "color0(.9,.9,1)color1($egg_color)scale(.3)texture(b_sfx_sparkle01)srate(.01)
+				vmin(5)vmax(8)omni_dir()rand_scale()radius(.5)fade_range(0,5,0)count(30)offset(0,.2,0)ts(.7)";
+			sfx attach_point #PEEK @body_mid target;
+			sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;			
+		]];
+}
+
+[effect_script*] //
+{
+	name	=combat_convert;
+
+	script	=[[
+			sound play s_e_spell_increase_ranged_to_hit_cast at #TARGET_POSITION dist 3 20;
+
+			sfx create fire #TARGET
+				"flamesize(.5)max_radius(.5)velocity(0,2,0)accel(0,2,0)
+				color0(.1,.9,0)color1(0,0,0)ts(1)scale(.75)
+				count(10)";
+			sfx attach_point #PEEK Bip01_L_Hand target;
+			sfx start #POP;
+			
+			pause .15;
+			
+			sfx create fire #TARGET
+				"flamesize(.5)max_radius(.5)velocity(0,2,0)accel(0,2,0)
+				line()color0(.2,.8,0)color1(0,0,0)ts(1)scale(.75)
+				count(10)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK Bip01_L_Forearm target;
+			sfx attach_point #PEEK Bip01_L_Hand source;
+			sfx start #POP;
+			
+			pause .15;
+			
+			sfx create fire #TARGET
+				"flamesize(.5)max_radius(.5)velocity(0,2,0)accel(0,2,0)
+				line()color0(.3,.7,0)color1(0,0,0)ts(1)scale(.75)
+				count(10)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK Bip01_L_UpperArm target;
+			sfx attach_point #PEEK Bip01_L_Forearm source;
+			sfx start #POP;
+			
+			pause .15;
+			
+			sfx create fire #TARGET
+				"flamesize(.5)max_radius(.5)velocity(0,2,0)accel(0,2,0)
+				line()color0(.4,.6,0)color1(0,0,0)ts(1)scale(.75)
+				count(10)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK Bip01_L_Clavicle target;
+			sfx attach_point #PEEK Bip01_L_UpperArm source;
+			sfx start #POP;
+			
+			pause .15;
+			
+			sfx create fire #TARGET
+				"flamesize(.5)max_radius(.5)velocity(0,0,-1)accel(0,0,-1)
+				line()color0(.5,.5,0)color1(0,0,0)ts(1)scale(.75)
+				count(10)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK Bip01_R_Clavicle target;
+			sfx attach_point #PEEK Bip01_L_Clavicle source;
+			sfx start #POP;
+			
+			pause .15;
+			
+			sfx create fire #TARGET
+				"flamesize(.5)max_radius(.5)velocity(0,-2,0)accel(0,-2,0)
+				line()color0(.6,.4,0)color1(0,0,0)ts(1)scale(.75)
+				count(10)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK Bip01_R_Clavicle target;
+			sfx attach_point #PEEK Bip01_R_UpperArm source;
+			sfx start #POP;
+			
+			pause .15;
+			
+			sfx create fire #TARGET
+				"flamesize(.5)max_radius(.5)velocity(0,-2,0)accel(0,-2,0)
+				line()color0(.7,.3,0)color1(0,0,0)ts(1)scale(.75)
+				count(10)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK Bip01_R_UpperArm target;
+			sfx attach_point #PEEK Bip01_R_Forearm source;
+			sfx start #POP;
+			
+			pause .15;
+			
+			sfx create fire #TARGET
+				"flamesize(.5)max_radius(.5)velocity(0,-2,0)accel(0,-2,0)
+				line()color0(.8,.2,0)color1(0,0,0)ts(1)scale(.75)
+				count(10)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK Bip01_R_Forearm target;
+			sfx attach_point #PEEK Bip01_R_Hand source;
+			sfx start #POP;
+			
+			pause .15;
+			
+			sfx create fire #TARGET
+				"flamesize(.5)max_radius(.5)velocity(0,-2,0)accel(0,-2,0)
+				color0(.9,.1,0)color1(0,0,0)ts(1)scale(.75)
+				count(10)";
+			sfx attach_point #PEEK Bip01_R_Hand target;
+			sfx start #POP;
+			]];
+}
+
+[effect_script*] // -ET
+{
+	name	=sleepy_gas;
+
+	script	=[[
+			sound play s_e_spell_sleepy_gas_cast at #TARGET_POSITION dist 3 30;
+
+
+			sfx create fire #TARGET_KB
+				"grey_tex()dark()color0(.8,.1,.9)[1]
+				count(30)velocity(0,.5,0)accel(0,0,0)alphafade(1)flamesize(8)
+				max_radius(10)instant()min_displace(.4)max_displace(.5)";
+			set $pcloud #POP;
+			sfx start $pcloud;
+
+
+			sfx create fire #TARGET_KB
+				"must_update()color0(.8,.3,.6)[1]count(20)velocity(0,2,0)
+				accel(0,0,0)alphafade(.4)flamesize(.1)min_radius(5)
+				max_radius(30)min_displace(.4)max_displace(.5)";
+			set $speckle2 #POP;
+			sfx start $speckle2;						
+			
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=hold_crowd;
+
+	script	=[[
+			sound play s_e_spell_curse_cast at #TARGET_POSITION dist 3 20;
+
+			set $texture b_sfx_lightray01;
+			set $detail 16;
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(-3,-1.25,0.5)hp1(0,0,0)
+				spin(1)rp0(1,1,0)rp1(1,1,0)dur(4.66)scale(.75)color0(.3,0,0)
+				segments($detail)";
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(3,1.25,-0.5)hp1(0,0,0)
+				spin(1)rp0(1,1,0)rp1(1,1,0)dur(4.66)scale(.75)color0(.3,0,0)
+				segments($detail)";
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(-2.5,-.75,0.5)hp1(0,0,0)
+				spin(-2)rp0(1.25,1.25,0)rp1(1.25,1.25,0)dur(4)scale(.75)
+				color0(.3,0,0.08)segments($detail)";
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(2.5,.75,-0.5)hp1(0,0,0)
+				spin(-2)rp0(1.25,1.25,0)rp1(1.25,1.25,0)dur(3.66)scale(.75)
+				color0(.3,0,.08)segments($detail)";
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(-2,-.25,0.5)hp1(0,0,0)
+				spin(3)rp0(1.5,1.5,0)rp1(1.5,1.5,0)dur(3.33)scale(.75)
+				color0(.3,0,.16)segments($detail)";	
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+				"tin(1)tout(1)texture($texture)hp0(2,.25,-0.5)hp1(0,0,0)
+				spin(3)rp0(1.5,1.5,0)rp1(1.5,1.5,0)dur(3)scale(.75)
+				color0(.3,0,.16)segments($detail)";
+			sfx start #POP;
+
+			set $center .3;
+
+			set $height .2;
+
+			pause .5;
+
+			set $offset 0,1.5,0;
+
+			sfx create orbiter #TARGET 
+				"tin(1)scale(0.3)offset($offset)
+				color0(1,.4,.6)radius(0)";
+			sfx attach_point #PEEK @body_anterior target;
+			set $orb #POP;
+			sfx start $orb;
+
+			sfx create cylinder #TARGET
+				"scale(.1)tin(1)tout(1)texture($texture)hp0(-3,-1.25,0.5)
+				hp1(0,0,0)spin(4)rp0(1,1,0)rp1(1,1,0)color0(.6,0,0)
+				segments(6)";	
+			sfx rat #PEEK;
+			sfx target #PEEK $orb;
+			sfx start #POP;
+
+			sfx create cylinder #TARGET
+				"scale(.1)tin(1)tout(1)texture($texture)hp0(3,1.25,-0.5)
+				hp1(0,0,0)spin(4)rp0(1,1,0)rp1(1,1,0)color0(.6,0,0)
+				segments(6)";		
+			sfx rat #PEEK;
+			sfx target #PEEK $orb;
+			sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=haste;
+		
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	//This effect was created before the spell itself was created,
+	//so all you have to do is hook it up! - BPM
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+	script	=[[
+			set $color 0,0,1;
+			set $height 4;
+			set $width  4;
+			set $detail 10;
+			set $texture b_sfx_010;
+			set $spin 20;
+			
+			set $delay .04;
+			set $dur .40;
+						
+			
+			
+			sfx create cylinder #TARGET
+				"spin($spin)texture($texture)color0(0,1,0)rp0(.1,.1,0)
+				rp1(.1,.1,0)hp0(-.1,-.1,0)hp1(0,0,0)tin(.50)tout(.3)
+				bone_orient()rotate(0,0,90)segments($detail)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			
+			sfx create cylinder #TARGET
+				"spin($spin)texture($texture)color0(0,1,0)rp0(.1,.1,0)
+				rp1(.1,.1,0)hp0(-.1,-.1,0)hp1(0,0,0)tin(.50)tout(.3)
+				bone_orient()rotate(0,0,90)segments($detail)";
+			sfx attach_point #PEEK @shield_bone target;
+			sfx start #POP;
+			
+			sfx create sray #TARGET 
+				"count(20)color0(.8,.2,.1)color1(0,1,0)lmin(0.25)
+				lmax(0.25)alpha(1,1,1)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			
+			sfx create sray #TARGET 
+				"count(20)color0(.8,.2,.1)color1(0,1,0)lmin(0.25)
+				lmax(0.25)alpha(1,1,1)";
+			sfx attach_point #PEEK @shield_bone target;
+			sfx start #POP;
+			
+			]];
+}
+
+[effect_script*]
+{
+	name	=group_haste;
+		
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	//This effect was created before the spell itself was created,
+	//so all you have to do is hook it up! - BPM
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+	script	=[[
+			set $color 0,0,1;
+			set $height 4;
+			set $width  4;
+			set $detail 10;
+			set $texture b_sfx_010;
+			set $spin 20;
+			
+			set $delay .04;
+			set $dur .40;
+						
+			
+			
+			sfx create cylinder #TARGET
+				"spin($spin)texture($texture)color0(1,0,0)rp0(.1,.1,0)
+				rp1(.1,.1,0)hp0(-.1,-.1,0)hp1(0,0,0)tin(.50)tout(.3)
+				bone_orient()rotate(0,0,90)segments($detail)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			
+			sfx create cylinder #TARGET
+				"spin($spin)texture($texture)color0(1,0,0)rp0(.1,.1,0)
+				rp1(.1,.1,0)hp0(-.1,-.1,0)hp1(0,0,0)tin(.50)tout(.3)
+				bone_orient()rotate(0,0,90)segments($detail)";
+			sfx attach_point #PEEK @shield_bone target;
+			sfx start #POP;
+			
+			sfx create sray #TARGET 
+				"count(20)color0(.8,.2,.1)color1(1,0,0)lmin(0.25)
+				lmax(0.25)alpha(1,1,1)";
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP;
+			
+			sfx create sray #TARGET 
+				"count(20)color0(.8,.2,.1)color1(1,0,0)lmin(0.25)
+				lmax(0.25)alpha(1,1,1)";
+			sfx attach_point #PEEK @shield_bone target;
+			sfx start #POP;
+			
+			]];
+}
+
+[effect_script*]
+
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	//This effect was created before the spell itself was created,
+	//so all you have to do is hook it up! - BPM
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	
+{
+	name	=transform;
+
+	script	=[[
+	
+			sound play s_e_spell_transform_cast at #TARGET_POSITION dist 3 20;
+
+			sfx create cylinder #TARGET
+			"hp0(8,-3,-35)hp1(20,8,-1)rp1(0,0,0)rp0(.3,5,.2)dur(2.5)
+			texture(b_sfx_mist-dynamic)spin(1)color0(.9,.5,.9)";
+			sfx start #POP;
+
+			pause .5;
+			
+			call healing_base s<b_sfx_mist-dynamic> s<.9,.5,.9>;
+
+			sound play s_e_spell_major_heal_cast at #TARGET_POSITION;
+			
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)
+				offset(0,1,0)count(40)flamesize(.2)velocity(0,-16,0)
+				accel(0,10,0)alphafade(1)dur(1)";
+				
+					
+			sfx start #POP;
+
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)offset(0,-1,0)
+				count(40)flamesize(1)velocity(0,16,0)accel(0,-10,0)
+				alphafade(1)dur(1)";
+					
+			sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+}
+[effect_script*]
+{
+	name	=transform_rune_fiend;
+
+	script	=[[
+	
+			sound play s_e_spell_transform_rune_fiend at #TARGET_POSITION dist 10 20;
+
+			sfx create cylinder #TARGET
+			"hp0(8,-3,-35)hp1(20,8,-1)rp1(0,0,0)rp0(.3,5,.2)dur(2.5)
+			texture(b_sfx_mist-dynamic)spin(1)color0(.9,.5,.9)";
+			sfx start #POP;
+
+			pause .5;
+			
+			call healing_base s<b_sfx_mist-dynamic> s<.9,.5,.9>;
+
+			sound play s_e_spell_major_heal_cast at #TARGET_POSITION;
+			
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)
+				offset(0,1,0)count(40)flamesize(.2)velocity(0,-16,0)
+				accel(0,10,0)alphafade(1)dur(1)";
+				
+					
+			sfx start #POP;
+
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)offset(0,-1,0)
+				count(40)flamesize(1)velocity(0,16,0)accel(0,-10,0)
+				alphafade(1)dur(1)";
+					
+			sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+}
+[effect_script*]
+{
+	name	=transform_troll_masher;
+
+	script	=[[
+	
+			sound play s_e_spell_transform_troll_masher at #TARGET_POSITION dist 10 20;
+
+			sfx create cylinder #TARGET
+			"hp0(8,-3,-35)hp1(20,8,-1)rp1(0,0,0)rp0(.3,5,.2)dur(2.5)
+			texture(b_sfx_mist-dynamic)spin(1)color0(.9,.5,.9)";
+			sfx start #POP;
+
+			pause .5;
+			
+			call healing_base s<b_sfx_mist-dynamic> s<.9,.5,.9>;
+
+			sound play s_e_spell_major_heal_cast at #TARGET_POSITION;
+			
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)
+				offset(0,1,0)count(40)flamesize(.2)velocity(0,-16,0)
+				accel(0,10,0)alphafade(1)dur(1)";
+				
+					
+			sfx start #POP;
+
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)offset(0,-1,0)
+				count(40)flamesize(1)velocity(0,16,0)accel(0,-10,0)
+				alphafade(1)dur(1)";
+					
+			sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+}
+[effect_script*]
+{
+	name	=transform_golem;
+
+	script	=[[
+	
+			sound play s_e_spell_transform_golem at #TARGET_POSITION dist 10 20;
+
+			sfx create cylinder #TARGET
+			"hp0(8,-3,-35)hp1(20,8,-1)rp1(0,0,0)rp0(.3,5,.2)dur(2.5)
+			texture(b_sfx_mist-dynamic)spin(1)color0(.9,.5,.9)";
+			sfx start #POP;
+
+			pause .5;
+			
+			call healing_base s<b_sfx_mist-dynamic> s<.9,.5,.9>;
+
+			sound play s_e_spell_major_heal_cast at #TARGET_POSITION;
+			
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)
+				offset(0,1,0)count(40)flamesize(.2)velocity(0,-16,0)
+				accel(0,10,0)alphafade(1)dur(1)";
+				
+					
+			sfx start #POP;
+
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)offset(0,-1,0)
+				count(40)flamesize(1)velocity(0,16,0)accel(0,-10,0)
+				alphafade(1)dur(1)";
+					
+			sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+}
+[effect_script*]
+{
+	name	=transform_barkrunner;
+
+	script	=[[
+	
+			sound play s_e_spell_transform_barkrunner at #TARGET_POSITION dist 10 20;
+
+			sfx create cylinder #TARGET
+			"hp0(8,-3,-35)hp1(20,8,-1)rp1(0,0,0)rp0(.3,5,.2)dur(2.5)
+			texture(b_sfx_mist-dynamic)spin(1)color0(.9,.5,.9)";
+			sfx start #POP;
+
+			pause .5;
+			
+			call healing_base s<b_sfx_mist-dynamic> s<.9,.5,.9>;
+
+			sound play s_e_spell_major_heal_cast at #TARGET_POSITION;
+			
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)
+				offset(0,1,0)count(40)flamesize(.2)velocity(0,-16,0)
+				accel(0,10,0)alphafade(1)dur(1)";
+				
+					
+			sfx start #POP;
+
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)offset(0,-1,0)
+				count(40)flamesize(1)velocity(0,16,0)accel(0,-10,0)
+				alphafade(1)dur(1)";
+					
+			sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+}
+[effect_script*]
+{
+	name	=transform_rock_beast;
+
+	script	=[[
+	
+			sound play s_e_spell_transform_rock_beast at #TARGET_POSITION dist 10 20;
+
+			sfx create cylinder #TARGET
+			"hp0(8,-3,-35)hp1(20,8,-1)rp1(0,0,0)rp0(.3,5,.2)dur(2.5)
+			texture(b_sfx_mist-dynamic)spin(1)color0(.9,.5,.9)";
+			sfx start #POP;
+
+			pause .5;
+			
+			call healing_base s<b_sfx_mist-dynamic> s<.9,.5,.9>;
+
+			sound play s_e_spell_major_heal_cast at #TARGET_POSITION;
+			
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)
+				offset(0,1,0)count(40)flamesize(.2)velocity(0,-16,0)
+				accel(0,10,0)alphafade(1)dur(1)";
+				
+					
+			sfx start #POP;
+
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)offset(0,-1,0)
+				count(40)flamesize(1)velocity(0,16,0)accel(0,-10,0)
+				alphafade(1)dur(1)";
+					
+			sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+}
+[effect_script*]
+{
+	name	=transform_wolf;
+
+	script	=[[
+	
+			sound play s_e_spell_transform_wolf at #TARGET_POSITION dist 10 20;
+
+			sfx create cylinder #TARGET
+			"hp0(8,-3,-35)hp1(20,8,-1)rp1(0,0,0)rp0(.3,5,.2)dur(2.5)
+			texture(b_sfx_mist-dynamic)spin(1)color0(.9,.5,.9)";
+			sfx start #POP;
+
+			pause .5;
+			
+			call healing_base s<b_sfx_mist-dynamic> s<.9,.5,.9>;
+
+			sound play s_e_spell_major_heal_cast at #TARGET_POSITION;
+			
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)
+				offset(0,1,0)count(40)flamesize(.2)velocity(0,-16,0)
+				accel(0,10,0)alphafade(1)dur(1)";
+				
+					
+			sfx start #POP;
+
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)offset(0,-1,0)
+				count(40)flamesize(1)velocity(0,16,0)accel(0,-10,0)
+				alphafade(1)dur(1)";
+					
+			sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+}
+[effect_script*]
+{
+	name	=transform_scorpion;
+
+	script	=[[
+	
+			sound play s_e_spell_transform_scorpion at #TARGET_POSITION dist 10 20;
+
+			sfx create cylinder #TARGET
+			"hp0(8,-3,-35)hp1(20,8,-1)rp1(0,0,0)rp0(.3,5,.2)dur(2.5)
+			texture(b_sfx_mist-dynamic)spin(1)color0(.9,.5,.9)";
+			sfx start #POP;
+
+			pause .5;
+			
+			call healing_base s<b_sfx_mist-dynamic> s<.9,.5,.9>;
+
+			sound play s_e_spell_major_heal_cast at #TARGET_POSITION;
+			
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)
+				offset(0,1,0)count(40)flamesize(.2)velocity(0,-16,0)
+				accel(0,10,0)alphafade(1)dur(1)";
+				
+					
+			sfx start #POP;
+
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)offset(0,-1,0)
+				count(40)flamesize(1)velocity(0,16,0)accel(0,-10,0)
+				alphafade(1)dur(1)";
+					
+			sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+}
+[effect_script*]
+{
+	name	=transform_ztrool;
+
+	script	=[[
+	
+			sound play s_e_spell_transform_ztrool at #TARGET_POSITION dist 10 20;
+
+			sfx create cylinder #TARGET
+			"hp0(8,-3,-35)hp1(20,8,-1)rp1(0,0,0)rp0(.3,5,.2)dur(2.5)
+			texture(b_sfx_mist-dynamic)spin(1)color0(.9,.5,.9)";
+			sfx start #POP;
+
+			pause .5;
+			
+			call healing_base s<b_sfx_mist-dynamic> s<.9,.5,.9>;
+
+			sound play s_e_spell_major_heal_cast at #TARGET_POSITION;
+			
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)
+				offset(0,1,0)count(40)flamesize(.2)velocity(0,-16,0)
+				accel(0,10,0)alphafade(1)dur(1)";
+				
+					
+			sfx start #POP;
+
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)offset(0,-1,0)
+				count(40)flamesize(1)velocity(0,16,0)accel(0,-10,0)
+				alphafade(1)dur(1)";
+					
+			sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+}
+[effect_script*]
+{
+	name	=transform_troll;
+
+	script	=[[
+	
+			sound play s_e_spell_transform_troll at #TARGET_POSITION dist 10 20;
+
+			sfx create cylinder #TARGET
+			"hp0(8,-3,-35)hp1(20,8,-1)rp1(0,0,0)rp0(.3,5,.2)dur(2.5)
+			texture(b_sfx_mist-dynamic)spin(1)color0(.9,.5,.9)";
+			sfx start #POP;
+
+			pause .5;
+			
+			call healing_base s<b_sfx_mist-dynamic> s<.9,.5,.9>;
+
+			sound play s_e_spell_major_heal_cast at #TARGET_POSITION;
+			
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)
+				offset(0,1,0)count(40)flamesize(.2)velocity(0,-16,0)
+				accel(0,10,0)alphafade(1)dur(1)";
+				
+					
+			sfx start #POP;
+
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)offset(0,-1,0)
+				count(40)flamesize(1)velocity(0,16,0)accel(0,-10,0)
+				alphafade(1)dur(1)";
+					
+			sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+}
+[effect_script*]
+{
+	name	=transform_mucosa;
+
+	script	=[[
+	
+			sound play s_e_spell_transform_mucosa at #TARGET_POSITION dist 10 20;
+
+			sfx create cylinder #TARGET
+			"hp0(8,-3,-35)hp1(20,8,-1)rp1(0,0,0)rp0(.3,5,.2)dur(2.5)
+			texture(b_sfx_mist-dynamic)spin(1)color0(.9,.5,.9)";
+			sfx start #POP;
+
+			pause .5;
+			
+			call healing_base s<b_sfx_mist-dynamic> s<.9,.5,.9>;
+
+			sound play s_e_spell_major_heal_cast at #TARGET_POSITION;
+			
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)
+				offset(0,1,0)count(40)flamesize(.2)velocity(0,-16,0)
+				accel(0,10,0)alphafade(1)dur(1)";
+				
+					
+			sfx start #POP;
+
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)offset(0,-1,0)
+				count(40)flamesize(1)velocity(0,16,0)accel(0,-10,0)
+				alphafade(1)dur(1)";
+					
+			sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+}
+[effect_script*]
+{
+	name	=transform_bear;
+
+	script	=[[
+	
+			sound play s_e_spell_transform_bear at #TARGET_POSITION dist 10 20;
+
+			sfx create cylinder #TARGET
+			"hp0(8,-3,-35)hp1(20,8,-1)rp1(0,0,0)rp0(.3,5,.2)dur(2.5)
+			texture(b_sfx_mist-dynamic)spin(1)color0(.9,.5,.9)";
+			sfx start #POP;
+
+			pause .5;
+			
+			call healing_base s<b_sfx_mist-dynamic> s<.9,.5,.9>;
+
+			sound play s_e_spell_major_heal_cast at #TARGET_POSITION;
+			
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)
+				offset(0,1,0)count(40)flamesize(.2)velocity(0,-16,0)
+				accel(0,10,0)alphafade(1)dur(1)";
+				
+					
+			sfx start #POP;
+
+			sfx create fire #TARGET
+				"texture(b_sfx_sparkle01)color0(.9,.5,.9)radius(1)offset(0,-1,0)
+				count(40)flamesize(1)velocity(0,16,0)accel(0,-10,0)
+				alphafade(1)dur(1)";
+					
+			sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #INVALID_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+}
+// MRC 7/17/2003 Play the orb sounds separately.
+[effect_script*]
+{
+	name	=orb_healing_sound;
+
+	script	=[[
+
+			sound play s_e_spell_orb_healing_cast at #SOURCE_POSITION dist 3 30;
+
+			]];
+}
+
+[effect_script*]
+{
+	name	=orb_healing_orbiter;
+
+	script	=[[
+            //Central orbiter.
+            sfx create orbiter #TARGET 
+				"color0(0.2,0.2,0.8)radius(2)scale(0.5)offset(0,0.5,0)smooth()
+                free()iphi(1)tout(0)";
+            set $orbiter #POP;
+            sfx start $orbiter;
+
+            //Red orbiter.
+            sfx create orbiter #TARGET
+                "phi(0)itheta(5)iphi(5)color0(1,0,0.5)
+                scale(0.1)tout(0.5)";
+            set $miniOrb1 #PEEK;
+            sfx rat #PEEK;
+            sfx target #PEEK $orbiter;
+            sfx start #POP;
+
+            //One white orbiter.
+            sfx create orbiter #TARGET
+                "phi(1.57)itheta(5)iphi(5)color0(1,1,1)
+                scale(0.1)tout(0.5)";
+            set $miniOrb2 #PEEK;
+            sfx rat #PEEK;
+            sfx target #PEEK $orbiter;
+            sfx start #POP;
+
+            //Blue orbiter.
+            sfx create orbiter #TARGET
+                "phi(3.14)itheta(5)iphi(5)color0(0,0,1)
+                scale(0.1)tout(0.5)";
+            set $miniOrb3 #PEEK;
+            sfx rat #PEEK;
+            sfx target #PEEK $orbiter;
+            sfx start #POP;
+
+            //Another white orbiter.
+            sfx create orbiter #TARGET
+                "phi(4.71)itheta(5)iphi(5)color0(1,1,1)
+                scale(0.1)tout(0.5)";
+            set $miniOrb4 #PEEK;
+            sfx rat #PEEK;
+            sfx target #PEEK $orbiter;
+            sfx start #POP;
+
+            //Linetracer between red and blue orbiters.
+            sfx create linetracer #TARGET
+                "fade_rate(1)tout(0.5)color0(1,0,0.5)color1(0,0,1)";
+            sfx rat #PEEK;
+            sfx target #PEEK $miniOrb1;
+            sfx target #PEEK $miniOrb3;
+            sfx start #POP;
+
+            //Linetracer between two white orbiters.
+            sfx create linetracer #TARGET
+                "fade_rate(1)tout(0.5)color0(0.6,0.6,0.6)color1(0,0,0)";
+            sfx rat #PEEK;
+            sfx target #PEEK $miniOrb2;
+            sfx target #PEEK $miniOrb4;
+            sfx start #POP;
+
+            //Sparkles make things pretty!
+            sfx create fire #TARGET
+                "color0(0.8,0,0.2)texture(b_sfx_sparkle01)flamesize(0.0001)
+                velocity(0,2,0)accel(0,0,0)alphafade(0.75)offset(0,-0.05,0)
+                count(30)dur([0])";
+            sfx rat #PEEK;
+            sfx target #PEEK $orbiter;
+            sfx start #POP;
+            
+            //More pretty!
+            sfx create fire #TARGET
+                "color0(0.2,0,0.8)texture(b_sfx_sparkle01)flamesize(0.0001)
+                velocity(0,2,0)accel(0,0,0)alphafade(0.75)offset(0,-0.05,0)
+                count(30)dur([0])";
+            sfx rat #PEEK;
+            sfx target #PEEK $orbiter;
+            sfx start #POP;
+
+			//Send back a mid sync message with the ID of the orbiter.  This is important!  The skrit needs
+			//to know this ID so that it can use the ID to get the location of the orbiter.
+			worldmsg WE_SPELL_SYNC_MID #OWNER_GOID #OWNER_GOID $orbiter;
+
+			]];
+}
+
+[effect_script*]
+{
+	name	=orb_healing_projectile;
+
+	script	=[[
+			sound play s_e_spell_orb_healing_shoot_SED at #SOURCE_POSITION dist 3 30;
+			
+            //Create a bunch of curving particles to show the connection.
+			sfx create curve #SOURCE
+				"size(0.03)velocity(60)
+                color0(1,0,0.5)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP; 
+
+			sfx create curve #SOURCE
+				"size(0.03)velocity(60)
+                color0(1,0,0.5)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP; 
+
+			sfx create curve #SOURCE
+				"size(0.03)velocity(60)
+                color0(1,0,0.5)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP; 
+
+			sfx create curve #SOURCE
+				"size(0.03)velocity(60)
+                color0(1,0,0.5)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP; 
+
+			sfx create curve #SOURCE
+				"size(0.03)velocity(60)
+                color0(0,0,1)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP; 
+			
+			sfx create curve #SOURCE
+				"size(0.03)velocity(60)
+                color0(0,0,1)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP; 
+
+			sfx create curve #SOURCE
+				"size(0.03)velocity(60)
+                color0(0,0,1)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP; 
+
+			sfx create curve #SOURCE
+				"size(0.03)velocity(60)
+                color0(0,0,1)";
+			sfx target #PEEK target;
+			sfx attach_point #PEEK @weapon_bone target;
+			sfx start #POP; 
+
+            //Brief pause
+            pause 0.3;
+
+
+            sfx create fire #TARGET
+                "offset(0.5,-.1,0)color0(0,0,1)
+                flamesize(0.25)texture(b_sfx_sparkle01)count(5)dur(0.5)
+                velocity(0,3,0)accel(0,5,0)";
+            sfx start #POP;
+
+            sfx create fire #TARGET
+                "offset(0.353,-.1,0.353)color0(1,0,0.5)
+                flamesize(0.25)texture(b_sfx_sparkle01)count(5)dur(0.5)
+                velocity(0,3,0)accel(0,5,0)alphafade(0.3)";
+            sfx start #POP;
+
+            sfx create fire #TARGET
+                "offset(0,-.1,0.5)color0(0,0,1)
+                flamesize(0.25)texture(b_sfx_sparkle01)count(5)dur(0.5)
+                velocity(0,3,0)accel(0,5,0)alphafade(0.3)";
+            sfx start #POP;
+
+            sfx create fire #TARGET
+                "offset(0.353,-.1,-0.353)color0(1,0,0.5)
+                flamesize(0.25)texture(b_sfx_sparkle01)count(5)dur(0.5)
+                velocity(0,3,0)accel(0,5,0)alphafade(0.3)";
+            sfx start #POP;
+
+            sfx create fire #TARGET
+                "offset(-0.5,-.1,0)color0(0,0,1)
+                flamesize(0.25)texture(b_sfx_sparkle01)count(5)dur(0.5)
+                velocity(0,3,0)accel(0,5,0)alphafade(0.3)";
+            sfx start #POP;
+            
+            sfx create fire #TARGET
+                "offset(-0.353,-.1,0.353)color0(1,0,0.5)
+                flamesize(0.25)texture(b_sfx_sparkle01)count(5)dur(0.5)
+                velocity(0,3,0)accel(0,5,0)alphafade(0.3)";
+            sfx start #POP;
+
+            sfx create fire #TARGET
+                "offset(0,-.1,-0.5)color0(0,0,1)
+                flamesize(0.25)texture(b_sfx_sparkle01)count(5)dur(0.5)
+                velocity(0,3,0)accel(0,5,0)alphafade(0.3)";
+            sfx start #POP;
+            
+            sfx create fire #TARGET
+                "offset(-0.353,-.1,-0.353)color0(1,0,0.5)
+                flamesize(0.25)texture(b_sfx_sparkle01)count(5)dur(0.5)
+                velocity(0,3,0)accel(0,5,0)alphafade(0.3)";
+            sfx start #POP;
+
+			worldmsg WE_SPELL_SYNC_END #OWNER_GOID #OWNER_GOID #TARGET_GOID;
+			]];
+
+}
+
+[effect_script*]
+{
+	name	=healing_well_bless;
+
+	script	=[[
+
+			sfx create fire #TARGET
+				"color0(1,1,1)color1(0,0,0)texture(b_sfx_star_01)scale(.1)
+				offset(0,.25,0)velocity(0,0,0)accel(0,-3,0)min_radius(40)max_radius(50)
+				alphafade(.3)count(60)";
+			sfx start #POP;
+			
+			sfx create fire #TARGET
+				"color0(.3,.5,1)color1(0,.3,0)scale(.2)
+				offset(0,.25,0)velocity(0,0,0)accel(0,-3,0)min_radius(20)max_radius(25)
+				alphafade(.3)count(60)";
+			sfx start #POP;
+
+			]];
+
+}

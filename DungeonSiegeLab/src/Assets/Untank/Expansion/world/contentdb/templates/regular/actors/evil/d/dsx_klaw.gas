@@ -1,0 +1,71 @@
+[t:template,n:dsx_forest_klaw]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_forest_klaw";
+	specializes = base_klaw;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  10, 0;
+			intelligence =  7, 0;
+			dexterity =  8, 0;
+           		 melee =  6,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 132;
+		life = 172;
+       		max_life = 172;
+        	mana = 18;
+		max_mana = 18;
+		textures:0 = b_c_edm_kw-02;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 41;
+		damage_min = 38;
+	}
+	[common] { screen_name="Jungle Klaw"; }
+   	 [defend] { defense=45; }
+	[inventory]
+	{
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 10, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 115;
+				max = 229;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_small;
+				il_main = potion_health_small;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/20-28;
+				il_main = #armor/6-53;
+				il_main = #*/20-28;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/22-33;
+				il_main = #armor/-rare(1)/34-90;
+				il_main = #*/-rare(1)/22-33;
+			}
+			
+		}
+	}
+	}
+}

@@ -1,0 +1,16 @@
+[intro_movie]
+{
+	[movie*]
+	{
+		movie_file = movies\ms_intro.bik;
+	}
+	[movie*]
+	{
+		movie_file = movies\gpg_intro.bik;
+	}
+	[movie*]
+	{
+		movie_file = movies\md_intro.bik;
+	}
+
+}

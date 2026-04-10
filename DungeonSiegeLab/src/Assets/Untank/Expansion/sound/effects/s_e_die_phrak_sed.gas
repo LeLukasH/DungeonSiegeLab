@@ -1,0 +1,7 @@
+[t:sed,n:s_e_die_phrak_SED]
+{
+	sound_effect_file = "s_e_die_phrak";
+	//max_simultaneous_samples = 2;
+	min_playback_rate = 0.80;
+	max_playback_rate = 1.40;
+}

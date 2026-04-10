@@ -1,0 +1,89 @@
+[difficulty_menu]
+{
+	interface = true;
+	[t:button,n:button_easy]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1;
+		rect = 283,192,519,241;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			onbuttonpress = notify(difficulty_easy);
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);				
+		}
+
+		index = 2;
+	}
+	[t:button,n:button_medium]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 2;
+		rect = 283,268,519,317;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			onbuttonpress = notify(difficulty_medium);
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);				
+		}
+
+		index = 2;
+	}
+	[t:button,n:button_hard]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 3;
+		rect = 283,342,519,391;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			onbuttonpress = notify(difficulty_hard);
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);				
+		}
+
+		index = 2;
+	}
+
+	[t:button,n:button_diff_back]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 3;
+		rect = 360,568,439,597;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			onbuttonpress = notify(difficulty_back);
+			onlbuttondown = notify(button_down);
+			onlbuttonup = notify(button_up);
+			onrolloff = notify(button_up);
+			onrollover = notify(button_rollover);				
+		}
+
+		index = 1;
+	}
+}

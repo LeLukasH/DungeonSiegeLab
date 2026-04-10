@@ -1,0 +1,519 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  dsx_lostqueen_tail_manager.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 MadDoc Software, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+property string _doc$							= "Controls the queen's spawning action for the tail";
+property string	spawn_template$		= ""		doc = "Name of template to spawn from the tail.";
+property int base_spawn_rate$		= 3			doc = "Number of fidgets between spawns.";
+property int spawn_rate_modifier$	= 1			doc = "Spawn rate will be randomized to the base rate plus a value between this and zero. Note that this is the number of fidgets.";
+property int base_spawn_value$		= 1			doc = "Number of enemies to be spawned at a time.";
+property int spawn_value_modifier$	= 1			doc = "Spawn value randomized to base value plus a value between this and zero.";
+property scid spawn_waypoint_scid_1$			doc = "Scid of waypoint that the enemies should travel to after being spawned.";
+property scid spawn_waypoint_scid_2$			doc = "Scid of waypoint that the enemies should travel to after being spawned.";
+property scid spawn_waypoint_scid_3$			doc = "Scid of waypoint that the enemies should travel to after being spawned.";
+property scid body_scid$				doc = "The queen's body scid";
+property scid tail_scid$				doc = "The queen's tail scid";
+property int enemy_cap$			= 8		doc = "Maximum number of enemies to have spawned at any one time.";
+
+owner = GoSkritComponent;
+
+// number of waypoints
+int num_waypoints$ = 3;
+
+// the summoned enemy
+Goid summoned_goid$;
+
+// globals
+Goid target_goid$;
+float duration$;
+int enemy_count$ = 0;
+Goid my_waypoint_goid$;
+int last_waypoint$;
+int num_fidgets$;
+
+//////////////////////////////////////////////////////////////////////////////
+// Support Functions
+
+// see if we're dead
+bool CheckForDead$()
+{
+	// see if the body is still valid
+	if( IsDead( body_scid$.Go.Aspect.GetLifeState() ) || IsDead(tail_scid$.Go.Aspect.GetLifeState() ) ) { return true; }
+	else { return false; }
+
+	return false;
+}
+
+// switches to the reveal animation
+float SwitchAnimation$(eAnimChore chore$, int fourcc$, scid the_scid$)
+{
+	// turn off auto fidget
+	the_scid$.Go.Mind.SetActorAutoFidgets(false);
+
+	// clear the mcp
+	MCPManager.Flush(the_scid$.Go.Goid);
+
+	// get the correct animation
+	int anim$ = the_scid$.Go.Aspect.AspectHandle.Blender.GetSubAnimIndex(chore$, fourcc$);
+		
+	// make sure we got one
+	if (anim$ >= 0)
+	{
+		// make the request for the action
+		eReqRetCode ret$ = MCPManager.MakeRequest(the_scid$.Go.Goid, PL_PLAYANIM, chore$, anim$, 0);
+	}
+	else
+	{
+		report.genericf("The animation could not be found\n");
+		return 0;
+	}
+
+	// return the duration
+	return the_scid$.Go.Aspect.AspectHandle.Blender.GetDuration(anim$);
+}
+
+// creates an enemy at the location of the trigger
+SpawnEnemy$()
+{
+	// spawn a new enemy for the target
+	GoCloneReq req$ = MakeGoCloneReq(spawn_template$);
+	req$.StartingPos = owner.Go.Placement.GetPosition();
+	req$.SnapToTerrain = true;
+	req$.SetForceClientAllowed(true);
+	req$.SetForceServerOnly(false);
+	req$.FadeIn = true;
+
+	// create the clone
+	summoned_goid$ = GoDb.SCloneGo(req$);
+
+	// watch the new creation
+	GoDb.StartWatching( owner.Goid, summoned_goid$);
+
+	// make sure the goid is valid
+	if(!summoned_goid$.IsValid())
+	{
+		report.genericf("couldn't spawn a mucosa from the lost queen tail\n");
+		return;
+	}
+
+	// clone the controller
+	GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.Go.Goid, owner.goid );
+	cloneReq$.Omni = true;
+	cloneReq$.SetForceClientAllowed(true);
+	cloneReq$.SetForceServerOnly(false);
+	Goid temp_goid$ = GoDb.SCloneGo( cloneReq$ );
+
+	// increment the counter
+	enemy_count$ = enemy_count$ + 1;
+
+	// send Omni version an Activate to get it started.
+	PostWorldMessage(WE_REQ_ACTIVATE, owner.go.goid, temp_goid$, 0);
+}
+
+// kills the tail by inflicting maximum damage
+KillTail$(scid the_scid$)
+{
+	float health$;
+
+	// get the tail's health
+	health$ = the_scid$.Go.Aspect.GetCurrentLife();
+
+	// do damage to it
+	Rules.DamageGo(the_scid$.Go.Goid, owner.Go.Goid, NULL, health$, false, false);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// State Machine
+
+// in case the body dies we get a message and pass it on to the tail
+trigger OnGoHandleMessage$(WE_REQ_DEACTIVATE)
+{
+	//report.genericf("the queen died...killing the tail");
+
+	// kill the tail
+	KillTail$(tail_scid$);
+
+	// we're done
+	SetState Done$;
+}
+
+// begin here
+startup state Start$
+{
+	// the omni version
+	trigger OnGoHandleMessage$(WE_REQ_ACTIVATE)
+	{
+		// see if the summoned is valid
+		if(summoned_goid$.IsValid())
+		{
+			// start controlling the summoned character
+			SetState ControllingSummoned$;
+		}
+	}
+
+	event OnEnterState$
+	{
+		// make sure all the scids are valid
+		if(tail_scid$ == NULL || body_scid$ == NULL 
+			|| spawn_waypoint_scid_1$ == NULL || spawn_waypoint_scid_2$ == NULL || spawn_waypoint_scid_3$ == NULL)
+		{
+			report.genericf("the scids are invalid!\n\n");
+			return;
+		}
+		
+		// TAT 9/20/2003 - check world version
+		//	if in veteran or elite, prepend appropriate prefix to spawn template
+		if ( !StringTool.IsEmpty(spawn_template$) && World.IsMultiPlayer() ) 
+		{
+			string world_name$ = WorldMap.GetMpWorldName();
+			string temp_str$;
+			if ( world_name$ == "veteran" )
+			{
+				StringTool.AssignF(temp_str$, "2w_%s", spawn_template$);
+				StringTool.Assign(spawn_template$, temp_str$);
+			}
+			else if ( world_name$ == "elite" )
+			{
+				StringTool.AssignF(temp_str$, "3w_%s", spawn_template$);
+				StringTool.Assign(spawn_template$, temp_str$);
+			}
+			
+			Report.Genericf("Lost queen spawn template is %s for world type %s\n", spawn_template$, world_name$);
+		}
+		
+
+		// see if we are the tail's skrit or a summoned's skrit
+		if(!summoned_goid$.IsValid())
+		{
+			last_waypoint$ = 0;
+
+			SetState WaitForTarget$;
+		}
+	}
+}
+
+// controls the summoned enemy
+state ControllingSummoned$
+{
+	event OnEnterState$
+	{
+		bool doit$ = true;
+
+		// get the front job and make sure we're not just waking up
+		Job action$ = summoned_goid$.Go.Mind.GetFrontJob(JQ_ACTION);
+		if(action$ != NULL)
+		{
+			if(action$.JobAbstractType == JAT_STARTUP)
+			{
+				doit$ = false;
+			}
+		}
+
+		// see if we're in the frustrum
+		if(!summoned_goid$.Go.IsInAnyWorldFrustum())
+		{
+			doit$ = false;
+		}
+	
+		// are we all set?
+		if(doit$)
+		{
+			// clear the mind
+			summoned_goid$.Go.Mind.Clear(JQ_ACTION);
+			
+			if( last_waypoint$ == 0 ) { my_waypoint_goid$ = spawn_waypoint_scid_1$.Goid; }
+			else if( last_waypoint$ == 1 ) { my_waypoint_goid$ = spawn_waypoint_scid_2$.Goid; }
+			else { my_waypoint_goid$ = spawn_waypoint_scid_3$.Goid; }
+
+			// add a move request
+			SiegePos pos$ = my_waypoint_goid$.Go.Placement.GetPosition();
+			summoned_goid$.Go.Mind.RSMove(pos$, QP_FRONT, AO_REFLEX);
+
+			// go to the attack state
+			SetState SummonedAttack$;
+		}
+		else
+		{
+			// create the timer before trying again
+			this.CreateTimer(1, .5);
+		}
+	}
+
+	transition->ControllingSummoned$:OnTimer(1);
+}
+
+state SummonedAttack$
+{
+
+	event OnEnterState$
+	{
+		// make sure the summoned is valid
+		if(!summoned_goid$.IsValid() || my_waypoint_goid$.Go == NULL)
+		{
+			// create a timer to re-enter
+			this.CreateTimer(1, .5);
+			return;
+		}
+
+		// find the positions
+		SiegePos waypoint_pos$ = my_waypoint_goid$.Go.Placement.GetPosition();
+		SiegePos summoned_pos$ = summoned_goid$.Go.Placement.GetPosition();
+
+		// see if we're at the target
+		if(AIQuery.GetDistance(waypoint_pos$, summoned_pos$) < .5)
+		{
+			// find a party member to attack
+			Go closest_enemy$ = summoned_goid$.Go.Mind.GetClosestVisible(QT_ENEMY);
+
+			// get their party
+			Go party$ = target_goid$.Go.GetOwningParty();
+
+			// see if the enemy is valid
+			if(closest_enemy$ == NULL && party$ != NULL)
+			{
+
+					// clear their mind and find the target's party
+					summoned_goid$.Go.Mind.TempGopColl1.Clear;
+					AIQuery.Get(NULL, QT_ALIVE, party$.GetChildren(), summoned_goid$.Go.Mind.TempGopColl1);
+
+					// counting info
+					int iend$ = summoned_goid$.Go.Mind.TempGopColl1.Size();
+					
+					// get a random party member
+					closest_enemy$ = summoned_goid$.Go.Mind.TempGopColl1.Get(Math.RandomInt(iend$ - 1));
+			}
+			// no party, see if the original goid is alive and target him
+			else if(!IsDead(target_goid$.Go.Aspect.GetLifeState()))
+			{
+				closest_enemy$ = target_goid$.Go;
+			}
+
+			// see if you got an enemy
+			if(closest_enemy$ != NULL)
+			{
+				// attack the enemy
+				summoned_goid$.Go.Mind.Clear(JQ_ACTION);
+				summoned_goid$.Go.Mind.SDoJob(MakeJobReq(JAT_ATTACK_OBJECT, JQ_ACTION, QP_FRONT, AO_COMMAND, closest_enemy$.Goid));
+			}
+		}
+		else
+		{
+			// wait, and then jump back into the state
+			this.CreateTimer(1, .5);
+		}
+	}
+
+	transition->SummonedAttack$:OnTimer(1);
+}
+
+// we're all done
+State WaitForTarget$
+{
+
+	// hop in here
+	event OnGoHandleMessage$(eWorldEvent e$, WorldMessage msg$)
+	{
+		// activate event
+		if(e$ == WE_REQ_ACTIVATE)
+		{
+
+			//report.genericf("found a new target!\n");
+
+			// get the goid of the catalyst
+			target_goid$ = MakeGoid(msg$.GetData1());
+
+			// see if the target is valid
+			if(!target_goid$.IsValid())
+			{
+				this.CreateTimer(1,.1);
+				return;
+			}
+
+			// jump into the loop state
+			SetState Thinking$;
+		}
+		else if(e$ == WE_REQ_DEACTIVATE)
+		{
+			//report.genericf("the queen died...killing the tail");
+
+			// kill the tail
+			KillTail$(tail_scid$);
+
+			// we're done
+			SetState Done$;
+		}
+	}
+
+	transition->WaitForTarget$:OnTimer(1);
+}
+
+// sits here and waits for an enemy to come into range
+State Thinking$
+{
+	// our poor kiddies are dying!
+	trigger OnGoHandleCCMessage$(WE_KILLED)
+	{
+		// drop the enemy count
+		enemy_count$ = enemy_count$ - 1;
+	}
+
+	// wait until we get into the state, then check to see if our target is still in range
+	// if so, spawn another enemy for him to play with
+	event OnEnterState$
+	{
+		//report.genericf("in thinking state!\n");
+
+		// make sure everything exists and is valid
+		if(body_scid$.Go == NULL || tail_scid$.Go == NULL)
+		{
+			//if(body_scid$.Go == NULL) { report.genericf("body go null!\n"); }
+			//if(tail_scid$.Go == NULL) { report.genericf("tail go null!\n"); }
+
+			// jump back into this state in a moment
+			this.CreateTimer(6, .2);
+			return;
+		}
+		else if(!body_scid$.Go.Goid.IsValid() || !tail_scid$.Go.Goid.IsValid())
+		{
+			// jump back into this state in a moment
+			this.CreateTimer(6, .2);
+			return;
+		}
+
+		// make sure the queen isn't dead
+		if( !CheckForDead$() )
+		{
+			// pause for the animation to end before entering
+			duration$ = tail_scid$.Go.Aspect.AspectHandle.Blender.DurationOfCurrentTimeWarp();
+			float current_time$ = tail_scid$.Go.Aspect.AspectHandle.Blender.TimeOfCurrentTimeWarp();
+
+			//report.genericf("time left: %f\n", duration$ - current_time$);
+			// do we still have a while to go or are we over the cap?
+			if(duration$ - current_time$ > .2 || enemy_count$ >= enemy_cap$)
+			{
+				// wait until it's done
+				this.CreateTimer(5, duration$ - current_time$);
+				return;
+			}
+
+			// do the reveal animation
+			duration$ = SwitchAnimation$(CHORE_MISC, 'revl', tail_scid$);
+
+			// MRC 6/18/2003 Adding spawn effect
+			// TRJ - note: for some reason you can't hook this up with owner.goid as any of the parameters...was causing RPC problems
+			SiegeFX.SRunMPScript("lostqueen_tail_spawn", tail_scid$.Go.Goid, tail_scid$.Go.Goid, "", target_goid$, WE_REQ_CAST);
+
+			// wait for the timer to run down before spawning an enemy
+			// forces it to spawn when the mouth opens
+			this.CreateTimer(3, 2);
+		}
+		else { SetState Done$; }
+	}
+
+	// wait until we get here before spawning the enemy
+	trigger OnTimer$(3)
+	{
+		// make sure we're not dead
+		if( !CheckForDead$() )
+		{
+			int num_to_spawn$;
+			int i$;
+
+			// how many enemies should we spawn?
+			num_to_spawn$ = base_spawn_value$ + Math.RandomInt( spawn_value_modifier$ );
+
+			// don't go over the cap
+			if( num_to_spawn$ + enemy_count$ > enemy_cap$ )
+			{
+				num_to_spawn$ = enemy_cap$ - enemy_count$;
+			}
+
+			// loop and spawn
+			i$ = 0;
+			while( i$ < num_to_spawn$ )
+			{
+				// spawn the enemy
+				SpawnEnemy$();
+
+				// increment
+				last_waypoint$ += 1;
+				i$ += 1;
+
+				// make sure we're not over the top
+				if( last_waypoint$ >= num_waypoints$ )
+				{
+					last_waypoint$ = 0;
+				}
+			}
+
+			//report.genericf("enemy_count: %d\n", enemy_count$);
+
+			// figure out the number of fidgets to wait through
+			num_fidgets$ = base_spawn_rate$ + Math.RandomInt(spawn_rate_modifier$);
+
+			// create a timer to run when the animation ends
+			this.CreateTimer(4, duration$ - 2);
+		}
+		else { SetState Done$; }
+	}
+
+	// timer that the state waits in until we are ready to spawn a new enemy
+	trigger OnTimer$(4)
+	{
+		if( !CheckForDead$() )
+		{
+			// do the reveal animation
+			duration$ = SwitchAnimation$(CHORE_FIDGET, '00', tail_scid$);
+
+			//report.genericf("num_fidgets: %d\nduration: %f\n", num_fidgets$, duration$ * num_fidgets$);
+
+			// are we done fidgeting?
+			if( num_fidgets$ == 0 )
+			{
+				// pause a second before looping again
+				this.CreateTimer(5, duration$);
+			}
+			else
+			{
+				num_fidgets$ -= 1;
+				this.CreateTimer( 4, duration$ );
+			}
+		}
+		else { SetState Done$; }
+	}
+
+	// state waits for this timer to end before spawning a new enemy
+	transition->Thinking$:OnTimer(5);
+
+	// jump back into this state if something went wrong.  most likely, we'll
+	// get here when the queen loads
+	transition->Thinking$:OnTimer(6);
+}
+
+State Done$
+{
+	event OnEnterState$
+	{
+		//report.genericf("\n\nwe're all done!\n\n");
+
+		// see if the summoned is still valid
+		if(summoned_goid$.IsValid())
+		{
+			// watch the new creation
+			GoDb.StopWatching( owner.Goid, summoned_goid$);
+		}
+
+		// clean up
+		PostWorldMessage(WE_REQ_DELETE, owner.Goid, owner.Goid, 1);
+	}
+}

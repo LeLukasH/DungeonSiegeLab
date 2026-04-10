@@ -1,0 +1,762 @@
+[t:template,n:3W_dsx_slime_zombie]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_slime_zombie";
+	specializes = base_zombie;
+	[actor]
+		{
+			[skills]
+				{
+					strength =		36.5,0;
+					intelligence =	11.3,0;
+					dexterity =		21.6,0;
+					melee =		73,0;
+				}
+		}
+	[aspect]
+		{
+			[textures] { 0 = b_c_edm_slime_zombie; }
+			experience_value = 829305;
+			life = 2220;
+			max_life = 2220;
+			mana = 111;
+			max_mana = 111;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_min = 249.8;
+			damage_max = 407;
+		}
+	[defend] { defense = 641.3; }
+	[common] { screen_name = "Slime Zombie"; }
+	[inventory]
+		{
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 4, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 196601;
+				max = 382279;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/174;
+				il_main = #armor/37-462;
+				il_main = #*/174;
+			}
+		}
+	}	
+		}
+}
+
+[t:template,n:3W_dsx_muck_zombie]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_zombie_2";
+	specializes = base_zombie;
+	[actor]
+		{
+			[skills]
+				{
+					strength =		 39.5,0;
+					intelligence =	12.8,0;
+					dexterity =		 18.7,0;
+					melee =		 73,0;
+				}
+		}
+	[aspect]
+		{
+			[textures] { 0 = b_c_edm_muck_zombie; }
+			model = m_c_edm_zo_pos_2;
+			experience_value = 884592;
+			life = 2100;
+			max_life = 2100;
+			mana = 90;
+			max_mana = 90;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 412.5;
+			damage_min = 243;
+		}
+	[defend] { defense = 590; }
+	[common] 
+	{ 
+		screen_name = "Muck Zombie";
+		membership=monster, undead;
+	}
+	[inventory]
+		{
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 4, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 135491;
+				max = 263454;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/146;
+				il_main = #armor/30-375;
+				il_main = #*/146;
+			}
+		}
+	}	
+		}
+}
+
+
+[t:template,n:3W_dsx_base_zombie_undead]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_base_zombie";
+	specializes = base_zombie;
+	[actor]
+		{
+			[skills]
+				{
+					strength =		42.4,0;
+					intelligence =	12.5,0;
+					dexterity =		21.8,0;
+					melee =		78,0;
+				}	
+		}
+	[aspect]
+		{
+			experience_value = 942840;
+			life = 1202.7;
+			max_life = 1202.7;
+			mana = 41;
+			max_mana = 41;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 338.3;
+			damage_min = 246;
+		}
+	[common] 
+	{ 
+		screen_name="Undead Body";
+		membership=monster, undead;
+	}
+	[defend] { defense=676.5; }
+	[inventory]
+		{
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 13, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 126340;
+				max = 251854;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/163-234;
+				il_main = #armor/62-485;
+				il_main = #*/163-234;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/182-267;
+				il_main = #armor/-rare(1)/362-806;
+				il_main = #*/-rare(1)/182-267;
+			}
+			
+		}
+	}	
+		}
+}
+
+[t:template,n:3W_dsx_undead_body]
+{
+// Balanced to level 13, medium melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_zombie_undead_body";
+	specializes = 3W_dsx_base_zombie_undead;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength =	45.9,0;
+			intelligence =	12.5,0;
+			dexterity =	24.3,0;
+			melee =		79,0;
+		}	
+	}
+	[aspect]
+	{
+		experience_value = 1193100;
+		life = 1763;
+		max_life = 1763;
+		mana = 41;
+		max_mana = 41;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 420.9;
+		damage_min = 319.8;
+	}
+	[common] { screen_name="Undead Body"; }
+	[defend] { defense=785.8; }
+
+}
+
+[t:template,n:3W_dsx_undead_body_ar]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_zombie_undead_body_auto-reveal";
+	specializes = 3W_dsx_base_zombie_undead;
+
+	[actor]
+		{
+			[skills]
+				{
+					strength =		42.4,0;
+					intelligence =	12.5,0;
+					dexterity =		21.8,0;
+					melee =		78,0;
+				}	
+		}
+	[aspect]
+		{
+			experience_value = 1193100;
+			life = 1605.8;
+			max_life = 1605.8;
+			mana = 41;
+			max_mana = 41;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 338.3;
+			damage_min = 246;
+		}
+	[common] { screen_name="Undead Body"; }
+	[defend] { defense=676.5; }
+
+	[mind]
+		{
+			jat_startup						= world\ai\jobs\common\job_startup_reveal.skrit
+				?auto_reveal				= true;
+		}
+}
+
+
+[t:template,n:3W_dsx_base_zombie_rotting]
+{ //level 12, medium melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_base_zombie_02";
+	specializes = base_zombie;
+	[actor]
+		{
+			[skills]
+				{
+					strength =		42.4,0;
+					intelligence =	12.5,0;
+					dexterity =		21.8,0;
+					melee =		78,0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 942840;
+			life = 1202.7;
+			max_life = 1202.7;
+			mana = 41;
+			max_mana = 41;
+			[textures] { 0=b_c_edm_zo-02; }
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 338.3;
+			damage_min = 246;
+		}
+	[common] 
+	{ 
+		screen_name="Rotting Corpse";
+		membership=monster, undead;
+	}
+	[defend] { defense=676.5; }
+	[inventory]
+		{
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 13, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 126340;
+				max = 251854;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/163-234;
+				il_main = #armor/62-485;
+				il_main = #*/163-234;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/182-267;
+				il_main = #armor/-rare(1)/362-806;
+				il_main = #*/-rare(1)/182-267;
+			}
+			
+		}
+	}	
+		}
+}
+
+[t:template,n:3W_dsx_rotting_corpse]
+{
+// Level 12, medium melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_zombie_rotting_corpse";
+	specializes = 3W_dsx_base_zombie_rotting;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength =	42.4,0;
+			intelligence =	12.5,0;
+			dexterity =	21.8,0;
+			melee =		78,0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 1204740;
+		life = 1605.8;
+		max_life = 1605.8;
+		mana = 41;
+		max_mana = 41;
+		[textures] { 0=b_c_edm_zo-02; }
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 436;
+		damage_min = 319.8;
+	}
+	[common] { screen_name="Rotting Corpse"; }
+	[defend] { defense=676.5; }
+
+}
+
+[t:template,n:3W_dsx_rotting_corpse_ar]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_zombie_rotting_corpse_auto-reveal";
+	specializes = 3W_dsx_base_zombie_rotting;
+
+	[actor]
+		{
+			[skills]
+				{
+					strength =		42.4,0;
+					intelligence =	12.5,0;
+					dexterity =		21.8,0;
+					melee =		78,0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1210560;
+			life = 1605.8;
+			max_life = 1605.8;
+			mana = 41;
+			max_mana = 41;
+			[textures] { 0=b_c_edm_zo-02; }
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 338.3;
+			damage_min = 246;
+		}
+	[common] { screen_name="Rotting Corpse"; }
+	[defend] { defense=676.5; }
+
+	[mind]
+		{
+			jat_startup						= world\ai\jobs\common\job_startup_reveal.skrit
+				?auto_reveal				= true;
+		}
+}
+
+[t:template,n:3W_dsx_base_zombie_pudgy]
+{ //level 11, medium melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_base_zombie_03";
+	specializes = base_zombie;
+	[body]
+		{
+			max_move_velocity = 1.4;
+		}
+	[actor]
+		{
+			[skills]
+				{
+					strength =		42.4,0;
+					intelligence =	11,0;
+					dexterity =		19.4,0;
+					melee =		78,0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1087026;
+			life = 1605.8;
+			max_life = 1605.8;
+			mana = 54.7;
+			max_mana = 54.7;
+			model = m_c_edm_zo_pos_2;
+			[textures] { 0=b_c_edm_zo-03; }
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 390.9;
+			damage_min = 184.5;
+		}
+	[common] 
+	{ 
+		screen_name="Living Dead";
+		membership=monster, undead;
+	}
+	[defend] { defense=612.7; }
+	[mind]
+		{
+			jat_attack_object_melee				= world\ai\jobs\common\job_attack_object_melee.skrit
+				?run_chance						= 1.0;
+		}
+	[inventory]
+		{
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 13, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 126340;
+				max = 251854;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/163-234;
+				il_main = #armor/62-485;
+				il_main = #*/163-234;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/182-267;
+				il_main = #armor/-rare(1)/362-806;
+				il_main = #*/-rare(1)/182-267;
+			}
+			
+		}
+	}		
+		}
+}
+
+[t:template,n:3W_dsx_zombie_pudgy]
+{
+// Level 12, medium melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_zombie_pudgy";
+	specializes = 3W_dsx_base_zombie_pudgy;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength =	42.4,0;
+			intelligence =	12.5,0;
+			dexterity =	21.8,0;
+			melee =		78,0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 1210560;
+		life = 1653.7;
+		max_life = 1653.7;
+		mana = 54.7;
+		max_mana = 54.7;
+		model = m_c_edm_zo_pos_2;
+		[textures] { 0=b_c_edm_zo-03; }
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 390.9;
+		damage_min = 276.8;
+	}
+	[common] { screen_name="Living Dead"; }
+	[defend] { defense=656; }
+
+}
+
+[t:template,n:3W_dsx_zombie_pudgy_ar]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_zombie_pudgy_auto-reveal";
+	specializes = 3W_dsx_base_zombie_pudgy;
+
+	[actor]
+		{
+			[skills]
+				{
+					strength =		42.4,0;
+					intelligence =	11,0;
+					dexterity =		19.4,0;
+					melee =		78,0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1193100;
+			life = 1605.8;
+			max_life = 1605.8;
+			mana = 54.7;
+			max_mana = 54.7;
+			model = m_c_edm_zo_pos_2;
+			[textures] { 0=b_c_edm_zo-03; }
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 390.9;
+			damage_min = 184.5;
+		}
+	[common] { screen_name="Living Dead"; }
+	[defend] { defense=612.7; }
+
+	[mind]
+		{
+			jat_startup						= world\ai\jobs\common\job_startup_reveal.skrit
+				?auto_reveal				= true;
+		}
+}
+
+[t:template,n:3W_dsx_base_zombie_headless]
+{ //level 11, medium melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_base_zombie_headless";
+	specializes = base_zombie;
+	[actor]
+		{
+			[skills]
+				{
+					strength =		42.4,0;
+					intelligence =	11,0;
+					dexterity =		19.4,0;
+					melee =		78,0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1087026;
+			life = 1127.5;
+			max_life = 1127.5;
+			mana = 54.7;
+			max_mana = 54.7;
+			model = m_c_edm_zo_pos_3;
+			[textures] { 0=b_c_edm_zo-04; }
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 390.9;
+			damage_min = 184.5;
+		}
+	[common] 
+	{ 
+		screen_name="Headless Corpse";
+		membership=monster, undead;
+	}
+	[defend] { defense=612.7; }
+	[inventory]
+		{
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 13, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 126340;
+				max = 251854;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/163-234;
+				il_main = #armor/62-485;
+				il_main = #*/163-234;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/182-267;
+				il_main = #armor/-rare(1)/362-806;
+				il_main = #*/-rare(1)/182-267;
+			}
+			
+		}
+	}	
+		}
+}
+
+[t:template,n:3W_dsx_zombie_headless]
+{
+// Level 13 medium melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_zombie_headless";
+	specializes = 3W_dsx_base_zombie_headless;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength =	42.4,0;
+			intelligence =	12.5,0;
+			dexterity =	24.3,0;
+			melee =		79,0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 1210560;
+		life = 1776.7;
+		max_life = 1776.7;
+		mana = 54.7;
+		max_mana = 54.7;
+		model = m_c_edm_zo_pos_3;
+		[textures] { 0=b_c_edm_zo-04; }
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 420.9;
+		damage_min = 258.3;
+	}
+	[common] { screen_name="Headless Corpse"; }
+	[defend] { defense=772.2; }
+
+}
+
+[t:template,n:3W_dsx_zombie_headless_ar]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_zombie_headless auto-reveal";
+	specializes = 3W_dsx_base_zombie_headless;
+
+	[actor]
+		{
+			[skills]
+				{
+					strength =		42.4,0;
+					intelligence =	11,0;
+					dexterity =		19.4,0;
+					melee =		78,0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 1222200;
+			life = 1605.8;
+			max_life = 1605.8;
+			mana = 54.7;
+			max_mana = 54.7;
+			model = m_c_edm_zo_pos_3;
+			[textures] { 0=b_c_edm_zo-04; }
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 390.9;
+			damage_min = 184.5;
+		}
+	[common] { screen_name="Headless Corpse"; }
+	[defend] { defense=612.7; }
+
+	[mind]
+		{
+			jat_startup						= world\ai\jobs\common\job_startup_reveal.skrit
+				?auto_reveal				= true;
+		}
+}

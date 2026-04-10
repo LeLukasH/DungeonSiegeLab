@@ -1,0 +1,145 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	effect_aftereffect.skrit
+
+	Author(s)	: 	Mathew Corthell
+
+	Purpose		:	Launch an effect that can stay persistent after an object dies or disappears
+					or whatever.  Also give the ability to explode things.
+	
+	Expected Behavior	: When a game object with this component hits the specified event
+						This skrit should create an instance of the effect template, which
+						is really just a modified "point" with this component tagged on.  The
+						new object will play the specified effect (or explode the original object),
+						and then destroy itself after a certain amount of time.
+
+	(C)opyright 2003 Mad Doc Software
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+property string afterEffectTemplate$="effect_aftereffect_manager" doc="Template of an object that also has this skrit component.";
+property bool isAfterEffectTemplate$=false doc="Only after effect managers should set this property to true.";
+
+property eWorldEvent triggerEvent$ = WE_KILLED	doc ="message to spawn new go on.";
+
+property string effect$="" doc="The effect to be played at the position of the original object.";
+property float effectDelay$=0 doc="How long to delay before playing the effect.";
+
+property bool explodeObject$=false doc="Do we explode the original object?";
+property float explodeDelay$=0 doc="How long to delay before exploding the object?";
+
+property float lifeSpan$=3 doc="The lifespan of the lingering object.";
+
+Goid m_originalOwner$=0;
+SfxSID m_scriptID$=0;
+
+owner = GoSkritComponent;
+
+startup state Initial$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		// If this isn't a manager template, then wait for the specified message
+		// to start the manager.
+		if(!isAfterEffectTemplate$)
+		{
+			// When the trigger event happens, then make a copy of ourself to run the effect, etc.
+			if( e$ == triggerEvent$ )
+			{
+				GoCloneReq cloneReq$ = MakeGoCloneReq(afterEffectTemplate$);
+				cloneReq$.ForceClientAllowed = true;
+				// JCD 8/21/03
+				// we have to set forceserveronly to false since we want to allow clients.
+				cloneReq$.ForceServerOnly = false;
+				cloneReq$.StartingPos = owner.Go.Placement.Position;
+				Goid manager$ = GoDb.SCloneGo(cloneReq$);
+
+				// Pass all the necessary info on to the child.
+				manager$.Go.SetComponentString("effect_aftereffect", "effect", effect$);
+				manager$.Go.SetComponentFloat("effect_aftereffect", "effectDelay", effectDelay$);
+				manager$.Go.SetComponentBool("effect_aftereffect", "explodeObject", explodeObject$);
+				manager$.Go.SetComponentFloat("effect_aftereffect", "explodeDelay", explodeDelay$);
+				manager$.Go.SetComponentFloat("effect_aftereffect", "lifeSpan", lifeSpan$);
+
+				PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, manager$, 0, 0 );
+			}
+		}
+		// Otherwise, if this is the manager template, then we're waiting to be activated.
+		else
+		{
+			if(e$ == WE_REQ_ACTIVATE)
+			{
+				// Get the original owner.  We may need this if things are supposed to
+				// explode.
+				m_originalOwner$ = msg$.GetSendFrom();			
+
+				// And switch to the effect-playing state.
+				SetState Running$;
+			}
+		}
+	}
+}
+
+state Running$
+{
+	event OnEnterState$
+	{
+		if(!StringTool.IsEmpty(effect$))
+		{
+			this.CreateTimer(1, effectDelay$);
+		}
+
+		if(explodeObject$)
+		{
+			this.CreateTimer(2, explodeDelay$);
+		}
+
+		this.CreateTimer(3, lifeSpan$);
+	}
+
+	event OnTimer$(int id$, float /*delta$*/)
+	{
+		// When the effect timer fires, run the effect.
+		if(id$ == 1)
+		{
+			SiegeFx.SRunMPScript(effect$, owner.goid, owner.goid, "", owner.goid, WE_REQ_CAST);
+		}
+
+		// When the explode timer fires, explode the original object.
+		if(id$ == 2)
+		{
+			if(m_originalOwner$.IsValid())
+			{
+				if(m_originalOwner$.go.HasPhysics())
+				{
+					Physics.SExplodeGo(m_originalOwner$, m_originalOwner$.go.physics.GetExplosionMagnitude(), MakeVector(0,3,0));
+				}
+			}
+		}
+
+		// When the expiration timer fires, end the object.
+		if(id$ == 3)
+		{
+			SetState Finished$;
+		}
+	}
+}
+
+state Finished$
+{
+	event OnEnterState$
+	{
+		// To be safe, stop the script.
+		if(m_scriptID$ != 0)
+		{
+			SiegeFx.StopScript(m_scriptID$);
+		}
+
+		// Kill myself
+		GoDb.SMarkForDeletion(owner.goid);
+	}
+}

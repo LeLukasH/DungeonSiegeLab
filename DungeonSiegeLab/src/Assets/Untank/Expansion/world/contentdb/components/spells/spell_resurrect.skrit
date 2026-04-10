@@ -1,0 +1,239 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_resurrect.skrit
+// Author(s):  Rick Saenz, Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+property string effect_script$	= "resurrect"	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string script_params$	= ""			doc = "Parameters to pass along to the SiegeFx script";
+property float	heal_ratio$		= 0.0			doc = "Amount to additionaly heal target 0.0 - 1.0";
+
+property bool createZombie$ = false					doc = "Replace the character with another when resurrected?  For creating zombies.";
+property string zombie_melee$ = ""			doc = "Name of the template with which to replace melee characters.";
+property string zombie_ranged$ = ""		doc = "Name of the template with which to replace ranged characters.";
+property string zombie_caster$ = ""		doc = "Name of the template with which to replace casting characters.";
+
+owner = GoSkritComponent;
+
+
+Goid caster$;
+Goid target$;
+
+// Function for cloning the target and making a zombie
+Goid CloneTarget$(string templateName$)
+{
+	// Clone the zombie in the location of the old guy.
+	GoCloneReq cloneReq$ = MakeGoCloneReq(templateName$);
+	cloneReq$.StartingPos = target$.go.GetPlacement().GetPosition();
+	cloneReq$.FadeIn = true;
+	return GoDb.SCloneGo( cloneReq$ );
+}
+
+// Function for moving the weapon from the target to the zombie.
+void CopyWeapon$(eInventoryLocation location$, Goid zombie$)
+{
+	// Get the zombie and target weapons.
+	Go zombieWeapon$ = zombie$.Go.Inventory.GetItem(location$);
+	Go targetWeapon$ = target$.Go.Inventory.GetItem(location$);
+
+	// If the zombie has a weapon, then remove it, but don't drop it.
+	// Then delete the weapon.
+	if(zombieWeapon$ != NULL)
+	{
+		zombie$.Go.Inventory.RSRemove(zombieWeapon$, false);
+		GoDb.SMarkForDeletion(zombieWeapon$);
+	}
+
+	// If the target has a weapon, transfer it to the zombie
+	if(targetWeapon$ != NULL)
+	{
+		target$.Go.Inventory.RSTransfer(targetWeapon$, zombie$.Go, location$, AO_REFLEX, false);
+		zombie$.Go.Inventory.RSSelect(location$, AO_REFLEX);
+	}
+}
+
+// Replace the old, dead actor with a zombie of some sort.
+void CreateTheZombie$
+{
+	Goid zombie$;
+
+	// If the target has a spell selected, and a caster template was specified, then
+	// use the caster template.
+	if(target$.Go.Inventory.IsSpellSelected()
+	   && !StringTool.IsEmpty(zombie_caster$))
+	{
+		zombie$ = CloneTarget$(zombie_caster$);
+	}
+	// Otherwise, if it has a ranged weapon selected and a ranged template was specified,
+	// then use the ranged template
+	else if (target$.Go.Inventory.IsRangedWeaponSelected()
+		     && !StringTool.IsEmpty(zombie_ranged$))
+	{
+		zombie$ = CloneTarget$(zombie_ranged$);
+		CopyWeapon$(IL_ACTIVE_RANGED_WEAPON, zombie$);
+	}
+	// Otherwise, default to a melee template , assuming we have one.
+	else if (!StringTool.IsEmpty(zombie_melee$))
+	{
+		zombie$ = CloneTarget$(zombie_melee$);
+		CopyWeapon$(IL_ACTIVE_MELEE_WEAPON, zombie$);
+	}
+	// Uh-oh!  No zombie template.
+	else
+	{
+		report.error("Resurrect: No template for creating a zombie! Tell Matt C.\n");
+		return;
+	}
+	
+	// Make the old dead body invisible.
+	target$.Go.Aspect.IsVisible = false;
+}
+
+// JCD 9/14/03
+// run through the players items un-equipping and re-equipping them
+void EquipImbuedItems$
+{
+	// run through the actors items.
+	if( target$.Go.HasInventory() )
+	{
+		// clear a collection to use
+		target$.go.Mind.TempGopColl1.Clear();
+
+		// get everything in the inventory
+		target$.go.Inventory.ListItems(IL_ALL, target$.go.Mind.TempGopColl1);
+
+		// get set to loop
+		int i$ = 0;
+		int iend$ = target$.go.Mind.TempGopColl1.Size();
+		Go temp$;
+		
+		eInventoryLocation location$;
+		eEquipSlot slot$;
+		
+		// loop through and search for imbued items
+		while( i$ < iend$ )
+		{
+			// get the go
+			temp$ = target$.go.Mind.TempGopColl1.Get( i$ );
+
+			#only( game )
+	          	[[
+			if( temp$.IsImbuedItem() )
+			{
+				// get its inventory location
+				location$ = target$.go.inventory.GetLocation(temp$);
+				
+				// get its equip slot
+				slot$ = target$.go.inventory.GetEquippedSlot(temp$);
+				
+				// unequip it
+				target$.go.Inventory.RSUnequip(slot$, AO_REFLEX);
+				// equip it
+				target$.go.Inventory.RSEquip( slot$, temp$.goid, AO_REFLEX );
+			}
+			]]
+			
+			i$ = i$ + 1;
+		}
+	}
+}
+
+startup state Start$
+{
+	transition -> MakeAlive$ : OnGoHandleMessage( WE_SPELL_SYNC_MID );
+
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST )
+		{
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			if( !target$.IsValidMp || !caster$.IsValidMp )
+			{
+				SetState Finished$;
+				return;
+			}
+
+			if( !target$.go.aspect.IsVisible ) 
+			{
+				SetState Finished$;
+				return;
+			}
+
+			// Start the visual effect
+			SiegeFx.SRunScript( effect_script$, target$, caster$, script_params$, owner.Goid, e$ );
+		}
+	}
+}
+
+state MakeAlive$
+{
+	transition -> Finished$ : OnGoHandleMessage( WE_SPELL_SYNC_END );
+	event OnEnterState$
+	{
+		if( !target$.IsValid || !caster$.Isvalid )
+		{
+			SetState Finished$;
+			return;
+		}
+	
+		if( !target$.go.aspect.IsVisible ) 
+		{
+			SetState Finished$;
+			return;
+		}
+
+		// If told to, then replace the target with another object. 
+		if(createZombie$)
+		{
+			CreateTheZombie$();
+		}
+		// Otherwise, just bring it back to life.
+		else
+		{
+			if ( target$.Go.IsGhost() )
+			{					
+				target$.Go.Aspect.SSetLifeState( LS_ALIVE_CONSCIOUS );
+			}
+			
+			// Now make the poor little dead go alive again by adding health
+			float n$ = 2.0 + caster$.go.actor.getskilllevel( owner.go.magic.skillclass ) - target$.go.aspect.currentlife; 
+			
+			n$ = Math.Maxfloat( 3, n$ );
+			
+			Rules.ChangeLife( target$, n$ );
+			
+			if( heal_ratio$ > 0.0 )
+			{
+				Rules.ChangeLife( target$, heal_ratio$ * target$.go.aspect.maxlife );
+			}
+		
+			// JCD 9/14/03
+			// if the actor has any imbued items, unequip and reequip them to get their
+			// effects playing
+			EquipImbuedItems$();	
+		
+			target$.go.mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+		}
+	}	
+}
+
+state Finished$
+{
+	event OnEnterState$
+	{
+		if(target$.IsValid()
+			&& createZombie$)
+		{
+			// Delete the old dead body.
+			GoDb.SMarkGoAndChildrenForDeletion(target$);
+		}
+
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

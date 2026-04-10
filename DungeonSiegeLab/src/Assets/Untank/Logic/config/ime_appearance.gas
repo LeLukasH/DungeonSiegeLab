@@ -1,0 +1,19 @@
+[ime_appearance]
+{
+	candcolorbase = 0xffffffff;
+	candcolorborder = 0xff000000;
+	candcolortext = 0xff000000;
+	compcolorconverted = 0x0000ff00;
+	compcolorinput = 0xff0005ff;
+	compcolorinputerr = 0x00ff0000;
+	compcolortargetconv = 0x000000ff;
+	compcolortargetnotconv = 0x00ff0000;
+	compcolortext = 0x00000000;
+	comptranslucence = 0x80;
+	symbolcolor = 0;
+	symbolcolortext = 0xffff0000;
+	symbolheight = 24;
+	symbolplacement = 0;
+	symboltranslucence = 0xa0;
+	swirl_time_increment = 0.05;
+}

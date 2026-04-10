@@ -1,0 +1,82 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  trp_trackball.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property bool _server_only$ = true;
+
+property string	effect_script$		= ""	doc = "Effect script to call for effect";
+property float	max_range$			= 15.0	doc = "maxiumum range for the fireball trap";
+property float  damage_radius$		= 2.0	doc = "how big to make the explosion";
+property bool	explosive$			= false	doc = "create an explosion where the trackball hits";
+
+owner = GoSkritComponent;
+
+float damage$;
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		damage$ = msg$.GetData1() / 1000.0;
+		
+		AIQuery.TempGopColl1.Clear;
+		AIQuery.TempGopColl2.Clear;
+		AIQuery.GetOccupantsInSphere( owner.Go.Placement.Position, max_range$, AIQuery.TempGopColl1 );
+		
+		AIQuery.TempQtColl1.Clear;
+		AIQuery.TempQtColl1.Add( QT_ACTOR );
+		AIQuery.TempQtColl1.Add( QT_ALIVE );
+		AIQuery.TempQtColl1.Add( QT_GOOD );
+
+		AIQuery.Get( owner.Go, AIQuery.TempQtColl1, AIQuery.TempGopColl1, AIQuery.TempGopColl2 );
+		
+		int i$ = 0;
+		int iend$ = AIQuery.TempGopColl2.Size();
+		Go temp_target$;
+		Goid Target$;
+		float current_range$ = max_range$;
+		
+		while( i$ < iend$ )
+		{
+			temp_target$ = AIQuery.TempGopColl2.Get( i$ );
+		
+			if( temp_target$ != NULL )
+			{
+				float temp_dist$ = AIQuery.GetDistance( temp_target$.Placement.Position, owner.Go.Placement.Position );
+				if( temp_dist$ < current_range$ )
+				{
+					Target$ = temp_target$.Goid;
+					current_range$ = temp_dist$;
+				}
+			}	
+			i$ += 1;
+		}
+		
+		if( Target$.IsValidMp )
+		{
+			SiegeFx.SRunScript( effect_script$, Target$, owner.Goid, "" , owner.Goid, WE_REQ_ACTIVATE );
+		}
+	}
+	if( e$ == WE_SPELL_COLLISION )
+	{
+		Rules.DamageGoTrap( msg$.SendFrom, Owner.Goid, Owner.Goid, damage$, damage$ );
+		
+		if( explosive$ )
+		{
+			SiegePos position$ = ToSiegePosRef( msg$.Data1 );
+			report.genericf("damage: %g\n",damage$);
+			Physics.CreateExplosion( position$, damage_radius$, damage_radius$ * 2.0, 2.0 * damage$, owner.goid, owner.goid );
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////

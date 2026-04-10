@@ -1,0 +1,280 @@
+[t:template,n:2W_base_frost_giant]
+{
+	category_name = "2W_evil_c";
+	doc = "2W_Base Frost Giant";
+	specializes = actor_evil;
+	[aspect]
+	{
+		[textures]	{ 0 = b_c_ecm_frost_giant; }
+		model = m_c_ecm_FGIANT_pos_1;
+		material = flesh;
+	}
+	[body]
+	{
+		avg_move_velocity = 1.550000; //1.15
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine1;
+			body_posterior = bip01_spine1;
+			kill_bone = bip01_spine1;
+			shield_bone = bip01_l_hand;
+			weapon_bone = bip01_r_hand;
+		}
+		[weapon_scales]
+		{
+			as_single_melee	= 1.7, 1.7, 1.7;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ecm_cy_fs;
+			[chore_attack]
+			{
+				chore_stances = 0,1;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					01 = at-02;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0,1;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0,1;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0,1;
+				skrit = select_fidget;
+				[anim_files] { 00=dff; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0,1;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[mind]
+	{
+		jat_fidget	= world\ai\jobs\common\job_fidget.skrit
+		?still		= false;
+	}
+}
+
+[t:template,n:2W_dsx_frost_giant]
+{
+	category_name = "2W_evil_c";
+	doc = "2W_dsx_ice_giant";
+	specializes = 2W_base_frost_giant;
+	[actor]
+	{
+		[skills]
+		{
+			strength	 =  45.5, 0;
+			intelligence   =  9.7, 0;
+			dexterity	 =  14.9, 0;
+			melee		 =  47, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 22820;
+		life = 1150;
+		max_life = 1150;
+		mana = 0;
+		max_mana = 0;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_ice_giant; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_ice_giant_SED; }
+			[hit_critical]	{ priority = low; * = s_e_hit_ice_giant_SED; }
+			[hit_glance]	        { priority = low; * = s_e_hit_ice_giant_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_ice_giant_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 759;
+		damage_min = 414;
+		reload_delay = 0;
+	}
+	
+	[common]
+	{
+		screen_name = "Ice Giant";
+		membership = ice,monster,immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+				no_trig_bits = true;
+				action* = call_sfx_script("unique_light_cyan(sgx)");
+			}
+		}
+	}
+	
+	[defend] { defense = 858.7; }
+	
+	[inventory]
+	{
+	[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 2, Special */
+		[all*]
+		{
+			[gold*]
+					{
+						max = 183520;
+						min = 146816;
+						min_pile = 15;
+						piles = 2 - 4;
+					}
+				[all*]
+				{
+					il_main = potion_health_large;
+					il_main = potion_mana_large;
+					il_main = #nmagic/23-69;
+					il_main = #cmagic/23-69;
+					il_main = #armor/-mod(1)/230-460;
+					il_main = #weapon/-mod(1)/86-207;
+					il_main = #*/-mod(1)/172-258;
+			}
+		}
+	}	
+	}
+
+	[mind]
+	{
+		job_travel_distance_limit 			= 40;	// leash the giant
+		on_job_reached_travel_distance_abort_attack 	= false;
+		jat_fidget					= world\ai\jobs\common\job_fidget.skrit
+		?curious					= 0.75
+		&wander						= 0.8
+		&social						= 0.1
+		&interest					= interest
+		&delay_min					= 6
+		&delay_max					= 16
+		&still						= false;
+		on_enemy_spotted_alert_friends 			= true;
+		jat_brain					= world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party			= true
+		&actor_creates_own_party			= true
+		&party_template					= "party_dsx_ice";
+		com_channels					= dyn_party, ice;
+		com_range					= 14.0;
+		melee_engage_range				= 14.0;
+		ranged_engage_range	 			= 14.0;
+		personal_space_range 				= 0.7;
+		sight_range					= 14.0;
+		actor_life_ratio_low_threshold 			= 0.5;
+	}
+}
+
+
+[t:template,n:2W_dsx_troll_masher_base]
+{
+// Balanced for level 26, hard melee
+	category_name = "2W_evil_c";
+	doc = "2W_dsx_troll_masher_base";
+	specializes = base_cyclops;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  36.6, 0;
+			intelligence =  10.5, 0;
+			dexterity =  20.2, 0;
+			melee =  61,  0;
+		}
+	}
+	[aspect]
+	{
+		[textures]	{ 0 = b_c_ecm_troll_masher; }
+		experience_value = 81510;
+		life = 1945.3;
+		max_life = 1945.3;
+		mana = 47.8;
+		max_mana = 47.8;
+		scale_base = 1.3;
+		textures:0 = b_c_ecm_cy-02;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_cyclops; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_troll_masher_SED; }
+			[hit_critical]	{ priority = low; * = s_e_hit_cyclops_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_cyclops_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_cyclops_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 335.7;
+		damage_min = 250.8;
+		reload_delay = 0;
+	}
+	[common] 
+	{ 
+		screen_name="Troll Masher"; 
+		membership = troll, monster;	
+	}
+	[defend] { defense=944.8; }
+	[mind]
+	{
+		jat_fidget				= world\ai\jobs\common\job_fidget.skrit
+		?curious				= 0.75
+		&wander					= 0.8
+		&social					= 0.1
+		&interest				= interest
+		&delay_min				= 6
+		&delay_max				= 16
+		&still					= false;
+		on_enemy_spotted_alert_friends 		= true;
+		jat_brain				= world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party		= true
+		&actor_creates_own_party		= true
+		&party_template				= "party_dsx_troll";
+		com_channels				= dyn_party, troll;
+		com_range				= 14.0;
+		melee_engage_range			= 14.0;
+		ranged_engage_range	 		= 14.0;
+		personal_space_range 			= 0.7;
+		sight_range				= 14.0;
+		actor_life_ratio_low_threshold 		= 0.5;
+	}
+}
+
+[t:template,n:2W_dsx_troll_masher]
+{
+	category_name = "2W_evil_c";
+	doc = "2W_dsx_troll_masher";
+	specializes = 2W_dsx_troll_masher_base;
+}
+
+
+[t:template,n:2W_dsx_troll_masher_summon]
+{
+  category_name = "2W_evil_c";
+  doc = "2W_dsx_summon_troll_masher";
+  specializes = 2W_dsx_troll_masher_base;
+ aspect:experience_value = 0;
+  [inventory]
+    {
+      selected_active_location = il_active_primary_spell;
+      
+    }
+}

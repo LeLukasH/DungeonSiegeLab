@@ -1,0 +1,118 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_t_delete.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: Deletes an object and all its inventory recursively to prevent
+// pcontent drops
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "cmd_t_play_effect";
+
+// external properties
+property scid source_scid$					doc = "Scid to use as source for effect.";
+property scid target_scid$					doc = "Scid to use as target for effect.";
+property string effect_name$		= ""	doc = "Effect to play.";
+property string params$				= ""	doc = "Params to send to effect. ([%g][%g]...)";
+property bool is_visible$			= true	doc = "Should the target be visible after the effect.";
+property float visibility_delay$	= 0.0	doc = "Seconds to wait before assigning the visibility.";
+property bool stop_effect$			= false	doc = "If you want to stop an effect on the target, set this flag to true.";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+// chill here until we get an activate event
+startup state Wait$
+{
+	// look for activates
+	event OnGoHandleMessage$(eWorldEvent e$, WorldMessage /*msg$*/)
+	{
+		// activate?
+		if(e$ == WE_REQ_ACTIVATE)
+		{
+			// check the scids
+			if( !target_scid$.Goid.IsValid() ) { report.genericf("target_scid$ is invalid!\n"); }
+			if( StringTool.IsEmpty( effect_name$ ) ) { report.genericf( "no effect name!\n"); }
+
+			// we can get by without a source scid, use the target
+			if( !source_scid$.Goid.IsValid() ) { source_scid$ = target_scid$; }
+	
+			// are we trying to stop the effect?
+			if( stop_effect$ )
+			{
+				SiegeFX.SStopScript( target_scid$.Goid, effect_name$ );
+				SetState Done$;
+			}
+			else
+			{
+				// jump into the delete state
+				SetState PlayEffect$;
+			}
+		}
+	}
+}
+
+// does the deleting
+state PlayEffect$
+{
+	event OnEnterState$
+	{
+		// play the effect
+		SiegeFX.SRunScript( effect_name$, target_scid$.Goid, source_scid$.Goid, params$, source_scid$.Goid, WE_REQ_CAST );
+
+		// create the visibility delay timer
+		this.CreateTimer( 1, visibility_delay$ );
+	}
+
+	// jump into the change visibility state when the timer runs out
+	transition->ChangeVisibility$:OnTimer( 1 );
+}
+
+// changes the visibility of the target
+state ChangeVisibility$
+{
+	event OnEnterState$
+	{
+		// make sure we have an aspect
+		if( target_scid$.Go.HasAspect() )
+		{
+			// set the visibility
+			target_scid$.Go.Aspect.SSetIsVisible( is_visible$ );
+		}
+
+		// we're all done
+		SetState Done$;
+	}
+}
+
+// finishing state.  cleans everything up
+state Done$
+{
+	event OnEnterState$
+	{
+		// i suppose we don't really need to clean anything up in this case
+		// any reason to delete ourselves?
+		
+	}
+
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == WE_REQ_ACTIVATE )
+		{
+			SetState PlayEffect$;
+		}
+	}
+}

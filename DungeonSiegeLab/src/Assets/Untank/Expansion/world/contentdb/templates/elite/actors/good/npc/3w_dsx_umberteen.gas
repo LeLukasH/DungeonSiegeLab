@@ -1,0 +1,47 @@
+[t:template,n:3W_umberteen]
+{
+	category_name = "3W_npc";
+	doc = "3W_Umberteen";
+	specializes = base_npc_fb;
+	
+	[aspect]
+	{
+		draw_selection_indicator = TRUE;
+		[textures]
+		{ 
+			0 = b_c_gan_utraean_skin_01;
+			1 = b_c_pos_a1_001;
+		}
+		model = m_c_gah_fb_pos_a1;
+	}
+	
+	[common]
+	{
+		screen_name = "Umberteen";
+	}
+	[conversation]
+	{
+	}
+	[inventory]
+	{
+		[equipment]
+		{
+
+
+		}
+		[other]
+		{
+			il_main = spell_transmuteall;
+			il_main = spell_lightofchadek;
+			il_main = book_glb_magic_umberteen;
+		}
+
+	}
+	[mind]
+	{
+		actor_may_attack = false;
+        	actor_may_be_attacked = false;
+		jat_talk = world\ai\jobs\actors\good\job_talk_umberteen.skrit;
+ 	}
+}
+

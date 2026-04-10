@@ -1,0 +1,4 @@
+[mood_manager]
+{
+	skrit					= "world\global\moods\dsx_mood_manager.skrit";
+}

@@ -1,0 +1,412 @@
+[zonematch_panel]
+{
+	interface = true;
+	
+	[t:text,n:current_user_name_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 128;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_16p_copperplate-light;
+		justify = right;
+		rect = 408,28,616,44;
+		text = "Not Signed In";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		truncate = true;
+	}
+
+	[t:dialog_box,n:background_commands]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 626,24,776,80;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:button,n:button_connect]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 98;
+		rect = 634,32,766,48;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		visible = false;
+		[messages] { onbuttonpress=notify(zonematch_connect) & playsound(s_e_interface_close); }
+		[t:text,n:button_connect_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 128;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,45,621,61;
+			text = "Connect...";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			truncate = true;
+		}
+	}
+	[t:button,n:button_sign_in]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 98;
+		rect = 634,32,766,48;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x99555555;
+		group = panel_signedout;
+		[messages] { onbuttonpress=notify(zonematch_sign_in) & playsound(s_e_interface_close); }
+		[t:text,n:button_sign_in_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 128;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,45,621,61;
+			text = "Sign In";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			truncate = true;
+		}
+	}
+	[t:button,n:button_account_options]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 18;
+		rect = 634,32,766,48;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x99555555;
+		group = panel_signedin;
+		[messages] { onbuttonpress=notify(zonematch_show_options); }
+		[t:text,n:button_account_options_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "Options";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:button,n:button_zonematch_exit]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 18;
+		rect = 634,56,766,72;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { onbuttonpress=notify(zonematch_exit) & playsound(s_e_interface_close); }
+		[t:text,n:button_main_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,8,621,21;
+			text = "Exit ZoneMatch";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+
+	[t:dialog_box,n:disabled_messaging_bg]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 626,86,776,514;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = panel_signedout;
+	}
+	[t:text_box,n:disabled_messaging_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000046;
+	  b fixed_location = true;
+		font_color = 0xffffffff;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+	  b has_slider = false;
+		justify = center;
+	  x max_height = 0x000000F0;
+	  x max_width = 0x00000140;
+		rect = 630,90,772,510;
+	  f scroll_rate = 0.000000;
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		center_height = true;
+		text = "Sign in to chat with people playing Dungeon Siege.";
+		group = panel_signedout;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////
+	//	Messages List
+
+	[t:dialog_box,n:background_messages_list]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = graytrim;
+		draw_order = 1;
+		rect = 626,86,776,200;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = panel_signedin;
+	}
+	[t:dialog_box,n:messages_header_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = browntrim;
+		draw_order = 2;
+		rect = 628,88,774,108;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = panel_signedin;
+	}
+	[t:window,n:messages_header_background_fill]
+	{
+		alpha = 1.000000;
+		draw_order = 3;
+		rect = 630,90,772,106;
+		texture = b_gui_cmn_brownbar;
+		uvcoords = 0.000000,0.000000,8.750000,1.000000;
+		wrap_mode = tiled;
+		group = panel_signedin;
+	}
+	[t:window,n:messages_header_undertrim]
+	{
+		alpha = 1.000000;
+		draw_order = 6;
+		rect = 628,106,774,108;
+		texture = b_gui_cmn_trim_subtab-beside;
+		uvcoords = 0.000000,0.000000,1.000000,0.5000;
+		group = panel_signedin;
+	}
+	[t:text,n:messages_header_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 15;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 634,90,770,106;
+		text = "Messages";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = panel_signedin;
+	}
+
+/*
+	[t:text,n:messages_title_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 68;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 626,86,776,102;
+		text = "Messages";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = panel_signedin;
+	}
+*/
+
+	[t:listbox,n:zonematch_messages_list]
+	{
+		alpha = 1.00000;
+		common_control = true;
+		common_template = ;
+		draw_order = 500;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		rect = 629,110,773,197;
+		text_color = 0xffffffff;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		selection_color = 0xFF008190;
+		group = panel_signedin;
+		[messages]
+		{
+			oncreated = setelementheight(16);
+			oncontext = notify(show_messages_popup_menu);
+			onldoubleclick = notify(show_selected_message);
+			onenter = notify(show_selected_message_enter);
+		}
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////
+	//	Friends List
+	
+	[t:dialog_box,n:background_friends_list]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = graytrim;
+		draw_order = 1;
+		rect = 626,210,776,514;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = panel_signedin;
+	}
+	[t:dialog_box,n:friends_header_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = browntrim;
+		draw_order = 2;
+		rect = 628,212,774,232;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = panel_signedin;
+	}
+	[t:window,n:friends_header_background_fill]
+	{
+		alpha = 1.000000;
+		draw_order = 3;
+		rect = 630,214,772,230;
+		texture = b_gui_cmn_brownbar;
+		uvcoords = 0.000000,0.000000,8.750000,1.000000;
+		wrap_mode = tiled;
+		group = panel_signedin;
+	}
+	[t:window,n:friends_header_undertrim]
+	{
+		alpha = 1.000000;
+		draw_order = 6;
+		rect = 628,230,774,232;
+		texture = b_gui_cmn_trim_subtab-beside;
+		uvcoords = 0.000000,0.000000,1.000000,0.5000;
+		group = panel_signedin;
+	}
+	[t:text,n:friends_header_text]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 15;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		rect = 634,214,770,230;
+		text = "Friends";
+		texture = none;
+		type = text;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = panel_signedin;
+	}
+	
+	[t:listbox,n:zonematch_friends_list]
+	{
+		alpha = 1.00000;
+		common_control = true;
+		common_template = ;
+		draw_order = 500;
+		font_type = b_gui_fnt_11p_chat;
+		rect = 629,234,773,480;
+		text_color = 0xffffffff;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		selection_color = 0xFF008190;
+		group = panel_signedin;
+		[messages]
+		{
+			oncreated = setelementheight(16);
+			oncontext = notify(show_friends_popup_menu);
+			onldoubleclick = notify(zonematch_friends_private_chat);
+		}
+	}
+	[t:button,n:button_add_friend]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_inset;
+		draw_order = 98;
+		rect = 630,494,772,510;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x99555555;
+		group = panel_signedin;
+		[messages] { onbuttonpress=notify(zonematch_add_friend); }
+		[t:text,n:button_add_friend_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 128;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 527,45,621,61;
+			text = "Add Friend";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			truncate = true;
+		}
+	}
+}

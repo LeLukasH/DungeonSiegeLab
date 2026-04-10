@@ -1,0 +1,15 @@
+
+[t:interface,n:icons] {
+
+	intended_resolution_height = 480;
+	intended_resolution_width = 640;
+
+	[t:item,n:template] {
+	}
+
+
+	[t:window,n:template_window] {
+	}
+
+}
+

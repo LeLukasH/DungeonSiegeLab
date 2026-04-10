@@ -1,0 +1,143 @@
+[t:interface,n:cursors]
+{
+	interface_type = cursor;
+
+	[t:cursor,n:cursor_pointer] 
+	{
+
+		[messages] 
+		{
+			oncreated = setrect(0,0,64,64) &
+						loadtexture(b_gui_c_pointer) &
+						sethotspot(21,13);
+		}
+	}
+
+	[t:cursor,n:cursor_attack] 
+	{
+		rect = 0,0,64,64;
+		texture = b_gui_c_attack1;
+
+		[messages] 
+		{
+			activatecursor = setvisible(true);						
+			oncreated = setvisible(false) &
+						sethotspot(21,13);
+		}
+	}
+
+	[t:cursor,n:cursor_cast] 
+	{
+		rect = 0,0,64,64;
+		texture = b_gui_c_magic2;
+
+		[messages] 
+		{
+			activatecursor = setvisible(true);						
+			oncreated = setvisible(false) &
+						sethotspot(21,13);
+		}
+	}
+
+	[t:cursor,n:cursor_cast_attack] 
+	{
+		rect = 0,0,64,64;
+		texture = b_gui_c_magic3;
+
+		[messages] 
+		{
+			activatecursor = setvisible(true);						
+			oncreated = setvisible(false) &
+						sethotspot(21,13);
+		}
+	}
+
+	[t:cursor,n:cursor_guard] 
+	{
+
+		[messages] 
+		{
+			oncreated = setrect(0,0,64,64) &
+						loadtexture(b_gui_c_guard) &
+						sethotspot(21,13) &
+						setvisible(false);
+		}	
+	}
+
+	[t:cursor,n:cursor_cant] 
+	{
+		[messages] 
+		{
+			oncreated = setrect(0,0,64,64) &
+						loadtexture(b_gui_c_cant) &
+						setvisible(false) &
+						sethotspot(21,13);
+		}
+	}
+
+	[t:cursor,n:cursor_talk] 
+	{
+		[messages] 
+		{
+			oncreated = setrect(0,0,32,32) &
+						setvisible(false) &
+						loadtexture(b_gui_c_talk) &
+						sethotspot(9,5);
+		}
+	}
+
+	[t:cursor,n:cursor_initiate] 
+	{
+		[messages] 
+		{
+			oncreated = setrect(0,0,32,32) &
+						setvisible(false) &
+						loadtexture(b_gui_c_notalk) &
+						sethotspot(9,5);
+		}
+	}
+
+	[t:cursor,n:cursor_grab] 
+	{
+		rect = 0,0,32,32;
+
+		[messages] 
+		{
+			activatecursor = setvisible(true) &
+						loadanimatedtexture(b_gui_c_grab1);
+			oncreated = setvisible(false) &
+						sethotspot(9,5);
+		}
+	}	
+
+	[t:cursor,n:cursor_smash] 
+	{
+		rect = 0,0,32,32;
+
+		[messages] 
+		{
+			activatecursor = setvisible(true) &
+						loadanimatedtexture(b_gui_c_smash1);
+			oncreated = setvisible(false) &
+						sethotspot(9,5);
+		}
+	}
+
+	[t:cursor,n:cursor_wait]
+	{
+		rect = 0,0,64,64;
+
+		[messages] 
+		{
+			oncreated = setrect(0,0,64,64) &
+					loadtexture(b_gui_c_wait) &
+					sethotspot(19,13) &
+					setvisible(false);
+		}	
+	}
+
+	[t:cursor,n:cursor_template] 
+	{
+	}
+}
+

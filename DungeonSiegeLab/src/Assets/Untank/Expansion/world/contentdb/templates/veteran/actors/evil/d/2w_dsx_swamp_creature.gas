@@ -1,0 +1,58 @@
+[t:template,n:2W_dsx_swamp_creature]
+//balanced to Level 15
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_swamp_creature";
+	specializes = swamp_creature_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength 		= 33.2, 0;
+			intelligence 	=  10.6, 0;
+			dexterity 		= 19.2, 0;
+			melee 			= 56, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 55200;
+		life = 1775.4;
+		max_life = 1775.4;
+		mana = 32.1;
+		max_mana = 32.1;
+	textures:0 = b_c_edm_la-02;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 480.3;
+		damage_min = 288.9;
+		reload_delay = 0;
+	}
+	[common]
+	{
+		screen_name	= "Muck Beast";
+		membership	= monster;
+	}
+	[defend] { defense=663; }
+	[mind]
+	{
+		jat_fidget						= world\ai\jobs\common\job_fidget.skrit
+			?still							= false;
+
+		jat_brain						 = world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party		 = true;
+
+		melee_engage_range = 14;
+		personal_space_range = 1.0; //0.7
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+	[inventory]
+	{
+		drop_at_use_point = true;
+		
+	}
+}

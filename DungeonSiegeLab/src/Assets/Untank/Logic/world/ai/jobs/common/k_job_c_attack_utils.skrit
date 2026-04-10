@@ -1,0 +1,608 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		:	k_job_c_attack_utils.skrit
+
+	Author(s)	: 	Bartosz Kijanka
+
+	Purpose		:	Collection of utility functions.
+
+	(C)opyright 2001 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+
+
+////////////////////////////////////////
+//
+//	GetStrongestAutoAttackSpell$
+//
+//	Of the spells that tha actor has permissions to auto-use, find the most damaging
+//	spell.  Consider factors such as:
+//	+	available mana
+//	+	command_cast permissions
+//	!	does not take range into account
+
+Go GetStrongestAutoAttackSpell$( Go attacker$, Go target$ )
+{
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - GetStrongestAutoAttackSpell$ - entered\n", attacker$.TemplateName );
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	//	human-controlled actors don't auto-pick weapons
+
+	if( attacker$.Player.Controller == PC_HUMAN )
+	{
+		Go selectedItem$ = attacker$.Inventory.SelectedItem;
+		if( selectedItem$ != NULL )
+		{
+			if( selectedItem$.IsSpell )
+			{
+				if( selectedItem$.Magic.IsCommandCast )
+				{
+					return( NULL );
+				}
+				else
+				{
+					return( selectedItem$ );
+				}
+			}
+		}
+	}
+
+	attacker$.Mind.TempQtColl1.Clear;
+	attacker$.Mind.TempQtColl1.Add( QT_SPELL );				// a spell
+	attacker$.Mind.TempQtColl1.Add( QT_LIFE_DAMAGING );		// that damages life
+	attacker$.Mind.TempQtColl1.Add( QT_CASTABLE );			// that attacker has enough mana to cast
+	attacker$.Mind.TempQtColl1.Add( QT_AUTO_CAST_SPELL );	// that can be auto-cast ( that is not an command_cast spell )
+
+	attacker$.Mind.TempGopColl1.Clear;
+
+	////////////////////////////////////////
+	//	get all items that meet the above criteria
+
+	if( !attacker$.Mind.GetAutoItems( attacker$.Mind.TempQtColl1, attacker$.Mind.TempGopColl1 ) )
+	{
+		if( attacker$.IsHuded )
+		{
+		   	report.reportf( "aiskrit", "'%s' - GetStrongestAutoAttackSpell$ - no candidate found\n", attacker$.TemplateName );
+		}
+		return( NULL );
+	}
+
+	////////////////////////////////////////
+	//	sort results from most to least damaging
+
+	attacker$.Mind.TempQtColl1.Clear;
+	attacker$.Mind.TempQtColl1.Add( QT_LIFE_DAMAGING );
+	attacker$.Mind.TempGopColl2.Clear;
+
+	AIQuery.GetMaxN( attacker$, attacker$.Mind.TempQtColl1, 100, attacker$.Mind.TempGopColl1, attacker$.Mind.TempGopColl2 );
+
+	////////////////////////////////////////
+	//	find the best spell that can be used on target$
+
+	int i$ = 0;
+	int iend$ = attacker$.Mind.TempGopColl2.Size();
+
+	Go spell$ = NULL;
+
+	while( i$ != iend$ )
+	{
+		Go candidate$ = attacker$.Mind.TempGopColl2.Get( i$ );
+		if( candidate$.Magic.IsCastableOn( target$ ) && attacker$.Mind.IsInRange( target$, candidate$, RL_EFFECTIVE_ATTACK_RANGE ) )
+		{															   
+			spell$ = attacker$.Mind.TempGopColl2.Get( i$ );
+			if( attacker$.IsHuded )
+			{
+				report.reportf( "aiskrit", "'%s' - GetStrongestAutoAttackSpell$ - spell '%s' is castable on '%s'\n", attacker$.TemplateName, spell$.TemplateName, target$.TemplateName );
+			}
+			break;
+		}
+		else
+		{
+			i$ += 1;
+		}
+	}
+
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - GetStrongestAutoAttackSpell$ - spell = %s\n", attacker$.TemplateName, ( spell$ == NULL ? "none" : spell$.TemplateName )  );
+	}
+
+	return( spell$ );
+}
+
+
+////////////////////////////////////////
+//	GetStrongestAutoAttackWeapon
+
+Go GetStrongestAutoAttackWeapon$( Go attacker$, Go /*target$*/ )
+{
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - GetStrongestAutoAttackWeapon$ - entered\n", attacker$.TemplateName );
+	}
+
+	attacker$.Mind.TempQtColl1.Clear;
+	attacker$.Mind.TempQtColl1.Add( QT_WEAPON );
+	attacker$.Mind.TempQtColl1.Add( QT_LIFE_DAMAGING );
+
+	attacker$.Mind.TempGopColl1.Clear;
+	if( !attacker$.Mind.GetAutoItems( attacker$.Mind.TempQtColl1, attacker$.Mind.TempGopColl1 ) )
+	{
+		Go selectedItem$ = attacker$.Inventory.SelectedItem;
+		if( selectedItem$ == NULL )
+		{
+			report.reportf( "aiskrit", "'%s' - GetStrongestAutoAttackWeapon$ - exit - weapon = %s\n", attacker$.TemplateName, attacker$.TemplateName );
+			return( attacker$ );
+		}
+		else
+		{
+			report.reportf( "aiskrit", "'%s' - GetStrongestAutoAttackWeapon$ - exit - no auto weapons available\n", attacker$.TemplateName );
+			return( NULL );
+		}
+	}
+
+	Go ranged$ 	= AIQuery.GetMax( attacker$, QT_RANGED_WEAPON, attacker$.Mind.TempGopColl1 );
+	Go melee$ 	= AIQuery.GetMax( attacker$, QT_MELEE_WEAPON, attacker$.Mind.TempGopColl1 );
+
+	Go preferred$ = NULL;
+
+	//report.genericf( "'%s' - GetBestAutoAttackWeapon$ 1.5 - melee = %s, ranged = %s\n", attacker$.TemplateName, melee$ == NULL ? "none" : melee$.TemplateName, ranged$ == NULL ? "none" : ranged$.TemplateName ); 
+
+ 	if( attacker$.Mind.ActorPrefersRanged && ( ranged$ != NULL ) )
+	{
+		//report.genericf( "'%s' - GetBestAutoAttackWeapon$ 2\n", attacker$.TemplateName );
+		preferred$ = ranged$;
+	}
+
+	if ( attacker$.Mind.ActorPrefersMelee && ( melee$ != NULL ) )
+	{
+		//report.genericf( "'%s' - GetBestAutoAttackWeapon$ 5\n", attacker$.TemplateName );
+		preferred$ = melee$;
+	}
+
+	////////////////////////////////////////
+	//	convention: computer-controlled actors have option of switching away from ranged at close ranges
+
+	if( preferred$ == NULL )
+	{
+		if( ranged$ != NULL )
+		{
+			preferred$ = ranged$;
+		}
+		else if ( melee$ != NULL )
+		{
+			preferred$ = melee$;
+		}
+		else
+		{
+			preferred$ = attacker$.Inventory.GetSelectedWeapon;
+		}
+	}
+
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - GetStrongestAutoAttackWeapon$ - weapon = %s \n", attacker$.TemplateName, preferred$ == NULL ? "none" : preferred$.TemplateName );
+	}
+
+	return( preferred$ );
+}
+
+
+////////////////////////////////////////
+//	GetBestAutoAttackWeaponSpellOrKarate
+
+Go GetBestAutoAttackWeaponSpellOrKarate$( Go attacker$, Go target$ )
+{
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - GetBestAutoAttackWeaponSpellOrKarate$ - entered\n", attacker$.TemplateName );
+	}
+
+	bool noRanged$     = false;                      
+
+	Go   weapon$       = NULL;
+	Go   spell$        = NULL;
+	Go   selectedItem$ = attacker$.Inventory.SelectedItem;
+
+	////////////////////////////////////////
+	//
+
+	if( attacker$.Mind.ActorPrefersMagic )
+	{
+		weapon$ = GetStrongestAutoAttackSpell$( attacker$, target$ );
+		spell$  = weapon$;                     
+	}
+
+	if( weapon$ == NULL )
+	{
+		weapon$ = GetStrongestAutoAttackWeapon$( attacker$, target$ );
+	}
+
+	// after trying melee and ranged, try magic!
+	if( weapon$ == NULL )
+	{
+		weapon$ = GetStrongestAutoAttackSpell$( attacker$, target$ );
+		spell$  = weapon$;
+	}
+
+	if( weapon$ != NULL )
+	{
+		if( weapon$.IsRangedWeapon || weapon$.IsSpell )
+		{
+			if( attacker$.Mind.OnEnemyEnteredICZSwitchToMelee &&
+				attacker$.Mind.ActorAutoSwitchesToMelee &&
+				attacker$.Mind.IsInRange( target$, attacker$.Mind.InnerComfortZoneRange ) )
+			{
+				attacker$.Mind.TempGopColl1.Clear;
+				if( attacker$.Mind.GetAutoItems( QT_MELEE_WEAPON, attacker$.Mind.TempGopColl1 ) )
+				{
+					weapon$ = AIQuery.GetMax( attacker$, QT_LIFE_DAMAGING, attacker$.Mind.TempGopColl1 );
+				}
+				else
+				{
+					weapon$ = attacker$;
+				}
+				noRanged$ = true;
+			}
+		}
+	}
+	else
+	{
+		if( attacker$.Mind.ActorAutoSwitchesToMelee )
+		{
+			weapon$ = attacker$;
+		}
+	}
+
+	////////////////////////////////////////
+	//	exit if we didn't pick a weapon
+
+	if( weapon$ == NULL )
+	{
+		report.reportf( "aiskrit", "'%'s - GetBestAutoAttackWeaponSpellOrKarate$ - exit (1) - weapon = NULL\n", attacker$.TemplateName );
+		return( weapon$ );
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	//	we can only melee attack an elevator rider if we're riding the same elevator
+
+
+	if( ( weapon$.IsMeleeWeapon || weapon$ == attacker$ ) && target$.HasMind )
+	{
+		int targetNode$  	= target$.placement.position.node.value;
+		int attackerNode$ 	= attacker$.placement.position.node.value;
+
+		if( ( attacker$.Mind.IsRidingElevator || target$.Mind.IsRidingElevator ) && ( targetNode$ != attackerNode$ ) )
+		{
+			// $$$ in this case it would be best to choose a ranged weapon
+			report.report( "aiskrit", "Danger 2!\n" );
+			weapon$ = NULL;
+		}
+	}
+
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - GetBestAutoAttackWeaponSpellOrKarate$ - exit (2) - weapon = %s\n", attacker$.TemplateName, weapon$ == NULL ? "NULL" : weapon$.TemplateName );
+	}
+
+	return( weapon$ );
+}
+
+
+////////////////////////////////////////
+//	MayAutoAttack
+
+bool MayAutoAttackB$( Go attacker$, Go target$, eRangeLimit rangeLimit$ )
+{
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - MayAutoAttackB$ - entered - rangeLimit = %d\n", attacker$.TemplateName, rangeLimit$ );
+	}
+
+	if( target$ == NULL )
+	{
+		if( attacker$.IsHuded )
+		{
+			report.report( "aiskrit", "MayAutoAttackB$ - failed NULL target\n" );
+		}
+		return( false );
+	}
+	
+	if( !target$.HasActor )
+	{
+		// if the thing attacking us doesn't have a Actor Component then it must be a
+		// trap of some sort. We can't attack it so bail. -ET
+		if( attacker$.IsHuded )
+		{
+			report.reportf( "aiskrit", "'%s' - MayAutoAttackB$ - failed trying to respond to non-actor target\n", attacker$.TemplateName );
+		}
+		return false;
+	}
+
+	if( !attacker$.Mind.GetMayAttack() || !target$.Mind.GetMayBeAttacked() )
+	{
+		if( attacker$.IsHuded )
+		{
+			report.reportf( "aiskrit", "'%s' - MayAutoAttackB$ - failed - attacker or target may not attack/be attacked\n", attacker$.TemplateName );
+		}
+		return( false );
+	}
+
+	if( ( attacker$.Mind.CombatOrders == CO_LIMITED ) && ( rangeLimit$ != RL_EFFECTIVE_ATTACK_RESPONSE_RANGE ) )
+	{
+		if( attacker$.IsHuded )
+		{
+			report.reportf( "aiskrit", "'%s' - MayAutoAttackB$ - failed - ( attacker$.Mind.CombatOrders == CO_LIMITED ) && ( rangeLimit$ != RL_EFFECTIVE_ATTACK_RESPONSE_RANGE )\n", attacker$.TemplateName );
+		}
+		return( false );
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	//	pick best weapon or spell
+
+	Go weapon$ = GetBestAutoAttackWeaponSpellOrKarate$( attacker$, target$ );
+	if( weapon$ == NULL )
+	{
+		if( attacker$.IsHuded )
+		{
+			report.reportf( "aiskrit", "'%s' - MayAutoAttackB$ - false; no weapon, spell or karate picked\n", attacker$.TemplateName );
+		}
+		return( false );
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	//	
+
+	if( weapon$.IsSpell )
+	{
+		if( !attacker$.Mind.MaySDoJob( JAT_CAST ) )
+		{
+			return( false );
+		}
+	}
+	else
+	{
+		if( !attacker$.Mind.MaySDoJob( JAT_ATTACK_OBJECT ) )
+		{
+			return( false );
+		}
+	}
+
+	if( ((weapon$ == attacker$) || weapon$.IsMeleeWeapon ) && target$.HasMind() && target$.HasInventory() )
+	{
+		// $$$ take into account all close-by enemies here, no just melee attackers
+		if( target$.Mind.EngagedMeMeleeAttackerCount >= WorldOptions.GetMeleeAttackerCountLimit )
+		{
+			if( attacker$.IsHuded )
+			{
+				report.reportf( "aiskrit", "'%s' - MayAutoAttackB$ - false; target engaged by too many melee attackers\n", attacker$.TemplateName );
+			}
+			return( false );
+		}
+	}
+
+	bool result$ = false;
+
+	result$ = attacker$.Mind.IsInRange( target$, weapon$, rangeLimit$ );
+
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - MayAutoAttackB$ - exit = %s\n", attacker$.TemplateName, result$ ? "TRUE" : "FALSE" );
+	}
+
+	return( result$ );
+}
+
+
+////////////////////////////////////////
+//	MayAutoAttack
+
+bool MayAutoAttack$( Go attacker$, Go target$ )
+{
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - MayAutoAttack$ - entered\n", attacker$.TemplateName );
+	}
+	return( MayAutoAttackB$( attacker$, target$, RL_ENGAGE_RANGE ) );
+}
+
+
+////////////////////////////////////////
+//	TryAutoAttack
+
+bool TryAutoAttackB$( Go attacker$, Go target$, erangeLimit rangeLimit$ )
+{
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - TryAutoAttackB$ - entered\n", attacker$.TemplateName );
+	}
+
+	if( target$ == NULL )
+	{
+		if( attacker$.IsHuded )
+		{
+			report.reportf( "aiskrit", "'%s' - TryAutoAttackB$ - false; target NULL\n", attacker$.TemplateName );
+		}
+		return( false );
+	}
+
+	if( !attacker$.Mind.IsEnemy( target$ ) )
+	{
+		if( attacker$.IsHuded )
+		{
+			report.reportf( "aiskrit", "'%s' - TryAutoAttackB$ - false; target not an enemy\n", attacker$.TemplateName );
+		}
+		return( false );
+	}
+
+	////////////////////////////////////////
+	//	pick best weapon or spell
+
+	if( !MayAutoAttackB$( attacker$, target$, rangeLimit$ ) )
+	{
+		if( attacker$.IsHuded )
+		{
+			report.reportf( "aiskrit", "'%s' - TryAutoAttackB$ - false; may not auto attack target\n", attacker$.TemplateName );
+		}
+		return( false );
+	}
+
+	Go weapon$ = GetBestAutoAttackWeaponSpellOrKarate$( attacker$, target$ );
+	if( weapon$ == NULL )
+	{
+		if( attacker$.IsHuded )
+		{
+			report.reportf( "aiskrit", "'%s' - TryAutoAttackB$ - false; couldn't find weapon,spell or karate\n", attacker$.TemplateName );
+		}
+		return( false );
+	}
+
+	bool success$ = false;
+	Job attack$ = attacker$.Mind.SDoJob( MakeJobReq( JAT_ATTACK_OBJECT, JQ_ACTION, QP_FRONT, AO_REFLEX, target$.Goid, weapon$ == NULL ? Goid.InvalidGoid : weapon$.Goid ));
+
+	if( attack$ != NULL )
+	{
+		success$ = attack$.JobResult == JR_OK;
+	}
+
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - TryAutoAttackB$ - success$ = %s\n", attacker$.TemplateName, success$ ? "ture" : "false" );
+	}
+
+	return success$;
+}
+
+
+////////////////////////////////////////
+//	TryAutoAttack
+
+bool TryAutoAttack$( Go attacker$, Go target$ )
+{
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - TryAutoAttack$ - entered\n", attacker$.TemplateName );
+	}
+	return TryAutoAttackB$( attacker$, target$, RL_ENGAGE_RANGE );
+}
+
+
+////////////////////////////////////////
+//	MayRespondToAttack
+
+bool MayRespondToAttack$( Go attacker$, Go target$ )
+{
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - MayRespondToAttack$ - entered\n", attacker$.TemplateName );
+	}
+	return( MayAutoAttackB$( attacker$, target$, RL_EFFECTIVE_ATTACK_RESPONSE_RANGE ) );
+}
+
+
+////////////////////////////////////////
+//	TryRespondToAttack
+
+bool TryRespondToAttack$( Go attacker$, Go target$ )
+{
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - TryRespondToAttack$ - entered\n", attacker$.TemplateName );
+	}
+	return( TryAutoAttackB$( attacker$, target$, RL_EFFECTIVE_ATTACK_RESPONSE_RANGE ) );
+}
+
+
+////////////////////////////////////////
+//	HaveEnoughManaToCast
+
+bool HaveEnoughManaToCast$( Go caster$, Go spell$, Go target$ )
+{
+	return( spell$.Magic.EvaluateManaCost( caster$, target$ ) <= caster$.Aspect.CurrentMana );
+}
+
+
+////////////////////////////////////////
+//	TryAutoAttackFocus
+
+bool TryAutoAttackFocus$( Go attacker$ )
+{
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - TryAutoAttackFocus$ - entered\n", attacker$.TemplateName );
+	}
+
+	Go target$ = m_Mind$.GetBestFocusEnemy();
+
+	if( attacker$.Player.Controller != PC_HUMAN )
+	{
+		// monsters will try to balance their attak more
+		Go target$ = AIQuery.CalcSecondTierTarget( attacker$, target$ );
+	}
+	return( TryAutoAttack$( attacker$, target$ ) );
+}												 
+
+
+////////////////////////////////////////
+//	TryAutoAttackFocus
+
+bool TryAutoRespondToAttack$( Go attacker$, Go _target$ )
+{
+	Go target$ 	= _target$;
+	Go focus$ 	= m_Mind$.GetBestFocusEnemy();
+
+	////////////////////////////////////////
+	//	debug msg
+
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - TryAutoRespondToAttack$ - entered\n", attacker$.TemplateName );
+	}
+
+	if( attacker$.IsHuded )
+	{
+		if( target$ != NULL )
+		{
+			report.reportf( "aiskrit", "TryAutoRespondToAttack$ - target = %s\n", target$.TemplateName );
+		}
+	}
+
+	// monsters will try to balance their attak more
+	if( attacker$.Player.Controller == PC_COMPUTER )
+	{
+		Go target$ = AIQuery.CalcSecondTierTarget( attacker$, attacker$.Mind.GetBestFocusEnemy() );
+	}
+
+	if( attacker$.Mind.JobRecentlyFailedToPathTo( target$ ) )
+	{
+		report.reportf( "aiskrit", "%s TryAutoRespondToAttack$ - returns false because JobRecentlyFailedToPathTo(..) target\n", m_Go$.TemplateName );
+		target$ = NULL;
+	}
+	
+	bool success$ = false;
+
+	if( target$ != NULL )
+	{
+		success$ = TryRespondToAttack$( attacker$, target$ );
+	}
+	else if ( focus$ != NULL )
+	{
+		success$ = TryRespondToAttack$( attacker$, focus$ );
+	}
+
+	if( attacker$.IsHuded )
+	{
+		report.reportf( "aiskrit", "'%s' - TryAutoRespondToAttack$ - exit - success = %s\n", attacker$.TemplateName, success$ == true ? "TRUE" : "FALSE" );
+	}
+
+	return( success$ );
+}												 

@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_ice_sign-mountainman]
+{
+	layer1texture1 = b_i_ice_sign-mountainman;
+  i texturedetail = 2;
+}

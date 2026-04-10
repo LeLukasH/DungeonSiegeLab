@@ -1,0 +1,5 @@
+[t:tsd,n:decal]
+{
+	layer1texture1 = decal;
+  i texturedetail = 1;
+}

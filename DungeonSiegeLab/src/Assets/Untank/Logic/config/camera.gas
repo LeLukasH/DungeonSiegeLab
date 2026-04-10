@@ -1,0 +1,67 @@
+[camera_settings]
+{
+	// Settings determine where on the screen in normalized coordinates [-1.0 - 1.0] the
+	// tracking location is placed.  i.e.  0.0 is the center of the screen
+	camera_y_screen_track		= -0.12;
+	camera_x_screen_track		= 0.0;
+
+	// Setting determines how much the historical data of the camera affects its overall
+	// movement.  i.e.  0.0 would mean that the history does not affect it at all.
+	camera_historic_affect		= 0.3;
+
+	// Setting determines how many seconds should go by before historical affectors
+	// reach their desired level.  Basically, the smaller you make this number, the
+	// faster the camera will recover from being rotated or snapped.
+	camera_affector_time		= 2.0;
+	target_affector_time		= 2.0;
+
+	// Maximum offset that the camera will allow in any one dimension, in meters.
+	// Essentially used for clamping cumulative camera shake effects.
+	camera_offset_maximum		= 6.0f;
+
+	// Determines how many degrees the camera can rotate along it's orbit per game
+	// second.  Number must be between 0 and 180.
+	orbit_degrees_per_second	= 90;
+
+	// Determines how many degrees the camera can rotate along the azimuth per
+	// game second.  Number must be between 0 and 180.
+	azimuth_degrees_per_second	= 40;
+	return_degrees_per_second	= 20;
+
+	// Determines how many meters the camera can zoom in or out per game second.
+	// This number only affects keyboard based zooming.
+	zoom_meters_per_second		= 12.0;
+
+	// Setting determines the amount (in meters) that the camera's target position
+	// must move before a redirection occurs.
+	meters_until_retrack		= 3.0;
+
+	// Normalized percentage that determines how far the camera will zoom on each
+	// request.  This percentage is then applied to the current distance between the
+	// camera and it's target, so 0.0 would cause no zoom, 0.5 would cause the camera
+	// to move halfway to the target at zoom, 1.0 would cause a single zoom to
+	// move all the in or all the way out.
+	zoom_delta_percentage		= 0.25;
+
+	// Offset, specified in meters, to add to the tracking position's height.
+	tracking_height_offset		= 1.51;
+
+	// Time, in seconds, that the camera will buffer before making modifications
+	// to it's position in order to avoid something.
+	camera_avoid_time			= 0.01;
+
+	// Time, in seconds, that the camera will buffer before trying to tilt
+	camera_tilt_time			= 0.75;
+
+	// Time, in seconds, that the camera will buffer before trying to return
+	camera_tilt_return_time		= 2.0f;
+
+	// Distance, in meters, of the leash the camera allows between its current
+	// location and track position when in hold mode.
+	camera_hold_leash_dist		= 5.0f;
+
+	// Normalized coordinates that determine the beginning of the mouse rotation
+	// when you move the cursor towards the edge of the screen.
+	horizontal_cursor_buffer	= 0.98;
+	vertical_cursor_buffer		= 0.98;
+}

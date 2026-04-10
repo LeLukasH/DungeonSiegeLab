@@ -1,0 +1,129 @@
+
+/////////////////////////////////////////////
+// DSX SKREVS
+
+// region 6 Rune Guardian summon sequence controller
+[t:template,n:skrev_reg_6_rune_guard]
+{
+	specializes		= special;
+
+	doc				= "Region 6 Rune Guardian summon controller";
+	category_name	= "zurb";
+
+	common:auto_expiration_class = immediate;
+	common:forced_expiration_class = immediate;
+	
+	[gizmo] { diffuse_color=0.300000,0.000000,0.800000; texture=; }
+	[placement] {}
+
+	[skrev_reg_6_rune_guard] { }
+}
+
+// TRJ - 6/10/03
+// controller for at the hub in a3_r2_digsite
+[t:template,n:skrev_a3_r2_hassat_controller]
+{
+	specializes = special;
+
+	doc = "A3_R2 Hassat Controller";
+	category_name = "zurb";
+
+	common:auto_expiration_class = immediate;
+	common:forced_expiration_class = immediate;
+
+	gizmo:diffuse_color = .3, 0, .8;
+
+	[placement] {}
+
+	[skrev_a3_r2_hassat_controller] {}
+}
+
+// TRJ - 6/11/03
+// Opening nis controller
+[t:template,n:skrev_a1_r1_nis_controller]
+{
+	specializes = special;
+
+	doc = "Opening NIS Controller";
+	category_name = "zurb";
+
+	common:auto_expiration_class = immediate;
+	common:forced_expiration_class = immediate;
+
+	[gizmo] { diffuse_color=0.300000,0.000000,0.800000; }
+	[placement] {}
+
+	[skrev_a1_r1_nis_controller] {}
+}
+
+// TRJ - 7/15/2003
+// a3_r3 algher skrev controller
+[t:template,n:skrev_a3_r3_algher_nis]
+{
+	specializes = special;
+
+	doc = "a3_r3 algher nis controller";
+	category_name = "zurb";
+
+	common:auto_expiration_class = immediate;
+	common:forced_expiration_class = immediate;
+
+	[gizmo] { diffuse_color=0.300000,0.000000,0.800000; }
+	[placement] {}
+
+	[skrev_a3_r3_algher_nis] {}
+}
+
+// JCD - 8/21/2003
+// a3_r3 hassat automaton skrev controller
+[t:template,n:skrev_a3_r3_h_a_is_controller]
+{
+	specializes = special;
+
+	doc = "a3_r3 hassat automaton is controller";
+	category_name = "zurb";
+
+	common:auto_expiration_class = immediate;
+	common:forced_expiration_class = immediate;
+
+	[gizmo] { diffuse_color=0.300000,0.000000,0.800000; }
+	[placement] {}
+
+	[skrev_a3_r3_h_a_is] {}
+}
+
+// TRJ - 7/15/2003
+// a5_r2 zigguart skrev controller
+[t:template,n:skrev_a5_r2_nis_controller]
+{
+	specializes = special;
+
+	doc = "a5_r2 nis controller";
+	category_name = "zurb";
+
+	common:auto_expiration_class = immediate;
+	common:forced_expiration_class = immediate;
+
+	[gizmo] { diffuse_color=0.300000,0.000000,0.800000; }
+	[placement] {}
+
+	[skrev_a5_r2_nis_controller] {}
+}
+
+// TRJ - 7/16/2003
+// a9_r3 final nis controller
+[t:template,n:skrev_a9_r3_final_nis_controller]
+{
+	specializes = special;
+
+	doc = "a9_r3 final nis controller";
+	category_name = "zurb";
+
+	common:auto_expiration_class = immediate;
+	common:forced_expiration_class = immediate;
+
+	[gizmo] { diffuse_color=0.300000,0.000000,0.800000; }
+	[placement] {}
+
+	[skrev_a9_r3_final_nis_controller] {}
+}

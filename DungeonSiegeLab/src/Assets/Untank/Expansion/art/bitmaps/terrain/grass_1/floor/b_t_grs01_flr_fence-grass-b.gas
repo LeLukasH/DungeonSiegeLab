@@ -1,0 +1,5 @@
+[t:tsd,n:b_t_grs01_flr_fence-grass-b]
+{
+	layer1texture1 = b_t_grs01_flr_fence-grass-b;
+  i texturedetail = 2;
+}

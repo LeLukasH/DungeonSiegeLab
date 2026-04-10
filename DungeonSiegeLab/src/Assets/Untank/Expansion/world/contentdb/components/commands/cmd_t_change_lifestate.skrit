@@ -1,0 +1,146 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_t_change_lifestate.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: Change lifestate to new one
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "cmd_t_change_lifestate";
+
+// external properties
+property scid target_scid$								doc = "Scid to use as target for change";
+property eLifeState lifestate$ = LS_ALIVE_CONSCIOUS		doc = "State to move character to.";
+property float new_health$ = 1							doc = "New health for the character.";
+property bool is_invincible$ = false					doc = "Is the character invincible?.";
+property float recovery_unit$ = -1						doc = "New recovery unit.  Leave as -1 if you don't want it to change.";
+property bool switch_visibility$ = false				doc = "Reverse the visiblity.";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+// chill here until we get an activate event
+startup state Wait$
+{
+	// look for activates
+	event OnGoHandleMessage$(eWorldEvent e$, WorldMessage /*msg$*/)
+	{
+		// activate?
+		if(e$ == WE_REQ_ACTIVATE)
+		{
+			// check the scids
+			if( !target_scid$.Goid.IsValid() ) { report.genericf("target_scid$ is invalid!\n"); }
+
+			// start watching the scid
+			GoDb.StartWatching( owner.Goid, target_scid$.Goid );
+
+			// change the lifestate
+			SetState ChangeLifeState$;
+		}
+	}
+}
+
+// changes the lifestate
+state ChangeLifeState$
+{
+	event OnEnterState$
+	{
+		// get the current health
+		float health$ = target_scid$.Go.Aspect.GetCurrentLife();
+
+		// make sure they're not invincible
+		target_scid$.Go.Aspect.SetIsInvincible( false );
+
+		// do we need to switch the visiblity?
+		if( switch_visibility$ )
+		{
+			if( target_scid$.Go.HasAspect() )
+			{
+				target_scid$.Go.Aspect.SSetIsVisible( !target_scid$.Go.Aspect.GetIsVisible() );
+			}
+		}
+
+		// change the recovery rate
+		if( recovery_unit$ != -1 )
+		{
+			#only(game) [[
+			target_scid$.Go.Aspect.SetLifeRecoveryUnit( recovery_unit$ );
+			target_scid$.Go.Aspect.SetNaturalLifeRecoveryUnit( recovery_unit$ );
+			]];
+		}
+
+		// what state are we going into?
+		if( lifestate$ == LS_DEAD_NORMAL || lifestate$ == LS_ALIVE_UNCONSCIOUS)
+		{
+			// do damage to it
+			Rules.DamageGo( target_scid$.Go.Goid, owner.Go.Goid, NULL, health$, false, false );
+
+			// change the health
+			target_scid$.Go.Aspect.SSetCurrentLife( new_health$ );
+
+			// and stay down!
+			target_scid$.Go.Aspect.SSetLifeState( lifestate$ );
+		}
+		else if( lifestate$ == LS_ALIVE_CONSCIOUS )
+		{
+			#only(game)[[
+			// change the recovery rate to wake them up
+			target_scid$.Go.Aspect.SetNaturalLifeRecoveryUnit( 100.0 );
+			]];
+
+			this.CreateTimer( 1, 0 );
+			return;
+		}
+		else
+		{
+			// just set the life state
+			target_scid$.Go.Aspect.SSetLifeState( lifestate$ );
+		}
+
+		// change the invincibility to whatever they wanted
+		target_scid$.Go.Aspect.SetIsInvincible( is_invincible$ );
+
+		SetState Done$;
+	}
+
+	transition->WaitForWake$:OnTimer( 1 );
+}
+
+// wait for them to wake up
+state WaitForWake$
+{
+	trigger OnGoHandleCCMessage$( WE_GAINED_CONSCIOUSNESS )
+	{
+		// change the invincibility around
+		target_scid$.Go.Aspect.SetIsInvincible( is_invincible$ );
+
+		#only(game) [[
+		// change the recovery unit back to normal
+		target_scid$.Go.Aspect.SetNaturalLifeRecoveryUnit( recovery_unit$ );
+		]];
+
+		SetState Done$;
+	}
+}
+
+// finishing state.  cleans everything up
+state Done$
+{
+	event OnEnterState$
+	{
+		GoDb.StopWatching( owner.Goid, target_scid$.Goid );
+	}
+}

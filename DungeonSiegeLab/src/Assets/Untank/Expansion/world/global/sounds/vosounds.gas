@@ -1,0 +1,19 @@
+[vosounds]
+{
+	// time between samples
+	inter_sample_time = 4.0;
+
+	// time between samples when multiple chars are selected
+	multi_sample_time = 10.0;
+
+	// should sounds be positional?
+	positional = false;
+	
+	// which voice commands do we use?
+	[events]
+	{
+		* = select_char;
+		* = order_attack;
+		* = order_move;
+	}
+}

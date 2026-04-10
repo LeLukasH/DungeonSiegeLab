@@ -1,0 +1,986 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	brain_thief.skrit
+
+	Author(s)	: 	Bartosz Kijanka, David Tomandl
+
+	Purpose		:	This brain is a modified brain_hero.skrit.
+					This brain will cause the creature to steal an item and run
+					away, when the opportunity presents itself.
+
+	(C)opyright 2001 Gas Powered Games, Inc.
+
+
+	See brain_hero.skrit for further explaination.
+	
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+GoMind	m_Mind$;
+Job		m_Job$;
+Go		best_item$;
+int		g_IHaveStolenSomething$;
+
+#include "k_job_c_attack_utils"
+
+void TimeStamp$()
+{
+	report.reportf( "aiskrit", "[%2.4f, 0x%08x] brain skrit : ", WorldTime.GetTime, WorldTime.GetSimCount );
+}
+
+
+startup state STARTUP$
+{
+	event OnEnterState$
+	{
+		g_IHaveStolenSomething$ = 0;
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.Go;
+	m_Mind$		= job$.Go.Mind;
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	if( job$.Go.IsHuded )
+	{
+		TimeStamp$();
+		report.report( "aiskrit", "OnJobInit$\n" );
+	}
+
+	OnJobInitPointers$( job$ );
+
+	SetState Thinking$;
+	return;
+}
+
+
+////////////////////////////////////////
+//	TryFlee
+
+void TryFlee$( Go From$ )
+{
+
+	if( From$ == NULL )
+	{
+		return;
+	}
+
+	if( m_Go$.Mind.MovementOrders == MO_HOLD )
+	{
+		return;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	//	human player's actors can flee indefinitely, others are limited
+
+	if( m_Go$.Player.IsScreenPlayer || ( !m_Go$.Player.IsScreenPlayer && m_Mind$.FleeCount > 0 ) )
+	{
+		// $ These checks were placed to avoid neutral creatures fleeing from each other.
+		// maybe we should solve this with Memberships? -ET
+	
+		if( From$.HasActor() )
+		{
+			if( From$.actor.getalignment == AA_NEUTRAL )
+			{
+				return;
+			}
+		}
+		report.reportf( "aiskrit", "%s fleeing from %s\n", m_Go$.TemplateName, From$.TemplateName );
+		m_Mind$.SDoJob( MakeJobReq( JAT_FLEE_FROM_OBJECT, JQ_ACTION, QP_CLEAR, AO_REFLEX, From$.Goid ) );
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	PickState$
+state PickState$
+{
+	event OnEnterState$
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "PickState$ - entered state\n" );
+		}
+
+		// $ failsafe to get us out of this state if we're no longer attacking
+		Job newAction$ = m_Mind$.GetFrontJob( JQ_ACTION );
+		if( newAction$ == NULL )
+		{
+			SetState Thinking$;
+		}
+		else if ( newAction$.IsOffensive )
+		{
+			SetState Attacking$;
+		}
+		else
+		{
+			SetState Thinking$;
+		}
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	state Thinking$
+
+state Thinking$
+{
+	transition
+	{
+		-> Thinking$:		OnWorldMessage( WE_JOB_TIMER_DONE );
+		-> Unconscious$:	OnWorldMessage( WE_LOST_CONSCIOUSNESS );
+	}
+
+	trigger OnWorldMessage$( WE_MIND_PROCESSING_NEW_JOB )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - WE_MIND_PROCESSING_NEW_JOB\n" );
+		}
+
+		Job newAction$ = m_Mind$.GetFrontJob( JQ_ACTION );
+		if( newAction$ != NULL )
+		{
+			if( newAction$.IsOffensive )
+			{
+				SetState Attacking$;
+			}
+			else if ( m_Mind$.AmBusy )
+			{
+				return;
+			}
+		}
+	}
+
+	trigger OnWorldMessage$( WE_ENEMY_SPOTTED )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - WE_ENEMY_SPOTTED\n" );
+		}
+
+		if ( !m_Mind$.AmBusy() && g_IHaveStolenSomething$ )
+		{
+			TryFlee$( MakeGoid( m_Mind$.HandlingMessage.Data1 ).Go );
+			return;
+		}
+
+		if( m_Mind$.OnEnemySpottedAttack() && !m_Mind$.AmBusy() )
+		{
+			if( TryAutoAttackFocus$( m_Go$ ) )
+			{
+				SetState( Attacking$ );
+			}
+		}
+	}
+
+	trigger OnWorldMessage$( WE_ALERT_PROJECTILE_NEAR_MISSED )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - WE_ALERT_PROJECTILE_NEAR_MISSED\n" );
+		}
+
+		if( m_Mind$.OnAlertProjectileNearMissedFlee || g_IHaveStolenSomething$ )
+		{
+			TryFlee$( MakeGoid( m_Mind$.HandlingMessage.Data1 ).Go );
+		}
+	}
+
+	trigger OnWorldMessage$( WE_ALERT_PROJECTILE_NEAR_MISSED )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - WE_ALERT_PROJECTILE_NEAR_MISSED\n" );
+		}
+
+		if( m_Mind$.OnAlertProjectileNearMissedAttack && !m_Mind$.AmBusy() && !g_IHaveStolenSomething$ )
+		{
+			if( TryAutoAttackFocus$( m_Go$ ) )
+			{
+				SetState( Attacking$ );
+			}
+		}
+	}
+
+	trigger OnWorldMessage$( WE_ENEMY_ENTERED_OUTER_COMFORT_ZONE )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - WE_ENEMY_ENTERED_OUTER_COMFORT_ZONE\n" );
+		}
+
+		if ( g_IHaveStolenSomething$ ) 
+		{
+			TryFlee$( MakeGoid( m_Mind$.HandlingMessage.Data1 ).Go );
+			return;
+		}
+		
+		if( m_Mind$.OnEnemyEnteredOCZFlee )
+		{
+			TryFlee$( MakeGoid( m_Mind$.HandlingMessage.Data1 ).Go );
+		}
+	}
+
+	trigger OnWorldMessage$( WE_FRIEND_ENTERED_OUTER_COMFORT_ZONE )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - WE_FRIEND_ENTERED_OUTER_COMFORT_ZONE\n" );
+		}
+
+		if( m_Mind$.OnFriendEnteredOCZFlee )
+		{
+			TryFlee$( MakeGoid( m_Mind$.HandlingMessage.Data1 ).Go );
+		}
+	}
+
+	trigger OnWorldMessage$( WE_ENEMY_ENTERED_INNER_COMFORT_ZONE )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - WE_ENEMY_ENTERED_INNER_COMFORT_ZONE\n" );
+		}
+
+		if( m_Mind$.OnEnemyEnteredICZFlee || g_IHaveStolenSomething$)
+		{
+			TryFlee$( MakeGoid( m_Mind$.HandlingMessage.Data1 ).Go );
+		}
+	}
+
+	trigger OnWorldMessage$( WE_FRIEND_ENTERED_INNER_COMFORT_ZONE )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - WE_FRIEND_ENTERED_INNER_COMFORT_ZONE\n" );
+		}
+
+		if( m_Mind$.OnFriendEnteredICZFlee )
+		{
+			TryFlee$( MakeGoid( m_Mind$.HandlingMessage.Data1 ).Go );
+		}
+	}
+
+	trigger OnWorldMessage$( WE_ENEMY_ENTERED_INNER_COMFORT_ZONE )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - WE_ENEMY_ENTERED_INNER_COMFORT_ZONE\n" );
+		}
+
+		if( m_Mind$.OnEnemyEnteredICZAttack && !m_Mind$.AmBusy() )
+		{
+			if( TryAutoAttackFocus$( m_Go$ ) )
+			{
+				SetState( Attacking$ );
+			}
+		}
+	}
+
+	trigger OnWorldMessage$( WE_FRIEND_ENTERED_INNER_COMFORT_ZONE )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - WE_FRIEND_ENTERED_INNER_COMFORT_ZONE\n" );
+		}
+
+		if( m_Mind$.OnFriendEnteredICZAttack && !m_Mind$.AmBusy() )
+		{
+			Go enemy$ = MakeGoid( m_Mind$.HandlingMessage.Data1 ).Go;
+			if( TryAutoAttack$( m_Go$, enemy$ ) )
+			{
+				SetState( Attacking$ );
+			}
+		}
+	}
+
+	trigger OnWorldMessage$( WE_DAMAGED )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - WE_DAMAGED\n" );
+		}
+
+		if( !m_Mind$.AmBusy() )
+		{
+			Go alternateTarget$ = MakeGoid( m_Mind$.HandlingMessage.Data1 ).Go;
+			if( TryAutoRespondToAttack$( m_Go$, alternateTarget$ ) )
+			{
+				SetState( Attacking$ );
+				return;
+			}
+			else
+			{
+				// currently only non-human controlled actors have the option of fleeing
+				if( (m_Go$.Player.Controller != PC_HUMAN) && (alternateTarget$ != NULL) )
+				{
+					TryFlee$( alternateTarget$ );
+				}
+			}
+		}
+	}
+
+	trigger OnWorldMessage$( WE_ATTACKED_MELEE )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - WE_ATTACKED_MELEE\n" );
+		}
+
+		if( !m_Mind$.AmBusy() )
+		{
+			if( TryAutoAttackFocus$( m_Go$ ) )
+			{
+				SetState( Attacking$ );
+			}
+		}
+	}
+
+	trigger OnWorldMessage$( WE_ALERT_ENEMY_SPOTTED )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - WE_ALERT_ENEMY_SPOTTED\n" );
+		}
+
+		if ( g_IHaveStolenSomething$ )
+		{
+			TryFlee$( m_Mind$.HandlingMessage.SendFrom.Go ); // run from whoever saw the enemy
+			return;
+		}
+
+		if( !m_Mind$.AmBusy() )
+		{
+			m_Mind$.RSGuard( m_Mind$.HandlingMessage.SendFrom.Go, QP_CLEAR, AO_REFLEX );
+		}
+	}
+
+	event OnEnterState$
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Thinking$ - OnEnterState$\n" );
+		}
+//		this.TraceOpCodes 	   = m_Go$.IsHuded;
+//		this.TraceSkritCalls   = m_Go$.IsHuded;
+//		this.TraceStateChanges = m_Go$.IsHuded;
+
+		m_Job$.SetTimer( m_Mind$.SensorScanPeriod );
+
+		if( !m_Mind$.BrainActive )
+		{
+			return;
+		}
+
+		////////////////////////////////////////
+		//	set state based on what action we're running
+
+		Job currentAction$ = m_Mind$.GetFrontJob( JQ_ACTION );
+		if( currentAction$ != NULL )
+		{
+			if( currentAction$.IsOffensive )
+			{
+				SetState Attacking$;
+				return;
+			}
+			else if ( m_Mind$.AmBusy )
+			{
+				return;
+			}
+		}
+
+		if( m_Mind$.OnEnemySpottedAttack() && m_Mind$.AliveEnemiesVisible() && !m_Mind$.AmBusy() && !g_IHaveStolenSomething$ )
+		{
+			if( m_Go$.IsHuded )
+			{
+				TimeStamp$();
+				report.report( "aiskrit", "Thinking$ - m_Mind$.OnEnemySpottedAttack() && m_Mind$.AliveEnemiesVisible() && !m_Mind$.AmBusy()\n" );
+			}
+
+			if( m_Mind$.GetFrontActionJat == JAT_PATROL )
+			{
+				return;
+			}
+
+			if( TryAutoAttackFocus$( m_Go$ ) )
+			{
+				SetState( Attacking$ );		
+				return;
+			}
+			else
+			{
+				m_Mind$.TempQtColl1.Clear;
+				m_Mind$.TempQtColl1.Add( QT_ENEMY  );
+				m_Mind$.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+	
+				Go temp_enemy$ = m_Mind$.GetClosestVisible( m_Mind$.TempQtColl1 );
+
+				if (temp_enemy$ != NULL)
+				{
+					if( !m_Mind$.AmFacing( temp_enemy$ ) )
+					{
+						if( m_Mind$.UnderstandsJob( JAT_FACE ) )
+						{
+							m_Mind$.SDoJob( MakeJobReq( JAT_FACE, JQ_ACTION, QP_CLEAR, AO_REFLEX, temp_enemy$.Goid ) );
+							return;
+						}
+					}
+				}
+			}
+		}
+
+		if( m_Mind$.AliveEnemiesVisible() && m_Mind$.OnEnemyEnteredICZAttack && !m_Mind$.AmBusy() )
+		{
+			if( m_Go$.IsHuded )
+			{
+				TimeStamp$();
+				report.report( "aiskrit", "Thinking$ - m_Mind$.AliveEnemiesVisible() && m_Mind$.OnEnemyEnteredICZAttack && !m_Mind$.AmBusy()\n" );
+			}
+
+			m_Mind$.TempQtColl1.Clear;
+			m_Mind$.TempQtColl1.Add( QT_ENEMY  );
+			m_Mind$.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+			m_Mind$.TempQtColl1.Add( QT_ATTACKABLE );
+
+			Go enemy$ = m_Mind$.GetVisible( m_Mind$.TempQtColl1, m_Mind$.InnerComfortZoneRange );
+
+			if( TryAutoAttack$( m_Go$, enemy$ ) )
+			{												 
+				SetState( Attacking$ );
+				return;
+			}
+		}
+
+		if ( m_Mind$.AliveFriendsVisible() && m_Mind$.OnFriendEnteredICZAttack && !m_Mind$.AmBusy() )
+		{
+			if( m_Go$.IsHuded )
+			{
+				TimeStamp$();
+				report.report( "aiskrit", "Thinking$ - m_Mind$.AliveFriendsVisible() && m_Mind$.OnFriendEnteredICZAttack && !m_Mind$.AmBusy()\n" );
+			}
+
+			m_Mind$.TempQtColl1.Clear;
+			m_Mind$.TempQtColl1.Add( QT_FRIEND );
+			m_Mind$.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+			Go friend$ = m_Mind$.GetVisible( m_Mind$.TempQtColl1, m_Mind$.InnerComfortZoneRange );
+
+			if( TryAutoAttack$( m_Go$, friend$ ) )
+			{												 
+				SetState( Attacking$ );
+				return;
+			}
+		}
+
+		if( m_Mind$.AliveEnemiesVisible() && m_Mind$.OnEnemyEnteredICZFlee )
+		{
+			if( m_Go$.IsHuded )
+			{
+				TimeStamp$();
+				report.report( "aiskrit", "Thinking$ - m_Mind$.AliveEnemiesVisible() && m_Mind$.OnEnemyEnteredICZFlee\n" );
+			}
+
+			m_Mind$.TempQtColl1.Clear;
+			m_Mind$.TempQtColl1.Add( QT_ENEMY  );
+			m_Mind$.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+
+			Go enemy$ = m_Mind$.GetVisible( m_Mind$.TempQtColl1, m_Mind$.InnerComfortZoneRange );
+
+			TryFlee$( enemy$ );
+			return;
+		}
+
+		if ( m_Mind$.AliveFriendsVisible() && m_Mind$.OnFriendEnteredICZFlee )
+		{
+			if( m_Go$.IsHuded )
+			{
+				TimeStamp$();
+				report.report( "aiskrit", "Thinking$ - m_Mind$.AliveFriendsVisible() && m_Mind$.OnFriendEnteredICZFlee\n" );
+			}
+
+			m_Mind$.TempQtColl1.Clear;
+			m_Mind$.TempQtColl1.Add( QT_FRIEND );
+			m_Mind$.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+			Go friend$ = m_Mind$.GetVisible( m_Mind$.TempQtColl1, m_Mind$.InnerComfortZoneRange );
+
+			TryFlee$( friend$ );
+			return;
+		}
+
+		if( m_Mind$.AliveEnemiesVisible() && m_Mind$.OnEnemyEnteredOCZFlee )
+		{
+			if( m_Go$.IsHuded )
+			{
+				TimeStamp$();
+				report.report( "aiskrit", "Thinking$ - m_Mind$.AliveEnemiesVisible() && m_Mind$.OnEnemyEnteredOCZFlee\n" );
+			}
+
+			m_Mind$.TempQtColl1.Clear;
+			m_Mind$.TempQtColl1.Add( QT_ENEMY  );
+			m_Mind$.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+
+			Go enemy$ = m_Mind$.GetVisible( m_Mind$.TempQtColl1, m_Mind$.OuterComfortZoneRange );
+
+			TryFlee$( enemy$ );
+			return;
+		}
+
+		if ( m_Mind$.AliveFriendsVisible() && m_Mind$.OnFriendEnteredOCZFlee )
+		{
+			if( m_Go$.IsHuded )
+			{
+				TimeStamp$();
+				report.report( "aiskrit", "Thinking$ - m_Mind$.AliveFriendsVisible() && m_Mind$.OnFriendEnteredOCZFlee\n" );
+			}
+
+			m_Mind$.TempQtColl1.Clear;
+			m_Mind$.TempQtColl1.Add( QT_FRIEND );
+			m_Mind$.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+			Go friend$ = m_Mind$.GetVisible( m_Mind$.TempQtColl1, m_Mind$.OuterComfortZoneRange );
+
+			TryFlee$( friend$ );
+			return;
+		}
+
+		//this check sends the actor to try to pick up a nearby item
+		if( /*m_Mind$.ActorAutoPicksUpItems() && */m_Mind$.ItemsVisible() )
+		{
+			if( m_Go$.IsHuded )
+			{
+				TimeStamp$();
+				report.report( "aiskrit", "Thinking$ - m_Mind$.ItemsVisible()\n" );
+			}
+
+			//Time to look at all nearby items, and choose the most powerful one.
+			//After picking it up, it's time to run away.  Get the loot and run!
+			//If we already have an item, don't pick up another one.
+			if ( !g_IHaveStolenSomething$ )	
+			{
+				SetState ( Stealing$ );
+			}
+		}
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	state Attacking$
+
+state Attacking$
+{
+	transition
+	{
+		-> Stealing$:	OnWorldMessage( WE_ENGAGED_HIT_KILLED );
+		-> Stealing$:	OnWorldMessage( WE_ENGAGED_KILLED );
+		-> Thinking$:	OnWorldMessage( WE_JOB_CURRENT_ACTION_BASE_JAT_CHANGED );
+		-> Thinking$:	OnWorldMessage( WE_ENGAGED_INVALID );
+	}
+
+	trigger OnWorldMessage$( WE_PICKED_UP )
+	{
+		g_IHaveStolenSomething$ = 1;
+	}
+
+	trigger OnTimer$( 1 )
+	{
+		SetState PickState$;
+	}
+
+	trigger OnWorldMessage$( WE_LIFE_RATIO_REACHED_LOW )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Attacking$ - WE_LIFE_RATIO_REACHED_LOW\n" );
+		}
+
+		if( m_Mind$.ActorAutoHealsSelfLife() )
+		{
+			m_Mind$.RSDrinkLifeHealingPotion( AO_REFLEX );
+		}
+
+		if( m_Mind$.IsLifeLow() )
+		{
+			if( m_Mind$.ActorAutoHealsSelfLife() )
+			{
+				m_Mind$.RSCastLifeHealingSpell( AO_REFLEX );
+			}
+		}
+
+		if( m_Mind$.IsLifeLow() )
+		{
+			m_Mind$.TempQtColl1.Clear;
+			m_Mind$.TempQtColl1.Add( QT_ENEMY  );
+			m_Mind$.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+
+			Go enemy$ = m_Mind$.GetClosestVisible( m_Mind$.TempQtColl1 );
+
+			if( m_Mind$.OnLifeRatioLowFlee()  && ( enemy$ != NULL ) )
+			{
+				TryFlee$( enemy$ );
+			}
+		}
+	}
+
+	trigger OnWorldMessage$( WE_MANA_RATIO_REACHED_LOW )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Attacking$ - WE_MANA_RATIO_REACHED_LOW\n" );
+		}
+
+		if( m_Mind$.ActorAutoHealsSelfMana() )
+		{
+			m_Mind$.RSDrinkManaHealingPotion( AO_REFLEX );
+		}
+
+		if( m_Mind$.IsManaLow() )
+		{
+			m_Mind$.TempQtColl1.Clear;
+			m_Mind$.TempQtColl1.Add( QT_ENEMY  );
+			m_Mind$.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+
+			Go enemy$ = m_Mind$.GetClosestVisible( m_Mind$.TempQtColl1 );
+
+			if( m_Mind$.OnManaRatioLowFlee()  && ( enemy$ != NULL ) )
+			{
+				TryFlee$( enemy$ );
+			}
+		}
+		return;
+	}
+
+	trigger OnWorldMessage$( WE_ENGAGED_LOST )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Attacking$ - WE_ENGAGED_LOST\n" );
+		}
+
+		Job currentAction$ = m_Mind$.GetFrontJob( JQ_ACTION );
+		if( currentAction$ == NULL )
+		{
+			return;
+		}
+
+		if( m_Mind$.OnEngagedLostReturnToJobOrigin )
+		{
+			// $$ the original job creation position may have been unloaded... what to do then?
+			m_Mind$.SDoJob( MakeJobReq( JAT_MOVE, JQ_ACTION, QP_FRONT, AO_REFLEX, currentAction$.InitPosition ) );
+		}
+		else if ( m_Mind$.OnEngagedLostLoiter )
+		{
+			// $$$ do something to loiter
+			currentAction$.RequestFinish();
+		}
+	}
+
+	trigger OnWorldMessage$( WE_JOB_REACHED_TRAVEL_DISTANCE )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Attacking$ - WE_JOB_REACHED_TRAVEL_DISTANCE\n" );
+		}
+
+		Job currentAction$ = m_Mind$.GetFrontJob( JQ_ACTION );
+		if( currentAction$ == NULL )
+		{
+			return;
+		}
+
+		if( m_Mind$.OnJobReachedTravelDistanceAbortAttack )
+		{
+			TryFlee$( m_Mind$.EngagedObject.Go );
+			//currentAction$.RequestFinish();
+		}
+	}
+
+	trigger OnWorldMessage$( WE_ENEMY_ENTERED_OUTER_COMFORT_ZONE )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Attacking$ - WE_ENEMY_ENTERED_OUTER_COMFORT_ZONE\n" );
+		}
+
+		if( m_Mind$.OnEnemyEnteredOCZFlee || g_IHaveStolenSomething$ )
+		{
+			TryFlee$( MakeGoid( m_Mind$.HandlingMessage.Data1 ).Go );
+		}
+	}
+
+	trigger OnWorldMessage$( WE_ENGAGED_FLED )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Attacking$ - WE_ENGAGED_FLED\n" );
+		}
+
+		if( m_Mind$.OnEngagedFleedAbortAttack )
+		{
+			Job currentAction$ = m_Mind$.GetFrontJob( JQ_ACTION );
+			if( currentAction$ == NULL )
+			{
+				return;
+			}
+			currentAction$.RequestFinish();
+		}
+	}
+
+	trigger OnWorldMessage$( WE_ENGAGED_LOST_CONSCIOUSNESS )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Attacking$ - WE_ENGAGED_LOST_CONSCIOUSNESS\n" );
+		}
+
+/* Taking this out--we want to kill someone, so we can grab their stuff.  It's the whole point.
+		if( m_Mind$.OnEngagedLostConsciousnessAbortAttack )
+		{
+			Job currentAction$ = m_Mind$.GetFrontJob( JQ_ACTION );
+			if( currentAction$ == NULL )
+			{
+				return;
+			}
+			report.generic( "requesting job finish\n" );
+			currentAction$.RequestFinish();
+		}
+
+*/
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	//	switch down to a melee weapon if allowed, when enemy gets in real close
+
+	trigger OnWorldMessage$( WE_ENEMY_ENTERED_INNER_COMFORT_ZONE )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Attacking$ - WE_ENEMY_ENTERED_INNER_COMFORT_ZONE\n" );
+		}
+
+		if( ( m_Go$.Inventory.IsRangedWeaponEquipped || m_Go$.Inventory.IsSpellSelected ) && m_Mind$.OnEnemyEnteredICZSwitchToMelee )
+		{
+			m_Mind$.TempQtColl1.Clear;
+			m_Mind$.TempQtColl1.Add( QT_ENEMY  );
+			m_Mind$.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+			m_Mind$.TempQtColl1.Add( QT_ATTACKABLE );
+			
+			Go enemy$ = m_Mind$.GetClosestVisible( m_Mind$.TempQtColl1 );
+
+			if( enemy$ != NULL )
+			{
+				Go weapon$ = GetBestAutoAttackWeaponSpellOrKarate$( m_Go$, enemy$ );
+				if( weapon$ != NULL )
+				{
+					if( weapon$.IsMeleeWeapon || (weapon$ == m_Go$) )
+					{
+						if( MayAutoAttack$( m_Go$, enemy$ ) )
+						{
+							TryAutoAttack$( m_Go$, enemy$ );
+						}
+					}
+				}
+			}
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	//	respond to an attacker, even if we're busy, only if the actor we're attacking isn't attacking us back
+
+	trigger OnWorldMessage$( WE_DAMAGED )
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Attacking$ - WE_DAMAGED\n" );
+		}
+
+		////////////////////////////////////////
+		//	if I was attacked, but whom I'm attacking isn't attacking back, attack back
+
+		Go victim$ = m_Mind$.EngagedObject.Go;
+		Go newAttacker$ = MakeGoid( m_Mind$.HandlingMessage.Data1 ).Go;
+
+		if( ( victim$ != NULL ) && ( newAttacker$ != NULL ) )
+		{
+			if( victim$.HasActor && newAttacker$.HasActor )
+			{
+				////////////////////////////////////////
+				//	respond if we're being damaged by a melee attacker
+				if( ( victim$.Mind.EngagedObject != m_Go$.Goid ) && ( newAttacker$.Mind.GetFrontActionJat == JAT_ATTACK_OBJECT_MELEE ) )
+				{
+					TryRespondToAttack$( m_Go$, MakeGoid( m_Mind$.HandlingMessage.Data1 ).Go );
+				}
+			}
+		}
+	}
+
+	event OnEnterState$
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Attacking$ - entered state\n" );
+		}
+
+		this.CreateTimer( 1, m_Mind$.SensorScanPeriod );
+	}
+}
+
+
+state Unconscious$
+{
+	transition
+	{
+		-> Thinking$:	OnWorldMessage( WE_GAINED_CONSCIOUSNESS );
+	}
+
+	event OnEnterState$
+	{
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Unconscious$ - entered state\n" );
+		}
+	}
+}
+
+state Stealing$
+{
+	transition
+	{
+		-> PickState$:	OnWorldMessage( WE_MCP_CHORE_CHANGING );
+		-> PickState$:	OnWorldMessage( WE_MIND_ACTION_Q_IDLED );
+	}
+
+/*	trigger OnTimer$( 1 )
+	{
+		report.generic("My timer went off!\n");
+		if ( g_IHaveStolenSomething$ )
+		{
+			report.generic("I have stolen something!\n");
+			SetState PickState$;
+			return;
+		}
+		if ( !g_IHaveStolenSomething$ )
+		{
+			report.generic("I have not stolen something!\n");
+			setState PickState$;
+			return;
+			//SetState Stealing$;
+			//return;
+		}
+		this.CreateTimer( 1, m_Mind$.SensorScanPeriod );
+	}
+*/
+	event OnEnterState$
+	{
+		//report.generic("I have entered Steal state.\n");
+		//this.CreateTimer( 1, m_Mind$.SensorScanPeriod );
+
+		if( m_Go$.IsHuded )
+		{
+			TimeStamp$();
+			report.report( "aiskrit", "Stealing$\n" );
+		}
+		
+		if ( best_item$ != NULL )
+		{
+			if ( best_item$.IsInsideInventory() )
+			{
+				g_IHaveStolenSomething$ = 1;
+			}
+		}
+	
+		if ( !g_IHaveStolenSomething$ ) {
+	 		//I want to make this look at all nearby items, and choose the most powerful one.
+	 		//After picking it up, it's time to run away.  Get the loot and run!
+	 		
+	 		m_Mind$.TempGopColl1.Clear;
+	 		m_Mind$.GetVisible( QT_ITEM, m_Mind$.TempGopColl1, 1000.0 );
+	 		
+	 		int i$ = 0;
+	 		Go temp$;
+	 		int goldvalue$ = 0;
+	 	
+	 		//I need to get a list of all visible, and compare their intrinsic value.
+	 		//Then, when the best one is found, run and get it and switch to "flee" mode
+	 	
+	 		while( i$ < m_Mind$.TempGopColl1.Size() )
+	 		{
+	 			temp$ = m_Mind$.TempGopColl1.Get( i$ );
+	 	
+	 			if ( goldvalue$ < temp$.Aspect.GoldValue )
+	 			{
+	 				goldvalue$ = temp$.Aspect.GoldValue;
+	 				best_item$ = temp$;
+	 			}
+	 			
+	 	        i$ += 1;
+	 	    }
+	 
+	 		if ( best_item$ != NULL )
+	 		{
+	 			//report.genericf("I'm going after an item with gold value of %i\n", goldvalue$);
+	 		
+	 			// Go run and get it
+	 			m_Mind$.SDoJob( MakeJobReq( JAT_MOVE, JQ_ACTION, QP_FRONT, AO_REFLEX, m_Go$.Placement.Position ) );
+	 			m_Mind$.SDoJob( MakeJobReq( JAT_GET, JQ_ACTION, QP_FRONT, AO_REFLEX, best_item$.Goid ) );
+	 		
+	 			// Run away from nearest enemy
+	 			m_Mind$.TempQtColl1.Clear;
+	 			m_Mind$.TempQtColl1.Add( QT_ENEMY  );
+	 			m_Mind$.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+
+	 			Go enemy$ = m_Mind$.GetClosestVisible( m_Mind$.TempQtColl1 );
+	 		
+	 			if( enemy$ != NULL )
+	 			{
+	 				TryFlee$( enemy$ );//m_Mind$.SDoJob( MakeJobReq( JAT_FLEE_FROM_OBJECT, JQ_ACTION, QP_BACK, AO_REFLEX, enemy$.Goid ) );
+	 			}
+
+				if ( best_item$.IsInsideInventory() )
+				{
+					g_IHaveStolenSomething$ = 1;
+				}
+	 		}
+	 	}
+		//SetState ( Thinking$ );
+	}
+}

@@ -1,0 +1,814 @@
+[t:template,n:2W_base_rune_guardian]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_Base Rune Guardian";
+	specializes = actor_evil;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength =	29.2, 0;
+			intelligence =	9.3, 0;
+			dexterity =	 15.9, 0;
+			ranged =	52,	 0;
+		}
+	}
+
+	[aspect]
+	{
+		model = m_c_ecm_rg_pos_2;
+		material = flesh;
+
+		[voice]
+		{
+			[enemy_spotted]	{ priority = high; * = s_e_call_rune_guardian_SED; }
+			[die]			{ priority = high;	* = s_e_die_rune_guardian_SED;		}
+			[hit_critical]	{ priority = low;	* = s_e_hit_rune_guardian_SED;		}
+			[hit_glance]	{ priority = low;	* = s_e_hit_rune_guardian_SED;		}
+			[hit_solid]		{ priority = low;	* = s_e_hit_rune_guardian_SED;		}
+		}
+
+	}
+
+	[body]
+	{
+		avg_move_velocity = 2.5;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine2;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[weapon_scales]
+		{
+			as_single_melee = 1.5, 1.5, 1.5;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ecm_rg_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+					{
+						00 = at;
+						01 = at-02;
+						02 = at-03;				
+					}
+			}
+			[chore_default]
+				{
+					chore_stances = 0;
+					skrit = infinite_loop;
+					[anim_files] { 00=dfs; }
+				}
+			[chore_die]
+				{
+					chore_stances = 0;
+					skrit = select_transition;
+					[anim_files] { 00=di; }
+				}
+			[chore_fidget]
+				{
+					chore_stances = 0;
+					skrit = select_fidget;
+					[anim_files] { 00=dff; }
+				}
+			[chore_walk]
+				{
+					chore_stances = 0;
+					skrit = select_walk;
+					[anim_files] { 00=wl; }
+				}
+			[chore_magic]
+				{
+					chore_stances = 0;
+					skrit = select_attack;
+					[anim_files] 
+						{
+							00 = mg; 
+						}
+				}
+		}
+	}
+
+	[mind]
+		{
+			jat_brain						= world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party	= false;
+
+			jat_fidget						= world\ai\jobs\common\job_fidget.skrit
+				?wander								= 0.8
+				&social								= 0.1
+				&delay_min							= 6
+				&delay_max							= 10
+				&still								= false;
+
+			melee_engage_range = 14;
+			personal_space_range = 0.7;
+			ranged_engage_range = 14.0;
+			sight_range = 14.0;
+		}
+}
+
+[t:template,n:2W_rune_guardian_base]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_Rune Guardian Base";
+	specializes = 2W_base_rune_guardian;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength	=	 29.2, 0;
+			intelligence = 10.6, 0;
+			dexterity		=	 15.9, 0;
+			melee			=	 52, 0;
+		}
+	}
+
+	[aspect]
+	{
+		scale_base = 0.85;
+		textures:0 = b_c_ecm_rg-02;
+		life = 863.3;
+		max_life = 863.3;
+		experience_value = 47320;
+		max_mana = 33.3;
+		mana = 33.3;
+
+		[voice]
+		{
+			[enemy_spotted]	{ priority = high; * = s_e_call_rune_guardian_SED; }
+			[die]			{ priority = high;	* = s_e_die_rune_guardian_SED;		}
+			[hit_critical]	{ priority = low;	* = s_e_hit_rune_guardian_SED;		}
+			[hit_glance]	{ priority = low;	* = s_e_hit_rune_guardian_SED;		}
+			[hit_solid]		{ priority = low;	* = s_e_hit_rune_guardian_SED;		}
+		}
+
+	}
+
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 201.7;
+		damage_min = 135;		
+	}
+
+	[defend] { defense=383.3; }
+
+	[common]
+	{
+		screen_name="Rune Beast";
+	}
+	[inventory]
+	{
+		drop_at_use_point = true;
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 18, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 38846;
+					max = 77074;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/117-159;
+					il_main = #armor/47-363;
+					il_main = #*/117-159;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/127-178;
+					il_main = #armor/-rare(1)/270-550;
+					il_main = #*/-rare(1)/127-178;
+				}
+				
+			}
+		}
+	}
+}
+
+[t:template,n:2W_dsx_rune_guardian]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_rune_guardian";
+	specializes = 2W_rune_guardian_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength	= 33.7, 0;
+			intelligence = 10.6, 0;
+			dexterity	= 17.6, 0;
+			melee		= 55, 0;
+		}
+	}
+	[aspect]
+	{
+		scale_base 		= 0.85;
+		textures:0 		= b_c_ecm_rg-02;
+		life 			= 1173.3;
+		max_life 		= 1173.3;
+		experience_value = 47320;
+		max_mana 		= 33.3;
+		mana 			= 33.3;
+		[voice]
+		{
+			[enemy_spotted]	{ priority = high; * = s_e_call_rune_guardian_SED; }
+			[die]			{ priority = high;	* = s_e_die_rune_guardian_SED;		}
+			[hit_critical]	{ priority = low;	* = s_e_hit_rune_guardian_SED;		}
+			[hit_glance]	{ priority = low;	* = s_e_hit_rune_guardian_SED;		}
+			[hit_solid]		{ priority = low;	* = s_e_hit_rune_guardian_SED;		}
+		}
+	}
+
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 242;
+		damage_min = 180;		
+	}
+
+	[defend] { defense=490; }
+
+	[common]
+	{
+		screen_name="Rune Beast";
+		membership = monster;
+	}
+	[inventory]
+	{
+		drop_at_use_point = true;
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 18, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 38846;
+					max = 77074;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/117-159;
+					il_main = #armor/47-363;
+					il_main = #*/117-159;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/127-178;
+					il_main = #armor/-rare(1)/270-550;
+					il_main = #*/-rare(1)/127-178;
+				}
+				
+			}
+		}
+	}
+
+}
+
+[t:template,n:2W_dsx_rune_guardian_summon]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_rune_guardian_summon";
+	specializes = 2W_rune_guardian_base;
+ 	aspect:experience_value = 0;
+	[inventory]{}
+}
+
+
+[t:template,n:2W_rune_guardian_r_base]
+//balanced to Level 14
+{
+	category_name = "2W_evil_d";
+	doc = "2W_Rune Guardian Ranged Base";
+	specializes = 2W_base_rune_guardian;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength 	 = 29.2, 0;
+			intelligence =	10.6, 0;
+			dexterity 	 =  15.9, 0;
+			melee 		 = 52, 0;
+		}
+	}
+	[aspect]
+	{
+		model = m_c_ecm_rg_pos_3;
+		scale_base = 0.85;
+		textures:0 = b_c_ecm_rg-03;
+		experience_value = 47320;
+
+		life = 863.3;
+		max_life = 863.3;
+		max_mana = 33.3;
+		mana = 33.3;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 139.3;
+		damage_min = 84;
+		damage_bonus_min_cmagic = 92;
+		damage_bonus_max_cmagic = 141;
+	}
+	[common]
+	{
+		screen_name="Rune Fiend";
+		membership = monster;
+	}
+	[defend] { defense=296.7; }
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other]
+			{
+				il_active_primary_spell	= dsx_spell_rune_fiend_blast; 
+			}
+			[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 18, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 38846;
+					max = 77074;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/117-159;
+					il_main = #armor/47-363;
+					il_main = #*/117-159;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/127-178;
+					il_main = #armor/-rare(1)/270-550;
+					il_main = #*/-rare(1)/127-178;
+				}
+				
+			}
+		}
+	}
+
+	[mind]
+	{
+		actor_weapon_preference						= WP_MAGIC;
+		actor_auto_switches_to_magic				= true;
+	}
+}
+
+[t:template,n:2W_dsx_rune_guardian_r]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_rune_guardian_r";
+	specializes = 2W_rune_guardian_r_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength 	 = 33.7, 0;
+			intelligence =	10.6, 0;
+			dexterity 	 = 17.6, 0;
+			ranged 		 = 55, 0;
+			combat_magic = 55, 0;
+			nature_magic = 55, 0;
+		}
+	}
+	[aspect]
+	{
+		model = m_c_ecm_rg_pos_3;
+		scale_base = 0.85;
+		textures:0 = b_c_ecm_rg-03;
+		experience_value = 47320;
+
+		life = 1123.3;
+		max_life = 1123.3;
+		max_mana = 33.3;
+		mana = 33.3;
+	}
+
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 201.7;
+		damage_min = 132;
+		damage_bonus_min_cmagic = 92;
+		damage_bonus_max_cmagic = 141;
+	}
+
+	[common]
+	{
+		screen_name="Rune Fiend";
+		membership = monster;
+	}
+
+	[defend] { defense=386.7; }
+
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other]
+		{
+			il_active_primary_spell		= dsx_spell_rune_fiend_blast; 
+		}
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 18, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 38846;
+					max = 77074;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/117-159;
+					il_main = #armor/47-363;
+					il_main = #*/117-159;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/127-178;
+					il_main = #armor/-rare(1)/270-550;
+					il_main = #*/-rare(1)/127-178;
+				}
+				
+			}
+		}
+	}
+
+	[mind]
+	{
+		actor_weapon_preference							 = WP_MAGIC;
+		actor_auto_switches_to_magic				 = true;
+	}
+
+}
+
+[t:template,n:2W_dsx_rune_guardian_r_summon]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_rune_guardian_r_summon";
+	specializes = 2W_rune_guardian_r_base;
+ 	aspect:experience_value = 0;
+	[inventory]{}
+}
+
+
+[t:template,n:2W_dsx_rune_guardian_summon_q]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_rune_guardian_summon_q";
+	specializes = 2W_rune_guardian_base;
+ 	aspect:experience_value = 0;
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = send_world_message("we_req_activate",0x0520074D,0f,"default","every",0), doc("for a6_rune quest trigger decrement");
+				condition* = receive_world_message("we_killed",0,"on_every_message");
+				f delay = 0.000000;
+				b flip_flop = false;
+				b multi_player = true;
+				occupants_group = ;
+				f reset_duration = 0.000000;
+				b single_player = true;
+				b single_shot = true;
+				b start_active = true;
+			}
+			[*]
+			{
+				action* = send_world_message("we_req_deactivate",0x0520074D,0f,"default","every",0), doc("for a6_rune quest trigger increment");
+				condition* = receive_world_message("we_constructed",0,"on_every_message");
+				f delay = 0.000000;
+				b flip_flop = false;
+				b multi_player = true;
+				occupants_group = ;
+				f reset_duration = 0.000000;
+				b single_player = true;
+				b single_shot = true;
+				b start_active = true;
+			}
+		}
+	}
+	[inventory]{}
+}
+
+[t:template,n:2W_dsx_rune_guardian_r_summon_q]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_rune_guardian_r_summon_q";
+	specializes = 2W_rune_guardian_r_base;
+ 	aspect:experience_value = 0;
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = send_world_message("we_req_activate",0x0520074D,0f,"default","every",0), doc("for a6_rune quest trigger");
+				condition* = receive_world_message("we_killed",0,"on_every_message"), doc("[*converted to one-shot*]");
+				f delay = 0.000000;
+				b flip_flop = false;
+				b multi_player = true;
+				occupants_group = ;
+				f reset_duration = 0.000000;
+				b single_player = true;
+				b single_shot = true;
+				b start_active = true;
+			}
+			[*]
+			{
+				action* = send_world_message("we_req_deactivate",0x0520074D,0f,"default","every",0), doc("for a6_rune quest trigger increment");
+				condition* = receive_world_message("we_constructed",0,"on_every_message"), doc("[*converted to one-shot*]");
+				f delay = 0.000000;
+				b flip_flop = false;
+				b multi_player = true;
+				occupants_group = ;
+				f reset_duration = 0.000000;
+				b single_player = true;
+				b single_shot = true;
+				b start_active = true;
+			}
+		}
+	}
+	[inventory]{}
+}
+
+
+[t:template,n:2W_dsx_rune_guardian_boss_base]
+{
+// Balanced to level 18, hard melee+
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_rune_guardian_boss_base";
+	specializes = 2W_rune_guardian_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength 	= 36, 0;
+			intelligence = 11.9, 0;
+			dexterity 	= 19.4, 0;
+			melee 		= 57, 0;
+		}
+	}
+	[aspect]
+	{
+		model = m_c_ecm_rg_pos_1;
+		scale_base = 1.25;
+		textures:0 = b_c_ecm_rg-01;
+		experience_value = 63336;
+		life = 2750;
+		max_life = 2750;
+		mana = 60;
+		max_mana = 60;
+		[voice]
+		{
+			[enemy_spotted]	{ priority = high; * = s_e_call_boss_rune_guardian; }
+			[die]			{ priority = high;	* = s_e_die_boss_rune_guardian;		}
+			[hit_critical]	{ priority = low;	* = s_e_hit_rune_guardian_SED;		}
+			[hit_glance]	{ priority = low;	* = s_e_hit_rune_guardian_SED;		}
+			[hit_solid]		{ priority = low;	* = s_e_hit_rune_guardian_SED;		}
+		}
+	}
+	[body]
+	{
+		avg_move_velocity = 2.5;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine2;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[weapon_scales]
+		{
+			as_staff = 1.2, 1.2, 1.2;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ecm_rg_fs;
+			[chore_attack]
+			{
+				chore_stances = 5;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					01 = at-02;
+					02 = at-03;
+				}
+				[anim_durations]
+				{
+					fs5 = 1.25;			
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 5;
+				skrit = infinite_loop;
+				[anim_files] { 00=dfs; }
+			}
+			[chore_die]
+			{
+				chore_stances = 5;
+				skrit = select_transition;
+				[anim_files] { 00=di-02; }
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				[anim_files] 
+				{
+					slep = a_c_ecm_rg_fs5_dfs;
+					wake = a_c_ecm_rg_fs5_rvl; 
+				}
+			}
+			[chore_fidget]
+			{
+				chore_stances = 5;
+				skrit = select_fidget;
+				[anim_files] 
+				{
+					00 = dff;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 5;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+			[chore_magic]
+			{
+				chore_stances = 5;
+				skrit = select_attack;
+				[anim_files] { 00=mg; }
+			}
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 570;
+		damage_min = 375;
+	}
+
+	[common]
+	{
+		screen_name="Rune Guardian";
+		membership = monster,immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("rune_guardian_die");
+				condition* = receive_world_message("WE_KILLED");
+				single_shot = true;
+			}
+		}
+	}
+	[defend] { defense=675; }
+	[inventory]
+	{
+		spew_equipped_kill_count =<ignore>;
+		[equipment]
+		{
+			es_weapon_hand=st_un_dsx_angk_guardian;
+		}
+		[pcontent]
+		{
+			il_main = 2w_st_un_dsx_angk;
+			// Let's JUST have him drop his staff, the rune caster can drop some cool loot as well
+		}
+	}
+	[generator_in_object]
+	{
+		child_template_name = dsx_rune_guardian_skull;
+		spawn_event = WE_EXPLODED;
+		spawn_chance = 1.0;
+	}
+	[mind]
+	{
+		jat_startup = world\ai\jobs\common\job_startup_reveal.skrit
+			?invisible=true
+			&activate=true;
+
+		jat_die					= world\ai\jobs\actors\evil\job_die_explode.skrit;
+
+		actor_auto_switches_to_melee		 = true;
+		melee_engage_range	= 9;	// JCD 8/20/03 - lowering this so that he won't run ahead of his friendlies
+	}
+	[physics]
+	{
+		gib_gore_good = true;
+		break_effect = rune_guardian_explode;
+	}
+}
+
+[t:template,n:2W_dsx_rune_guardian_boss]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_rune_guardian_boss";
+	specializes = 2W_dsx_rune_guardian_boss_base;
+}
+
+[t:template,n:2W_dsx_rune_guardian_boss_mp]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_rune_guardian_boss";
+	specializes = 2W_dsx_rune_guardian_boss_base;
+	
+	// only difference is he doesn't reveal
+	[mind]
+	{
+		jat_startup = jat_none;
+	}
+}
+
+
+[t:template,n:2W_dsx_rune_guardian_skull]
+{
+	category_name = "2W_special";
+	doc = "[don't place] dsx_rune_guardian_skull";
+	specializes = non_interactive;
+	[aspect]
+	{
+		model = m_c_ecm_rg_skl;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			[chore_default]
+			{
+				skrit = select_transition;
+				[anim_files] { 00=a_c_ecm_rg_fs5_skl; }
+			}
+		}
+	}
+}

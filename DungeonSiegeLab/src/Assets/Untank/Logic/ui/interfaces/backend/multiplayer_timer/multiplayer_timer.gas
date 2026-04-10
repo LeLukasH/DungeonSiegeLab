@@ -1,0 +1,53 @@
+[multiplayer_timer]
+{
+	intended_resolution_height = 600;
+	intended_resolution_width = 800;
+	interface = true;
+	[t:text,n:text_game_timer]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 10;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 520,125,637,138;
+		text = "00:00:00";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		is_right_anchor = true;
+		right_anchor = 120;
+
+	}
+	[t:text,n:text_time_remaining_elapsed]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 9;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 520,112,635,125;
+		text = "Time Remaining:";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		is_right_anchor = true;
+		right_anchor = 120;
+	}
+	[t:dialog_box,n:timer_bg]
+	{
+	  f alpha = 1.000000;		
+	  b common_control = true;
+		common_template = cpbox;
+	  x draw_order = 0;
+		is_right_anchor = true;
+		right_anchor = 122;
+		rect = 518,110,639,141;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;		
+	}	
+}

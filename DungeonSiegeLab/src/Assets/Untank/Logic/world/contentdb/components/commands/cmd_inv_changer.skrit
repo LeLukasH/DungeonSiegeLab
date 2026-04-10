@@ -1,0 +1,156 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_inv_changer.skrit
+// Author(s):  Uncle Ernsie, Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        	= true;
+property string _doc$                	= "Special case command to manipulate a specific object in the players inventory.";
+property string _required_component$ 	= "placement";
+
+// exported properties
+property	scid		Object_Scid$               					doc = "Scid of target object.";
+property    bool        Go_Within_Sphere$   = false                 doc = "Set this to true if using Template_Name vs. Object Scid.";
+property    string      Template_Name$      = ""					doc = "Specify the template name of the target object.";
+property	eWorldEvent	Msg_Type$			= WE_REQ_ACTIVATE		doc = "Message to send to another object on target object deletion.";
+property    scid        Msg_Scid$                                   doc = "Scid of object to send message to on deletion.";
+property    string      Job1$               = "delete"              doc = "Valid Jobs: drop, equip, delete.  These names are case sensitive.";
+																	//I am using this string to restrict this commands jat usage.
+            goid catalyst$;
+			goid target_object$;
+			eJobAbstractType job$;
+            eEquipSlot       slot$          = ES_WEAPON_HAND;
+
+owner = GoSkritComponent;
+
+Startup State Waiting$
+{
+    event OnEnterState$
+    {
+		//report.generic("Entered StartUpState.\n");
+
+		//Perform which job?
+        if (( job1$ ~= "delete" ) || ( job1$ ~= "drop" ))
+		{
+			job$ = JAT_DROP;
+		}
+        else if (job1$ ~= "equip")
+		{
+			job$ = JAT_EQUIP;
+		}
+        //If the strings are not valid, ditch out.
+        else
+        {
+            SetState Done$;
+		}
+	}
+
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+    	if( e$ == Msg_Type$)
+		{
+			//Make data1 equal target_object and check to see if catalyst has template
+			catalyst$ = MakeGoid( msg$.GetData1() );
+
+			if (catalyst$.go == NULL)
+            {
+                SetState Done$;
+                Return;
+			}
+            else
+            {
+				catalyst$.Go.Mind.ResetSensors();
+			}
+			if (Go_Within_Sphere$)
+            {
+				//report.generic("Inv_Changer Activated.\n");
+
+				if (catalyst$.Go.Inventory.LocationContainsTemplate( IL_ALL, Template_Name$ ))
+        		{
+					//report.generic("trying to find template goid\n");
+
+					go t_go$;
+    				t_go$ = catalyst$.go.Inventory.GetItemFromTemplate( Template_Name$ );
+
+					if( t_go$ != NULL )
+                    {
+						target_object$ = t_go$.getgoid;
+
+						//report.genericf("Found template goid for %s\n",target_object$.go.templatename);
+
+						SetState DoJob$;
+					}
+                    else
+                    {
+                        report.generic("Inventory Changer Couldn't Find Templates Goid\n");
+                    }
+				}
+            }
+    		else if ( Object_Scid$.go != NULL )
+        	{
+				if ( catalyst$.Go.Inventory.Contains( Object_Scid$.go ) )
+				{
+					//otherwise use object_scid for target_object
+					target_object$ = Object_Scid$.Goid;
+                	SetState DoJob$;
+					//report.genericf("Found scid for %s\n",target_object$.go.templatename);
+                }
+			}
+            else
+            {
+                SetState Done$;
+
+				report.genericf("Inventory Changer Has No Valid State/Template Defined in Instance\n");
+			}
+		}
+    }
+}
+
+state DoJob$
+{
+	event OnEnterState$
+	{
+		//Pack the jobs into Req$
+		JobReq req$;
+		req$ = MakeJobReq( job$, JQ_ACTION, QP_FRONT, AO_COMMAND, target_object$ );
+		req$.Slot = slot$;
+
+	    //report.generic("jobs packed\n");
+
+		 //If deleting make invis first
+		if (job1$ ~= "delete")
+		{
+			target_object$.Go.Aspect.SSetIsVisible (false);
+		    //report.generic("making go invis\n");
+		}
+
+		//Ask Actor to Perform Job
+		target_object$.Go.Parent.Mind.SDoJob( req$ );
+		//report.generic("performing job\n");
+
+		//Delete if valid
+		if (job1$ ~= "delete")
+		{
+			PostWorldMessage( WE_REQ_DELETE, owner.Goid, target_object$, .1 );
+			//report.generic("deleting object\n");
+		}
+		if ( Msg_Scid$.IsValid() )
+		{
+			SSendWorldMessage( Msg_Type$, owner.Goid, Msg_Scid$ );
+		   	//report.generic("sending message to external object\n");
+		}
+	}
+}
+
+state Done${}
+
+///////////////////////////////////////////////////////////////////////////////

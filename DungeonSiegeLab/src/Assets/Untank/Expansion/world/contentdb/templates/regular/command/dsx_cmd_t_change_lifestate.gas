@@ -1,0 +1,16 @@
+[t:template,n:cmd_t_change_lifestate]
+{
+	specializes = cmd_const;
+	doc = "cmd_t_change_lifestate";
+	extra_doc = "Use this command to change the lifestate of a character.";
+	category_name = "target";
+
+	[gizmo]
+	{
+		texture = ;
+		diffuse_color = 1.0, 0.1, 0.85;
+		use_diffuse_color = true;
+	}
+
+	[cmd_t_change_lifestate] {}
+}

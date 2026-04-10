@@ -1,0 +1,7 @@
+[t:tsd,n:b_gui_cmn_listreport_selection]
+{
+  b dither = true;
+  b hasalpha = true;
+	layer1texture1 = b_gui_cmn_listreport_selection;
+  i texturedetail = 0;
+}

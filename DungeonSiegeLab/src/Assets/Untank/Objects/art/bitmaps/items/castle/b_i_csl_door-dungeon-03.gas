@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_csl_door-dungeon-03]
+{
+	layer1texture1 = b_i_csl_door-dungeon-03;
+  i texturedetail = 1;
+}

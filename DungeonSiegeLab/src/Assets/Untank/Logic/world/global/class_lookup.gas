@@ -1,0 +1,2395 @@
+[class_lookup]
+{
+	// Defaults are all zeros.  Fill in the skill ranges as needed
+	
+	/////////////////////////////////////////////////////////
+	//  Tier 0
+
+	// All tier 0 class are set on the template level.  You
+	// must have greater than 0 in a skill in order to attain
+	// one of the listed class rankings.
+
+	/////////////////////////////////////////////////////////
+	//  Tier 1
+
+	[class_designation*]
+	{
+		screen_name = "Squire";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 1;
+			max_range = 4;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Bowyer";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 1;
+			max_range = 4;
+		}				
+	}
+	
+	[class_designation*]
+	{
+		screen_name = "Apprentice";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 1;
+			max_range = 4;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Savant";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 1;
+			max_range = 4;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Man-At-Arms";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 1;
+			max_range = 4;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Woman-At-Arms";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 1;
+			max_range = 4;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Friar";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 1;
+			max_range = 4;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Combatant";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 1;
+			max_range = 4;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Scout";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 1;
+			max_range = 4;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Jager";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 1;
+			max_range = 4;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Acolyte";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 1;
+			max_range = 4;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Cavalier";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 1;
+			max_range = 4;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Mercenary";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 1;
+			max_range = 4;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Initiate";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 1;
+			max_range = 4;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Adept";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 1;
+			max_range = 4;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Freelance";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 1;
+			max_range = 4;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 1;
+			max_range = 4;
+		}		
+	}
+
+	/////////////////////////////////////////////////////////
+	//  Tier 2
+
+	[class_designation*]
+	{
+		screen_name = "Soldier";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 5;
+			max_range = 10;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Archer";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 5;
+			max_range = 10;
+		}				
+	}
+	
+	[class_designation*]
+	{
+		screen_name = "Theurgist";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 5;
+			max_range = 10;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Hedge Wizard";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 5;
+			max_range = 10;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Skirmisher";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 5;
+			max_range = 10;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Curate";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 5;
+			max_range = 10;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Duelist";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 5;
+			max_range = 10;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Forester";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 5;
+			max_range = 10;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Conjurer";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 5;
+			max_range = 10;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Shaman";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 5;
+			max_range = 10;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Marshal";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 5;
+			max_range = 10;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Gladiator";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 5;
+			max_range = 10;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Mystik";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 5;
+			max_range = 10;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Oracle";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 5;
+			max_range = 10;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Journeyman";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 5;
+			max_range = 10;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 5;
+			max_range = 10;
+		}		
+	}
+
+	/////////////////////////////////////////////////////////
+	//  Tier 3
+
+	[class_designation*]
+	{
+		screen_name = "Warrior";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 11;
+			max_range = 19;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Marksman";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 11;
+			max_range = 19;
+		}				
+	}
+	
+	[class_designation*]
+	{
+		screen_name = "Magician";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 11;
+			max_range = 19;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Wizard";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 11;
+			max_range = 19;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Raider";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 11;
+			max_range = 19;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Druid";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 11;
+			max_range = 19;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Dragoon";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 11;
+			max_range = 19;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Ranger";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 11;
+			max_range = 19;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Channeler";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 11;
+			max_range = 19;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Scholar";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 11;
+			max_range = 19;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Paladin";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 11;
+			max_range = 19;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Centurion";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 11;
+			max_range = 19;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Sage";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 11;
+			max_range = 19;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Thaumaturgist";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 11;
+			max_range = 19;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Adventurer";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 11;
+			max_range = 19;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 11;
+			max_range = 19;
+		}		
+	}
+
+	/////////////////////////////////////////////////////////
+	//  Tier 4
+
+	[class_designation*]
+	{
+		screen_name = "Knight";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 20;
+			max_range = 49;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Sharpshooter";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 20;
+			max_range = 49;
+		}				
+	}
+	
+	[class_designation*]
+	{
+		screen_name = "Grand Mage";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 20;
+			max_range = 49;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Sorcerer";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 20;
+			max_range = 49;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Sorceress";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 20;
+			max_range = 49;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Campaigner";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 20;
+			max_range = 49;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Preserver";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 20;
+			max_range = 49;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Warlock";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 20;
+			max_range = 49;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Warwitch";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 20;
+			max_range = 49;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Warder";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 20;
+			max_range = 49;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Wardess";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 20;
+			max_range = 49;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Matross";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 20;
+			max_range = 49;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Magus";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 20;
+			max_range = 49;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Templar";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 20;
+			max_range = 49;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Myrmidon";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 20;
+			max_range = 49;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Deacon";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 20;
+			max_range = 49;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Deaconess";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 20;
+			max_range = 49;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Evoker";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 20;
+			max_range = 49;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Master";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 20;
+			max_range = 49;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 20;
+			max_range = 49;
+		}		
+	}
+
+	/////////////////////////////////////////////////////////
+	//  Tier 5
+
+	[class_designation*]
+	{
+		screen_name = "Champion";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 50;
+			max_range = 99;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Master Sharpshooter";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 50;
+			max_range = 99;
+		}				
+	}
+	
+	[class_designation*]
+	{
+		screen_name = "Arch Mage";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 50;
+			max_range = 99;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand Sorcerer";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 50;
+			max_range = 99;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand Sorceress";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 50;
+			max_range = 99;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Crusader";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 50;
+			max_range = 99;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand Preserver";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 50;
+			max_range = 99;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand Warlock";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 50;
+			max_range = 99;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand Warwitch";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 50;
+			max_range = 99;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Arch Ward";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 50;
+			max_range = 99;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Arch Wardess";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 50;
+			max_range = 99;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Master Matross";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 50;
+			max_range = 99;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand Magus";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 50;
+			max_range = 99;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Arch Templar";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 50;
+			max_range = 99;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Warlord";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 50;
+			max_range = 99;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Warlady";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 50;
+			max_range = 99;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand Deacon";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 50;
+			max_range = 99;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand Deaconess";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 50;
+			max_range = 99;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Senior Evoker";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 50;
+			max_range = 99;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand Master";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 50;
+			max_range = 99;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 50;
+			max_range = 99;
+		}		
+	}
+
+	/////////////////////////////////////////////////////////
+	//  Tier 6
+
+	[class_designation*]
+	{
+		screen_name = "Grand Champion";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 100;
+			max_range = 500;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grandmaster Sharpshooter";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 100;
+			max_range = 500;
+		}				
+	}
+	
+	[class_designation*]
+	{
+		screen_name = "Supreme Arch Mage";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 100;
+			max_range = 500;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand High Sorcerer";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand High Sorceress";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand Crusader";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 100;
+			max_range = 500;
+		}	
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Supreme Preserver";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 100;
+			max_range = 500;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand High Warlock";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand High Warwitch";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Supreme Arch Ward";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 100;
+			max_range = 500;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Supreme Arch Wardess";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 100;
+			max_range = 500;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grandmaster Matross";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand High Magus";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Supreme Templar";
+		is_female = true;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 100;
+			max_range = 500;
+		}
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Warlord Noble";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Warlady Noble";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand High Deacon";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand High Deaconess";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Lord Evoker";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Lady Evoker";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand High Siegemaster";
+		is_female = false;
+		is_male = true;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+
+	[class_designation*]
+	{
+		screen_name = "Grand High Siegemistress";
+		is_female = true;
+		is_male = false;
+
+		[skill*]
+		{			
+			name = "melee";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "ranged";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "nature magic";
+			min_range = 100;
+			max_range = 500;
+		}
+
+		[skill*]
+		{
+			name = "combat magic";
+			min_range = 100;
+			max_range = 500;
+		}		
+	}
+}

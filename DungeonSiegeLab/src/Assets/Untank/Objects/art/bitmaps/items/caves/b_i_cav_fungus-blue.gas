@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_cav_fungus-blue]
+{
+	layer1texture1 = b_i_cav_fungus-blue;
+  i texturedetail = 1;
+}

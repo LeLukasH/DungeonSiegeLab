@@ -1,0 +1,41 @@
+[paperdoll_positions]
+{
+	[t:res_pos,n:resolution_1]
+	{
+		width = 640;
+		height = 480;
+		x = -0.469;
+		y = -0.7;	
+		distance = 6.3;
+		store_offset = 0.1;
+
+		x_dockbar_offset = 0;
+		y_dockbar_offset = -0.15;
+	}
+
+	[t:res_pos,n:resolution_2]
+	{
+		width = 800;
+		height = 600;
+		x = -0.575;
+		y = -0.397;
+		distance = 7.1;
+		store_offset = 0.1;
+
+		x_dockbar_offset = 0;
+		y_dockbar_offset = -0.10;
+	}
+
+	[t:res_pos,n:resolution_3]
+	{
+		width = 1024;
+		height = 768;
+		x = -0.72;
+		y = -0.089;
+		distance = 9;
+		store_offset = 0.1;
+
+		x_dockbar_offset = 0;
+		y_dockbar_offset = -0.07;
+	}	
+}

@@ -1,0 +1,173 @@
+[t:template,n:2W_dsx_rock_beast]
+//balanced to Level 17
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_rock_beast";
+	specializes = base_rock_beast;
+	[actor]
+	{
+		[skills]
+		{
+			strength 		= 35.4,0;
+			intelligence 	=  10.5,0;
+			dexterity 		= 18.7,0;
+            melee 			= 59,0;
+            nature_magic 	= 59,0;
+            combat_magic 	= 59,0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 72036;
+		life = 1203.2;
+		material = stone;
+		max_life = 1203.2;
+		mana = 27.9;
+		max_mana = 27.9;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 319.4;
+		damage_min = 238.7;
+		damage_bonus_min_cmagic = 169;
+		damage_bonus_max_cmagic = 244;
+	}
+	[common] 
+	{ 
+		screen_name="Rock Beast"; 
+		membership = monster;	
+	}
+	[defend] { defense=816.6; }
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=spell_rock_beast_blast_dsx; }
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 24, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 62780;
+					max = 124659;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/134-181;
+					il_main = #armor/59-436;
+					il_main = #*/134-181;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/142-195;
+					il_main = #armor/-rare(1)/329-617;
+					il_main = #*/-rare(1)/142-195;
+				}
+				
+			}
+		}
+	}
+}
+
+[t:template,n:2W_dsx_golem_cobbleman]
+//balanced to Level 17
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_golem_cobbleman";
+	specializes = base_rock_beast;
+	[actor]
+	{
+		[skills]
+		{
+			strength 		= 32.6, 0;
+			intelligence 	= 13.3, 0;
+			dexterity 		= 21.5, 0;
+			melee 			= 56, 0;
+			nature_magic	= 55, 0;
+			combat_magic 	= 55, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 58806;
+		life 			= 1576.9;
+		max_life 		= 1576.9;
+		mana 			= 362.5;
+		max_mana 		= 362.5;
+		textures:0 = b_c_edm_rb-05;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max 	= 474.5;
+		damage_min 	= 326.3;
+		reload_delay = 0;
+		damage_bonus_min_cmagic = 248;
+		damage_bonus_max_cmagic = 358;
+	}
+	[common] 
+	{ 
+		screen_name = "Cobble Man"; 
+		membership = monster;	
+	}
+	[defend] { defense = 1000.5; }
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=spell_rock_beast_blast_dsx; }
+			[pcontent]
+			{
+				/* Generated: Tue Jun 17 11:13:15 2003
+				Level 16, Strong */
+				[oneof*]
+				{
+					[gold*]
+					{
+						chance = 0.2;
+						min = 30206;
+						max = 60047;
+					}
+					[oneof*]
+					{
+						chance = 0.2;
+						il_main = potion_mana_large;
+						il_main = potion_health_large;
+					}
+					[oneof*]
+					{
+						chance = 0.2;
+						il_main = #weapon/126-165;
+						il_main = #armor/69-395;
+						il_main = #*/126-165;
+					}
+					[oneof*]
+					{
+						chance = 0.01;
+						il_main = #weapon/-rare(1)/165-193;
+						il_main = #armor/-rare(1)/257-566;
+						il_main = #*/-rare(1)/165-193;
+					}
+					[oneof*]
+					{
+						chance = 0.005;
+						il_main = #weapon/-unique(2)/165-193;
+						il_main = #armor/-unique(2)/257-566;
+						il_main = #*/-unique(2)/165-193;
+					}			
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,7 @@
+[dsx_credits_movie]
+{
+	[movie*]
+	{
+		movie_file = movies\dsx_credits.bik;
+	}
+}

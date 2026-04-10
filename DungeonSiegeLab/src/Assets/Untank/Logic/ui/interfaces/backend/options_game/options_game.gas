@@ -1,0 +1,994 @@
+[options_game]
+{
+	interface = true;
+	modal = true;
+	centered = background;
+//	intended_resolution_height = 480;
+//	intended_resolution_width = 640;
+
+	[t:dialog_box,n:background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_wide;
+		draw_order = 0;
+		rect = 105,22,535,390;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:options_bg]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 117,80,524,345;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:options_title]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 10;
+		font_color = -1;
+		font_size = 22;
+		font_type = b_gui_fnt_20p_copperplate-light;
+		justify = center;
+		rect = 200,38,440,52;
+		text = "Options Menu";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+
+	[t:tab,n:tab_video]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 1;
+		radio_group = options_menu_tabs;
+		rect = 118,67,218,83;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { oncheck=notify(show_options_video) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:tab_video_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = button_4;
+			draw_order = 5;
+			font_size = 14;
+			font_color = -1;
+			font_type = b_gui_fnt_12p_copperplate-light;			
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 128,65,218,80;
+			text = "Video";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:tab,n:tab_audio]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 4;
+		radio_group = options_menu_tabs;
+		rect = 219,67,321,83;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { oncheck=notify(show_options_audio) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:tab_audio_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = button_4;
+			draw_order = 6;			
+			font_size = 14;
+			font_color = -1;
+			font_type = b_gui_fnt_12p_copperplate-light;			
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 231,65,321,80;
+			text = "Audio";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:tab,n:tab_input]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 2;
+		radio_group = options_menu_tabs;
+		rect = 322,67,423,83;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages] { oncheck=notify(show_options_input) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:tab_input_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = button_4;
+			draw_order = 7;
+			font_size = 14;
+			font_color = -1;
+			font_type = b_gui_fnt_12p_copperplate-light;			
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 334,65,423,80;
+			text = "Input";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:tab,n:tab_game]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 3;
+		radio_group = options_menu_tabs;
+		rect = 424,64,524,80;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		enabled = false;
+		[messages] { oncheck=notify(show_options_game) & playsound(s_e_frontend_tiny_button); }
+		[t:text,n:tab_game_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 8;
+			font_size = 14;
+			font_color = -1;
+			font_type = b_gui_fnt_12p_copperplate-light;			
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 435,65,524,80;
+			text = "Game";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+
+	[t:button,n:button_ok]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 18;
+		rect = 200,358,310,374;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_ok_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 14;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 200,359,310,374;
+			text = "OK";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages] 
+		{ 
+			onbuttonpress=notify(set_options) & playsound(s_e_frontend_tiny_button); 
+			onenter=notify(set_options);
+		}
+	}
+	[t:button,n:button_cancel]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 18;
+		rect = 330,358,440,374;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_cancel_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 14;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 330,359,440,374;
+			text = "Cancel";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{ 
+			onbuttonpress = notify(cancel_options) & playsound(s_e_frontend_tiny_button);
+			onescape = notify(cancel_options);
+		}
+	}
+	[t:button,n:button_defaults]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 58;
+		rect = 361,318,501,334;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_defaults_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 14;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 406,319,516,334;
+			text = "Defaults";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages] { onbuttonpress=notify(default_options_game) & playsound(s_e_frontend_tiny_button); }
+	}
+
+	[t:text,n:text_framerate]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 70;
+		font_color = -1;
+		font_size = 14;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = right;
+		rect = 50,100,320,116;
+		text = "Display Onscreen Framerate";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_1;
+	}
+	[t:button,n:button_framerate]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 15;
+		rect = 340,100,490,116;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_framerate_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 14;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 392,131,490,146;
+			text = ;
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			group = options_game_1;
+		}
+		[messages] { onbuttonpress=notify(toggle_option_game_onscreenframerate) & playsound(s_e_frontend_tiny_button); }
+		group = options_game_1;
+	}
+	[t:text,n:text_priority_boost]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 72;
+		font_color = -1;
+		font_size = 14;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = right;
+		rect = 50,130,320,146;
+		text = "Raise App Priority";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_1;
+	}
+	[t:button,n:button_priority_boost]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 15;
+		rect = 340,130,490,146;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_priority_boost_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 392,161,490,176;
+			text = ;
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			group = options_game_1;
+		}
+		[messages] { onbuttonpress=notify(toggle_option_game_priority_boost) & playsound(s_e_frontend_tiny_button); }
+		group = options_game_1;
+	}
+	[t:text,n:text_textscroll]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 72;
+		font_color = -1;
+		font_size = 14;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = right;
+		rect = 50,160,320,176;
+		text = "Text Scroll Rate";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_1;
+	}
+	[t:text,n:text_textscroll_minus]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 78;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = right;
+		rect = 327,160,343,176;
+		text = "-";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_1;
+	}
+	[t:text,n:text_textscroll_plus]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 78;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = left;
+		rect = 487,160,503,176;
+		text = "+";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_1;
+	}
+	[t:slider,n:slider_textscroll]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = track;
+		draw_order = 15;
+		rect = 343,160,487,176;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		slide_axis = horizontal;
+		min_value = 0;
+		max_value = 100;
+		enabled = true;
+		group = options_game_1;
+		[messages] { onbuttonpress = playsound(s_e_IH_select_char); }
+	}
+	[t:text,n:text_maxtext]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 72;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = right;
+		rect = 50,190,320,206;
+		text = "Maximum Text Displayed";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_1;
+	}
+	[t:text,n:text_maxtext_minus]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 78;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = right;
+		rect = 327,190,343,206;
+		text = "-";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_1;
+	}
+	[t:text,n:text_maxtext_plus]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 78;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = left;
+		rect = 487,190,503,206;
+		text = "+";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_1;
+	}
+	[t:slider,n:slider_maxtext]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = track;
+		draw_order = 15;
+		rect = 343,190,487,206;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		slide_axis = horizontal;
+		min_value = 0;
+		max_value = 100;
+		enabled = true;
+		group = options_game_1;
+		show_popup_value = true;
+		popup_value_font = b_gui_fnt_12p_copperplate-light;
+		[messages]
+		{
+			onchange = notify(slider_change_maxtext);
+			onbuttonpress = playsound(s_e_IH_select_char);
+		}
+	}
+	[t:text,n:text_gamespeed]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 72;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = right;
+		rect = 50,220,320,236;
+		text = "Game Speed";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_1;
+	}
+	[t:text,n:text_gamespeed_minus]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 78;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = right;
+		rect = 327,220,343,236;
+		text = "-";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_1;
+	}
+	[t:text,n:text_gamespeed_plus]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 78;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = left;
+		rect = 487,220,503,236;
+		text = "+";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_1;
+	}
+	[t:slider,n:slider_gamespeed]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = track;
+		draw_order = 15;
+		rect = 343,220,487,236;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		slide_axis = horizontal;
+		min_value = 0;
+		max_value = 100;
+		step_value = 10;
+		show_popup_value = true;
+		popup_value_font = b_gui_fnt_12p_copperplate-light;
+		[messages]
+		{
+			onchange = notify(slider_change_gamespeed);
+			onbuttonpress = playsound(s_e_IH_select_char);
+		}
+		group = options_game_1;
+	}
+
+	[t:text,n:text_tutorial_tips]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 72;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;		
+		justify = right;
+		rect = 50,250,320,266;
+		text = "Tutorial Tips";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_1;
+	}
+	[t:button,n:button_tutorial_tips]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 15;
+		rect = 340,250,490,266;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_tutorial_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 14;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 392,131,490,146;
+			text = ;
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			group = options_game_1;
+		}
+		[messages] { onbuttonpress=notify(toggle_option_game_tutorialtips) & playsound(s_e_frontend_tiny_button); }
+		group = options_game_1;
+	}
+
+	[t:text,n:text_difficulty]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 72;
+		font_color = -1;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;		
+		justify = right;
+		rect = 50,280,320,296;
+		text = "Game Difficulty";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_1;
+	}
+	[t:button,n:button_difficulty]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 15;
+		rect = 340,280,490,296;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	  x disable_color = 0x55ffffff;
+		[t:text,n:button_difficulty_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 14;
+			font_type = b_gui_fnt_12p_copperplate-light;			
+			justify = center;
+			rect = 392,131,490,146;
+			text = ;
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			group = options_game_1;
+		}
+		[messages] { onbuttonpress=notify(toggle_option_game_difficulty) & playsound(s_e_frontend_tiny_button); }
+		group = options_game_1;
+	}
+
+	[t:button,n:button_more]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 15;
+		rect = 140,318,280,334;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_more_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 140,319,250,334;
+			text = "More";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			group = options_game_more;
+		}
+		[messages] { onbuttonpress=notify(options_game_more) & playsound(s_e_frontend_tiny_button); }		
+		group = options_game_more;
+	}
+	[t:button,n:button_back]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 15;
+		rect = 140,318,280,334;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_back_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 140,319,250,334;
+			text = "Back";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;			
+			group = options_game_back;
+		}
+		[messages] { onbuttonpress=notify(options_game_back) & playsound(s_e_frontend_tiny_button); }
+		group = options_game_back;
+	}
+
+	[t:text,n:text_showtooltips]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 72;
+		font_color = -1;
+		font_size = 14;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = right;
+		rect = 50,100,320,116;
+		text = "Show Rollover Help";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_2;
+	}
+	[t:button,n:button_showtooltips]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 15;
+		rect = 340,100,490,116;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_showtooltips_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 392,131,490,146;
+			text = ;
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			group = options_game_2;
+		}
+		[messages] { onbuttonpress=notify(toggle_option_game_showtooltips) & playsound(s_e_frontend_tiny_button); }
+		group = options_game_2;
+	}
+
+	[t:text,n:text_blood_color]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 70;
+		font_color = -1;
+		font_size = 14;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = right;		
+		rect = 50,130,320,146;
+		text = "Blood Color";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_redblood;
+	}
+	[t:button,n:button_blood_color]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 15;		
+		rect = 340,130,490,146;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_blood_color_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 14;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;			
+			rect = 392,131,490,146;
+			text = ;
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			group = options_game_redblood;
+		}
+		[messages] { onbuttonpress=notify(toggle_option_game_bloodcolor) & playsound(s_e_frontend_tiny_button); }
+		group = options_game_redblood;
+	}
+
+// $ dismemberment disable for esrb
+
+	[t:text,n:text_dismemberment]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 70;
+		font_color = -1;
+		font_size = 14;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+		justify = right;
+		rect = 150,160,320,176;
+		text = "Dismemberment";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_dismember;
+	}
+	[t:button,n:button_dismemberment]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 15;
+		rect = 340,160,490,176;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_dismemberment_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 14;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			//font_1024x768 = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 392,161,490,176;
+			text = ;
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			group = options_game_dismember;
+		}
+		[messages] { onbuttonpress=notify(toggle_option_game_dismemberment) & playsound(s_e_frontend_tiny_button); }
+		group = options_game_dismember;
+	}
+
+	///////////////////////////////////////////////////////////////
+	//
+	//		Disable messages from people in ZM
+	//
+	//
+	[t:text,n:text_zmmessage]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		draw_order = 70;
+		font_color = 0xffffffff;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		rect = 150,182,250,214;
+		text = "Receive ZoneMatch messages from:";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		group = options_game_zmmessage;
+		wrap_mode = clamp;
+		justify = center;
+		
+	}
+	[t:button,n:button_zmmessage]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 15;
+		rect = 340,190,474,206;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = options_game_zmmessage;
+		[t:text,n:button_screen_zmmessage_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 14;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 392,191,490,206;
+			text = ;
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			group = options_game_zmmessage;
+		}
+
+		[messages]
+		{
+			onlbuttondown = playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:combo_box,n:combo_zmmessage]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 200;
+		rect = 360,191,474,206;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 4;
+		group = options_game_zmmessage;
+		[t:button,n:button_combo_show_zmmessage]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 32;
+			rect = 474,190,490,206;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			group = options_game_zmmessage;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_zmmessage]
+		{
+			alpha = 0.2500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 600;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			rect = 340,207,490,310;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.75;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+			}
+		}
+	}
+
+
+
+
+
+}

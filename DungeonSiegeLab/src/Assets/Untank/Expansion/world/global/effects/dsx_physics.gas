@@ -1,0 +1,102 @@
+//
+//	Physics related effect scripts
+//
+//	Effect scripts for reacting to getting burned, breaking apart,
+//	any kind of fire, dust or explosion.
+//
+
+[effect_script*]
+{
+	name	=dsx_gear_door;
+
+	script	=[[
+	 		camerashake camera_stomp s<frequency=1&magnitude_x=0.0&magnitude_y=.05&magnitude_z=0.0&duration=.1&epicenter=#TARGET_GOID>;
+
+			sfx create steam #TARGET
+				"ts(2)dur(1)count(15)scale(4)wispsize(.8)color0(.12,.12,.055)
+				velocity(0,0,0)accel(0,0,0)";
+			sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=DSX_mindflare_projectile;
+
+	script	=[[
+            sfx create fire #TARGET
+                "dur(4)";
+            sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=DSX_grenade_napalm;
+
+	script	=[[
+	
+			sound play s_e_spell_fireball_cast at #SOURCE_POSITION dist 10 40;
+	
+			sfx create orbiter #TARGET
+				"radius(0)color0(.8,.2,.2)texture(b_sfx_napalm)scale(.3)";
+			sfx start #POP;
+
+			sfx create orbiter #TARGET
+				"radius(0)color0(.6,.3,.3)texture(b_sfx_napalm)scale(.3)offset(0,.01,0)";
+			sfx start #POP;
+
+            sfx create fire #TARGET
+                "color0(.3,.2,.1)flamesize(.75)velocity(0,0,0)accel(0,0,0)max_radius(2)
+				alphafade(3)count(30)";
+            sfx start #POP;
+
+            sfx create fire #TARGET
+                "color0(.3,.2,.1)flamesize(.75)velocity(0,0,0)accel(0,0,0)max_radius(1)
+				alphafade(3)count(30)texture(b_sfx_fireball-02)";
+            sfx start #POP;
+
+			sfx create explosion #TARGET
+				"color0(.4,.3,.1)texture(b_sfx_sparkle01)srate(.001)omni_dir()
+				fade_range(7,7,0)radius(0)count(64)";
+			sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=DSX_grenade_napalm_explosion;
+
+	script	=[[
+
+	sound play s_e_spell_firespray_hit at #TARGET_POSITION dist 10 40;
+	
+            sfx create explosion #TARGET
+                "color0(.6,.3,.3)omni_dir()vmin(3)vmax(5)texture(b_sfx_napalm)
+				color2(.7,.5,.3)splat()splat_life(1)stexture(b_sfx_napalm_splat)
+				scale_range(.1,.2,0)";
+			set $explosionGoo #PEEK;
+            sfx start #POP;
+
+			sfx create explosion #TARGET
+                "color0(.9,.7,.5)omni_dir()vmin(3)vmax(5)";
+			set $explosionGeneric #PEEK;
+            sfx start #POP;
+
+			sfx create explosion #TARGET
+				"color0(.8,.3,.1)texture(b_sfx_sparkle01)omni_dir()
+				radius(0)count(16)vmin(6)vmax(8)";
+			set $explosionSparkle #PEEK;
+			sfx start #POP;
+
+			// MRC 7/22/2003 Bug 2041 I examined the grenade launcher from the first game,
+			// and the explosion effect for that weapon destroyed its effects.  I'm doing
+			// the same here to make sure they don't stay around too long.
+			pause 4;
+
+			sfx destroy $explosionGoo;
+			sfx destroy $explosionGeneric;
+			sfx destroy $explosionSparkle;
+
+			]];
+}

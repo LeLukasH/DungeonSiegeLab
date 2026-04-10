@@ -1,0 +1,11 @@
+[player_colors]
+{
+	0 = 0xFFFF0000;
+	1 = 0xFF91FFF6;
+	2 = 0xFF102376;
+	3 = 0xFFFFFF00;
+	4 = 0xFF00FF00;
+	5 = 0xFFFF00FF;
+	6 = 0xFF808080;
+	7 = 0xFF0041FA;
+}

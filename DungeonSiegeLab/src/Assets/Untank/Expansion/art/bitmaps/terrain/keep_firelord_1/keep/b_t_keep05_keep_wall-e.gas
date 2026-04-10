@@ -1,0 +1,5 @@
+[t:tsd,n:b_t_keep05_keep_wall-e]
+{
+	layer1texture1 = b_t_keep05_keep_wall-e;
+  i texturedetail = 2;
+}

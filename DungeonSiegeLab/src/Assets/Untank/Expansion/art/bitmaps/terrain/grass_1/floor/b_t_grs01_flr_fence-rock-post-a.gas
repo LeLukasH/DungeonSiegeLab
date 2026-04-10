@@ -1,0 +1,5 @@
+[t:tsd,n:b_t_grs01_flr_fence-rock-post-a]
+{
+	layer1texture1 = b_t_grs01_flr_fence-rock-post-a;
+  i texturedetail = 2;
+}

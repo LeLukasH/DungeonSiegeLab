@@ -1,0 +1,110 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  profile.skrit (Skritbot)
+// Author(s):  Scott Bilas
+//
+// Summary  :  Contains automation for profiling via Quantify.
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property string type$			= "load"	doc = "Profile type to run";
+property int    sample_frames$	= 100		doc = "Frames to sample";
+property int    delay_frames$	= 0			doc = "Frames to delay before sampling";
+property bool   exit_on_done$	= true		doc = "Exit game when done sampling?";
+
+//////////////////////////////////////////////////////////////////////////////
+// Chooser
+
+startup state Chooser$
+{
+	trigger OnEnterState$
+	{
+		if ( type$ ~= "load" )
+		{
+			setstate Load$;
+		}
+		else if ( type$ ~= "immediate" )
+		{
+			setstate Immediate$;
+		}
+		else if ( type$ ~= "savegame" )
+		{
+			setstate SaveGame$;
+		}
+		else
+		{
+			report.ErrorBoxF( "Unknown profile type '%s'\n", type$ );
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Load
+
+state Load$ trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+{
+	if ( WorldState.CurrentState == WS_SP_INGAME )
+	{
+		QuantifyApi.SnapshotProfileData;
+		setstate Idle$;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Immediate
+
+state Immediate$
+{
+	trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+	{
+		if ( WorldState.CurrentState == WS_SP_INGAME )
+		{
+			this.CreateFrameTimer( 0, delay_frames$ );
+		}
+	}
+
+	trigger OnTimer$( 0 )
+	{
+		QuantifyApi.BeginProfile( sample_frames$, true );
+		this.CreateFrameTimer( 1, sample_frames$ + 5 );
+	}
+
+	trigger OnTimer$( 1 )
+	{
+		setstate Idle$;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// SaveGame
+
+state SaveGame$ trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+{
+	if ( WorldState.CurrentState == WS_SP_INGAME )
+	{
+		QuantifyApi.BeginProfile( 1, true );
+		Game.AutoSaveGameNow();
+		QuantifyApi.StopProfile();
+		setstate Idle$;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Idle
+
+state Idle$
+{
+	CheckExit$ at ( 10 frames )
+	{
+		if ( exit_on_done$ )
+		{
+			GpConsole.Execute( "exit" );
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////

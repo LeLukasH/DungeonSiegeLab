@@ -1,0 +1,9 @@
+[t:sed,n:s_e_call_bear_SED]
+{
+	sound_effect_file = "s_e_call_bear";
+	max_simultaneous_samples = 2;
+	min_playback_rate = 0.85;
+	max_playback_rate = 1.15;
+	min_override_dist = 5.0;
+	max_override_dist = 14.0;
+}

@@ -1,0 +1,383 @@
+[t:template,n:base_sign_directional]
+{
+	category_name = "sign";
+	doc = "base template for directional signs";
+	specializes = interactive;
+	[aspect]
+	{
+		draw_selection_indicator = false;
+		is_selectable = true;
+		lodfi_lower = 0;
+		lodfi_upper = 0;
+		megamap_icon = b_gui_ig_mnu_arrow;
+		megamap_orient = true;
+		megamap_override = true;
+	}
+	[common]
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+		rollover_display = true;
+	}
+}
+[t:template,n:path_marker]
+{
+	doc = "directional path marker";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		force_no_render = true;
+		model = m_i_glb_emitter;
+	}
+	[common]
+	{
+		rollover_display = false;
+	}
+	[gizmo]
+	{
+		diffuse_color = 1.0, 0, 0;
+		model = m_i_glb_object-waypoint;
+		use_diffuse_color = true;
+	}
+}
+[t:template,n:sign_cav_glitterdelve]
+{
+	doc = "directional_glitterdelve";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_cav_sign-glitterdelve;
+	}
+	[common]
+	{
+		screen_name = "Glitterdelve";
+	}
+}
+[t:template,n:sign_cav_glitterdelve_02]
+{
+	doc = "directional_glitterdelve_left";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_cav_sign-glitterdelve-02;
+	}
+	[common]
+	{
+		screen_name = "Glitterdelve";
+	}
+}
+[t:template,n:sign_csl_castle_ehb]
+{
+	doc = "directional_castle ehb";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_csl_sign-castle-ehb;
+	}
+	[common]
+	{
+		screen_name = "Castle Ehb";
+	}
+}
+[t:template,n:sign_csl_castle_ehb_02]
+{
+	doc = "directional_castle_ehb_left";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_csl_sign-castle-ehb-02;
+	}
+	[common]
+	{
+		screen_name = "Castle Ehb";
+	}
+}
+[t:template,n:sign_des_dragon]
+{
+	doc = "directional_dragons rathe";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_des_sign-dragon;
+	}
+	[common]
+	{
+		screen_name = "Dragon"s Rathe";
+	}
+}
+[t:template,n:sign_des_dragon_02]
+{
+	doc = "directional_dragons rath_left";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_des_sign-dragon-02;
+	}
+	[common]
+	{
+		screen_name = "Dragon"s Rathe";
+	}
+}
+[t:template,n:sign_glb_01]
+{
+	doc = "sign_direction plate";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_glb_sign-01;
+		rollover_highlight = true;
+	}
+	[common]
+	{
+		screen_name = "sign";
+	}
+}
+[t:template,n:sign_glb_fortress_kroth]
+{
+	doc = "directional_fortress kroth";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_glb_sign-fortress-kroth;
+	}
+	[common]
+	{
+		screen_name = "Fortress Kroth";
+	}
+}
+[t:template,n:sign_glb_fortress_kroth_02]
+{
+	doc = "directional fortress kroth_left";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_glb_sign-fortress-kroth-02;
+	}
+	[common]
+	{
+		screen_name = "Fortress Kroth";
+	}
+}
+[t:template,n:sign_grs_crypts_01]
+{
+	doc = "directional_crypts_right";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_grs_sign-town;
+		[textures]
+		{
+			0 = b_i_grs_sign-crypts;
+		}
+	}
+	[common]
+	{
+		screen_name = "Crypts";
+	}
+}
+[t:template,n:sign_grs_crypts_02]
+{
+	doc = "directional_crypts_left";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_grs_sign-town-02;
+		[textures]
+		{
+			0 = b_i_grs_sign-crypts-02;
+		}
+	}
+	[common]
+	{
+		screen_name = "Crypts";
+	}
+}
+[t:template,n:sign_grs_crypts_03]
+{
+	doc = "crypts_stone";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_grs_sign-crypts;
+		does_block_path = true;
+		[textures]
+		{
+			0 = b_i_grs_sign-crypts-03;
+		}
+	}
+	[common]
+	{
+		screen_name = "Crypt of the Sacred Blood";
+	}
+}
+[t:template,n:sign_grs_town]
+{
+	doc = "directional_stonebridge";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_grs_sign-town;
+	}
+	[common]
+	{
+		screen_name = "Stonebridge";
+	}
+}
+[t:template,n:sign_grs_town_02]
+{
+	doc = "directional_stonebridge_left";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_grs_sign-town-02;
+	}
+	[common]
+	{
+		screen_name = "Stonebridge";
+	}
+}
+[t:template,n:sign_ice_glacern]
+{
+	doc = "directional_glacern";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_ice_sign-glacern;
+	}
+	[common]
+	{
+		screen_name = "Glacern";
+	}
+}
+[t:template,n:sign_ice_glacern_02]
+{
+	doc = "directional_glacern_left";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_ice_sign-glacern-02;
+	}
+	[common]
+	{
+		screen_name = "Glacern";
+	}
+}
+[t:template,n:sign_swp_potions]
+{
+	doc = "sign_potions";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_swp_sign-potions;
+	}
+	[common]
+	{
+		screen_name = "Potions";
+	}
+}
+[t:template,n:sign_glb_magic_right]
+{
+	doc = "sign_magic_rt";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_glb_sign-magic-shop-01;
+	}
+	[common]
+	{
+		screen_name = "Magic Shop";
+	}
+}
+[t:template,n:sign_glb_magic_left]
+{
+	doc = "sign_magic_left";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_glb_sign-magic-shop-02;
+	}
+	[common]
+	{
+		screen_name = "Magic Shop";
+	}
+}
+[t:template,n:sign_glb_blacksmith_left]
+{
+	doc = "sign_blacksmith_left";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_glb_sign-blacksmith-01;
+	}
+	[common]
+	{
+		screen_name = "Blacksmith";
+	}
+}
+[t:template,n:sign_glb_blacksmith_right]
+{
+	doc = "sign_blacksmith_rt";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_glb_sign-blacksmith-02;
+	}
+	[common]
+	{
+		screen_name = "Blacksmith";
+	}
+}
+[t:template,n:sign_ice_01]
+{
+	doc = "direction plate_ice";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_glb_sign-01;
+		textures:0 = b_i_ice_sign-01;
+	}
+	[common]
+	{
+		screen_name = "Sign";
+	}
+}
+[t:template,n:sign_swp_01]
+{
+	doc = "direction plate_swp";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_glb_sign-01;
+		textures:0 = b_i_swp_sign-01;
+	}
+	[common]
+	{
+		screen_name = "Sign";
+	}
+}
+[t:template,n:sign_glb_dungeon_right]
+{
+	doc = "direction_plate_dgn_rt";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_glb_sign-dungeon-01;
+	}
+	[common]
+	{
+		screen_name = "Sign";
+	}
+}
+[t:template,n:sign_glb_dungeon_left]
+{
+	doc = "direction_plate_dgn_left";
+	specializes = base_sign_directional;
+	[aspect]
+	{
+		model = m_i_glb_sign-dungeon-02;
+	}
+	[common]
+	{
+		screen_name = "Sign";
+	}
+}

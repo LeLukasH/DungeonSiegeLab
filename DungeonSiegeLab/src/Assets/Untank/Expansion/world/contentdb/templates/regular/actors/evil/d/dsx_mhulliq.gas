@@ -1,0 +1,242 @@
+[t:template,n:dsx_mhulliq_base]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_mhulliq_base";
+	specializes = actor_evil;
+	[actor]
+	{
+		[skills]
+		{
+			strength =     20, 0;
+			intelligence = 20, 0;
+			dexterity =    20, 0;
+			melee =        20, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 12;
+		life             = 12;
+		max_life         = 12;
+		mana             = 12;
+		max_mana         = 12;
+		model = m_c_edm_hb_pos_2;
+		textures:0 = b_c_edm_hb-03;
+		material = flesh;
+		[voice]
+		{
+			[die]			{ priority = high;	* = s_e_die_mhulliq_SED;		}
+			[enemy_spotted]	{ priority = high;  * = s_e_call_mhulliq_SED; }
+			[hit_critical]	{ priority = low;	* = s_e_hit_mhulliq_SED;		}
+			[hit_glance]	{ priority = low;	* = s_e_hit_mhulliq_SED;		}
+			[hit_solid]		{ priority = low;	* = s_e_hit_mhulliq_SED;		}
+		}
+	
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 11; //! Do by hand, on a curve.  For low values, ~==XP (6xp => 6damage; 90xp=> 50damage)
+		damage_min = 11; //! Same as damage_max
+	}
+	[body]
+	{
+		avg_move_velocity = 4;
+		[bone_translator]
+		{
+			body_anterior = rt_ft_upper;
+			body_mid = spine1;
+			body_posterior = Tail;
+			kill_bone = bone01;
+			shield_bone = lt_bk_foot;
+			weapon_bone = rt_ft_foot;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_hb_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+					{
+						00 = at;
+						01 = at-02;
+					}
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=dfs; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dff; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+		}
+	}
+	[common]
+	{
+		screen_name = "Mhulliq Base"; 
+		membership = monster;
+	}
+	[defend] { defense = 12; }
+	
+	[mind]
+	{
+		jat_brain = world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party	= true;
+		
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit;
+		
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+}
+
+
+[t:template,n:dsx_mhulliq_two]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_mhulliq_two";
+	specializes = dsx_mhulliq_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength =     14, 0;
+			intelligence  = 9, 0;
+			dexterity =    11, 0;
+			melee =        12, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 238;
+		life             = 156;
+		max_life         = 156;
+		mana             = 12;
+		max_mana         = 12;
+		textures:0 = b_c_edm_hb-04;
+		material = flesh;
+		[voice]
+		{
+			[die]			{ priority = high;	* = s_e_die_mhulliq_SED;		}
+			[enemy_spotted]	{ priority = high;  * = s_e_call_mhulliq_SED; }
+			[hit_critical]	{ priority = low;	* = s_e_hit_mhulliq_SED;		}
+			[hit_glance]	{ priority = low;	* = s_e_hit_mhulliq_SED;		}
+			[hit_solid]		{ priority = low;	* = s_e_hit_mhulliq_SED;		}
+		}	
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 55;
+		damage_min = 45;
+	}
+	[body]
+	{
+		avg_move_velocity = 4;
+	}
+	[common]
+	{
+		screen_name = "Rending Mhulliq"; 
+		membership = monster;
+	}
+	[defend] { defense = 95; }
+	
+	[mind]
+	{
+		jat_brain = world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party	= true;	
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit;
+		
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+}
+
+
+[t:template,n:dsx_mhulliq_one]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_mhulliq_one";
+	specializes = dsx_mhulliq_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength =     9, 0;
+			intelligence = 7, 0;
+			dexterity =    8, 0;
+			melee =        4, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 59;
+		life             = 88;
+		max_life         = 88;
+		mana             = 12;
+		max_mana         = 12;
+		textures:0 = b_c_edm_hb-03;
+		material = flesh;
+		[voice]
+		{
+			[die]			{ priority = high;	* = s_e_die_mhulliq_SED;		}
+			[enemy_spotted]	{ priority = high;  * = s_e_call_mhulliq_SED; }
+			[hit_critical]	{ priority = low;	* = s_e_hit_mhulliq_SED;		}
+			[hit_glance]	{ priority = low;	* = s_e_hit_mhulliq_SED;		}
+			[hit_solid]		{ priority = low;	* = s_e_hit_mhulliq_SED;		}
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 70; //! Do by hand, on a curve.  For low values, ~==XP (6xp => 6damage; 90xp=> 50damage)
+		damage_min = 60; //! Same as damage_max
+	}
+	[body]
+	{
+		avg_move_velocity = 5;
+	}
+	[common]
+	{
+		screen_name = "Mhulliq"; 
+		membership = monster;
+	}
+	[defend] { defense = 29; }
+	
+	[mind]
+	{
+		jat_brain = world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party	= true;
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit;
+		
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+}
+
+

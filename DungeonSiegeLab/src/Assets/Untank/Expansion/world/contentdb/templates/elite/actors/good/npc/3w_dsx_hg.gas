@@ -1,0 +1,32 @@
+[t:template,n:3W_half_giant_NPC]
+{
+	category_name = "3W_npc";
+	doc = "3W_Half Giant NPC";
+	specializes = 3W_base_giant;
+	
+	[aspect]
+	{
+		draw_selection_indicator = TRUE;
+	}
+	
+	[common]
+	{
+		screen_name = "Half-Giant";
+	}
+	[conversation]
+	{
+	}
+	[inventory]
+	{
+		[equipment]
+		{
+		}
+	}
+	[mind]
+	{
+		actor_may_attack = false;
+        	actor_may_be_attacked = false;
+		jat_talk = world\ai\jobs\common\job_talk.skrit;
+ 	}
+}
+

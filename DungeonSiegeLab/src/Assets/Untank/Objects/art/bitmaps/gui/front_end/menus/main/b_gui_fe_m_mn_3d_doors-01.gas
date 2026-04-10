@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_fe_m_mn_3d_doors-01]
+{
+	layer1texture1 = b_gui_fe_m_mn_3d_doors-01;
+  i texturedetail = 0;
+}

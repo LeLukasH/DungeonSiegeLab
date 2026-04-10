@@ -1,0 +1,44 @@
+[staging_area_select_team]
+{
+	interface = true;
+	
+	[t:dialog_box,n:background]
+	{
+		alpha = 1.000000;
+		draw_order = 1;
+		rect = 0,0,800,600;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onlbuttondown = notify(hide_team_selection);
+		}
+	}
+	[t:dialog_box,n:teams_bg]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_thin;
+		draw_order = 10;
+		rect = 0,0,90,200;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		consumable = true;
+	}
+	[t:window,n:team_sign]
+	{
+		alpha = 1.000000;
+		draw_order = 20;
+		rect = 0,0,90,200;
+		texture = ;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		consumable = true;
+		[messages]
+		{
+			onlbuttondown = notify(select_team);
+		}
+	}
+}

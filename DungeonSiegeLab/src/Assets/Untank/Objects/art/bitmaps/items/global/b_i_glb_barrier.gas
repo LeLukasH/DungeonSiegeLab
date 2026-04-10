@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_barrier]
+{
+	layer1texture1 = b_i_glb_barrier;
+  i texturedetail = 1;
+}

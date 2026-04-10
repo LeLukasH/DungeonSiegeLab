@@ -1,0 +1,63 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  Alignment_switcher.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+//	When activated an actor will switch it's alignment.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property bool   _server_only$        = true;
+property string _required_component$ = "actor";
+
+property eActorAlignment	alignment_spawn$ 			= aa_neutral			doc ="Alignment of Monster when Spawned.";
+property eLifeState         life_state_spawn$           = ls_alive_conscious	doc ="Life State of Monster when Spawned.";
+property eActorAlignment 	alignment_activated$ 		= aa_evil				doc ="Alignment of Monster when Activated.";
+property eLifeState         life_state_activated$       = ls_alive_conscious    doc ="Life State of Monster when Activated.";
+property bool				selectable_on_spawn$		= false					doc = "Can this character be selected when spawned?";
+property eWorldEvent 		trigger_msg$				= WE_REQ_ACTIVATE		doc = "Trigger message";
+property eWorldEvent 		trigger_msg2$				= WE_REQ_ACTIVATE		doc = "Trigger message";
+
+
+
+owner	= GoSkritComponent;
+go		m_Go$;
+
+//////////////////////////////////////////////////////////////////////////////
+
+startup state Startup$
+{
+	transition -> Waiting$ : OnGoHandleMessage( WE_ENTERED_WORLD );
+}
+
+state Waiting$
+{
+	event OnEnterState$
+	{
+		m_Go$ = owner.go;
+		m_Go$.actor.ssetalignment( alignment_spawn$ );
+    	m_Go$.Aspect.SSetLifeState = life_state_spawn$;
+		m_Go$.Aspect.SSetIsSelectable( selectable_on_spawn$ );
+	}
+	
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( ( e$ == trigger_msg$ ) || ( e$ == trigger_msg2$ ) )
+		{
+			m_Go$.actor.ssetalignment( alignment_activated$ );
+        	m_Go$.Aspect.SSetLifeState = life_state_activated$;
+			m_Go$.Aspect.SSetIsSelectable( true );
+			m_Go$.Mind.SDoJob( MakeJobReq( JAT_STOP, JQ_ACTION, QP_CLEAR, AO_REFLEX ));
+			m_Go$.Mind.ResetSensors();
+			SetState Finished$;
+		}
+	}
+}
+
+state Finished$
+{ }

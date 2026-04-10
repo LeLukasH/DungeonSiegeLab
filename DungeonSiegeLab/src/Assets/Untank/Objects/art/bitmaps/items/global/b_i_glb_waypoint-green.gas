@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_waypoint-green]
+{
+	layer1texture1 = b_i_glb_waypoint-green;
+  i texturedetail = 1;
+}

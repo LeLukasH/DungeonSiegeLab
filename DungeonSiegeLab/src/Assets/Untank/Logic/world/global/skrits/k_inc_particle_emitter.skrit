@@ -1,0 +1,50 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  k_inc_particle_emitter.skrit
+// Author(s):  Rick Saenz, Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+string params$;
+
+PackParams$
+{
+	params$ = "[";
+	
+	if( ignite$ )
+	{
+		StringTool.Append( params$, "ignite()" );
+		StringTool.Appendf( params$, "fdamage(%g,%g,%g)", damage_min$, damage_max$, particle_fit$ );
+	}
+
+	if( !random_vel$ )
+	{
+		StringTool.Append( params$, "cvel()" );
+	}
+
+	if( dark$ )
+	{
+		StringTool.Append( params$, "dark()" );
+	}
+
+	StringTool.Appendf( params$, "color0(%g,%g,%g)", red$, green$, blue$ );
+	StringTool.Appendf( params$, "velocity(%g,%g,%g)", xvel$, yvel$, zvel$ );
+	StringTool.Appendf( params$, "accel(%g,%g,%g)", xacc$, yacc$, zacc$ );
+	
+	StringTool.Appendf( params$, "alphafade(%g)", fade$ );
+	StringTool.Appendf( params$, "count(%d)", count$ );
+	StringTool.Appendf( params$, "flamesize(%g)", particle_size$ );
+
+	StringTool.Appendf( params$, "min_displace(%g)max_displace(%g)", displace_min$, displace_max$ );
+  
+	StringTool.Appendf( params$, "lower_r0(%g)upper_r0(%g)", start_radius_min$, start_radius_max$ );
+	StringTool.Appendf( params$, "upper_r1(%g)upper_r1(%g)", end_radius_min$, end_radius_max$ );
+
+	StringTool.Appendf( params$, "fctrl(%g,%g,%g)", min_size_range$, max_size_range$, growth$ );
+				
+	StringTool.Append( params$, MakeStringF( "start_rate(%g)end_rate(%g)]", srate_start$, srate_stop$ ) );
+}

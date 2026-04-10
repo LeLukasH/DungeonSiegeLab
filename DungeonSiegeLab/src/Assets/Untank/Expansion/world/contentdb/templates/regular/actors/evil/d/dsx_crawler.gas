@@ -1,0 +1,35 @@
+[t:template,n:dsx_crawler_dungeon]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_crawler_dungeon";
+	specializes = base_dungeon_crawler;
+	[actor]
+		{
+			[skills]
+				{
+					strength =	 13, 0;
+					intelligence =	8, 0;
+					dexterity =	9, 0;
+					melee =		9, 0;
+				}
+		}
+	[aspect]
+		{
+			experience_value = 168;
+			life = 129;
+			max_life = 129;
+			mana = 6;
+			max_mana = 6;
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 43;
+			damage_min = 38;
+		}
+	[common] { screen_name = "Decomposing Corpse"; }
+	[defend] { defense = 65; }
+	[inventory]
+		{
+		}
+}

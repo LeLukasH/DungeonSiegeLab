@@ -1,0 +1,55 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	point_snapper.skrit
+
+	Author(s)	: 	Bartosz Kijanka
+
+	Purpose		:	Snap some other Go to own position.
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+owner = GoSkritComponent;
+
+////////////////////////////////////////////////////////////////////////////////
+// 	reserved tags
+property bool			_server_only$					= true;
+property string			_doc$							= "snaps other object to own position";
+property string			_required_component$			= "placement";
+
+////////////////////////////////////////
+//	tunable params
+property float 			snapRadius$ = 0.3				doc = "Max distance object can be from point_snapper and get snapped.";
+
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		Go customer$ = msg$.SendFrom.Go;
+		if( customer$ != NULL )
+		{
+			if( customer$.HasFollower() )
+			{
+				report.errorf( "point_snapper.skrit - Command scid 0x%08x attempted to snap an object with a follower.  Go = %s, scid = 0x%08x\n", owner.Scid, customer$.TemplateName, customer$.Scid );
+				return;
+			}
+			else if( AIQuery.GetDistance( owner.Go.Placement.Position, customer$.Placement.Position ) <= snapRadius$ )
+			{
+				customer$.Placement.SSetPosition( owner.Go.Placement.Position, false );
+			}
+		}
+	}
+}
+
+
+event OnGoDrawDebugHud$
+{
+	World.DrawDebugSphere( owner.go.Placement.Position, snapRadius$, 0xFF99FFCC, "snap radius" );
+}

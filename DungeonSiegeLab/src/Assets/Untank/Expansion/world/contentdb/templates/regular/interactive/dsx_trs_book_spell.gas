@@ -1,0 +1,67 @@
+[t:template,n:book_glb_magic_umberteen]
+{
+	doc = "book_magic_umberteen";
+	specializes = base_book_spell;
+	[aspect]
+	{
+		[textures]
+		{
+			0 = b_i_glb_book-magic-07;
+		}
+	}
+	[common]
+	{
+		is_pcontent_allowed = false;
+		pcontent_special_type = unique;
+		screen_name = "Umberteen's Book of Trickery";
+	}
+	[gui]
+	{
+		can_sell = false;
+        	equip_requirements = intelligence:12;
+		inventory_icon = b_gui_ig_i_it_magic-book-07;
+	}
+	[inventory]
+	{
+		[other]
+		{
+			il_spell_1 = spell_lightofchadek;
+			il_spell_2 = spell_transmuteall;
+			il_spell_3 = spell_invisibility_self;
+		}
+	}
+	[magic]
+	{
+		[enchantments]
+		{
+			[*]
+			{
+				alteration = alter_spell_cost;
+				description = "Reduce the cost of deceptive spells contained in this spell book.";
+				multiply_value = true;
+				value = 0.7;
+				imbued_spell_group = "tricky_spells";
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+			[*]
+			{
+				alteration 		= alter_strength;
+				value			= 2;
+				description		= "+2 to Strength";
+				duration		= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}
+			[*]
+			{
+				alteration 		= alter_dexterity;
+				value			= 2;
+				description		= "+2 to Dexterity";
+				duration		= #infinite;
+				is_permanent		= true;
+				is_single_instance	= false;
+			}			
+		}
+	}
+}

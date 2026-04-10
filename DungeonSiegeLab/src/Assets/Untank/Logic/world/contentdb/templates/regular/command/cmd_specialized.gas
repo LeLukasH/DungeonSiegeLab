@@ -1,0 +1,915 @@
+//////////////////////////////////////////////////////////////////////////////
+//  Zurb Commands
+//////////////////////////////////////////////////////////////////////////////
+[t:template,n:cmd_ai_c_send_message]
+{
+	specializes = cmd_const;
+	doc			= "cmd_send_message";
+   	extra_doc	= "This sends world messages within a command chain and is client friendly";
+    category_name       = "zurb";
+
+	[gizmo]
+	{
+		diffuse_color=0.000000,0.000000,0.700000;
+		model = m_i_glb_object-gogen;
+	}
+
+	[cmd_send_world_message]{}
+}
+
+[t:template,n:cmd_ai_c_move]
+{
+	specializes = cmd_const;
+	doc			= "cmd_c_move";
+   	extra_doc	= "This is a command for setting up Catalyst movement waypoints.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_move;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+
+	}
+	[gizmo]
+	{
+		diffuse_color=0.000000,0.400000,1.000000;
+		model = m_i_glb_object-gogen;
+	}
+}
+
+[t:template,n:cmd_ai_c_move_orient]
+{
+	specializes = cmd_const;
+	doc			= "cmd_c_move_orient";
+   	extra_doc	= "This is a command for setting up Catalyst movement waypoints where the actor will orient to the orientation of the waypoint.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_move;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+	useCommandOrientation = true;
+
+	}
+	[gizmo]
+	{
+		diffuse_color=0.000000,0.000000,0.700000;
+		model = m_i_glb_object-waypoint;
+	}
+}
+[t:template,n:cmd_ai_t_move_orient]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_move_orient";
+   	extra_doc	= "This is a command for setting up Target1 movement waypoints where the actor will orient to the orientation of the waypoint.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_move;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	useCommandOrientation = true;
+
+	}
+	[gizmo]
+	{
+		diffuse_color=0.000000,0.000000,0.700000;
+		model = m_i_glb_object-waypoint;
+	}
+}
+[t:template,n:cmd_ai_c_patrol_orient]
+{
+	specializes = cmd_const;
+	doc			= "cmd_ai_c_patrol_orient";
+   	extra_doc	= "This is a command for setting up Catalyst patrol waypoints where the actor will orient to the orientation of the waypoint.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_move;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+	useCommandOrientation = true;
+
+	}
+	[gizmo]
+	{
+		diffuse_color=0.000000,0.000000,0.700000;
+		model = m_i_glb_object-waypoint;
+	}
+}
+[t:template,n:cmd_ai_t_patrol_orient]
+{
+	specializes = cmd_const;
+	doc			= "cmd_ai_t_patrol_orient";
+   	extra_doc	= "This is a command for setting up Target1 patrol waypoints where the actor will orient to the orientation of the waypoint.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_move;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	useCommandOrientation = true;
+
+	}
+	[gizmo]
+	{
+		diffuse_color=0.000000,0.000000,0.700000;
+		model = m_i_glb_object-waypoint;
+	}
+}
+[t:template,n:cmd_ai_t_move]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_move";
+	extra_doc	= "This is a command for setting up Target1 movement waypoints.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_move;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+    }
+	[gizmo]
+	{ 
+		diffuse_color=0.000000,0.400000,1.000000;
+		texture=;
+	}
+}
+
+[t:template,n:cmd_ai_t_talk]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_talk";
+	extra_doc	= "This is a command for setting up Target1 Conversations.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+	    jat			= jat_talk;
+		q			= jq_action;
+		placement	= qp_front;
+		ao			= ao_command;
+	    mode		= djm_1vc;
+    }
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+
+
+[t:template,n:cmd_ai_c_patrol]
+{
+	specializes = cmd_const;
+	doc			= "cmd_c_patrol";
+	extra_doc	= "This is a command for setting up Catalyst patrol waypoints.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_patrol;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+
+	}
+	[gizmo]
+	{
+		diffuse_color=0.000000,0.000000,0.500000;
+		texture=;
+	}
+}
+
+[t:template,n:cmd_ai_t_patrol]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_patrol";
+	extra_doc	= "This is a command for setting up Target1 patrol waypoints.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_patrol;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	}
+	[gizmo]
+	{
+		diffuse_color=0.000000,0.000000,0.500000;
+		texture=;
+	}
+}
+
+[t:template,n:cmd_ai_c_attack_object]
+{
+	specializes = cmd_const;
+	doc			= "cmd_c_attack_object";
+	extra_doc	= "Use this command to make the catalyst attack Target1.";
+
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_attack_object;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_attack_catalyst]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_attack_catalyst";
+	extra_doc	= "Use this command to make Target1 attack the catalyst.";
+
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_attack_object;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1vC;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_attack_object]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_attack_object";
+	extra_doc	= "Use this command to make Target1 attack Target2.";
+
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_attack_object;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_c_drop]
+{
+	specializes = cmd_const;
+	doc			= "cmd_c_drop";
+	extra_doc	= "Use this command to make the Catalyst drop target1.  Proper Slot Info Required.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_drop;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_Cv1;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_drop]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_drop";
+	extra_doc	= "Use this command to make target1 drop the modifier.  Proper Slot Info Required.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_drop;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_c_equip]
+{
+	specializes = cmd_const;
+	doc			= "cmd_c_equip";
+	extra_doc	= "Use this command to make the Catalyst equip Target1.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_equip;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_Cv1;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_equip]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_equip";
+	extra_doc	= "Use this command to make target1 equip target2.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_equip;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_follow_catalyst]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_follow";
+	extra_doc	= "Use this command to make target1 follow the catalyst.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_follow;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1vC;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_follow]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_follow";
+	extra_doc	= "Use this command to make target1 follow target2.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_follow;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_c_follow]
+{
+	specializes 		= cmd_const;
+	doc					= "cmd_c_follow";
+	extra_doc			= "Use this command to make the catalyst follow target1.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_follow;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_cv1;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_c_animate]
+{
+	specializes 		= cmd_const;
+	doc					= "cmd_c_animate";
+	extra_doc			= "Use this command to make the catalyst animate.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_play_anim;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_cv1;
+    ac          = chore_misc;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_c_get]
+{
+	specializes = cmd_const;
+	doc			= "cmd_c_get";
+	extra_doc	= "Use this command to make catalyst get target1.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_get;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_Cv1;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_get]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_get";
+	extra_doc	= "Use this command to make target1 get the target2.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_get;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_c_give]
+{
+	specializes = cmd_const;
+	doc			= "cmd_c_give";
+	extra_doc	= "Use this command to make the catalyst give target2 to target1.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_give;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_Cv1;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_give]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_give";
+	extra_doc	= "Use this command to make target1 give the modifier to target2.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_give;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_c_guard]
+{
+	specializes = cmd_const;
+	doc			= "cmd_c_guard";
+	extra_doc	= "Use this command to make the Catalyst guard target1.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_guard;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_Cv1;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_guard]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_guard";
+	extra_doc	= "Use this command to make target1 guard target2.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_guard;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_guard_catalyst]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_guard_catalyst";
+	extra_doc	= "Use this command to make target1 guard the Catalyst.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_guard;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1vC;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_c_use]
+{
+	specializes = cmd_const;
+	doc			= "cmd_c_use";
+    extra_doc	= "Use this command to make the catalyst use target1.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_use;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_Cv1;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_use]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_use";
+    extra_doc	= "Use this command to make target1 use target2.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_use;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_c_face]
+{
+	specializes = cmd_const;
+	doc			= "cmd_c_face";
+	extra_doc	= "Use this command to make the Catalyst face target1.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_face;
+	q			= jq_action;
+	placement	= qp_clear;
+	ao			= ao_command;
+    mode		= djm_Cv1;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_face_catalyst]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_face_catalyst";
+	extra_doc	= "Use this command to make target1 face the catalyst.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_face;
+	q			= jq_action;
+	placement	= qp_clear;
+	ao			= ao_command;
+    mode		= djm_1vC;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_face]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_face";
+	extra_doc	= "Use this command to make target1 face target2.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_face;
+	q			= jq_action;
+	placement	= qp_clear;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_c_fidget]
+{
+	specializes = cmd_const;
+	doc			= "cmd_c_fidget";
+	extra_doc	= "Use this command to make the Catalyst fidget.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_fidget;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_Cv1;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_fidget]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_fidget";
+	extra_doc	= "Use this command to make target1 fidget.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_fidget;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_c_stop]
+{
+	specializes = cmd_const;
+	doc			= "cmd_c_stop";
+	extra_doc	= "Use this command to make the catalyst stop.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_stop;
+	q			= jq_action;
+	placement	= qp_clear;
+	ao			= ao_command;
+    mode		= djm_Cv1;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_stop]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_stop";
+	extra_doc	= "Use this command to make target1 stop.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_stop;
+	q			= jq_action;
+	placement	= qp_clear;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_animate]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_animate";
+	extra_doc	= "Use this command to make target1 play a specified anim.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_play_anim;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+    ac          = chore_misc;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_c_die]
+{
+	specializes 		= cmd_const;
+	doc					= "cmd_c_die";
+	extra_doc			= "Use this command to make the catalyst die.";
+    category_name       = "catalyst";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_die;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_cv1;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_ai_t_die]
+{
+	specializes = cmd_const;
+	doc			= "cmd_t_animate";
+	extra_doc	= "Use this command to make target1 die.";
+    category_name       = "target";
+
+	[cmd_ai_dojob] {
+
+    jat			= jat_die;
+	q			= jq_action;
+	placement	= qp_front;
+	ao			= ao_command;
+    mode		= djm_1v2;
+	}
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_selection_toggle]
+{
+	specializes = cmd_const;
+	doc			= "cmd_selection_toggle";
+	extra_doc	= "Use this command to toggle the selection of the target scid.";
+    category_name       = "zurb";
+
+	[cmd_selection_toggle] {}
+
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:cmd_alignment_changer]
+{
+	specializes = cmd_const;
+	doc			= "cmd_alignment_changer";
+	extra_doc	= "Use this command to toggle the alignment, lifestate, and selection of a monster.";
+    category_name       = "zurb";
+
+	[cmd_dumb_guy] {}
+
+	[gizmo] { diffuse_color=0.000000,0.000000,0.700000; texture=; }
+}
+[t:template,n:animate_chain]
+{
+	specializes	= cmd_const;
+	doc			= "chain tex_anim";
+    category_name = "effects";
+    extra_doc = "use this to animate the door chains in the spider dungeon";
+
+	[nodal_tex_anim]
+	{  
+		texture_name = "b_t_sd_chain";
+	}
+}
+[t:template,n:animate_elevator]
+{
+	specializes	= cmd_const;
+	doc			= "chain tex_anim";
+    category_name = "effects";
+    extra_doc = "use this to animate rope and pully elevators";
+
+	[nodal_tex_anim]
+	{  
+		start_state = 0;
+		texture_name = "b_t_xxx_ele-disk-front-a";
+		texture_name2 = "b_t_xxx_ele-disk-side-a";
+		texture_name3 = "b_t_xxx_ele-rope-a";
+	}
+}
+[t:template,n:cmd_inventory_changer]
+{
+    specializes		= cmd_const;
+	doc				= "cmd_inventory_changer";
+	category_name	= "zurb";
+    extra_doc = "Special case command to manipulate a specific object in the players inventory.";
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0.5, 0.0, 0.5;
+		use_diffuse_color	=	true;
+	}
+
+	[cmd_inv_changer] {}
+}
+[t:template,n:cmd_puzzle_steam]
+{
+    specializes		= command;
+	doc				= "cmd_puzzle_steam";
+	category_name	= "zurb";
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0.5, 0.0, 0.5;
+		use_diffuse_color	=	true;
+	}
+
+	[cmd_steam_puzzle] {}
+}
+[t:template,n:cmd_stop_party]
+{
+	specializes	= cmd_const;
+	doc			= "command stop party";
+    category_name = "zurb";
+    extra_doc = "use this to stop the entire party";
+
+	[cmd_party]  
+	{  
+		stop_party = true;
+	}
+}
+[t:template,n:cmd_move_party]
+{
+	specializes	= cmd_const;
+	doc			= "command move party";
+    category_name = "zurb";
+    extra_doc = "use this to move the entire party";
+	[aspect]
+	{
+        force_no_render = true;
+		is_visible = false;
+		use_range = 3.0;
+	}
+	[cmd_party]  
+	{  
+		move_party = true;
+	}
+}
+[t:template,n:cmd_party_wrangler]
+{
+	specializes	= cmd_const;
+	doc			= "command wrangle party";
+    category_name = "zurb";
+    extra_doc = "use this to make the party behave durring an NIS";
+
+	[cmd_party_wrangler] {}
+}
+[t:template,n:cmd_camera_move]
+{
+	specializes	= cmd_const;
+	doc			= "command camera move";
+    category_name = "zurb";
+    extra_doc = "Use this dangerous command to move the camera to a new position. Single player only.";
+
+	[cmd_camera_move]  
+	{ }
+
+	[gizmo]
+	{
+		diffuse_color=0.70000,0.400000,0.000000;
+		model = m_i_glb_object-camera;
+		scale = 1.25;
+	}
+}
+[t:template,n:cmd_region_message]
+{
+	specializes = cmd_const;
+	doc			= "cmd_region_message";
+	extra_doc	= "[cmd_region_message]";
+	category_name       = "zurb";
+
+	[screen_report]
+	{
+		prepend_name = true;
+	}
+}
+
+[t:template,n:experience_award]
+{
+    specializes 	= cmd_const;
+	doc				= "experience award";
+	category_name   = "zurb";
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0.5, 0.0, 0.5;
+		use_diffuse_color	=	true;
+	}
+	
+	[experience_award] {}
+}
+
+[t:template,n:preload_go]
+{
+    specializes		= cmd_const;
+	doc				= "preload go";
+	category_name	= "zurb";
+
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0.5, 0.0, 0.5;
+		use_diffuse_color	=	true;
+	}
+
+	[clone_preloader] {}
+}
+

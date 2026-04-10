@@ -1,0 +1,33 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_auto_save.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        	= true;
+property string _doc$                	= "Command which toggles an objects selectable state via world messaging.";
+property string _required_component$ 	= "placement";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+// local states
+
+Trigger OnGoHandleMessage$( WE_REQ_ACTIVATE )
+{
+	#only( game )
+	[[
+		Game.AutoSaveGame();
+	]]
+}
+
+///////////////////////////////////////////////////////////////////////////////

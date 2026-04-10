@@ -1,0 +1,407 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_dumb_guy.skrit
+// Author(s):  Uncle Ernsie, Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//
+// Scid Bits Key
+// 0 = Changed.
+// 1 = State. true = used, false = act/deact.
+// 2 = State. true = Act, false = deact.
+
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = true;
+property string _doc$                = "Make a dumb guy into a smart guy command.";
+property string _required_component$ = "placement";
+
+// exported properties
+property scid               target_actor$                                       doc ="Scid of Monster to Manipulate.";
+property eActorAlignment	alignment_spawn$ 			= aa_neutral			doc ="Alignment of Monster on We_Req_Use.";
+property eLifeState         life_state_spawn$           = ls_ignore				doc ="Life State of Monster on We_Req_Use.";
+property bool				update_anim_spawn$			= true					doc ="Can this actor animate after getting We_Req_Use?";
+property bool				invincible_spawn$			= false					doc ="Is this actor invincible after getting We_Req_Use?";
+property bool				collide_spawn$				= true					doc ="Can this actor be hit after getting We_Req_Use?";
+property bool				may_attacked_spawn$			= false					doc ="Can this actor be attacked after getting We_Req_Use?";
+property bool				may_attack_spawn$			= false					doc ="Can this actor attack after getting We_Req_Use?";
+
+property eActorAlignment 	alignment_activated$ 		= aa_evil				doc ="Alignment of Monster when Activated.";
+property eLifeState         life_state_activated$       = ls_alive_conscious    doc ="Life State of Monster when Activated.";
+property bool				update_anim_activated$		= true					doc ="Can this actor animate after getting Activated?";
+property bool				invincible_activated$		= false					doc ="Is this actor invincible after getting Activated?";
+property bool				collide_activated$			= true					doc ="Can this actor be hit after getting Activated?";
+property bool				may_attacked_activated$		= true					doc ="Can this actor be attacked after getting Activated?";
+property bool				may_attack_activated$		= true					doc ="Can this actor attack after getting Activated?";
+
+property eActorAlignment    alignment_deactivated$      = aa_evil               doc ="Extra Alignment Change on Deactivate.";
+property eLifeState         life_state_deactivated$     = ls_alive_conscious    doc ="Life State of Monster when Deactivate.";
+property bool				update_anim_deactivated$	= true					doc ="Can this actor animate after getting Deactivated?";
+property bool				invincible_deactivated$		= false					doc ="Is this actor invincible after getting Deactivated?";
+property bool				collide_deactivated$		= true					doc ="Can this actor be hit after getting Deactivated?";
+property bool				may_attacked_deactivated$	= true					doc ="Can this actor be attacked after getting Deactivated?";
+property bool				may_attack_deactivated$		= true					doc ="Can this actor attack after getting Deactivated?";
+
+property bool             	change_alignment$           = true                  doc ="When True Alignment will be effected on spawn/activate.";
+property bool             	change_life_state$          = true                  doc ="When True Life_State will be effected on spawn/activate.";
+property bool             	change_selection$          	= true                  doc ="When True Selection States will be effected on spawn/activate.";
+property bool             	change_visibility$         	= false                 doc ="When True Actor will spawn invisible and become visible on activate.";
+property bool             	change_invincibility$       = false                 doc ="When True Invincibility will be effected on spawn/activate.";
+property bool             	change_collide$      		= false                 doc ="When True Collision with this Go will be effected on spawn/activate.";
+property bool				change_may_attacked$		= false					doc ="When True being able to attack this go will be effected on spawn/activate.";
+property bool				change_may_attack$			= false					doc ="When True the ability for this go to attack will be effected on spawn/activate.";
+
+
+property int				start_state$				= 0						doc ="Set the initial state when the monster enters the world. 1 = used, 2 = Activated, 3 = de-activated, leave 0 for no change";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+// local states
+
+void Use$()
+{
+	// Set the active Bits
+	Godb.SetScidBit( owner.scid, 1, true );
+	
+	SetState Used$;
+}
+
+void Act$()
+{
+	// Set the active Bits
+	Godb.SetScidBit( owner.scid, 1, false );
+	
+	// Set the active Bits
+	Godb.SetScidBit( owner.scid, 2, true );
+	
+	SetState Activated$;
+}
+
+void DeAct$()
+{
+	// Set the active Bits
+	Godb.SetScidBit( owner.scid, 1, false );
+	
+	// Set the active Bits
+	Godb.SetScidBit( owner.scid, 2, false );
+	
+	SetState Deactivated$;
+}
+
+
+trigger OnGoHandleMessage$( WE_REQ_USE )
+{
+	Use$();
+}
+
+trigger OnGoHandleMessage$( WE_REQ_ACTIVATE )
+{
+	Act$();
+}
+
+trigger OnGoHandleMessage$( WE_REQ_DEACTIVATE )
+{
+	DeAct$();
+}
+
+trigger OnGoHandleCCMessage$( WE_KILLED )
+{
+	GoDb.SMarkForDeletion( owner.goid );
+}
+
+startup state Startup$
+{
+	#only( game )
+    [[
+		trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+		{		
+			int bits$ = Godb.GetScidBits( owner.scid );
+			
+			if( bits$ == 0 ) // nothing has changed. In the default state.
+			{
+				if( start_state$ == 1)
+				{
+					Use$();
+				}
+				else if( start_state$ == 2)
+				{
+					Act$();
+				}
+				else if( start_state$ == 3)
+				{
+					DeAct$();
+				}
+			}
+			else if ( Godb.GetScidBit( owner.scid, 1 ) ) // restore state of the object now that the command has streamed back in.
+			{
+				Use$();
+			}
+			else if ( Godb.GetScidBit( owner.scid, 2 ) )
+			{
+				Act$();
+			}
+			else
+			{
+				DeAct$();
+			}
+		}
+		
+		event OnExitState$
+		{
+			// Set the used Bits
+			Godb.SetScidBit( owner.scid, 0, true );
+		}
+    ]]
+}
+
+	
+State Used$
+{
+	transition -> Used$:	OnGoHandleCCMessage( WE_LEFT_WORLD );
+	
+	trigger OnTimer$ ( 1 )
+	{
+		SetState Used$;
+	}
+
+	event OnExitState$
+	{
+		if( GoDb.IsWatching( owner.Goid ) && target_actor$.goid.isvalid() )
+		{
+			GoDb.StopWatching( owner.Goid, target_actor$.goid );
+		}
+	}
+	
+	event OnEnterState$
+	{
+		if ( !target_actor$.goid.isvalid() )
+		{
+			this.CreateFrameTimer( 1, 5 );
+			return;
+		}	
+		
+		if( !target_actor$.Go.Placement.Position.node.IsNodeInAnyFrustum )
+		{
+			this.CreateFrameTimer( 1, 5 );
+			return;
+		}
+		
+		GoDb.StartWatching( owner.Goid, target_actor$.goid );
+		
+		if (change_alignment$)
+	    {
+			// set initial (spawned) alignment
+			target_actor$.go.actor.ssetalignment( alignment_spawn$ );
+	    }
+	    if (change_life_state$)
+	    {
+	    	target_actor$.Go.Aspect.SSetLifeState = life_state_spawn$;
+		}
+		if (change_selection$)
+		{
+			target_actor$.Go.Aspect.SSetIsSelectable( false );
+		}
+		if (change_visibility$)
+		{
+			target_actor$.Go.Aspect.SSetIsVisible( false );
+		}
+		if (change_invincibility$)
+		{
+			target_actor$.Go.Aspect.IsInvincible = invincible_spawn$;
+		}
+		if (change_collide$)
+		{
+			target_actor$.Go.Aspect.IsCollidable = collide_spawn$;
+		}
+		if (change_may_attacked$)
+		{
+			target_actor$.Go.Mind.MayBeAttacked = may_attacked_spawn$;
+		}
+		if (change_may_attack$)
+		{
+			target_actor$.Go.Mind.SetMayAttack = may_attack_spawn$;
+		}
+		if(update_anim_spawn$)
+		{
+			// start moving
+			target_actor$.Go.Aspect.AspectHandle.SetLockMeshFlag( false );
+		} else {
+			// stop moving
+			target_actor$.Go.Aspect.AspectHandle.SetLockMeshFlag( true );
+		}
+		//Reset Mind
+		target_actor$.Go.Mind.ReqResetSensorsSelfAndVisible();
+	}
+}
+
+State Activated$
+{
+	transition -> Activated$:	OnGoHandleCCMessage( WE_LEFT_WORLD );
+	
+	trigger OnTimer$ ( 1 )
+	{
+		SetState Activated$;
+	}
+
+	event OnExitState$
+	{
+		if( GoDb.IsWatching( owner.Goid ) && target_actor$.goid.isvalid() )
+		{
+			GoDb.StopWatching( owner.Goid, target_actor$.goid );
+		}
+	}
+	
+	event OnEnterState$
+	{
+		if ( !target_actor$.goid.isvalid() )
+		{
+			this.CreateFrameTimer( 1, 5 );
+			return;
+		}	
+		
+		if( !target_actor$.Go.Placement.Position.node.IsNodeInAnyFrustum )
+		{
+			this.CreateFrameTimer( 1, 5 );
+			return;
+		}
+		
+		GoDb.StartWatching( owner.Goid, target_actor$.goid );
+		
+		if (change_alignment$)
+        {
+			// set activated alignment
+			target_actor$.go.actor.ssetalignment( alignment_activated$ );
+        }
+		if (change_life_state$)
+        {
+        	target_actor$.Go.Aspect.SSetLifeState = life_state_activated$;
+        }
+		if (change_selection$)
+        {
+			target_actor$.Go.Aspect.SSetIsSelectable( true );
+	    }
+		if (change_visibility$)
+		{
+			target_actor$.Go.Aspect.SSetIsVisible( true );
+		}
+		if (change_invincibility$)
+		{
+			target_actor$.Go.Aspect.IsInvincible = invincible_activated$;
+		}
+		if (change_collide$)
+		{
+			target_actor$.Go.Aspect.IsCollidable = collide_activated$;
+		}
+		if (change_may_attacked$)
+		{
+			target_actor$.Go.Mind.MayBeAttacked = may_attacked_activated$;
+		}
+		if (change_may_attack$)
+		{
+			target_actor$.Go.Mind.SetMayAttack = may_attack_activated$;
+		}
+		if(update_anim_activated$)
+		{
+			// start moving
+			target_actor$.Go.Aspect.AspectHandle.SetLockMeshFlag( false );
+		} else {
+			// stop moving
+			target_actor$.Go.Aspect.AspectHandle.SetLockMeshFlag( true );
+		}
+		//Reset Mind
+		target_actor$.Go.Mind.ReqResetSensorsSelfAndVisible();
+	}
+}
+
+State DeActivated$
+{
+	transition -> DeActivated$:	OnGoHandleCCMessage( WE_LEFT_WORLD );
+	
+	trigger OnTimer$ ( 1 )
+	{
+		SetState DeActivated$;
+	}
+	
+	event OnExitState$
+	{
+		if( GoDb.IsWatching( owner.Goid ) && target_actor$.goid.isvalid() )
+		{
+			GoDb.StopWatching( owner.Goid, target_actor$.goid );
+		}
+	}
+	
+	event OnEnterState$
+	{
+		if ( !target_actor$.goid.isvalid() )
+		{
+			this.CreateFrameTimer( 1, 5 );
+			return;
+		}	
+		
+		if( !target_actor$.Go.Placement.Position.node.IsNodeInAnyFrustum )
+		{
+			this.CreateFrameTimer( 1, 5 );
+			return;
+		}
+		
+		GoDb.StartWatching( owner.Goid, target_actor$.goid );
+		
+        if (change_alignment$)
+        {
+        	// set activated alignment
+			target_actor$.go.actor.ssetalignment( alignment_deactivated$ );
+        }
+		if (change_life_state$)
+        {
+        	target_actor$.Go.Aspect.SSetLifeState = life_state_deactivated$;
+        }
+		if (change_selection$)
+        {
+			target_actor$.Go.Aspect.SSetIsSelectable( true );
+	    }
+		if (change_visibility$)
+		{
+			target_actor$.Go.Aspect.SSetIsVisible( true );
+		}
+		if (change_invincibility$)
+		{
+			target_actor$.Go.Aspect.IsInvincible = invincible_deactivated$;
+		}
+		if (change_collide$)
+		{
+			target_actor$.Go.Aspect.IsCollidable = collide_deactivated$;
+		}
+		if (change_may_attacked$)
+		{
+			target_actor$.Go.Mind.MayBeAttacked = may_attacked_deactivated$;
+		}
+		if (change_may_attack$)
+		{
+			target_actor$.Go.Mind.SetMayAttack = may_attack_deactivated$;
+		}
+		if(update_anim_deactivated$)
+		{
+			// start moving
+			target_actor$.Go.Aspect.AspectHandle.SetLockMeshFlag( false );
+		} else {
+			// stop moving
+			target_actor$.Go.Aspect.AspectHandle.SetLockMeshFlag( true );
+		}
+		//Reset Mind
+		target_actor$.Go.Mind.ReqResetSensorsSelfAndVisible();
+	}
+}
+
+
+	
+	
+//////////////////////////////////////////////////////////////////////////////

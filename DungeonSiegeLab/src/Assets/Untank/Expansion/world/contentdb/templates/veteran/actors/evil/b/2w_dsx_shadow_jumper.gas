@@ -1,0 +1,1542 @@
+////////////////////////////////////////////////////////////////////////////////
+// SHADOWJUMPER MINIONS
+//
+
+[t:template,n:2W_dsx_shadow_minion_base]
+{
+	category_name = "2W_evil_b";
+	doc = "2W_dsx_shadow_minion_base";
+	specializes = actor_evil;
+	[aspect]
+	{
+		experience_value = 40500;
+		life             = 1204.5;
+		max_life         = 1204.5;
+		mana             = 1204.5;
+		max_mana         = 1204.5;
+		model = m_c_ebb_sj_pos_1;
+		material = flesh;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_shadowjumper_minion_SED; }
+			[hit_critical]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_skeleton_SED; }
+		}		
+	}
+	[body]
+	{
+		avg_move_velocity = 2.5;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine2;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[weapon_scales]
+		{
+			as_single_melee = 1.5, 1.5, 1.5;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ebb_sj_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					01 = at-02;
+					02 = at-03;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] 
+				{ 
+					00=dff; 
+					01=dff-02;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+			[chore_misc]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+
+				[anim_files]
+				{
+					att1 = at;
+					att2 = at-02;
+					att3 = at-03;
+					defa = ds;
+					fid1 = dff;
+					fid2 = dff-02;
+				}
+			}
+		}
+	}
+	[conversation] { }
+	[common]
+	{
+		//screen_name = "Shadowjumper Minion Base";
+		membership = monster;
+	}
+	[defend] { defense = 1204.5; }
+
+	[mind]
+	{
+		jat_brain = world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party	= true;
+
+		jat_talk = world\ai\jobs\common\job_talk.skrit;
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit;
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+}
+
+// melee only minion
+[t:template,n:2W_dsx_shadow_jumper_minion_one]
+{ //level 10
+		category_name = "2W_evil_b";
+		doc = "2W_dsx_shadow_jumper_minion_one";
+		specializes = 2W_dsx_shadow_minion_base;
+		[actor]
+		{
+			[skills]
+			{
+				strength =     28.8, 0;
+				intelligence = 10.5, 0;
+				dexterity =    16.9, 0;
+				melee =        55, 0;
+			}
+		}
+		[aspect]
+		{
+			experience_value = 62816;
+			life             = 1278.4;
+			max_life         = 1278.4;
+			mana             = 119.7;
+			max_mana         = 119.7;
+			model = m_c_ebb_sj_pos_1;
+			textures:0 = b_c_ebb_sj-01;
+			material = flesh;
+			[voice]
+			{
+				[enemy_spotted]	{ priority = high; * = s_e_call_shadowjumper_minion_SED; }
+				[die]			{ priority = high; * = s_e_die_shadowjumper_minion_SED; }
+				[hit_critical]	{ priority = low; * = s_e_hit_skeleton_SED; }
+				[hit_glance]	{ priority = low; * = s_e_hit_skeleton_SED; }
+				[hit_solid]		{ priority = low; * = s_e_hit_skeleton_SED; }
+			}
+		}
+		[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 313;
+			damage_min = 219.3; 
+		}
+		[common]
+		{
+			screen_name = "Shadowjumper Minion"; //--
+			membership = monster; //--
+		}
+		[defend] { defense = 448.8; }
+		[inventory]
+		{
+			spew_equipped_kill_count = <ignore>;
+			[equipment]
+			{
+				es_weapon_hand = dg_g_c_dsx_kaj_mag;
+				es_shield_hand = dg_g_c_dsx_kaj_mag;
+			}
+			[pcontent]
+			{
+			/* Generated: Tue Jun 17 11:13:15 2003
+				Level 11, Strong */
+				[oneof*]
+				{
+					[gold*]
+					{
+						chance = 0.2;
+						min = 4362;
+						max = 8690;
+					}
+					[oneof*]
+					{
+						chance = 0.2;
+						il_main = potion_mana_large;
+						il_main = potion_health_large;
+					}
+					[oneof*]
+					{
+						chance = 0.2;
+						il_main = #weapon/67-88;
+						il_main = #armor/33-193;
+						il_main = #*/67-88;
+					}
+					[oneof*]
+					{
+						chance = 0.01;
+						il_main = #weapon/-rare(1)/88-110;
+						il_main = #armor/-rare(1)/117-296;
+						il_main = #*/-rare(1)/88-110;
+					}
+					[oneof*]
+					{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/88-110;
+					il_main = #armor/-unique(2)/117-296;
+					il_main = #*/-unique(2)/88-110;
+				}			
+			}
+		}
+					
+	}
+}
+
+// ranged and melee minion
+[t:template,n:2W_dsx_shadow_jumper_minion_two]
+{
+	category_name = "2W_evil_b";
+	doc = "2W_dsx_shadow_jumper_minion_two";
+	specializes = 2W_dsx_shadow_minion_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength 		= 37.5, 0;
+			intelligence 	=  10.5, 0;
+			dexterity 		= 18.7, 0;
+			ranged 			= 63, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 65832;
+		life             = 2046.3;
+		max_life         = 2046.3;
+		mana             = 697.9;
+		max_mana         = 697.9;
+		model = m_c_ebb_sj_pos_2;
+		textures:0 = b_c_ebb_sj-02;
+		material = flesh;
+		[voice]
+		{
+			[enemy_spotted]	{ priority = high; * = s_e_call_shadowjumper_minion_SED; }
+			[die]			{ priority = high; * = s_e_die_shadowjumper_minion_SED; }
+			[hit_critical]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_skeleton_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 15;
+		damage_max = 514.5; 
+		damage_min = 367.4;
+		damage_bonus_min_ranged = 159;
+		damage_bonus_max_ranged = 232;
+	}
+	[body]
+	{
+		avg_move_velocity = 2.5;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine2;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[weapon_scales]
+		{
+			as_single_melee = 1.5, 1.5, 1.5;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ebb_sj_fs;
+			[chore_attack]
+			{
+				chore_stances = 6;
+				skrit = select_attack;
+				[anim_files]{00 = at;}
+			}
+			[chore_default]
+			{
+				chore_stances = 6;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 6;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 6;
+				skrit = select_fidget;
+				[anim_files] 
+				{ 
+					00=dff; 
+					01=dff-02;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 6;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+		}
+	}
+	[common]
+	{
+		screen_name = "Shadow Servant";
+		membership = monster;
+	}
+	[defend] { defense = 660.2; }
+	[inventory]
+	{
+		spew_equipped_kill_count = <ignore>;
+		[equipment]
+		{
+			es_shield_hand = bw_dsx_shadjump_2_avg;
+		}
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 25, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 67927;
+					max = 134840;
+				}
+				[oneof*]
+				{
+					chance = 0.088888888888889;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.111111111111111;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/151-195;
+					il_main = #armor/89-486;
+					il_main = #*/151-195;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/195-216;
+					il_main = #armor/-rare(1)/382-670;
+					il_main = #*/-rare(1)/195-216;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/195-216;
+					il_main = #armor/-unique(2)/382-670;
+					il_main = #*/-unique(2)/195-216;
+				}			
+			}
+		}				
+	}
+	[mind]
+	{
+		actor_auto_switches_to_melee         = true;
+		actor_auto_switches_to_ranged        = true;
+		actor_auto_uses_stored_items		 = false;
+		actor_weapon_preference				 = WP_RANGED;
+	}
+}
+
+// melee only minion
+[t:template,n:2W_dsx_shadow_jumper_minion_three]
+//balanced to Level 15
+{
+	category_name = "2W_evil_b";
+	doc = "2W_dsx_shadow_jumper_minion_three";
+	specializes = 2W_dsx_shadow_minion_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength =     32.9, 0;
+			intelligence = 10.7, 0;
+			dexterity =    18.1, 0;
+			melee =        56, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 54964;
+		life             = 1686.5;
+		max_life         = 1686.5;
+		mana             = 215.3;
+		max_mana         = 215.3;
+		model = m_c_ebb_sj_pos_1;
+		textures:0 = b_c_ebb_sj-01;
+		material = flesh;
+		[voice]
+		{
+			[enemy_spotted]	{ priority = high; * = s_e_call_shadowjumper_minion_SED; }
+			[die]			{ priority = high; * = s_e_die_shadowjumper_minion_SED; }
+			[hit_critical]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_skeleton_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 543.6;
+		damage_min = 386.6; 
+	}
+	[common]
+	{
+		screen_name = "Shadowjumper Henchman"; //--
+		membership = monster; //--
+	}
+	[defend] { defense = 592.1; }
+	[inventory]
+	{
+		spew_equipped_kill_count = <ignore>;
+		[equipment]
+		{
+			es_weapon_hand = dg_g_c_dsx_sjumper_three;
+			es_shield_hand = dg_g_c_dsx_sjumper_three;
+		}
+		[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 17, Strong */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 36648;
+				max = 72852;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_large;
+				il_main = potion_health_large;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = #weapon/125-171;
+				il_main = #armor/68-391;
+				il_main = #*/125-171;
+			}
+			[oneof*]
+			{
+				chance = 0.01;
+				il_main = #weapon/-rare(1)/171-202;
+				il_main = #armor/-rare(1)/291-592;
+				il_main = #*/-rare(1)/171-202;
+			}
+			[oneof*]
+			{
+				chance = 0.005;
+				il_main = #weapon/-unique(2)/171-202;
+				il_main = #armor/-unique(2)/291-592;
+				il_main = #*/-unique(2)/171-202;
+			}			
+		}
+	}		
+	}
+}
+
+// ranged and melee minion
+[t:template,n:2W_dsx_shadow_jumper_minion_four]
+{
+// Balanced to level 29, hard ranged
+	category_name = "2W_evil_b";
+	doc = "2W_dsx_shadow_jumper_minion_four";
+	specializes = 2W_dsx_shadow_minion_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength =     40.2, 0;
+			intelligence = 10.5, 0;
+			dexterity =    20.1, 0;
+			ranged =       64, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 92508;
+		life             = 2409.4;
+		max_life         = 2409.4;
+		mana             = 642.9;
+		max_mana         = 642.9;
+		model = m_c_ebb_sj_pos_2;
+		textures:0 = b_c_ebb_sj-02;
+		material = flesh;
+		[voice]
+		{
+			[enemy_spotted]	{ priority = high; * = s_e_call_shadowjumper_minion_SED; }
+			[die]			{ priority = high; * = s_e_die_shadowjumper_minion_SED; }
+			[hit_critical]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_skeleton_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 15;
+		damage_max = 696.9; 
+		damage_min = 512.7;
+		damage_bonus_min_ranged = 223;
+		damage_bonus_max_ranged = 329;
+	}
+	[body]
+	{
+		avg_move_velocity = 2.5;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine2;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[weapon_scales]
+		{
+			as_single_melee = 1.5, 1.5, 1.5;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ebb_sj_fs;
+			[chore_attack]
+			{
+				chore_stances = 6;
+				skrit = select_attack;
+				[anim_files]{00 = at;}
+			}
+			[chore_default]
+			{
+				chore_stances = 6;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 6;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 6;
+				skrit = select_fidget;
+				[anim_files] 
+				{ 
+					00=dff; 
+					01=dff-02;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 6;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+		}
+	}
+	[common]
+	{
+		screen_name = "Shadow Servant"; //--
+		membership = monster; //--
+	}
+	[defend] { defense = 591.4; }
+	[inventory]
+	{
+		spew_equipped_kill_count = <ignore>;
+		[equipment]
+		{
+			es_shield_hand = bw_dsx_shadjump_4_avg;
+		}
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 25, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 51204;
+					max = 101644;
+				}
+				[oneof*]
+				{
+					chance = 0.088888888888889;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.111111111111111;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/139-180;
+					il_main = #armor/82-447;
+					il_main = #*/139-180;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/180-200;
+					il_main = #armor/-rare(1)/352-617;
+					il_main = #*/-rare(1)/180-200;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/180-200;
+					il_main = #armor/-unique(2)/352-617;
+					il_main = #*/-unique(2)/180-200;
+				}			
+			}
+		}		
+	}
+	[mind]
+	{
+		actor_auto_switches_to_melee	= true;
+		actor_auto_switches_to_ranged	= true;
+		actor_auto_uses_stored_items	= false;
+		actor_weapon_preference		= WP_RANGED;
+	}
+}
+
+// Shadowjumper Lt. Melee ONLY
+[t:template,n:2W_dsx_shadow_jumper_boss]
+{
+	category_name = "2W_evil_b";
+	doc = "2W_Base Shadowjumper Boss";
+	specializes = actor_evil; 
+	[actor]
+	{
+		[skills]
+		{
+			strength =     	49.6, 0;
+			intelligence = 	19.6, 0;
+			dexterity =    	29.9, 0;
+			melee =        	68, 0;
+			ranged =		68, 0;
+			nature_magic =	68, 0;
+			combat_magic =	68, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 79228;
+		life             = 2860.3;
+		max_life         = 2860.3;
+		mana             = 2535.7;
+		max_mana         = 2535.7;
+		model = m_c_ebb_sj_pos_3;
+		textures:0 = b_c_ebb_sj-03;
+		material = flesh;
+		[voice]
+		{
+			[enemy_spotted]	{ priority = high; * = s_e_call_shadowjumper_boss; }
+			[die]			{ priority = high; * = s_e_die_shadowjumper_boss; }
+			[hit_critical]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_skeleton_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 595.2;
+		damage_min = 379.2;
+	}
+	[body]
+	{
+		avg_move_velocity = 4.00000;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine2;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[weapon_scales]
+		{
+			as_single_melee = 1.5, 1.5, 1.5;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ebb_sj_fs;
+			[chore_attack]
+			{
+				chore_stances = 1;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					01 = at-02;
+					02 = at-03;
+					qffg = dff;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 1;
+				skrit = infinite_loop;
+				[anim_files] { 00=dfs; }
+			}
+			[chore_die]
+			{
+				chore_stances = 1;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 1;
+				skrit = select_fidget;
+				[anim_files] 
+					{ 
+						00=dff; 
+						01=dff-02;
+					}
+			}
+			[chore_walk]
+			{
+				chore_stances = 1;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+		}
+	}
+	[common]
+	{
+		screen_name = "Shadowjumper Lieutenant";
+		membership = monster;
+	}	
+	[defend] { defense = 623.8; }
+	
+	[mind]
+	{
+		actor_weapon_preference			= WP_MELEE;
+		actor_auto_switches_to_magic	= false;
+		actor_auto_switches_to_karate	= false;
+		actor_auto_switches_to_melee	= true;
+		
+		jat_brain 				= world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party	= true;
+
+		jat_talk 				= world\ai\jobs\common\job_talk.skrit;
+		jat_fidget 				= world\ai\jobs\common\job_fidget.skrit;
+				
+		job_travel_distance_limit 	= 28;
+		on_job_reached_travel_distance_abort_attack = false;
+		
+		on_engaged_lost_consciousness_abort_attack = false;
+		
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}	
+	[inventory]
+	{
+		spew_equipped_kill_count = <ignore>;
+		[equipment]
+		{
+			es_weapon_hand=sd_g_c_dsx_kat_1h_shadowjumper;
+		}
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 28, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 58333;
+					max = 115804;
+				}
+				[oneof*]
+				{
+					chance = 0.088888888888889;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.111111111111111;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/157-197;
+					il_main = #armor/96-512;
+					il_main = #*/157-197;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/197-217;
+					il_main = #armor/-rare(1)/418-680;
+					il_main = #*/-rare(1)/197-217;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/197-217;
+					il_main = #armor/-unique(2)/418-680;
+					il_main = #*/-unique(2)/197-217;
+				}		
+			}
+		}
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// SHADOWJUMPER BIG BOSS
+//
+
+[t:template,n:2W_dsx_shadow_bigboss_base]
+{
+	category_name = "2W_evil_b";
+	doc = "2W_Base Shadowjumper Boss";
+	specializes = actor_evil; 
+	[aspect]
+	{
+		experience_value = 79228;
+		life             = 3874.6;
+		max_life         = 3874.6;
+		mana             = 2535.7;
+		max_mana         = 2535.7;
+		model = m_c_ebb_sjb_pos_1;
+		
+		material = flesh;
+		[voice]
+		{
+			[enemy_spotted]	{ priority = high; * = s_e_call_shadowjumper_boss; }
+			[die]			{ priority = high; * = s_e_die_shadowjumper_boss; }
+			[hit_critical]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_skeleton_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 557.9;
+		damage_min = 410.8;
+	}
+	[body]
+	{
+		avg_move_velocity = 4.00000;
+		max_move_velocity = 4;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine2;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[weapon_scales]
+		{
+			as_single_melee = 1.5, 1.5, 1.5;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ebb_sjb_fs;
+			[chore_attack]
+			{
+				chore_stances = 5;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					qffg = dff;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 5;
+				skrit = infinite_loop;
+				[anim_files] { 00=dfs; }
+			}
+			[chore_die]
+			{
+				chore_stances = 5;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 5;
+				skrit = select_fidget;
+				[anim_files] 
+					{ 
+						00=dff; 
+						01=dff-02;
+						02=dff-03;
+					}
+			}
+			[chore_magic]
+			{
+				  chore_stances = 5;
+				  skrit = select_attack;
+				[anim_files]
+				{
+					  
+					00=mg;
+					01=mg-02;
+					02=mg-03;
+					03=mg-04;
+					04=mg-05;
+					05=mg-06;
+					06=mg-07;
+				}
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				// need all anim files here for nis control
+				[anim_files]
+				{
+					// fidgets/boredom
+					dff0 = a_c_ebb_sjb_fs5_dfs;
+					dff1 = a_c_ebb_sjb_fs5_dff-02;
+					dff2 = a_c_ebb_sjb_fs5_dff-03;
+					idle = a_c_ebb_sjb_fs5_dsf;
+					// attack
+					att1 = a_c_ebb_sjb_fs5_at;
+					// death
+					die = a_c_ebb_sjb_fs5_di;
+					// walking
+					walk = a_c_ebb_sjb_fs5_wl;
+					// facial expressions
+					talk = a_c_ebb_sjb_fs5_dsf-02;
+					tlk1 = a_c_ebb_sjb_fs5_dsf-02;
+					tlk2 = a_c_ebb_sjb_fs5_dsf_a5;
+					tlk3 = a_c_ebb_sjb_fs5_dsf_a9;
+					roar = a_c_ebb_sjb_fs5_dsf-03;
+					// NIS misc
+					grab = a_c_ebb_sjb_fs5_grab;
+					// reveal / disappear
+					// TRJ 7/31/03 - renamed these for consistency with the NIS versions
+					wake = a_c_ebb_sjb_fs5_rvl;
+					slep = a_c_ebb_sjb_fs5_dspr;
+					// sword break - /**** PLACEHOLDER *****/ just to make it obvious
+					swbr = a_c_ebb_sjb_fs5_grab;
+					heal = a_c_ebb_sjb_fs5_heal;
+					// Casting anims
+					cst1 = a_c_ebb_sjb_fs5_mg;
+					cst2 = a_c_ebb_sjb_fs5_mg-02;
+					cst3 = a_c_ebb_sjb_fs5_mg-03;
+					cst4 = a_c_ebb_sjb_fs5_mg-04;
+					cst5 = a_c_ebb_sjb_fs5_mg-05;
+					cst6 = a_c_ebb_sjb_fs5_mg-06;
+					cst7 = a_c_ebb_sjb_fs5_mg-07;
+				 }
+			}
+			[chore_walk]
+			{
+				chore_stances = 5;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[common]
+	{
+		screen_name = "Shadowjumper"; //--
+		membership = monster,immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("shadow_jumper_boss");
+				condition* = receive_world_message("WE_REQ_ACTIVATE");
+				single_shot = true;
+			}
+			[*]
+			{
+				action* = call_sfx_script("shadow_jumper_boss_dur");
+				action* = call_sfx_script("shadow_jumper_boss_die_right_arm");
+				action* = call_sfx_script("shadow_jumper_boss_die_left_arm");
+				action* = call_sfx_script("shadow_jumper_boss_die_right_leg");
+				action* = call_sfx_script("shadow_jumper_boss_die_left_leg");
+				action* = call_sfx_script("shadow_jumper_boss_die_torso");
+				action* = call_sfx_script("shadow_jumper_boss_die_flare");
+				condition* = receive_world_message("WE_KILLED");
+				single_shot = true;
+			}
+		}
+	}
+}
+
+// Shadowjumper BIG BAD BOSS - ingame monster
+[t:template,n:2W_dsx_shadow_bigboss]
+{
+	category_name = "2W_evil_b";
+	doc = "2W_Shadowjumper Boss";
+	specializes = 2W_dsx_shadow_bigboss_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength 	=  65.7, 0;
+			intelligence = 20, 0;
+			dexterity 	=  25.6, 0;
+			melee 		=  68, 0;
+			ranged 		=  71, 0;
+			nature_magic = 76, 0;
+			combat_magic = 76, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 89056;
+		life             = 8121.5;
+		max_life         = 7886.3;
+		mana             = 2642.9;
+		max_mana         = 2642.9;
+		[voice]
+		{
+			[enemy_spotted]	{ priority = high; * = s_e_shadow_laugh; }
+			[die]			{ priority = high; * = s_e_die_sj_big_boss; }
+			[hit_critical]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_skeleton_SED; }
+		}
+	}
+	[defend] { defense = 1343.9; }
+	[inventory]
+	{
+    		selected_active_location = il_active_primary_spell;
+		spew_equipped_kill_count = ;
+		[equipment]
+		{
+			// NOTE: This is the only place the SJ should have the SOS equipped
+			es_weapon_hand = 2w_st_g_c_dsx_stars;
+		}
+		drop_at_use_point = true;
+    		[other]
+		{
+			il_active_primary_spell=spell_sj_chubby_rain;
+			il_spell_1=spell_sj_tornado;
+			il_spell_2=spell_sj_snowstorm;
+			il_spell_3=spell_sj_chain_tornado;
+			il_spell_4=spell_sj_chain_lightning;
+		}
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 29, Special */
+			[all*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 70229;
+					max = 139396;
+				}
+				[oneof*]
+				{
+					chance = 0.088888888888889;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.111111111111111;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/172-213;
+					il_main = #armor/106-560;
+					il_main = #*/172-213;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/213-234;
+					il_main = #armor/-rare(1)/460-732;
+					il_main = #*/-rare(1)/213-234;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/213-234;
+					il_main = #armor/-unique(2)/460-732;
+					il_main = #*/-unique(2)/213-234;
+				}			
+			}
+		}
+	}
+	
+	[mind]
+	{
+		jat_brain = world\ai\jobs\common\brain_hero.skrit
+			?actor_joins_existing_party	= true;
+		
+		jat_cast 						= world\ai\jobs\common\job_cast.skrit
+			?rand_spell					= true
+			&use_self_cast_anim			= true
+			&use_base_duration			= false
+ 			&spell_chances				= ".2,.2,.2,.2,.2"
+			&spells						= "spell_sj_tornado,spell_sj_snowstorm,spell_sj_chubby_rain,spell_sj_chain_lightning,spell_sj_chain_tornado";
+   		jat_fidget						= world\ai\jobs\common\job_fidget.skrit;
+		
+		jat_flee_from_object			= world\ai\jobs\common\job_flee_from_object.skrit
+			?run_chance					= 1.0;
+
+		actor_weapon_preference			= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+		actor_auto_switches_to_karate	= false;
+		actor_auto_switches_to_melee	= false;
+		
+		melee_engage_range 				= 10;
+		personal_space_range 			= 0.7;
+		ranged_engage_range 			= 20.0;
+		sight_range 					= 20.0;
+	}
+	
+	[physics]
+	{
+		angular_magnitude = 0;
+		explode_when_killed = false;
+		explosion_magnitude = .001;
+		gib_gore_good = true;
+		[break_particulate]
+		{
+			frag_glb_sjb_01 = 1;
+			frag_glb_sjb_02 = 1;
+			frag_glb_sjb_03 = 2;
+			frag_glb_sjb_04 = 2;
+		}
+	}	
+	// Spawn the shadowjumper ghost at a specific frame in the death animation.
+	[generator_in_object]
+	{
+		child_template_name = dsx_shadow_jumper_ghost;
+		spawn_chance = 1.0;
+		spawn_event = WE_ANIM_SFX;
+	}
+
+	// Skrit component for making him explode a few seconds through his death animation.
+	[effect_aftereffect]
+	{
+		explodeObject=true;
+		explodeDelay=6;
+
+		lifeSpan=7;
+	}
+	[dsx_shadow_jumper_heal_monitor]
+	{
+		approachDistance = 5;
+		chanceToHeal = .75;
+		darkGeneratorScids="";
+		healAmountMin = 100;
+		healAmountMax = 100;
+		healEffect = "shadow_jumper_boss_heal";
+		healThreshold = .5;
+		interGeneratorEffect = "dark_generator_connect";
+		multiplyByGeneratorCount = true;
+		justHealedDelay = 10;
+
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// SHADOWJUMPER NIS VERSION
+//
+
+// Base version of the NIS shadowjumper.  Doesn't need to inherit from the
+// base of the shadowjumper.  This can be a completely separate branch of
+// actors, and probable should be.
+[t:template,n:2W_dsx_shadow_bigboss_nis_base]
+{
+	category_name = "2W_evil_b";
+	doc = "2W_dsx_shadow_bigboss_nis_base";
+	extra_doc = "Used in NIS work for shadowjumper";
+	specializes = actor_evil;
+
+	[aspect] 
+	{
+		// Don't draw the shadow for the NIS shadow jumper.
+		draw_shadow = false;
+		life             = 5588.7;
+		max_life         = 5588.7;
+		model = m_c_ebb_sjb_pos_2;
+	}
+	[body]
+	{
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ebb_sjb_fs;
+			[chore_attack]
+			{
+				chore_stances = 5;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					qffg = dff;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 5;
+				skrit = infinite_loop;
+				[anim_files] { 00=dfs; }
+			}
+			// MRC 7/31/2003 To play the disappear animation,
+			// we hook it up to the death chore and kill him.
+			[chore_die]
+			{
+				chore_stances = 5;
+				skrit = select_transition;
+				[anim_files] { 00=dspr; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 5;
+				skrit = select_fidget;
+				[anim_files] 
+					{ 
+						00=dff; 
+						01=dff-02;
+						02=dff-03;
+					}
+			}
+			[chore_magic]
+			{
+				  chore_stances = 5;
+				  skrit = select_attack;
+				[anim_files]
+				{
+					  
+					00=mg;
+					01=mg-02;
+					02=mg-03;
+				}
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				// need all anim files here for nis control
+				[anim_files]
+				{
+					// fidgets/boredom
+					dff0 = a_c_ebb_sjb_fs5_dfs;
+					dff1 = a_c_ebb_sjb_fs5_dff-02;
+					dff2 = a_c_ebb_sjb_fs5_dff-03;
+					idle = a_c_ebb_sjb_fs5_dsf;
+					// attack
+					att1 = a_c_ebb_sjb_fs5_at;
+					att2 = a_c_ebb_sjb_fs5_at-01;
+					att3 = a_c_ebb_sjb_fs5_at-02;
+					// death
+					die = a_c_ebb_sjb_fs5_di;
+					// walking
+					walk = a_c_ebb_sjb_fs5_wl;
+					// facial expressions
+					tlk1 = a_c_ebb_sjb_fs5_dsf-02;
+					tlk2 = a_c_ebb_sjb_fs5_dsf_a5;
+					tlk3 = a_c_ebb_sjb_fs5_dsf_a9;
+					roar = a_c_ebb_sjb_fs5_dsf-03;
+					// NIS misc
+					grab = a_c_ebb_sjb_fs5_grab;
+					// reveal / disappear 
+					// MRC 7/31/2003 Note that 'wake' is hard coded into the startup skrit
+					// so we need the reveal to be named exactly that.
+					wake = a_c_ebb_sjb_fs5_rvl;
+					slep = a_c_ebb_sjb_fs5_dspr;
+					// magic
+					cst1 = a_c_ebb_sjb_fs5_mg;
+					cst2 = a_c_ebb_sjb_fs5_mg-02;
+					cst3 = a_c_ebb_sjb_fs5_mg-03;
+					cst4 = a_c_ebb_sjb_fs5_mg-04;
+				 }
+			}
+			[chore_walk]
+			{
+				chore_stances = 5;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[common]
+	{
+		screen_name = "Shadowjumper"; //--
+		[template_triggers]
+		{
+			// Start the NIS version effect when the object is activated,
+			// NOT when it enters the world.
+			[*]
+			{
+				action* = call_sfx_script("shadow_jumper_boss_nis");
+				condition* = receive_world_message("WE_REQ_ACTIVATE");
+				single_shot = true;
+			}
+			// Play the hide effect when he dies.
+			[*]
+			{
+				action* = call_sfx_script("dsx_shadow_jumper_nis_die");
+				condition* = receive_world_message("WE_KILLED");
+				single_shot = true;
+			}
+		}
+	}
+	[mind]
+	{	
+   		jat_fidget						= world\ai\jobs\common\job_fidget.skrit;
+
+		// MRC 7/31/2003 For the NIS jumper, set these ranges really low.  This 
+		// way, you can drop the NIS shadowjumper and look at effects and animations
+		// without turning of monsterai (which would stop animations) and without
+		// this guy attacking you.
+		inner_comfort_zone_range = 1;
+		outer_comfort_zone_range = 1;
+		com_range = 1;
+		melee_engage_range = 1;
+		personal_space_range = 0.7;
+		ranged_engage_range = 1.0;
+		sight_range = 1;
+	}
+
+}
+
+// ShadowJumper BIG BAD BOSS - NIS only, no staff
+[t:template,n:2W_dsx_shadow_bigboss_nis_karate]
+{
+	category_name = "2W_evil_b";
+	doc = "2W_dsx_shadow_bigboss_nis_karate";
+	specializes = 2W_dsx_shadow_bigboss_nis_base;
+}
+
+// ShadowJumper BIG BAD BOSS - NIS only, with a staff.
+[t:template,n:2W_dsx_shadow_bigboss_nis_staff]
+{
+	category_name = "2W_evil_b";
+	doc = "2W_dsx_shadow_bigboss_nis_staff";
+	specializes = 2W_dsx_shadow_bigboss_nis_base;
+	[common]
+	{
+		screen_name = "Shadowjumper";
+	}
+	[inventory]
+	{
+		spew_equipped_kill_count = <ignore>;
+		[equipment]
+		{
+			es_weapon_hand = 2w_st_g_c_dsx_stars;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// SHADOWJUMPER GHOST
+//
+
+// Etherial ghost of the shadowjumper to use during his death effect.
+[t:template,n:2W_dsx_shadow_jumper_ghost]
+{
+	category_name = "2W_special";
+	doc = "2W_dsx_shadow_jumper_ghost";
+	specializes = non_interactive;
+	extra_doc = "Used with shadowjumper die, don't place in levels";
+
+	[aspect]
+	{
+		model=m_c_ebb_sjb_pos_3;
+		life_state = LS_GHOST;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			[chore_default]
+			{
+				skrit = select_transition;
+				[anim_files] { 00=a_c_ebb_sjb_fs5_di-02; }
+			}
+		}
+
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("shadow_jumper_ghost");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+			}
+		}
+	}
+	[self_destruct]
+	{
+		delete_msg = WE_ANIM_DONE;
+	}
+}
+
+// melee only minion
+[t:template,n:2W_dsx_shadow_jumper_minion_five]
+{
+// Balanced to Level 29, hard melee
+	category_name = "2W_evil_b";
+	doc = "2W_dsx_shadow_jumper_minion_five";
+	specializes = 2W_dsx_shadow_minion_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength =     40.2, 0;
+			intelligence = 10.5, 0;
+			dexterity =    20.1, 0;
+			melee =        64, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 79228;
+		life             = 2566.3;
+		max_life         = 2566.3;
+		mana             = 154.3;
+		max_mana         = 154.3;
+		model = m_c_ebb_sj_pos_1;
+		textures:0 = b_c_ebb_sj-01;
+		material = flesh;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_shadowjumper_minion_SED; }
+			[hit_critical]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_glance]	{ priority = low; * = s_e_hit_skeleton_SED; }
+			[hit_solid]		{ priority = low; * = s_e_hit_skeleton_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 696.9;
+		damage_min = 512.7; 
+	}
+	[common]
+	{
+		screen_name = "ShadowJumper Disciple"; //--
+		membership = monster; //--
+	}
+	[defend] { defense = 730.3; }
+	[inventory]
+	{
+		spew_equipped_kill_count = <ignore>;
+		[equipment]
+		{
+			es_weapon_hand = dg_g_c_dsx_sjumper_five;
+			es_shield_hand = dg_g_c_dsx_sjumper_five;
+		}
+		// @TODO - need new pcontent
+		[pcontent]
+		{
+			/* Generated: Sun Jun 15 10:20:36 2003
+				 Level 17, Special */
+			[all*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 11697;
+					max = 23251;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_large;
+					il_main = potion_health_large;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/91-124;
+					il_main = #armor/49-280;
+					il_main = #*/91-124;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/91-124;
+					il_main = #armor/-rare(1)/49-280;
+					il_main = #*/-rare(1)/91-124;
+					}
+			}
+		}		
+	}
+}

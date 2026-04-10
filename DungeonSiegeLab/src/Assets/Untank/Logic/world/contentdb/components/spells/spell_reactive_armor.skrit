@@ -1,0 +1,311 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_reactive_armor.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+// This skrit waits reads the duration and sets up a state timer so only one of these spells
+// can be cast at a time. The when the duration is over the state is removed and the spell
+// is deleted. When the character is attacked this spell will shoot back at the attacker.
+
+
+property string effect_script$		= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string react_script$		= ""	doc = "Name of the SiegeFx script that will be providing the visual when attacking back.";
+property float  react_rate$			= 1.0	doc = "Minimun Time between return fire shots.";
+property string effect_params$		= ""   	doc = "Parameters to send to SiegeFx script";
+property string description$		= ""	doc = "Description of enchantment being applied";
+property float  max_range$			= -1.0	doc = "Maximum distance between target for reaction to occur";
+property float	freeze_time$		= -1.0	doc = "If positive will freese as a reaction";
+property string freeze_description$ = ""	doc = "Description of enchantment being applied";
+property string freeze_state$ 		= ""	doc = "State name of enchantment being applied";
+property float	freeze_threshold$	= 1.0	doc = "Monster health must have his health/maxhealth ration under this to be frozen 0.5 would be 50% of the monsters normal health.";
+property float	freeze_chance$		= 0.15	doc = "Change to freeze the monster.";
+property string explode_script$		= ""	doc = "Name of the SiegeFx script that will be providing the visual when the frozen attacker explodes.";
+property float	lightning_dur$		= -1.0	doc = "If greater then 0 will pack lightning damage into the effect";
+property string immunity$					doc = "If the attacker contains this membership then it is immune to the freeze from this spell.";
+
+
+owner = GoSkritComponent;
+#include "k_inc_spl_utils"
+
+Goid 	target$;
+Goid 	caster$;
+float 	spell_duration$;
+SFxSID	active_effect$ = 0;
+bool	can_shoot$ = true;   
+
+event OnTimer$( int id$, float /*off$*/)
+{
+	/////////////////////////////
+	// Omni Go
+	
+	if ( id$ == 0x80000001 )
+	{
+		SetState RestoreState$;
+	} else if ( id$ == 0x80000002 ) {
+		can_shoot$ = true;
+	} else {
+		goid frozen_guy$ = MakeGoid( id$ );
+		if (frozen_guy$.IsValid)
+		{
+			TryThaw$( frozen_guy$ );
+			GoDb.StopWatching( owner.Goid, frozen_guy$);
+			// remove the state so this can be affected again
+			frozen_guy$.Go.Actor.SRemoveGenericState( freeze_state$ );
+		}
+	}
+}
+
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) {
+		
+			/////////////////////////////
+			// Normal Go
+		
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+			
+			if( !GoodBuffTarget$( target$ ) )
+			{
+				SetState Finished$;
+				return;	
+			}
+			
+			if( Owner.go.Parent != NULL )
+			{
+				// Create an Omni version of the spell.
+				GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.go.Parent.Goid, owner.goid );
+				cloneReq$.Omni = true;
+				Goid new_spell$ = GoDb.SCloneGo( cloneReq$ );
+				
+				// Send a message to the omni version of the Spell to get it started.
+				PostWorldMessage( WE_REQ_ACTIVATE, caster$, new_spell$, msg$.GetData1(), 0 );
+			}
+			// Delete Normal version of the spell.
+			SetState Finished$;
+			
+		} else if ( e$ == WE_REQ_ACTIVATE ) {
+
+			/////////////////////////////
+			// Omni Go
+			
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			if( !target$.IsValid || !caster$.Isvalid )
+			{
+				SetState RestoreState$;
+				return;
+			}
+			
+			spell_duration$ = owner.Go.Magic.EvaluateEffectDuration(caster$.Go, target$.Go);
+
+			// Check to see if the enchantment has already been cast on this go
+			if( target$.Go.Actor.HasGenericState( owner.Go.Magic.StateName ) ) {
+				
+				Goid old_spell$ = target$.Go.Actor.GetGenericStateSpellGoid ( owner.Go.Magic.StateName );
+				
+				if( StringTool.SameWithCase( old_spell$.Go.TemplateName, Owner.Go.TemplateName ))
+				{
+					int packed_speed$ = Math.Round( spell_duration$ * 1000 );
+					SendWorldMessage( WE_SPELL_EXPIRATION_TIMER_RESET, owner.Goid, old_spell$ ,packed_speed$);
+				
+					// apply the enchantments.
+					owner.go.magic.SApplyEnchantments( target$, caster$ );
+					
+					SetState Finished$;
+					return;
+				}
+				SetState Abort$;
+				return;
+			}
+			 
+			// If we are responding with lightning pack the damage into the params to send to the script;
+			if( lightning_dur$ > 0 )
+			{
+				PackLightning$( lightning_dur$ );
+			}
+			
+			// Start the visual
+			if(effect_script$ != "")
+			{
+				active_effect$ = SiegeFx.SRunMpScript( effect_script$, target$, caster$, effect_params$, owner.Goid, e$ );
+			}
+			// Add the effected state so this can only happen once
+			target$.Go.Actor.SAddGenericState( owner.Go.Magic.StateName, description$, spell_duration$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+			
+			// apply the enchantments.
+			owner.go.magic.SApplyEnchantments( target$, caster$ );
+			
+			This.CreateTimer( 0x80000001, spell_duration$ );
+			This.SetTimerGlobal ( 0x80000001, true );
+			
+			GoDb.StartWatching( owner.Goid, target$);
+			
+			SetState Shooting$;
+		}
+	}
+}
+ 	
+state Shooting$
+{ 	
+ 	/////////////////////////////
+	// Omni Go
+	
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if ( e$ == WE_SPELL_EXPIRATION_TIMER_RESET )
+		{	
+			if(target$.IsValid && caster$.IsValid)
+			{
+				if( msg$.GetData1() == -1)
+				{
+					SetState RestoreState$;
+				} else {
+					SiegeFx.SStopScript( active_effect$ );
+					
+					active_effect$ = SiegeFx.SRunMPScript( effect_script$, target$, caster$, effect_params$, owner.Goid, WE_REQ_CAST );
+					
+					// remove stale state...
+					target$.Go.Actor.SRemoveGenericState( owner.Go.Magic.StateName );
+					
+					// Add the effected state so this can only happen once
+					target$.Go.Actor.SAddGenericState( owner.Go.Magic.StateName, description$, This.AddTimerSeconds( 0x80000001 , msg$.GetData1() / 1000.0 ) , caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+				}
+			}
+		}
+	}
+	
+	event OnGoHandleCcMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if(( e$ == WE_DAMAGED ) && (msg$.GetSendTo() == target$) && can_shoot$ ){
+
+			Goid attacker$ = msg$.GetSendFrom();
+
+			if( (react_script$ != "") && attacker$.IsValidMp() && target$.IsValidMp())
+			{
+				if ( target$.Go.Hasmind && attacker$.Go.HasAspect )
+				{
+					if ( ( target$.Go.Mind.GetDistance( attacker$.Go ) < max_range$ ) || ( max_range$ < 0.0 ) )
+					{	
+						SiegeFx.SRunScript( react_script$, attacker$, target$, params$, owner.Goid, WE_UNKNOWN );
+						
+						float freeze$ = Math.RandomFloat(1.0);
+						
+						bool doit$ = true;
+				
+						if( !StringTool.IsEmpty( immunity$ ) )
+						{
+							if( attacker$.Go.Common.Membership.Contains( immunity$ ) )
+							{
+								doit$ = false;
+							}
+						}
+						
+						if( attacker$.Go.Player.Controller != PC_COMPUTER  )
+						{
+							doit$ = false;
+						}
+
+						if( doit$ && !( ((attacker$.Go.Aspect.CurrentLife / attacker$.Go.Aspect.MaxLife) > freeze_threshold$) || (freeze$ > freeze_chance$) ) )
+						{
+							if( ( freeze_time$ > 0.0 ) && attacker$.Go.Hasactor )
+							{
+								if( !attacker$.Go.Actor.HasGenericState( freeze_state$ ) )
+								{
+									TryFreeze$( attacker$ );
+									int timer$ = MakeInt( attacker$ );
+									This.CreateTimer( timer$, freeze_time$);
+									This.SetTimerGlobal ( timer$, true );
+									GoDb.StartWatching( owner.Goid, attacker$);
+									// Add the effected state so this can only happen once
+									attacker$.Go.Actor.SAddGenericState( freeze_state$, freeze_description$, freeze_time$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+								}
+							}
+						}
+						this.CreateTimer( 0x80000002, react_rate$ );
+						this.SetTimerGlobal ( 0x80000002, true );
+						can_shoot$ = false;
+					}
+				}
+			}
+		} else {	
+			goid from_guy$ = msg$.GetSendTo();
+			
+			if( e$ == WE_KILLED )
+			{
+				if ( from_guy$.IsValidMp && caster$.IsValidMp && (from_guy$ != target$)) 
+				{
+					if(explode_script$ != "")
+					{
+						SiegeFx.SRunScript( explode_script$, from_guy$, caster$, "", owner.Goid, e$ );
+					}
+					
+					PostWorldMessage( WE_REQ_DELETE, from_guy$, from_guy$, .1 );
+				}
+				else if ( from_guy$ == target$)
+				{
+					SetState RestoreState$;
+				}
+			}
+		}
+	}
+}
+
+
+state RestoreState$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+		// If the go is still alive then restore his state
+		if( target$.IsValid ) {
+			GoDb.StopWatching( owner.Goid, target$);
+			
+			// remove the state so this can be affected again
+			target$.Go.Actor.SRemoveGenericState( owner.Go.Magic.StateName );	
+			
+			if (active_effect$ != 0)
+			{
+				SiegeFx.SStopScript( active_effect$ );
+			}
+		}
+		SetState( Finished$ );
+	}
+}
+
+state Abort$
+{
+	////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+		// Refund the players mana
+		Rules.ChangeMana( caster$, owner.go.getmagic.manacost );
+
+		SetState( Finished$ );
+	}
+}
+
+state Finished$
+{
+	/////////////////////////////
+	// Both Gos
+	
+	event OnEnterState$
+	{
+		// Delete this skrit
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 10.0 + freeze_time$ );
+	}
+}

@@ -1,0 +1,36 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  k_job_c_talk_utils.skrit
+// Author(s):  Tara Teich
+//
+// Copyright © 2003 Mad Doc Software.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+
+// Is someone with requested template in the party of the passed in person?
+bool IsInParty$(string name$, Goid person$)
+{
+	// get the party object for person
+	Go party$ = person$.Go.Parent;
+
+	// loop through all party members
+	int i$ = 0;
+	int iend$ = party$.Children.Size();
+	Go temp_child$;
+	
+	while( i$ != iend$ )
+	{
+		temp_child$ = party$.Children.Get( i$ );
+
+		if (StringTool.SameNoCase(temp_child$.TemplateName, name$))
+		{
+			return true;
+		}
+		i$ += 1;
+	}
+
+	return false;
+}

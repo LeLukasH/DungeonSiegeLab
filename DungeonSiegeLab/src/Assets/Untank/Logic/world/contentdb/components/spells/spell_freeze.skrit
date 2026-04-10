@@ -1,0 +1,158 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_freeze.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property string effect_script$		= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string explode_script$		= ""	doc = "Name of the SiegeFx script that will be providing the visual when the target explodes.";
+property string effect_params$		= ""   	doc = "Parameters to send to SiegeFx script";
+property string description$		= ""	doc = "Description of enchantment being applied";
+property float	freeze_threshold$	= 1.0	doc = "Monster health must have his health/maxhealth ration under this to be frozen 0.5 would be 50% of the monsters normal health.";
+property float	freeze_chance$		= 1.0	doc = "Change to freeze the monster.";
+property string immunity$					doc = "If the target contains this membership then it is immune to this spell.";
+
+
+owner = GoSkritComponent;
+#include "k_inc_spl_utils" 
+
+Goid caster$;
+Goid target$;
+Goid go_hit$;
+float spell_duration$;
+
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) {
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			if( !target$.IsValidMp || !caster$.IsValidMp )
+			{
+				SetState Finish$;
+				return;
+			}
+			
+			// Start the visual
+			SiegeFx.SRunScript( effect_script$, target$, caster$, effect_params$, owner.Goid, e$ );
+		} else if ( e$ == WE_SPELL_COLLISION ) {
+			go_hit$ = msg$.SendFrom;
+			
+			if( !go_hit$.IsValid || !caster$.Isvalid )
+			{
+				SetState Finish$;
+				return;
+			}
+			
+			spell_duration$ = owner.Go.Magic.EvaluateEffectDuration(go_hit$.Go, caster$.Go);
+			
+			if (go_hit$.IsValid)
+			{
+				if(go_hit$.Go.Aspect.MaxLife == 0.0)
+				{
+					SetState Finish$;
+					return;
+				}
+				
+				if( !StringTool.IsEmpty( immunity$ ) )
+				{
+					if( target$.Go.Common.Membership.Contains( immunity$ ) )
+					{
+						SetState Finish$;
+						return;
+					}
+				}
+				
+				if( target$.Go.Player.Controller != PC_COMPUTER  )
+				{
+					SetState Finish$;
+					return;
+				}
+				
+				float freeze$ = Math.RandomFloat(1.0);
+				
+//				report.genericf("life %g, max %g, threshold %g, ratio %g, chance %g, freeze %g\n",go_hit$.Go.Aspect.CurrentLife,go_hit$.Go.Aspect.MaxLife,freeze_threshold$,(go_hit$.Go.Aspect.CurrentLife / go_hit$.Go.Aspect.MaxLife),freeze_chance$,freeze$);
+				
+				if( ((go_hit$.Go.Aspect.CurrentLife / go_hit$.Go.Aspect.MaxLife) > freeze_threshold$) || (freeze$ > freeze_chance$) )
+				{
+					SetState Finish$;
+					return;
+				}
+				if( go_hit$.Go.HasMind() && go_hit$.Go.HasActor() )
+				{
+					if( !go_hit$.Go.Actor.HasGenericState( owner.Go.Magic.StateName ) )
+					{
+						TryFreeze$( go_hit$ );
+						
+						// Add the effected state so this can only happen once
+						go_hit$.Go.Actor.SAddGenericState( owner.Go.Magic.StateName, description$, spell_duration$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+		
+						// we need to watch the guy to see if he is killed so we can shatter him.
+						GoDb.StartWatching( owner.Goid, go_hit$);
+						
+						SetState Frozen$;
+						return;
+					}
+				}
+			}
+			SetState Finish$;
+		}
+	}
+}
+	
+state Frozen$
+{
+	event OnGoHandleCcMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( ( e$ == WE_KILLED ) && go_hit$.IsValidMp() && ( go_hit$ == msg$.GetSendTo() ) )
+		{
+			if(explode_script$ != "")
+			{
+				SiegeFx.SRunScript( explode_script$, go_hit$, caster$, "", owner.Goid, e$ );
+			}
+			
+			go_hit$.go.Aspect.SSetIsVisible( false );
+		}
+	}
+	
+	trigger OnTimer$( 1 )
+	{
+//		report.generic("freeze timer fired\n");
+		if (go_hit$.IsValid)
+		{
+//			report.generic("I want to thaw!!\n");
+			TryThaw$( go_hit$ );
+			
+			// remove the state so this can be affected again
+			go_hit$.Go.Actor.SRemoveGenericState( owner.Go.Magic.StateName );
+			GoDb.StopWatching( owner.Goid, go_hit$);
+		}
+		
+		SetState Finish$;
+	}
+	event OnEnterState$
+	{
+//		report.genericf("setting freeze timer for %g seconds.\n", spell_duration$ );
+		this.CreateTimer( 1, spell_duration$ );
+	}
+}
+
+state Finish$
+{
+	event OnEnterState$
+	{
+		SiegeFx.ClearVariables( owner.goid );
+		
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 5 );
+	}
+}
+
+
+

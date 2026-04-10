@@ -1,0 +1,95 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  special_defense_trackball.skrit
+// Author(s):  Tara Teich
+//
+// Copyright © 2003 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+//	Handles spell collision messages for special defense code
+//		This allows us to make sure we deal damage for trackballs
+//
+//////////////////////////////////////////////////////////////////////////////
+
+owner = GoSkritComponent;
+
+// if we do area damage, this will be positive and indicate the radius of damage
+float area_damage_radius$ = 0.0;
+
+// Helper func - award experience to selected weapon
+void GiveExperienceToSelected$( Go attacker$, Goid victim$, float damage$ )
+{
+	// How much experience?
+	float experience$ = Rules.CalculateExperience( attacker$.goid, attacker$.goid, victim$, damage$ );
+	
+	// We need to figure out what type of experience we should award
+	//		Use the selected weapon
+	Go Weapon$ = attacker$.Inventory.GetItem( attacker$.Inventory.SelectedLocation );
+	
+	if ( Weapon$ != NULL )
+	{
+		Rules.AwardExperience( attacker$.goid, Weapon$.goid, experience$ );
+	} 
+}
+
+
+startup state Main$
+{ 	
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+ 	{
+		if (e$ == WE_REQ_ACTIVATE )
+		{
+			// this is just a message to set the area damage radius
+			// unpack area damage radius
+			area_damage_radius$ = msg$.GetData1() / 1000.0;
+			
+			// done
+		} 		
+ 		else if ( e$ == WE_SPELL_COLLISION )
+ 		{
+ 			// who sent the message
+			Goid sender$ = msg$.GetSendFrom();
+			
+			// make sure the sender is valid
+			if (sender$.IsValidMp)
+			{
+				if (sender$.Go.HasAspect)
+				{
+					if (sender$.Go.Aspect.CurrentLife > 0.0)
+					{
+						// for now, just do damage directly
+						
+						// Do we do explosive damage?
+						if ( area_damage_radius$ > 0.0 )
+						{
+							// pick a random amount of damage between min and max
+							float damage$ = Math.RandomFloat(owner.Go.Attack.DamageMin, owner.Go.Attack.DamageMax);
+							// figure out the magnitude of exposive damage
+							float mag$ = Rules.CalculateMagnitude( area_damage_radius$, damage$ );
+							// use the location of the sender, which should be the spell impact point
+							SiegePos damage_pos$ = sender$.Go.Placement.Position;
+							// create an explosion
+							int explosion$ = Physics.CreateExplosion( damage_pos$, area_damage_radius$, area_damage_radius$, damage$, Owner.Go.Parent.Goid, Owner.Goid );
+							// and we don't want it to hurt party members
+							Physics.SetIgnorePartyMembers( explosion$ );
+						}						
+						
+						// how much damage to do?
+						float defense$ = Rules.GetTotalDefense( sender$ );
+						float damage$ = Rules.CalculateDamage( owner.goid, owner.goid, sender$, 
+								owner.Go.Attack.DamageMin, owner.Go.Attack.DamageMax, defense$, false );
+						
+						// give experience
+						GiveExperienceToSelected$( Owner.go.Parent, sender$, damage$ );						
+						
+						//	the owner of this component is who does the damage
+						Rules.DamageGo( sender$, Owner.go.Parent.Goid, owner.goid, damage$, false, false );
+						
+					}
+				}
+			}
+ 		} 		
+ 	}
+}

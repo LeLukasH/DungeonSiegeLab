@@ -1,0 +1,139 @@
+[t:template,n:3W_goblin_inventor]
+{
+	category_name = "3W_evil_b";
+	doc = "3W_goblin_inventor";
+	specializes = actor_evil;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  	20.2, 0;
+			intelligence =  27.5, 0;
+			dexterity =  	22.8, 0;
+			combat_magic =  101, 0;
+		}
+	}
+	[aspect]
+	{
+		is_invincible     = true;
+      	is_collidable   = false;
+		experience_value = 2970000;
+		life = 499.2;
+		max_life = 499.2;
+		mana = 115.2;
+		max_mana = 115.2;
+		model = m_c_ebb_gi_pos_1;
+		[voice]
+		{
+			[die]
+			{
+				* = s_e_die_goblin_SED;
+			}
+			[hit_critical]
+			{
+				* = s_e_hit_goblin_SED;
+			}
+			[hit_glance]
+			{
+				* = s_e_hit_goblin_SED;
+			}
+			[hit_solid]
+			{
+				* = s_e_hit_goblin_SED;
+			}
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 179.5;
+		damage_min = 100.8;
+	}
+	[body]
+	{
+		avg_move_velocity = 2.720000;
+		terrain_movement_permissions = lf_hover;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine2;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ebb_gi_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=ds; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+			[chore_misc]
+			{
+				chore_stances = ignore;
+				skrit = select_transition;
+				[anim_files]
+				{
+					tlk1 = a_c_ebb_gi_fs0_dsf-02;
+					tlk2 = a_c_ebb_gi_fs0_dsf-03;
+				}
+			}
+		}
+	}
+	[common] 
+	{ 
+		screen_name="Goblin Inventor"; 
+		membership=monster,immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;
+	}
+	[conversation] { }
+	[defend] { defense=680; }
+	[inventory]
+	{
+    	[pcontent]
+		{
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = #*/297-328;
+			}
+		}
+	}
+	[mind]
+	{
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit;
+		actor_may_attack = false;
+		actor_may_be_attacked = false;
+		melee_engage_range = 12;
+		on_engaged_lost_consciousness_abort_attack = true;
+		ranged_engage_range = 13.0;
+		personal_space_range = 0.7;
+		sight_range = 13.0;
+	}
+}

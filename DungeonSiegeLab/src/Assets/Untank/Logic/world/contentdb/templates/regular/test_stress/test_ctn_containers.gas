@@ -1,0 +1,133 @@
+[t:template,n:test_barrel_glb_fh_r1]
+{
+	category_name = "fh_r1";
+	doc = "barrel_glb_fh_r1";
+	specializes = base_container_barrel;
+	[aspect]
+	{
+		model = m_i_glb_barrel;
+	}
+	[inventory]
+	{
+		[pcontent]
+		{
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.05;
+					max = 8;
+					min = 2;
+				}
+				[oneof*]
+				{
+					chance = 0.3;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+			}
+		}
+	}
+}
+[t:template,n:test_chest_csl_02_dm_r10]
+{
+	category_name = "dm_r10";
+	doc = "chest_csl_02_dm_r10";
+	specializes = base_chest;
+	[aspect]
+	{
+		model = m_i_glb_chest-02;
+	}
+	[attack]
+	{
+		damage_max = 82;
+		damage_min = 74;
+	}
+	[body]
+	{
+		[chore_dictionary]
+		{
+			chore_prefix = a_i_glb;
+			[chore_close]
+			{
+				skrit = transition;
+				[anim_files]
+				{
+					00 = chest-02-close;
+				}
+			}
+			[chore_open]
+			{
+				skrit = transition;
+				[anim_files]
+				{
+					00 = chest-02-open;
+				}
+			}
+		}
+	}
+	[inventory]
+	{
+		[pcontent]
+		{
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					max = 35;
+					min = 17;
+				}
+				[oneof*]
+				{
+					chance = 0.4;
+					il_main = #weapon/1-3;
+					il_main = #armor/1-6;
+					max = 2;
+					min = 1;
+				}
+			}
+		}
+	}
+	[trapped]
+	{
+		trap = trp_generator_zap_chest;
+	}
+}
+[t:template,n:test_crate_glb_fh_r1]
+{
+	category_name = "fh_r1";
+	doc = "crate_glb_fh_r1";
+	specializes = base_container_wood;
+	[aspect]
+	{
+		model = m_i_glb_crate;
+	}
+	[common]
+	{
+		screen_name = "Crate";
+	}
+	[inventory]
+	{
+		[pcontent]
+		{
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.15;
+					max = 15;
+					min = 5;
+					min_pile = 1;
+					piles = 2 - 3;
+				}
+				[oneof*]
+				{
+					chance = 0.3;
+					il_main = #weapon/1-3;
+					il_main = #armor/1-3;
+				}
+			}
+		}
+	}
+}

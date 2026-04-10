@@ -1,0 +1,220 @@
+[t:template,n:dsx_fleshrender_base]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_fleshrender_base";
+	specializes = actor_evil;
+	[actor]
+	{
+		[skills]
+		{
+			strength     = 12, 0;
+			intelligence = 7, 0;
+			dexterity    = 8, 0;
+			melee        = 8, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 90;
+		life             = 82;
+		max_life         = 82;
+		mana             = 45;
+		max_mana         = 45;
+
+		model = m_c_edm_frender;
+		textures:0 = b_c_edm_frender;
+		material = flesh;
+		draw_shadow = false;
+		[voice]
+		{
+			[die] 		{ priority = high;	* = s_e_call_wraith_SED;			}
+			[enemy_spotted] { priority = high;	* = s_e_call_zombie_ground_SED;	}
+			[hit_critical]	{ priority = low;	* = s_e_hit_dead_SED;			}
+			[hit_glance]	{ priority = low;	* = s_e_hit_dead_SED;			}
+			[hit_solid]		{ priority = low;	* = s_e_hit_dead_SED;			}
+		}
+
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 47;
+		damage_min = 25; 
+	}
+	[body]
+	{
+		avg_move_velocity = 2.5;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = Bip01_Spine1;
+			body_posterior = bip01_pelvis;
+			kill_bone = Bip01_Spine1;
+			//shield_bone = shield_grip;
+			//weapon_bone = weapon_grip;
+		}
+		[weapon_scales]
+		{
+			as_single_melee = 1.5, 1.5, 1.5;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_frender_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at-01;
+					01 = at-02;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+		}
+	}
+	[common]
+	{
+		screen_name = "Fleshrender"; //--
+		membership = monster; //--
+	}
+
+	[defend] { defense = 58; }
+
+	[mind]
+	{
+		jat_brain  = world\ai\jobs\common\brain_hero.skrit
+			? actor_joins_existing_party	= true;
+
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit;
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+}
+
+[t:template,n:dsx_fleshrender]
+{
+// Balanced to level 13, medium melee
+	category_name = "1W_evil_d";
+	doc = "dsx_fleshrender";
+	specializes = dsx_fleshrender_base;
+
+	[actor]
+	{
+		[skills]
+		{
+			strength     = 13, 0;
+			intelligence = 8, 0;
+			dexterity    = 9, 0;
+			melee        = 10, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 258;
+		life             = 258;
+		max_life         = 258;
+		mana             = 45;
+		max_mana         = 45;
+
+		material = flesh;
+		draw_shadow = false;
+		[voice]
+		{
+			[die] 			{ priority = high;	* = s_e_call_wraith_SED;			}
+			[enemy_spotted] { priority = high;	* = s_e_call_zombie_ground_SED;	}
+			[hit_critical]	{ priority = low;	* = s_e_hit_dead_SED;			}
+			[hit_glance]	{ priority = low;	* = s_e_hit_dead_SED;			}
+			[hit_solid]		{ priority = low;	* = s_e_hit_dead_SED;			}
+		}
+
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 68;
+		damage_min = 50; 
+	}
+
+	[common]
+		{
+			screen_name = "Fleshrender"; //--
+			membership = monster; //--
+		}
+
+	[defend] { defense = 100; }
+
+}
+
+
+[t:template,n:dsx_fleshrender_summon]
+{
+  category_name = "1W_evil_d";
+  doc = "dsx_summon_fleshrender";
+  specializes = dsx_fleshrender_base;
+ aspect:experience_value = 0;
+  [inventory]
+    {
+      selected_active_location = il_active_primary_spell;
+      [pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 12, Weak */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 150;
+				max = 299;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_small;
+				il_main = potion_health_small;
+			}
+			[oneof*]
+			{
+				chance = 0.1;
+				il_main = #weapon/22-33;
+				il_main = #armor/9-71;
+				il_main = #*/22-33;
+			}
+			[oneof*]
+			{
+				chance = 0.005;
+				il_main = #weapon/-rare(1)/20-36;
+				il_main = #armor/-rare(1)/43-71;
+				il_main = #*/-rare(1)/20-36;
+			}
+			
+		}
+	}
+    }
+}

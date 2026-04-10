@@ -1,0 +1,88 @@
+[DSX_backpack_ui]
+{
+  b interface = true;
+	[t:button,n:button_arrange]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+		group = human_inventory;
+		rect = 389,2,413,30;
+		rollover_help = inventory_arrange;
+		texture = b_gui_ig_mnu_ip_arrange_up;
+		uvcoords = 0.000000,0.125000,0.750000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(arrange_backpack_inventory);
+			onlbuttondown = loadtexture(b_gui_ig_mnu_ip_arrange_dwn);
+			onlbuttonup = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrolloff = loadtexture(b_gui_ig_mnu_ip_arrange_up);
+			onrollover = loadtexture(b_gui_ig_mnu_ip_arrange_hov);
+		}
+	}
+
+	[t:text,n:text_backpack]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 3;
+	  x font_color = 0xFFFFFFFF;
+	  x font_size = 0x0000000E;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = center;
+		rect = 413,2,501,30;
+		text = "Backpack";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+
+	[t:button,n:button_backpack_close]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = x;
+	  x draw_order = 0x00000009;
+		rect = 503,2,519,18;
+		rollover_help = backpack_exit;
+		texture = b_gui_cmn_button_x_up;
+		uvcoords = 0.000000,0.00000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(backpack_close);
+		}
+	}
+	[t:dialog_box,n:dialog_backpack_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		rect = 387,0,521,289;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+    
+	[t:gridbox,n:gridbox_8x4]
+	{
+	  f alpha = 1.000000;
+		box_height = 32.000000;
+		box_width = 32.000000;
+		columns = 4;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000002;
+		grid_type = inventory;
+		rect = 389,30,518,287;
+		rows = 8;
+		texture = b_gui_ig_mnu_ip_grid;
+		uvcoords = 0.000000,-7.031250,4.031250,1.000000;
+        visible = false;
+		wrap_mode = tiled;
+	}
+
+}

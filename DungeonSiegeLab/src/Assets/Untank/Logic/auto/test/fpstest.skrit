@@ -1,0 +1,78 @@
+//***************************************************************************/
+//*
+//* File     :  FPSTest.skrit
+//* Author(s):  Bryce Jones
+//*
+//* Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//*--------------------------------------------------------------------------/
+//*  $Revision:: $              $Date:$
+//*--------------------------------------------------------------------------/
+//***************************************************************************/
+
+
+
+
+
+
+
+
+#include "LogOut.skrit"
+
+property float	TestLength$	= 30			doc = "Sample period, in seconds.";
+
+
+
+startup state InitialState$ trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+	{
+		if ( (WorldState.CurrentState == WS_SP_INGAME) || (WorldState.CurrentState == WS_MP_INGAME) )
+		{
+			setstate SetItAllUp$;
+		}
+	}
+
+state SetItAllUp$
+	{
+ 		FInGame$ at ( 5 frames )
+		{
+			gpconsole.execute("stats inv");
+			//gpconsole.execute("stats max");
+			
+			setstate Chillout$;
+		}
+	}
+	
+state CheckNotPaused$
+{
+	event OnEnterState$
+	{	
+		ensure_game_not_paused$();		
+		if (WorldTime.Time < TestLength$  )  //    
+		{
+			setstate Chillout$;
+		}
+		else
+		{
+			setstate Quit$;
+		}
+	}
+}	
+		
+state Chillout$
+//Chillin while da' fpslog do it's do..
+
+{
+	transition -> CheckNotPaused$ :  OnTimer( 1 );
+
+	event OnEnterState$
+	{
+		this.CreateTimer( 1, 0.040 );
+	}
+}
+ 
+state Quit$
+	{
+		event OnEnterState$
+		{
+			gpconsole.execute("Exit");
+		}
+	}

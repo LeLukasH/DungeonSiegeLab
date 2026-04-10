@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_cmn_button_soundoff_down]
+{
+	layer1texture1 = b_gui_cmn_button_soundoff_down;
+  i texturedetail = 0;
+}

@@ -1,0 +1,157 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: job_cast_position.skrit
+
+	Author(s)	: Bartosz Kijanka
+
+	Purpose		: This is a basic cast the darn spell at a position.
+
+	(C)opyright 2001 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+
+Go		m_Go$;
+GoMind	m_Mind$;
+GoBody  m_Body$;
+Job		m_Job$;
+Goid	m_Spell$;
+Goid	m_Target$;
+int		m_Anim$;
+float 	cast_loop_duration$;
+
+startup state STARTUP$
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.GetGo;
+	m_Mind$		= job$.GetGo.GetMind;
+	m_Body$		= job$.GetGo.GetBody;
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+
+	m_Spell$ 	= job$.GoalModifier;
+	m_Anim$		= job$.GoalModifier.Go.Magic.CastSubAnimation;
+
+	if ( m_Job$.Origin == AO_HUMAN )
+	{
+		m_Go$.RCPlayVoiceSound( m_Go$.Player.GetMachineId(), "order_cast", false);
+	}
+
+	SetState( Approaching$ );
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	global messgae handling
+trigger OnWorldMessage$( WE_KILLED )			{	SetState Exiting$; }
+trigger OnWorldMessage$( WE_MCP_INVALIDATED )	{	SetState Exiting$; }
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	
+state Approaching$
+{
+	event OnEnterState$
+	{
+		if( m_Spell$.Go.Magic.EvaluateManaCost( m_Go$, NULL ) <= m_Go$.Aspect.CurrentMana )
+		{
+			eAnimStance stance$ = m_Go$.inventory.animstance;
+	 		cast_loop_duration$ = m_Spell$.Go.Magic.CastReloadDelay;
+			cast_loop_duration$ += m_Go$.Aspect.AspectHandle.Blender.GetBaseDuration(CHORE_MAGIC,stance$);
+
+			report.reportf( "aiskrit", "%s: duration of cast: %g\n",m_Go$.TemplateName,cast_loop_duration$ );
+			
+			int num_anims$ = m_Go$.Aspect.AspectHandle.Blender.GetNumSubAnims(CHORE_MAGIC,stance$);
+					
+			if( num_anims$ < m_Anim$ )
+			{
+				m_Anim$ = 0;
+			}
+
+			// make a new point to target
+			GoCloneReq cloneReq$ = MakeGoCloneReq( "point" );
+			cloneReq$.StartingPos	= m_Job$.GoalPosition;
+        	cloneReq$.SnapToTerrain = true;         
+			cloneReq$.ForceClientAllowed = true;
+   			m_Target$	= GoDb.SCloneGo( cloneReq$ );
+   			
+			eReqRetCode ret$ = MCPManager.MakeRequest(	m_Go$.Goid,
+														PL_CAST_ON_OBJECT,
+														cast_loop_duration$,
+														m_Anim$,
+														m_Target$,
+														1.0,
+														2.0,
+														m_Spell$.Go.Magic.CastRange,
+														REQFLAG_DEFAULT );
+
+			report.ReportF("aimove","[%s] PL_CAST_ON_POSITION [%s] returned [%s]\n",
+			 	m_Go$.TemplateName,
+				MakeSiegePosString(m_Job$.GoalPosition),
+				ToString(ret$) );
+
+			if (RequestFailed(ret$))
+			{
+				SetState( Exiting$ );
+			}
+			else 
+			{
+				SetState( Gesturing$ );
+			}
+		}
+		else
+		{
+			 SetState( Exiting$ );
+		}
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	
+state Gesturing$
+{
+
+	transition
+	{
+		-> Exiting$:				OnWorldMessage( WE_MCP_DEPENDANCY_BROKEN );
+		-> Exiting$:				OnWorldMessage( WE_MCP_INVALIDATED );
+		-> Exiting$:				OnWorldMessage( WE_ANIM_DONE );
+	}
+
+	trigger OnWorldMessage$( WE_MCP_FACING_LOCKEDON ) 
+	{
+		if( m_Target$.IsValid )
+		{
+			m_Job$.EnterAtomicState( cast_loop_duration$ );
+			m_Spell$.Go.Magic.SCast( m_Target$.Go );
+			GoDb.StartExpiration( m_Target$.Go, true );
+		}
+		
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//	
+state Exiting$
+{
+	event OnEnterState$
+	{
+		m_Job$.MarkForDeletion();
+	}
+}

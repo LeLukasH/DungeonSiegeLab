@@ -1,0 +1,803 @@
+[t:template,n:alcove_ice_cover]
+{
+	category_name = "node";
+	doc = "ice_alcove cover";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_ice_alcove-cover; }
+}
+
+[t:template,n:bones_cav_fury_arm_01]
+{
+	category_name = "dead";
+	doc = "bones_fury_arm_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_fury-bone-arm-01; }
+}
+[t:template,n:bones_cav_fury_arm_02]
+{
+	category_name = "dead";
+	doc = "bones_fury_arm_sm";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_fury-bone-arm-02; }
+}
+[t:template,n:bones_cav_fury_arm_03]
+{
+	category_name = "dead";
+	doc = "bones_fury_arm_med";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_fury-bone-arm-03; }
+}
+[t:template,n:bones_cav_fury_body_01]
+{
+	category_name = "dead";
+	doc = "body_fury_full";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_fury-bone-body-01; }
+}
+[t:template,n:bones_cav_fury_body_02]
+{
+	category_name = "dead";
+	doc = "body_fury_half";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_fury-bone-body-02; }
+}
+[t:template,n:bones_cav_fury_jaw]
+{
+	category_name = "dead";
+	doc = "bones_fury_jaw";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_fury-bone-jaw; }
+}
+
+[t:template,n:egg_csl_sacks_spider_07]
+{
+	category_name = "dead";
+	doc = "lump_fleshy_webbed";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_csl_eggsacks-spider-07; }
+}
+[t:template,n:egg_des_dragon_01]
+{
+	category_name = "misc";
+	doc = "googore_egg_horizontal";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_des_egg-dragon-01; }
+}
+[t:template,n:egg_des_dragon_02]
+{
+	category_name = "misc";
+	doc = "googore_egg_cluster";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_des_egg-dragon-02; }
+}
+[t:template,n:egg_des_dragon_03]
+{
+	category_name = "misc";
+	doc = "googore_egg_vertical";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_des_egg-dragon-03; }
+}
+[t:template,n:egg_des_dragon_large_01]
+{
+	category_name = "misc";
+	doc = "egg_dragon_lg_broken";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model = m_i_des_egg-dragon-large-01; 
+	}
+}
+[t:template,n:egg_des_dragon_large_02]
+{
+	category_name = "misc";
+	doc = "egg_dragon_med_broken";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model = m_i_des_egg-dragon-large-02; 
+	}
+}
+[t:template,n:log_cav_01]
+{
+	category_name = "misc";
+	doc = "cav_log_branch_thin";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-04; }
+}
+[t:template,n:log_cav_02]
+{
+	category_name = "misc";
+	doc = "cav_log_trunk";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-05; }
+}
+[t:template,n:log_cav_03]
+{
+	category_name = "misc";
+	doc = "cav_log_branch_thick";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-06; }
+}
+[t:template,n:log_des_01]
+{
+	category_name = "misc";
+	doc = "des_uprooted tree";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_des_log-01; }
+}
+
+[t:template,n:log_des_04]
+{
+	category_name = "misc";
+	doc = "des_log_branch_thin";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-04; }
+}
+[t:template,n:log_des_05]
+{
+	category_name = "misc";
+	doc = "des_log_trunk";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-05; }
+}
+[t:template,n:log_des_06]
+{
+	category_name = "misc";
+	doc = "des_log_branch_thick";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-06; }
+}
+[t:template,n:log_glb_01]
+{
+	category_name = "misc";
+	doc = "grs_log_sway";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-floating; }
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			chore_prefix = a_i_glb;
+			[chore_default]
+			{
+				skrit = infinite_loop;
+				[anim_files] { 00=log-floating-bob; }
+			}
+		}
+	}
+}
+[t:template,n:log_glb_burnt_01]
+{
+	category_name = "misc";
+	doc = "grs_log_trunk_burnt";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-burnt-01; }
+}
+[t:template,n:log_glb_burnt_02]
+{
+	category_name = "misc";
+	doc = "grs_log_branch_burnt";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-burnt-02; }
+}
+[t:template,n:log_grs_04]
+{
+	category_name = "misc";
+	doc = "grs_log_branch_thin";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-04; }
+}
+[t:template,n:log_grs_05]
+{
+	category_name = "misc";
+	doc = "grs_log_trunk";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-05; }
+}
+[t:template,n:log_grs_06]
+{
+	category_name = "misc";
+	doc = "grs_log_branch_thick";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-06; }
+}
+[t:template,n:log_grs_chopped]
+{
+	category_name = "misc";
+	doc = "grs_log_chopped";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-chopped; }
+}
+[t:template,n:log_grs_hollow]
+{
+	category_name = "misc";
+	doc = "grs_log_hollow";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-hollow; }
+}
+[t:template,n:log_grs_split]
+{
+	category_name = "misc";
+	doc = "grs_log_split";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_log-split; }
+}
+[t:template,n:log_ice_03]
+{
+	category_name = "misc";
+	doc = "ice_log_branch_thin";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_glb_log-04;
+		[textures] { 0=b_i_ice_logs; }
+	}
+}
+[t:template,n:log_ice_04]
+{
+	category_name = "misc";
+	doc = "ice_log_trunk";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_glb_log-05;
+		[textures] { 0=b_i_ice_logs; }
+	}
+}
+[t:template,n:log_ice_05]
+{
+	category_name = "misc";
+	doc = "ice_log_branch_thick";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_glb_log-06;
+		[textures] { 0=b_i_ice_logs; }
+	}
+}
+[t:template,n:log_ice_chopped]
+{
+	category_name = "misc";
+	doc = "ice_log_chopped";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_glb_log-chopped;
+		[textures] { 0=b_i_ice_log-chopped; }
+	}
+}
+[t:template,n:log_ice_hollow]
+{
+	category_name = "misc";
+	doc = "ice_log_hollow";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_glb_log-hollow;
+		[textures] { 0=b_i_ice_log-hollow; }
+	}
+}
+[t:template,n:log_ice_split]
+{
+	category_name = "misc";
+	doc = "ice_log_split";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_glb_log-split;
+		[textures] { 0=b_i_ice_log-split; }
+	}
+}
+[t:template,n:spire_ice_01]
+{
+	category_name = "rocks";
+	doc = "ice_spire_lg_01";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_ice_spire-01;
+		[textures] { 0=b_t_ic01_flr_stg-08x08-a; }
+	}
+}
+[t:template,n:spire_ice_02]
+{
+	category_name = "rocks";
+	doc = "ice_spire_lg_02";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_ice_spire-02;
+		[textures] { 0=b_t_ic01_flr_stg-08x08-a; }
+	}
+}
+[t:template,n:spire_ice_03]
+{
+	category_name = "rocks";
+	doc = "ice_spire_lg_03";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_ice_spire-03;
+		[textures] { 0=b_t_ic01_flr_stg-08x08-a; }
+	}
+}
+[t:template,n:spire_ice_04]
+{
+	category_name = "rocks";
+	doc = "ice_spire_lg_04";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_ice_spire-04;
+		[textures] { 0=b_t_ic01_flr_stg-08x08-a; }
+	}
+}
+[t:template,n:spire_ice_05]
+{
+	category_name = "rocks";
+	doc = "ice_spire_lg_05";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_ice_spire-05;
+		[textures] { 0=b_t_ic01_flr_stg-08x08-a; }
+	}
+}
+[t:template,n:spire_ice_06]
+{
+	category_name = "rocks";
+	doc = "ice_spire_sm_tall";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_ice_spire-06;
+		[textures] { 0=b_t_ic01_flr_stg-08x08-a; }
+	}
+}
+[t:template,n:log_swp_01]
+{
+	category_name = "misc";
+	doc = "swp_log_long";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_swp_log-01; }
+}
+[t:template,n:log_swp_02]
+{
+	category_name = "misc";
+	doc = "swp_log_med";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_swp_log-02; }
+}
+[t:template,n:log_swp_03]
+{
+	category_name = "misc";
+	doc = "swp_log_branched";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_swp_log-03; }
+}
+[t:template,n:mound_swp_01]
+{
+	category_name = "misc";
+	doc = "swp_brush_sm";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_swp_mound-01; }
+}
+[t:template,n:mound_swp_02]
+{
+	category_name = "misc";
+	doc = "swp_brush_med";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_swp_mound-02; }
+}
+[t:template,n:mound_swp_03]
+{
+	category_name = "misc";
+	doc = "swp_brush_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_swp_mound-03; }
+}
+
+
+[t:template,n:rock_des_03]
+{
+	category_name = "rocks";
+	doc = "des_rock_arched_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_des_rock-03; }
+}
+[t:template,n:rock_des_04]
+{
+	category_name = "rocks";
+	doc = "des_rock_stacked";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_des_rock-04; }
+}
+[t:template,n:rock_des_05]
+{
+	category_name = "rocks";
+	doc = "des_rock_arched_med";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_des_rock-05; }
+}
+[t:template,n:rock_des_06]
+{
+	category_name = "rocks";
+	doc = "des_rock_flat";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_des_rock-06; }
+}
+[t:template,n:rock_des_07]
+{
+	category_name = "rocks";
+	doc = "des_rock_arched_sm";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_des_rock-07; }
+}
+[t:template,n:rock_des_08]
+{
+	category_name = "rocks";
+	doc = "des_rock_sm";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_des_rock-08; }
+}
+[t:template,n:rock_grs_02]
+{
+	category_name = "rocks";
+	doc = "grs_rock_med";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_rock-02; }
+}
+[t:template,n:rock_grs_03]
+{
+	category_name = "rocks";
+	doc = "grs_rock_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_glb_rock-03; }
+}
+
+[t:template,n:rock_swp_01]
+{
+	doc = "swp_rock_tall_lg";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		model = m_i_swp_rock-01;
+		[textures] { 0=b_i_swp_rock-01; }
+	}
+}
+[t:template,n:rock_swp_02]
+{
+	category_name = "rocks";
+	doc = "swp_rock_round_med";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_swp_rock-02; }
+}
+[t:template,n:rock_swp_03]
+{
+	category_name = "rocks";
+	doc = "swp_rock_round_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_swp_rock-03; }
+}
+[t:template,n:rock_swp_04]
+{
+	category_name = "rocks";
+	doc = "swp_rock_fat_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_swp_rock-04; }
+}
+
+[t:template,n:rock_glb_wet_01]
+{
+	category_name = "rocks";
+	doc = "swp_lump_wet_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model = m_i_glb_rocks-wet-01; }
+}
+[t:template,n:rock_glb_wet_02]
+{
+	category_name = "rocks";
+	doc = "swp_lump_wet_med";
+	specializes = non_interactive_blocking;
+	[aspect] { model = m_i_glb_rocks-wet-02; }
+}
+[t:template,n:rock_glb_wet_03]
+{
+	category_name = "rocks";
+	doc = "swp_lump_wet_sm";
+	specializes = non_interactive_blocking;
+	[aspect] { model = m_i_glb_rocks-wet-03; }
+}
+[t:template,n:rock_glb_wet_04]
+{
+	category_name = "rocks";
+	doc = "swp_rock_wet_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model = m_i_glb_rocks-wet-04; }
+}
+[t:template,n:rock_glb_wet_05]
+{
+	category_name = "rocks";
+	doc = "swp_rock_wet_med";
+	specializes = non_interactive_blocking;
+	[aspect] { model = m_i_glb_rocks-wet-05; }
+}
+[t:template,n:rubble_glb_01]
+{
+	category_name = "rocks";
+	doc = "rubble_xxlg";
+	specializes = non_interactive_blocking;
+	
+	[aspect]
+	{
+		model = m_i_glb_rubble-01;
+		is_invincible = true;
+		lodfi_lower = -1;
+		lodfi_upper = -1;
+	}
+	[breaking_object] 
+	{
+		break_with_damage = false;
+		delete_object = true;
+	}
+
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_rubble_01	= 1;
+		}
+	} 
+}
+[t:template,n:rubble_glb_02]
+{
+	category_name = "rocks";
+	doc = "rubble_xlg";
+	specializes = non_interactive_blocking;
+	
+	[aspect]
+	{
+		model = m_i_glb_rubble-02;
+		is_invincible = true;
+		lodfi_lower = -1;
+		lodfi_upper = -1;
+	}
+	[breaking_object] 
+	{
+		break_with_damage = false;
+		delete_object = true;
+	}
+
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_rubble_02	= 1;
+		}
+	}  
+}
+[t:template,n:rubble_glb_03]
+{
+	category_name = "rocks";
+	doc = "rubble_lg";
+	specializes = non_interactive_blocking;
+	
+	[aspect]
+	{
+		model = m_i_glb_rubble-03;
+		is_invincible = true;
+		lodfi_lower = -1;
+		lodfi_upper = -1;
+	}
+	[breaking_object] 
+	{
+		break_with_damage = false;
+		delete_object = true;
+	}
+
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_rubble_03	= 1;
+		}
+	}  
+}
+[t:template,n:rubble_glb_04]
+{
+	category_name = "rocks";
+	doc = "rubble_med";
+	specializes = non_interactive_blocking;
+
+	[aspect]
+	{
+		model = m_i_glb_rubble-04;
+		is_invincible = true;
+		lodfi_lower = -1;
+		lodfi_upper = -1;
+	}	
+	[breaking_object] 
+	{
+		break_with_damage = false;
+		delete_object = true;
+	}
+
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_rubble_04	= 1;
+		}
+	}  
+}
+[t:template,n:rubble_glb_05]
+{
+	category_name = "rocks";
+	doc = "rubble_sm";
+	specializes = non_interactive_blocking;
+
+	
+	[aspect]
+	{
+		model = m_i_glb_rubble-05;
+		is_invincible = true;
+		lodfi_lower = -1;
+		lodfi_upper = -1;
+	}
+	[breaking_object] 
+	{
+		break_with_damage = false;
+		delete_object = true;
+	}
+
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_rubble_05	= 1;
+		}
+	}  
+}
+[t:template,n:rubble_glb_06]
+{
+	category_name = "rocks";
+	doc = "rubble_xsm";
+	specializes = non_interactive_blocking;
+	
+	[aspect]
+	{
+		model = m_i_glb_rubble-06;
+		is_invincible = true;
+		lodfi_lower = -1;
+		lodfi_upper = -1;
+	}
+	[breaking_object] 
+	{
+		break_with_damage = false;
+		delete_object = true;
+	}
+
+	[physics]
+	{
+		[break_particulate]
+		{
+			frag_glb_rubble_06	= 1;
+		}
+	}  
+}
+[t:template,n:stalactite_cav_01]
+{
+	category_name = "bad";
+	doc = "rvr_stalag_column_narrow_sm";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_stalactite-01; }
+}
+[t:template,n:stalactite_cav_02]
+{
+	category_name = "bad";
+	doc = "rvr_stalag_column_arched_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_stalactite-02; }
+}
+[t:template,n:stalactite_cav_03]
+{
+	category_name = "bad";
+	doc = "rvr_stalag_column_arched_med";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_stalactite-03; }
+}
+[t:template,n:stalactite_cav_04]
+{
+	category_name = "bad";
+	doc = "rvr_stalag_column_wide";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_stalactite-04; }
+}
+[t:template,n:stalagmite_cav_01]
+{
+	category_name = "bad";
+	doc = "rvr_stalagmite_wide_sm";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_stalagmite-01; }
+}
+[t:template,n:stalagmite_cav_02]
+{
+	category_name = "bad";
+	doc = "rvr_stalagmite_wide_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_stalagmite-02; }
+}
+[t:template,n:stalagmite_cav_03]
+{
+	category_name = "bad";
+	doc = "rvr_stalagmite_wide_pit";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_stalagmite-03; }
+}
+[t:template,n:stalagmite_cav_04]
+{
+	category_name = "bad";
+	doc = "rvr_stalagmite_wide_broken_med";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_stalagmite-04; }
+}
+[t:template,n:stalagmite_cav_05]
+{
+	category_name = "bad";
+	doc = "rvr_stalagmite_arched_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_stalagmite-05; }
+}
+[t:template,n:stalagmite_cav_06]
+{
+	category_name = "rocks";
+	doc = "rvr_stalagmite_wide_broken_sm";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_stalagmite-06; }
+}
+[t:template,n:stalagmite_cav_07]
+{
+	category_name = "rocks";
+	doc = "rvr_stalagmite_narrow_broken_lg";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_stalagmite-07; }
+}
+[t:template,n:stalagmite_cav_08]
+{
+	category_name = "rocks";
+	doc = "rvr_stalagmite_wide_broken_sm_trans";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_stalagmite-08; }
+}
+[t:template,n:stalagmite_cav_09]
+{
+	category_name = "rocks";
+	doc = "rvr_stalag_frags_med_arch";
+	specializes = non_interactive_blocking;
+	[aspect] { model=m_i_cav_stalagmite-09; }
+}
+
+[t:template,n:spike_glb_rock_broken_01]
+{
+	category_name = "rocks";
+	doc = "lava_spike_sm_broken";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model = m_i_glb_spike-rock-broken-01; 
+		textures:0 = b_t_lc01_wal_04x08-d;	
+	}
+}
+[t:template,n:spike_glb_rock_broken_02]
+{
+	category_name = "rocks";
+	doc = "lava_spike_lg_broken";
+	specializes = non_interactive_blocking;
+	[aspect] 
+	{ 
+		model = m_i_glb_spike-rock-broken-02; 
+		textures:0 = b_t_lc01_wal_04x08-d;	
+	}
+}
+

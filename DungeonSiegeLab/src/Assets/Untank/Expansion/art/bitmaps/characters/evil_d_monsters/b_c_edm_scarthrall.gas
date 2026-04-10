@@ -1,0 +1,6 @@
+[t:tsd,n:b_c_edm_scarthrall]
+{
+  b hasalpha = true;
+	layer1texture1 = b_c_edm_scarthrall;
+  i texturedetail = 3;
+}

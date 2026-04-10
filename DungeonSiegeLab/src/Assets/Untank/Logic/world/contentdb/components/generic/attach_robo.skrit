@@ -1,0 +1,100 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  attach_robo.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$			= false;
+property string _doc$					= "made to put the robosuit together";
+property string _required_component$	= "placement";
+
+property string	ttorso$;
+property string	tlightning$;
+property string	tminigun$;
+property string	tflamethrower$;
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+startup state Start$
+{
+	trigger OnGoHandleMessage$( WE_ENTERED_WORLD )
+	{
+		This.CreateTimer( 1, 0 );
+	}
+	
+	transition -> Attach$:OnTimer( 1 );
+}
+
+state Attach$
+{	
+	transition -> Attach$:OnTimer( 1 );
+	
+	event OnEnterState$
+	{
+		int i$ = 0;
+		int iend$ = Owner.Go.Parent.Children.Size();
+		Go Torso$;
+		
+		while( i$ < iend$ )
+		{
+			Torso$ = Owner.Go.Parent.Children.Get( i$ );
+			if( Torso$ != NULL )
+			{
+				if( StringTool.SameNoCase( Torso$.templatename, ttorso$))
+				{
+					Owner.Go.Parent.Aspect.AspectHandle.AttachRigidLinkedChild( Torso$.Aspect.AspectHandle, "Bip01_Spine", "Torso_Root" );
+					i$ = iend$;
+					// Follow the legs!
+					MCPManager.MakeRequest(	Torso$.Goid, PL_FOLLOW, Owner.Go.Goid );
+				}
+			}
+			i$ += 1;
+		}
+		if( Torso$ == NULL )
+		{
+			This.CreateFrameTimer( 1, 5 );
+			return;
+		}
+	
+		Go Child$;
+		i$ = 0;
+		while( i$ < iend$ )
+		{
+			Child$ = Owner.Go.Parent.Children.Get( i$ );
+			if( Child$ != NULL )
+			{
+				if( StringTool.SameNoCase( Child$.templatename, tminigun$))
+				{
+					Torso$.Aspect.AspectHandle.AttachRigidLinkedChild( Child$.Aspect.AspectHandle, "L_shoulder_attach_bone", "L_shoulder_attach_bone" );
+				}
+				else if( StringTool.SameNoCase( Child$.templatename, tflamethrower$))
+				{
+					Torso$.Aspect.AspectHandle.AttachRigidLinkedChild( Child$.Aspect.AspectHandle, "R_shoulder_attach_bone", "R_shoulder_attach_bone" );
+				}
+				else if( StringTool.SameNoCase( Child$.templatename, tlightning$))
+				{
+					Torso$.Aspect.AspectHandle.AttachRigidLinkedChild( Child$.Aspect.AspectHandle, "lightninggun_attach_bone", "lightninggun_attach_bone" );
+				}
+				// Follow the legs!
+				MCPManager.MakeRequest(	Child$.Goid, PL_FOLLOW, Owner.Go.Goid );
+			}
+			i$ += 1;
+		}
+		SetState Done$;
+	}
+}
+
+state Done$
+{
+}

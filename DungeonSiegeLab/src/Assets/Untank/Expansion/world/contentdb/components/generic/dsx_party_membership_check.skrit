@@ -1,0 +1,54 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  dsx_party_membership_check.skrit
+// Author(s):  Mathew Corthell
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: Checks to see if a particular actor is in the party of the 
+//          actor that activated the trigger.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "dsx_party_membership_check.skrit";
+
+property scid object_to_activate$ doc = "Scid of the object to activate if the indicated member IS in the party.";
+property string member_template$="" doc = "Template of the person that we're looking for.";
+
+owner = GoSkritComponent;
+
+#include "k_job_c_talk_utils_DSX" 
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+startup state Wait$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if(e$ == WE_REQ_ACTIVATE)
+		{
+			Goid activator$ = MakeGoid( msg$.GetData1() );
+			report.Genericf("Activator: 0x%x Name: %s Parent: 0x%x\n", MakeInt(activator$), activator$.Go.TemplateName, MakeInt(activator$.Go.Parent.Goid));
+
+			if(activator$.IsValid())
+			{
+				if(IsInParty$(member_template$, activator$))
+				{
+					report.Genericf("Actor in party.  Sending message to goid: 0x%x\n", MakeInt(object_to_activate$));
+					#only(game)[[
+					PostWorldMessage( WE_REQ_ACTIVATE, owner.Goid, object_to_activate$, activator$, 0.0 );
+					]];
+				}
+			}
+		}
+	}
+}

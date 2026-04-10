@@ -1,0 +1,346 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_steam_puzzle.skrit
+// Author(s):  Uncle Ernsie
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property	bool	_server_only$			= true;
+property	string	_doc$					= "Changes whether an object is useable and selectable";
+property	string	_required_component$	= "placement";
+
+property	scid	Lever1_Scid$						doc = "Scid for first lever in sequence.";
+property	scid	Lever2_Scid$						doc = "Scid for second lever in sequence.";
+property	scid	Lever3_Scid$						doc = "Scid for third lever in sequence.";
+property	scid	Lever4_Scid$						doc = "Scid for fourth lever in sequence.";
+property	scid	Steam1_Scid$						doc = "Scid for to trigger steam for lever1.";
+property	scid	Steam2_Scid$						doc = "Scid for to trigger steam for lever2.";
+property	scid	Steam3_Scid$						doc = "Scid for to trigger steam for lever3.";
+property	scid	Steam4_Scid$						doc = "Scid for to trigger steam for lever4.";
+property    scid    Goal_Scid$                          doc = "Scid of the Object which will be activated when all steam is on.";
+
+            goid    fromlever$;
+            bool    Goal_Met$           = false;
+			bool   	lever1_enabled$     = false;
+			bool   	lever2_enabled$     = false;
+			bool   	lever3_enabled$     = false;
+			bool   	lever4_enabled$     = false;
+			bool   	steam1_enabled$     = false;
+			bool   	steam2_enabled$     = false;
+			bool   	steam3_enabled$     = false;
+			bool   	steam4_enabled$     = false;
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+event OnGoDrawDebugHud$
+{
+    if ( Lever1_Scid$.IsValid() && Lever1_Scid$.getgoid.isvalid() )
+    {
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 Lever1_Scid$.go.Placement.Position,
+                                     MakeColor( 0.0, 1.0, 0.0 ),
+                                     "Lever1_Scid" );
+    }
+    if ( Lever2_Scid$.IsValid() && Lever2_Scid$.getgoid.isvalid() )
+    {
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 Lever2_Scid$.go.Placement.Position,
+                                     MakeColor( 0.0, 1.0, 0.0 ),
+                                     "Lever2_Scid" );
+    }
+    if ( Lever3_Scid$.IsValid() && Lever3_Scid$.getgoid.isvalid() )
+    {
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 Lever3_Scid$.go.Placement.Position,
+                                     MakeColor( 0.0, 1.0, 0.0 ),
+                                     "Lever3_Scid" );
+    }
+    if ( Lever4_Scid$.IsValid() && Lever4_Scid$.getgoid.isvalid() )
+    {
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 Lever4_Scid$.go.Placement.Position,
+                                     MakeColor( 0.0, 1.0, 0.0 ),
+                                     "Lever4_Scid" );
+    }
+    if ( Steam1_Scid$.IsValid() && Steam1_Scid$.getgoid.isvalid() )
+    {
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 Steam1_Scid$.go.Placement.Position,
+                                     MakeColor( 0.5, 0.0, 0.5 ),
+                                     "Steam1_Scid" );
+    }
+    if ( Steam2_Scid$.IsValid() && Steam2_Scid$.getgoid.isvalid() )
+    {
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 Steam2_Scid$.go.Placement.Position,
+                                     MakeColor( 0.5, 0.0, 0.5 ),
+                                     "Steam2_Scid" );
+    }
+    if ( Steam3_Scid$.IsValid() && Steam3_Scid$.getgoid.isvalid() )
+    {
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 Steam3_Scid$.go.Placement.Position,
+                                     MakeColor( 0.5, 0.0, 0.5 ),
+                                     "Steam3_Scid" );
+    }
+    if ( Steam4_Scid$.IsValid() && Steam4_Scid$.getgoid.isvalid() )
+    {
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 Steam4_Scid$.go.Placement.Position,
+                                     MakeColor( 0.5, 0.0, 0.5 ),
+                                     "Steam4_Scid" );
+    }
+    if ( Goal_Scid$.IsValid() && Goal_Scid$.getgoid.isvalid() )
+    {
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 Goal_Scid$.go.Placement.Position,
+                                     MakeColor( 1.0, 1.0, 1.0 ),
+                                     "Goal_Scid" );
+    }
+}
+
+startup state Waiting$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_ACTIVATE)
+		{
+			fromlever$ = msg$.GetSendFrom();
+
+            if (fromlever$ == Lever1_Scid$.goid)
+            {
+				SetState Lever1$;
+			}
+            if (fromlever$ == Lever2_Scid$.goid)
+            {
+				SetState Lever2$;
+			}
+            if (fromlever$ == Lever3_Scid$.goid)
+            {
+				SetState Lever3$;
+			}
+            if (fromlever$ == Lever4_Scid$.goid)
+            {
+				SetState Lever4$;
+			}
+		}
+	}
+}
+
+
+State Lever1$
+{
+    event OnEnterState$
+    {
+		if (!lever1_enabled$)
+    	{
+            lever1_enabled$ = true;
+			steam1_enabled$ = true;
+
+			if (( lever2_enabled$ ) && ( !steam2_enabled$ ))
+    		{
+				steam2_enabled$ = true;
+			}
+			if (( lever3_enabled$ ) && ( !steam3_enabled$ ))
+    		{
+				steam3_enabled$ = true;
+			}
+			if (( lever4_enabled$ ) && ( !steam4_enabled$ ))
+    		{
+				steam4_enabled$ = true;
+			}
+		}
+        else if (lever1_enabled$)
+    	{
+            lever1_enabled$ = false;
+			steam1_enabled$ = false;
+
+			if (( lever2_enabled$ ) && ( steam2_enabled$ ))
+    		{
+				steam2_enabled$ = false;
+			}
+			if (( lever3_enabled$ ) && ( steam3_enabled$ ))
+    		{
+				steam3_enabled$ = false;
+			}
+			if (( lever4_enabled$ ) && ( steam4_enabled$ ))
+    		{
+				steam4_enabled$ = false;
+			}
+		}
+
+        SetState Compute$;
+	}
+}
+
+State Lever2$
+{
+    event OnEnterState$
+    {
+		if (!lever2_enabled$)
+    	{
+            lever2_enabled$ = true;
+
+			if ( steam1_enabled$ )
+			{
+				steam2_enabled$ = true;
+
+				if (( lever3_enabled$ ) && ( !steam3_enabled$ ))
+   				{
+					steam3_enabled$ = true;
+				}
+				if (( lever4_enabled$ ) && ( !steam4_enabled$ ))
+   				{
+					steam4_enabled$ = true;
+				}
+            }
+		}
+        else if (lever2_enabled$)
+    	{
+            lever2_enabled$ = false;
+			steam2_enabled$ = false;
+
+			if (( lever3_enabled$ ) && ( steam3_enabled$ ))
+    		{
+				steam3_enabled$ = false;
+			}
+			if (( lever4_enabled$ ) && ( steam4_enabled$ ))
+    		{
+				steam4_enabled$ = false;
+			}
+		}
+
+        SetState Compute$;
+	}
+}
+
+State Lever3$
+{
+    event OnEnterState$
+    {
+		if (!lever3_enabled$)
+    	{
+			lever3_enabled$ = true;
+			
+			if (( steam1_enabled$ ) && ( steam2_enabled$ ))
+			{
+				steam3_enabled$ = true;
+            }
+			if (( lever4_enabled$ ) && ( !steam4_enabled$ ))
+   			{
+				steam4_enabled$ = true;
+			}
+        }
+        else if (lever3_enabled$)
+    	{
+			lever3_enabled$ = false;
+			steam3_enabled$ = false;
+
+			if (( lever4_enabled$ ) && ( steam4_enabled$ ))
+    		{
+				steam4_enabled$ = false;
+			}
+		}
+
+        SetState Compute$;
+	}
+}
+
+State Lever4$
+{
+    event OnEnterState$
+    {
+		if (!lever4_enabled$)
+    	{
+            lever4_enabled$ = true;
+
+        	if (( steam1_enabled$ ) && ( steam2_enabled$ ) && ( steam3_enabled$ ))
+			{
+				steam4_enabled$ = true;
+        	}
+		}
+        else
+    	{
+            lever4_enabled$ = false;
+			steam4_enabled$ = false;
+		}
+
+        SetState Compute$;
+	}
+}
+
+State Compute$
+{
+    event OnEnterState$
+	{
+		//Turn Steam Emitters On/Off
+		if (steam1_enabled$)
+		{
+			SendWorldMessage( WE_REQ_ACTIVATE, owner.Goid, Steam1_Scid$ );
+		}
+		else
+		{
+			SendWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, Steam1_Scid$ );
+		}
+
+		if (steam2_enabled$)
+		{
+			SendWorldMessage( WE_REQ_ACTIVATE, owner.Goid, Steam2_Scid$ );
+		}
+		else
+		{
+			SendWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, Steam2_Scid$ );
+		}
+
+		if (steam3_enabled$)
+		{
+			SendWorldMessage( WE_REQ_ACTIVATE, owner.Goid, Steam3_Scid$ );
+		}
+		else
+		{
+			SendWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, Steam3_Scid$ );
+		}
+
+		if (steam4_enabled$)
+		{
+			SendWorldMessage( WE_REQ_ACTIVATE, owner.Goid, Steam4_Scid$ );
+		}
+		else
+		{
+			SendWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, Steam4_Scid$ );
+		}
+		if (( steam1_enabled$ ) && ( steam2_enabled$ ) && ( steam3_enabled$ ) && ( steam4_enabled$ ))
+		{
+		    Goal_Met$ = True;
+		    SendWorldMessage( WE_REQ_ACTIVATE, owner.Goid, Goal_Scid$ );
+        }
+		else if (Goal_Met$)
+		{
+		    SendWorldMessage( WE_REQ_DEACTIVATE, owner.Goid, Goal_Scid$ );
+		    Goal_Met$ = False;
+        }
+
+		SetState Waiting$;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,154 @@
+[mood_setting*]
+{
+
+	mood_name			= uber_test_main;
+	transition_time			= 1.0f;
+	interior			= true;
+
+	[fog]
+	{
+		fog_near_dist		= 38.0f;
+		fog_far_dist		= 48.0f;
+		fog_lowdetail_near_dist		= 25.0f; 
+		fog_lowdetail_far_dist		= 35.0f;
+		fog_color			= 0xFF646464;
+		fog_density			= 0.5f;
+	}
+	[frustum]
+	{
+		frustum_width		= 20.0f;
+		frustum_height		= 70.0f;
+	}
+}
+[mood_setting*]
+{
+
+	mood_name			= uber_test_low;
+	transition_time			= 1.0f;
+	interior			= true;
+
+	[fog]
+	{
+		fog_near_dist		= 38.0f;
+		fog_far_dist		= 48.0f;
+		fog_lowdetail_near_dist		= 25.0f; 
+		fog_lowdetail_far_dist		= 35.0f;
+		fog_color			= 0xFF000000;
+		fog_density			= 0.5f;
+	}
+	[frustum]
+	{
+		frustum_width		= 20.0f;
+		frustum_height		= 70.0f;
+	}
+}
+[mood_setting*]
+{
+
+	mood_name			= uber_test_1;
+	transition_time			= 1.0f;
+	interior			= true;
+
+	[fog]
+	{
+		fog_near_dist		= 25.0f;
+		fog_far_dist		= 35.0f;
+		fog_lowdetail_near_dist		= 25.0f; 
+		fog_lowdetail_far_dist		= 35.0f;
+		fog_color			= 0xFF222255;
+		fog_density			= 0.5f;
+	}
+	[frustum]
+	{
+		frustum_width		= 20.0f;
+		frustum_height		= 70.0f;
+	}
+}
+[mood_setting*]
+{
+
+	mood_name			= uber_test_2;
+	transition_time			= 1.0f;
+	interior			= true;
+
+	[fog]
+	{
+		fog_near_dist		= 25.0f;
+		fog_far_dist		= 35.0f;
+		fog_lowdetail_near_dist		= 25.0f; 
+		fog_lowdetail_far_dist		= 35.0f;
+		fog_color			= 0xFF552222;
+		fog_density			= 0.5f;
+	}
+	[frustum]
+	{
+		frustum_width		= 20.0f;
+		frustum_height		= 70.0f;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= uber_test_1_teleport;//blue
+	transition_time			= 10.0f;
+	interior				= true;
+
+	[frustum]
+	{
+		frustum_width		= 20.0f;
+		frustum_height		= 70.0f;
+	}
+	[fog]
+	{
+		fog_near_dist		= 25.0f;
+		fog_far_dist		= 35.0f;
+		fog_lowdetail_near_dist		= 25.0f; 
+		fog_lowdetail_far_dist		= 35.0f;
+		fog_color			= 0xFF222255;
+		fog_density			= 0.5f;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= uber_test_2_teleport;//red
+	transition_time			= 10.0f;
+	interior				= true;
+
+	[frustum]
+	{
+		frustum_width		= 20.0f;
+		frustum_height		= 70.0f;
+	}
+	[fog]
+	{
+		fog_near_dist		= 25.0f;
+		fog_far_dist		= 35.0f;
+		fog_lowdetail_near_dist		= 25.0f; 
+		fog_lowdetail_far_dist		= 35.0f;
+		fog_color			= 0xFF552222;
+		fog_density			= 0.5f;
+	}
+}
+[mood_setting*]
+{
+	mood_name				= uber_test_teleport;
+	transition_time			= 2.0f;
+	interior				= true;
+
+	[frustum]
+	{
+		frustum_width		= 5.0f;
+		frustum_height		= 70.0f;
+	}
+
+	[fog]
+	{
+		fog_near_dist		= 25.0f;
+		fog_far_dist		= 35.0f;
+		fog_lowdetail_near_dist		= 25.0f; 
+		fog_lowdetail_far_dist		= 35.0f;
+		fog_color			= 0xFF000000;
+		fog_density			= 0.5f;
+	}
+
+	[rain] {}
+}

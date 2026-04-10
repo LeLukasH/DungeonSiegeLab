@@ -1,0 +1,4 @@
+[mood_manager]
+{
+	skrit					= "world\global\moods\mood_manager.skrit";
+}

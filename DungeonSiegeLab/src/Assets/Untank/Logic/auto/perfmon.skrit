@@ -1,0 +1,68 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :	perfmon.skrit (Skritbot)
+// Author(s):  	Bartosz Kijanka
+//
+// Summary  :  	Log basic performance stats during gameplay
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property float	period$	= 10			doc = "Sample period, in seconds.";
+
+
+////////////////////////////////////////
+//	Startup$
+startup state STARTUP$
+{
+	event OnEnterState$
+	{
+		SetState Wait$;
+	}
+}
+
+
+////////////////////////////////////////
+//	Wait$
+startup state Wait$
+{
+	transition -> TakeSample$ :  OnTimer( 1 );
+
+	event OnEnterState$
+	{
+		GpConsole.Execute( "report enable perflog" );
+		GpConsole.Execute( "report filelog perflog" );
+
+		this.CreateTimer( 1, period$ );
+	}
+}
+
+
+////////////////////////////////////////
+//	TakeSample$
+state TakeSample$
+{
+	event OnEnterState$
+	{
+		report.perflog(  "\n\n" );
+		report.perflog(  "//===============================================================================\n" );
+		report.perflogf( "[gametime=%2.2f] - Performance Summary\n", WorldTime.Time );
+		report.perflog(  "//-------------------------------------------------------------------------------\n" );
+
+		Game.DumpPerformanceSummary( false, PerfLogContext() );
+
+		if( World.IsMultiplayer )
+		{
+			string netdump$;
+			DebugProbe.GetNet( netdump$ );
+			report.perflogf( "%s\n", netdump$ );
+		}
+
+		SetState Wait$;
+	}
+}
+
+

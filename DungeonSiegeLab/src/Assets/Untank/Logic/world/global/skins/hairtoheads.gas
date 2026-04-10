@@ -1,0 +1,16 @@
+[hairtoheads]
+{
+	[farmboy]
+	{
+		b_c_gah_fb_hair_001 = default,m_c_gah_fb_hlmt_head-02,m_c_gah_fb_hlmt_head-03;
+		b_c_gah_fb_hair_002 = default,m_c_gah_fb_hlmt_head-02,m_c_gah_fb_hlmt_head-03;
+		b_c_gah_fb_hair_003 = default,m_c_gah_fb_hlmt_head-02,m_c_gah_fb_hlmt_head-03;
+		b_c_gah_fb_hair_004 = default,m_c_gah_fb_hlmt_head-02,m_c_gah_fb_hlmt_head-03;
+		b_c_gah_fb_hair_005 = default,m_c_gah_fb_hlmt_head-02,m_c_gah_fb_hlmt_head-03;
+		b_c_gah_fb_hair_006 = default,m_c_gah_fb_hlmt_head-02,m_c_gah_fb_hlmt_head-03;
+		b_c_gah_fb_hair_007 = default,m_c_gah_fb_hlmt_head-04,m_c_gah_fb_hlmt_head-05;
+		b_c_gah_fb_hair_008 = default,m_c_gah_fb_hlmt_head-04,m_c_gah_fb_hlmt_head-05;
+		b_c_gah_fb_hair_009 = default,m_c_gah_fb_hlmt_head-04,m_c_gah_fb_hlmt_head-05;
+		b_c_gah_fb_hair_010 = default,m_c_gah_fb_hlmt_head-04,m_c_gah_fb_hlmt_head-05;
+	}
+}

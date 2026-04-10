@@ -1,0 +1,179 @@
+[t:template,n:3W_base_boar]
+{
+	doc = "3W_Generic Boar";
+	specializes = actor_evil;
+	[aspect]
+	{
+		model = m_c_edm_hb_pos_1;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_hellboar;		}
+			[hit_critical]	{ priority = low; * = s_e_hit_hellboar_SED;	}
+			[hit_glance]	{ priority = low; * = s_e_hit_hellboar_SED;	}
+			[hit_solid]		{ priority = low; * = s_e_hit_hellboar_SED;	}
+		}
+	}
+	[body]
+	{
+		avg_move_velocity = 4.800000;
+		[bone_translator]
+		{
+			body_anterior = rt_ft_upper;
+			body_mid = spine1;
+			body_posterior = Tail;
+			kill_bone = bone01;
+			shield_bone = lt_bk_foot;
+			weapon_bone = rt_ft_foot;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_hb_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+					{
+						00 = at;
+						01 = at-02;
+					}
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=dfs; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dff; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=rl; }
+			}
+		}
+	}
+	[mind]	{}
+}
+
+[t:template,n:3W_hell_boar_base]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_hell_boar";
+	specializes = 3W_base_boar;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  56, 0;
+			intelligence =  9.8, 0;
+			dexterity =  29.4, 0;
+            melee =  92,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 1399648;
+		life = 1575;
+        max_life = 1575;
+        mana = 40;
+		max_mana = 40;
+		model = m_c_edm_hb_pos_1;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 341;
+		damage_min = 270;
+	}
+	[common] { screen_name="Hell Boar"; }
+   	[defend] { defense=930; }
+	[mind]
+	{
+		jat_fidget	= world\ai\jobs\common\job_fidget.skrit
+			?social			= 0.30
+			&wander			= 0.60
+			&approach_dist 	= 2.50
+			&still			= false;
+
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+}
+[t:template,n:3W_hell_boar]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_hell_boar";
+	specializes = 3W_hell_boar_base;
+}
+[t:template,n:3W_hell_boar_summon]
+{
+	category_name = "3W_evil_d";
+	doc = "[summon] hell_boar";
+	specializes = 3W_hell_boar_base;
+	aspect:experience_value = 0;
+	[inventory]
+	{
+		[pcontent]
+		{
+			[gold*]
+			{
+				chance = 0;
+			}
+		}
+	}
+}
+[t:template,n:3W_snow_boar]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_snow_boar";
+	specializes = 3W_base_boar;
+	[actor]
+	{
+		[skills]
+		{
+			strength =  54.4, 0;
+			intelligence =  6.9, 0;
+			dexterity =  27.9, 0;
+            melee =  95,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 1039764;
+		life = 2000;
+        max_life = 2000;
+        mana = 66.7;
+		max_mana = 66.7;
+		model = m_c_edm_hb_pos_1;
+		[textures]		{ 0 = b_c_edm_hb-02; }
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 421.7;
+		damage_min = 285;
+	}
+	[common] { screen_name="Snow Boar"; }
+    	[defend] { defense=508.3; }
+	[mind]
+	{
+		melee_engage_range = 10;
+		personal_space_range = 0.7;
+		ranged_engage_range = 10.0;
+		sight_range = 10.0;
+	}
+}

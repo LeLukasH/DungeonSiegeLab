@@ -1,0 +1,95 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_resurrect.skrit
+// Author(s):  Rick Saenz, Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+property string effect_script$	= "resurrect"	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string script_params$	= ""			doc = "Parameters to pass along to the SiegeFx script";
+property float	heal_ratio$		= 0.0			doc = "Amount to additionaly heal target 0.0 - 1.0";
+
+owner = GoSkritComponent;
+
+
+Goid caster$;
+Goid target$;
+
+
+startup state Start$
+{
+	transition -> MakeAlive$ : OnGoHandleMessage( WE_SPELL_SYNC_MID );
+
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST )
+		{
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			if( !target$.IsValidMp || !caster$.IsValidMp )
+			{
+				SetState Finished$;
+				return;
+			}
+
+			if( !target$.go.aspect.IsVisible ) 
+			{
+				SetState Finished$;
+				return;
+			}
+
+			// Start the visual effect
+			SiegeFx.SRunScript( effect_script$, target$, caster$, script_params$, owner.Goid, e$ );
+		}
+	}
+}
+
+state MakeAlive$
+{
+	transition -> Finished$ : OnGoHandleMessage( WE_SPELL_SYNC_END );
+	event OnEnterState$
+	{
+		if( !target$.IsValid || !caster$.Isvalid )
+		{
+			SetState Finished$;
+			return;
+		}
+	
+		if( !target$.go.aspect.IsVisible ) 
+		{
+			SetState Finished$;
+			return;
+		}
+			
+		if ( target$.Go.IsGhost() )
+		{					
+			target$.Go.Aspect.SSetLifeState( LS_ALIVE_CONSCIOUS );
+		}
+		
+		// Now make the poor little dead go alive again by adding health
+		float n$ = 2.0 + caster$.go.actor.getskilllevel( owner.go.magic.skillclass ) - target$.go.aspect.currentlife; 
+		
+		n$ = Math.Maxfloat( 3, n$ );
+		
+		Rules.ChangeLife( target$, n$ );
+		
+		if( heal_ratio$ > 0.0 )
+		{
+			Rules.ChangeLife( target$, heal_ratio$ * target$.go.aspect.maxlife );
+		}
+		
+		target$.go.mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+	}	
+}
+
+state Finished$
+{
+	event OnEnterState$
+	{
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

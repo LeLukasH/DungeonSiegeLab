@@ -1,0 +1,301 @@
+[t:template,n:dsx_angler_base]
+{
+	category_name = "1W_evil_d";
+	doc = "Angler Base";
+	specializes = actor_evil;
+	[aspect]
+	{	
+       [textures]	{ 0 = b_c_edm_angler; }
+		model = m_c_edm_mn_pos_1;
+		voice:die:		* = s_e_die_angler_SED;
+		voice:hit_glance:	* = s_e_hit_mangler_SED;
+		//voice:hit_solid:	* = s_e_hit_mangler_SED;
+		voice:hit_critical:	* = s_e_hit_mangler_SED;
+	}
+	[body]
+	{
+		min_move_velocity = 1.75;
+		avg_move_velocity = 2.980000;
+		[bone_translator]
+		{
+			body_anterior = bone01;
+			body_mid = bone01;
+			body_posterior = bone01;
+			kill_bone = bone01;
+			shield_bone = bone01;
+			weapon_bone = bone01;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_mn_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					01 = at-02;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[water_effects]
+	{
+		shallow_water_effect = water_splashes;
+		deep_water_effect = water_splashes;
+		effect_scale = .9;
+		battle_scale = 0.4;
+		max_scale = 1.0;
+	}
+	[mind]
+	{
+		melee_engage_range = 10;
+		personal_space_range = 0.7;
+		ranged_engage_range = 10.0;
+		sight_range = 10.0;
+   		job_travel_distance_limit = 10;
+		on_job_reached_travel_distance_abort_attack = true;
+		sight_origin_height	= 1;
+	}
+}
+[t:template,n:dsx_angler]
+{
+	doc = "dsx_angler";
+	specializes = dsx_angler_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength 		= 	9, 0;
+			intelligence 	= 	7, 0;
+			dexterity 		= 	8, 0;
+			melee 			=  	6,  0;
+		}
+	}
+
+	[aspect]
+	{
+		[textures]	{ 0 = b_c_edm_angler; }
+		experience_value = 44;
+		life = 60;
+		max_life = 60;
+		mana = 15;
+		max_mana = 15;
+	}
+
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 40;
+		damage_min = 24;
+	}
+	[common] { screen_name="Angler"; }
+	[defend] { defense = 40; }
+}
+
+[t:template,n:dsx_angler_shadow]
+//balanced to Level 15
+{
+	doc = "dsx_angler_shadow";
+	specializes = dsx_angler_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength = 	15, 0;
+			intelligence = 	8, 0;
+			dexterity = 	11, 0;
+			melee =  	13,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 400;
+		life = 184;
+		max_life = 184;
+		mana = 10;
+		max_mana = 10;
+		scale_base = 0.60;
+		[textures]	{0=b_c_edm_shadow_angler;}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 61;
+		damage_min = 55;
+	}
+	[common] { screen_name="Shadow Angler"; }
+	[defend] { defense=96; }
+	[mind] 
+	{ 
+		jat_fidget	= world\ai\jobs\common\job_fidget.skrit;
+        personal_space_range = 0.2;
+	}
+}
+
+[t:template,n:dsx_angler_jungle]
+{
+	doc = "dsx_angler_jungle";
+	specializes = dsx_angler_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength = 	9, 0;
+			intelligence = 	7, 0;
+			dexterity = 	8, 0;
+			melee =  	4, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 98;
+		life = 117;
+		max_life = 117;
+		mana = 4;
+		material = teeth;
+		max_mana = 4;
+ 	    [textures]	{0=b_c_edm_jungle_mangler;}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 26;
+		damage_min = 20;
+	}
+	[common] { screen_name="Jungle Angler"; }
+	[defend] { defense=52; }
+	[mind]
+	{
+		jat_attack_object_melee	= world\ai\jobs\common\job_attack_object_melee.skrit
+			?cautious_chance	= 0.75
+			&min_cautious_distance = 3.00
+			&cautious_approach_distance = 1.0
+			&cautious_down_time = 1.1;
+
+
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit
+			?social 		= 0.35
+			&approach_dist 	= 2.00
+			&move_distance 	= 4.00
+			&min_distance 	= 2.00
+			&still 			= false;
+	}
+}
+
+[t:template,n:dsx_angler_jungle_02]
+]
+{
+	doc = "dsx_angler_jungle_02";
+	specializes = dsx_angler_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength = 	17, 0;
+			intelligence = 	8, 0;
+			dexterity = 	11, 0;
+			melee =  	16, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 696;
+		life = 216;
+		max_life = 216;
+		mana = 4;
+		material = teeth;
+		max_mana = 4;
+ 	    [textures]	{0=b_c_edm_jungle_mangler;}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 74;
+		damage_min = 65;
+	}
+	[common] { screen_name="Jungle Angler"; }
+	[defend] { defense=117; }
+	[mind]
+	{
+		jat_attack_object_melee	= world\ai\jobs\common\job_attack_object_melee.skrit
+			?cautious_chance	= 0.75
+			&min_cautious_distance = 3.00
+			&cautious_approach_distance = 1.0
+			&cautious_down_time = 1.1;
+
+
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit
+			?social 		= 0.35
+			&approach_dist 	= 2.00
+			&move_distance 	= 4.00
+			&min_distance 	= 2.00
+			&still 			= false;
+	}
+}
+
+
+[t:template,n:dsx_angler_cave]
+// balanced to Level 12
+{
+	doc = "dsx_angler_cave";
+	specializes = base_mangler;
+	[actor]
+	{
+		[skills]
+		{
+			strength 		= 	13, 0;
+			intelligence 	= 	8, 0;
+			dexterity 		= 	10, 0;
+			melee 			=  	11,  0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 196;
+		life = 145;
+		max_life = 145;
+		mana = 10;
+		max_mana = 10;
+		voice:die:			* = s_e_die_angler_SED;
+		voice:hit_glance:	* = s_e_hit_mangler_SED;
+		//voice:hit_solid:	* = s_e_hit_mangler_SED;
+		voice:hit_critical:	* = s_e_hit_mangler_SED;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 52;
+		damage_min = 40;
+	}
+	[common] { screen_name="Cave Angler"; }
+	[defend] { defense=135; }
+	[inventory]
+	{
+	}
+}

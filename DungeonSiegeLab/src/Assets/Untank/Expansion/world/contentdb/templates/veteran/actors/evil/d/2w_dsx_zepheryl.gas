@@ -1,0 +1,521 @@
+[t:template,n:2W_base_ranged_zepheryl]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_base_ranged_zepheryl";
+	specializes = actor_evil;
+	[actor]
+	{
+		[skills]
+			{
+				strength 		= 27, 0;
+				intelligence 	=  4, 0;
+				dexterity 		=  14.1, 0;
+				combat_magic 	= 55, 0;
+				nature_magic 	= 55, 0;
+			}
+	}
+	[aspect]
+	{
+		experience_value = 30363;
+		force_no_render = true;
+		// MRC 7/18/2003 Allow clicking on invisible objects.
+		force_no_render_click = true;
+		life = 193.3;
+		max_life = 193.3;
+		mana = 26.7;
+		max_mana = 26.7;
+		draw_shadow = false;
+		model = m_c_edm_ga_pos_1;
+		scale_base = 1;	 
+
+		[voice]
+		{
+			[die]			{ priority = high;	* = s_e_die_zepheryl_SED;		}
+			[enemy_spotted]	{ priority = high; * = s_e_call_zepheryl_SED; }
+			[hit_critical]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+			[hit_glance]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+			[hit_solid]		{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+		}
+	}
+	[attack]
+	{
+		attack_range = .5;
+		damage_max = 132;
+		damage_min = 99;
+	}
+
+	[defend] { defense=42.2; }
+
+	[body]
+	{
+		avg_move_velocity = 7.990000;
+		[bone_translator]
+		{
+			body_anterior = bone01;
+			body_mid = bone01;
+			body_posterior = bone01;
+			kill_bone = bone01;
+			shield_bone = bone01;
+			weapon_bone = bone01;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_ga_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					01 = at-02;
+				}
+			}
+			[chore_magic]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = mg;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=dfs; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dff; }
+			}
+			[chore_misc]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files]
+				{
+					slep = ds;
+					wake = rv;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = basic_walk;
+				[anim_files] { 00=fl; }
+			}
+		}
+	}
+	[common]
+	{
+		screen_name="Zepheryl";
+		membership = gargoyle, monster, immune_polymorph;
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("zepheryl_fire");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+			}
+		}
+	}
+	[mind]
+	{
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit;
+
+		melee_engage_range		= 14;
+		personal_space_range	= 0.5;
+		ranged_engage_range		= 14.0;
+		sight_range				= 14.0;
+	}
+	[physics]
+	{
+		break_effect = zepheryl_die;
+		explode_when_killed = true;
+		explosion_magnitude = 2;
+		fire_effect = human_physics_fire;
+		fire_resistance = 0.0;
+		fire_burn_threshold = 20;
+		gib_gore_good = true;
+			
+	}
+
+	[inventory]
+	{
+		drop_at_use_point = true;
+		
+	}	
+}
+[t:template,n:2W_dsx_zepheryl_base]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_zepheryl_base";
+	specializes = 2W_base_ranged_zepheryl;
+	[common]
+	{
+		membership = gargoyle,monster;
+	}
+	[aspect]
+	{
+		experience_value = 42108;
+		force_no_render = true;
+		life = 400;
+		max_life = 400;
+		mana = 26.7;
+		max_mana = 26.7;
+		megamap_icon	= b_gui_ig_mnu_zepheryl;
+		megamap_orient = true;
+		draw_shadow = false;
+		model = m_c_edm_ga_pos_1;
+		scale_base = 1;	 
+
+		[voice]
+		{
+			[die]			{ priority = high;	* = s_e_die_zepheryl_SED;		}
+			[enemy_spotted]	{ priority = high; * = s_e_call_zepheryl_SED; }
+			[hit_critical]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+			[hit_glance]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+			[hit_solid]		{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+		}
+	}
+	[actor]
+	{
+		[skills]
+		{
+			strength 		= 29.2, 0;
+			intelligence 	=  10.6, 0;
+			dexterity 		=  15.9, 0;
+			ranged 			=  51, 0;				
+			combat_magic 	= 55, 0;
+			nature_magic 	= 55, 0;
+		}
+	}
+
+	[attack]
+	{
+		attack_range = .5;
+		damage_max = 121;
+		damage_min = 69;
+		damage_bonus_min_cmagic = 120;
+		damage_bonus_max_cmagic = 210;
+	}
+	[common]
+	{
+		screen_name="Zepheryl";
+		membership = gargoyle, monster, immune_polymorph;
+		[template_triggers]
+		{
+			[*]
+				{
+					action* = call_sfx_script("zepheryl_fire");
+					condition* = receive_world_message("WE_ENTERED_WORLD");
+					single_shot = true;
+				}
+		}
+	}
+	[defend] { defense=176.7; }
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=spell_zepheryl_zap; }
+	}
+	[mind]
+	{
+		actor_weapon_preference		= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+		actor_auto_switches_to_karate	= false;
+		actor_auto_switches_to_melee	= false;
+	}
+}
+
+[t:template,n:2W_dsx_zepheryl]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_zepheryl";
+	specializes = 2W_dsx_zepheryl_base;
+
+	[common]
+	{
+		membership = gargoyle,monster;
+	}
+	[aspect]
+	{
+		experience_value = 42108;
+		force_no_render = true;
+		life = 563.3;
+		max_life = 563.3;
+		mana = 26.7;
+		max_mana = 26.7;
+		draw_shadow = false;
+		model = m_c_edm_ga_pos_1;
+		scale_base = 1;	 
+		[voice]
+		{
+			[die]			{ priority = high;	* = s_e_die_zepheryl_SED;		}
+			[enemy_spotted]	{ priority = high; * = s_e_call_zepheryl_SED; }
+			[hit_critical]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+			[hit_glance]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+			[hit_solid]		{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+		}
+	}
+	[actor]
+	{
+		[skills]
+		{
+			strength 		=	33.7, 0;
+			intelligence 	=	 10.6, 0;
+			dexterity 		=	17.6, 0;
+			combat_magic 	=	55, 0;
+			nature_magic 	=	55, 0;
+				
+		}
+	}
+	[attack]
+	{
+		attack_range = .5;
+		damage_max = 157.7;
+		damage_min = 108;
+		damage_bonus_min_cmagic = 120;
+		damage_bonus_max_cmagic = 210;
+	}
+	[common]
+	{
+		screen_name="Zepheryl";
+		membership = gargoyle, monster, immune_polymorph;
+		[template_triggers]
+			{
+				[*]
+					{
+						action* = call_sfx_script("zepheryl_fire");
+						condition* = receive_world_message("WE_ENTERED_WORLD");
+						single_shot = true;
+					}
+			}
+	}
+	[defend] { defense=276.7; }
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=spell_zepheryl_zap; }
+	}
+	[mind]
+	{
+		actor_weapon_preference		= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+		actor_auto_switches_to_karate	= false;
+		actor_auto_switches_to_melee	= false;
+	}
+
+}
+
+[t:template,n:2W_dsx_zepheryl_dark_base]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_zepheryl_dark_base";
+	specializes = 2W_base_ranged_zepheryl;
+	[common]
+	{
+		membership = gargoyle,monster;
+	}
+	[actor]
+	{
+		[skills]
+		{
+			strength 		=	29.2, 0;
+			intelligence 	=	10.6, 0;
+			dexterity 		=	 15.9, 0;
+			combat_magic 	=	55, 0;
+			nature_magic 	=	55, 0;
+				
+		}
+	}
+
+	[aspect]
+	{
+		experience_value = 47320;
+		life = 766.7;
+		max_life = 766.7;
+		mana = 33.3;
+		max_mana = 33.3;
+		megamap_icon	= b_gui_ig_mnu_zepheryl_dark;
+		megamap_orient = true;
+		scale_base = 1; 
+		[voice]
+			{
+				[die]			{ priority = high;	* = s_e_die_zepheryl_two_SED;		}
+				[enemy_spotted]	{ priority = high; * = s_e_call_zepheryl_SED; }
+				[hit_critical]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+				[hit_glance]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+				[hit_solid]		{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+			} 
+	}
+
+	[attack]
+	{
+		attack_range = .5;
+		damage_max = 139.3;
+		damage_min = 84;
+		damage_bonus_min_cmagic = 134;
+		damage_bonus_max_cmagic = 252;
+	}
+	[common]
+	{
+		screen_name="Dark Zepheryl";
+		membership = gargoyle, monster, immune_polymorph;
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("zepheryl_fire_two");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+			}
+		}
+	}
+
+	[defend] { defense=56.7; }
+	[inventory]
+		{
+			selected_active_location = il_active_primary_spell;
+			[other] { il_active_primary_spell=spell_zepheryl_zap_two; }
+
+					
+		}
+	[mind]
+		{
+			actor_weapon_preference		= WP_MAGIC;
+			actor_auto_switches_to_magic	= true;
+			actor_auto_switches_to_karate	= false;
+			actor_auto_switches_to_melee	= false;
+		}
+	[physics]
+		{
+			break_effect = zepheryl_die_two;
+
+				
+		}
+}
+
+[t:template,n:2W_dsx_zepheryl_dark]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_zepheryl_dark";
+	specializes = 2W_dsx_zepheryl_dark_base;
+
+	[common]
+	{
+		membership = gargoyle,monster;
+	}
+	[actor]
+	{
+		[skills]
+		{
+			strength 		=	33.7, 0;
+			intelligence 	=	 10.6, 0;
+			dexterity 		=	17.6, 0;
+			combat_magic 	=	57, 0;
+			nature_magic 	=	57, 0;
+				
+		}
+	}
+
+	[aspect]
+	{
+		experience_value = 47320;
+		life = 1123.3;
+		max_life = 1123.3;
+		mana = 33.3;
+		max_mana = 33.3;
+		scale_base = 1; 
+		[voice]
+		{
+			[die]			{ priority = high;	* = s_e_die_zepheryl_two_SED;		}
+			[enemy_spotted]	{ priority = high; * = s_e_call_zepheryl_SED; }
+			[hit_critical]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+			[hit_glance]	{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+			[hit_solid]		{ priority = low;	* = s_e_hit_zepheryl_SED;		}
+		} 
+	}
+
+	[attack]
+	{
+		attack_range = .5;
+		damage_max = 183.3;
+		damage_min = 132;
+		damage_bonus_min_cmagic = 134;
+		damage_bonus_max_cmagic = 252;
+	}
+	[common]
+	{
+		screen_name="Dark Zepheryl";
+		membership = gargoyle, monster, immune_polymorph;
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("zepheryl_fire_two");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+			}
+		}
+	}
+
+	[defend] { defense=386.7; }
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=spell_zepheryl_zap_two; }
+
+			
+	}
+	[mind]
+	{
+		actor_weapon_preference		= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+		actor_auto_switches_to_karate	= false;
+		actor_auto_switches_to_melee	= false;
+	}
+	[physics]
+	{
+		break_effect = zepheryl_die_two;
+
+			
+	}
+
+}
+
+[t:template,n:2W_dsx_zepheryl_summon]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_summon_zepheryl";
+	specializes = 2W_dsx_zepheryl_base;
+ aspect:experience_value = 0;
+	[inventory]
+		{
+			selected_active_location = il_active_primary_spell;
+			
+		}
+}
+[t:template,n:2W_dsx_zepheryl_dark_summon]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_summon_zepheryl_dark";
+	specializes = 2W_dsx_zepheryl_dark_base;
+ aspect:experience_value = 0;
+	[inventory]
+		{
+			selected_active_location = il_active_primary_spell;
+			
+		}
+}

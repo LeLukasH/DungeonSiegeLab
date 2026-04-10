@@ -1,0 +1,1297 @@
+//////////////////////////////////////////////////////////
+////
+////jungle_foliage-templates
+////
+//////////////////////////////////////////////////////////
+[t:template,n:bush_jng_cabbage_01]
+{
+	category_name = "bushes";
+	doc = "jngl_hosta_lg_cabbage";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = TBA;
+		cam_fade_alpha = 128;
+		ghost_alpha = 64;
+		//lodfi_lower = TBA;
+		//lodfi_upper = TBA;
+		model = m_i_jng_plant-05;
+		scale_multiplier = 1.3;
+		bounding_volume_scale = 1.0;
+		[textures]
+		{
+			0 = b_i_jng_plant-01;
+		}
+	}
+}
+[t:template,n:bush_jng_frond_01]
+{
+	category_name = "bushes";
+	doc = "jngl_hosta_lg_frond";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = TBA;
+		cam_fade_alpha = 128;
+		ghost_alpha = 64;
+		//lodfi_lower = TBA;
+		//lodfi_upper = TBA;
+		model = m_i_jng_plant-06;
+		scale_multiplier = 1.3;
+		bounding_volume_scale = .75;
+		[textures]
+		{
+			0 = b_i_jng_plant-02;
+		}
+	}
+}
+[t:template,n:tree_jng_banana_11]
+{
+	category_name = "bushes";
+	doc = "jngl_cycad_short_med";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		cam_fade_alpha = 128;
+		ghost_alpha = 64;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-11;
+		scale_base = 1;
+		bounding_volume_scale = .8;
+	}
+}
+[t:template,n:plant_jng_01]
+{
+	category_name = "bushes";
+	doc = "jngl_philodendron";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.127430839;
+		cam_fade_alpha = 128;
+		ghost_alpha = 64;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.45;
+		model = m_i_jng_plant-01;
+	}
+}
+[t:template,n:plant_jng_02]
+{
+	category_name = "bushes";
+	doc = "jngl_fern_group";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.282503616;
+		cam_fade_alpha = 128;
+		ghost_alpha = 64;
+		lodfi_lower = 0.45;
+		lodfi_upper = 0.8;
+		model = m_i_jng_plant-02;
+	}
+}
+[t:template,n:plant_jng_03]
+{
+	category_name = "bushes";
+	doc = "jngl_fern_sm";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.16444258;
+		cam_fade_alpha = 128;
+		ghost_alpha = 64;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.45;
+		model = m_i_jng_plant-03;
+	}
+}
+[t:template,n:plant_jng_04]
+{
+	category_name = "bushes";
+	doc = "jngl_fern_lg";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.222176589;
+		cam_fade_alpha = 128;
+		ghost_alpha = 64;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.6;
+		model = m_i_jng_plant-04;
+		scale_base = 1.8;
+	}
+}
+[t:template,n:plant_jng_05]
+{
+	category_name = "bushes";
+	doc = "jngl_plant_glossy_sm";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.128444054;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.45;
+		model = m_i_jng_plant-01;
+		[textures]
+		{
+			0 = b_i_jng_trees-05;
+		}
+	}
+}
+[t:template,n:plant_jng_06]
+{
+	category_name = "bushes";
+	doc = "jngl_croton_sm";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.127742911;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.45;
+		model = m_i_jng_plant-01;
+		[textures]
+		{
+			0 = b_i_jng_trees-10;
+		}
+	}
+}
+[t:template,n:vine_jng_01]
+{
+	category_name = "foliage";
+	doc = "jngl_vine_u_sm";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.254237411;
+		lodfi_lower = 0.1;
+		lodfi_upper = 0.4;
+		model = m_i_jng_vine-01;
+	}
+}
+[t:template,n:flower_jng_01]
+{
+	category_name = "flowers";
+	doc = "jungle_titan_arum_thin";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		////display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_titan-arum-01;
+	}
+}
+[t:template,n:flower_jng_02]
+{
+	category_name = "flowers";
+	doc = "jungle_titan_arum_thick";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_titan-arum-02;
+	}
+}
+[t:template,n:log_jng_mossy_01]
+{
+	category_name = "logs";
+	doc = "jngl_log_lg";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_log-01;
+	}
+}
+[t:template,n:log_jng_mossy_02]
+{
+	category_name = "logs";
+	doc = "jngl_log_lg_broken";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_log-02;
+	}
+}
+[t:template,n:log_jng_mossy_03]
+{
+	category_name = "logs";
+	doc = "jngl_log_sm";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_log-03;
+	}
+}
+[t:template,n:stump_jng_01]
+{
+	category_name = "logs";
+	doc = "jngl_stump_no_moss";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-stump-01;
+		[textures]
+		{
+			0 = b_i_jng_tree-stump-01;
+		}
+	}
+}
+[t:template,n:stump_jng_02]
+{
+	category_name = "logs";
+	doc = "jngl_stump_light_moss";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-stump-01;
+		[textures]
+		{
+			0 = b_i_jng_tree-stump-02;
+		}
+	}
+}
+[t:template,n:stump_jng_03]
+{
+	category_name = "logs";
+	doc = "jngl_stump_med_moss";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-stump-01;
+		[textures]
+		{
+			0 = b_i_jng_tree-stump-03;
+		}
+	}
+}
+[t:template,n:stump_jng_04]
+{
+	category_name = "logs";
+	doc = "jngl_stump_heavy_moss";
+	specializes = non_interactive_blocking;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-stump-01;
+		[textures]
+		{
+			0 = b_i_jng_tree-stump-04;
+		}
+	}
+}
+[t:template,n:tree_jng_01]
+{
+	category_name = "trees";
+	doc = "jngl_trunk_sm";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.404266991;
+		lodfi_lower = 0.1;
+		lodfi_upper = 0.45;
+		model = m_i_jng_tree-01;
+	}
+}
+[t:template,n:tree_jng_02]
+{
+	category_name = "trees";
+	doc = "jngl_trunk_lg";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.683769866;
+		lodfi_lower = 0.3;
+		lodfi_upper = 0.65;
+		model = m_i_jng_tree-02;
+	}
+}
+[t:template,n:tree_jng_03]
+{
+	category_name = "trees";
+	doc = "jngl_trunk_split_3";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.669032375;
+		lodfi_lower = 0.3;
+		lodfi_upper = 0.6;
+		model = m_i_jng_tree-03;
+	}
+}
+[t:template,n:tree_jng_04]
+{
+	category_name = "trees";
+	doc = "jngl_trunk_split_2";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.574127875;
+		lodfi_lower = 0.2;
+		lodfi_upper = 0.5;
+		model = m_i_jng_tree-04;
+	}
+}
+[t:template,n:tree_jng_07]
+{
+	category_name = "trees";
+	doc = "jngl_ficus_med";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.193383714;
+		lodfi_lower = 0.25;
+		lodfi_upper = 0.55;
+		model = m_i_jng_tree-07;
+	}
+}
+[t:template,n:tree_jng_08]
+{
+	category_name = "trees";
+	doc = "jngl_ficus_sm";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.130559402;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.4;
+		model = m_i_jng_tree-08;
+	}
+}
+[t:template,n:tree_jng_09]
+{
+	category_name = "bad";
+	doc = "jngl_ficus_sm-dupe";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.129783268;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.4;
+		model = m_i_jng_tree-09;
+	}
+}
+[t:template,n:tree_jng_10]
+{
+	category_name = "trees";
+	doc = "jngl_ficus_xsm";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.108703634;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.3;
+		model = m_i_jng_tree-10;
+	}
+}
+[t:template,n:tree_jng_11]
+{
+	category_name = "trees";
+	doc = "jngl_ficus_xxsm";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.101816929;
+		lodfi_lower = 0.4;
+		lodfi_upper = 0.7;
+		model = m_i_jng_tree-11;
+	}
+}
+[t:template,n:tree_jng_12]
+{
+	category_name = "trees";
+	doc = "jngl_palm_fan";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.302953946;
+		lodfi_lower = 0.4;
+		lodfi_upper = 0.7;
+		model = m_i_jng_tree-12;
+	}
+}
+[t:template,n:tree_jng_cliff_01]
+{
+	category_name = "trees";
+	doc = "jngl_palm_fan_cliff";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.284488241;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.3;
+		model = m_i_jng_tree-cliff-01;
+	}
+}
+[t:template,n:tree_jng_cliff_02]
+{
+	category_name = "trees";
+	doc = "jngl_shrub_xlg_cliff";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.22566775;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.35;
+		model = m_i_jng_tree-cliff-02;
+	}
+}
+[t:template,n:tree_jng_cliff_03]
+{
+	category_name = "trees";
+	doc = "jngl_chinadoll_cliff";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.220383732;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.35;
+		model = m_i_jng_tree-cliff-03;
+	}
+}
+[t:template,n:tree_jng_cliff_04]
+{
+	category_name = "trees";
+	doc = "jngl_shrub_lg_cliff";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.36181108;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.35;
+		model = m_i_jng_tree-cliff-04;
+	}
+}
+[t:template,n:tree_jng_cliff_05]
+{
+	category_name = "trees";
+	doc = "jngl_shrub_med_cliff";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.286987161;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.4;
+		model = m_i_jng_tree-cliff-05;
+	}
+}
+[t:template,n:tree_jng_palm_01]
+{
+	category_name = "trees";
+	doc = "jngl_palm_straight";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-palm-01;
+	}
+}
+[t:template,n:tree_jng_palm_02]
+{
+	category_name = "trees";
+	doc = "jngl_palm_bent_slightly";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-palm-02;
+	}
+}
+[t:template,n:tree_jng_palm_03]
+{
+	category_name = "trees";
+	doc = "jngl_palm_s_curved";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-palm-03;
+	}
+}
+[t:template,n:tree_jng_palm_04]
+{
+	category_name = "trees";
+	doc = "jngl_palm_bent_lots";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-palm-04;
+	}
+}
+[t:template,n:tree_jng_banana_06]
+{
+	category_name = "trees";
+	doc = "jngl_cycad_tall_sm";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-06;
+	}
+}
+[t:template,n:tree_jng_banana_13]
+{
+	category_name = "trees";
+	doc = "jngl_sabal_tall_med";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-04;
+		[textures]
+		{
+			0 = b_i_jng_tree-banana-03;
+		}
+	}
+}
+[t:template,n:tree_jng_banana_15]
+{
+	category_name = "trees";
+	doc = "jngl_sabal_tall_sm";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-06;
+		[textures]
+		{
+			0 = b_i_jng_tree-banana-03;
+		}
+	}
+}
+[t:template,n:tree_jng_banana_18]
+{
+	category_name = "bushes";
+	doc = "jngl_sabal_short_sm";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-09;
+		[textures]
+		{
+			0 = b_i_jng_tree-banana-03;
+		}
+	}
+}
+[t:template,n:tree_jng_willow_01]
+{
+	category_name = "trees";
+	doc = "jngl_willow_cliff";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-willow-01;
+	}
+}
+[t:template,n:tree_jng_willow_02]
+{
+	category_name = "trees";
+	doc = "jngl_willow";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-willow-02;
+	}
+}
+[t:template,n:bush_jng_03]
+{
+	category_name = "bushes";
+	doc = "jngl_chinadoll_xsm";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.178192696;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.35;
+		model = m_i_jng_bush-03;
+	}
+}
+[t:template,n:bush_jng_04]
+{
+	category_name = "bushes";
+	doc = "jngl_chinadoll_lg";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.489677902;
+		lodfi_lower = 0.1;
+		lodfi_upper = 0.35;
+		model = m_i_jng_bush-04;
+	}
+}
+[t:template,n:bush_jng_05]
+{
+	category_name = "bushes";
+	doc = "jngl_shrub_lg";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.631058;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.35;
+		model = m_i_jng_bush-05;
+	}
+}
+[t:template,n:bush_jng_06]
+{
+	category_name = "bushes";
+	doc = "jngl_chinadoll_xlg";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.401422938;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.35;
+		model = m_i_jng_bush-06;
+	}
+}
+[t:template,n:bush_jng_07]
+{
+	category_name = "bushes";
+	doc = "jngl_chinadoll_sm";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.239773893;
+		lodfi_lower = 0.15;
+		lodfi_upper = 0.35;
+		model = m_i_jng_bush-07;
+	}
+}
+[t:template,n:bush_jng_08]
+{
+	category_name = "bushes";
+	doc = "jngl_chinadoll_med";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.343725625;
+		lodfi_lower = 0.1;
+		lodfi_upper = 0.35;
+		model = m_i_jng_bush-08;
+	}
+}
+[t:template,n:bush_jng_09]
+{
+	category_name = "bushes";
+	doc = "jngl_shrub_med";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.604483357;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.35;
+		model = m_i_jng_bush-09;
+	}
+}
+[t:template,n:bush_jng_10]
+{
+	category_name = "bushes";
+	doc = "jngl_shrub_xxlg";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 1.166995384;
+		lodfi_lower = 0.3;
+		lodfi_upper = 0.35;
+		model = m_i_jng_tree-13;
+	}
+}
+[t:template,n:bush_jng_11]
+{
+	category_name = "bushes";
+	doc = "jngl_hosta_striped";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = TBA;
+		//lodfi_lower = TBA;
+		//lodfi_upper = TBA;
+		model = m_i_jng_plant-07;
+	}
+}
+[t:template,n:bush_jng_12]
+{
+	category_name = "bushes";
+	doc = "jngl_hosta_suede";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = TBA;
+		//lodfi_lower = TBA;
+		//lodfi_upper = TBA;
+		model = m_i_jng_plant-08;
+	}
+}
+[t:template,n:bush_jng_cliff_01]
+{
+	category_name = "bushes";
+	doc = "jngl_chinadoll_wall";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 1.752183125;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.35;
+		model = m_i_jng_bush-cliff-01;
+	}
+}
+[t:template,n:tree_jng_banana_07]
+{
+	category_name = "bushes";
+	doc = "jngl_cycad_short_lg";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-07;
+	}
+}
+[t:template,n:tree_jng_banana_09]
+{
+	category_name = "bushes";
+	doc = "jngl_cycad_short_sm";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-09;
+	}
+}
+[t:template,n:tree_jng_05]
+{
+	category_name = "trees";
+	doc = "jngl_ficus_xlg";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.350659098;
+		lodfi_lower = 0.35;
+		lodfi_upper = 0.7;
+		model = m_i_jng_tree-05;
+		scale_base = 2;
+		bounding_volume_scale = 1.0;
+	}
+}
+[t:template,n:tree_jng_06]
+{
+	category_name = "trees";
+	doc = "jngl_ficus_lg";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.21750117;
+		lodfi_lower = 0.2;
+		lodfi_upper = 0.55;
+		model = m_i_jng_tree-06;
+		scale_base = 2.3;
+		bounding_volume_scale = 1.0;
+	}
+}
+[t:template,n:tree_jng_15]
+{
+	category_name = "trees";
+	doc = "jngl_fern_tree";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.240933768;
+		lodfi_lower = 0.4;
+		lodfi_upper = 0.7;
+		model = m_i_jng_tree-15;
+		scale_base = 2;
+		bounding_volume_scale = 1.0;
+	}
+}
+[t:template,n:bush_jng_banana_01]
+{
+	category_name = "trees";
+	doc = "jngl_banana_sm";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-01;
+		scale_base = 2;
+		bounding_volume_scale = 1.0;
+	}
+}
+[t:template,n:bush_jng_banana_02]
+{
+	category_name = "trees";
+	doc = "jngl_banana_lg";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-02;
+		scale_base = 3.2;
+		bounding_volume_scale = 1.0;
+	}
+}
+[t:template,n:bush_jng_banana_03]
+{
+	category_name = "trees";
+	doc = "jngl_banana_med";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-03;
+		scale_base = 2;
+		bounding_volume_scale = 1.0;
+	}
+}
+[t:template,n:tree_jng_banana_04]
+{
+	category_name = "trees";
+	doc = "jngl_cycad_tall_lg";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-04;
+		scale_base = 1.6;
+		bounding_volume_scale = 1.0;
+	}
+}
+[t:template,n:tree_jng_banana_05]
+{
+	category_name = "trees";
+	doc = "jngl_cycad_tall_med";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-05;
+		scale_base = 1.5;
+		bounding_volume_scale = 1.0;
+	}
+}
+[t:template,n:tree_jng_banana_14]
+{
+	category_name = "trees";
+	doc = "jngl_sabal_tall_lg";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-05;
+		scale_base = 1.9;
+		bounding_volume_scale = 1.0;
+		[textures]
+		{
+			0 = b_i_jng_tree-banana-03;
+		}
+	}
+}
+[t:template,n:tree_jng_banana_16]
+{
+	category_name = "bushes";
+	doc = "jngl_sabal_short_lg";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-07;
+		scale_base = 1;
+		bounding_volume_scale = 1.0;
+		[textures]
+		{
+			0 = b_i_jng_tree-banana-03;
+		}
+	}
+}
+[t:template,n:tree_jng_banana_20]
+{
+	category_name = "bushes";
+	doc = "jngl_sabal_short_med";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.1974485;
+		//lodfi_lower = 0.05;
+		//lodfi_upper = 0.05;
+		model = m_i_jng_tree-banana-11;
+		scale_base = 1;
+		bounding_volume_scale = 1.0;
+		[textures]
+		{
+			0 = b_i_jng_tree-banana-03;
+		}
+	}
+}
+//////////////////////////////////////////////////////////
+////
+//// seashore_foliage-templates
+////
+//////////////////////////////////////////////////////////
+[t:template,n:bush_sea_01]
+{
+	category_name = "bushes";
+	doc = "beach_rhod_sm";
+	specializes = base_bush;
+	[aspect]
+	{
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.35;
+		model = m_i_sea_bush-01;
+	}
+}
+[t:template,n:bush_sea_02]
+{
+	category_name = "bushes";
+	doc = "beach_rhod_long";
+	specializes = base_bush;
+	[aspect]
+	{
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.35;
+		model = m_i_sea_bush-02;
+	}
+}
+[t:template,n:bush_sea_03]
+{
+	category_name = "bushes";
+	doc = "beach_rhod_lg";
+	specializes = base_bush;
+	[aspect]
+	{
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.35;
+		model = m_i_sea_bush-03;
+	}
+}
+[t:template,n:bush_sea_04]
+{
+	category_name = "bushes";
+	doc = "beach_chinadoll_xsm";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = TBA;
+		//lodfi_lower = TBA;
+		//lodfi_upper = TBA;
+		model = m_i_jng_bush-03;
+		[textures]
+		{
+			0 = b_i_sea_tree-02;
+		}
+	}
+}
+[t:template,n:bush_sea_05]
+{
+	category_name = "bushes";
+	doc = "beach_chinadoll_lg";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = TBA;
+		//lodfi_lower = TBA;
+		//lodfi_upper = TBA;
+		model = m_i_jng_bush-04;
+		[textures]
+		{
+			0 = b_i_sea_tree-02;
+		}
+	}
+}
+[t:template,n:bush_sea_06]
+{
+	category_name = "bushes";
+	doc = "beach_chinadoll_med";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = TBA;
+		//lodfi_lower = TBA;
+		//lodfi_upper = TBA;
+		model = m_i_jng_bush-08;
+		[textures]
+		{
+			0 = b_i_sea_tree-02;
+		}
+	}
+}
+[t:template,n:bush_sea_07]
+{
+	category_name = "bushes";
+	doc = "beach_chinadoll_xlg";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = TBA;
+		//lodfi_lower = TBA;
+		//lodfi_upper = TBA;
+		model = m_i_jng_bush-06;
+		[textures]
+		{
+			0 = b_i_sea_tree-01;
+		}
+	}
+}
+[t:template,n:bush_sea_08]
+{
+	category_name = "bushes";
+	doc = "beach_chinadoll_sm";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = TBA;
+		//lodfi_lower = TBA;
+		//lodfi_upper = TBA;
+		model = m_i_jng_bush-07;
+		[textures]
+		{
+			0 = b_i_sea_tree-01;
+		}
+	}
+}
+[t:template,n:bush_sea_cliff_01]
+{
+	category_name = "bushes";
+	doc = "beach_chinadoll_wall";
+	specializes = base_bush;
+	[aspect]
+	{
+		//display_cost = TBA;
+		//lodfi_lower = TBA;
+		//lodfi_upper = TBA;
+		model = m_i_jng_bush-cliff-01;
+		[textures]
+		{
+			0 = b_i_sea_tree-01;
+		}
+	}
+}
+[t:template,n:grass_sea_01]
+{
+	category_name = "grass";
+	doc = "beach_wheat_long_sparse";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.719358545;
+		lodfi_lower = 0.1;
+		lodfi_upper = 0.5;
+		model = m_i_sea_grass-01;
+	}
+}
+[t:template,n:grass_sea_02]
+{
+	category_name = "grass";
+	doc = "beach_wheat_sparse";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.276252027;
+		lodfi_lower = 0.2;
+		lodfi_upper = 0.55;
+		model = m_i_sea_grass-02;
+	}
+}
+[t:template,n:grass_sea_03]
+{
+	category_name = "grass";
+	doc = "beach_wheat_med";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.42641058;
+		lodfi_lower = 0.4;
+		lodfi_upper = 0.65;
+		model = m_i_sea_grass-03;
+	}
+}
+[t:template,n:grass_sea_04]
+{
+	category_name = "grass";
+	doc = "beach_wheat_long_dense";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.395509545;
+		lodfi_lower = 0.5;
+		lodfi_upper = 0.8;
+		model = m_i_sea_grass-04;
+	}
+}
+[t:template,n:grass_sea_05]
+{
+	category_name = "grass";
+	doc = "beach_wheat_dense";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.740523545;
+		lodfi_lower = 0.6;
+		lodfi_upper = 1;
+		model = m_i_sea_grass-05;
+	}
+}
+[t:template,n:grass_sea_06]
+{
+	category_name = "grass";
+	doc = "beach_grs_lg_dense";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.275247402;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.35;
+		model = m_i_sea_grass-06;
+	}
+}
+[t:template,n:grass_sea_07]
+{
+	category_name = "grass";
+	doc = "beach_grs_sm_sparse";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.351574554;
+		lodfi_lower = 0.05;
+		lodfi_upper = 0.35;
+		model = m_i_sea_grass-07;
+	}
+}
+[t:template,n:grass_sea_08]
+{
+	category_name = "grass";
+	doc = "beach_grs_sm_dense";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.854866821;
+		lodfi_lower = 0.4;
+		lodfi_upper = 0.8;
+		model = m_i_sea_grass-08;
+	}
+}
+[t:template,n:grass_sea_09]
+{
+	category_name = "grass";
+	doc = "beach_grs_lg_sparse_01";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.46537392;
+		lodfi_lower = 0.1;
+		lodfi_upper = 0.45;
+		model = m_i_sea_grass-09;
+	}
+}
+[t:template,n:grass_sea_10]
+{
+	category_name = "grass";
+	doc = "beach_grs_lg_sparse_02";
+	specializes = non_interactive_nonblocking;
+	[aspect]
+	{
+		//display_cost = 0.39730042;
+		lodfi_lower = 0.1;
+		lodfi_upper = 0.4;
+		model = m_i_sea_grass-10;
+	}
+}
+[t:template,n:tree_sea_cliff_02]
+{
+	category_name = "trees";
+	doc = "beach_chinadoll_cliff_lg";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = 0.378576625;
+		//lodfi_lower = 0.1;
+		//lodfi_upper = 0.45;
+		model = m_i_jng_tree-cliff-02;
+		[textures]
+		{
+			0 = b_i_sea_tree-02;
+		}
+	}
+}
+[t:template,n:tree_sea_cliff_03]
+{
+	category_name = "trees";
+	doc = "beach_chinadoll_cliff_sm";
+	specializes = base_tree;
+	[aspect]
+	{
+		//display_cost = TBA;
+		//lodfi_lower = TBA;
+		//lodfi_upper = TBA;
+		model = m_i_jng_tree-cliff-03;
+		[textures]
+		{
+			0 = b_i_sea_tree-02;
+		}
+	}
+}
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////

@@ -1,0 +1,55 @@
+[t:interface,n:game_console]
+{
+	intended_resolution_height = 480;
+	intended_resolution_width = 640;
+	
+	[t:edit_box,n:console_edit]
+	{
+	  f alpha = 0.300000;
+	  i bottom_anchor = 56;
+	  b clear_select = true;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 33;
+	  i font_color = -1;
+	  i font_size = 15;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		group = console_edit;
+	  b is_bottom_anchor = true;
+	  i max_string_size = 256;
+	  b permanent_focus = true;
+		rect = 125,424,516,442;
+		text = "";
+	  b topmost = true;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			oncreated =		setvisible(false) &
+							showgroup(false);
+			oneditselect =	notify(console_submit_text) &
+							setvisible(false) &
+							notify(hide_console);
+		}
+		[prompt]
+		{
+			texture = b_gui_fe_m_single_prompt;
+			width = 1;
+		}
+	}
+	[t:dialog_box,n:dialog_box_console_bg]
+	{
+	  f alpha = 1.000000;
+	  i bottom_anchor = 58;
+	  b common_control = true;
+		common_template = cpbox;		
+	  i draw_order = 16;
+		group = console_edit;
+	  b is_bottom_anchor = true;
+		rect = 120,422,541,444;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		topmost = true;
+		consumable = true;
+	}
+}

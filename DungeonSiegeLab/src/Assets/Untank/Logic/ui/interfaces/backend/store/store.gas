@@ -1,0 +1,391 @@
+[store]
+{
+	intended_resolution_height = 480;
+	intended_resolution_width = 640;
+	interface = true;
+  b disable_camera = true;
+	[t:button,n:button_cancel]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x0000000E;
+		rect = 551,418,631,434;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(hide_store_inventory) & playsound(s_e_frontend_tiny_button);
+		}
+		[t:text,n:text_cancel]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000000F;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x0000000E;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 564,419,628,434;
+			text = "Close";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:dialog_box,n:dialog_box_grid_frame]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  x draw_order = 0x00000003;
+		rect = 369,82,636,412;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_portrait_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  x draw_order = 0x00000005;
+		rect = 371,3,413,52;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_store_frame]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+		consumable = true;
+	  x draw_order = 0x00000001;
+		rect = 366,0,639,449;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_box_store_name]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  x draw_order = 0x00000006;
+		rect = 415,12,636,46;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:text_store_name]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000000F;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0xCDCDCDCD;
+			font_type = b_gui_fnt_14p_copperplate-light;
+			justify = center;
+			rect = 480,21,587,46;
+			text = "DEFAULT";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:gridbox,n:gridbox_store]
+	{
+	  f alpha = 1.000000;
+	  f box_height = 32.000000;
+	  f box_width = 32.000000;
+	  x columns = 0x00000008;
+	  b common_control = false;
+		common_template = ;
+		consumes_items = true;
+	  x draw_order = 0x00000005;
+		grid_type = inventory;
+		rect = 374,88,630,408;
+	  x rows = 0x0000000A;
+		texture = b_gui_ig_mnu_ip_grid;
+		uvcoords = 0.000000,10.000000,8.000000,0.000000;
+		wrap_mode = tiled;
+	}
+	[t:itemslot,n:itemslot_store_owner]
+	{
+		accept_input = false;
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000010;
+		rect = 372,4,411,50;
+		slot_type = picture;
+		uvcoords = 0.000000,0.281250,0.609375,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:tab,n:tab_armor]
+	{
+	  f alpha = 1.000000;
+		column = 0;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000006;
+		radio_group = store;
+		rect = 373,68,453,84;
+		row = 0;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x55ffffff;
+		[messages]
+		{
+			oncheck = notify(store_tab_change) & shift_y(5);
+			oncreated = setstate(1);
+			onunchecked = shift_y(-5);
+		}
+		[t:text,n:text_front_row_1]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000000F;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x0000000E;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 391,73,453,88;
+			text = "ARMOR";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:tab,n:tab_magic]
+	{
+	  f alpha = 1.000000;
+		column = 0;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000009;
+		radio_group = store;
+		rect = 393,53,473,68;
+		row = 1;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x55ffffff;
+		[messages]
+		{
+			oncheck = notify(store_tab_change) & shift_y(5);
+			onunchecked = shift_y(-5);
+		}
+		[t:text,n:text_back_row_1]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000000F;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x0000000E;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 413,54,473,68;
+			text = "SPELLS";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:tab,n:tab_misc]
+	{
+	  f alpha = 1.000000;
+		column = 2;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x0000000B;
+		radio_group = store;
+		rect = 551,53,631,68;
+		row = 1;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x55ffffff;
+		[messages]
+		{
+			oncheck = notify(store_tab_change) & shift_y(5);
+			onunchecked = shift_y(-5);
+		}
+		[t:text,n:text_back_row_3]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000000F;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x0000000E;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 577,54,631,68;
+			text = "MISC";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:tab,n:tab_potion]
+	{
+	  f alpha = 1.000000;
+		column = 1;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x0000000A;
+		radio_group = store;
+		rect = 472,53,552,68;
+		row = 1;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x55ffffff;
+		[messages]
+		{
+			oncheck = notify(store_tab_change) & shift_y(5);
+			onunchecked = shift_y(-5);
+		}
+		[t:text,n:text_back_row_2]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000000F;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x0000000E;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 486,54,552,68;
+			text = "POTIONS";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:tab,n:tab_shields]
+	{
+	  f alpha = 1.000000;
+		column = 2;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000008;
+		radio_group = store;
+		rect = 534,67,614,83;
+		row = 0;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x55ffffff;
+		[messages]
+		{
+			oncheck = notify(store_tab_change) & shift_y(5);
+			onunchecked = shift_y(-5);
+		}
+		[t:text,n:text_front_row_3]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000000F;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x0000000E;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 549,68,614,83;
+			text = "SHIELDS";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:tab,n:tab_weapon]
+	{
+	  f alpha = 1.000000;
+		column = 1;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000007;
+		radio_group = store;
+		rect = 453,67,533,83;
+		row = 0;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x55ffffff;
+		[messages]
+		{
+			oncheck = notify(store_tab_change) & shift_y(5);
+			onunchecked = shift_y(-5);
+		}
+		[t:text,n:text_front_row_2]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x0000000F;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x0000000E;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 464,68,533,83;
+			text = "WEAPONS";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+
+	[t:button,n:button_next]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 3;
+		rect = 457,418,537,434;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	    disable_color = 0x55ffffff;
+
+		[t:text,n:text_next]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 7;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 457,419,537,433;
+			text = "Next >";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+
+		[messages]
+		{
+			onbuttonpress = notify(store_next);
+		}
+	}
+	[t:button,n:button_previous]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 2;
+		rect = 371,418,451,434;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		disable_color = 0x55ffffff;
+
+		[t:text,n:text_previous]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 4;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 371,419,451,433;
+			text = "< Previous";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+
+		[messages]
+		{
+			onbuttonpress = notify(store_previous);
+		}
+	}
+}

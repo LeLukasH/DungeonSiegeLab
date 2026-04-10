@@ -1,0 +1,408 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_freeze.skrit
+// Author(s):  Eric Tams and Mathew Corthell
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// This is a copy of the DS1 spell_freeze skrit modified for the use of a 
+// couple of DSX spells.  (Block of Stone and Dimension Gate)
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string effect_script$		= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string effect_script2$		= ""	doc = "A second effect to be played after the mid sync of the spell.";
+property string explode_script$		= ""	doc = "Name of the SiegeFx script that will be providing the visual when the target explodes.";
+property string return_script$		= ""	doc = "Name of the SiegeFX script that will be played when the monster returns to normal";
+
+property string description$		= ""	doc = "Description of enchantment being applied";
+
+property string immunity$					doc = "If the target contains this membership then it is immune to this spell.";
+
+property string freeze_texture$		= ""	doc = "The texture to show on the target while it is frozen.";
+
+property bool	use_pedestal$		= false	doc = "Are we showing a pedestal for this freeze.";
+property string pedestal_template$	= ""	doc = "The model to draw for the pedestal.";
+property float	pedestal_scale$		= 1.0   doc = "Scaling factor used when drawing the pedestal.";
+
+property float effect_scale$		= 1.0	doc = "Scaling factor used when showing the frozen effect.";
+
+property bool goesAway$				= false	doc = "Whether the target goes away for the duration of the spell.";
+
+owner = GoSkritComponent;
+
+#include "k_inc_spl_utils_DSX"
+
+Goid m_caster$;
+Goid m_target$;
+Goid m_goHit$;
+float m_duration$;
+
+string m_originalTexture0$ = "";
+string m_originalTexture1$ = "";
+string m_originalTexture2$ = "";
+string m_originalBootTexture$ = "";
+int numTextures$ = 0;
+
+Goid m_pedestal$;
+
+SFxSID m_firstScript$;
+SFxSID m_secondScript$;
+
+// Freeze actions that might need to be redone.
+void Freeze$
+{
+	//Freeze the target as is.
+	m_goHit$.Go.Aspect.SSetLockMeshFlag(true);
+
+	//And set it to the new texture for the m_target.
+	numTextures$ = m_goHit$.Go.Aspect.NumSubTextures;
+	int i$ = 0;
+	
+	//Report.Genericf("Freezing %s with %d textures\n", m_goHit$.Go.TemplateName, numTextures$);
+	
+	while (i$ < numTextures$)
+	{
+		m_goHit$.Go.Aspect.SSetCurrentAspectTexture(i$, freeze_texture$);
+		i$ += 1;
+	}
+	
+	// See if the target is wearing boots.
+	Go boots$ = m_goHit$.Go.Inventory.GetEquipped(ES_FEET);
+	if(boots$ != NULL)
+	{
+		// Retexture the boots.
+		m_originalBootTexture$ = StringTool.GetFileNameOnly(boots$.Aspect.GetCurrentAspectTexture(0));
+		boots$.Aspect.SSetCurrentAspectTexture(0, freeze_texture$);
+	}
+}
+
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) 
+		{
+			m_target$ = MakeGoid( msg$.GetData1() );
+			m_caster$ = msg$.GetSendFrom();
+
+			if( !m_target$.IsValidMp || !m_caster$.IsValidMp )
+			{
+				SetState Finish$;
+				return;
+			}
+
+			if( !StringTool.IsEmpty( immunity$ ) )
+			{
+				if( m_target$.Go.Common.Membership.Contains( immunity$ ) )
+				{
+					SetState Abort$;
+					return;
+				}
+			}
+
+			//Clone the spell to create an OMNI version.
+			GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.go.Parent.Goid, owner.goid );
+			cloneReq$.Omni = true;
+			Goid new_spell$ = GoDb.SCloneGo( cloneReq$ );				
+
+			// send Omni version an Activate to get it started.
+			PostWorldMessage( WE_REQ_ACTIVATE, m_Caster$, new_spell$, MakeInt( m_Target$ ), 0 );
+
+			SetState Finish$;
+		}
+		else if( e$ == WE_REQ_ACTIVATE ) 
+		{
+			m_Caster$ = msg$.GetSendFrom();
+			m_Target$ = MakeGoid(msg$.GetData1());
+			if(!m_Caster$.IsValid
+			   || !m_Target$.IsValid)
+			{
+				SetState Finish$;
+			}
+
+			m_duration$ = owner.Go.Magic.EvaluateEffectDuration(m_target$.Go, m_caster$.Go);
+			
+			//Scale it based on the size of the target.
+			float targetObjectRadius$ = m_target$.Go.GetAspect.GetBoundingSphereRadius();
+
+			string params$ = "";
+			StringTool.AppendF(params$, "[%g][%g]", m_duration$, targetObjectRadius$ * effect_scale$);
+
+			// Start the visual
+			m_firstScript$ = SiegeFx.SRunMpScript( effect_script$, m_target$, m_caster$, params$, owner.Goid, e$ );
+		} 
+		else if ( e$ == WE_SPELL_SYNC_MID ) 
+		{
+			m_goHit$ = MakeGoid(msg$.GetData1());
+			
+			if( !m_goHit$.IsValid || !m_caster$.Isvalid )
+			{
+				SetState Finish$;
+				return;
+			}
+						
+			if(m_goHit$.Go.Aspect.MaxLife == 0.0)
+			{
+				SetState Finish$;
+				return;
+			}
+			
+			if( !StringTool.IsEmpty( immunity$ ) )
+			{
+				if( m_target$.Go.Common.Membership.Contains( immunity$ ) )
+				{
+					SetState Finish$;
+					return;
+				}
+			}
+			
+			if( m_target$.Go.Player.Controller != PC_COMPUTER  )
+			{
+				SetState Finish$;
+				return;
+			}
+							
+			//Time to freeze the target.
+			if( m_goHit$.Go.HasMind() && m_goHit$.Go.HasActor() )
+			{
+				if(!StringTool.IsEmpty(effect_script2$))
+				{
+					//Scale it based on the size of the target.
+					float targetObjectRadius$ = m_target$.Go.GetAspect.GetBoundingSphereRadius();
+
+					string params$ = "";
+					StringTool.AppendF(params$, "[%g][%g]", m_duration$, targetObjectRadius$ * effect_scale$);
+
+					// Start the visual
+					m_secondScript$ = SiegeFx.SRunMpScript( effect_script2$, m_target$, m_caster$, params$, owner.Goid, e$ );
+				}
+				
+				//Get the current textures of this m_target.  We'll need to
+				//reset it later.
+				// MRC 8/12/2003 Bug 1420 Need to get multiple layers of texture.
+				m_originalTexture0$ = StringTool.GetFileNameOnly(m_goHit$.Go.Aspect.GetCurrentAspectTexture(0));
+				m_originalTexture1$ = StringTool.GetFileNameOnly(m_goHit$.Go.Aspect.GetCurrentAspectTexture(1));
+				m_originalTexture2$ = StringTool.GetFileNameOnly(m_goHit$.Go.Aspect.GetCurrentAspectTexture(2));
+
+				// Freeze the monster 
+				Freeze$();
+
+				//turn off brain so he wont try to attack any more.
+				MCPManager.MakeRequest( m_goHit$, PL_FACE );
+				m_goHit$.Go.Mind.Clear();
+				MCPManager.Flush(m_goHit$);
+
+				//If there's a pedestal to be drawn, do it.
+				if(use_pedestal$)
+				{
+					//Create the object for the pedestal.
+					GoCloneReq cloneReq$ = MakeGoCloneReq(pedestal_template$);
+					cloneReq$.StartingPos = m_goHit$.go.GetPlacement().GetPosition();
+					m_pedestal$ = GoDb.SCloneGo( cloneReq$ );
+					
+					//Scale it based on the size of the target.
+					float hitObjectRadius$ = m_goHit$.Go.GetAspect.GetBoundingSphereRadius();
+					//Hack for the time being.  This function does not exist in the siege editor.
+					#only( game )
+					[[
+					m_pedestal$.Go.GetAspect.SetRenderScaleMultiplier(hitObjectRadius$ * pedestal_scale$);
+					]]
+				}
+
+				// If the target cannot be attacked, then stop it from attacking.
+				if(goesAway$)
+				{
+					m_goHit$.Go.Aspect.SSetIsVisible(false);
+					
+					// TAT 9/16/2003 - set it to be unattackable
+					m_goHit$.Go.Mind.SetMayBeAttacked(false);
+					ClearEngaged$( m_goHit$ );
+					StopFriendsAttackingMe$( m_goHit$, 15.0 );
+					
+					if(m_pedestal$.IsValid())
+					{
+						string screenName$;
+						m_goHit$.Go.Common.GetScreenName(screenName$);
+						m_pedestal$.Go.Common.SSetScreenName(screenName$);
+						m_pedestal$.Go.Actor.SAddGenericState( owner.Go.Magic.StateName, description$, m_duration$, m_caster$, owner.goid, owner.go.magic.GetMagicLevel( m_caster$.go ) );
+					}
+				}
+
+				// Add the effected state so this can only happen once
+				m_goHit$.Go.Actor.SAddGenericState( owner.Go.Magic.StateName, description$, m_duration$, m_caster$, owner.goid, owner.go.magic.GetMagicLevel( m_caster$.go ) );
+
+				// we need to watch the guy to see if he is killed so we can shatter him.
+				GoDb.StartWatching( owner.Goid, m_goHit$);
+				
+				SetState Frozen$;
+				return;
+			}
+
+			SetState Finish$;
+		}
+	}
+}
+	
+state Frozen$
+{
+	//When we enter the state, start a timer to wait out the duration of the spell.
+	event OnEnterState$
+	{
+		this.CreateTimer( 1, m_duration$ );
+
+		//Another timer to periodically keep the brain shut down
+		// and also periodically freeze it.
+		this.CreateTimer( 2, 0.1);
+	}
+
+	//Periodically clear the mind.  Other spells or effects might want to turn the
+	//brain back on, but we don't want this to happen while the creature is frozen.
+	trigger OnTimer$( 2 )
+	{
+		// MRC 7/7/2003 BUG 1557 Check to make sure the object is still valid before
+		// operating on it.
+		if(m_goHit$.IsValid())
+		{
+			m_goHit$.Go.Mind.Clear();
+			
+			// Refreeze the monster in case someone joins an MP game.
+			Freeze$();
+		}
+		this.CreateTimer( 2, 0.1);
+	}
+
+	//When the timer is completed, then we need to free the target up again.
+	trigger OnTimer$( 1 )
+	{
+		if (m_goHit$.IsValid)
+		{
+			//Play the unfreeze effect, if any.
+			if(!StringTool.IsEmpty(return_script$))
+			{
+				//Scale it based on the size of the target.
+				float targetObjectRadius$ = m_goHit$.Go.GetAspect.GetBoundingSphereRadius();
+
+				string params$ = "";
+				StringTool.AppendF(params$, "[%g]", targetObjectRadius$ * effect_scale$);
+
+				SiegeFx.SRunScript( return_script$, m_goHit$, m_caster$, params$, owner.Goid, WE_REQ_CAST);				
+			}
+
+			//Reset to the original texture.
+			m_goHit$.Go.Aspect.SSetCurrentAspectTexture(0, m_originalTexture0$);
+			if ( numTextures$ > 1 )
+			{
+				m_goHit$.Go.Aspect.SSetCurrentAspectTexture(1, m_originalTexture1$);
+			}
+			if ( numTextures$ > 2 )
+			{
+				m_goHit$.Go.Aspect.SSetCurrentAspectTexture(2, m_originalTexture2$);
+			}
+			
+
+			// See if the target is wearing boots.  Replace the texture if he is.
+			Go boots$ = m_goHit$.Go.Inventory.GetEquipped(ES_FEET);
+			if(boots$ != NULL && !StringTool.IsEmpty(m_originalBootTexture$))
+			{
+				boots$.Aspect.SSetCurrentAspectTexture(0, m_originalBootTexture$);
+			}
+
+			//Hide the pedestal if we're using it.
+			if(use_pedestal$
+			   && m_pedestal$.IsValid())
+			{
+				m_pedestal$.Go.Aspect.SSetIsVisible(false);
+			}
+
+			// If the target could not be attacked, then let it get attacked again.
+			if(goesAway$)
+			{
+				m_goHit$.Go.Aspect.SSetIsVisible(true);
+				
+				// TAT 9/16/2003 and attackable again
+				m_goHit$.Go.Mind.SetMayBeAttacked(true);
+			}
+			
+			//Let the model move again.
+			m_goHit$.Go.Aspect.SSetLockMeshFlag( false );
+			//And restart the brain.
+			m_goHit$.Go.Mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+			
+			// remove the state so this can be affected again
+			m_goHit$.Go.Actor.SRemoveGenericState( owner.Go.Magic.StateName );
+
+			//And stop waiting for it to die.
+			GoDb.StopWatching( owner.Goid, m_goHit$);
+		}
+		
+		SetState Finish$;
+	}
+
+	//While we're frozen, watch to see if the target dies.
+	event OnGoHandleCcMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		//If the target is killed, we want to play an explosion effect.
+		if( ( e$ == WE_KILLED ) && m_goHit$.IsValidMp() && ( m_goHit$ == msg$.GetSendTo() ) )
+		{
+			//Play the effect.
+			if(explode_script$ != "")
+			{
+				SiegeFx.SRunScript( explode_script$, m_goHit$, m_caster$, "", owner.Goid, e$ );
+			}
+			//Hide the target, because it exploded.
+			m_goHit$.go.Aspect.SSetIsVisible( false );
+	
+			//If there's a pedestal, hide that as well.
+			if(use_pedestal$)
+			{
+				m_pedestal$.Go.Aspect.SSetIsVisible(false);
+			}
+			SiegeFx.SStopScript(m_firstScript$);
+			SiegeFx.SStopScript(m_secondScript$);
+
+			SetState Finish$;
+		}
+		if( ( e$ == WE_ENTERED_WORLD ) && m_goHit$.IsValidMp() && ( m_goHit$ == msg$.GetSendTo() ) )
+		{
+			//Freeze the target as is.
+			m_goHit$.Go.Aspect.SSetLockMeshFlag(true);
+		}
+	}
+}
+state Abort$
+{
+	////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+		float refund$ = owner.go.Magic.EvaluateManaCost(m_caster$.go, m_target$.go);
+		// Refund the players mana
+		Rules.ChangeMana( m_caster$, refund$);
+
+		SetState( Finish$ );
+	}
+}
+
+state Finish$
+{
+	event OnEnterState$
+	{
+		//Get rid of the pedestal.
+		if(use_pedestal$)
+		{
+			GoDb.SMarkForDeletion(m_pedestal$);
+		}
+
+		SiegeFx.ClearVariables( owner.goid );
+		
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 5 );
+	}
+}
+
+
+

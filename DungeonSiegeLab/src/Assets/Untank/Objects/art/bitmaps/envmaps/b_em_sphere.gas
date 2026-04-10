@@ -1,0 +1,5 @@
+[t:tsd,n:b_em_sphere]
+{
+	layer1texture1 = b_em_sphere;
+  i texturedetail = 2;
+}

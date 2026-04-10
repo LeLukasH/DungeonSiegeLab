@@ -1,0 +1,273 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_transformation.skrit
+// Author(s):  Jason Dunlop
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+// skrit freezes all enemies around the caster
+
+
+property string effect_script$		= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string effect_params$		= ""   	doc = "Parameters to send to SiegeFx script";
+property string description$		= ""	doc = "Description of enchantment being applied";
+property string	templateName$		= ""	doc = "template name of creature we are transforming into";
+
+owner = GoSkritComponent;
+
+Goid 	caster$;
+float	duration$;
+Goid	target$;
+float	lifeRatio$;
+float	manaRatio$;
+float   originalLife$;
+float	originalMana$;
+
+#include "k_inc_spl_utils_DSX"
+
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST )
+		{	
+			
+		//	report.genericf("transform: spell cast\n");
+			/////////////////////////////
+			// Normal Go
+
+			caster$ = msg$.GetSendFrom();
+			target$ = MakeGoid( msg$.GetData1() );
+
+			if( !owner.Go.Magic.IsCastableOn( target$.go, true) )
+			{
+				SetState Finish$;
+				return;
+			}
+
+			// a target can't be transformed twice
+			if( target$.Go.Actor.HasGenericState( owner.Go.Magic.StateName ) )
+			{
+			//	report.genericf("transform: actor ALREADY transformed - going to finished state\n");
+				SetState Finish$;
+				return;
+			}
+			
+			// transform can only be cast on yourself 
+			if( caster$ == target$ )
+			{
+				// create Omni version of the spell.
+				GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.go.Parent.Goid, owner.goid );
+				cloneReq$.Omni = true;
+				Goid new_spell$ = GoDb.SCloneGo( cloneReq$ );
+
+				// send Omni version an Activate to get it started.
+				PostWorldMessage( WE_REQ_ACTIVATE, caster$, new_spell$, msg$.GetData1(), 0 );
+			}
+
+			// Delete Normal version of the spell.
+			SetState Finish$;
+			return;
+			
+		}
+		else if ( e$ == WE_REQ_ACTIVATE )
+		{
+			
+			/////////////////////////////
+			// Omni Go
+
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			if( !target$.IsValid || !caster$.Isvalid )
+			{
+				SetState Finish$;
+				return;
+			}
+			
+			// a target can't be transformed twice
+			if( target$.Go.Actor.HasGenericState( owner.Go.Magic.StateName ) )
+			{
+			//	report.genericf("transform: actor ALREADY transformed - going to finished state\n");
+				SetState Finish$;
+				return;
+			}
+			
+			duration$ = owner.Go.Magic.EvaluateEffectDuration(caster$.Go, target$.Go);
+
+		//	report.genericf("transform: adding generic state for duration: %d\n", duration$);
+			// Add the effected state so this can only happen once
+			target$.Go.Actor.SAddGenericState( owner.Go.Magic.StateName, description$, duration$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+						
+			// Start the visual
+			SiegeFx.SRunScript( effect_script$, target$, caster$, effect_params$, owner.goid, e$ );
+
+			SetState Transform$;
+			return;
+		}
+	}
+}
+
+state Transform$
+{
+	event OnEnterState$
+	{
+	//	report.genericf("transform: actual transforming occurring now\n");
+	
+		// keep track of what our target is doing
+		GoDb.StartWatching( owner.Goid, target$);
+
+		// grab life and mana ratios so as to sync up caster with what it is transforming into
+		lifeRatio$ = target$.Go.Aspect.GetLifeRatio();
+		manaRatio$ = target$.Go.Aspect.GetManaRatio();
+		
+		originalLife$ = target$.Go.Aspect.GetCurrentLife();
+		originalMana$ = target$.Go.Aspect.GetCurrentMana();
+		
+		// make sure that nothing bad has happened to this character ( still alive ) since casting this spell
+		if( target$.go.aspect.GetLifeState() == LS_ALIVE_CONSCIOUS )
+		{
+			#only( game )
+	          	[[
+			TransformationManager.STransformMe(target$.Go, templateName$, owner.go.GetTemplateName());
+			]]
+		}
+		else
+		{
+			SetState Finish$;
+			return;
+		}
+	
+		// clear the minds of the enemies engaged with the character
+		ClearEngaged$(target$);
+		
+		// do the alterations
+		owner.go.magic.SApplyEnchantments( target$, caster$ );
+		
+		// set the target's values correctly
+		target$.go.CheckModifierRecalc();
+		
+		// set the life to max and mana to mana ratio
+		target$.go.aspect.SSetCurrentLife( target$.go.aspect.GetMaxLife() );
+		target$.go.aspect.SSetCurrentMana( manaRatio$ * target$.go.aspect.GetMaxMana() );
+		
+		SetState InActive$;
+		return;
+	}
+}
+
+state UnTransform$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_DEACTIVATE )
+		{
+			// no need to watch target any longer
+			GoDb.StopWatching( owner.Goid, target$);
+			
+			#only( game )
+	          	[[
+			// remove the spell enchantments from the target
+			GoDb.SRemoveEnchantments(target$, owner.goid, true);
+			]]
+			
+			// reset the target's values now that enchantments from transformations are gone
+			target$.go.CheckModifierRecalc();
+
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			// Start the visual
+			SiegeFx.SRunScript( effect_script$, target$, caster$, effect_params$, owner.Goid, e$ );
+
+			#only( game )
+          		[[
+			// untransform the caster
+			TransformationManager.SUnTransformMe(target$.Go);
+			]]
+
+			// clear the minds of the enemies engaged with the character
+			ClearEngaged$(target$);
+
+			// remove the state so this can be affected again
+			target$.Go.Actor.SRemoveGenericState( owner.Go.Magic.StateName );
+
+			// set the life to original
+			// set the mana to original
+			Rules.ChangeLife(target$, originalLife$ );//lifeRatio$ * target$.go.aspect.GetMaxLife() );
+			Rules.ChangeMana(target$, originalMana$ );//lifeRatio$ * target$.go.aspect.GetMaxMana() );
+
+			// let them live in case they weren't already
+			target$.go.aspect.SSetLifeState(LS_ALIVE_CONSCIOUS);
+
+			// set the life to original
+			// set mana to ratio of what mans is
+			target$.go.aspect.SSetCurrentLife( originalLife$ );//lifeRatio$ * target$.go.aspect.GetMaxLife() );
+			target$.go.aspect.SSetCurrentMana( manaRatio$ * target$.go.aspect.GetMaxMana() );
+			
+			target$.go.mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+
+			SetState Finish$;
+			return;
+		}
+	}
+
+	event OnEnterState$
+	{
+
+		if( target$.IsValid && target$.Go.Actor.HasGenericState("Transformed") )
+		{
+		//	report.genericf("transform: actual UNtransforming occurring now\n");
+			// untransformed caster has the same life/mana ratio as when transformed
+			lifeRatio$ = target$.Go.Aspect.GetLifeRatio();
+			manaRatio$ = target$.Go.Aspect.GetManaRatio();
+			
+			// send Omni version a deactivate to get it started.
+			PostWorldMessage( WE_REQ_DEACTIVATE, target$, owner.goid, MakeInt(target$), 0 );
+			return;
+		}
+		else
+		{
+		//	report.genericf("transform: untransform, but the target is not transformed!!!\n");
+			SetState Finish$;
+			return;
+		}
+	}
+}
+
+state InActive$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	trigger OnTimer$(1)
+	{	
+		SetState( UnTransform$ );
+		return;
+	}
+
+	event OnEnterState$
+	{		
+		this.CreateTimer( 1, duration$ );
+		
+	}
+	transition -> UnTransform$: OnGoHandleCCMessage( WE_KILLED );
+	transition -> UnTransform$: OnGoHandleCCMessage( WE_LOST_CONSCIOUSNESS );
+	transition -> UnTransform$: OnGoHandleMessage( WE_REQ_DEACTIVATE );
+}
+
+state Finish$
+{
+	event OnEnterState$
+	{
+	//	report.genericf("transform: we are finished\n");
+		
+		SiegeFx.ClearVariables( owner.goid );
+		
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 5 );
+	}
+}

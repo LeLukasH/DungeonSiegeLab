@@ -1,0 +1,244 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_mass_enchant.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Give commands to all enemies in radius or spell.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string effect_script$	= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string script_params$	= ""   	doc = "Parameters to send to SiegeFx script";
+property string enchant_script$	= ""   	doc = "Name of the SiegeFx script that will be providing the visual.";
+property float	radius$			= 15.0	doc = "Radius of the effect, centered on the caster.";
+property string description$	= ""	doc = "Description of enchantment being applied";
+property float	effect_delay$	= 0		doc = "Extra time to wait before removing the enchant_script";
+
+owner = GoSkritComponent;
+#include "k_inc_spl_utils"
+
+Goid	target$;
+Goid	caster$;
+float	alt_time$ = 0;   
+
+
+////////////////////////////////////////
+//	State Machine
+			
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) {
+			
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+			
+			if( target$.isvalid && caster$.isvalid && ( Owner.go.Parent != NULL ) )
+			{
+				if ( target$.Go.Hasmind )
+				{
+					target$.Go.Mind.TempGopColl1.Clear;
+					
+					target$.Go.Mind.GetVisible( QT_FRIEND, target$.Go.Mind.TempGopColl1, radius$ );
+					
+					target$.Go.Mind.TempGopColl1.Add( target$.Go );
+					
+					int i$ = 0;
+					int iend$ = target$.Go.Mind.TempGopColl1.Size();
+					
+					int enchanted$ = 0;
+					Go temp$;
+					while(i$ < iend$)
+					{
+						temp$ = target$.Go.Mind.TempGopColl1.Get( i$ );
+						
+						if( temp$.HasActor() )
+						{
+							if( owner.Go.Magic.IsCastableOn( temp$, false) )
+							{
+								// create Omni version of the spell.
+								GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.go.Parent.Goid, owner.goid );
+								cloneReq$.Omni = true;
+								Goid new_spell$ = GoDb.SCloneGo( cloneReq$ );
+								
+								// send Omni version an Activate to get it started.
+								PostWorldMessage( WE_REQ_ACTIVATE, caster$, new_spell$, MakeInt(temp$.Goid), 0 );
+								enchanted$ += 1;
+							}
+						}
+				        i$ += 1;
+				    }
+				    if( ( enchanted$ > 0 ) && ( effect_script$ != "" ) )
+				    {
+				    	// Start the visual
+						SiegeFx.SRunScript( effect_script$, target$, caster$, script_params$, owner.Goid, e$ );
+				    }
+				    alt_time$ = 20;
+				    SetState InActive$;
+				    return;	
+				}
+			} 
+			SetState Finished$;
+			return;
+		} else if ( e$ == WE_REQ_ACTIVATE ) {
+			
+			/////////////////////////////
+			// Omni Go
+			
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			if( !target$.IsValid || !caster$.Isvalid )
+			{
+				SetState RestoreState$;
+				return;
+			}
+
+			// Check to see if the enchantment has already been cast on this go
+			if( target$.Go.Actor.HasGenericState( owner.Go.Magic.StateName ) )
+			{
+				float level$ = target$.Go.Actor.GetGenericStateSpellLevel( owner.Go.Magic.StateName );
+				Goid old_spell$ = target$.Go.Actor.GetGenericStateSpellGoid ( owner.Go.Magic.StateName );
+				
+				if( level$ > owner.go.magic.GetMagicLevel( caster$.go ) )
+				{
+					owner.go.magic.SApplyEnchantments( target$, caster$ );
+					alt_time$ = GoDb.GetLongestAlteration( target$, target$, caster$, owner.goid );
+
+					int packed_speed$ = Math.Round( alt_time$ * 1000 );
+					SendWorldMessage( WE_SPELL_EXPIRATION_TIMER_RESET, owner.Goid, old_spell$ ,packed_speed$);
+				
+					SetState InActive$;
+					return;
+
+				} else {
+		
+					// tell the old spell to go away.
+ 					SendWorldMessage( WE_SPELL_EXPIRATION_TIMER_RESET, owner.Goid, old_spell$, -1);
+					
+					// remove stale state...
+					target$.Go.Actor.SRemoveGenericState( owner.Go.Magic.StateName );
+				}
+			}
+			
+			// do the alterations and figure out how long we should stick around because of them.
+			owner.go.magic.SApplyEnchantments( target$, caster$ );
+
+			alt_time$ = GoDb.GetLongestAlteration( target$, target$, caster$, owner.goid );
+
+			// Add the effected state so this can only happen once
+			target$.Go.Actor.SAddGenericState( owner.Go.Magic.StateName, description$, alt_time$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+			
+			// Start the visual
+			if( enchant_script$ != "" )
+			{
+				SiegeFx.SRunMpScript( enchant_script$, target$, caster$, "", owner.Goid, e$ );
+			}
+			
+			Godb.StartWatching( owner.goid, target$);
+			
+			
+			this.CreateTimer( 1, alt_time$ );
+		
+		} else if ( e$ == WE_SPELL_EXPIRATION_TIMER_RESET )
+		{
+			/////////////////////////////
+			// Omni Go
+			
+			if(target$.IsValid)
+			{
+				if( msg$.GetData1() == -1)
+				{
+					SetState( Finished$ );
+				} else {
+					// remove stale state...
+					target$.Go.Actor.SRemoveGenericState( owner.Go.Magic.StateName );
+					
+					float unpacked_duration$ = msg$.GetData1() / 1000.0;
+					
+					// Add the effected state so this can only happen once
+					target$.Go.Actor.SAddGenericState( owner.Go.Magic.StateName, description$, unpacked_duration$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+				
+					This.SetNewTimerSeconds( 1, unpacked_duration$ );
+				}
+			}
+		}
+		
+	}
+	transition -> RestoreState$ :  OnTimer( 1 );
+	transition -> RestoreState$ :  OnGoHandleCCMessage( WE_KILLED );
+}
+
+state RestoreState$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	transition -> Finished$ :  OnTimer( 1 );
+	
+	event OnEnterState$
+	{
+		// If the go is still alive then restore his state
+		if( target$.IsValid ) {
+			Godb.StopWatching( owner.goid, target$);
+			
+			// remove the state so this can be affected again
+			target$.Go.Actor.SRemoveGenericState( owner.Go.Magic.StateName );
+		}
+		
+		this.CreateTimer( 1, effect_delay$ );
+	}
+}
+
+
+state Abort$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+		// Refund the players mana
+		Rules.ChangeMana( caster$, owner.go.getmagic.manacost );
+
+		SetState( Finished$ );
+	}
+}
+
+state InActive$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	trigger OnTimer$(1)
+	{
+		SetState( Finished$ );
+	}
+	
+	event OnEnterState$
+	{
+		this.CreateTimer( 1, alt_time$ );
+	}
+}
+
+state Finished$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+		if( target$.IsValid ) {
+			SiegeFx.SStopScript( target$, effect_script$ );
+		}
+		
+		// Delete this skrit
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

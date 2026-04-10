@@ -14,6 +14,10 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     private readonly TextureFinder _textureFinder = new();
     private readonly TreeStateService _treeState = new();
 
+    /// <summary>Bundled base-game data folder, placed next to the executable.</summary>
+    public static readonly string UntankPath =
+        Path.Combine(AppContext.BaseDirectory, "Untank");
+
     [ObservableProperty] private ObservableCollection<BitsNodeViewModel> _rootNodes = new();
     [ObservableProperty] private BitsNodeViewModel? _selectedNode;
     [ObservableProperty] private string _statusMessage = "Load a /Bits folder.";
@@ -27,6 +31,8 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     public bool HasNoOpenCodeTabs => OpenCodeTabs.Count == 0;
 
     private string _bitsRootPath = "";
+    private BitsNodeViewModel? _bitsRootVm;
+    private BitsNodeViewModel? _untankRootVm;
     private CancellationTokenSource? _saveCts;
 
     public event Action<List<TextureReference>>? TexturesIdentified;
@@ -38,9 +44,15 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         BitsNodeViewModel.AnyExpansionChanged += SaveExpansionStateDebounced;
         OpenCodeTabs.CollectionChanged += OnOpenCodeTabsChanged;
 
-        // Startup load: restore saved expansion state
+        _ = InitializeAsync();
+    }
+
+    private async Task InitializeAsync()
+    {
+        // Load user's Bits folder first (with expansion restored), then Untank
         if (!string.IsNullOrEmpty(BitsPath))
-            _ = LoadCoreAsync(BitsPath, restoreExpansion: true);
+            await LoadCoreAsync(BitsPath, restoreExpansion: true);
+        await LoadUntankAsync(restoreExpansion: true);
     }
 
     private void OnOpenCodeTabsChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -49,7 +61,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         OnPropertyChanged(nameof(HasNoOpenCodeTabs));
     }
 
-    // ─── Load folder ──────────────────────────────────────────────────────
+    // ─── Load user's Bits folder ──────────────────────────────────────────
 
     [RelayCommand]
     private Task LoadBitsFolderAsync(string path) => LoadCoreAsync(path, restoreExpansion: false);
@@ -77,15 +89,23 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
         IsLoading = true;
         StatusMessage = "Loading...";
-        RootNodes.Clear();
         OpenCodeTabs.Clear();
         SelectedCodeTab = null;
+
+        // Rebuild root list: clear old Bits root, keep Untank
+        _bitsRootVm = null;
+        RootNodes.Clear();
+        if (_untankRootVm != null)
+            RootNodes.Add(_untankRootVm);
 
         try
         {
             _bitsRootPath = path;
             var root = await _bitsLoader.LoadAsync(path);
-            RootNodes.Add(new BitsNodeViewModel(root));
+            _bitsRootVm = new BitsNodeViewModel(root);
+
+            // Bits goes first — insert before Untank
+            RootNodes.Insert(0, _bitsRootVm);
 
             if (restoreExpansion)
             {
@@ -93,13 +113,12 @@ public partial class ProjectBrowserViewModel : ViewModelBase
                 if (saved.Count > 0)
                 {
                     BitsNodeViewModel.AnyExpansionChanged -= SaveExpansionStateDebounced;
-                    RestoreExpansionState(RootNodes, saved);
+                    RestoreExpansionState(new[] { _bitsRootVm }, saved);
                     BitsNodeViewModel.AnyExpansionChanged += SaveExpansionStateDebounced;
                 }
             }
 
-            // Always persist the path immediately after a successful load
-            _treeState.SaveExpansionState(_bitsRootPath, CollectExpandedPaths(RootNodes));
+            _treeState.SaveExpansionState(_bitsRootPath, CollectExpandedPaths(new[] { _bitsRootVm }));
             StatusMessage = $"Loaded: {path}";
         }
         catch (Exception ex)
@@ -112,9 +131,39 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         }
     }
 
-    private static void RestoreExpansionState(IEnumerable<BitsNodeViewModel> nodes, HashSet<string> expandedPaths)
+    // ─── Load bundled Untank folder ───────────────────────────────────────
+
+    private async Task LoadUntankAsync(bool restoreExpansion = false)
     {
-        foreach (var node in nodes)
+        if (!Directory.Exists(UntankPath)) return;
+
+        try
+        {
+            var root = await _bitsLoader.LoadAsync(UntankPath);
+            _untankRootVm = new BitsNodeViewModel(root);
+
+            if (restoreExpansion)
+            {
+                var saved = _treeState.GetExpandedPaths(UntankPath);
+                if (saved.Count > 0)
+                {
+                    BitsNodeViewModel.AnyExpansionChanged -= SaveExpansionStateDebounced;
+                    RestoreExpansionState(new[] { _untankRootVm }, saved);
+                    BitsNodeViewModel.AnyExpansionChanged += SaveExpansionStateDebounced;
+                }
+            }
+
+            // Untank always goes last
+            RootNodes.Add(_untankRootVm);
+        }
+        catch { /* Untank load failure is non-critical */ }
+    }
+
+    // ─── Expansion state ──────────────────────────────────────────────────
+
+    private static void RestoreExpansionState(IEnumerable<BitsNodeViewModel> roots, HashSet<string> expandedPaths)
+    {
+        foreach (var node in roots)
         {
             node.IsExpanded = expandedPaths.Contains(node.FullPath);
             if (node.Children.Count > 0)
@@ -134,16 +183,20 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         try
         {
             await Task.Delay(300, token);
-            if (string.IsNullOrEmpty(_bitsRootPath)) return;
-            _treeState.SaveExpansionState(_bitsRootPath, CollectExpandedPaths(RootNodes));
+
+            if (!string.IsNullOrEmpty(_bitsRootPath) && _bitsRootVm != null)
+                _treeState.SaveExpansionState(_bitsRootPath, CollectExpandedPaths(new[] { _bitsRootVm }));
+
+            if (_untankRootVm != null)
+                _treeState.SaveExpansionOnly(UntankPath, CollectExpandedPaths(new[] { _untankRootVm }));
         }
         catch (OperationCanceledException) { }
     }
 
-    private static List<string> CollectExpandedPaths(IEnumerable<BitsNodeViewModel> nodes)
+    private static List<string> CollectExpandedPaths(IEnumerable<BitsNodeViewModel> roots)
     {
         var result = new List<string>();
-        foreach (var node in nodes)
+        foreach (var node in roots)
         {
             if (node.IsExpanded) result.Add(node.FullPath);
             if (node.Children.Count > 0) result.AddRange(CollectExpandedPaths(node.Children));
@@ -223,8 +276,11 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         }
 
         var textures = _textureFinder.FindInTemplate(template);
+
+        // User's Bits folder has priority; Untank fills in anything not found there
         if (!string.IsNullOrEmpty(_bitsRootPath))
             _textureFinder.ResolveTextureFiles(textures, _bitsRootPath);
+        _textureFinder.ResolveTextureFiles(textures, UntankPath, overwriteExisting: false);
 
         StatusMessage = $"Found {textures.Count} texture(s) in '{template.TemplateName}'.";
         TexturesIdentified?.Invoke(textures);

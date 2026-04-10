@@ -1,0 +1,34 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	job_set_standing_movement_orders.skrit
+
+	Author(s)	: 	Bartosz Kijanka
+
+	Purpose		: 	
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+startup state STARTUP$
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	job$.GetGo.GetMind.RSSetMovementOrders( MakeMovementOrders( job$.Int1 ) );
+	job$$.MarkForDeletion( true );
+}

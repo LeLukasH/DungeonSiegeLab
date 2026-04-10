@@ -1,0 +1,58 @@
+[t:template,n:2W_dsx_chitterskrag_boss]
+//balanced for Level 14
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_chitterskrag_boss";
+	specializes = 2W_dsx_chitterskrag_base;
+	[actor]
+	{
+		[skills]
+		{
+		strength 		= 36.6, 0;
+		intelligence 	= 13.3, 0;
+		dexterity 		= 21.3, 0;
+		melee 			= 57, 0;
+		}
+    }
+	[aspect]
+	{
+		experience_value = 54964;
+		life             = 2006;
+		max_life         = 2006;
+		mana             = 173.5;
+		max_mana         = 173.5;
+		scale_base 		= 1.5
+		model = m_c_edm_chs_pos_3;
+		textures:0 = b_c_edm_chs-02;
+		material = flesh;
+		[voice]
+		{
+			[die]			{ priority = high;	* = s_e_die_chitterskrag_boss_SED;		}
+			[enemy_spotted]	{ priority = high; * = s_e_call_chitterskrag_boss_SED; }
+		}
+	    }
+  [attack]
+	{
+		attack_range = 0.5;
+		damage_max 	= 565;
+		damage_min 	= 374.8;
+	}
+	[common]
+	{
+		screen_name = "Giant Chitterskrag";
+		membership = chitterskrag,monster,immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+				no_trig_bits = true;
+				action* = call_sfx_script("unique_ray_purple");
+			}
+		}
+    }
+	[defend] { defense = 944; }
+}
+ 
+

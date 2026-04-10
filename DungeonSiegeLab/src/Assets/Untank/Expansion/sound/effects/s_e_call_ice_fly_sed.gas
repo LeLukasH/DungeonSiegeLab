@@ -1,0 +1,7 @@
+[t:sed,n:s_e_call_ice_fly_SED]
+{
+	sound_effect_file = "s_e_call_swirling_midges";
+	max_simultaneous_samples = 3;
+	min_playback_rate = 1.10;
+	max_playback_rate = 1.65;
+}

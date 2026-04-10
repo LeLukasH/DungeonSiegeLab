@@ -1,0 +1,61 @@
+[continue_dialog]
+{
+	interface = true;
+	modal = true;
+	[t:button,n:button_continue_okay]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  i draw_order = 4;
+		rect = 347,323,455,339;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(exit_continue);
+		}
+		[t:text,n:text_select_name_okay]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  i draw_order = 5;
+		  i font_color = -1;
+		  i font_size = 0;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 389,325,455,339;
+			text = "Okay";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:dialog_box,n:continue_dialog_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox_thin_dark;
+	  i draw_order = 1;
+		rect = 246,215,563,380;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text_box,n:continue_invalid_text]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  i draw_order = 3;
+	  i font_color = -1;
+	  i font_size = 0;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = center;
+		rect = 259,227,550,314;
+		text = "No continuable game available.";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		center_height = true;
+		fixed_location = true;		
+	}
+}

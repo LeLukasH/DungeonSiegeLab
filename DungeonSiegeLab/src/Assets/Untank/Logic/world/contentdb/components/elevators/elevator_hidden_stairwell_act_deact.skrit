@@ -1,0 +1,362 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  elevator_hidden_stairwell_act_deact.skrit
+// Author(s):  James Loe, David Tomandl
+//
+// This modified elevator takes WE_REQ_ACTIVATE to go to location 2,
+// and WE_REQ_DEACTIVATE to go to location 1.  It will also buffer
+// these messages while in transition, so if a WE_REQ_ACTIVATE is sent while
+// it is moving to location 1, it will immediately move to location 2 when
+// it is done.  --DT
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool      _server_only$          = true;
+property string    _doc$                  = "Specialty hidden stairwell, activate/deactivate for transition one/two";
+property string    _required_component$   = "placement";
+
+// exported properties
+property SiegeId   stairwell_node$        = 0;
+property SiegeId   stair_node_1$          = 0;
+property SiegeId   stair_node_2$          = 0;
+property SiegeId   stair_node_3$          = 0;
+property SiegeId   stair_node_4$          = 0;
+property SiegeId   stair_node_5$          = 0;
+property SiegeId   stair_node_6$          = 0;
+property SiegeId   stair_node_7$          = 0;
+property SiegeId   stair_node_8$          = 0;
+property SiegeId   stair_node_9$          = 0;
+property SiegeId   stair_node_10$         = 0;
+
+property int       stair_door_side$       = 0;
+property int       stair_door_front_top$  = 0;
+property int       stair_door_front_bot$  = 0;
+property int       stair_door_back$       = 0;
+
+property int       stairwell_door1_up$    = 0;
+property int       stairwell_door2_up$    = 0;
+property int       stairwell_door3_up$    = 0;
+property int       stairwell_door4_up$    = 0;
+property int       stairwell_door5_up$    = 0;
+property int       stairwell_door6_up$    = 0;
+property int       stairwell_door7_up$    = 0;
+property int       stairwell_door8_up$    = 0;
+property int       stairwell_door9_up$    = 0;
+property int       stairwell_door10_up$   = 0;
+
+property int       stairwell_door1_down$  = 0;
+property int       stairwell_door2_down$  = 0;
+property int       stairwell_door3_down$  = 0;
+property int       stairwell_door4_down$  = 0;
+property int       stairwell_door5_down$  = 0;
+property int       stairwell_door6_down$  = 0;
+property int       stairwell_door7_down$  = 0;
+property int       stairwell_door8_down$  = 0;
+property int       stairwell_door9_down$  = 0;
+property int       stairwell_door10_down$ = 0;
+
+property float     duration$              = 0;
+
+property eWorldEvent	Level1_Message$			= WE_REQ_ACTIVATE		doc = "Trans1 World Message to Send.";
+property scid      		Level1_Scid$									doc = "Scid of External Object during first transition.";
+property float			Level1_Message_Delay$	= -1.0					doc = "Delay before sending message. -1 to use default MCP lag";
+
+property eWorldEvent	Level2_Message$ 		= WE_REQ_ACTIVATE 		doc = "Trans2 World Message to Send.";
+property scid      		Level2_Scid$									doc = "Scid of External Trigger during second transition.";
+property float			Level2_Message_Delay$	= -1.0					doc = "Delay before sending message. -1 to use default MCP lag";
+
+property eWorldEvent	Moving1_Message$ 		= WE_REQ_ACTIVATE		doc = "Up World Message to Send.";
+property scid      		Moving1_Scid$									doc = "Scid of External Trigger during up position.";
+property float			Moving1_Message_Delay$	= -1.0					doc = "Delay before sending message. -1 to use default MCP lag";
+
+property eWorldEvent	Moving2_Message$ 		= WE_REQ_ACTIVATE	 	doc = "Down World Message to Send.";
+property scid			Moving2_Scid$									doc = "Scid of External Trigger during down position.";
+property float			Moving2_Message_Delay$	= -1.0					doc = "Delay before sending message. -1 to use default MCP lag";
+property string			Material$										doc = "Material of the elevator, if blank no sounds are played.";
+
+int                transitions_complete$  = 0;
+float              temp_duration$         = 0;
+
+owner                                     = GoSkritComponent;
+
+bool 		bMoveToLevel1$	= false;
+bool 		bMoveToLevel2$	= false;
+float		mcp_lag$ 		= 0.5;
+
+//////////////////////////////////////////////////////////////////////////////
+trigger OnGoDrawDebugHud$
+{
+	if( Level1_Scid$.getgoid.IsValid() )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 Level1_Scid$.go.Placement.Position,
+									 MakeColor( 0, 1.0, 0, 0.5 ),
+									 ToString( Level1_Message$ ) );
+	}
+
+	if( Moving1_Scid$.getgoid.IsValid() )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 Moving1_Scid$.go.Placement.Position,
+									 MakeColor( 1.0, 1.0, 0, 0.5 ),
+									 ToString( Moving1_Message$ ) );
+	}
+
+	if( Level2_Scid$.getgoid.IsValid() )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 Level2_Scid$.go.Placement.Position,
+									 MakeColor( 0, 1.0, 0, 0.5 ),
+									 ToString( Level2_Message$ ) );
+	}
+
+	if( Moving2_Scid$.getgoid.IsValid() )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 Moving2_Scid$.go.Placement.Position,
+									 MakeColor( 1.0, 1.0, 0, 0.5 ),
+									 ToString( Moving2_Message$ ) );
+	}
+}
+startup state wait$
+{
+	transition -> L1_Wait$: OnGoHandleMessage( WE_ENTERED_WORLD );
+}
+
+state L1_Wait$
+{
+	transition
+	{
+		-> L1_Moving$: OnGoHandleMessage( WE_REQ_ACTIVATE );
+	}
+
+	event OnEnterState$
+	{	// $$ removed checks to see if the goid we are sending to is valid so we can message things outside the frustum. -ET
+		if ( Level1_Scid$.isvalid() )
+        {
+			float delay$ = Level1_Message_Delay$;
+			if ( delay$ < 0.0 )
+			{
+				delay$ = mcp_lag$;
+			}
+
+			SPostWorldMessage( Level1_Message$, owner.Goid, Level1_Scid$, delay$ );
+		}
+
+		bMoveToLevel1$ = false;
+		if( bMoveToLevel2$ == true )
+		{
+			SetState L1_Moving$;
+		}
+	}
+
+	event OnExitState$
+	{
+		temp_duration$	= duration$ / 10.0;
+
+		WorldTerrain.SRequestNodeTransition( stair_node_1$, stair_door_side$,
+											 stairwell_node$, stairwell_door1_down$,
+											 temp_duration$ * 1.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_2$, stair_door_side$,
+											 stairwell_node$, stairwell_door2_down$,
+											 temp_duration$ * 2.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_3$, stair_door_side$,
+											 stairwell_node$, stairwell_door3_down$,
+											 temp_duration$ * 3.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_4$, stair_door_side$,
+											 stairwell_node$, stairwell_door4_down$,
+											 temp_duration$ * 4.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_5$, stair_door_side$,
+											 stairwell_node$, stairwell_door5_down$,
+											 temp_duration$ * 5.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_6$, stair_door_side$,
+											 stairwell_node$, stairwell_door6_down$,
+											 temp_duration$ * 6.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_7$, stair_door_side$,
+											 stairwell_node$, stairwell_door7_down$,
+											 temp_duration$ * 7.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_8$, stair_door_side$,
+											 stairwell_node$, stairwell_door8_down$,
+											 temp_duration$ * 8.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_9$, stair_door_side$,
+											 stairwell_node$, stairwell_door9_down$,
+											 temp_duration$ * 9.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_10$, stair_door_side$,
+											 stairwell_node$, stairwell_door10_down$,
+											 temp_duration$ * 10.0, AH_NONE, owner.Go.Goid, true, true );
+		transitions_complete$ = 0;
+
+		if ( Moving1_Scid$.isvalid() )
+		{
+			float delay$ = Moving1_Message_Delay$;
+			if ( delay$ < 0.0 )
+			{
+				delay$ = mcp_lag$;
+			}
+
+			SPostWorldMessage( Moving1_Message$, owner.Goid, Moving1_Scid$, delay$ );
+		}
+		if ( !StringTool.IsEmpty( Material$ ) )
+        {
+			owner.Go.SPlayMaterialSound( "moving_1", Material$, true);
+        }
+	}
+}
+
+state L1_Moving$
+{
+	event OnGoHandleMessage$( eWorldEvent event$, WorldMessage /*msg$*/ )
+	{
+		if ( event$ == WE_REQ_DEACTIVATE )
+		{
+			bMoveToLevel1$ = true;
+		}
+		if ( event$ == WE_REQ_ACTIVATE )
+		{
+			bMoveToLevel1$ = false;
+		}
+		if( event$ == WE_TERRAIN_TRANSITION_DONE )
+		{
+			transitions_complete$ += 1;
+			if( transitions_complete$ == 10 )
+			{
+				WorldTerrain.SRequestNodeConnection( stair_node_1$, stair_door_front_bot$, stair_node_2$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_2$, stair_door_front_bot$, stair_node_3$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_3$, stair_door_front_bot$, stair_node_4$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_4$, stair_door_front_bot$, stair_node_5$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_5$, stair_door_front_bot$, stair_node_6$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_6$, stair_door_front_bot$, stair_node_7$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_7$, stair_door_front_bot$, stair_node_8$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_8$, stair_door_front_bot$, stair_node_9$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_9$, stair_door_front_bot$, stair_node_10$, stair_door_back$, true, true );
+
+				SetState L2_Wait$;
+			}
+		}
+	}
+}
+
+state L2_Wait$
+{
+	transition
+	{
+		-> L2_Moving$: OnGoHandleMessage( WE_REQ_DEACTIVATE );
+	}
+
+	event OnEnterState$
+	{
+		if ( Level2_Scid$.isvalid() )
+       	{
+			float delay$ = Level2_Message_Delay$;
+			if ( delay$ < 0.0 )
+			{
+				delay$ = mcp_lag$;
+			}
+			
+			SPostWorldMessage( Level2_Message$, owner.Goid, Level2_Scid$, delay$ );
+    	}
+
+		bMoveToLevel2$ = false;
+		if( bMoveToLevel1$ == true )
+		{
+			SetState L2_Moving$;
+		}
+	}
+
+	event OnExitState$
+	{
+		temp_duration$	= duration$ / 10.0;
+
+		WorldTerrain.SRequestNodeTransition( stair_node_1$, stair_door_side$,
+											 stairwell_node$, stairwell_door1_up$,
+											 temp_duration$ * 1.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_2$, stair_door_side$,
+											 stairwell_node$, stairwell_door2_up$,
+											 temp_duration$ * 2.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_3$, stair_door_side$,
+											 stairwell_node$, stairwell_door3_up$,
+											 temp_duration$ * 3.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_4$, stair_door_side$,
+											 stairwell_node$, stairwell_door4_up$,
+											 temp_duration$ * 4.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_5$, stair_door_side$,
+											 stairwell_node$, stairwell_door5_up$,
+											 temp_duration$ * 5.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_6$, stair_door_side$,
+											 stairwell_node$, stairwell_door6_up$,
+											 temp_duration$ * 6.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_7$, stair_door_side$,
+											 stairwell_node$, stairwell_door7_up$,
+											 temp_duration$ * 7.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_8$, stair_door_side$,
+											 stairwell_node$, stairwell_door8_up$,
+											 temp_duration$ * 8.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_9$, stair_door_side$,
+											 stairwell_node$, stairwell_door9_up$,
+											 temp_duration$ * 9.0, AH_NONE, owner.Go.Goid, true, true );
+		WorldTerrain.SRequestNodeTransition( stair_node_10$, stair_door_side$,
+											 stairwell_node$, stairwell_door10_up$,
+											 temp_duration$ * 10.0, AH_NONE, owner.Go.Goid, true, true );
+		transitions_complete$ = 0;
+
+		if ( Moving2_Scid$.isvalid() )
+		{
+			float delay$ = Moving2_Message_Delay$;
+			if ( delay$ < 0.0 )
+			{
+				delay$ = mcp_lag$;
+			}
+
+			SPostWorldMessage( Moving2_Message$, owner.Goid, Moving2_Scid$, delay$ );
+		}
+		if ( !StringTool.IsEmpty( Material$ ) )
+        {
+			owner.Go.SPlayMaterialSound( "moving_2", Material$, true);
+        }
+	}
+}
+
+state L2_Moving$
+{
+	event OnGoHandleMessage$( eWorldEvent event$, WorldMessage /*msg$*/ )
+	{
+		if( event$ == WE_REQ_ACTIVATE )
+		{
+			bMoveToLevel2$ = true;
+		}
+	
+		if( event$ == WE_REQ_DEACTIVATE )
+		{
+			bMoveToLevel2$ = false;
+		}
+
+		if( event$ == WE_TERRAIN_TRANSITION_DONE )
+		{
+			transitions_complete$ += 1;
+			if( transitions_complete$ == 10 )
+			{
+				WorldTerrain.SRequestNodeConnection( stair_node_1$, stair_door_front_top$, stair_node_2$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_2$, stair_door_front_top$, stair_node_3$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_3$, stair_door_front_top$, stair_node_4$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_4$, stair_door_front_top$, stair_node_5$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_5$, stair_door_front_top$, stair_node_6$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_6$, stair_door_front_top$, stair_node_7$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_7$, stair_door_front_top$, stair_node_8$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_8$, stair_door_front_top$, stair_node_9$, stair_door_back$, true, true );
+				WorldTerrain.SRequestNodeConnection( stair_node_9$, stair_door_front_top$, stair_node_10$, stair_door_back$, true, true );
+
+				SetState L1_Wait$;
+			}
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////

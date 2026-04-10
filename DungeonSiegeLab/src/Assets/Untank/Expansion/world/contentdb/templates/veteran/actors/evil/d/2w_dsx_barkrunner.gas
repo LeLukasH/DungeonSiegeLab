@@ -1,0 +1,235 @@
+[t:template,n:2W_dsx_base_barkrunner]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_base_barkrunner";
+	specializes = actor_evil;
+	[aspect]
+		{
+			model = m_c_edm_BARKRUNNER_pos_1;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_swamp_creature; }
+					[enemy_spotted]	{ priority = high; * = s_e_call_swamp_slinger_SED; }
+					[hit_critical]	{ priority = low; * = s_e_hit_swamp_creature_SED; }
+					[hit_glance]	{ priority = low; * = s_e_hit_swamp_creature_SED; }
+					[hit_solid]		{ priority = low; * = s_e_hit_swamp_creature_SED; }
+				}
+		}
+	[body]
+		{
+			avg_move_velocity = 2.580000;	 // 2.080
+			[bone_translator]
+				{
+					body_anterior = bip01_head;
+					body_mid = bip01_spine2;
+					body_posterior = bip01_pelvis;
+					kill_bone = bip01_spine2;
+					shield_bone = shield_grip;
+					weapon_bone = weapon_grip;
+				}
+			[chore_dictionary]
+				{
+					chore_prefix = a_c_edm_la_fs;
+					[chore_attack]
+						{
+							chore_stances = 0;
+							skrit = select_attack;
+							[anim_files] { 00=at; }
+						}
+					[chore_default]
+						{
+							chore_stances = 0;
+							skrit = infinite_loop;
+							[anim_files] { 00=ds; }
+						}
+					[chore_die]
+						{
+							chore_stances = 0;
+							skrit = select_transition;
+							[anim_files] { 00=di; }
+						}
+					[chore_fidget]
+						{
+							chore_stances = 0;
+							skrit = select_fidget;
+							[anim_files] { 00=dsf; }
+						}
+					[chore_magic]
+						{
+							chore_stances = 0;
+							skrit = select_attack;
+							[anim_files] { 00=at; }
+						}
+					[chore_walk]
+						{
+							chore_stances = 0;
+							skrit = select_walk;
+							[anim_files] { 00=wl; }
+						}
+				}
+		}
+}
+[t:template,n:2W_dsx_barkrunner_base]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_barkrunner_base";
+	specializes = 2W_dsx_base_barkrunner;
+	[actor]
+		{
+			[skills]
+				{
+					strength =		30.2, 0;
+					intelligence =	9.4, 0;
+					dexterity =		14.9, 0;
+					melee =		50,	0;
+				}
+		}
+	[aspect]
+		{
+			[textures]	{ 0 = b_c_edm_barkrunner; }
+			experience_value = 39894;
+			life = 1111.5;
+			max_life = 1111.5;
+			mana = 45;
+			max_mana = 45;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_larch; }
+					[hit_critical]	{ priority = low; * = s_e_hit_larch_SED; }
+					[hit_glance]	{ priority = low; * = s_e_hit_larch_SED; }
+					[hit_solid]		{ priority = low; * = s_e_hit_larch_SED; }
+				}
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 282.2;
+			damage_min = 182.2;
+			reload_delay = 0;
+		}
+	[common]
+		{
+			screen_name="Barkrunner";
+		
+		}
+	[defend] { defense=471; }
+	[inventory]
+		{
+			[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 12, Strong */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 27981;
+				max = 55775;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = potion_mana_large;
+				il_main = potion_health_large;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = #weapon/120-155;
+				il_main = #armor/59-365;
+				il_main = #*/120-155;
+			}
+			[oneof*]
+			{
+				chance = 0.01;
+				il_main = #weapon/-rare(1)/155-189;
+				il_main = #armor/-rare(1)/239-531;
+				il_main = #*/-rare(1)/155-189;
+			}
+			[oneof*]
+			{
+				chance = 0.005;
+				il_main = #weapon/-unique(2)/155-189;
+				il_main = #armor/-unique(2)/239-531;
+				il_main = #*/-unique(2)/155-189;
+			}	
+		}
+	}
+		}
+	[mind]
+		{
+			jat_brain						= world\ai\jobs\common\brain_hero.skrit
+				?actor_joins_existing_party		= true;
+
+			jat_fidget						= world\ai\jobs\common\job_fidget.skrit
+				?meander						= false
+				&still							= false;
+
+			melee_engage_range = 14;
+			personal_space_range = 1.0; //0.7
+			ranged_engage_range = 14.0;
+			sight_range = 14.0;
+		}
+}
+
+
+[t:template,n:2W_dsx_barkrunner]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_barkrunner";
+	specializes = 2W_dsx_barkrunner_base;
+
+	[actor]
+		{
+			[skills]
+				{
+					strength =		30.2, 0;
+					intelligence =	9.4, 0;
+					dexterity =		14.9, 0;
+					melee =		50,	0;
+				}
+		}
+	[aspect]
+		{
+			[textures]	{ 0 = b_c_edm_barkrunner; }
+			experience_value = 39528;
+			life = 1480.5;
+			max_life = 1480.5;
+			mana = 45;
+			max_mana = 45;
+			[voice]
+				{
+					[die]			{ priority = high; * = s_e_die_larch; }
+					[hit_critical]	{ priority = low; * = s_e_hit_larch_SED; }
+					[hit_glance]	{ priority = low; * = s_e_hit_larch_SED; }
+					[hit_solid]		{ priority = low; * = s_e_hit_larch_SED; }
+				}
+		}
+	[attack]
+		{
+			attack_range = 0.5;
+			damage_max = 282.2;
+			damage_min = 182.2;
+			reload_delay = 0;
+		}
+	[common]
+		{
+			screen_name="Barkrunner";
+		
+		}
+	[defend] { defense=471; }
+		
+}
+
+[t:template,n:2W_dsx_barkrunner_summon]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_summon_barkrunner";
+	specializes = 2W_dsx_barkrunner_base;
+ aspect:experience_value = 0;
+	[inventory]
+		{
+			selected_active_location = il_active_primary_spell;
+		}
+}

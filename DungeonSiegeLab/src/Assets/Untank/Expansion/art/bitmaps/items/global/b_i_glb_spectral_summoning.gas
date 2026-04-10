@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_glb_spectral_summoning]
+{
+	layer1texture1 = b_i_glb_spectral_summoning;
+  i texturedetail = 1;
+}

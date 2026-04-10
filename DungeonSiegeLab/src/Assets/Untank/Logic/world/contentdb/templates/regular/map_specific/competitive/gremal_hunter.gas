@@ -1,0 +1,322 @@
+/////////////
+// Gremals For the Gremal-hunter map!!
+
+[t:template,n:gremal_effect]
+{
+	category_name = "test";
+	doc = "[test] Gremal effect";
+	specializes = non_interactive;
+	[aspect]
+	{
+		megamap_icon = <none>;
+		model = m_c_edm_gm_pos_2;
+		scale_base = 0.4;
+	}
+	[body]
+	{
+		initial_chore = chore_default;
+		[chore_dictionary]
+		{
+			[chore_default]
+			{
+				skrit = infinite_loop;
+				[anim_files] 
+				{ 
+					00=a_c_edm_gm_fs0_di; 
+				}
+			}
+		}
+	}
+}
+
+[t:template,n:gremal_baby]
+{
+	category_name = "test";
+	doc = "[test] baby Gremal";
+	specializes = base_gremal;
+	[actor]
+	{
+		alignment			= aa_neutral;
+		[skills]
+		{
+			strength =  1, 0;
+			intelligence =  2, 0;
+			dexterity =  2, 0;
+			melee =  1,  0;
+		}
+	}
+	[aspect]
+	{
+		life = 1;
+		max_life = 1;
+		mana = 4;
+        max_mana = 4;
+		megamap_icon = <none>;
+		model = m_c_edm_gm_pos_2;
+		scale_base = 0.2;
+	}
+	[attack]
+	{
+		damage_max = 1;
+		damage_min = 1;
+	}
+	[body]
+	{
+		avg_move_velocity = 3.0;
+	}
+	[common]
+	{
+		screen_name="Baby Gremal";
+	}
+	[mind]
+	{
+		jat_fidget = world\ai\jobs\actors\evil\job_fidget_curious.skrit;
+		on_alert_projectile_near_missed_flee = true;
+
+		on_enemy_spotted_alert_friends       = false;
+		on_enemy_entered_ocz_flee            = true;
+		on_friend_entered_ocz_flee           = true;
+		on_enemy_entered_icz_attack          = true;
+
+		sensor_scan_period		 = 0.75;
+		flee_count				 = 1000;
+		com_range                = 7.0;
+		inner_comfort_zone_range = 0.5;
+		melee_engage_range       = 0.5;
+		ranged_engage_range      = 1.0;
+		outer_comfort_zone_range = 3.0;
+		personal_space_range     = 0.7;
+		sight_range              = 12.0;
+	}
+	[inventory]
+	{
+		[pcontent]
+		{
+			[oneof*]
+			{
+				il_main = gremal_soul;
+            }
+		}
+	}
+	[physics]
+	{
+		break_effect = melee_hit_2;
+		explode_when_killed = true;
+	}
+}
+
+
+[t:template,n:gremal_normal]
+{
+	category_name = "test";
+	doc = "[test] normal Gremal";
+	specializes = base_gremal;
+	[actor]
+	{
+		alignment			= aa_neutral;
+		[skills]
+		{
+			strength =  1, 0;
+			intelligence =  2, 0;
+			dexterity =  2, 0;
+			melee =  4,  0;
+		}
+	}
+	[aspect]
+	{
+		life = 10;
+		max_life = 10;
+		mana = 4;
+        max_mana = 4;
+		megamap_icon = <none>;
+		model = m_c_edm_gm_pos_2;
+		scale_base = 0.35;
+	}
+	[attack]
+	{
+		damage_max = 2;
+		damage_min = 2;
+	}
+	[body]
+	{
+		avg_move_velocity = 4.0;
+	}
+	[common]
+	{
+		screen_name="Gremal";
+	}
+	[defend]
+	{
+		  defense = 20;
+	}
+	
+	[mind]
+	{
+		jat_fidget = world\ai\jobs\actors\evil\job_fidget_curious.skrit;
+		on_alert_projectile_near_missed_flee = true;
+
+		on_enemy_spotted_alert_friends       = false;
+		on_enemy_entered_ocz_flee            = true;
+		on_friend_entered_ocz_flee           = true;
+		on_enemy_entered_icz_attack          = true;
+
+		sensor_scan_period		 = 0.75;
+		flee_count				 = 1000;
+		com_range                = 7.0;
+		inner_comfort_zone_range = 0.5;
+		melee_engage_range       = 0.5;
+		ranged_engage_range      = 1.0;
+		outer_comfort_zone_range = 3.0;
+		personal_space_range     = 0.7;
+		sight_range              = 12.0;
+	}
+	[inventory]
+	{
+		[pcontent]
+		{
+			[oneof*]
+			{
+				[oneof*]
+				{
+					  il_main = gremal_soul;
+					  max = 4;
+					  min = 3;
+				}
+            }
+		}
+	}
+	[physics]
+	{
+		break_effect = melee_hit_2;
+		explode_when_killed = true;
+	}
+}
+
+[t:template,n:gremal_super]
+{
+	category_name = "test";
+	doc = "[test] Super Gremal";
+	specializes = base_gremal;
+	[actor]
+	{
+		alignment			= aa_neutral;
+		[skills]
+		{
+			strength =  30, 0;
+			intelligence =  30, 0;
+			dexterity =  30, 0;
+			melee =  30,  0;
+		}
+	}
+	[aspect]
+	{
+		life = 100;
+		max_life = 100;
+		mana = 4;
+        max_mana = 4;
+		megamap_icon = <none>;
+		model = m_c_edm_gm_pos_2;
+		scale_base = 0.5;
+	}
+	[attack]
+	{
+		damage_max = 30;
+		damage_min = 15;
+	}
+	[body]
+	{
+		avg_move_velocity = 5.0;
+	}
+	[common]
+	{
+		screen_name="Super Gremal!!";
+	}
+	[defend]
+	{
+		  defense = 100;
+	}
+	
+	[mind]
+	{
+		jat_fidget = world\ai\jobs\actors\evil\job_fidget_curious.skrit;
+		on_alert_projectile_near_missed_flee = true;
+
+		on_enemy_spotted_alert_friends       = false;
+		on_enemy_entered_ocz_flee            = true;
+		on_friend_entered_ocz_flee           = true;
+		on_enemy_entered_icz_attack          = true;
+
+		sensor_scan_period		 = 0.75;
+		flee_count				 = 1000;
+		com_range                = 7.0;
+		inner_comfort_zone_range = 0.5;
+		melee_engage_range       = 0.5;
+		ranged_engage_range      = 1.0;
+		outer_comfort_zone_range = 3.0;
+		personal_space_range     = 0.7;
+		sight_range              = 12.0;
+	}
+	[inventory]
+	{
+		[pcontent]
+		{
+			[oneof*]
+			{
+				[oneof*]
+				{
+					  il_main = gremal_soul;
+					  max = 30;
+					  min = 20;
+				}
+            }
+		}
+	}
+	[physics]
+	{
+		break_effect = melee_hit_2;
+		explode_when_killed = true;
+	}
+}
+
+[t:template,n:gremal_soul]
+{
+	specializes			= treasure;
+	doc					= "jewel_sm_red";
+    category_name       = "treasure";
+
+	aspect:model		= m_i_glb_jewel-01;
+	aspect:voice:put_down:* = s_e_gui_put_down_jewelry;
+
+	common:screen_name	= "Gremal Soul";
+	common:description  = "The life force of a poor defenseless Gremal lies in this stone.";
+	
+	gui:inventory_icon	= b_gui_ig_i_it_jewel_01;
+}
+
+[t:template,n:gremal_reward]
+{
+    specializes = point;
+	doc			= "[test] gremal reward";
+
+	category_name       = "special";
+	[aspect]
+	{
+		force_no_render = true;
+	}
+	[placement]	{}
+	[common]
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+	}
+	[inventory]
+	{}
+	[gizmo]
+	{
+		model				=	m_i_glb_object-waypoint;
+		texture				=	;
+		diffuse_color		=	0.5, 0.0, 0.5;
+		use_diffuse_color	=	true;
+	}
+	[gremal_reward] {}
+}

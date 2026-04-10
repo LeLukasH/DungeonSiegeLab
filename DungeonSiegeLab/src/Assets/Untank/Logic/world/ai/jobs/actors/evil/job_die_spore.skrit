@@ -1,0 +1,93 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	job_die_spore.skrit
+
+	Author(s)	: 	Eric Tams
+
+	Purpose		: 	die, wait around for a while, then spawn a new spore.
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+GoMind	m_Mind$;
+GoBody  m_Body$;
+Job		m_Job$;
+
+
+startup state STARTUP$
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.GetGo;
+	m_Mind$		= job$.GetGo.GetMind;
+	m_Body$		= job$.GetGo.GetBody;
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+
+	SetState Wait$;
+}
+
+
+state Wait$
+{
+	trigger OnTimer$( 1 )
+	{
+		SetState SpawnNew$;
+	}
+
+	event OnEnterState$
+	{
+		string params$;
+		
+		float scale$ = m_Go$.attack.AttackRange;
+		scale$ /= 2.5;
+		
+		StringTool.AppendF( params$, "[%g]", scale$ );
+		
+		Physics.CreateExplosion(m_Go$.placement.position, m_Go$.attack.AttackRange, m_Go$.attack.AttackRange, m_Go$.attack.DamageMax , m_Go$.goid, m_Go$.goid );
+		Siegefx.RunScript("spore_cloud",m_Go$.goid,m_Go$.goid,params$,m_Go$.goid, WE_KILLED );
+		m_Go$.Aspect.SSetIsVisible( false );
+		this.CreateTimer( 1, 4 );
+	}
+}
+
+state SpawnNew$
+{
+	trigger OnTimer$( 1 )
+	{
+		SetState Explode$;
+	}
+	event OnEnterState$
+	{
+		PostWorldMessage( WE_REQ_ACTIVATE, m_Go$.Goid, m_Go$.Goid, 0 );
+		this.CreateTimer( 1, 0 );
+	}
+}
+
+state Explode$
+{
+	event OnEnterState$
+	{
+		GoDb.SMarkForDeletion( m_Go$.goid );
+		m_Mind$.Clear();
+		m_Job$.MarkForDeletion();
+		
+	}
+}

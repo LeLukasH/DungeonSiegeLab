@@ -1,0 +1,223 @@
+
+
+
+
+[effect_script*]
+{
+	name	=weapon_fire;
+
+	script	=[[sfx create fire -scale(.5) #TARGET
+			sfx attach_point #PEEK [0] target;
+			sfx start #POP;
+			]];
+}
+
+
+[effect_script*]
+{
+    name    =testflare;
+
+    script  =[[
+			sfx create fire #TARGET
+				"dur(8)accel(0,-8,0)velocity(0,-8,0)alphafade(.3)color0(.1,.9,.3)
+				scale(.3)count(125)";
+				
+					
+			sfx attach_point #PEEK bip01_l_hand target;
+			sfx start #POP;
+
+
+			sfx create fire #TARGET
+				"dur(8)accel(0,-8,0)velocity(0,-8,0)alphafade(.3)color0(.1,.9,.3)
+				scale(.3)count(125)";
+				
+					
+			sfx attach_point #PEEK bip01_r_hand target;
+			sfx start #POP;
+			]];
+}
+
+
+
+[effect_script*]
+{
+	name	=channelfire;
+
+	script	=[[
+			sfx create charge #SOURCE
+				"dur(3)speed0(.3)centersize(.3)color0(1,.3,.2)radius(1)
+				offset(0,0,-.3)ts(2.25)";
+				
+					
+			sfx start #POP;
+
+			sound play s_e_levelup1 loop;
+			pause 3;
+			sound stop #POP;
+			call fireball <offset(0,0,-.3)>;
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=channellight;
+
+	script	=[[
+			sfx create charge #SOURCE
+				"dur(3)speed0(.3)centersize(.3)radius(1)offset(0,0,-.3)
+				ts(2)";
+				
+					
+			sfx start #POP;
+
+			sound play s_e_levelup1 loop;
+			pause 3;
+			sound stop #POP;
+
+			sfx create lightning #SOURCE 
+				"dur(3)offset(0,0,-.6)";
+			sfx offset #PEEK v<0 0 -0.3> source;
+			sfx target #PEEK target;
+			sfx start #POP;
+
+			sound play s_e_ambient_thunder;
+			pause 3;
+			sound stop #POP;
+			]];
+}
+
+
+[effect_script*]
+{
+	name	=vandegraph;
+
+	script	=[[
+			sfx create sphere #TARGET 
+				"color0(0.65,.65,0.65)scale(0.15)dur(4.5)grow_params(0.35,1.5,1.5)";
+			sfx start #POP;
+
+			sfx create sphere #TARGET 
+				"color0(.2,.1,.8)dur(4.25)";
+			set $big_sphere #POP;
+			sfx start $big_sphere;
+
+			pause .75;
+
+			sfx create orbiter #TARGET 
+				"color0(1,0,0)radius(0)dur(3)";
+			sfx start #POP;
+
+			sfx create orbiter #TARGET 
+				"invisible()radius(0)scale(0.1)dur(3)";
+			set $source_point #POP;
+
+			sfx create orbiter #TARGET 
+				"invisible()radius(10.1)scale(0.1)phi(0)theta(0)iphi(1)
+				itheta(-3)dur(3)";
+			pause 0;
+			sfx create orbiter #TARGET 
+				"invisible()radius(10.1)scale(0.1)phi(0)theta(1)iphi(2)
+				itheta(-2)dur(3)";
+			pause 0;
+			sfx create orbiter #TARGET 
+				"invisible()radius(10.1)scale(0.1)phi(1)theta(0)iphi(3)
+				itheta(-1)dur(3)";
+			pause 0;
+			sfx create orbiter #TARGET 
+				"invisible()radius(10.1)scale(0.1)phi(1)theta(1)iphi(3)
+				itheta(1)dur(3)";
+			pause 0;
+			sfx create orbiter #TARGET 
+				"invisible()radius(10.1)scale(0.1)phi(-1)theta(-1)iphi(2)
+				itheta(2)dur(3)";
+			pause 0;
+			sfx create orbiter #TARGET 
+				"invisible()radius(10.1)scale(0.1)phi(2)theta(-1)iphi(1)
+				itheta(3)dur(3)";
+			pause 0;
+			set $point1 #POP;
+			set $point2 #POP;
+			set $point3 #POP;
+			set $point4 #POP;
+			set $point5 #POP;
+			set $point6 #POP;
+
+			sfx create lightning #TARGET 
+				"scale(.4)dur(2.5)minsubd(2.5)subd(3.75)mindisplace(-.5)
+				maxdisplace(.5)";
+			set $bolts1 #POP;
+			pause 0;
+			sfx create lightning #TARGET 
+				"scale(.4)dur(2.5)minsubd(2.5)subd(3.75)mindisplace(-.5)
+				maxdisplace(.5)";
+			set $bolts2 #POP;
+			pause 0;
+			sfx create lightning #TARGET 
+				"scale(.4)dur(2.5)minsubd(2.5)subd(3.75)mindisplace(-.5)
+				maxdisplace(.5)";
+			set $bolts3 #POP;
+			pause 0;
+			sfx create lightning #TARGET 
+				"scale(.4)dur(2.5)minsubd(2.5)subd(3.75)mindisplace(-.5)
+				maxdisplace(.5)";
+			set $bolts4 #POP;
+			pause 0;
+			sfx create lightning #TARGET 
+				"scale(.4)dur(2.5)minsubd(2.5)subd(3.75)mindisplace(-.5)
+				maxdisplace(.5)";
+			set $bolts5 #POP;
+			pause 0;
+			sfx create lightning #TARGET 
+				"scale(.4)dur(2.5)minsubd(2.5)subd(3.75)mindisplace(-.5)
+				maxdisplace(.5)";
+			set $bolts6 #POP;
+			pause 0;
+
+			sfx rat $bolts1;
+			sfx rat $bolts2;
+			sfx rat $bolts3;
+			sfx rat $bolts4;
+			sfx rat $bolts5;
+			sfx rat $bolts6;
+
+			sfx target $bolts1 $source_point;
+			sfx target $bolts1 $point1;
+			sfx target $bolts2 $source_point;
+			sfx target $bolts2 $point2;
+			sfx target $bolts3 $source_point;
+			sfx target $bolts3 $point3;
+			sfx target $bolts4 $source_point;
+			sfx target $bolts4 $point4;
+			sfx target $bolts5 $source_point;
+			sfx target $bolts5 $point5;
+			sfx target $bolts6 $source_point;
+			sfx target $bolts6 $point6;
+
+			sfx attach $source_point $point1;
+			sfx attach $source_point $point2;
+			sfx attach $source_point $point3;
+			sfx attach $source_point $point4;
+			sfx attach $source_point $point5;
+			sfx attach $source_point $point6;
+
+			sfx start $source_point;
+			sfx start $bolts1;
+			sfx start $bolts2;
+			sfx start $bolts3;
+			sfx start $bolts4;
+			sfx start $bolts5;
+			sfx start $bolts6;
+
+
+			sfx create lightsource #TARGET 
+				"color0(1,1,1)color1(0,0,0)";
+			set $flashes #POP;
+			sfx start $flashes;
+
+			pause 2.65;
+
+			sfx destroy $bolts1;
+			sfx destroy $flashes;
+			]];
+}

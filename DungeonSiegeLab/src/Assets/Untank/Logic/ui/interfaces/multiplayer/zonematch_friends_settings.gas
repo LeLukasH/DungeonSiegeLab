@@ -1,0 +1,405 @@
+[zonematch_friends_settings]
+{
+	interface = true;
+	modal = true;
+
+	[t:window,n:bg_fill]
+	{
+		alpha = 0.40000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1;
+		rect = 0,0,800,600;
+		texture = b_gui_cmn_textbox_bg;
+		uvcoords = 0.000000,0.000000,0.000000,0.000000;
+		wrap_mode = clamp;
+	}
+
+	[t:dialog_box,n:background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox_wide;
+		draw_order = 2;
+		rect = 200,150,600,450;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:client_background]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = cpbox;
+		draw_order = 10;
+		rect = 220,216,580,394;
+		texture = none;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:title]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 79;
+		rect = 240,166,560,186;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		font_color = -1;
+		font_size = 22;
+		font_type = b_gui_fnt_20p_copperplate-light;
+		justify = center;
+		text = "OPTIONS";
+	}	
+	
+	[t:tab,n:tab_account]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 8;
+		radio_group = zonematch_account_settings;
+		rect = 220,203,340,219;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:tab_account_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 31,1,104,15;
+			text = "Account";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			oncheck = notify(zonematch_account_settings);
+		}
+	}
+	[t:tab,n:tab_friends]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 8;
+		radio_group = zonematch_account_settings;
+		rect = 341,200,460,216;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		enabled = false;
+		[t:text,n:tab_friends_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 31,1,104,15;
+			text = "Friends";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			oncheck = notify(zonematch_friends_settings);
+		}
+	}
+	[t:tab,n:tab_ignored]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 8;
+		radio_group = zonematch_account_settings;
+		rect = 461,203,580,219;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:tab_ignored_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 31,1,104,15;
+			text = "Ignored";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages]
+		{
+			oncheck = notify(zonematch_ignored_settings);
+		}
+	}
+	
+	[t:button,n:button_ok]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 20;
+		rect = 340,410,460,424;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:text,n:button_ok_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 107,256,231,271;
+			text = "OK";
+			texture = none;
+			type = text;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[messages] { onbuttonpress=notify(zonematch_settings_ok); }
+	}
+	
+		///////////////////////////////////////////////////////////////
+	//
+	//		Disable messages from people in ZM
+	//
+	//
+	[t:text,n:text_zmmessage]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = button_4;
+		draw_order = 70;
+		font_color = 0xffffffff;
+		font_size = 12;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		justify = left;
+		//rect = 150,190,320,206;
+		rect = 270,244,420,276;
+		text = "While in-Game receive messages from:";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zm_options_game_zmmessage;
+	}
+	[t:button,n:button_zmmessage]
+	{
+		alpha = 1.000000;
+		common_control = true;
+		common_template = button_4;
+		draw_order = 15;
+		//rect = 340,190,474,206;
+		rect = 460,252,544,268;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		group = zm_options_game_zmmessage;
+		[messages]
+		{
+			onlbuttondown = playsound(s_e_frontend_tiny_button);
+		}
+	}
+	[t:combo_box,n:combo_zmmessage]
+	{
+		common_control = false;
+		common_template = ;
+		font_type = b_gui_fnt_12p_copperplate-light;
+		text_color = -1;
+		draw_order = 2500;
+		//rect = 360,191,474,206;
+		rect = 470,253,544,268;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		has_background = true;
+		auto_size = true;
+		max_visible_elements = 4;
+		group = zm_options_game_zmmessage;
+		topmost=true;
+		[t:button,n:button_combo_show_zmmessage]
+		{
+			common_control = true;
+			common_template = down;
+			draw_order = 2400;
+			//rect = 474,190,490,206;
+			rect = 544,252,560,268;
+			texture = b_gui_cmn_button_down_up;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			group = zm_options_game_zmmessage;
+			[messages]
+			{
+				onlbuttondown = parentmessage(oncomboexpand) & playsound(s_e_frontend_tiny_button);
+			}
+		}
+		[t:listbox,n:listbox_zmmessage]
+		{
+			alpha = 0.9500000;
+			common_control = true;
+			common_template = ;
+			draw_order = 2600;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			//rect = 340,207,490,310;
+			rect = 461,269,560,372;
+			text_color = 0xffffffff;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			left_indent = 4;
+			topmost=true;
+			group = zm_options_game_zmmessage;
+			[t:selection_box,n:selection_box]
+			{
+				alpha = 0.75;
+				texture = b_gui_cmn_selection;
+			}
+			[messages]
+			{
+				oncreated = setelementheight(16);
+			}
+		}
+	}
+
+
+//	[t:checkbox,n:disable_friends_in_game]
+//	{
+///		alpha = 1.000000;
+//		common_control = false;
+//		common_template = ;
+//		draw_order = 1296;
+//		rect = 270,258,286,274;
+//		texture = b_gui_cmn_checkbox;
+//		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+//		wrap_mode = clamp;
+//		[t:window,n:disable_friends_in_game_texture]
+//		{
+//			alpha = 1.0000;
+//			rect = 270,258,286,274;
+//			draw_order = 2000;
+//			texture = b_gui_cmn_checkbox_x;
+//			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+//			wrap_mode = clamp;
+//		}
+//		[t:text_box,n:disable_friends_in_game_text]
+//		{
+//			alpha = 1.000000;
+//			common_control = false;
+//			common_template = ;
+//			draw_order = 68;
+//			font_color = -1;
+//			font_size = 12;
+//			font_type = b_gui_fnt_12p_copperplate-light;
+//			justify = left;
+//			rect = 292,252,530,280;
+//			text = "Disable friends messaging in-game.";
+//			texture = none;
+//			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+//			wrap_mode = clamp;
+//			fixed_location = true;
+//			center_height = true;
+//		}	
+//	}
+
+	///////////////////////////////////////////////////////////
+	//
+	//		disable all friends
+	//
+	[t:checkbox,n:disable_friends_for_account]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1296;
+		rect = 270,298,286,314;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:window,n:disable_friends_for_account_texture]
+		{
+			alpha = 1.0000;
+			draw_order = 2000;
+			rect = 270,298,286,314;
+			texture = b_gui_cmn_checkbox_x;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[t:text_box,n:disable_friends_for_account_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 292,292,530,320;
+			text = "Automatically reject friend requests.";
+			texture = none;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			fixed_location = true;
+			center_height = true;
+		}
+	}
+
+	///////////////////////////////////////////////////////////
+	//
+	//		ask before adding as friend
+	//
+	[t:checkbox,n:checkbox_ask_before_add]
+	{
+		alpha = 1.000000;
+		common_control = false;
+		common_template = ;
+		draw_order = 1296;
+		rect = 270,338,286,354;
+		texture = b_gui_cmn_checkbox;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[t:window,n:checkbox_ask_before_add_texture]
+		{
+			alpha = 1.0000;
+			rect = 270,338,286,354;
+			draw_order = 2000;
+			texture = b_gui_cmn_checkbox_x;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+		[t:text_box,n:checkbox_ask_before_add_text]
+		{
+			alpha = 1.000000;
+			common_control = false;
+			common_template = ;
+			draw_order = 68;
+			font_color = -1;
+			font_size = 12;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = left;
+			rect = 292,332,530,360;
+			text = "Ask before accepting friend additions.";
+			texture = none;
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+			fixed_location = true;
+			center_height = true;
+		}
+	}
+}

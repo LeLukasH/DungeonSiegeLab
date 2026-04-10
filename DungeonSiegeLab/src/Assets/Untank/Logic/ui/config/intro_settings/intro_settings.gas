@@ -1,0 +1,28 @@
+[intro_settings]
+{	
+	// note: all durations are in seconds
+
+	[fades]
+	{
+		// name of fade = duration, start alpha, end alpha;
+		loadbar_fade_out	= 2.0,1.0,0.0;
+
+		microsoft_fade_in 	= 2.0,0.0,1.0;
+		microsoft_fade_out	= 2.0,1.0,0.0;
+		
+		gaspowered_fade_in	= 2.0,0.0,1.0;
+		gaspowered_fade_out	= 2.0,1.0,0.0;
+	}
+
+	[beats]
+	{
+		intro_beat			= 1.0;
+		microsoft_beat		= 1.0;
+		gaspowered_beat		= 1.0;	
+		monolog_beat		= 1.0;	
+		ds_begin_beat		= 5.0;
+		ds_end_beat			= 4.0;	
+	}
+
+	monolog_sample = s_v_king_intro;
+}

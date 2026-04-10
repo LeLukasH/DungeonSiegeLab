@@ -1,0 +1,45 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  breaking_object.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property float 			Damage_on_activate$	= 100				doc = "Amount to damage the object when recieving break_event.";
+property eWorldEvent	break_event$		= WE_REQ_ACTIVATE	doc = "message to break on.";
+
+property bool			break_with_damage$	= true				doc = "use damage to break go";
+property bool			delete_object$		= false				doc = "delete object after breaking";
+
+owner                                = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+startup state Waiting$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == break_event$ )
+		{
+			if (owner.go.IsActor() )
+			{
+				owner.go.Mind.Clear();
+			}
+			if (break_with_damage$)
+			{
+				Rules.DamageGo(  owner.goid, owner.goid, owner.goid, Damage_on_activate$, true, true);
+			} else {
+				Physics.ExplodeGoWithDamage( owner.goid , owner.goid , owner.goid );
+			}
+			
+			if (delete_object$)
+			{
+				PostWorldMessage( WE_REQ_DELETE, owner.goid, owner.goid, 0 );
+			}
+		}
+	}
+}

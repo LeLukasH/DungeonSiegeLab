@@ -1,0 +1,36 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	job_set_standing_combat_orders.skrit
+
+	Author(s)	: 	Bartosz Kijanka
+
+	Purpose		: 	
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+startup state STARTUP$
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	job$.GetGo.GetMind.SetCombatOrders( MakeCombatOrders( job$.Int1 ) );
+	job$.MarkForDeletion( true );
+}
+
+

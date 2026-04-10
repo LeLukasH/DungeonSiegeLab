@@ -1,0 +1,47 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  set_quest_bits.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2002 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//
+// This doesn't set quest bits. You shouldn't ever need to use this skrit.
+//
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool			_server_only$			= true;
+property string			_doc$					= "Sets boolean value upon receiving we_req_activate";
+
+// exported properties
+property string			bool_variable$								doc = "Name of the Bool variable";
+property eWorldEvent	message_true$			= WE_REQ_ACTIVATE	doc = "Set bool to true when this message is received";
+property eWorldEvent	message_false$			= WE_REQ_DEACTIVATE doc = "Set bool to true when this message is received";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if ( StringTool.IsEmpty( bool_variable$ ) )
+	{
+		Report.Error("Invalid variable name for setting quest bool!!\n");	
+	}
+	
+	if ( e$ == message_true$ )
+	{
+		GameAuditor.RCSetBool( bool_variable$, true );
+	}
+	else if ( e$ == message_false$ )
+	{
+		GameAuditor.RCSetBool( bool_variable$, false );
+	}
+}

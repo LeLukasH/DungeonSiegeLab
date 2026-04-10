@@ -1,0 +1,174 @@
+// JCD 7/18/03
+// balanced as Lvl 7 medium melee for A2
+[t:template,n:2W_dsx_chomper_base]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_chomper_base";
+	specializes = actor_evil;
+	[actor]
+	{
+		[skills]
+		{
+			strength =     29.4, 0;
+			intelligence = 9.5, 0;
+			dexterity =    15.8, 0;
+			melee =        47, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 30875;
+		life             = 936;
+		max_life         = 936;
+		mana             = 120;
+		max_mana         = 120;
+		model = m_c_ecm_db_pos_1;
+		textures:0 = b_c_ecm_db-02;
+		material = flesh;
+		[voice]
+		{
+			[attack]		{	* = s_e_attack_chomper_SED;	}
+			[die]			{ priority = high; * = s_e_die_chomper_SED; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_chomper_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 528; 
+		damage_min = 360; 
+	}
+	[body]
+	{
+		min_move_velocity = 3.0;
+		avg_move_velocity = 3.750000;
+		[bone_translator]
+		{
+			body_anterior = bip01_head;
+			body_mid = bip01_spine2;
+			body_posterior = bip01_pelvis;
+			kill_bone = bip01_spine2;
+			shield_bone = shield_grip;
+			weapon_bone = weapon_grip;
+		}
+		[weapon_scales]
+		{
+			as_two_handed_melee	= 1.5, 1.5, 1.5;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_ecm_db_fs;
+			[chore_attack]
+			{
+				chore_stances = 0,3;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					01 = at-02;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0,3;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0,3;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0,3;
+				skrit = select_fidget;
+				[anim_files] { 00=dff; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0,3;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+	[common]
+	{
+		screen_name = "Chomper";
+		membership = monster;
+	}
+	[defend] { defense = 317.3; }
+	[inventory]
+{
+	drop_at_use_point = true;
+	[pcontent]
+	{
+	/* Generated: Tue Jun 17 11:13:15 2003
+		Level 6, Medium */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 35969;
+				max = 70938;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_large;
+				il_main = potion_health_large;
+			}
+			[oneof*]
+			{
+				chance = 0.15;
+				il_main = #weapon/102-123;
+				il_main = #armor/24-272;
+				il_main = #*/102-123;
+			}
+			[oneof*]
+			{
+				chance = 0.0075;
+				il_main = #weapon/-rare(1)/123-160;
+				il_main = #armor/-rare(1)/0-424;
+				il_main = #*/-rare(1)/123-160;
+			}
+			
+		}
+	}
+}
+	[mind]
+	{
+		jat_brain = world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party	= true;		
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit;	
+
+		melee_engage_range = 14;
+		personal_space_range = 0.7;
+		ranged_engage_range = 14.0;
+		sight_range = 14.0;
+	}
+}
+
+[t:template,n:2W_dsx_chomper]
+{
+	category_name = "2W_evil_d";
+	doc = "2W_dsx_chomper";
+	specializes = 2W_dsx_chomper_base;
+}
+
+
+[t:template,n:2W_dsx_chomper_summon]
+{
+  category_name = "2W_evil_d";
+  doc = "2W_dsx_summon_chomper";
+  specializes = 2W_dsx_chomper_base;
+ aspect:experience_value = 0;
+  [inventory]
+    {
+      selected_active_location = il_active_primary_spell;
+    }
+    
+}

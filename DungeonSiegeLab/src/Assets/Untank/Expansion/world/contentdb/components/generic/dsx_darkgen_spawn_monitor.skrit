@@ -1,0 +1,188 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	dsx_darkgen_spawn_monitor.skrit
+
+	Author(s)	: 	Mathew Corthell
+
+	Purpose		:	Special monitor for the dark generators that makes it spawn
+					shadow jumper minions.
+	
+	Expected Behavior	: 
+
+	(C)opyright 2003 Mad Doc Software
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+property string creatureTemplate$="" doc="Well, I say creature, but it really could be any monster.";
+
+property int maxTotalCreatures$=5 doc="The max number of creatures that the death knight will have at one time.";
+property int maxCreatures$=2 doc="The max number of creatures to summon at the same time.";
+
+property string summonEffect$="" doc="The effect to play when summoning the creatures.";
+
+property float initialDelay$=.1 doc="Initial delay between when enemies are started and when we first spawn.";
+property float waitInterval$=1 doc="Period of time to go before checking whether we need to spawn.";
+
+property float minDistanceFromGenerator$=1 doc="Minimum distance from generator for creature to appear.";
+property float maxDistanceFromGenerator$=3 doc="Maximum distance from generator for creature to appear.";
+
+property scid spawnReferencePoint$=0 doc="Object to use as a reference when spawning the minion.";
+property scid shadowJumper$=0 doc="The ShadowJumper.  The dark generators will watch him.  When he dies, they stop spawning.";
+
+property string monitorTemplate$="dsx_sj_minion_monitor" doc="the template that will monitor SJ killing a minion when SJ dies.";
+owner = GoSkritComponent;
+
+int m_creatureCount$=0;
+
+// Summon a single creature
+void SummonCreature$()
+{
+	if(!spawnReferencePoint$.Goid.IsValid())
+	{
+		// Get a position to spawn this creature.
+		AIQuery.FindSpotRelativeToSource(owner.go, minDistanceFromGenerator$,  maxDistanceFromGenerator$, 0, AIQuery.TempPos1);
+	}
+	else
+	{
+		AIQuery.FindSpotRelativeToSource(owner.go, 
+										 spawnReferencePoint$.Goid.Go,
+										 false,
+										 minDistanceFromGenerator$,  
+										 maxDistanceFromGenerator$,
+										 20,
+										 20,
+										 .5, 
+										 AIQuery.TempPos1,
+										 false);
+	}
+
+	// Clone the creature.
+	GoCloneReq cloneReq$ = MakeGoCloneReq(creatureTemplate$);
+	cloneReq$.FadeIn = true;
+	cloneReq$.StartingPos = AIQuery.TempPos1;
+	Goid creature$ = GoDb.SCloneGo(cloneReq$);
+
+	// Play the spawn effect on the creature.
+	if(!StringTool.IsEmpty(summonEffect$))
+	{
+		SiegeFX.SRunMPScript(summonEffect$, creature$, owner.goid, "", owner.Goid, WE_REQ_CAST);
+	}
+
+	// Start watching this creature so that we know when it dies.
+	GoDb.StartWatching(owner.goid, creature$);
+
+	// Increment the counter.
+	m_creatureCount$ = m_creatureCount$ + 1;
+	
+	// clone monitoring skrit for the summon
+	GoCloneReq summonMonitorCloneReq$ = MakeGoCloneReq(monitorTemplate$);
+	summonMonitorCloneReq$.Omni = true;
+	Goid new_skrit$ = GoDb.SCloneGo(summonMonitorCloneReq$);
+
+	// send the message to the new skrit
+	PostWorldMessage(WE_REQ_ACTIVATE, creature$, new_skrit$, MakeInt(shadowJumper$.goid), 0);
+
+//	report.genericf("Generator spawn monitor: Creature spawned.  Total creatures: %d\n", m_creatureCount$);
+}
+
+// Function to summon multiple creatures.
+void SummonCreatures$()
+{
+	// Spawn a number of creatures.  Make sure we don't go over the per-summon limit or over
+	// the maximum limit.
+	int count$ = 0;
+	while(count$ < maxCreatures$ && m_creatureCount$ < maxTotalCreatures$)
+	{
+		SummonCreature$();
+		count$ = count$ + 1; 
+	}
+}
+
+startup state Initial$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		// When we see the enemy for the first time, kick off this skrit.
+		if( e$ == WE_REQ_ACTIVATE )
+		{
+//			report.generic("Generator spawn monitor: Enemy spotted, switch to monitor state\n");
+
+			if(shadowJumper$.Goid.IsValid())
+			{
+				GoDb.StartWatching(owner.goid, shadowJumper$.Goid);
+			}
+
+			SetState Monitoring$;
+		}
+	}
+}
+
+state Monitoring$
+{
+	event OnEnterState$
+	{
+//		report.generic("Generator spawn monitor: Starting to monitor\n");
+		// As soon as we enter this state, start a short timer before 
+		This.CreateTimer(1, initialDelay$);
+	}
+
+	event OnTimer$(int id$, float /*delta$*/)
+	{
+		if(id$ == 1)
+		{
+//			report.genericf("Generator spawn monitor: Check timer fired.  Current count: %d Max possible:%d\n", m_creatureCount$, maxTotalCreatures$);
+
+			// If the current number of creatures is less than the max, then summon some 
+			// more creatures.
+			if(m_creatureCount$ < maxTotalCreatures$)
+			{
+				SummonCreatures$();
+			}
+
+			This.CreateTimer(1, waitInterval$);
+		}
+	}
+
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == WE_KILLED )
+		{
+//			report.generic("Generator spawn monitor: Death knight killed, time to exit\n");
+
+			SetState CleanUp$;
+		}
+	}
+
+	event OnGoHandleCCMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		// If one of the creatures is killed, then stop watching it and decrement the
+		// amount of creatures.
+		if( e$ == WE_KILLED )
+		{
+			// If the shadow jumper dies, then we're done, so go to the cleanup state.
+			if(msg$.GetSendTo() == shadowJumper$.Goid)
+			{
+				SetState CleanUp$;
+			}
+			else
+			{
+				m_creatureCount$ = m_creatureCount$ - 1;
+				GoDb.StopWatching(owner.goid, msg$.GetSendTo());
+			}
+
+//			report.genericf("Generator spawn monitor: Creature killed.  Total creatures: %d\n", m_creatureCount$);
+		}
+	}
+
+
+}
+
+// That's all folks.  
+state CleanUp$
+{
+
+}

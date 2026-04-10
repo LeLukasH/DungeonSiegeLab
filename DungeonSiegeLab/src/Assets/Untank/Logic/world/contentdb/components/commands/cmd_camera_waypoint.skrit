@@ -1,0 +1,38 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  cmd_camera_waypoint.skrit
+// Author(s):  Scott Bilas
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string _doc$ = "camera_waypoint for linked-list camera command";
+property string _required_component$ = "placement";
+
+// exported properties
+property Scid next_scid$ = 0		doc = "Scid of next object in sequence, 0 to terminate";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+event OnGoDrawDebugHud$
+{
+	Goid goid$ = GoDb.FindGoidByScid( next_scid$ );
+	if ( goid$.IsValid )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 goid$.go.Placement.Position,
+									 MakeColor( 0, 0.8, 0, 0.5 ),
+									 "*" );
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////

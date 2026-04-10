@@ -1,0 +1,7 @@
+[zonematch_settings]
+{	
+	[games]
+	{
+		m_SessionTimeout = 360;
+	}
+}

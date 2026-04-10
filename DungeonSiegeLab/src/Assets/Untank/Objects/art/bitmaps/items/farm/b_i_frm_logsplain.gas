@@ -1,0 +1,5 @@
+[t:tsd,n:b_i_frm_logsplain]
+{
+	layer1texture1 = b_i_frm_logsplain;
+  i texturedetail = 2;
+}

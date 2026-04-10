@@ -1,0 +1,247 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	job_fidget_social.skrit
+
+	Author(s)	: 	Eric Tams orig Bartosz Kijanka
+
+	Purpose		: 	Wander around in a circle, talk to your friends
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+property	float	m_Move_Distance$	= 5.0		doc = "How far we will move from where we started";
+property	float	m_Min_Distance$		= 3.0		doc = "Minimum distance for a move to take place (not implemented)";
+property	float	m_Delay_Min$		= 10.0		doc = "minimum delay before moving again";
+property	float	m_Delay_Max$		= 20.0		doc = "maximum delay before moving again";
+
+property	float	Destructive$		= 0.00		doc = "chance to find something to break, and attack it.";
+property	float	Curious$			= 0.00		doc = "chance to find something interesting, and look at it.";
+property	float	Social$				= 0.45		doc = "chance to find a friend, and talk to it.";
+
+property	bool	Meander$			= true		doc = "Lower speed to MinMoveVelocity when wandering around";
+
+
+
+Go		m_Go$;
+GoMind	m_Mind$;
+GoBody  m_Body$;
+Job		m_Job$;
+Goid	m_Target$;
+float	m_OrigSpeed$ = 0.0;
+
+
+#include "k_job_c_mcp_fidget_utils"
+
+void FaceTarget$()
+{
+	if ( m_Target$.IsValid )
+	{
+		if( m_Target$.Go.HasMind )
+		{
+			if ( !m_Target$.Go.Mind.AmBusy && ( m_Mind$.GetDistance( m_Target$.Go ) < 2.0 ) )
+			{
+				if( !m_Target$.Go.Mind.AmFacing( m_Go$ ) )
+				{
+					MCPManager.Flush( m_Target$ );
+				
+					eAnimStance stance$ = m_Target$.Go.inventory.animstance;
+					int subanim$ = m_Target$.Go.Aspect.AspectHandle.Blender.GetNumSubAnims(CHORE_FIDGET,stance$);
+					subanim$ = Math.RandomInt(0, Math.MaxInt( 0, subanim$-1 ) ) ;
+					eReqRetCode ret$ = MCPManager.MakeRequest( m_Target$, PL_FIDGET, subanim$);
+					
+					m_Target$.Go.Mind.SDoJob( MakeJobReq( JAT_FACE, JQ_ACTION, QP_FRONT, AO_REFLEX, m_Go$.Goid ) );
+				}
+				
+				if( !m_Mind$.AmFacing( m_Target$.Go ) )
+				{
+					m_Mind$.SDoJob( MakeJobReq( JAT_FACE, JQ_ACTION, QP_FRONT, AO_REFLEX, m_Target$ ) );
+				}
+			}
+		}
+	}
+}
+
+void ChangeSpeed$()
+{
+	if( Meander$ )
+	{
+		m_Go$.Body.SetAvgMoveVelocity( m_Go$.Body.MinMoveVelocity );
+	}
+}
+
+void ResetSpeed$()
+{
+	if( Meander$ )
+	{
+		if( m_OrigSpeed$ > 0.0 )
+		{
+			m_Go$.Body.SetAvgMoveVelocity( m_OrigSpeed$ );
+		}
+	}
+}
+
+
+	
+////////////////////////////////////////////////////////////////////////////////
+
+startup state Unknown$
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$					= job$;
+	m_Go$					= job$.Go;
+	m_Mind$					= job$.Go.Mind;
+	m_Body$					= job$.Go.Body;	
+	m_Target$				= Goid.InvalidGoid;
+	m_OrigSpeed$			= m_Go$.Body.AvgMoveVelocity;
+}
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+	
+	SetState Wandering$;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//	
+state Wandering$
+{
+	trigger OnWorldMessage$( WE_ANIM_DONE )
+	{
+		StartFidgetIfRequired$();
+	}
+	
+	trigger OnWorldMessage$( WE_MCP_SECTION_COMPLETED )
+	{
+		FaceTarget$();
+		
+		This.CreateTimer( 1 , Math.RandomFloat( m_Delay_Min$, m_Delay_Max$ ) );
+	}
+	
+	trigger OnTimer$( 1 )
+	{
+		if( ( m_Mind$.MovementOrders == MO_FREE ) && m_Go$.WasInViewFrustumRecently )
+		{
+			bool found_spot$ = false;
+			m_Target$ = Goid.InvalidGoid;
+			
+			if( Math.RandomFloat( 1 ) < Destructive$ )
+			{
+				m_Mind$.TempGopColl1.Clear;
+				
+				m_Mind$.GetOccupantsInSphere( m_Mind$.SightRange, m_Mind$.TempGopColl1);
+				int i$ = 0;
+				bool found$ = false;
+				while( i$ < m_Mind$.TempGopColl1.Size() && !found$ )
+				{
+					if(m_Mind$.TempGopColl1.Get( i$ ).IsBreakable() && !m_Mind$.TempGopColl1.Get( i$ ).IsActor())
+					{
+						found$ = true;
+						m_Mind$.SDoJob( MakeJobReq(JAT_ATTACK_OBJECT, JQ_ACTION, QP_FRONT, m_Job$.GetOrigin, m_Mind$.TempGopColl1.Get( i$ ).goid, m_Go$.Goid ) );
+					}
+			        i$ += 1;
+			    }
+
+			    This.CreateTimer( 1 , Math.RandomFloat( m_Delay_Min$, m_Delay_Max$ ) );
+			} else if( Math.RandomFloat( 1 ) < Curious$ )
+			{
+				if( m_Mind$.AliveFriendsVisible() )
+				{
+					m_Mind$.TempQtColl1.Clear;
+					m_Mind$.TempQtColl1.Add( QT_ITEM );
+					Go temp$ = m_Mind$.GetClosestVisible( m_Mind$.TempQtColl1 );
+					
+					if (temp$ != NULL)
+					{
+						m_Target$ = temp$.goid;
+						
+						if ( m_Mind$.GetDistance( m_Target$.Go ) > 1.5 )
+						{
+							MCPManager.Flush(m_Go$.Goid);
+							ChangeSpeed$();
+							MCPManager.MakeRequest( m_Go$.Goid, PL_APPROACH, m_Target$, m_Delay_Min$, m_Delay_Min$, 1.0 );
+							ResetSpeed$();
+							
+						} else {
+							FaceTarget$();
+						}
+					}
+				}
+			} else if( Math.RandomFloat( 1 ) < Social$ )
+			{
+				if( m_Mind$.AliveFriendsVisible() )
+				{
+					m_Mind$.TempQtColl1.Clear;
+					m_Mind$.TempQtColl1.Add( QT_FRIEND );
+					m_Mind$.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+					Go temp$ = m_Mind$.GetClosestVisible( m_Mind$.TempQtColl1 );
+					
+					if (temp$ != NULL)
+					{
+						m_Target$ = temp$.goid;
+						
+						if ( m_Mind$.GetDistance( m_Target$.Go ) > 1.5 )
+						{
+							MCPManager.Flush(m_Go$.Goid);
+							ChangeSpeed$();
+							MCPManager.MakeRequest( m_Go$.Goid, PL_APPROACH, m_Target$, m_Delay_Min$, m_Delay_Min$, 1.1 );
+							ResetSpeed$();
+						} else if ( m_Mind$.GetDistance( m_Target$.Go ) < 0.5 ) {
+							if( AIQuery.FindSpotRelativeToSource(	m_Target$.Go,
+																	1.0,
+																	1.5,
+																	2.0,
+																	m_Mind$.TempPos1 ) )
+					   		{
+								MCPManager.Flush(m_Go$.Goid);
+								ChangeSpeed$();
+								MCPManager.MakeRequest( m_Go$.Goid, PL_APPROACH, m_Mind$.TempPos1, 0.1 );
+								ResetSpeed$();
+							}
+						} else {
+							FaceTarget$();
+						}
+					}
+				}
+			} else {
+				if( AIQuery.FindSpotRelativeToSource( 	m_Job$.InitPosition,
+														1,
+														m_Min_Distance$,
+														m_Move_Distance$,
+														2.0,
+														m_Go$.IsHuded,
+														m_Mind$.TempPos1 ) )
+		   		{
+					if ( m_Mind$.TempPos1.node.IsNodeInAnyFrustum && m_Go$.placement.position.node.IsNodeInAnyFrustum)
+					{
+						if( GetSiegeDistance(m_Mind$.TempPos1, m_Go$.placement.position ) > m_Min_Distance$ )
+						{
+							MCPManager.Flush(m_Go$.Goid);
+							ChangeSpeed$();
+							MCPManager.MakeRequest( m_Go$.Goid, PL_APPROACH, m_Mind$.TempPos1, 0.2 );
+							ResetSpeed$();
+						}
+					}
+				}
+			}
+		}
+		This.CreateTimer( 1 , Math.RandomFloat( m_Delay_Min$, m_Delay_Max$ ) ); 
+	}
+	
+	event OnEnterState$
+	{
+		StartFidgetIfRequired$();
+		
+		This.CreateTimer( 1 , Math.RandomFloat( m_Delay_Min$, m_Delay_Max$ ) );
+	}
+}

@@ -1,0 +1,7 @@
+[t:sed,n:s_e_env_sarc_lid_slide_SED]
+{
+	sound_effect_file = "s_e_env_button_stone";
+	max_simultaneous_samples = 2;
+	min_playback_rate = 0.70;
+	max_playback_rate = 0.70;
+}

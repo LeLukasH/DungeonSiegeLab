@@ -1,0 +1,178 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_summon_multiple.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+property string effect_script$		= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string script_params$		= ""   	doc = "Parameters to send to SiegeFx script";
+property float	spawn_radius$		= 1.0	doc = "Radius to spawn objects in.";
+property float	spawn_rate$			= 0.18	doc = "Time between summoning objects.";
+property int	spawn_num$			= 6		doc = "Number of objects to spawn.";
+property string	summon_script$		= ""	doc = "Effect script to call for effect";
+property float	particle_fit$		= -1.0	doc = "set this between 0 and 1 and fire damage will be passed as a parameter ot the FX script";
+property string state_name$			= "summoned"	doc = "Name of effect to use as a generic state and as a screen name.";
+property string description$		= ""	doc = "Description of enchantment being applied";
+property string caster_description$	= ""	doc = "Description of enchantment being applied to the caster";
+property bool	watch_summoned$		= false	doc = "watch until summoned creatures are gone to end spell";
+property bool	flee$				= false	doc = "flee after summoning.";
+
+owner = GoSkritComponent;
+#include "k_inc_spl_utils"
+
+int starting_pos$;
+
+Goid caster$;
+Goid target$;
+int	num_spawned$ = 0;
+float summon_duration$;
+	
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST ) {
+			
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+			
+			if( !target$.IsValidMp || !caster$.IsValidMp )
+			{
+				SetState Finished$;
+				return;
+			}
+			
+			// Copy the reference to the starting position into SiegeFx persistant storage
+			starting_pos$ = SiegeFx.AddVariable( target$.go.placement.position, owner.goid );
+
+			// Start the visual
+			SiegeFx.SRunScript( effect_script$, target$, caster$, script_params$, owner.Goid, e$ );
+			
+			if( particle_fit$ > 0.0 )
+			{
+				PackFire$( particle_fit$, true, 1, -1.0, false, caster$, target$);
+			}
+			
+			if( watch_summoned$	)
+			{
+				summon_duration$ = owner.Go.Magic.EvaluateEffectDuration(caster$.Go, caster$.Go);
+				caster$.Go.Actor.SAddGenericState( owner.Go.Magic.CasterStateName, caster_description$, summon_duration$ + 2.0, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+			}
+		}
+	}
+	transition -> SummonGo$ : OnGoHandleMessage( WE_SPELL_SYNC_MID );
+}
+
+trigger OnGoHandleMessage$( WE_SPELL_SYNC_END )
+{
+	if( flee$ )
+	{
+		if( caster$.IsValid )
+		{
+			caster$.Go.Mind.TempQtColl1.Clear;
+			caster$.Go.Mind.TempQtColl1.Add( QT_ENEMY  );
+			caster$.Go.Mind.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+		
+			Go temp_enemy$ = caster$.Go.Mind.GetClosestVisible( caster$.Go.Mind.TempQtColl1 );
+		
+			if (temp_enemy$ != NULL)
+			{
+				caster$.Go.Mind.SDoJob( MakeJobReq( JAT_FLEE_FROM_OBJECT, JQ_ACTION, QP_CLEAR, AO_COMMAND, temp_enemy$.Goid ) );
+			}
+		}
+	}
+}
+
+state SummonGo$
+{
+	trigger OnTimer$( 1 )
+	{
+		SetState SummonGo$;
+	}
+	
+	trigger OnTimer$( 2 )
+	{
+		SetState Cleanup$;
+	}
+	
+	event OnEnterState$
+	{
+		if(caster$.IsValidMp)
+		{
+			if( target$.IsValidMp )
+			{
+				SiegePos TempPos$ = target$.Go.Placement.Position;
+				
+				if( AIQuery.FindSpotRelativeToSource( target$.Go, 0, spawn_radius$, 2.0, caster$.Go.Mind.TempPos1 ) )
+				{
+					TempPos$ = caster$.Go.Mind.TempPos1;
+				}
+				
+				// Create new game objects as specified in delayed_pcontent block
+				owner.go.inventory.AddDelayedPcontent();
+			
+				Go summoned_go$ = owner.go.children.get( 0 );
+				
+				owner.go.inventory.RSRemove( summoned_go$, false );
+				summoned_go$.placement.SSetposition( TempPos$, true );
+				
+				// buff the summoned guy up.
+				owner.go.magic.SApplyEnchantments( summoned_go$.goid, caster$ );
+				
+				if( summon_script$ != "" )
+				{
+					SiegeFx.SRunScript( summon_script$, summoned_go$.goid, caster$, params$, owner.Goid, WE_REQ_CAST );
+				}
+			}
+			num_spawned$ += 1;
+			
+			if( num_spawned$ >= spawn_num$ )
+			{
+				if( !watch_summoned$ )
+				{
+					SetState Finished$;
+				}
+				else
+				{
+					this.CreateTimer( 2, summon_duration$ );
+				}
+			} 
+			else 
+			{
+				this.CreateTimer( 1, spawn_rate$ );
+			}		
+		} 
+		else 
+		{
+			SetState Cleanup$;
+		}
+	}
+}
+
+state Cleanup$
+{
+	event OnEnterState$
+	{
+		if( caster$.IsValid )
+		{
+			caster$.Go.Actor.SRemoveGenericState( owner.Go.Magic.CasterStateName );
+		}
+		SetState Finished$;
+	}
+}
+	
+state Finished$
+{
+	event OnEnterState$
+	{
+		// Get rid of any temporary storage
+		SiegeFx.ClearVariables( owner.goid );
+	
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 4 );
+	}
+}

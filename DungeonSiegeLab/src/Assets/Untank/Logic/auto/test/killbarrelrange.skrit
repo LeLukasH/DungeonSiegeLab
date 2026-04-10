@@ -1,0 +1,291 @@
+// purpose: Kill a Barrel ...  BW  9/13/2001
+
+/* use cmd line args - skritbot=auto\test\KillBarrelRange  skrit_retry=true   map=KillBarrel   teleport=start    demo=true 
+	use range weapon - bow
+	check for range experience increase upon barrel breaking
+
+*/
+
+//////////////////////////////////////////////////////////////////////////////
+
+owner = GoSkritComponent;
+
+#include "LogOut.skrit"
+
+//  string			cBarrel$   =   "Barrel";
+goActor			m_Actor$;
+go				m_Barrel$;
+property float	period$	=   0.2			doc = "Sample period, in seconds.";
+bool			bResponse$;
+float			fRSkill$;
+bool            BExiting$ = false;
+go				weapon$;
+Go				m_Go$;
+string          m_statement$;  // for log output
+
+
+startup state S$ trigger OnBotHandleMessage$( WE_WORLD_STATE_TRANSITION_DONE )
+{
+	if ( (WorldState.CurrentState == WS_SP_INGAME) || (WorldState.CurrentState == WS_MP_INGAME) )
+	{
+		myinit$(__NAME__);
+					
+		setstate SInGame2$;
+	}
+}
+
+state SInGame2$
+{
+	goMind		m_Mind$;
+	goInventory m_GO_Inv$;
+	GoAspect	m_Aspect$;
+	bool		bAskedForBarrel$ = false;   // track requests for finding the barrel ...
+	bool		bAskedForBow$    = false;      // track requests for finding the bow ...
+	Go			m_Bow$;
+	int			i$;
+	
+ 	FInGame$ at ( 5 frames )
+	{
+		Go			temp$;
+
+		Go party$ = Server.GetScreenParty();
+		string      sTemp$;
+
+		debug.AssertF(party$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+		
+		m_Go$ = party$.Children.Get( 0 );
+		if ( m_Go$ == NULL  )
+		{
+			logout$(nFAIL$, "SETUP", "Could not find Screen Party [essential]");
+		}
+		else
+		{
+			m_Mind$ = m_Go$.Mind;
+//			report.genericF("in skrit %s\n", __NAME__);
+			debug.AssertF(m_Mind$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+
+			m_GO_Inv$ = m_Go$.Inventory;    // Get  goinventory
+			debug.AssertF(m_GO_Inv$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+
+			m_Aspect$ = m_Go$.Aspect;
+			debug.AssertF(m_Aspect$ != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+
+			m_Actor$  = m_Go$.Actor;
+			debug.AssertF(m_Actor$  != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+
+			fRSkill$ = m_Actor$.GetSkillLevel( "ranged" );
+//			report.genericF("Range skill starts at %f\n", fRSkill$);
+			StringTool.AssignF(m_statement$, "Range skill starts at %f", fRSkill$);
+			logout$(nINFO$, "ATTRIBUTES", m_statement$);
+
+	 		//I want to make this look at all nearby items, and choose the most powerful one.
+	 		//After picking it up, it's time to run away.  Get the loot and run!
+	 		
+	 		m_Mind$.TempGopColl1.Clear;
+			bResponse$ = AIQuery.GetOccupantsInSphere(m_Go$.Placement.Position, 100.0, m_Mind$.TempGopColl1);
+			debug.AssertF(bResponse$, "state SInGame2 %s line %d", __NAME__, __LINE__);
+	 		
+	 		i$ = 0;
+		
+	 		//I need to get a list of all visible, and locate the barrel - attack it if found.
+//			Report.genericF("Looking for %i objects in the vicinity... ", m_Mind$.TempGopColl1.Size() );
+			m_GO_Inv$.RSUnequip( ES_WEAPON_HAND, AO_HUMAN );
+		
+	 		while (! (bAskedForBarrel$ && bAskedForBow$) )    // i$ < m_Mind$.TempGopColl1.Size() )
+	 		{
+	 			temp$ = m_Mind$.TempGopColl1.Get( i$ );
+				debug.AssertF(temp$  != NULL, "state SInGame2 %s line %d", __NAME__, __LINE__);
+//				Report.genericF("%i: on temp go %i\n", i$, MakeInt(temp$.GoID) );
+
+				sTemp$ = temp$.TemplateName;
+//				Report.genericF("%i: found item %s\n", i$, sTemp$);
+		
+	 			if ( sTemp$ == "bw_g_o_c_s_4_fun"   )  // scid == 0x00100001 => AV !?! )  // bow
+	 			{
+					if (! bAskedForBow$)
+					{
+//						report.generic("Bow was found ");
+						m_Bow$ = temp$;
+		 				// Go run and get it
+						bAskedForBow$ = true;  // ask only once 
+					}
+				}
+	 			if ( sTemp$ == "barrel_glb")   // temp$.scid == 0x00100002 )  // barrel
+	 			{
+//					report.generic("Barrel was found ");
+					if ( ! bAskedForBarrel$)
+					{
+						m_Barrel$ = temp$; // .Aspect;
+ 				
+						bAskedForBarrel$ = true;  // ask only once 
+					}
+	 			}
+				if (i$ == (m_Mind$.TempGopColl1.Size() - 1) ) 
+				{
+					break;
+				}
+				else 
+				{
+		 			i$ += 1;   // continue in loop
+				}
+	 		}
+ 		}
+	 	m_Mind$.SDoJob( MakeJobReq( JAT_MOVE, JQ_ACTION, QP_FRONT, AO_HUMAN, m_Bow$.Placement.Position ) ); // was m_Go$...  not needed - already there
+	 	m_Mind$.SDoJob( MakeJobReq( JAT_GET,  JQ_ACTION, QP_FRONT, AO_HUMAN, m_Bow$.Goid, es_any) ); //, es_weapon_hand ) );
+//		report.generic("- Job created: pick up this bow.\n");
+		logout$(nINFO$, "AUTOMATION", "Job created: pick up the Ranged weapon: bow.");
+		
+		i$ = 0;           // prepare to count firings of TakeSample$
+		setstate Wait$;
+	}
+}
+
+////////////////////////////////////////
+//	Wait$
+state Wait$
+{
+	transition -> TakeSample$ :  OnTimer( 1 );
+
+	event OnEnterState$
+	{
+		if ( (WorldState.CurrentState == WS_SP_OUTRO ) || (WorldState.CurrentState == WS_MP_SESSION_LOST ) )
+		{	
+			BExiting$ = true;
+		}
+		else
+		{
+			this.CreateTimer( 1, period$ );
+			i$ += 1;
+		}
+	}
+}
+
+bool bBetween$(float a$, float b$, float c$)
+{
+	return((a$ >= b$) && (a$ <= c$));
+}
+
+////////////////////////////////////////
+//	TakeSample$
+state TakeSample$	
+{
+	bool			bGaveOrderToAttack$ = false;
+	bool			bSelectBow$ = false;
+//	float			fMSkill$;
+
+	event OnEnterState$
+	{
+		if (m_Bow$ != NULL)
+		{
+			weapon$ = m_GO_Inv$.GetEquipped( ES_WEAPON_HAND );
+
+			if (! bSelectBow$)
+			{
+				bSelectBow$ = true;
+				
+				if (weapon$ != NULL)
+				{
+					m_GO_Inv$.RSUnequip( ES_WEAPON_HAND, AO_HUMAN );
+				}
+				m_GO_Inv$.RSAutoEquip( ES_WEAPON_HAND, m_Bow$.Goid, AO_HUMAN );
+//				m_GO_Inv$.RSEquip( ES_WEAPON_HAND, m_Bow$.Goid, AO_HUMAN );  // does  not work: errors! use next line				
+				m_GO_Inv$.RSSelect(il_active_ranged_weapon, AO_HUMAN);
+				m_Mind$.SetActorWeaponPreference(WP_RANGED);
+					
+		//				report.generic("Job created: Select bow as default weapon.\n");
+				logout$(nINFO$, "AUTOMATION", "Job created: set the Ranged weapon: bow as default weapon.");
+				setstate Wait$;	// re-evaluate in period$ secs.
+			}
+			else
+			{
+				if (weapon$ != NULL)
+				{
+					if (weapon$.goid ==  m_Bow$.Goid)
+					{  
+		//				m_Mind$.FrontActionJAT = JAT_ATTACK_POSITION_RANGED;  // cannot write to a read-only property!
+						if (! bGaveOrderToAttack$)
+						{
+							bGaveOrderToAttack$ = true;
+		//					report.generic("Use Bow as the default weapon: ");
+							// Go run and get it
+	 						m_Mind$.SDoJob( MakeJobReq( JAT_MOVE, JQ_ACTION, QP_FRONT, AO_HUMAN, m_Barrel$.Placement.Position ) ); // was m_Go$...  not needed - already there
+	 						m_Mind$.SDoJob( MakeJobReq( JAT_ATTACK_OBJECT_RANGED, JQ_ACTION, QP_FRONT, AO_HUMAN, m_Barrel$.Goid, m_Bow$.Goid ) );
+		//					report.generic("Job created: attack this barrel with bow.\n");
+							logout$(nINFO$, "AUTOMATION", "Job created: attack the barrel with the Ranged weapon: bow.");	
+							setstate Wait$;		// re-evaluate in period$ secs.
+						}
+					}
+					else
+					{
+//						report.genericF("bow is not the default weapon; %s is.\n", weapon$.TemplateName);
+		//					m_Go$.Inventory.	
+					}
+				}
+				else
+				{
+//					report.generic("There is no default weapon.\n");
+				}
+			}
+
+			fRSkill$ = m_Actor$.GetSkillLevel( "ranged" );
+	//		fMSkill$ = m_Actor$.GetSkillLevel( "Melee" );
+	//		report.genericF("\t%f sec timer fired: Range skill is now at %f | Melee skill is now at %f \n", period$, fRSkill$, fMSkill$);
+			debug.AssertF(m_Barrel$  != NULL, "state TakeSample$ %s line %d", __NAME__, __LINE__);
+
+			if (m_Barrel$ != NULL)
+			{
+				if (m_Barrel$.LifeState == ls_Alive_Conscious)	// not broken yet?
+				{
+	//				report.genericF("Barrel is not yet broken.\n");
+					setstate Wait$;														// continue looping
+				}
+				else
+				{
+	//				report.generic("Barrel is now broken...\n");
+					setstate Ext$;
+				}
+			}
+			else
+			{
+	//			report.generic("Exiting as barrel was not found!\n");
+				setstate Ext$;
+			}
+		}
+		// last chance to guarantee completion, ready or not, within 4 seconds
+		if (WorldTime.Time > 4.0)
+		{
+			logout$(nINFO$, "AUTOMATION", "exiting because TIME exceeds 4.0 seconds");
+			setstate Ext$;
+		}
+	}
+}
+
+
+state Ext$
+{
+	event OnEnterState$
+	{
+//		int numofevents$ = m_Aspect$.GetNumberOfEvents(ANIMEVENT_FIRE_WEAPON);
+//		int numofevents$ = owner.GetNumberOfEvents(ANIMEVENT_FIRE_WEAPON);
+
+		fRSkill$ = m_Actor$.GetSkillLevel( "Ranged" );
+		StringTool.AssignF(m_statement$, "Ranged skill actual %f expected %f", fRSkill$, 0.142857);
+		if ( math.abs(fRSkill$ - 0.142857) < 0.05)
+		{
+//			report.generic("PASS Range points accrue test case ");
+			logout$(nPASS$, "ATTRIBUTES", m_statement$);
+		}
+		else
+		{
+//			report.generic("FAIL Range points accrue test case ");
+			logout$(nFAIL$, "ATTRIBUTES", m_statement$);
+		}
+//		report.genericF(" | %i weapon firings\n", numofevents$);
+		mydeinit$(__NAME__);
+		bResponse$ = GpConsole.Execute( "exit\n");          // out of here
+		debug.AssertF(bResponse$, "state TakeSample$ %s line %d", __NAME__, __LINE__);		
+	}
+}
+/*
+
+*/

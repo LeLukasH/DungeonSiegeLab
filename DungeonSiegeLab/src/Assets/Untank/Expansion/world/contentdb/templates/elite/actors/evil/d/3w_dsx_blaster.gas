@@ -1,0 +1,224 @@
+[t:template,n:3W_dsx_blaster]
+{
+// Balanced to level 27+, hard ranged
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_blaster";
+	specializes = actor_evil;
+	[actor]
+	{
+		[skills]
+		{
+			strength 		= 49.9, 0;
+			intelligence 	= 15.1, 0;
+			dexterity 		= 25.1, 0;
+			ranged 			= 91, 0;
+			nature_magic 	= 92, 0;
+			combat_magic 	= 92, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 2500800;
+		life 			= 2772;
+		max_life 		= 2772;
+		mana 			= 35.4;
+		max_mana 		= 35.4;
+		model = m_c_edm_bl_pos_1;
+		material = wood;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_proxo; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_mechanoid_big_SED; }
+		}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 388.9;
+		damage_min = 286.4;
+		damage_bonus_min_cmagic = 205;
+		damage_bonus_max_cmagic = 279;
+	}	
+	[body]
+	{
+		avg_move_velocity = 1.960000;
+		[bone_translator]
+		{
+			body_anterior = bone01;
+			body_mid = bone01;
+			body_posterior = bone01;
+			kill_bone = bone01;
+			shield_bone = bone01;
+			weapon_bone = bone01;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_bl_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=at; }
+			}
+			[chore_magic]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files] { 00=at; }
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=ds; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=wl; }
+			}
+		}
+	}
+
+	[common]
+	{
+		screen_name="Gobbot Blaster";
+		membership = automaton,monster,immune_freeze;
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+				action* = call_sfx_script("tailpipe_steam_blaster");
+			}
+		}
+	}
+	[defend] { defense=965.3; }
+	[inventory]
+	{
+    		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=dsx_spell_blaster_bomb; }
+    		[pcontent]
+	{
+		/* Generated: Tue Jun 17 11:13:15 2003
+		Level 28, Strong */
+		[oneof*]
+		{
+			[gold*]
+			{
+				chance = 0.2;
+				min = 191093;
+				max = 379362;
+			}
+			[oneof*]
+			{
+				chance = 0.088888888888889;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.111111111111111;
+				il_main = potion_mana_super;
+				il_main = potion_health_super;
+			}
+			[oneof*]
+			{
+				chance = 0.2;
+				il_main = #weapon/219-274;
+				il_main = #armor/134-714;
+				il_main = #*/219-274;
+			}
+			[oneof*]
+			{
+				chance = 0.01;
+				il_main = #weapon/-rare(1)/274-302;
+				il_main = #armor/-rare(1)/583-948;
+				il_main = #*/-rare(1)/274-302;
+			}
+			[oneof*]
+			{
+				chance = 0.005;
+				il_main = #weapon/-unique(2)/274-302;
+				il_main = #armor/-unique(2)/583-948;
+				il_main = #*/-unique(2)/274-302;
+			}		
+		}
+	}
+	}
+	[mind]
+	{
+		jat_fidget				= world\ai\jobs\common\job_fidget.skrit
+		?curious				= 0.75
+		&wander					= 0.8
+		&social					= 0.1
+		&interest				= interest
+		&delay_min				= 6
+		&delay_max				= 16
+		&still					= false;
+		on_enemy_spotted_alert_friends 		= true;
+		jat_brain				= world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party		= true
+		&actor_creates_own_party		= true
+		&party_template				= "party_dsx_gobbot";
+		com_channels				= dyn_party, gobbot;
+		com_range				= 8.0;
+		melee_engage_range			= 9.0;
+		ranged_engage_range	 		= 10.0;
+		sight_range				= 13.0;
+		personal_space_range 			= 0.7;
+		actor_life_ratio_low_threshold 		= 0.5;
+		actor_weapon_preference			= WP_MAGIC;
+		actor_auto_switches_to_magic		= true;
+		actor_auto_switches_to_karate		= false;
+		actor_auto_switches_to_melee		= false;
+	}
+	[physics]
+	{
+		velocity=14.0;
+		break_effect = generic_explosion;
+		explode_when_killed = true;
+		explosion_magnitude = 3.0;
+		gib_gore_good = true;
+		[break_particulate]
+		{
+			frag_glb_blaster_01 = 3;
+			frag_glb_blaster_02 = 1;
+			frag_glb_blaster_03 = 1;
+			frag_glb_blaster_04 = 1;
+			frag_glb_blaster_05 = 1;
+			frag_glb_metal_01 = 1;
+			frag_glb_metal_02 = 2;
+			frag_glb_metal_03 = 3;
+			frag_glb_metal_04 = 1;
+			frag_glb_metal_05 = 3;
+			frag_glb_metal_06 = 3;
+			frag_glb_wood_01 = 1;
+			frag_glb_wood_02 = 1;
+			frag_glb_wood_03 = 2;
+			frag_glb_wood_04 = 2;
+			frag_glb_wood_05 = 4;
+			frag_glb_wood_06 = 3;
+		}
+	}
+	[tsd_manager]
+	{
+		check_freq_min	= .1;
+		check_freq_max	= .1;
+		use_velocity_for_speed = true;
+	}
+}

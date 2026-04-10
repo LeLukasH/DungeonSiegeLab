@@ -1,0 +1,12 @@
+[t:tsd,n:b_t_jng01_rvr_bridge-planked]
+{
+	hasalpha = true;
+	layer1numframes = 1;
+	layer1secondsperframe = 0.0;
+	layer1texture1 = b_t_jng01_rvr_bridge-planked;
+	layer1ushiftpersecond = 0.0;
+	layer1vshiftpersecond = 0.0;
+	numlayers = 1;
+	texturedetail = 2;
+	timesyncanimation = true;
+}

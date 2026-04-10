@@ -1,0 +1,103 @@
+[about_dialog]
+{
+	centered = dialog_about_bg;
+  b interface = true;
+  b modal = true;
+	[t:button,n:button_close]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = button_4;
+	  x draw_order = 0x00000006;
+		rect = 271,368,373,384;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+		[messages]
+		{
+			onbuttonpress = notify(close_about);
+		}
+		[t:text,n:text_close]
+		{
+		  f alpha = 1.000000;
+		  b common_control = false;
+			common_template = ;
+		  x draw_order = 0x00000008;
+		  x font_color = 0xFFFFFFFF;
+		  x font_size = 0x00000000;
+			font_type = b_gui_fnt_12p_copperplate-light;
+			justify = center;
+			rect = 307,369,373,384;
+			text = "Close";
+			uvcoords = 0.000000,0.000000,1.000000,1.000000;
+			wrap_mode = clamp;
+		}
+	}
+	[t:dialog_box,n:dialog_about_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  x draw_order = 0x00000001;
+		rect = 123,106,526,396;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_about_text_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  x draw_order = 0x00000002;
+		rect = 175,118,467,153;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:dialog_box,n:dialog_abouttext_bg]
+	{
+	  f alpha = 1.000000;
+	  b common_control = true;
+		common_template = cpbox;
+	  x draw_order = 0x0000000B;
+		rect = 137,158,512,359;
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text,n:text_about]
+	{
+	  f alpha = 1.000000;
+	  b common_control = false;
+		common_template = ;
+	  x draw_order = 0x00000004;
+	  x font_color = 0xFFFFFFFF;
+	  x font_size = 0x00000000;
+		font_type = b_gui_fnt_14p_copperplate-light;
+		justify = center;
+		rect = 182,124,459,146;
+		text = "About Dungeon Siege";
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+	}
+	[t:text_box,n:text_box_about]
+	{
+	  f alpha = 1.000000;
+	  b center_height = false;
+	  b common_control = true;
+		common_template = ;
+	  x draw_order = 0x00000015;
+	  b fixed_location = true;
+		font_type = b_gui_fnt_12p_copperplate-light;
+	  b has_slider = true;
+		justify = left;
+	  x max_height = 0x00000000;
+	  x max_width = 0x00000000;
+		rect = 143,163,505,352;
+	  f scroll_rate = 0.000000;		
+		uvcoords = 0.000000,0.000000,1.000000,1.000000;
+		wrap_mode = clamp;
+
+		[messages]
+		{
+			oncreated = notify(about_dialog);
+		}
+	}
+}

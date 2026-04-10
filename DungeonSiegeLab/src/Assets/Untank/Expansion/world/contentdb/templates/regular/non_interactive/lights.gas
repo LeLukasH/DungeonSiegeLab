@@ -1,0 +1,1498 @@
+[t:template,n:base_light]
+{
+	category_name = "lighting";
+	doc = "base_light";
+	specializes = non_interactive;
+	[aspect]
+	{
+		lodfi_lower = 0;
+		lodfi_upper = 0;
+	}
+	[light_flicker_lightweight]
+	{
+		duration = 0;
+		flicker_frequency_max = 12;
+		flicker_frequency_min = 10;
+		magnitude = 0.15;
+	}
+}
+[t:template,n:base_lamp_ice]
+{
+	category_name = "lighting";
+	doc = "base_lamp_ice";
+	specializes = base_light;
+	[aspect]
+	{
+		scale_base = 2;
+		[textures]
+		{
+			0 = b_i_ice_lamp-posts;
+		}
+	}
+	[common]
+	{
+		screen_name = "Lamp";
+	}
+}
+[t:template,n:base_fire_glb_pit_gom]
+{
+	category_name = "lighting";
+	doc = "base_firepot_evil";
+	specializes = base_light;
+	[aspect]
+	{
+		does_block_path = true;
+		model = m_i_glb_gom-fire-pit;
+		[textures]
+		{
+			0 = b_i_glb_gom-fire-pit;
+		}
+	}
+}
+[t:template,n:base_brazier_glb]
+{
+	category_name = "lighting";
+	doc = "base_brazier";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.5771575;
+		does_block_path = true;
+		model = m_i_glb_brazier-01;
+		[textures]
+		{
+			0 = b_i_glb_brazier-01;
+		}
+	}
+}
+[t:template,n:brazier_glb_brass_01]
+{
+	category_name = "lighting";
+	doc = "brazier";
+	specializes = base_brazier_glb;
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("brazier_fire");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:brazier_glb_golden_01]
+{
+	category_name = "lighting";
+	doc = "brazier_gold_flame";
+	specializes = base_brazier_glb;
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("brazier_fire_golden");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+
+[t:template,n:brazier_glb_golden_02]
+{
+	category_name = "lighting";
+	doc = "brazier_gold_flame_activate";
+	specializes = base_brazier_glb;
+	[aspect]
+  	{
+  		lodfi_lower = -1;
+  		lodfi_upper = -1;
+  	}
+  	[common]
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+	}
+	[generic_emitter_act]
+  	{
+  		other_effect = "brazier_fire_golden";
+  	}
+  	[light_enable]
+	{
+		initially_active = FALSE;
+	}
+}
+[t:template,n:brazier_glb_blue_01]
+{
+	category_name = "lighting";
+	doc = "brazier_blue_flame";
+	specializes = base_brazier_glb;
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("brazier_fire_blue");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+
+[t:template,n:brazier_glb_blue_02]
+{
+	category_name = "lighting";
+	doc = "brazier_blue_flame_activate";
+	specializes = base_brazier_glb;
+	[aspect]
+  	{
+  		lodfi_lower = -1;
+  		lodfi_upper = -1;
+  	}
+  	[common]
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+	}
+	[generic_emitter_act]
+  	{
+  		other_effect = "brazier_fire_blue";
+  	}
+  	[light_enable]
+	{
+		initially_active = FALSE;
+	}
+}
+
+
+[t:template,n:candle_glb_01]
+{
+	category_name = "lighting";
+	doc = "candle_short";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.396819813;
+		model = m_i_glb_candle-01;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("candle_fire1");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:candle_glb_02]
+{
+	category_name = "lighting";
+	doc = "candle_tall";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.467440563;
+		model = m_i_glb_candle-02;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("candle_fire1");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:candle_glb_skull_01]
+{
+	category_name = "lighting";
+	doc = "candle_skull_sm";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.495406875;
+		model = m_i_glb_skull-candle-01;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("skull_candle_fire1");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:candle_glb_skull_02]
+{
+	category_name = "lighting";
+	doc = "candle_skull_lg";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.493285875;
+		model = m_i_glb_skull-candle-01;
+		scale_base = 2;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("skull_candle_fire2");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:candlestand_csl_01]
+{
+	category_name = "lighting";
+	doc = "candlestick_single";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.51455675;
+		model = m_i_csl_candlestand-01;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("candle_fire1");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:candlestand_csl_02]
+{
+	category_name = "lighting";
+	doc = "candlestick_floor";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 1.21049175;
+		model = m_i_csl_candlestand-02;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("candle_fire2");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:candlestand_csl_02_noflame]
+{
+	category_name = "lighting";
+	doc = "candlestick_floor_no_flame";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 1.21049175;
+		model = m_i_csl_candlestand-02;
+	}
+}
+[t:template,n:candlestand_csl_03]
+{
+	category_name = "lighting";
+	doc = "candlestick_tri";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 1.45781525;
+		model = m_i_csl_candlestand-03;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("candle_fire3");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:fire_glb_01]
+{
+	category_name = "lighting";
+	doc = "Fireplace fire";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.026394625;
+		model = m_i_glb_fire-01;
+	}
+}
+[t:template,n:fire_glb_pit_gom_01]
+{
+	category_name = "lighting";
+	doc = "firepot_evil";
+	specializes = base_fire_glb_pit_gom;
+	[aspect]
+	{
+//		display_cost = 0.36853325;
+	}
+}
+[t:template,n:fire_glb_pit_gom_02]
+{
+	category_name = "lighting";
+	doc = "firepot_evil_with fire";
+	specializes = base_fire_glb_pit_gom;
+	[aspect]
+	{
+//		display_cost = 1.746847375;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("fire_pit_gom_02");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:fire_glb_pit_gom_03]
+{
+	category_name = "lighting";
+	doc = "firepot_evil_with blue fire";
+	specializes = base_fire_glb_pit_gom;
+	[aspect]
+	{
+//		display_cost = 1.438180313;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("fire_pit_gom_03");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:fire_grs_campfire]
+{
+	category_name = "lighting";
+	doc = "campfire";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 1.053256063;
+		does_block_path = true;
+		model = m_i_grs_campfire;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("fireplace_fire");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:firepit_des_dragon]
+{
+	category_name = "lighting";
+	doc = "torch_dragon claw";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 1.097128188;
+		model = m_i_des_firepit-dragon;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("fire_pit_fire","ap_light");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:firepit_glb]
+{
+	category_name = "lighting";
+	doc = "firepit_empty";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.773089438;
+		does_block_path = true;
+		model = m_i_glb_firepit02;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("fireplace_fire");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:firepit_glb_03]
+{
+	category_name = "lighting";
+	doc = "firepit with rocks";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.934844813;
+		does_block_path = true;
+		model = m_i_glb_firepit-03;
+		[textures]
+		{
+			0 = b_i_glb_firepit-02;
+		}
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("fireplace_fire");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:firepit_glb_04]
+{
+	category_name = "lighting";
+	doc = "fire_pit_fire";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 1.982507063;
+		does_block_path = true;
+		model = m_i_grs_campfire;
+		scale_base = 1.6;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("firepit_fire");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:firepit_glb_04_unlit]
+{
+	category_name = "lighting";
+	doc = "fire_pit_no_fire";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 1.982507063;
+		does_block_path = true;
+		model = m_i_grs_campfire;
+		scale_base = 1.6;
+	}
+}
+[t:template,n:lamp_csl_01]
+{
+	category_name = "lighting";
+	doc = "lantern_hanging";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.462664688;
+		model = m_i_csl_lantern-01;
+	}
+	[common]
+	{
+		screen_name = "Lantern";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("lamp_glow_yellow");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_csl_02]
+{
+	category_name = "lighting";
+	doc = "lamp_table_stone";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.987267875;
+		model = m_i_csl_lantern-02;
+	}
+	[common]
+	{
+		screen_name = "Lamp";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_firews2");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_glb_gom_01]
+{
+	category_name = "lighting";
+	doc = "lamp_evil";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.44541925;
+		does_block_path = true;
+		model = m_i_glb_gom-lamp-01;
+		[textures]
+		{
+			0 = b_i_glb_gom-fire-pit;
+		}
+	}
+}
+[t:template,n:lamp_glb_gom_02]
+{
+	category_name = "lighting";
+	doc = "lamp_evil_with fire";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 1.394454688;
+		does_block_path = true;
+		model = m_i_glb_gom-lamp-01;
+		[textures]
+		{
+			0 = b_i_glb_gom-fire-pit;
+		}
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("lamp_gom_02");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_glb_oil_01]
+{
+	category_name = "lighting";
+	doc = "lamp_wall_oil";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.865875188;
+		model = m_i_glb_lamp-oil-01;
+	}
+	[common]
+	{
+		screen_name = "Oil Lamp";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("oil_fire1");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_glb_oil_02]
+{
+	category_name = "lighting";
+	doc = "lamp_wall_oil_ornate";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.621926813;
+		model = m_i_glb_lamp-oil-02;
+	}
+	[common]
+	{
+		screen_name = "Oil Lamp";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("oil_fire2");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_glb_oil_03]
+{
+	category_name = "lighting";
+	doc = "lamp_floor_oil";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.741073563;
+		model = m_i_glb_lamp-oil-03;
+	}
+	[common]
+	{
+		screen_name = "Oil Lamp";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("oil_fire3");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_glb_post]
+{
+	category_name = "lighting";
+	doc = "lamp post";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.702840938;
+		model = m_i_glb_lamp-post;
+		scale_base = 2;
+	}
+	[common]
+	{
+		screen_name = "Lamp Post";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_firews2");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_glb_post_03]
+{
+	category_name = "lighting";
+	doc = "lamppost_ornate";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.535140938;
+		model = m_i_glb_lamp-post-03;
+		scale_base = 2;
+		[textures]
+		{
+			0 = b_i_glb_lamp-posts;
+		}
+	}
+	[common]
+	{
+		screen_name = "Lamp Post";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("lamp_glow_orange4");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_glb_table]
+{
+	category_name = "lighting";
+	doc = "lamp table";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.497967375;
+		model = m_i_glb_lamp-table;
+	}
+	[common]
+	{
+		screen_name = "Table Lamp";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("candle_fire1");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_glb_wall]
+{
+	category_name = "lighting";
+	doc = "lamp wall";
+	specializes = base_light;
+	[aspect]
+	{
+//		display_cost = 0.539880125;
+		model = m_i_glb_lamp-wall;
+	}
+	[common]
+	{
+		screen_name = "Lamp";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_fire_small");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_glb_wall_01]
+{
+	category_name = "lighting";
+	doc = "lamp_wall_mono";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.735360688;
+		model = m_i_glb_wall-lamp-01;
+	}
+	[common]
+	{
+		screen_name = "Lamp";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("soft_lamp_glow");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_gob_floor_01]
+{
+	category_name = "lighting";
+	doc = "lamp_floor_gobinv";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 1.5474485;
+		does_block_path = true;
+		model = m_i_gob_floor-lamp-01;
+	}
+	[common]
+	{
+		screen_name = "Goblin floor lamp";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("gobinv_lamp_floor");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_gob_wall_01]
+{
+	category_name = "lighting";
+	doc = "lamp_wall_gobinv";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.702291625;
+		model = m_i_gob_wall-lamp-01;
+	}
+	[common]
+	{
+		screen_name = "Goblin wall lamp 1";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("gobinv_lamp_wall");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_gob_wall_02]
+{
+	category_name = "lighting";
+	doc = "lamp_wall_gobinv";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.7035185;
+		model = m_i_gob_wall-lamp-01;
+	}
+	[common]
+	{
+		screen_name = "Goblin wall lamp 2";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("gobinv_lamp_wall_02");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_ice_01]
+{
+	category_name = "lighting";
+	doc = "lamppost_bracketed_wood_ice";
+	specializes = base_lamp_ice;
+	[aspect]
+	{
+		//display_cost = 0.407690313;
+		model = m_i_glb_lamp-post-01;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("lamp_glow_orange");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_ice_02]
+{
+	category_name = "lighting";
+	doc = "lamppost_bracketed_metal_ice";
+	specializes = base_lamp_ice;
+	[aspect]
+	{
+		//display_cost = 0.449179063;
+		model = m_i_glb_lamp-post-02;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("lamp_glow_orange3");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:lamp_ice_03]
+{
+	category_name = "lighting";
+	doc = "lamppost_metal_ice";
+	specializes = base_lamp_ice;
+	[aspect]
+	{
+		//display_cost = 0.53955675;
+		model = m_i_glb_lamp-post-03;
+	}	
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("lamp_glow_orange2");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+
+[t:template,n:lightstand_lightable]
+{
+	category_name = "lighting";
+	doc = "torch_lightable";
+	specializes = interactive;
+	[aspect]
+	{
+		//display_cost = 0.12879325;
+		does_block_path = TRUE;
+		draw_selection_indicator = FALSE;
+		is_selectable = TRUE;
+		is_usable = TRUE;
+		lodfi_lower = -1;
+		lodfi_upper = -1;
+		model = m_i_glb_light-torch-01;
+		rollover_highlight = TRUE;
+		use_range = 3;
+		[textures]
+		{
+			0 = b_i_glb_torch-05;
+		}
+	}
+	[common]
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+	}
+	[generic_emitter_act]
+	{
+		other_effect = "torch_firews1";
+	}
+	[light_enable]
+	{
+		initially_active = FALSE;
+	}
+	[light_flicker]
+	{
+		duration = 0;
+		flicker_frequency_max = 12;
+		flicker_frequency_min = 10;
+		initially_active = FALSE;
+		magnitude = 0.15;
+	}
+	[msg_switch]
+	{
+	}
+}
+
+[t:template,n:torch_activate]
+{
+	category_name = "lighting";
+	doc = "torch_activate";
+	specializes = non_interactive;
+	[aspect]
+	{
+		//display_cost = 0.121475188;
+		does_block_path = TRUE;
+		lodfi_lower = -1;
+		lodfi_upper = -1;
+		model = m_i_glb_light-torch-01;
+		[textures]
+		{
+			0 = b_i_glb_torch-05;
+		}
+	}
+	[common]
+	{
+		auto_expiration_class = immediate;
+		forced_expiration_class = immediate;
+	}
+	[generic_emitter_act]
+	{
+		other_effect = "torch_firews1";
+	}
+	[light_enable]
+	{
+		initially_active = FALSE;
+	}
+	[light_flicker]
+	{
+		duration = 0;
+		flicker_frequency_max = 12;
+		flicker_frequency_min = 10;
+		initially_active = FALSE;
+		magnitude = 0.15;
+	}
+}
+
+[t:template,n:torch_csl_sconce]
+{
+	category_name = "lighting";
+	doc = "sconce_gld_ornate";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.567007313;
+		model = m_i_glb_light-sconce;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_firews2");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+
+[t:template,n:torch_glb_hands]
+{
+	category_name = "lighting";
+	doc = "torch_hands";
+	specializes = non_interactive;
+	[aspect]
+	{
+		//display_cost = 0.219982875;
+		lodfi_lower = -1;
+		lodfi_upper = -1;
+		model = m_i_glb_hand-torch;
+	}
+	[common]
+	{
+		auto_expiration_class = normal;
+		forced_expiration_class = normal;
+	}
+	[generic_emitter_act]
+  	{
+  		other_effect = "torch_hands";
+  	}
+  	[light_enable]
+	{
+		initially_active = FALSE;
+	}
+	[light_flicker]
+	{
+		duration = 0;
+		flicker_frequency_max = 12;
+		flicker_frequency_min = 10;
+		initially_active = FALSE;
+		magnitude = 0.15;
+	}
+}
+
+[t:template,n:torch_glb_holder_01]
+{
+	category_name = "lighting";
+	doc = "torch_wall_bracketed_lit";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.568414125;
+		model = m_i_glb_light-torch-01;
+		[textures]
+		{
+			0 = b_i_glb_torch-05;
+		}
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_firews1");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:torch_glb_holder_02]
+{
+	category_name = "lighting";
+	doc = "torch_wall_bracketed_unlit";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.122024438;
+		model = m_i_glb_light-torch-01;
+		[textures]
+		{
+			0 = b_i_glb_torch-05;
+		}
+	}
+}
+[t:template,n:torch_glb_holder_03]
+{
+	category_name = "lighting";
+	doc = "torch_wall_spiked";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.565835438;
+		model = m_i_glb_light-torch-02;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_firews");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:torch_glb_holder_04]
+{
+	category_name = "lighting";
+	doc = "torch_unlit";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.122024438;
+		model = m_i_glb_light-torch-unlit;
+		[textures]
+		{
+			0 = b_i_glb_torch-05;
+		}
+	}
+}
+[t:template,n:torch_glb_skull_01]
+{
+	category_name = "lighting";
+	doc = "torch_skull";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.807705625;
+		model = m_i_glb_torch-skull-01;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_skull");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:torch_glb_stand_01]
+{
+	category_name = "lighting";
+	doc = "torch_stand_ornate_gld";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.633560125;
+		model = m_i_glb_light-torch-stand-01;
+		[textures]
+		{
+			0 = b_i_csl_torch-gold;
+		}
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_firews");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:torch_glb_stand_02]
+{
+	category_name = "lighting";
+	doc = "torch_stand_unlit";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.172469938;
+		model = m_i_glb_light-torch-stand-01;
+	}
+}
+[t:template,n:torch_glb_stand_03]
+{
+	category_name = "lighting";
+	doc = "torch_stand_ornate_blk";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.631732063;
+		model = m_i_glb_light-torch-stand-01;
+		[textures]
+		{
+			0 = b_i_csl_torch-black;
+		}
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_firews");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:dsx_torch_lavacave_lit]
+{
+	category_name = "lighting";
+	doc = "dsx_torch_lavacave_lit";
+	specializes = base_light;
+	[aspect]
+	{
+		does_block_path = true;
+		model = m_i_glb_torch-lavacave;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_firews");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:torch_glb_stand_04]
+{
+	category_name = "lighting";
+	doc = "torch_stand_blck";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.63357225;
+		model = m_i_glb_light-torch-stand-01;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_firews");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:torch_glb_stick]
+{
+	category_name = "lighting";
+	doc = "torch_tiki";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.539822188;
+		model = m_i_glb_torch-stick;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_firews");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:torch_swp_stick_01]
+{
+	category_name = "lighting";
+	doc = "torch_tiki_yllw";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.593807813;
+		model = m_i_swp_torch-01;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_firews3");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:torch_swp_stick_02]
+{
+	category_name = "lighting";
+	doc = "torch_tiki_white";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.5914275;
+		model = m_i_swp_torch-02;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("torch_firews3");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:wood_glb_pile_fireplace_burnt]
+{
+	category_name = "lighting";
+	doc = "fireplace_logs_burning";
+	specializes = base_light;
+	[aspect]
+	{
+		//display_cost = 0.774133188;
+		does_block_path = true;
+		model = m_i_glb_woodpile-02;
+		[textures]
+		{
+			0 = b_i_glb_woodpile-burnt;
+		}
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("fireplace_fire");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:shroom_cav_glow_01]
+{
+	category_name = "mushrooms";
+	doc = "shroom_cyan_glow";
+	specializes = base_light;
+	[aspect]
+	{
+		model = m_i_cav_shroom-01;
+		scale_base = 0.33;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("shroom_glow_01");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:shroom_cav_glow_02]
+{
+	category_name = "mushrooms";
+	doc = "shroom_violet_glow";
+	specializes = base_light;
+	[aspect]
+	{
+		model = m_i_cav_shroom-02;
+		scale_base = 0.66;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("shroom_glow_02");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:shroom_cav_glow_03]
+{
+	category_name = "mushrooms";
+	doc = "shroom_blue_glow";
+	specializes = base_light;
+	[aspect]
+	{
+		model = m_i_cav_shroom-03;
+		scale_base = 0.33;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("shroom_glow_03");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+[t:template,n:shroom_cav_glow_05]
+{
+	category_name = "mushrooms";
+	doc = "shroom_orange_glow";
+	specializes = base_light;
+	[aspect]
+	{
+		model = m_i_cav_shroom-05;
+		scale_base = 0.45;
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("shroom_glow_05");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}
+
+[t:template,n:dsx_lamp_disco_wall]
+{
+	category_name = "lighting";
+	doc = "lamp_wall_disco";
+	specializes = non_interactive;
+	[aspect]
+	{
+		lodfi_lower = 0;
+		lodfi_upper = 0;
+		model = m_i_glb_wall-lamp-01-gold;
+	}
+	[common]
+	{
+		screen_name = "Lamp";
+	}
+}

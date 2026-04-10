@@ -1,0 +1,176 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: job_give.skrit
+
+	Author(s)	: Bartosz Kijanka
+
+	Purpose		: Give an item.
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+Go		m_Go$;
+GoMind	m_Mind$;
+GoBody  m_Body$;
+Job		m_Job$;
+bool 	m_BegunGive$;
+Goid	m_Target$;
+
+////////////////////////////////////////////////////////////////////////////////
+
+#include "k_job_c_mcp_path_utils" 
+
+////////////////////////////////////////////////////////////////////////////////
+
+startup state Startup$
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.GetGo;
+	m_Mind$		= job$.GetGo.GetMind;
+	m_Body$		= job$.GetGo.GetBody;
+}
+
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+
+	m_BegunGive$ = false;
+
+	m_Target$ = m_Job$.GoalObject;
+
+	ResetPathFindingParameters$();
+
+	SetState RequestAction$;	
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	global event handler
+trigger OnWorldMessage$( WE_DESTRUCTED         ) { SetState Exiting$ ; }
+trigger OnWorldMessage$( WE_JOB_DESTRUCTED     ) { SetState CleaningUpAndExiting$ ; }
+
+
+////////////////////////////////////////////////////////////////////////////////
+//	
+state RequestAction$
+{
+	transition
+	{
+		->TargetMoved$:          OnWorldMessage( WE_MCP_DEPENDANCY_BROKEN );
+		->Giving$:               OnWorldMessage( WE_ANIM_DONE             );
+		->Giving$:               OnWorldMessage( WE_MCP_SECTION_COMPLETED );
+		->CleaningUpAndExiting$: OnWorldMessage( WE_MCP_INVALIDATED       );
+	}
+
+	event OnEnterState$
+	{
+		if ( m_Go$.Inventory.SBeginGive( m_Target$, m_Job$.Origin ) )
+		{
+			m_BegunGive$ = true;		
+
+			eReqRetCode ret$ = MCPManager.MakeRequest(	m_Go$.Goid,
+														PL_APPROACH,
+														m_Target$,
+														m_LookAhead$, m_MaxApproachTime$,
+														10.0 );
+
+		report.ReportF(	"aimove","[%s] GIVE (PL_APPROACH) [%s] returned [%s]\n",
+						m_Go$.TemplateName,
+						m_Target$.go.TemplateName,
+						ToString(ret$) );
+
+			if( RequestFailed(ret$) )
+			{
+				Report.Genericf("[%s] GIVE - FAILED could not get to target [%s]. Aborting job.\n",
+					m_Go$.TemplateName, m_Job$.GoalObject.GetGo.TemplateName);
+				SetState( CleaningUpAndExiting$ );
+			}
+			else if (ret$ == REQUEST_OK_IN_RANGE)
+			{
+				SetState( Giving$ );
+			}
+			else if ( (ret$ == REQUEST_OK) || (ret$ == REQUEST_OK_CROWDED) )
+			{
+				// just stay in this state we are going to make it to our goal in this move.
+			}
+			else // anything else we just want to try to get closer.
+			{
+				SetState( MovingCloser$ );
+			}
+		}
+		else
+		{
+			SetState( CleaningUpAndExiting$ );
+		}
+	}
+}
+
+
+state Giving$
+{
+	event OnEnterState$
+	{
+		bool bValid$ = m_Target$.Go.IsScreenPartyMember();
+		if ( bValid$ )
+		{
+			bValid$ = IsAlive( m_Target$.Go.Aspect.LifeState );
+		}
+
+		if ( bValid$ == false )
+		{
+			SetState CleaningUpAndExiting$;
+			return;
+		}
+		else
+		{
+			SetState GivingForReal$;
+			return;
+		}
+	}
+}
+
+state GivingForReal$
+{
+	event OnEnterState$
+	{
+		m_Go$.Inventory.SAutoGive( m_Job$.GoalObject, m_Job$.GoalModifier, m_Job$.Origin );
+		SetState( CleaningUpAndExiting$ );
+	}
+}
+
+
+state CleaningUpAndExiting$
+{
+	event OnEnterState$
+	{
+		if( m_BegunGive$ == true )
+		{
+			m_Go$.Inventory.SEndGive( m_Job$.GoalObject, m_Job$.GoalModifier, m_Job$.Origin );
+			m_BegunGive$ = false;
+		}
+		SetState Exiting$;
+	}
+}
+
+
+state Exiting$
+{
+	event OnEnterState$
+	{
+		m_Job$.MarkForDeletion();
+	}
+}

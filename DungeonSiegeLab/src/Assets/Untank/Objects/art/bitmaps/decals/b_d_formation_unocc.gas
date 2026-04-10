@@ -1,0 +1,5 @@
+[t:tsd,n:b_d_formation_unocc]
+{
+	layer1texture1 = b_d_formation_unocc;
+  i texturedetail = 1;
+}

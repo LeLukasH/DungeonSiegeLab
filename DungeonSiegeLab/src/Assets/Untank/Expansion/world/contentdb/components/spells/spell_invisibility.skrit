@@ -1,0 +1,284 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_invisibility.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Makes the selected target invisible (unattackable) for the duration
+// of the spell
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string target_script$		= ""		doc = "Name of the SiegeFx script that will be providing the visual.";
+property string invisibility_script$ 	= ""	doc = "Name of the SiegeFx scrip that will be played through out the duration of the spell.";
+property string end_script$		= ""		doc = "Name of the SiegeFx script that will be played at the end of the spell.";
+property string state_name$		= "Invisible"	doc = "State name for character";
+property string state_description$	= "Invisible"	doc = "State desc for character";
+
+owner = GoSkritComponent;
+
+Goid target$;
+Goid caster$;
+float	alt_time$ = 0; 
+
+void ClearEngaged$(Goid target$)
+{
+	// clear the go collection and refill it with the friends within the given radius
+	target$.Go.Mind.TempGopColl1.Clear;
+	target$.Go.Mind.GetEngagedMeEnemies(target$.Go.Mind.TempGopColl1);
+
+	int i$ = 0;
+	int iend$ = target$.Go.Mind.TempGopColl1.Size();
+	Go temp$;
+
+	// loop through the engaged characters
+	while( i$ < iend$ )
+	{
+		// get the character
+		temp$ = target$.Go.Mind.TempGopColl1.Get( i$ );
+
+		// free their mind and their arse will follow
+		temp$.Mind.Clear(JQ_ACTION);
+
+		// increment i$
+		i$ = i$ + 1;
+	}
+}
+
+////////////////////////////////////////
+//	State Machine
+			
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST )
+		{
+
+			// get the target and the caster goids
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			// make sure their valid
+			if( !target$.IsValidMp || !caster$.IsValidMp )
+			{
+				SetState Finished$;
+				return;
+			}
+	
+			// figure out the length of the effect
+			alt_time$ = owner.Go.Magic.EvaluateEffectDuration(caster$.Go, target$.Go);
+
+			// If the target already has the state, then send a message to the existing
+			// spell to extend the time for the spell.
+			if(target$.Go.Actor.HasGenericState(state_name$))
+			{
+			//	report.generic("Has state.  Need to extend\n");
+
+				Goid existingSpell$ = target$.Go.Actor.GetGenericStateSpellGoid(state_name$);
+
+				// Pack the duration from this spell
+				int packedDuration$ = Math.Round(alt_time$ * 1000);
+
+				// Send the world message to the existing spell with the time it needs to extend itself.
+				PostWorldMessage( WE_SPELL_SYNC_MID, owner.goid, existingSpell$, packedDuration$, 0 );
+
+				SetState Finished$;
+				return;
+			}		
+
+			// clone the spell to activate for the target
+			GoCloneReq cloneReq$ = MakeGoCloneReq(Owner.Go.Parent.Goid, owner.goid);
+			cloneReq$.Omni = true;
+			Goid new_spell$ = GoDb.SCloneGo(cloneReq$);
+
+			// send the message to the target
+			PostWorldMessage(WE_REQ_ACTIVATE, caster$, new_spell$, MakeInt(target$), 0);
+			
+			// JCD 9/18/03
+			// delete the normal version of the spell
+			SetState Finished$;
+			return;
+		}
+		else if ( e$ == WE_REQ_ACTIVATE )
+		{
+			
+			/////////////////////////////
+			// Omni Go
+				
+			// get the caster and the target
+			caster$ = msg$.GetSendFrom();
+			target$ = MakeGoid(msg$.GetData1());
+
+			// make sure they're valid
+			if( !target$.IsValid || !caster$.Isvalid )
+			{
+				SetState RestoreState$;
+				return;
+			}
+
+			// start the visual
+			if ( !StringTool.IsEmpty(target_script$) )
+			{
+				// create the param string					
+				string params$ = "";
+
+				// run the cast effect
+				SiegeFx.SRunMpScript( target_script$, target$, target$, params$, owner.Goid, e$ );
+			}
+
+			// make them unattackable
+			target$.Go.Mind.SetMayBeAttacked(false);
+
+			/*#only(game)[[
+			// see if there's an aspect handle to make him invisible with
+			if(target$.Go.Aspect.HasAspectHandle())
+			{
+				// copy the ambience and alpha
+				ambience$ = target$.Go.Aspect.GetAspectHandle().GetAmbience();
+				alpha$ = target$.Go.Aspect.GetAspectHandle().GetAlpha();
+
+				// bye bye!
+				target$.Go.Aspect.GetAspectHandle().InitializeLighting(ambience$, 96);
+			}
+			]];*/
+
+			// start the visual
+			if ( !StringTool.IsEmpty(invisibility_script$) )
+			{
+				// create the param string					
+				string params$ = "";
+
+				// get the size of the character
+				float radius$ = target$.Go.Aspect.GetBoundingSphereRadius();
+
+				// add the radius to the string
+				StringTool.AppendF(params$, "[%g][%g][%g]", radius$ * .35, radius$ * .5, radius$ * .90);
+
+				// run the hide effect
+				SiegeFx.SRunMpScript( invisibility_script$, target$, target$, params$, owner.Goid, e$);
+			}
+
+			// clear the minds of the enemies engaged with the character
+			ClearEngaged$(target$);
+
+			// add the effected state so this can only happen once
+			target$.Go.Actor.SAddGenericState(state_name$, state_description$, alt_time$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+
+			// watch the target
+			Godb.StartWatching( owner.goid, target$);				
+				
+			// create the timer to finish at the end of the effect
+			this.CreateTimer( 1, alt_time$ );
+		}
+		// Receiving a sync message to extend the time of this spell.
+		else if(e$ == WE_SPELL_SYNC_MID)
+		{
+		//	report.generic("Extending time\n");
+
+			// Extract the time to extend the orbiter duration.
+			float durationExtension$ = msg$.GetData1() / 1000;
+
+			float remainingTime$ = this.AddTimerSeconds(1, durationExtension$);
+
+			// Remove the exisiting generic state.
+			target$.Go.Actor.SRemoveGenericState( state_name$ );	
+
+			// Add another one with the remaining time and the duration extension.
+			target$.Go.Actor.SAddGenericState( state_name$, state_description$, remainingTime$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+
+		}
+	}
+	
+	event OnGoHandleCCMessage$(eWorldEvent e$, WorldMessage /*msg$*/)
+	{
+		// JCD 9/18/03
+		// adding a few more messages to listen for which will result in state being restored
+		// look for engaged hit lived events
+		if( e$ == WE_ENGAGED_HIT_LIVED || e$ == WE_ENGAGED_HIT_KILLED || e$ == WE_ENGAGED_MISSED )
+		{
+			// MRC 9/15/2003 The spell was too powerful.  Now, as soon as you attack someone,
+			// then you become uninvisible.
+			SetState RestoreState$;	
+		}
+	}
+
+	transition -> RestoreState$ :  OnTimer( 1 );
+	transition -> RestoreState$ :  OnGoHandleCCMessage( WE_KILLED );
+		
+}
+
+state RestoreState$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+
+		// If the go is still alive then restore his state
+		if( target$.IsValid )
+		{
+			// kill the effect
+			SiegeFx.ClearVariables(owner.goid);
+			
+			// play the end effect
+			SiegeFx.SRunScript(end_script$, target$, target$, "", owner.Goid, WE_SPELL_SYNC_END);
+
+			// stop watching the target
+			Godb.StopWatching( owner.goid, target$);
+	
+			// remove the state so this can be affected again
+			target$.Go.Actor.SRemoveGenericState(state_name$);
+
+			// make him/her attackable again and visible
+			target$.Go.Mind.SetMayBeAttacked(true);
+
+			/*#only(game)[[
+			// see if there's an aspect handle to make him visible
+			if(target$.Go.Aspect.HasAspectHandle())
+			{
+				target$.Go.Aspect.GetAspectHandle().InitializeLighting(ambience$, alpha$);
+			}
+			]];*/
+
+			// create a timer
+			this.Createtimer(2, .5);
+		}
+		else
+		{
+			SetState Finished$;
+		}
+	}
+
+	transition -> Finished$ : OnTimer(2);
+}
+
+state Finished$
+{
+	event OnEnterState$
+	{
+		PostWorldMessage(WE_REQ_DELETE, owner.Goid, owner.Goid, 1);
+	}
+}
+
+state Abort$
+{
+	////////////////////
+	// Normal Go
+	
+	event OnEnterState$
+	{
+		// Refund the players mana
+		Rules.ChangeMana( caster$, owner.go.getmagic.manacost );
+
+		// Get rid of any temporary storage
+		SiegeFx.ClearVariables( owner.goid );
+
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

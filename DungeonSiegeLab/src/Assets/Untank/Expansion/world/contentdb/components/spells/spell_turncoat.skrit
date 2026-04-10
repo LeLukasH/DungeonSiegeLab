@@ -1,0 +1,314 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_turncoat.skrit
+// Author(s):  Tim Jones (based on spell_purity.skrit code)
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Turns enemies against the targeted enemy
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string effect_script$	= ""		doc = "Name of the SiegeFx script that will be providing the visual.";
+property string caster_script$	= ""		doc = "Name of the SiegeFx script providing the visual on the caster.";
+property string script_params$	= ""   		doc = "Parameters to send to SiegeFx script";
+property float	radius$		= 15.0		doc = "Radius of the effect, centered on the caster.";
+property string state_description$= "Turned"	doc = "State name for turned monsters.";
+property string immunity$			doc = "If the target contains this membership then it is immune to this spell.";
+
+owner = GoSkritComponent;
+
+#include "k_inc_spl_utils_DSX"
+
+Goid target$;
+Goid caster$;
+float alt_time$ = 0;   
+
+
+// Func to do the turning part of the spell
+void MakeFriendsAttackMe$()
+{
+	// clear the go collection and refill it with the friends within the given radius
+	target$.Go.Mind.TempGopColl1.Clear;
+	target$.Go.Mind.GetFriendsInSphere( radius$, target$.Go.Mind.TempGopColl1 );
+
+	int i$ = 0;
+	int iend$ = target$.Go.Mind.TempGopColl1.Size();
+	Go temp$;
+
+	while( i$ < iend$ )
+	{
+		temp$ = target$.Go.Mind.TempGopColl1.Get( i$ );
+
+		if (temp$.hasmind())
+		{
+			//bool doit$ = false;
+			bool doit$ = true;
+
+			// don't attack yourself
+			if (target$ == temp$.Goid)
+			{
+				doit$ = false;
+			}
+
+			/////////// not sure what this check does...
+			Job action$ = temp$.Mind.GetFrontJob( JQ_ACTION );
+			if( action$ != NULL )
+			{
+				if( action$.JobAbstractType == JAT_STARTUP )
+				{
+					doit$ = false;
+				}
+			}
+			
+			if( temp$.Player.Controller != PC_COMPUTER  )
+			{
+				doit$ = false;
+			}
+			
+			// is our target immune to this spell?
+			if( !StringTool.IsEmpty( immunity$ ) )
+			{
+				if( temp$.Common.Membership.Contains( immunity$ ) )
+				{
+					doit$ = false;
+				}
+			}			
+			
+			if( doit$ )
+			{
+				// make sure they know how to attack
+				if( temp$.Mind.UnderstandsJob( JAT_ATTACK_OBJECT ) )
+				{
+					// if they have a ranged attack, then they won't be effected
+					//	this is because their arrows will shoot right through me
+					Go weapon$ = temp$.Inventory.SelectedItem;
+					
+					if ( weapon$ == NULL )
+					{
+						weapon$ = temp$;
+					}					
+					
+					//Report.Genericf("Weapon is %s for %s\n", weapon$.templatename, temp$.templatename);
+						
+					// if we have a melee weapon, or we attack barehanded, then do it
+					if ( weapon$.IsMeleeWeapon || (weapon$ == temp$) )
+					{
+						// tell my friend to attack me
+						temp$.Mind.SDoJob(MakeJobReq(JAT_ATTACK_OBJECT, JQ_ACTION, QP_CLEAR, AO_COMMAND, target$));
+					}
+				}
+			}
+		}
+
+		i$ += 1;
+	}
+}
+
+
+////////////////////////////////////////
+//	State Machine
+			
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST )
+		{
+			// get the target and the caster goids
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+			
+			// make sure their valid
+			if( !target$.IsValidMp || !caster$.IsValidMp )
+			{
+				SetState Finished$;
+				return;
+			}
+			
+			if ( !target$.Go.HasMind )
+			{
+				SetState Abort$;
+				return;
+			}			
+
+			// make sure we're not already doing the spell
+			if( caster$.Go.Actor.HasGenericState(owner.Go.Magic.StateName))
+			{
+				SetState Abort$;
+				return;
+			}			
+
+			// is our target immune to this spell?
+			if( !StringTool.IsEmpty( immunity$ ) )
+			{
+				if( target$.Go.Common.Membership.Contains( immunity$ ) )
+				{
+					SetState Abort$;
+					return;
+				}
+			}			
+		
+			// figure out the lenght of the effect
+			alt_time$ = owner.Go.Magic.EvaluateEffectDuration(caster$.Go, target$.Go);
+
+			// Start the visual
+			if ( !StringTool.IsEmpty(caster_script$) )
+			{
+				SiegeFx.SRunScript( caster_script$, target$, caster$, script_params$, owner.Goid, e$ );
+			}			
+
+			return;	
+		}
+		else if( e$ == WE_SPELL_SYNC_MID)
+		{
+
+			// get the target and the caster goids
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+			
+			// make sure their valid
+			if( !target$.IsValidMp || !caster$.IsValidMp )
+			{
+				SetState Finished$;
+				return;
+			}
+			
+			if ( !target$.Go.HasMind )
+			{
+				SetState Finished$;
+				return;
+			}
+			
+						
+			// Turn enemies
+			MakeFriendsAttackMe$();
+
+			// clone the spell to activate for the target
+			GoCloneReq cloneReq$ = MakeGoCloneReq(Owner.Go.Parent.Goid, owner.goid);
+			cloneReq$.Omni = true;
+			Goid new_spell$ = GoDb.SCloneGo(cloneReq$);
+
+			// send the message to the target
+			PostWorldMessage(WE_REQ_ACTIVATE, caster$, new_spell$, MakeInt(target$), 0);
+		}
+		else if ( e$ == WE_REQ_ACTIVATE )
+		{
+			
+			/////////////////////////////
+			// Omni Go
+
+			//string screen_name$;
+			
+			// store the name of the target
+			Goid tmp_target$ = target$;
+				
+			// get the caster and the target
+			caster$ = msg$.GetSendFrom();
+			target$ = MakeGoid(msg$.GetData1());
+
+			// make sure they're valid
+			if( !target$.IsValid || !caster$.Isvalid )
+			{
+				SetState RestoreState$;
+				return;
+			}
+
+			// see if the data from the message is the target's goid
+			if(tmp_target$ == MakeGoid(msg$.GetData1()))
+			{
+				// if so, we're working with the original target.  give me a new state and an effect
+
+				// add the effected state so this can only happen once
+				target$.Go.Actor.SAddGenericState( owner.Go.Magic.StateName, state_description$, alt_time$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+
+				// Start the visual
+				if( effect_script$ != "" )
+				{
+					// get the size of the character
+					float radius$ = target$.Go.Aspect.GetBoundingSphereRadius();
+
+					// create teh param string					
+					string params$ = "";
+					StringTool.AppendF(params$, "[%g][%g][%g][%g][%g][%g][%g]", alt_time$ - 1, .7 * radius$, .6 * radius$, .5 * radius$, .6 * radius$, -.5 * radius$, -1 * radius$);
+
+					// debug
+					//target$.Go.Common.SetScreenName(params$);
+
+					SiegeFx.SRunMpScript( effect_script$, target$, caster$, params$, owner.Goid, e$ );
+				}
+
+				// watch the target
+				Godb.StartWatching( owner.goid, target$);				
+				
+				// create the timer to finish at the end of the effect
+				this.CreateTimer( 1, alt_time$ );
+			}
+		}
+	}
+
+	transition -> RestoreState$ :  OnTimer( 1 );
+	transition -> RestoreState$ :  OnGoHandleCCMessage(WE_KILLED);
+}
+
+state RestoreState$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+		// If the go is still alive then restore his state
+		if( target$.IsValid )
+		{
+			//Report.Genericf("Restoring state for target %s\n", target$.go.TemplateName);
+
+			// Stop the effect from playing on the target.
+			SiegeFx.SStopScript(owner.goid, effect_script$);
+			
+			// don't need to watch him anymore
+			Godb.StopWatching( owner.goid, target$);
+
+			// remove the state so this can be affected again
+			target$.Go.Actor.SRemoveGenericState( owner.Go.Magic.StateName );
+
+			// Everyone attacking me should stop - pick a new target
+			StopFriendsAttackingMe$(target$, radius$);
+		}
+		
+		//this.CreateTimer( 1, effect_delay$ );
+		SetState Finished$;
+	}
+}
+
+
+state Finished$
+{
+	event OnEnterState$
+	{
+		// kill the effect
+		SiegeFx.ClearVariables(owner.goid);
+
+		PostWorldMessage(WE_REQ_DELETE, owner.Goid, owner.Goid, 1);
+	}
+}
+
+state Abort$
+{
+	////////////////////
+	// Normal Go
+	
+	event OnEnterState$
+	{
+		// Refund the players mana
+		Rules.ChangeMana( caster$, owner.go.GetMagic.ManaCost );
+
+		// Get rid of any temporary storage
+		SiegeFx.ClearVariables( owner.goid );
+
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

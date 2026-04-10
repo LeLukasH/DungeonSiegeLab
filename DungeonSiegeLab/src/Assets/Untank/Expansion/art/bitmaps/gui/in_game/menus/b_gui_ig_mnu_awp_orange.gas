@@ -1,0 +1,5 @@
+[t:tsd,n:b_gui_ig_mnu_awp_orange]
+{
+	layer1texture1 = b_gui_ig_mnu_awp_orange;
+  i texturedetail = 0;
+}

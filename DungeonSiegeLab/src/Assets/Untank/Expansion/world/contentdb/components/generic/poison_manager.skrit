@@ -1,0 +1,250 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  poison_manager.skrit
+// Author(s):  Tara Teich (modified from freeze_manager)
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+//	This is sneaky... dont try this at home kids.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+owner = GoSkritComponent;
+
+property string state_name$	= "Poisoned" 	doc = "State name for afflicted party - this should be the same for all poison type afflictions";
+property string description$ 	= "Poisoned"	doc = "Displayed state name for afflicted party";
+property string effect_script$	= ""		doc = "Effect to play on afflicted party";
+property float damageInterval$	= 1.0		doc = "Seconds in between application of damageAmt damage";
+property float damageAmt$	= 12.0		doc = "Amount of damge to do every damageInterval seconds";
+
+// Duration of continuous damage effect
+//		this is the only info that can be specified dynamically
+float duration$ = 2.0;
+property Goid attacked$;
+property Goid weapon$;
+property Goid attacker$;
+SFxSID	active_effect$ = 0;
+
+startup state Main$
+{ 	
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if (e$ == WE_REQ_TALK_BEGIN )
+		{
+			// this is just a message to set the duration
+			// unpack duration
+			duration$ = msg$.GetData1() / 1000.0;
+			
+			// done
+		}
+		else if ( e$ == WE_REQ_TALK_END )
+		{
+			// we are sending the attacker
+			attacker$ = msg$.GetSendFrom();
+		}		
+		else if( e$ == WE_REQ_ACTIVATE )
+		{			
+			attacked$ = msg$.GetSendFrom();
+			
+			weapon$ = MakeGoid( msg$.GetData1() );
+			
+			if( attacked$.IsValidMp() )
+			{
+				if( ( duration$ > 0.0 ) && attacked$.Go.HasActor && ( attacked$.Go.Player.Controller != PC_HUMAN ) )
+				{
+					//if( AIQuery.Is( attacked$.Go, attacked$.Go, QT_ALIVE_CONSCIOUS ) )
+					if ( attacked$.Go.Aspect.CurrentLife > 0.0 )
+					{
+						if( attacked$.Go.Actor.HasGenericState( state_name$ ) )
+						{
+							// has poison state, so reset other one
+							// Get manager of old state
+							Goid old_manager$ = attacked$.Go.Actor.GetGenericStateSpellGoid ( state_name$ );
+							
+							// tell the old manager to go away.
+		 					SendWorldMessage( WE_SPELL_EXPIRATION_TIMER_RESET, owner.Goid, old_manager$, -1);
+			 				
+			 				GoDb.StopWatching( old_manager$, attacked$ );
+							
+							// Remove old state
+							attacked$.Go.Actor.SRemoveGenericState( state_name$ );
+						}
+						//if( !attacked$.Go.Actor.HasGenericState( state_name$ ) )
+						{
+							// Create another omni version of myself for
+							//		dealing damage
+							// create Omni version of the manager - the weapon is the attacker
+							GoCloneReq cloneReq$ = MakeGoCloneReq( owner.goid );
+							cloneReq$.Omni = true;
+							cloneReq$.ForceClientAllowed = true;
+							Goid new_manager$ = GoDb.SCloneGo( cloneReq$ );
+							
+							// send a message to get it started - can't use activate, that's already used - using cast
+							PostWorldMessage( WE_REQ_CAST, owner.Goid, new_manager$, MakeInt(attacked$), 0 );
+						}
+					}
+				}
+			}
+		}
+		else if ( e$ == WE_REQ_CAST )
+		{
+			// this means we're the specific version to do damage
+			attacked$ = MakeGoid( msg$.GetData1() );
+
+			SetState Damage$;
+		}		
+	}
+}
+
+State Damage$
+{
+	event OnEnterState$
+	{
+		// make sure our target is still valid
+		if ( attacked$.IsValidMp )
+		{
+			if ( attacked$.Go.HasAspect )
+			{
+				// and still alive
+				if ( attacked$.Go.Aspect.CurrentLife > 0.0 )
+				{
+					// create a timer to stop doing damage at the end of the duration
+					this.CreateTimer( 2, duration$ );
+					
+					GoDb.StartWatching( owner.Goid, attacked$ );
+					
+					// Add the effected state so this can only happen once
+					attacked$.Go.Actor.SAddGenericState( state_name$, description$, duration$, owner.goid, owner.goid, 0 );
+					
+					// We want a timer for doing damage
+					
+					this.CreateTimer( 1, damageInterval$ );
+					// play poison effect on target
+					if( effect_script$ != "" )
+					{
+						// Run the script using the MP call.
+						active_effect$ = SiegeFx.SRunMpScript( effect_script$, attacked$, attacked$, "", attacked$, WE_UNKNOWN );
+					}
+				}
+			}
+		}
+	}
+	
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		// someone is telling us to go away
+		if ( e$ == WE_SPELL_EXPIRATION_TIMER_RESET )
+		{
+			// stop the effect
+			if (active_effect$ != 0)
+			{
+				SiegeFx.SStopScript( active_effect$ );
+			}
+			
+			// so remove ourself
+			SetState Cleanup$;
+		}
+	}
+	
+	
+	event OnGoHandleCCMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{	
+		goid afflicted_fellow$ = msg$.GetSendTo();
+		
+		if( e$ == WE_KILLED && afflicted_fellow$.IsValidMp() )
+		{			
+			GoDb.StopWatching( owner.Goid, attacked$ );
+				
+			// remove the state so this can be affected again
+			attacked$.Go.Actor.SRemoveGenericState( state_name$ );
+			
+			// stop the effect
+			if (active_effect$ != 0)
+			{
+				SiegeFx.SStopScript( active_effect$ );
+			}			
+		
+			SetState Cleanup$;
+		}
+	}
+	
+	// when timer 1 goes off, then we need to apply damage
+	trigger OnTimer$( 1 )
+	{
+		// if the guy is dead, then we're done
+		if ( !attacked$.IsValidMp )
+		{
+			GoDb.StopWatching( owner.Goid, attacked$ );			
+		}
+		else
+		{
+			bool stop$ = false;
+			
+			// It's valid, but we could be a dead body
+			if ( attacked$.Go.HasAspect )
+			{
+				if ( attacked$.Go.Aspect.CurrentLife <= 0.0 )
+				{
+					GoDb.StopWatching( owner.Goid, attacked$ );
+					
+					// remove the state so it doesn't look goofy
+					attacked$.Go.Actor.SRemoveGenericState( state_name$ );
+					
+					stop$ = true;
+				}				
+			}
+			
+			if ( !stop$ )
+			{
+				// give experience
+				
+				// how much experience?
+				float experience$ = Rules.CalculateExperience( attacker$, weapon$, attacked$, damageAmt$ );
+				
+				// and give the owner the experience
+				Rules.AwardExperience( attacker$, weapon$, experience$ );
+				
+				// damage the guy
+				Rules.DamageGo( attacked$, attacker$, weapon$, damageAmt$, false, false );
+				
+				// start the timer again
+				this.CreateTimer( 1, damageInterval$ );
+			}
+		}
+	}
+	
+	// this goes off when damage should stop
+	trigger OnTimer$( 2 )
+	{
+		GoDb.StopWatching( owner.Goid, attacked$ );
+		
+		if (attacked$.IsValidMp)
+		{		
+			// remove the state so this can be affected again
+			attacked$.Go.Actor.SRemoveGenericState( state_name$ );
+
+			// Also stop the effect when the timer runs out.
+			if (active_effect$ != 0)
+			{
+				SiegeFx.SStopScript( active_effect$ );
+			}
+		}
+		
+		SetState Cleanup$;
+	}	
+}
+
+// only called on the instance for dealing damage - not called on the manager created from equipping the weapon
+//		which would be bad and prevent it from doing more poison damage
+State Cleanup$
+{
+	event OnEnterState$
+	{
+		// Delete this skrit
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}
+

@@ -1,0 +1,16 @@
+[t:template,n:cmd_t_play_effect]
+{
+	specializes = cmd_const;
+	doc = "cmd_t_play_effect";
+	extra_doc = "Use this command to play an effect between source/target.";
+	category_name = "target";
+
+	[gizmo]
+	{
+		texture = ;
+		diffuse_color = 1.0, 0.1, 0.85;
+		use_diffuse_color = true;
+	}
+
+	[cmd_t_play_effect] {}
+}

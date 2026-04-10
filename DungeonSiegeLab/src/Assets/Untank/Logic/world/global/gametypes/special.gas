@@ -1,0 +1,40 @@
+///////////////////////////////////////////////////////////////////////////
+
+[t:gametype,n:special]
+{
+	screen_name = "Special";
+	description = "Testing";
+	automatic = true;
+	
+	allow_character_save = false;
+	allow_player_kills = true;
+
+	[teams]
+	{
+		minimum_teams = 2;		
+		allow_alliances = true;
+	}
+
+	[stats]
+	{
+		[in_game]
+		{
+			// columns
+			0 = kills;
+			1 = deaths;
+			2 = experience_gained;
+		}
+		[end_game]
+		{
+			0 = kills;
+			1 = gibs;
+			2 = human_kills;
+			3 = deaths;
+			4 = melee_gained;
+			5 = ranged_gained;
+			6 = cmagic_gained;
+			7 = nmagic_gained;
+			8 = experience_gained;
+		}
+	}	
+}

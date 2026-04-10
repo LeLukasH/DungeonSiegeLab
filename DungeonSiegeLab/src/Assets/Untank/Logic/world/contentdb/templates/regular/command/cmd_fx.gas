@@ -1,0 +1,153 @@
+//////////////////////////////////////////////////////////////////////////////
+// camera fx
+
+[t:template,n:camera_quake_base]
+{
+	specializes	= cmd_const;
+	doc			= [camera_quake];
+
+	[camera_quake]  {  }
+}
+
+	[t:template,n:camera_quake]
+	{
+		specializes	= camera_quake_base;
+		category_name = "effects";
+		doc			= camera_quake;
+	}
+
+	[t:template,n:camera_barrel_explode]
+	{
+		specializes	= camera_quake_base;
+		doc			= "effect_barrel";
+        category_name = "effects";
+        extra_doc = "effect for an exploding barrel";
+
+		[camera_quake]
+		{
+			magnitude_x = 0.8;
+			magnitude_y = 0.8;
+			magnitude_z = 0.8;
+		}
+	}
+
+[t:template,n:camera_stomp]
+{
+	specializes	= cmd_const;
+	doc			= [camera_stomp];
+
+	[camera_stomp]  {  }
+}
+
+[t:template,n:rock_beast_stomp]
+{
+	specializes = camera_stomp;
+	doc = "effect_stomp";
+    category_name = "effects";
+    extra_doc = "effect for rock beast stomp";
+
+	[camera_stomp]
+	{
+		magnitude_x = 0.4;
+		magnitude_y = 0.4;
+		magnitude_z = 0.4;
+		duration = 0.3;
+	}
+	[gizmo]
+	{
+		model = m_i_glb_object-gogen;
+		texture = ;
+		diffuse_color = 0.5, 0.1, 0.7;
+		use_diffuse_color = true;
+		scale = 0.7;
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+// light fx
+
+[t:template,n:light_flicker]
+{
+	specializes	= cmd_const;
+	doc			= "light_flicker";
+    category_name = "effects";
+    extra_doc = [light_flicker];
+
+    [gizmo]
+	{
+		model = m_i_glb_object-gogen;
+		texture = ;
+		diffuse_color = 0.9, 0.3, 0.1;
+		use_diffuse_color = true;
+		scale = 0.7;
+	}
+
+
+	[light_flicker]  {  }
+}
+
+[t:template,n:light_colorwave]
+{
+	specializes	= cmd_const;
+	doc			= "light_colorwave";
+    category_name = "effects";
+    extra_doc = [light_colorwave];
+
+	[light_colorwave]  {  }
+}
+
+[t:template,n:light_enable]
+{
+	specializes	= cmd_const;
+	doc			= "light_enable";
+    category_name = "effects";
+    extra_doc = [light_enable];
+
+    [gizmo]
+	{
+		model = m_i_glb_object-gogen;
+		texture = ;
+		diffuse_color = 0.3, 0.9, 0.4;
+		use_diffuse_color = true;
+		scale = 0.7;
+	}
+
+	[light_enable]  {  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// decal fx
+
+[t:template,n:decal_fade] // not currently used. -ET
+{
+	specializes	= command;
+	doc			= "decal_fade";
+    category_name = "effects";
+    extra_doc = [decal_fade];
+
+	[decal_fade]  {  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// texture fx
+
+[t:template,n:nodal_tex_anim]
+{
+	specializes	= command;
+	doc			= "nodal_tex_anim";
+    category_name = "effects";
+    extra_doc = [nodal_tex_anim];
+
+	[nodal_tex_anim]  {  }
+}
+
+[t:template,n:nodal_tex_swap] // not currently used. -ET
+{
+	specializes	= command;
+	doc			= "nodal_tex_swap";
+    category_name = "effects";
+    extra_doc = [nodal_tex_swap];
+
+	[nodal_tex_swap]  {  }
+}

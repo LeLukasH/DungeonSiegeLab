@@ -1,0 +1,25 @@
+[t:template,n:arrow_fire]
+{
+	doc="DSX Flaming arrow";
+	specializes=arrow;
+	[aspect]
+	{
+		[voice]
+		{
+			[attack]		{	* = s_e_fire_bow_fire;	}
+		}
+
+	}
+	[common]
+	{
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("flaming_arrow");
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+			}
+		}
+	}
+}			
+

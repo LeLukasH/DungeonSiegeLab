@@ -1,0 +1,421 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		:	cmd_ai_dojob.skrit
+
+	Author(s)	: 	Bartosz Kijanka
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+
+	Usage:
+	======
+
+	A number of elements can be involved in the assignment a command:
+
+	catalyst 	- 	actor that called for the activation of the command.  Typically,
+					this is an actor who activated the trigger which called the
+					command to be executed.
+
+	target1		-	actor or item ( t1 )
+
+	target2		-	actor or item ( t2 )
+
+	modifier	-	actor or item
+
+	position	-	SiegePosition
+
+	slot		-	eEqupiSlot
+
+
+	The giving of a command can be thought of as constructing a sentence; subject --> verb --> object
+
+	Or catalyst/target1/target2 COMMAND catalyst/target1/target2, modifier, position, slot
+
+	Where each command is from the eJobAbstractType:
+
+	JAT_DO_SE_COMMAND,
+	JAT_SET_STANDING_FIGHTING_ORDERS,
+	JAT_SET_STANDING_MOVEMENT_ORDERS,
+	JAT_ATTACK_OBJECT,
+	JAT_ATTACK_OBJECT_MELEE,
+	JAT_ATTACK_OBJECT_RANGED,
+	JAT_ATTACK_POSITION,
+	JAT_ATTACK_POSITION_MELEE,
+	JAT_ATTACK_POSITION_RANGED,
+	JAT_CAST,
+	JAT_CAST_POSITION,
+	JAT_DIE,
+	JAT_DO_PLAN,
+	JAT_DROP,
+	JAT_EQUIP,
+	JAT_FACE,
+	JAT_GAIN_CONSCIOUSNESS,
+	JAT_FIDGET,
+	JAT_FLEE_FROM_OBJECT,
+	JAT_FOLLOW,
+	JAT_GET,
+	JAT_GIVE,
+	JAT_GUARD,
+	JAT_KNOCK_BACK,
+	JAT_MOVE,
+	JAT_PATROL,
+	JAT_STOP,
+	JAT_USE,
+	
+	There are several ways all the parameters can be arranged so each supported arrangement can
+	correspond to a "mode"
+
+	CV1 mode 	-	catalyst 	COMMAND t1, 			modifier, position, slot
+	1V2 mode	-	t1 			COMMAND t2, 			modifier, position, slot
+	1VC mode	-	t1			COMMAND catalyst,		modifier, position, slot
+
+	The mode is specified in the eComponentCommandMode enum
+
+
+	------------------------------------------------------------------------------------------
+
+
+	Bakcground:
+	===========
+
+	Two issues:
+		
+		How do spatial commands interact with waypoints?
+
+		How are command sequences treated by the engine?
+
+
+	Spatial commands
+	----------------
+
+		This is any command that causes an actor to move about the terrain.
+		These are commands such as move, attack, equip, use, cast.  Any of these
+		may require that the actor move somewhere.  Most of these commands
+		are self-contained; most of them can contain all the params
+		needed to fully desribe the command.  However, there is the case of
+		wanting to move an actor along a path of explicitly defined waypoints.
+		Since waypoints are often thought independent of the move command, we
+		are inclined to describe movement as:
+
+		cmd_move -> waypoint1 -> waypoint2 -> ...
+
+		In this case, what happend during the first transition is unclear.  
+		Does the cmd_move move the actor the the position of the command, or to the 
+		position of the waypoint  We are forced to choose a convention in this case.
+		We can go two ways:
+
+		1.	cmd_move always requires waypoints.  In this case, we need to add
+			content-entry-level code to ensure this is always the case.  This also
+			has the implication each time you want to just place a single 
+			"move here" command, you must place a pair of objects down.
+
+		2.	cmd_move will move you to the position of the command if there
+			are no waypoints, if there are waypoints, it can behave one
+			of two ways:
+			1.	move you first to the location of the command, then procees to
+				move you to each waypoint
+			2.	start by moving you to the first waypoint, then proceed the the
+				following waypoints.
+
+		We were thinking that if we place a command at the head of the list, and
+		just have waypoints follow, there will be an advantage when we want to
+		change the command at the head of the queue, and have it automatically
+		use the remaining waypoints.  This sounds good, except I can't think of
+		what we'd want to change that command to.  It's not like we're going to 
+		switch from moving along waypoints to using or equipping along waypoints.
+
+		$$$ So, what are the advantages of having they waypoints independent of the
+		move order?
+
+		A more consistent convention seems to be to have all of the commands be
+		self-contained and explicit.  Have each command contain all the information
+		it needs to execute.  With these assumptions, the above example would
+		be expressed by a command chain like this:
+
+		cmd_move_here1 -> cmd_move_here2 -> cmd_move_here3 -> ...
+
+		As the name implies, the first command would move the actor the it's position,
+		then it would pass control to the second command which would do the same
+		thing.  So, in this case there is no ambiguity.  Each command does what it
+		says it does.
+
+
+	Command sequences
+	-----------------
+
+		When we string commands together, we create a command sequence.  The example
+		above was a command sequence.
+
+		cmd_move_here1 -> cmd_move_here2 -> cmd_move_here3 -> ...
+		
+		The question is, what is the best way for the system to treat a command
+		sequence?
+
+		There are several possibilities:
+
+		1.	Process all the commands in a sequence up-front.
+		2.	Process process some look-ahead amount of commands up-front.
+		3.	Process commands one at a time.
+
+		Since command sequences can have circular references, it makes things much
+		simpler to process commands one at a time.
+
+
+	Commands
+	--------
+
+	-	$$$ How to recycle the same commands for initial AI orders, NIS and IS?
+
+		Well, when the command is given, we can specify if it is an initial command or if it
+		is scripted.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// exported properties
+property string _doc$ 						= "base_command_actor AI job";
+property string _required_component$ 		= "placement";
+
+property Scid next_scid$ 					doc = "Scid of next object in sequence, 0 to terminate";
+property bool nextCommandJobFinished$		= true;
+property bool nextCommandOnSectionWarning$	= false;
+
+owner = GoSkritComponent;
+
+////////////////////////////////////////
+//	queue control
+property eJobAbstractType jat$			doc = "The name of the AI job for this command to run.";
+property eJobQ q$						doc = "Which queue in the mind to put this job in.";
+property eQPlace placement$				doc = "Where in the queue to palce the job.";
+property eActionOrigin ao$	  			doc	= "The assignment origin of the job.  This affects how the system will treat the job.";
+
+////////////////////////////////////////
+//	standard job params
+property eDoJobMode mode$							doc = "Picks the syntax of the command.";
+property Scid target1$								doc = "Job parameter.  Job goal/target object.";
+property Scid target2$								doc = "Job parameter.  Job goal/target object.";
+property Scid modifier$								doc = "Job parameter.  Additional target or supplemental object.  I.e. the item to equip or use.";
+property eEquipSlot slot$							doc = "Job parameter.  Slot info for a job like equip etc.";
+property bool useCommandOrientation$	= false		doc = "Job parameter.  Use command orientation in addition to position?";
+property bool setJobTraitInterruptable$	= false		doc = "Job parameter.  Is a job is interruptable, the brain will think the actor isn't busy, so it may take autonomous action or respond to reflexes.";
+
+////////////////////////////////////////
+//	misc job params - context specific
+property eMovementOrders mo$			doc = "Job parameter.  Standing movement orders.";
+property eCombatOrders co$ 				doc = "Job parameter.  Standing combat orders.";
+property eAnimChore ac$					doc = "Job parameter.  Animation Chore.";
+property int int1$						doc = "Job parameter.  Int1.";
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+{
+	if( e$ == WE_REQ_ACTIVATE )
+	{
+		Goid modifierGoid$ = GoDb.FindGoidByScid(modifier$);
+
+		////////////////////////////////////////
+		//	make job req
+
+		JobReq req$;
+		Go assignTo$ = NULL;
+
+		if( mode$ == DJM_CV1 )
+		{
+			req$ = MakeJobReq( jat$, q$, placement$, ao$, GoDb.FindGoidByScid(target1$), modifierGoid$, owner.Go.Placement.Position );
+			assignTo$ = MakeGoid( msg$.Data1 ).Go;
+		}
+		else if( mode$ == DJM_1V2 )
+		{
+			req$ = MakeJobReq( jat$, q$, placement$, ao$, GoDb.FindGoidByScid(target2$), modifierGoid$, owner.Go.Placement.Position );
+			assignTo$ = GoDb.FindGoidByScid( target1$ ).Go;
+		}
+		else if( mode$ == DJM_1VC )
+		{
+			req$ = MakeJobReq( jat$, q$, placement$, ao$, MakeGoid( msg$.Data1 ), modifierGoid$, owner.Go.Placement.Position );
+			assignTo$ = GoDb.FindGoidByScid( target1$ ).Go;
+		}
+		else
+		{
+			// $$$ error - unsupported command mode
+		}
+
+		////////////////////////////////////////
+		//	set extra params
+
+		req$.Slot 			= slot$;
+		req$.Notify 		= owner.go.Goid;
+		req$.GoalModifier	= modifierGoid$;
+
+		if( mo$ != MO_INVALID )
+		{
+			req$.Int1 = MakeInt( mo$ );
+		}
+		else if ( co$ != CO_INVALID )
+		{
+			req$.Int1 = MakeInt( co$ );
+		}
+		else if ( req$.Jat == JAT_PLAY_ANIM )
+		{
+			req$.Int1 = MakeInt( ac$ );
+			req$.Int2 = int1$;
+		}
+		
+		if( useCommandOrientation$ )
+		{
+			req$.GoalOrientation = owner.Go.Placement.Orientation;
+		}
+
+		////////////////////////////////////////
+		//	assign job
+
+		if( assignTo$ != NULL )
+		{
+			req$.SECommandScid = owner.Scid;
+			Job newJob$ = assignTo$.Mind.SDoJob( req$ );
+			////////////////////////////////////////
+			//	post-creation extra params
+			if( newJob$ != NULL && setJobTraitInterruptable$ )
+			{
+				newJob$.SetTraitInterruptable( true );
+			}
+		}
+		else
+		{
+			// $$$ error - no actor to receive job
+		}
+	}
+	else if(	( next_scid$ != Scid.InvalidScid ) &&
+				( nextCommandJobFinished$ && ( e$ == WE_JOB_FINISHED )) )
+
+// Ignore section complete warnings --biddle
+//				( ( nextCommandJobFinished$ && ( e$ == WE_JOB_FINISHED )) || ( nextCommandOnSectionWarning$ && ( e$ == WE_MCP_SECTION_COMPLETE_WARNING ) ) ) )
+//
+
+	{
+		////////////////////////////////////////
+		//	check validity of next command
+
+		if( !next_scid$.IsValid )
+		{
+			report.errorf( "cmd_ai_dojob.skrit - BAD CONTENT. command scid 0x%08x has a BAD next_scid.  BAD.\n", owner.Scid );
+			return;
+		}
+		
+		if( next_scid$ == owner.scid )
+		{
+			report.errorf( "cmd_ai_dojob.skrit - BAD CONTENT. command scid 0x%08x has a RECURSIVE next_scid.  BAD.\n", owner.Scid );
+			return;
+		}
+
+		////////////////////////////////////////
+		//	assign next command
+
+		JobReq req$ = MakeJobReq( JAT_DO_SE_COMMAND, JQ_ACTION, QP_FRONT, AO_COMMAND );
+		req$.SetInt1( MakeInt( next_scid$ ) );
+
+		Go actor$ = NULL;
+
+		if( mode$ == DJM_CV1 )
+		{
+			actor$ = msg$.SendFrom.Go;
+		}
+		else if( mode$ == DJM_1V2 )
+		{
+			actor$ = GoDb.FindGoidByScid( target1$ ).Go;
+		}
+		else if( mode$ == DJM_1VC )
+		{
+			actor$ = GoDb.FindGoidByScid( target1$ ).Go;
+		}
+		else
+		{
+			report.errorf( "%s, scid 0x%08x using using unsupported mode.\n", owner.Go.TemplateName, owner.Go.Scid );
+			return;
+		}
+
+		// assign command to actor
+
+		if( actor$ != NULL )
+		{
+			if( !actor$.IsInAnyWorldFrustum )
+			{
+				report.errorf( "cmd_ai_dojob.skrit - Command scid 0x%08x giving next command to a go outside all frusti.  Go = %s, scid = 0x%08x\n", owner.Scid, actor$.TemplateName, actor$.Scid );
+				return;
+			}
+			req$.SECommandScid = owner.Scid;
+			actor$.Mind.SDoJob( req$ );
+		}
+		else
+		{
+			// $$$ error
+		}
+	}
+}
+
+
+event OnGoDrawDebugHud$
+{
+	////////////////////////////////////////
+	//	check validity of next command
+
+	Goid nextGoid$ = GoDb.FindGoidByScid( next_scid$ );
+
+	if( nextGoid$.IsValid )
+	{
+		if ( !nextGoid$.Go.IsCommand )
+		{
+			World.DrawDebugSphere( owner.go.Placement.Position,
+										 5.0,
+										 0xFFFF0000,
+										 "" );
+
+			World.DrawDebugSphere( owner.go.Placement.Position,
+										 5.5,
+										 0xFFFF0000,
+										 "next_command NOT a command" );
+			return;
+		}
+	}
+
+	if ( nextGoid$.IsValid )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 nextGoid$.go.Placement.Position,
+									 0xFFFFCC66, "next" );
+	}
+
+	Goid t1$ = GoDb.FindGoidByScid( target1$ );
+	if ( t1$.IsValid )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 t1$.go.Placement.Position,
+									 0xFFFFCC66, "target1" );
+	}
+	Goid t2$ = GoDb.FindGoidByScid( target2$ );
+	if ( t2$.IsValid )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 t2$.go.Placement.Position,
+									 0xFFFFCC66, "target2" );
+	}
+	Goid mod$ = GoDb.FindGoidByScid( modifier$ );
+	if ( mod$.IsValid )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 mod$.go.Placement.Position,
+									 0xFFFFCC66, "modifier" );
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////

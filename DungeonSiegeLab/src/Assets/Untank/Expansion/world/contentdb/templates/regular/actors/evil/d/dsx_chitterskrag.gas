@@ -1,0 +1,452 @@
+[t:template,n:dsx_chitterskrag_base]
+{
+  category_name = "1W_evil_d";
+  doc = "dsx_chitterskrag_base";
+  specializes = actor_evil;
+  [actor]
+    {
+      [skills]
+	{
+	  strength =     50, 0;
+	  intelligence = 50, 0;
+	  dexterity =    50, 0;
+	  melee =        50, 0;
+	}
+    }
+  [aspect]
+    {
+      experience_value = 50;
+      life             = 50;
+      max_life         = 50;
+      mana             = 50;
+      max_mana         = 50;
+      model = m_c_edm_chs_pos_1;
+      textures:0 = b_c_edm_chs;
+      material = flesh;
+		[voice]
+		{
+			[die]			{ priority = high;	* = s_e_die_chitterskrag_SED.gas;		}
+			[enemy_spotted]	{ priority = high; * = s_e_call_braak_SED; }
+		}
+
+    }
+  [attack]
+    {
+      attack_range = 0.5;
+      damage_max = 20; //! Do by hand, on a curve.  For low values, ~==XP (6xp => 6damage; 90xp=> 50damage)
+      damage_min = 20; //! Same as damage_max
+    }
+  [body]
+    {
+      avg_move_velocity = 2.5;
+      [bone_translator]
+	{
+	  body_anterior = bip01_head;
+	  body_mid = bip01_spine_01;
+	  body_posterior = bip01_pelvis;
+	  kill_bone = bip01_spine_01;
+	 // shield_bone = shield_grip;
+	 // weapon_bone = weapon_grip;
+	}
+      [weapon_scales]
+	{
+	  as_single_melee = 1.5, 1.5, 1.5;
+	}
+      [chore_dictionary]
+	{
+	  chore_prefix = a_c_edm_chs_fs;
+	  [chore_attack]
+	    {
+	      chore_stances = 0;
+	      skrit = select_attack;
+	      [anim_files]
+		{
+		  00 = at;
+		  01 = at-02;
+		}
+	    }
+	  [chore_default]
+	    {
+	      chore_stances = 0;
+	      skrit = infinite_loop;
+	      [anim_files] { 00=ds; }
+	    }
+	  [chore_die]
+	    {
+	      chore_stances = 0;
+	      skrit = select_transition;
+	      [anim_files] { 00=di; }
+	    }
+	  [chore_fidget]
+	    {
+	      chore_stances = 0;
+	      skrit = select_fidget;
+	      [anim_files] { 00=dsf; }
+	    }
+	  [chore_walk]
+	    {
+	      chore_stances = 0;
+	      skrit = select_walk;
+	      [anim_files] 
+		{ 
+			00=wl; // 01=rl; //alternate 
+		}
+	    }
+	  [chore_magic]
+	  {
+		chore_stances = 0;
+		skrit = select_attack;
+		[anim_files]{ 00=mg; }
+	  }
+	}
+    }
+  [common]
+    {
+      screen_name = "ChitterSkraal"; //--
+      membership = chitterskrag, monster; //--
+    }
+  [defend] { defense = 50; }
+
+  [mind]
+    {
+	jat_fidget				= world\ai\jobs\common\job_fidget.skrit
+	?curious				= 0.75
+	&wander					= 0.8
+	&social					= 0.1
+	&interest				= interest
+	&delay_min				= 6
+	&delay_max				= 16
+	&still					= false;
+	on_enemy_spotted_alert_friends 		= true;
+	jat_brain				= world\ai\jobs\common\brain_hero.skrit
+	?actor_joins_existing_party		= true
+	&actor_creates_own_party		= true
+	&party_template				= "party_dsx_chitterskrag";
+	com_channels				= dyn_party, chitterskrag;
+	com_range				= 14.0;
+	personal_space_range 			= 0.7;
+	melee_engage_range			= 14.0;
+	ranged_engage_range	 		= 14.0;
+	sight_range				= 14.0;
+	actor_life_ratio_low_threshold 		= 0.5;
+     }
+}
+ 
+
+[t:template,n:dsx_chitterskrag_one]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_chitterskrag_one";
+	specializes = dsx_chitterskrag_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength =     14, 0;
+			intelligence = 8, 0;
+			dexterity =    10, 0;
+			melee =        12, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 406;
+		life             = 314;
+		max_life         = 314;
+		mana             = 50;
+		max_mana         = 50;
+		model = m_c_edm_chs_pos_1;
+		textures:0 = b_c_edm_chs;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max 	= 77; 
+		damage_min 	= 66;
+	}
+	[common]
+	{
+		screen_name = "Chitterskrag";
+		membership = monster;
+	}
+	[defend] { defense = 154; }
+	[inventory]
+	{
+		drop_at_use_point = true;
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 16, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 331;
+					max = 658;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/33-44;
+					il_main = #armor/13-100;
+					il_main = #*/33-44;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/36-49;
+					il_main = #armor/-rare(1)/62-146;
+					il_main = #*/-rare(1)/36-49;
+				}
+				
+			}
+		}
+	}
+}
+
+[t:template,n:dsx_chitterskrag_baby]
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_chitterskrag_baby";
+	specializes = dsx_chitterskrag_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength =     14, 0;
+			intelligence = 8, 0;
+			dexterity =    10, 0;
+			melee =        11, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 262;
+		life             = 157;
+		max_life         = 157;
+		mana             = 50;
+		max_mana         = 50;
+		model = m_c_edm_chs_pos_1;
+		scale_base = 0.35;
+		[voice]
+		{
+			[die]			{ priority = high;	* = s_e_die_baby_chitterskrag_SED;		}
+			[enemy_spotted]	{ priority = high; * = s_e_call_baby_chitterskrag_SED; }
+		}
+		textures:0 = b_c_edm_chs;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 53;
+		damage_min = 47;
+	}
+	[common]
+	{
+		screen_name = "Immature Chitterskrag"; //--
+		membership = monster; //--
+	}
+	[defend] { defense = 90; }
+	[body]
+	{
+		avg_move_velocity = 5;
+	}
+	[inventory]
+	{
+		drop_at_use_point = true;
+		[pcontent]
+		{
+		/* Generated: Tue Jun 17 11:13:15 2003
+			Level 15, Weak */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 268;
+					max = 533;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.1;
+					il_main = #weapon/28-41;
+					il_main = #armor/11-90;
+					il_main = #*/28-41;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-rare(1)/25-44;
+					il_main = #armor/-rare(1)/53-90;
+					il_main = #*/-rare(1)/25-44;
+				}
+				
+			}
+		}
+	}
+}
+ 
+
+[t:template,n:dsx_chitterskrag_two]
+//balanced to Level 13
+{
+	category_name = "1W_evil_d";
+	doc = "dsx_chitterskrag_two";
+	specializes = dsx_chitterskrag_base;
+	[actor]
+		{
+		[skills]
+		{
+			strength 		= 14, 0;
+			intelligence 	= 8, 0;
+			dexterity 		= 10, 0;
+			ranged 			= 11, 0;
+			combat_magic	= 11, 0;
+			nature_magic	= 11, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value = 406;
+		life             = 313;
+		max_life         = 313;
+		mana             = 50;
+		max_mana         = 50;
+		model = m_c_edm_chs_pos_2;
+		scale_base = 1.0;
+		textures:0 = b_c_edm_chs-03;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 56; 
+		damage_min = 40;
+	}
+	[common]
+	{
+		screen_name = "Spewing Chitterskrag"; //--
+		membership = monster; //--
+	}
+	[defend] { defense = 105; }
+	[body]
+	{
+		avg_move_velocity = 2.5;
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_chs_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00 = at;
+					01 = at-02;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files] { 00=dsf; }
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] 
+				{ 
+				00=rl; //alternate //01=wl;  
+				}
+			}
+			[chore_magic]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]{ 00=mg; }
+			}
+		}
+	}
+	[mind]
+	{
+		jat_brain						= world\ai\jobs\common\brain_hero.skrit
+		?actor_joins_existing_party		= true;
+		
+		actor_weapon_preference			= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+		actor_auto_switches_to_karate	= false;
+		actor_auto_switches_to_melee	= false;
+		
+		personal_space_range = 0.75;
+	}
+	[inventory]
+	{
+		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=spell_chitterskrag_poison; }
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 16, Medium */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 331;
+					max = 658;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_small;
+					il_main = potion_health_small;
+				}
+				[oneof*]
+				{
+					chance = 0.15;
+					il_main = #weapon/33-44;
+					il_main = #armor/13-100;
+					il_main = #*/33-44;
+				}
+				[oneof*]
+				{
+					chance = 0.0075;
+					il_main = #weapon/-rare(1)/36-49;
+					il_main = #armor/-rare(1)/62-146;
+					il_main = #*/-rare(1)/36-49;
+				}
+				
+			}
+		}
+	}
+
+}
+
+
+ 
+

@@ -1,0 +1,7 @@
+[t:sed,n:s_e_hit_scrub_howler_SED]
+{
+	sound_effect_file = "s_e_hit_scrub_howler";
+	max_simultaneous_samples = 3;
+	min_playback_rate = 0.85;
+	max_playback_rate = 1.15;
+}

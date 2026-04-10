@@ -1,0 +1,231 @@
+[effect_script*]
+{
+	name	=lightning_emitter;
+
+	script	=[[
+				// This script expects a number of values passed in the params to create the
+				// lightning effect.  They should all be float values.
+				// [0] X-offset from TARGET of the bottom
+				// [1] Z-offset from TARGET of the bottom
+				// [2] X-offset from TARGET of the top
+				// [3] Y-offset from TARGET of the top
+				// [4] Z-offset from TARGET of the top
+				// [5] X-offset from TARGET of the lights
+				// [6] Y-offset from TARGET of the lights
+				// [7] Z-offset from TARGET of the lights
+		
+		
+				// lightning effects need two targets.  For simplicity, we create two invisible
+				// orbiters with radius of zero to be the ends of the lightning bolt.
+				
+				// The first orbiter is snapped to the ground so the lightning terminates at
+				// the ground.
+				sfx create orbiter #TARGET
+					"invisible()radius(0)offset([0],0,[1])dur(0.5)";
+				set $bottomPoint #PEEK;
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;
+
+				sfx create orbiter #TARGET
+					"invisible()radius(0)offset([2],[3],[4])dur(0.5)";
+				set $topPoint #PEEK;
+				sfx start #POP;
+
+				//The lightning bolt.
+				sfx create lightning #TARGET 
+					"must_update()scale(0.5)bolt_life(0.5)mindisplace(-0.3)maxdisplace(0.3)
+					color0(1,1,1)subd(0.5)dur(0.5)";
+				sfx rat #PEEK;
+				sfx target #PEEK $bottomPoint;
+				sfx target #PEEK $topPoint;
+				sfx start #POP;
+
+				// Some fire at the contact point on the ground.  Snap it to the ground
+				// so it doesn't sink below the terrain.
+				sfx create fire #TARGET 
+					"dur(0.5)color0(1,1,1)velocity(0.0,4.0,0.0)accel(0.0,0.7,0.0)
+					flamesize(2.5)offset([0],0,[1])";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;
+
+				// CRASH! BOOM!
+				sound play s_e_ambient_thunder at #TARGET_POSITION dist 3 50;
+
+				//Flash one light
+				sfx create lightsource #TARGET 
+					"dur(0.6)radius(15)color0(1,1,1)draw_shadow()tin(0.01)tout(0.4)
+					offset([5],[6],[7])";
+				sfx start #POP;
+
+				pause 0.25;
+				//Then bump with a bigger light.
+				sfx create lightsource #TARGET 
+					"dur(1.0)radius(30)color0(1,1,1)draw_shadow()tin(0.01)tout(0.5)
+					offset([5],[6],[7])";
+				sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=fire_column_emitter;
+
+	script	=[[
+
+				sfx create fire #TARGET
+					"must_update()color0(1,.3,.1)color1(0,0,0)flamesize(2)scale(1.5)
+					radius(0.015)ts(5)fctrl(0,0,6)min_radius(2)max_radius(3)
+					count(100)dur(1)velocity(0,20,0)alphafade(.6)";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;		
+
+				sfx create fire #TARGET
+					"must_update()color0(.8,.7,.5)color1(0,0,0)flamesize(1)scale(1.5)
+					radius(0.015)ts(5)fctrl(0,0,6)min_radius(1)max_radius(3)
+					count(100)dur(1)velocity(0,20,0)alphafade(.6)";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;		
+
+				pause .5;
+
+				sfx create fire #TARGET
+					"must_update()color0(5,.3,.1)color1(0,0,0)flamesize(1)scale(1.5)
+					radius(0.015)fctrl(0,0,6)min_radius(1)max_radius(3)
+					dur(.6)alphafade(.85)";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;		
+			
+				pause .5;
+
+				sfx create fire #TARGET
+					"must_update()color0(.1,.3,.3)color1(0,0,0)flamesize(1)scale(1.5)
+					radius(0.015)fctrl(0,0,6)min_radius(1)max_radius(3)
+					dur(.3)alphafade(.6)dark()offset(0,2,0)";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;		
+			]];
+}
+
+[effect_script*]
+{
+	name	=water_column_emitter;
+
+	script	=[[
+
+				pause .2;
+
+				sfx create orbiter #TARGET
+					"iphi(20)radius(.75)dur(1)offset(0,.3,0)invisible()";
+				set $orb1 #PEEK;
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;
+
+				sfx create fire #TARGET
+					"color0(.8,.8,.8)flamesize(.3)dur(1)radius(.1)
+					velocity(0,0,0)accel(0,0,0)count(100)max_radius(2)ts(5)alphafade(.2)";
+				sfx rat #PEEK;
+				sfx target #PEEK $orb1;
+				sfx start #POP;
+
+				sfx create orbiter #TARGET
+					"iphi(20)phi(3.14)radius(.75)dur(1)offset(0,.3,0)invisible()";
+				set $orb2 #PEEK;
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;
+
+				sfx create fire #SOURCE
+					"color0(.8,.8,.8)flamesize(.3)dur(1)radius(.1)
+					velocity(0,0,0)accel(0,0,0)count(100)max_radius(2)ts(5)alphafade(.2)";
+				sfx rat #PEEK;
+				sfx target #PEEK $orb2;
+				sfx start #POP;
+
+				pause .6;
+
+				sfx create fire #TARGET
+					"must_update()color0(1,1,1)color1(.7,.7,.7)flamesize(1.5)scale(.5)
+					radius(0.1)ts(5)fctrl(0,0,6)min_radius(2)max_radius(3)
+					count(100)dur(.5)velocity(0,10,0)alphafade(.6)";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;
+
+				sfx create fire #TARGET
+					"must_update()color0(.1,.3,.8)color1(0,0,0)flamesize(2)scale(.5)
+					radius(0.1)ts(5)fctrl(0,0,6)min_radius(2)max_radius(3)
+					count(100)dur(.5)velocity(0,10,0)alphafade(.6)";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;		
+
+				sfx create fire #TARGET
+					"must_update()color0(.2,.4,.6)color1(0,0,0)flamesize(1)scale(.5)
+					radius(0.1)ts(5)fctrl(0,0,6)min_radius(1)max_radius(3)
+					count(100)dur(.5)velocity(0,10,0)alphafade(.6)";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;	
+				
+				/*sfx create fire #TARGET
+					"must_update()color0(.1,.2,.7)color1(0,0,0)flamesize(2)scale(.5)
+					radius(0.5)ts(5)fctrl(0,0,6)min_radius(1)max_radius(3)
+					count(100)dur(.5)velocity(0,1,0)alphafade(.2)";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;
+
+				sfx create fire #TARGET
+					"must_update()color0(.8,.9,1)color1(1,1,1)flamesize(2)scale(.5)
+					radius(0.5)ts(5)fctrl(0,0,6)min_radius(1)max_radius(3)
+					count(100)dur(.5)velocity(0,1,0)alphafade(.2)";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;*/
+
+				pause .2;
+
+				sfx create fire #TARGET
+					"must_update()color0(.1,.3,.5)color1(0,0,0)flamesize(1)scale(.5)
+					radius(0.1)fctrl(0,0,6)min_radius(1)max_radius(3)
+					dur(.3)alphafade(.85)";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;		
+
+				sfx create fire #TARGET
+					"must_update()color0(.3,.3,.1)color1(0,0,0)flamesize(1)scale(.5)
+					radius(0.1)fctrl(0,0,6)min_radius(1)max_radius(3)
+					dur(.1)alphafade(.6)dark()";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;	
+
+				sfx create fire #TARGET
+					"must_update()color0(.1,.2,.5)color1(0,.1,.4)flamesize(5)scale(.5)
+					radius(.1)fctrl(0,0,6)min_radius(1)max_radius(3)
+					dur(.1)alphafade(.6)";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;
+
+				sfx create fire #TARGET
+					"must_update()color0(1,1,1)color1(.8,.8,.8)flamesize(5)scale(.5)
+					radius(.1)fctrl(0,0,6)min_radius(1)max_radius(3)
+					dur(.2)alphafade(.3)";
+				sfx snap_to_ground #PEEK;
+				sfx start #POP;
+			]];
+}
+
+[effect_script*]
+{
+	name	=napalm_emitter_fire;
+
+	script	=[[
+
+			sfx create fire #TARGET
+				"color0(1,.3,.1)color1(0,0,0)scale(2)alphafade(.1)dur(.5)
+				min_radius(0)max_radius(0)velocity(0,10,0)accel(0,-10,0)";
+			sfx start #POP;
+
+			sfx create explosion #TARGET
+				"color0(1,.7,0)omni_dir()";
+			sfx start #POP;
+
+			sfx create explosion #TARGET
+				"color0(1,.3,0)omni_dir()";
+			sfx start #POP;
+			]];
+}

@@ -1,0 +1,16 @@
+[t:template,n:screen_fade]
+{
+	specializes	= command;
+	doc			= "screen fade";
+    category_name = "effects";
+
+	[gizmo]
+	{
+//		model = m_i_glb_SE-effcomm;
+		texture = ;
+		diffuse_color = 1.0, 0.1, 0.85;
+		use_diffuse_color = true;
+	}
+	
+	[screen_fade]  {  }
+}

@@ -1,0 +1,22 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  on_client.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// This skrit should make GO's that would appear only on the server appear on the client
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$			= false;
+property string _doc$					= "make GO's that would appear only on the server appear on the client";
+
+owner = GoSkritComponent;

@@ -1,0 +1,466 @@
+[t:template,n:3W_dsx_drake_base]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_Drake Base";
+	specializes = actor_evil;	
+	[aspect]
+	{
+		draw_shadow = false;
+		experience_value = 159258;
+		life = 6;
+		max_life = 6;
+		mana = 6;
+		max_mana = 6;
+		model = m_c_edm_dk_pos_1;
+		textures:0 = b_c_edm_dk;
+		[voice]
+		{
+			[die] { priority = high; * = s_e_die_drake; }
+		}
+	}	
+	[body]
+	{
+		avg_move_velocity = 4.990000;
+		[bone_translator]
+		{
+			body_anterior = Bip01_Head;
+			body_mid = Bip01_Spine2;
+			body_posterior = Bip01_Pelvis;
+			kill_bone = Bip01_Neck1;
+			shield_bone = Bip01_L_Hand;
+			weapon_bone = Bip01_R_Hand;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_dk_fs;
+			[chore_attack]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]
+				{
+					00=at-02;
+					01=at-03;
+				}
+			}
+			[chore_magic]
+			{
+				chore_stances = 0;
+				skrit = select_attack;
+				[anim_files]{00=at;}
+			}
+			[chore_misc]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files]
+				{
+					slep = dsf;
+					wake = rv;
+				}
+			}
+			[chore_default]
+			{
+				chore_stances = 0;
+				skrit = infinite_loop;
+				[anim_files] { 00=ds; }
+			}
+			[chore_die]
+			{
+				chore_stances = 0;
+				skrit = select_transition;
+				[anim_files] { 00=di; }
+			}
+			[chore_fidget]
+			{
+				chore_stances = 0;
+				skrit = select_fidget;
+				[anim_files]
+				{
+					00=dff;
+					00=dff-02;
+					00=dff-03;
+				}
+			}
+			[chore_walk]
+			{
+				chore_stances = 0;
+				skrit = select_walk;
+				[anim_files] { 00=fl; }
+			}
+		}
+	}
+	[mind]
+	{
+		jat_fidget = world\ai\jobs\common\job_fidget.skrit
+			?meander	 = false
+			&still		 = false;
+	
+		jat_attack_object_melee	= world\ai\jobs\common\job_attack_object_melee.skrit
+			?persistence				= 0.0;
+	
+		actor_weapon_preference			= WP_MAGIC;
+		actor_auto_switches_to_magic	= true;
+		actor_auto_switches_to_karate	= true;
+		actor_auto_switches_to_melee	= true;	
+		on_enemy_entered_icz_switch_to_melee = true;		
+		melee_engage_range = 3;
+		personal_space_range = 1.5;
+		inner_comfort_zone_range = 3.0;
+		ranged_engage_range = 20.0;
+		sight_range = 20.0;
+	}
+}
+
+[t:template,n:3W_dsx_drake]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_drake";
+	specializes = 3W_dsx_drake_base;
+}
+
+[t:template,n:3W_dsx_drake_feathered]
+{
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_drake_feathered";
+	specializes = 3W_dsx_drake_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength =	45.3, 0;
+			intelligence =	9.2, 0;
+			dexterity =	 24.7, 0;
+			melee =	 80,	0;
+		}		 
+	}
+	[aspect]
+	{		
+		[textures]	{ 0 = b_c_edm_feathered_drakeling; }
+		experience_value = 1271256;
+		life = 890;
+		max_life = 890;
+		mana = 430.9;
+		max_mana = 430.9;
+		material = claw;
+		model = m_c_edm_FLDRKLNG_pos_1;
+		[voice]
+		{
+			[die]			{ priority = high; * = s_e_die_drakeling_SED; }
+			[enemy_spotted]	{ priority = high; * = s_e_call_drakeling_SED;	}
+			}
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 113.4;
+		damage_min = 75.9;
+	}
+	[body]
+	{
+		avg_move_velocity = 4.990000;
+		[bone_translator]
+		{
+			body_anterior = bone01;
+			body_mid = bone01;
+			body_posterior = bone01;
+			kill_bone = bone01;
+			shield_bone = bone01;
+			weapon_bone = bone01;
+		}
+		[chore_dictionary]
+		{
+			chore_prefix = a_c_edm_ss_fs;
+			[chore_attack]
+				{
+					chore_stances = 0;
+					skrit = select_attack;
+					[anim_files] { 00=at; }
+				}
+			[chore_default]
+				{
+					chore_stances = 0;
+					skrit = infinite_loop;
+					[anim_files] { 00=ds; }
+				}
+			[chore_die]
+				{
+					chore_stances = 0;
+					skrit = select_transition;
+					[anim_files] { 00=di; }
+				}
+			[chore_fidget]
+				{
+					chore_stances = 0;
+					skrit = select_fidget;
+					[anim_files] { 00=dff; }
+				}
+			[chore_walk]
+				{
+					chore_stances = 0;
+					skrit = select_walk;
+					[anim_files] { 00=fl; }
+				}
+		}
+	}
+	[common] 
+	{ 
+		screen_name="Feathered Drakeling";
+		membership = monster;
+	}
+	[defend] { defense=194.4; }
+}
+
+
+[t:template,n:3W_dsx_drake_death_one]
+{
+// Level 15, Hard melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_drake_death_one";
+	specializes = 3W_dsx_drake_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 43.7, 0;
+			intelligence 	= 12.5, 0;
+			dexterity		= 23.7, 0;
+			melee			= 82, 0;
+			combat_magic	= 82, 0;
+			nature_magic	= 82, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value 	= 1258284;
+		life 			= 2532;
+		max_life 		= 2532;
+		mana 			= 270;
+		max_mana 		= 270;
+		
+		textures:0 = b_c_edm_ddk-01;
+
+	}
+	[defend] { defense = 954; }
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 594;
+		damage_min = 432;
+		damage_bonus_min_cmagic = 360;
+		damage_bonus_max_cmagic = 495;
+	}
+
+	[common]
+	{
+		screen_name="Rahk";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("drake_wing");
+				condition* = receive_world_message("we_anim_sfx",2);
+			}
+			[*]
+			{
+				action* = call_sfx_script("drake_scream");
+				condition* = receive_world_message("we_anim_sfx",3);
+			}
+		}
+		membership = monster;
+	}
+	[inventory]
+	{
+   		selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=dsx_spell_drake_breath_red; }
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 14, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 107470;
+					max = 213866;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_super;
+					il_main = potion_health_super;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/173-236;
+					il_main = #armor/90-540;
+					il_main = #*/173-236;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/236-282;
+					il_main = #armor/-rare(1)/372-822;
+					il_main = #*/-rare(1)/236-282;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/236-282;
+					il_main = #armor/-unique(2)/372-822;
+					il_main = #*/-unique(2)/236-282;
+				}			
+			}
+		}
+	}
+}
+
+
+
+[t:template,n:3W_dsx_drake_death_two_base]
+{
+	// Level 15, Hard melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_drake_death_two_base";
+	specializes = 3W_dsx_drake_base;
+	[actor]
+	{
+		[skills]
+		{
+			strength		= 43.7, 0;
+			intelligence 	= 14, 0;
+			dexterity		= 23.7, 0;
+			melee			= 82, 0;
+			combat_magic	= 82, 0;
+			nature_magic	= 82, 0;
+		}
+	}
+	[aspect]
+	{
+		experience_value 	= 1258284;
+		life 			 	= 2892;
+		max_life 			= 2892;
+		mana 				= 270;
+		max_mana 			= 270;
+
+		model = m_c_edm_dk_pos_1;
+		textures:0 = b_c_edm_ddk-02;
+	}
+	[attack]
+	{
+		attack_range = 0.5;
+		damage_max = 594;
+		damage_min = 432;
+		damage_bonus_min_cmagic = 360;
+		damage_bonus_max_cmagic = 495;
+	}
+
+	[common]
+	{
+		screen_name="Scaly Rahk";
+		[template_triggers]
+		{
+			[*]
+			{
+				action* = call_sfx_script("drake_wing");
+				condition* = receive_world_message("we_anim_sfx",2);
+			}
+			[*]
+			{
+				action* = call_sfx_script("drake_scream");
+				condition* = receive_world_message("we_anim_sfx",3);
+			}
+		}
+		membership = monster;
+	}
+ 
+	[defend] { defense = 906; }
+	[inventory]
+	{
+    	selected_active_location = il_active_primary_spell;
+		[other] { il_active_primary_spell=dsx_spell_drake_breath_black; }
+		[pcontent]
+		{
+			/* Generated: Tue Jun 17 11:13:15 2003
+			Level 14, Strong */
+			[oneof*]
+			{
+				[gold*]
+				{
+					chance = 0.2;
+					min = 107470;
+					max = 213866;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = potion_mana_super;
+					il_main = potion_health_super;
+				}
+				[oneof*]
+				{
+					chance = 0.2;
+					il_main = #weapon/173-236;
+					il_main = #armor/90-540;
+					il_main = #*/173-236;
+				}
+				[oneof*]
+				{
+					chance = 0.01;
+					il_main = #weapon/-rare(1)/236-282;
+					il_main = #armor/-rare(1)/372-822;
+					il_main = #*/-rare(1)/236-282;
+				}
+				[oneof*]
+				{
+					chance = 0.005;
+					il_main = #weapon/-unique(2)/236-282;
+					il_main = #armor/-unique(2)/372-822;
+					il_main = #*/-unique(2)/236-282;
+				}			
+			}
+		}
+	}
+}
+
+
+[t:template,n:3W_dsx_drake_death_two]
+{
+	// Level 15, Hard melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_drake_death_two";
+	specializes = 3W_dsx_drake_death_two_base;
+}
+
+[t:template,n:3W_dsx_drake_death_two_boss]
+{
+	// Level 15, Hard melee
+	category_name = "3W_evil_d";
+	doc = "3W_dsx_drake_death_two_base";
+	specializes = 3W_dsx_drake_death_two_base;
+	[aspect]
+	{
+	  f scale_multiplier = 1.5;
+		life 			 	= 3510;
+		max_life 			= 3510;
+	}
+	[common]
+	{
+		screen_name = "Krakemaw the Putrid";
+		membership = monster,immune_charm,immune_control,immune_freeze,immune_polymorph,immune_align_change,immune_explode;
+		[template_triggers]
+		{
+			[*]
+			{
+				condition* = receive_world_message("WE_ENTERED_WORLD");
+				single_shot = true;
+				no_trig_bits = true;
+				action* = call_sfx_script("unique_ray_red(sgx)");
+			}
+		}
+	}
+}
+
+

@@ -1,0 +1,34 @@
+[multiplayer]
+{
+	[settings]
+	{
+		default_multiplayer_map = multiplayer_world;
+		ghost_timeout = 60;  // seconds until ghosting wears off
+	}
+
+	[characters]
+	{
+		* = farmboy;
+		* = farmgirl;
+		* = dwarf;
+		* = skeleton_good;
+	}
+
+	[ingame]
+	{
+		player_label_font = b_gui_fnt_12p_copperplate-light;
+	}
+
+	[game_timer]
+	{
+		// List all the minute denominations of time you want
+		* = 15;
+		* = 30;
+		* = 45;
+		* = 60;
+		* = 90;
+		* = 120;
+		* = 180;
+		* = 300;
+	}
+}

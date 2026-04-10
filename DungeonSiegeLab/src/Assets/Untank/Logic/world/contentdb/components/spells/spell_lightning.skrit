@@ -1,0 +1,55 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_lightning.skrit
+// Author(s):  Eric Tams
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Wraping lightning damage into the attack component for a spell.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string	effect_script$		= ""	doc = "Effect script to call for effect";
+property float	dur$				= 1.0	doc = "How long the effect plays.";
+
+owner = GoSkritComponent;
+#include "k_inc_spl_utils" 
+
+Goid 		target$;
+Goid 		caster$;
+
+startup state Idle$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{	
+		if( e$ == WE_REQ_CAST )
+		{
+			target$ 			= MakeGoid( msg$.GetData1() );
+			caster$ 			= msg$.GetSendFrom();
+			
+			if( !target$.IsValidMp || !caster$.IsValidMp )
+			{
+				SetState Finished$;
+				return;
+			}
+			
+			PackLightning$( dur$ );
+			
+			Siegefx.SRunScript(effect_script$,target$,caster$,params$,owner.goid, e$ );
+			
+			this.CreateTimer( 1, dur$ );
+		}
+	}
+	transition -> Finished$: OnTimer( 1 );
+}
+
+state Finished$
+{
+	event OnEnterState$
+	{	
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 10 );	
+	}
+}

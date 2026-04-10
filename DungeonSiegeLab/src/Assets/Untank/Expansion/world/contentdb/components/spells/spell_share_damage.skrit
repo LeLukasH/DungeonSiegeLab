@@ -1,0 +1,242 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_share_damage.skrit
+// Author(s):  Jason Dunlop
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+// skrit applies state to the casted members
+
+
+property string effect_script$		= ""	doc = "Name of the SiegeFx script that will be providing the visual.";
+property string effect_params$		= ""   	doc = "Parameters to send to SiegeFx script";
+property string description$		= ""	doc = "Description of enchantment being applied";
+property string immunity$			= ""	doc = "If the target contains this membership then it is immune to this spell.";
+property float	radius$				= 0.0	doc = "The distance to search from the target for characters to affect.";
+
+owner = GoSkritComponent;
+
+Goid 	caster$;
+float	duration$;
+Goid	target$;
+
+startup state CastBegin$
+{
+ 	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{
+		if( e$ == WE_REQ_CAST )
+		{
+		
+			/////////////////////////////
+			// Normal Go
+			
+			caster$ = msg$.GetSendFrom();
+			target$ = MakeGoid( msg$.GetData1() );
+
+			if( target$.Go.Hasmind )
+			{
+				// we need to find all characters near the caster					
+				target$.Go.Mind.TempGopColl1.Clear;
+				
+				target$.Go.Mind.TempQtColl1.Clear;
+				target$.Go.Mind.TempQtColl1.Add( QT_ACTOR );
+				target$.Go.Mind.TempQtColl1.Add( QT_ALIVE_CONSCIOUS );
+				target$.Go.Mind.TempQtColl1.Add( QT_FRIEND );
+					
+				target$.Go.Mind.GetVisible( target$.Go.Mind.TempQtColl1, target$.Go.Mind.TempGopColl1, radius$ );
+										
+				int i$ = 0;
+				int iend$ = target$.Go.Mind.TempGopColl1.Size();
+					
+				int enchanted$ = 0;
+				Go temp$;
+				bool canCastUpon$;
+
+				// now loop through the characters
+				while(i$ < iend$)
+				{
+					temp$ = target$.Go.Mind.TempGopColl1.Get( i$ );
+				
+					// Can we cast on this thing - it must be in our party
+					if( temp$.IsAnyHumanPartyMember() )
+					{
+						// we don't want to share any damage with pack animals.
+						if( !temp$.inventory.IsPackOnly() )
+						{
+							// default to can cast
+							canCastUpon$ = true;
+							
+							// check if the character is immune to this
+							if( !StringTool.IsEmpty( immunity$ ) )
+							{
+								if( temp$.Common.Membership.Contains( immunity$ ) )
+								{
+									canCastUpon$ = false;
+								}
+							}
+	
+							if (canCastUpon$)
+							{
+								// create Omni version of the spell.
+								GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.go.Parent.Goid, owner.goid );
+								cloneReq$.Omni = true;
+								Goid new_spell$ = GoDb.SCloneGo( cloneReq$ );
+	
+								// send Omni version an Activate to get it started.
+								PostWorldMessage( WE_REQ_ACTIVATE, target$, new_spell$, MakeInt(temp$.Goid), 0 );
+								enchanted$ += 1;
+							}
+						}
+					}
+			        i$ += 1;
+			    }
+			}
+
+
+			if( !owner.Go.Magic.IsCastableOn( target$.Go, false ) )
+			{
+				//report.generic("returning (1)\n");
+				SetState Finished$;
+				return;	
+			}
+
+			if( !target$.IsValid || !caster$.IsValid )
+			{
+				//report.generic("returning (2)\n");
+				SetState Finished$;
+				return;
+			}
+				 
+			if( !StringTool.IsEmpty( immunity$ ) )
+			{
+				if( target$.Go.Common.Membership.Contains( immunity$ ) )
+				{
+					SetState Finished$;
+					return;
+				}
+			}
+				
+			if( Owner.go.Parent != NULL )
+			{
+				// Create an Omni version of the spell.
+				GoCloneReq cloneReq$ = MakeGoCloneReq( Owner.go.Parent.Goid, owner.goid );
+				cloneReq$.Omni = true;
+				Goid new_spell$ = GoDb.SCloneGo( cloneReq$ );
+				
+				// Send a message to the omni version of the Spell to get it started.
+				PostWorldMessage( WE_REQ_ACTIVATE, target$, new_spell$, MakeInt(target$), 0 );
+			}
+
+			// Delete Normal version of the spell.
+			SetState Finished$;
+			return;
+			
+		}
+		else if ( e$ == WE_REQ_ACTIVATE )
+		{
+			
+			/////////////////////////////
+			// Omni Go
+
+			target$ = MakeGoid( msg$.GetData1() );
+			caster$ = msg$.GetSendFrom();
+
+			if( !target$.IsValid || !caster$.Isvalid )
+			{
+				SetState RestoreState$;
+				return;
+			}
+			
+			// Check to see if the enchantment has already been cast on this go
+			if( target$.Go.Actor.HasGenericState( owner.Go.Magic.StateName ) )
+			{
+				SetState Finished$;
+				return;
+			}
+
+			// calculate our duration
+			duration$ = owner.Go.Magic.EvaluateEffectDuration(caster$.Go, target$.Go);
+
+			// Add the effected state so this can only happen once
+			target$.Go.Actor.SAddGenericState( owner.Go.Magic.StateName, description$, duration$, caster$, owner.goid, owner.go.magic.GetMagicLevel( caster$.go ) );
+			
+			// Start the visual
+			if( effect_script$ != "" )
+			{
+				SiegeFx.SRunMpScript( effect_script$, target$, caster$, effect_params$, owner.Goid, e$ );
+			}
+			
+			this.CreateTimer( 1, duration$);
+
+			// we need to watch the guy to see if he is knocked unconscious so we can stop the effect
+			GoDb.StartWatching( owner.Goid, target$);
+		
+		}
+	}
+	transition -> RestoreState$: OnTimer( 1 );
+	transition -> RestoreState$: OnGoHandleCCMessage( WE_KILLED );
+	transition -> RestoreState$: OnGoHandleCCMessage( WE_LOST_CONSCIOUSNESS );
+}
+
+state RestoreState$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+		// If the go is still alive then restore his state
+		if( target$.IsValid ) {
+			// don;t have to watch the character any longer
+			GoDb.StopWatching( owner.Goid, target$);
+			// remove the state so this can be affected again
+			target$.Go.Actor.SRemoveGenericState( owner.Go.Magic.StateName );
+		}
+		
+		SetState( StopEffect$ );
+	}
+}
+
+state InActive$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	trigger OnTimer$(1)
+	{
+		SetState( StopEffect$ );
+	}
+	
+	event OnEnterState$
+	{
+		this.CreateTimer( 1, 10 );
+	}
+}
+
+state StopEffect$
+{
+	/////////////////////////////
+	// Omni Go
+	
+	event OnEnterState$
+	{
+		if( target$.IsValid ) {
+			SiegeFx.SStopScript( target$, effect_script$ );
+		}
+		
+		SetState Finished$;
+	}
+}
+
+state Finished$
+{
+	event OnEnterState$
+	{
+		// Delete this skrit
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 1 );
+	}
+}

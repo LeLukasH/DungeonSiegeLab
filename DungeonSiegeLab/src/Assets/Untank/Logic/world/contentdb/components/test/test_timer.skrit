@@ -1,0 +1,63 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  test_timer.skrit
+// Author(s):  Scott Bilas
+//
+// Copyright © 2001 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        = false;
+property string _doc$                = "Special marker";
+property string _required_component$ = "placement";
+
+// exported properties
+property string text$		= "<Configure me>";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+
+trigger OnGoDraw$
+{
+	SiegePos p$ = SiegePos.Copy( owner.Go.Placement.Position );
+	p$.pos.y = p$.pos.y + 1.0;
+	World.DrawDebugScreenLabel( p$, text$ );
+}
+
+int timer$;
+
+event OnConstruct$
+{
+	this.CreateTimer( 5, 0.75 );
+	this.CreateTimer( 0.6 );
+	this.SetTimerRepeatCount( 5, -1 );
+	timer$ = this.CreateFrameTimer( 50 );
+	this.SetTimerRepeatCount( timer$, 10 );
+}
+
+trigger OnTimer$( 5 )
+{
+	report.genericf( "Time timer fired\n" );
+}
+
+event OnTimer$( int id$, float delta$ )
+{
+	if ( id$ == timer$ )
+	{
+		report.genericf( "Frame timer fired\n" );
+	}
+	else
+	{
+		StringTool.AssignF( text$, "delta = %f", delta$ );
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////////

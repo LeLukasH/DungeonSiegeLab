@@ -1,0 +1,101 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  generic_accumtrigger.skrit
+// Author(s):  James Loe
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool			_server_only$			= false;
+property string			_doc$					= "Accumulate trigger";
+
+// exported properties
+property int			num_til_send$			= 0					doc = "Number of messages to accumulate before triggering";
+property eWorldEvent	message_increment$		= WE_REQ_ACTIVATE	doc = "Message to increment counter";
+property eWorldEvent	message_decrement$		= WE_REQ_DEACTIVATE doc = "Message to decrement counter";
+
+property eWorldEvent	message_when_active$	= WE_REQ_ACTIVATE	doc = "Message to send when triggered";
+property eWorldEvent	message_when_inactive$	= WE_REQ_DEACTIVATE doc = "Message to send when untriggered";
+
+property scid      		send_to_scid$								doc = "Scid of object to receive message when triggered";
+property bool			repeat_send$			= false				doc = "Send message each time a message is received while condition is met";
+
+property float			num_delay$				= 0.0				doc = "Delay (in seconds) before sending message";
+owner = GoSkritComponent;
+
+// globals
+int						current_num_messages$	= 0;
+bool					current_active$			= false;
+
+//////////////////////////////////////////////////////////////////////////////
+
+trigger OnGoDrawDebugHud$
+{
+	Goid goid$ = send_to_scid$.Goid;
+	if( goid$.IsValid )
+	{
+		World.DrawDebugDirectedLine( owner.go.Placement.Position,
+									 goid$.go.Placement.Position,
+									 MakeColor( 0, 1.0, 0, 0.5 ),
+									 ToString( message_when_active$ ) );
+	}
+}
+
+EvaluateMessageCount$
+{
+	// See if the message count is equal to or greater than our count
+	if( current_num_messages$ >= num_til_send$ )
+	{
+		if( !current_active$ || repeat_send$ )
+		{
+			// Send the world message
+			// SendWorldMessage( message_when_active$, send_to_scid$ );
+
+			//changed to support delays
+			PostWorldMessage( message_when_active$, owner.Goid, send_to_scid$, num_delay$ );
+
+			// Set to active
+			current_active$	= true;
+		}
+	}
+	else if( current_active$ || repeat_send$ )
+	{
+		// Send the world message
+		// SendWorldMessage( message_when_inactive$, send_to_scid$ );
+
+		//changed to support delays
+		PostWorldMessage( message_when_inactive$, owner.Goid, send_to_scid$, num_delay$ );
+
+
+		// Set to inactive
+		current_active$		= false;
+	}
+}
+
+event OnGoHandleMessage$( eWorldEvent e$, WorldMessage )
+{
+	if( e$ == message_increment$ )
+	{
+		// Increment counter
+		current_num_messages$	+= 1;
+
+		// Evaluate
+		EvaluateMessageCount$();
+	}
+
+	if( e$ == message_decrement$ )
+	{
+		// Increment counter
+		current_num_messages$	-= 1;
+
+		// Evaluate
+		EvaluateMessageCount$();
+	}
+}

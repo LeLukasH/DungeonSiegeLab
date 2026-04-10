@@ -1,0 +1,99 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  nodal_tex_swap.skrit
+// Author(s):  James Loe
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool		_server_only$			= true;
+property string		_doc$					= "Nodal texture swapping";
+
+// exported properties
+property SiegeId	siege_node$				= 0					doc = "Identifier of siege node whose textures you will be modifying";
+
+property string		texture_name1$			= ""				doc = "First texture you want to change";
+property string		texture_replace1$		= ""				doc = "First texture replacment";
+property string		texture_name2$			= ""				doc = "Second texture you want to change (leave empty if not needed)";
+property string		texture_replace2$		= ""				doc = "Second texture replacement (leave empty if not needed)";
+property string		texture_name3$			= ""				doc = "Third texture you want to change (leave empty if not needed)";
+property string		texture_replace3$		= ""				doc = "Third texture replacement (leave empty if not needed)";
+
+owner = GoSkritComponent;
+
+// globals
+int					texture_index1$			= -1;
+int					texture_index2$			= -1;
+int					texture_index3$			= -1;
+
+//////////////////////////////////////////////////////////////////////////////
+
+startup state Constructed$
+{
+	// $ wait in this state until the siege node is in the world
+
+	event OnGoUpdate$( float /*deltaTime$*/ )
+	{
+		if( siege_node$.IsValid )
+		{
+			if( !StringTool.IsEmpty( texture_name1$ ) && !StringTool.IsEmpty( texture_replace1$ ) )
+			{
+				texture_index1$	= WorldTerrain.FindNodalTextureIndex( siege_node$, texture_name1$ );
+
+				if( !StringTool.IsEmpty( texture_name2$ ) && !StringTool.IsEmpty( texture_replace2$ ) )
+				{
+					texture_index2$	= WorldTerrain.FindNodalTextureIndex( siege_node$, texture_name2$ );
+				}
+				if( !StringTool.IsEmpty( texture_name3$ ) && !StringTool.IsEmpty( texture_replace3$ ) )
+				{
+					texture_index3$	= WorldTerrain.FindNodalTextureIndex( siege_node$, texture_name3$ );
+				}
+
+				setstate Wait$;
+			}
+		}
+	}
+}
+
+state Wait$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( (e$ == WE_REQ_ACTIVATE) && siege_node$.IsValid )
+		{
+			// Set the new textures
+			WorldTerrain.SReplaceNodalTexture( siege_node$, texture_index1$, texture_replace1$ );
+
+			if( texture_index2$ != -1 )
+			{
+				WorldTerrain.SReplaceNodalTexture( siege_node$, texture_index2$, texture_replace2$ );
+			}
+			if( texture_index3$ != -1 )
+			{
+				WorldTerrain.SReplaceNodalTexture( siege_node$, texture_index3$, texture_replace3$ );
+			}
+		}
+
+		if( (e$ == WE_REQ_DEACTIVATE) && siege_node$.IsValid )
+		{
+			// Set the old textures
+			WorldTerrain.SReplaceNodalTexture( siege_node$, texture_index1$, texture_name1$ );
+
+			if( texture_index2$ != -1 )
+			{
+				WorldTerrain.SReplaceNodalTexture( siege_node$, texture_index2$, texture_name2$ );
+			}
+			if( texture_index3$ != -1 )
+			{
+				WorldTerrain.SReplaceNodalTexture( siege_node$, texture_index3$, texture_name3$ );
+			}
+		}
+	}
+}

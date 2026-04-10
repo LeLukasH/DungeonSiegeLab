@@ -1,0 +1,413 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  skrev_a3_r3_nis_controller.skrit
+// Author(s):  Tim Jones
+//
+// Copyright © 2003 Mad Doc Software, LLC.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Purpose: To control the algher nis
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property string			_doc$ = "skrev A3_R3 NIS Controller";
+
+// external properties
+property scid mp_character_scid$		doc = "Scid of multiplayer character.";
+property scid sp_character_scid$		doc = "Scid of singleplayer character.";
+property scid attack_scid_1$			doc = "Scid of first attacker.";
+property scid attack_scid_2$			doc = "Scid of second attacker.";
+property scid attack_scid_3$			doc = "Scid of third attacker.";
+property scid attack_scid_4$			doc = "Scid of fourth attacker.";
+property scid waypoint_scid$			doc = "Scid to runaway to.";
+
+owner = GoSkritComponent;
+
+// globals
+goid character_goid$;
+int activate_count$ = 0;
+//string hm_template$ = "hm_g_c_1h1m_avg";
+//string effect_name$ = "a3_r3_nis_algher_yell";
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// Support functions
+
+// unequips a given weapon
+unequip_weapon$( goid character$, eEquipSlot es$ )
+{
+	// unequip
+	character$.Go.Inventory.RSUnequip(es$, AO_REFLEX);
+}
+
+// equip a given weapon
+equip_weapon$( goid character$, eInventoryLocation il$, eEquipSlot es$ )
+{
+	Go weapon$;
+
+	// unequip the selected weapon
+	weapon$ = character$.Go.Inventory.GetSelectedWeapon();
+	if( weapon$ != NULL )
+	{
+		character$.Go.Inventory.RSUnequip( character$.Go.Inventory.GetEquippedSlot( weapon$ ), AO_REFLEX );
+	}
+
+	// select the item
+	character$.Go.Inventory.RSSelect( il$, AO_REFLEX );
+
+	// get the item in the melee slot
+	weapon$ = character$.Go.Inventory.GetSelectedWeapon();
+
+	// make sure you got something
+	if( weapon$ != NULL )
+	{
+		// equip the weapon
+		character$.Go.Inventory.RSEquip( es$, weapon$.Goid, AO_REFLEX );
+	}
+}
+
+// equips the given weapon to the given player in the give slot given...
+add_equip_weapon$( goid character$, string template_name$, eInventoryLocation il$, eEquipSlot es$ )
+{
+	Goid item_goid$;
+	GoCloneReq cloneReq$;
+
+	// clone the weapon
+	cloneReq$ = MakeGoCloneReq( template_name$ );
+	item_goid$ = GoDb.SCloneGo( cloneReq$ );
+
+	// make sure we're not dealing with a spell slot
+	if( il$ != il_active_primary_spell )
+	{
+		// add it to the character and equip
+		character$.Go.Inventory.RSAdd( item_goid$.Go, il$, AO_REFLEX, false );
+		character$.Go.Inventory.RSEquip( es$, item_goid$, AO_REFLEX );
+	}
+	else
+	{
+		#only(game) [[
+
+			// get the spell book
+			Go spellbook_go$ = character$.Go.Inventory.GetActiveSpellBook();
+
+			// we need to remove the active primary spell
+
+			// select the spell
+			character$.Go.Inventory.RSSelect( il_active_primary_spell, AO_REFLEX );
+			Go temp_spell$ = character$.Go.Inventory.GetSelectedItem();
+
+			// did we get it?
+			if( temp_spell$ != NULL )
+			{
+				spellbook_go$.Inventory.RSRemove( temp_spell$, false );
+			}
+
+			// add the spell to the spell book in the first slot
+			spellbook_go$.Inventory.RSAdd(item_goid$.Go, IL_SPELL_1, AO_REFLEX, false);
+
+			// select that slot
+			character$.Go.Inventory.RSSelect( il_active_primary_spell, AO_REFLEX );
+		]];
+	}
+}
+
+// moves a given weapon between slots
+move_weapon$( goid character$, eInventoryLocation il_old$, eInventoryLocation il_new$ )
+{
+	Go weapon$ = character$.Go.Inventory.GetItem( il_old$ );
+
+	if( weapon$ != NULL )
+	{
+		character$.Go.Inventory.RSSetLocation( weapon$, il_new$, false );
+	}
+}
+
+// plays any given effect
+play_effect$(string effect$, goid target$, goid source$, string params$, eWorldEvent e$)
+{
+	// play the effect
+	SiegeFX.SRunScript(effect$, target$, source$, params$, source$, e$);
+}
+
+// make the selected character unconscious
+make_unconscious$( goid character$ )
+{
+	// get the current health
+	float health$ = character$.Go.Aspect.GetCurrentLife();
+
+	// make sure they're not invincible
+	character$.Go.Aspect.SetIsInvincible( false );
+
+	// do damage to it
+	Rules.DamageGo( character$, owner.Go.Goid, NULL, health$, false, false );
+
+	// change the health
+	character$.Go.Aspect.SSetCurrentLife( 0.0 );
+
+	// change the life recovery rate
+	#only(game) [[
+		character$.Go.Aspect.SetNaturalLifeRecoveryUnit( 0.0 );
+		character$.Go.Aspect.SetLifeRecoveryUnit( 0.0 );
+		]];
+
+	// and stay down!
+	character$.Go.Aspect.SSetLifeState( LS_ALIVE_UNCONSCIOUS );
+}
+
+// moves a character from their current position to the location of the use point
+move_character$(goid character$, goid waypoint$)
+{
+	// clear the mcp
+	MCPManager.Flush(character$);
+
+	// make sure the waypoint is valid
+	if( waypoint$.IsValid() && character$.IsValid() )
+	{
+		if( waypoint$.Go != NULL && character$.Go != NULL )
+		{
+			// get the location of the use point
+			SiegePos pos$ = waypoint$.Go.Placement.GetPosition();
+
+			// try the move
+			MCPManager.MakeRequest(character$, PL_APPROACH, pos$, 0.0);
+		}
+	}
+}
+
+// delete the character
+delete_character$( goid character$ )
+{
+	// do we have an inventory
+	if(character$.Go.HasInventory())
+	{
+		// clear a collection to use
+		character$.Go.Mind.TempGopColl1.Clear();
+
+		// get everything in the inventory
+		character$.Go.Inventory.ListItems(IL_ALL, character$.Go.Mind.TempGopColl1);
+
+		// get set to loop
+		int i$ = 0;
+		int iend$ = character$.Go.Mind.TempGopColl1.Size();
+		Go temp$;
+
+		// loop through and search for items that have inventories.  then delete the item
+		while( i$ < iend$ )
+		{
+			// get the go
+			temp$ = character$.Go.Mind.TempGopColl1.Get( i$ );
+
+			// do we have an inventory?  if yes, go one level deeper.  i hope no one
+			// is planning on going farther than that...
+			if( temp$.HasInventory() )
+			{
+				// get all the items in this inventory
+				character$.Go.Mind.TempGopColl2.Clear();
+				temp$.Inventory.ListItems(IL_ALL, character$.Go.Mind.TempGopColl2);
+
+				// loop and delete
+				int j$ = 0;
+				int jend$ = character$.Go.Mind.TempGopColl2.Size();
+				Go temp2$;
+
+				while(j$ < jend$)
+				{
+					temp2$ = character$.Go.Mind.TempGopColl2.Get( j$ );
+
+					// remove it from the inventory
+					temp$.Inventory.RSRemove(temp2$, false);
+					// delete it
+					PostWorldMessage(WE_REQ_DELETE, owner.Goid, temp2$.Goid, 0);
+
+					j$ = j$ + 1;
+				}
+			}
+
+			// delete the item itself
+			character$.Go.Inventory.RSRemove(temp$, false);
+			PostWorldMessage(WE_REQ_DELETE, owner.Goid, temp$.Goid, 0);
+
+			i$ = i$ + 1;
+		}
+	}
+
+	// delete the target
+	PostWorldMessage(WE_REQ_DELETE, owner.Goid, character$, 0);
+}
+
+// attack the give object
+attack_character$( goid attacker$, goid target$ )
+{
+	// attack the target
+	attacker$.Go.Mind.Clear( JQ_ACTION );
+	attacker$.Go.Mind.SDoJob( MakeJobReq( JAT_ATTACK_OBJECT, JQ_ACTION, QP_FRONT, AO_COMMAND, target$ ) );
+}
+
+// switches to the reveal animation
+float switch_animation$(eAnimChore chore$, int fourcc$, goid character$)
+{
+	//report.genericf( "switching animation!\n" );
+
+	// if we have a mind we want to stop fidgeting
+	if( character$.Go.HasMind() )
+	{
+		// turn off auto fidget
+		character$.Go.Mind.SetActorAutoFidgets( false );
+	}
+
+	// clear the mcp
+	MCPManager.Flush( character$ );
+
+	// get the correct animation
+	int anim$ = character$.Go.Aspect.AspectHandle.Blender.GetSubAnimIndex( chore$, fourcc$ );
+		
+	// make sure we got one
+	if (anim$ >= 0)
+	{
+		// make the request for the action
+		eReqRetCode ret$ = MCPManager.MakeRequest( character$.Go.Goid, PL_PLAYANIM, chore$, anim$, 0 );
+	}
+	else
+	{
+		report.genericf( "The animation could not be found\n" );
+		return 0;
+	}
+
+	// return the duration
+	return character$.Go.Aspect.AspectHandle.Blender.GetDuration( anim$ );
+}
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+/// State Machine
+
+// chill here until we get an activate event
+startup state Wait$
+{
+	// look for activates
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		// activate?
+		if(e$ == WE_REQ_ACTIVATE)
+		{
+			if( activate_count$ == 0 )
+			{
+				// check the scids
+				if( !mp_character_scid$.Goid.IsValid() &&
+					!sp_character_scid$.Goid.IsValid() ) { report.genericf( "sp_character_scid$ and mp_character_scid$ are invalid!\n" ); }
+				if( !attack_scid_1$.Goid.IsValid() ) { report.genericf( "attack_scid_1$ is invalid!\n" ); }
+				if( !attack_scid_2$.Goid.IsValid() ) { report.genericf( "attack_scid_2$ is invalid!\n" ); }
+				if( !attack_scid_3$.Goid.IsValid() ) { report.genericf( "attack_scid_3$ is invalid!\n" ); }
+				if( !attack_scid_4$.Goid.IsValid() ) { report.genericf( "attack_scid_4$ is invalid!\n" ); }
+				if( !waypoint_scid$.Goid.IsValid() ) { report.genericf( "waypoint_scid$ is invalid!\n" ); }
+
+				// set the character goid
+				if( !mp_character_scid$.Goid.IsValid() ) { character_goid$ = sp_character_scid$.Goid; }
+				else if( !sp_character_scid$.Goid.IsValid() ) { character_goid$ = mp_character_scid$.Goid; }
+
+				// start watching the character
+				GoDb.StartWatching( owner.Goid, character_goid$ );
+
+				// jump into the start state
+				SetState Start$;
+			}
+			else if( activate_count$ == 1 )
+			{	
+				SetState DeleteCharacters$;
+			}
+		}
+	}
+}
+
+// start doing real events here
+state Start$
+{
+	// play the sound
+	//play_sound$ at ( 0.0 ) { play_effect$(effect_name$, character_goid$, character_goid$, "", WE_REQ_ACTIVATE); }
+	// make him talk
+	talk_1$ at ( 0.0 ) { float dur$ = switch_animation$( CHORE_MISC, 'talk', character_goid$ ); }
+
+	// change alignments
+	change_align_1$ at ( 10.6 ) { attack_scid_1$.Go.Actor.SSetAlignment( AA_EVIL ); }
+	change_align_2$ at ( 10.6 ) { attack_scid_2$.Go.Actor.SSetAlignment( AA_EVIL ); }
+	change_align_3$ at ( 10.6 ) { attack_scid_3$.Go.Actor.SSetAlignment( AA_EVIL ); }
+	change_align_4$ at ( 10.6 ) { attack_scid_4$.Go.Actor.SSetAlignment( AA_EVIL ); }
+
+	// change alghers stance
+	change_stance$ at ( 10.6 ) { switch_animation$( CHORE_MISC, 'atst', character_goid$); }
+
+	// equip the weapon
+	//equip$ at ( 10.65 ) { add_equip_weapon$( character_goid$, hm_template$, IL_ACTIVE_MELEE_WEAPON, ES_WEAPON_HAND ); }
+
+	// start attacking algher
+	attack_character_1$ at ( 10.7 ) { attack_character$( attack_scid_1$.Goid, character_goid$ ); }
+	attack_character_2$ at ( 10.7 ) { attack_character$( attack_scid_2$.Goid, character_goid$ ); }
+	attack_character_3$ at ( 10.7 ) { attack_character$( attack_scid_3$.Goid, character_goid$ ); }
+	attack_character_4$ at ( 10.7 ) { attack_character$( attack_scid_4$.Goid, character_goid$ ); }
+
+	// attack back
+	attack_back$ at ( 13.7 ) { attack_character$( character_goid$, attack_scid_2$.Goid ); }
+
+	make_smart$ at (16.0)  	{
+					// tell algher he can fidget if he wants to
+					character_goid$.Go.Mind.SetActorAutoFidgets( true );
+					
+					// make algher's brain work.
+					character_goid$.Go.Mind.Clear();
+					character_goid$.Go.Mind.SDoJob( MakeJobReq( JAT_BRAIN, JQ_BRAIN, QP_CLEAR, AO_REFLEX ));
+					
+					// set his regeneration to zero.  it will have to be reset when he is hired or something
+					#only( game )
+	        			[[
+					character_goid$.Go.Aspect.SetNaturalLifeRecoveryUnit(0);
+					]]
+				//	character_goid$.Go.Aspect.SetNaturalLifeRecoveryPeriod(0);
+				}
+
+	// make him unconscious and unequip the axe
+	//unequip$ at ( 16.4 ) { unequip_weapon$( character_goid$, ES_WEAPON_HAND ); }
+	move$ at ( 16.4 ) { move_weapon$( character_goid$, IL_ACTIVE_MELEE_WEAPON, IL_MAIN ); }
+	unconscious$ at ( 16.5 ) { make_unconscious$( character_goid$ ); }
+
+	// move them out of the picture
+	move_character_1$ at ( 17.5 ) { move_character$( attack_scid_1$.Goid, waypoint_scid$.Goid ); }
+	move_character_2$ at ( 17.5 ) { move_character$( attack_scid_2$.Goid, waypoint_scid$.Goid ); }
+	move_character_3$ at ( 17.5 ) { move_character$( attack_scid_3$.Goid, waypoint_scid$.Goid ); }
+	move_character_4$ at ( 17.5 ) { move_character$( attack_scid_4$.Goid, waypoint_scid$.Goid ); }
+
+	// we're all set
+	change_state$ at ( 18.0 ) { activate_count$ = 1; SetState Wait$; }
+}
+
+// delete the characters
+state DeleteCharacters$
+{
+	event OnEnterState$
+	{
+
+		// delete the characters
+		delete_character$( attack_scid_1$.Goid );
+		delete_character$( attack_scid_2$.Goid );
+		delete_character$( attack_scid_3$.Goid );
+		delete_character$( attack_scid_4$.Goid );
+
+		// jump back into the wait state
+		SetState Done$;
+	}
+}
+
+// finishing state.  cleans everything up
+state Done$
+{
+	event OnEnterState$
+	{
+		// delete ourselves
+		PostWorldMessage(WE_REQ_DELETE, owner.Goid, owner.Goid, 1);
+	}
+}

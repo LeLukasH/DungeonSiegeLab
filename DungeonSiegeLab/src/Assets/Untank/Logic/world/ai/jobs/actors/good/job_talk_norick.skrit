@@ -1,0 +1,85 @@
+/*
+  ============================================================================
+  ----------------------------------------------------------------------------
+
+	File		: 	job_talk_norick.skrit
+
+	Author(s)	: 	Marsh Macy
+
+	Purpose		: 	Norick speaks his last words.
+
+	(C)opyright 2000 Gas Powered Games, Inc.
+
+  ----------------------------------------------------------------------------
+  ============================================================================
+*/
+
+Go		m_Go$;
+GoMind	m_Mind$;
+GoBody  m_Body$;
+Job		m_Job$;
+
+
+#include "k_job_c_mcp_fidget_utils"
+#include "k_job_c_talk_utils"
+
+startup state STARTUP$
+{
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//	init
+event OnJobInitPointers$( Job job$ )
+{
+	m_Job$		= job$;
+	m_Go$		= job$.Go;
+	m_Mind$		= job$.Go.Mind;
+	m_Body$		= job$.Go.Body;
+}
+
+event OnJobInit$( Job job$ )
+{
+	OnJobInitPointers$( job$ );
+
+	SetState Talk$;
+}
+
+////////////////////////////////////////
+//	Main State Machine
+
+state Talk$
+{
+	transition
+	{
+		-> Exiting$:	OnWorldMessage( WE_REQ_TALK_END );
+	}
+
+	event OnEnterState$
+	{
+		// $$$ read/write variables from the Game Auditor here, and bring up the appropriate dialogs...
+		MCPManager.Flush(m_Go$.Goid);
+		
+		m_Go$.GetConversation.RSSelectConversation( "conversation_norick" );
+
+		m_Go$.GetConversation.RSActivateDialogue();
+		
+		TryAnim$('dead');
+	}
+}
+
+
+state Exiting$
+{
+	event OnEnterState$
+	{ 
+		// $$ killing norick in the script in the level now...
+		m_Go$.Aspect.SSetLifeState( LS_DEAD_NORMAL );
+		MCPManager.Flush(m_Go$.Goid);
+		m_Mind$.Clear();
+		PostWorldMessage( WE_KILLED, m_Go$.Goid, m_Go$.Goid, 0 );
+		m_Go$.Aspect.SSetIsSelectable( false );
+		m_Job$.MarkForDeletion();
+	}
+}
+
+

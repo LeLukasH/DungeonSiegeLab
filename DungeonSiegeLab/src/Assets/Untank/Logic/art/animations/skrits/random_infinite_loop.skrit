@@ -1,0 +1,50 @@
+// Animation Skrit: Random Infinite_Loop
+//
+// History:
+//		VERSION 1.0:	Initial implementation
+//
+
+property int MAJORVERSION$ = 1;
+property int MINORVERSION$ = 0;
+property bool _PERSIST$ = false;
+
+owner = Aspect;
+
+/////////////////////////////////////////////////////////////////////////////
+// Utilities
+
+RestartChore$ 
+{ 
+	int numanims$ = owner.Blender.GetNumSubAnims();
+	int newanim$ = Math.RandomInt( numanims$ - 1 );
+	
+	int bg$ = owner.blender.OpenBlendGroup();
+	owner.blender.AddAnimToBlendGroup(newanim$,1);
+	owner.blender.CloseBlendGroup();
+	owner.blender.SetBlendGroupWeight(bg$,1);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// States
+
+//----------------------------
+
+startup state LoopForever$ 
+{
+	event OnStartChore$ ( int /*subanim$*/, int /*flags$*/ )
+	{
+		RestartChore$;
+		
+	}
+
+	event OnUpdate$( float delta_t$ )
+	{
+ 	 	int events$ = owner.UpdateBlender(delta_t$);
+
+		if (AnimEventBitTest(events$,ANIMEVENT_FINISH)) 
+		{
+			RestartChore$;
+		}
+	}
+}

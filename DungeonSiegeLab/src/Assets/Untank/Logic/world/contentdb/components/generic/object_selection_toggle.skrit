@@ -1,0 +1,63 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  object_selection_toggle.skrit.skrit
+// Author(s):  Uncle Ernsie
+//
+// Copyright © 2000 Gas Powered Games, Inc.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// public definitions
+
+// reserved tags
+property bool   _server_only$        	= true;
+property string _doc$                	= "Add this block to any object to make non-selectable.  Make selectable via req_activate.";
+property string _required_component$ 	= "placement";
+
+// exported properties
+property eWorldEvent Selection_Off_Msg$			= WE_ENTERED_WORLD   	doc = "Send this to make Object non-selectable.";
+property eWorldEvent Selection_On_Msg$			= WE_REQ_ACTIVATE     	doc = "Send this to make Object selectable.";
+
+owner = GoSkritComponent;
+
+//////////////////////////////////////////////////////////////////////////////
+// global state
+
+
+///////////////////////////////////////////////////////////////////////////////
+// local states
+
+startup state Startup$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == Selection_Off_Msg$ )
+		{
+        	Owner.Go.Aspect.SSetIsSelectable( false );
+            Owner.Go.Aspect.SetIsCollidable( false );
+
+            SetState MakeSelectable$;
+		}
+	}
+}
+
+State MakeSelectable$
+{
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage /*msg$*/ )
+	{
+		if( e$ == Selection_On_Msg$ )
+		{
+       		Owner.Go.Aspect.SSetIsSelectable( true );
+            Owner.Go.Aspect.SetIsCollidable ( true );
+
+        	SetState Startup$;
+        }
+	}
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////

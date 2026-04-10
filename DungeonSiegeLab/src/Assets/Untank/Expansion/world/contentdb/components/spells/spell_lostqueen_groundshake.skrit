@@ -1,0 +1,82 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// File     :  spell_groundshake.skrit
+// Author(s):  Mathew Corthell
+//
+// Copyright © 2003 Mad Doc Software.  All rights reserved.
+//----------------------------------------------------------------------------
+//  $Revision:: $              $Date:$
+//----------------------------------------------------------------------------
+//
+// Skrit for running the groundshake attack for the lost queen.
+//
+//////////////////////////////////////////////////////////////////////////////
+
+property string groundEffect$=""	doc="Which effect to play to show the area of effect.";
+property string targetEffect$=""	doc="Effect to play on damaged targets.";
+
+property float effectRadius$=5		doc="Radius from the queen to affect.";
+property float effectMagnitude$=3	doc="The rate at which the radius glows.  (I have no idea what the units are for this.  Maybe m/s)";
+property float effectDamageMin$=10	doc="Min damage per ground shake.";
+property float effectDamageMax$=20	doc="Max damage per ground shake.";
+
+owner = GoSkritComponent;
+
+Goid m_Target$;
+Goid m_Caster$;
+
+//Default state.  Waiting to be cast.
+startup state Active$
+{
+    //Handle messages
+	event OnGoHandleMessage$( eWorldEvent e$, WorldMessage msg$ )
+	{	
+        //We got cast.  Goody!
+		if( e$ == WE_REQ_CAST )
+		{
+			m_Target$ 			= MakeGoid( msg$.GetData1() );
+			m_Caster$ 			= msg$.GetSendFrom();
+			
+            //Is the target valid?  If not, then punt right now.
+			if( !m_Target$.IsValid || !m_Caster$.IsValid)
+			{
+				SetState Finished$;
+				return;
+			}
+
+			m_Caster$.Go.Mind.TempGopColl1.Clear;
+			AIQuery.GetEnemiesOfGoInSphere(m_Caster$.go.placement.position, effectRadius$, m_Caster$.go, m_Caster$.Go.Mind.TempGopColl1);
+			
+			// If there's someone close enough, then hit them...
+			if(m_Caster$.Go.Mind.TempGopColl1.Size() > 0)
+			{
+				SiegeFX.SRunScript(groundEffect$, m_Caster$, m_Caster$, "", owner.Goid, WE_REQ_CAST);
+
+				float effectDamage$ = Math.RandomFloat(effectDamageMin$, effectDamageMax$);					
+
+				//Create an explosion.
+				Physics.CreateExplosion(m_Caster$.go.placement.position, 
+										effectRadius$, 
+										effectMagnitude$, 
+										effectDamage$, 
+										m_Caster$, 
+										owner.goid);			
+			}
+
+			SetState Finished$;
+		}
+	}
+}			
+
+state Finished$
+{       
+	event OnEnterState$
+	{   
+		// Get rid of any temporary storage
+		SiegeFx.ClearVariables( owner.goid );
+        
+		// Since this skrit is the component of a spell and all spells are cloned before being executed
+		// then it is safe to destroy ourself after finishing execution
+		PostWorldMessage( WE_REQ_DELETE, owner.Goid, owner.Goid, 10 );			
+	}   
+}       
