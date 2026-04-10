@@ -13,6 +13,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     private readonly BitsLoader _bitsLoader = new();
     private readonly TextureFinder _textureFinder = new();
     private readonly TreeStateService _treeState = new();
+    private CancellationTokenSource? _searchCts;
 
     /// <summary>Bundled base-game data folder, placed next to the executable.</summary>
     public static readonly string UntankPath =
@@ -29,6 +30,16 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
     public bool HasOpenCodeTabs => OpenCodeTabs.Count > 0;
     public bool HasNoOpenCodeTabs => OpenCodeTabs.Count == 0;
+
+    // ─── Search panel ─────────────────────────────────────────────────────
+    [ObservableProperty] private bool _isSearchPanelActive;
+    [ObservableProperty] private string _searchQuery = "";
+    [ObservableProperty] private bool _searchInNames = true;
+    [ObservableProperty] private bool _searchInContent = true;
+    [ObservableProperty] private bool _isSearching;
+    [ObservableProperty] private string _searchStatusMessage = "";
+    [ObservableProperty] private ObservableCollection<SearchResultViewModel> _searchResults = new();
+    [ObservableProperty] private SearchResultViewModel? _selectedSearchResult;
 
     private string _bitsRootPath = "";
     private BitsNodeViewModel? _bitsRootVm;
@@ -284,6 +295,121 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
         StatusMessage = $"Found {textures.Count} texture(s) in '{template.TemplateName}'.";
         TexturesIdentified?.Invoke(textures);
+    }
+
+    // ─── Search ───────────────────────────────────────────────────────────
+
+    [RelayCommand] private void ShowExplorer() => IsSearchPanelActive = false;
+    [RelayCommand] private void ShowSearch()   => IsSearchPanelActive = true;
+
+    partial void OnSearchQueryChanged(string value)      => TriggerSearchDebounced();
+    partial void OnSearchInNamesChanged(bool value)      => TriggerSearchDebounced();
+    partial void OnSearchInContentChanged(bool value)    => TriggerSearchDebounced();
+
+    partial void OnSelectedSearchResultChanged(SearchResultViewModel? value)
+    {
+        if (value is null) return;
+        OpenPreviewTab(value.Node);
+    }
+
+    private void TriggerSearchDebounced()
+    {
+        _searchCts?.Cancel();
+        _searchCts = new CancellationTokenSource();
+        _ = RunSearchAsync(_searchCts.Token);
+    }
+
+    private async Task RunSearchAsync(CancellationToken token)
+    {
+        if (string.IsNullOrWhiteSpace(SearchQuery))
+        {
+            SearchResults.Clear();
+            SearchStatusMessage = "";
+            IsSearching = false;
+            return;
+        }
+
+        IsSearching = true;
+        SearchStatusMessage = "Searching…";
+
+        try
+        {
+            await Task.Delay(300, token);
+
+            // Snapshot all state on the UI thread before going to background
+            var roots     = RootNodes.ToList();
+            var query     = SearchQuery;
+            var inNames   = SearchInNames;
+            var inContent = SearchInContent;
+
+            var results = await Task.Run(
+                () => DoSearch(roots, query, inNames, inContent), token);
+
+            SearchResults.Clear();
+            foreach (var r in results) SearchResults.Add(r);
+
+            SearchStatusMessage = results.Count == 0
+                ? "No results."
+                : $"{results.Count} result{(results.Count == 1 ? "" : "s")}";
+        }
+        catch (OperationCanceledException) { }
+        finally
+        {
+            if (!token.IsCancellationRequested)
+                IsSearching = false;
+        }
+    }
+
+    private static List<SearchResultViewModel> DoSearch(
+        List<BitsNodeViewModel> roots, string query, bool inNames, bool inContent)
+    {
+        var results = new List<SearchResultViewModel>();
+        var seen    = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var root in roots)
+            SearchNode(root, root.FullPath, query, inNames, inContent, results, seen);
+        return results;
+    }
+
+    private static void SearchNode(
+        BitsNodeViewModel node, string rootPath,
+        string query, bool inNames, bool inContent,
+        List<SearchResultViewModel> results, HashSet<string> seen)
+    {
+        if (node.IsTemplate && node.Node is Models.BitsTemplate template)
+        {
+            bool nameMatch = inNames &&
+                node.Name.Contains(query, StringComparison.OrdinalIgnoreCase);
+
+            string snippet = "";
+            bool contentMatch = false;
+            if (inContent)
+            {
+                var line = FindMatchingLine(template.SourceCode, query);
+                if (line is not null) { contentMatch = true; snippet = line; }
+            }
+
+            if ((nameMatch || contentMatch) && seen.Add(node.FullPath))
+            {
+                var rel = node.FullPath.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase)
+                    ? node.FullPath[rootPath.Length..].TrimStart('/', '\\')
+                    : node.FullPath;
+                results.Add(new SearchResultViewModel(node, rel, snippet));
+            }
+        }
+
+        foreach (var child in node.Children)
+            SearchNode(child, rootPath, query, inNames, inContent, results, seen);
+    }
+
+    private static string? FindMatchingLine(string sourceCode, string query)
+    {
+        foreach (var rawLine in sourceCode.Split('\n'))
+        {
+            var line = rawLine.Trim();
+            if (line.Contains(query, StringComparison.OrdinalIgnoreCase))
+                return line.Length > 80 ? line[..80] + "…" : line;
+        }
+        return null;
     }
 
     // ─── Identify Dependencies ────────────────────────────────────────────

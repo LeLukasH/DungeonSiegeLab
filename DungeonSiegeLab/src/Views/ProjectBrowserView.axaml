@@ -4,6 +4,27 @@
              x:Class="DungeonSiegeLab.Views.ProjectBrowserView"
              x:DataType="vm:ProjectBrowserViewModel">
 
+    <UserControl.Styles>
+        <!-- Sidebar tab toggle buttons -->
+        <Style Selector="Button.sidebarTab">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0 0 0 2"/>
+            <Setter Property="Padding" Value="12 6"/>
+            <Setter Property="CornerRadius" Value="0"/>
+            <Setter Property="Foreground" Value="#585b70"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style Selector="Button.sidebarTab:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#252537"/>
+        </Style>
+        <Style Selector="Button.sidebarTab.active">
+            <Setter Property="Foreground" Value="#cdd6f4"/>
+            <Setter Property="BorderBrush" Value="#cba6f7"/>
+        </Style>
+    </UserControl.Styles>
+
     <DockPanel>
 
         <!-- Toolbar -->
@@ -65,7 +86,7 @@
                        FontSize="12"/>
         </Border>
 
-        <!-- Main content: tree | code viewer with tabs -->
+        <!-- Main content: left panel | splitter | code viewer -->
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="280" MinWidth="150"/>
@@ -73,49 +94,143 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Tree -->
+            <!-- Left panel -->
             <Border Grid.Column="0"
                     Background="#1e1e2e"
                     BorderBrush="#313244"
                     BorderThickness="0 0 1 0">
                 <DockPanel>
-                    <TextBlock DockPanel.Dock="Top"
-                               Text="  Project Structure"
-                               Background="#181825"
-                               Padding="10 6"
-                               FontSize="12"
-                               FontWeight="SemiBold"
-                               Foreground="#6c7086"/>
-                    <ScrollViewer>
-                        <TreeView ItemsSource="{Binding RootNodes}"
-                                  SelectedItem="{Binding SelectedNode}"
-                                  Margin="4"
-                                  DoubleTapped="OnTreeDoubleTapped">
-                            <TreeView.Styles>
-                                <Style Selector="TreeViewItem">
-                                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
-                                </Style>
-                            </TreeView.Styles>
-                            <TreeView.ItemTemplate>
-                                <TreeDataTemplate DataType="vm:BitsNodeViewModel"
-                                                  ItemsSource="{Binding Children}">
-                                    <!-- Border fills the full row width; Tapped toggles expand for folders/files -->
-                                    <Border HorizontalAlignment="Stretch"
-                                            Background="Transparent"
-                                            Tapped="OnTreeItemTapped">
-                                        <StackPanel Orientation="Horizontal" Spacing="5" Margin="0 2">
-                                            <TextBlock Text="{Binding Icon}" FontSize="13"/>
+
+                    <!-- Explorer / Search toggle -->
+                    <Border DockPanel.Dock="Top"
+                            Background="#181825"
+                            BorderBrush="#313244"
+                            BorderThickness="0 0 0 1">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Classes="sidebarTab"
+                                    Classes.active="{Binding !IsSearchPanelActive}"
+                                    Command="{Binding ShowExplorerCommand}"
+                                    ToolTip.Tip="Explorer">
+                                Explorer
+                            </Button>
+                            <Button Classes="sidebarTab"
+                                    Classes.active="{Binding IsSearchPanelActive}"
+                                    Command="{Binding ShowSearchCommand}"
+                                    ToolTip.Tip="Search templates">
+                                🔍 Search
+                            </Button>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ── Explorer ── -->
+                    <DockPanel IsVisible="{Binding !IsSearchPanelActive}">
+                        <ScrollViewer>
+                            <TreeView ItemsSource="{Binding RootNodes}"
+                                      SelectedItem="{Binding SelectedNode}"
+                                      Margin="4"
+                                      DoubleTapped="OnTreeDoubleTapped">
+                                <TreeView.Styles>
+                                    <Style Selector="TreeViewItem">
+                                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                    </Style>
+                                </TreeView.Styles>
+                                <TreeView.ItemTemplate>
+                                    <TreeDataTemplate DataType="vm:BitsNodeViewModel"
+                                                      ItemsSource="{Binding Children}">
+                                        <Border HorizontalAlignment="Stretch"
+                                                Background="Transparent"
+                                                Tapped="OnTreeItemTapped">
+                                            <StackPanel Orientation="Horizontal" Spacing="5" Margin="0 2">
+                                                <TextBlock Text="{Binding Icon}" FontSize="13"/>
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontSize="13"
+                                                           Foreground="{Binding IsTemplate,
+                                                             Converter={StaticResource BoolToBrushConverter},
+                                                             ConverterParameter='#cba6f7|#cdd6f4'}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </TreeDataTemplate>
+                                </TreeView.ItemTemplate>
+                            </TreeView>
+                        </ScrollViewer>
+                    </DockPanel>
+
+                    <!-- ── Search ── -->
+                    <DockPanel IsVisible="{Binding IsSearchPanelActive}">
+
+                        <!-- Search controls -->
+                        <Border DockPanel.Dock="Top" Padding="8">
+                        <StackPanel Spacing="6">
+                            <TextBox Text="{Binding SearchQuery}"
+                                     Watermark="Search…"
+                                     Height="30"
+                                     VerticalContentAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" Spacing="16">
+                                <CheckBox Content="Names"
+                                          IsChecked="{Binding SearchInNames}"
+                                          FontSize="12"
+                                          Foreground="#a6adc8"/>
+                                <CheckBox Content="Content"
+                                          IsChecked="{Binding SearchInContent}"
+                                          FontSize="12"
+                                          Foreground="#a6adc8"/>
+                                <ProgressBar IsIndeterminate="True"
+                                             IsVisible="{Binding IsSearching}"
+                                             Width="40" Height="3"
+                                             VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding SearchStatusMessage}"
+                                       FontSize="11"
+                                       Foreground="#6c7086"/>
+                        </StackPanel>
+                        </Border>
+
+                        <!-- Results list -->
+                        <ScrollViewer>
+                            <ListBox ItemsSource="{Binding SearchResults}"
+                                     SelectedItem="{Binding SelectedSearchResult}"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     DoubleTapped="OnSearchResultDoubleTapped">
+                                <ListBox.Styles>
+                                    <Style Selector="ListBoxItem">
+                                        <Setter Property="Padding" Value="8 6"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                    </Style>
+                                    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+                                        <Setter Property="Background" Value="#252537"/>
+                                    </Style>
+                                    <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+                                        <Setter Property="Background" Value="#313244"/>
+                                    </Style>
+                                </ListBox.Styles>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="vm:SearchResultViewModel">
+                                        <StackPanel Spacing="1">
                                             <TextBlock Text="{Binding Name}"
                                                        FontSize="13"
-                                                       Foreground="{Binding IsTemplate,
-                                                         Converter={StaticResource BoolToBrushConverter},
-                                                         ConverterParameter='#cba6f7|#cdd6f4'}"/>
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#cba6f7"/>
+                                            <TextBlock Text="{Binding RelativePath}"
+                                                       FontSize="11"
+                                                       Foreground="#6c7086"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{Binding MatchSnippet}"
+                                                       IsVisible="{Binding HasSnippet}"
+                                                       FontSize="11"
+                                                       Foreground="#89b4fa"
+                                                       FontFamily="Cascadia Code,Consolas,monospace"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Margin="0 2 0 0"/>
                                         </StackPanel>
-                                    </Border>
-                                </TreeDataTemplate>
-                            </TreeView.ItemTemplate>
-                        </TreeView>
-                    </ScrollViewer>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </ScrollViewer>
+
+                    </DockPanel>
+
                 </DockPanel>
             </Border>
 
@@ -127,15 +242,13 @@
             <!-- Code viewer with VSCode-style tabs -->
             <Grid Grid.Column="2" Background="#1e1e2e">
 
-                <!-- Empty state -->
                 <TextBlock IsVisible="{Binding HasNoOpenCodeTabs}"
-                           Text="Click a template in the tree..."
+                           Text="Click a template in the tree…"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Foreground="#6c7086"
                            FontSize="14"/>
 
-                <!-- Tabbed code viewer -->
                 <TabControl IsVisible="{Binding HasOpenCodeTabs}"
                             ItemsSource="{Binding OpenCodeTabs}"
                             SelectedItem="{Binding SelectedCodeTab}">

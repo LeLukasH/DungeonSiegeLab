@@ -41,6 +41,15 @@ public partial class ProjectBrowserView : UserControl
             tab.IsPreview = false;
     }
 
+    // Double-tap on search result → promote to permanent tab
+    private void OnSearchResultDoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
+    {
+        if (DataContext is not ProjectBrowserViewModel vm) return;
+        var result = (e.Source as Avalonia.StyledElement)?.DataContext as SearchResultViewModel;
+        if (result is not null)
+            vm.PromoteToPermanent(result.Node);
+    }
+
     // Close button inside tab header — DataContext of sender is CodeTabViewModel
     private void OnCloseCodeTabClicked(object? sender, RoutedEventArgs e)
     {
