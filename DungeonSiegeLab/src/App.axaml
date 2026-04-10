@@ -10,6 +10,7 @@
 
     <Application.Resources>
         <conv:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
+        <conv:BoolToFontStyleConverter x:Key="BoolToFontStyleConverter"/>
         <conv:StatusToBrushConverter x:Key="StatusToBrushConverter"/>
     </Application.Resources>
 

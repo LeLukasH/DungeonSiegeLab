@@ -14,13 +14,12 @@ public partial class TextureLabViewModel : ViewModelBase
 
     [ObservableProperty] private ObservableCollection<TextureTabViewModel> _openTabs = new();
     [ObservableProperty] private TextureTabViewModel? _selectedTab;
-    [ObservableProperty] private string _statusMessage = "Žiadna textúra nie je otvorená.";
+    [ObservableProperty] private string _statusMessage = "No texture is open.";
     [ObservableProperty] private string _rawToPsdToolPath = "";
 
-    // Event: prepnúť späť na Project Browser
     public event Action? BackRequested;
 
-    // ─── Načítanie textúr z Project Browsera ─────────────────────────────
+    // ─── Load textures from Project Browser ──────────────────────────────
 
     public async Task LoadTexturesAsync(List<TextureReference> textures)
     {
@@ -28,7 +27,6 @@ public partial class TextureLabViewModel : ViewModelBase
 
         foreach (var tex in textures.Where(t => t.ResolvedPath != null))
         {
-            // Neklonovať kartu ak už je otvorená
             if (OpenTabs.Any(t => t.TextureName == tex.TextureName))
                 continue;
 
@@ -40,11 +38,11 @@ public partial class TextureLabViewModel : ViewModelBase
         }
 
         StatusMessage = OpenTabs.Count > 0
-            ? $"Otvorených {OpenTabs.Count} textúr."
-            : "Žiadne textúry nebolo možné načítať (súbory nenájdené v /Bits).";
+            ? $"{OpenTabs.Count} texture(s) open."
+            : "No textures could be loaded (files not found in /Bits).";
     }
 
-    // ─── Otvoriť textúru manuálne ─────────────────────────────────────────
+    // ─── Open texture manually ────────────────────────────────────────────
 
     [RelayCommand]
     private async Task OpenTextureManuallyAsync(IStorageProvider? storageProvider)
@@ -53,12 +51,12 @@ public partial class TextureLabViewModel : ViewModelBase
 
         var files = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Otvoriť textúru",
+            Title = "Open Texture",
             AllowMultiple = false,
             FileTypeFilter = new[]
             {
                 new FilePickerFileType("Dungeon Siege Textures") { Patterns = new[] { "*.raw", "*.psd" } },
-                new FilePickerFileType("Všetky súbory") { Patterns = new[] { "*.*" } }
+                new FilePickerFileType("All Files") { Patterns = new[] { "*.*" } }
             }
         });
 
@@ -74,7 +72,7 @@ public partial class TextureLabViewModel : ViewModelBase
         await tab.LoadFromPathAsync(_converter, filePath);
     }
 
-    // ─── Zatvoriť kartu ──────────────────────────────────────────────────
+    // ─── Close tab ────────────────────────────────────────────────────────
 
     [RelayCommand]
     private void CloseTab(TextureTabViewModel? tab)
@@ -83,10 +81,10 @@ public partial class TextureLabViewModel : ViewModelBase
         tab.Dispose();
         OpenTabs.Remove(tab);
         SelectedTab = OpenTabs.LastOrDefault();
-        StatusMessage = OpenTabs.Count == 0 ? "Žiadna textúra nie je otvorená." : "";
+        StatusMessage = OpenTabs.Count == 0 ? "No texture is open." : "";
     }
 
-    // ─── Save to disk as... ───────────────────────────────────────────────
+    // ─── Save to disk ─────────────────────────────────────────────────────
 
     [RelayCommand]
     private async Task SaveToDiskAsync(IStorageProvider? storageProvider)
@@ -95,7 +93,7 @@ public partial class TextureLabViewModel : ViewModelBase
 
         var file = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
-            Title = "Uložiť textúru ako PNG",
+            Title = "Save Texture as PNG",
             SuggestedFileName = SelectedTab.TextureName + ".png",
             FileTypeChoices = new[] { new FilePickerFileType("PNG") { Patterns = new[] { "*.png" } } }
         });
@@ -105,11 +103,11 @@ public partial class TextureLabViewModel : ViewModelBase
         try
         {
             await _converter.ExportToDiskAsync(SelectedTab.Texture, file.Path.LocalPath);
-            StatusMessage = $"Uložené: {file.Path.LocalPath}";
+            StatusMessage = $"Saved: {file.Path.LocalPath}";
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Chyba pri ukladaní: {ex.Message}";
+            StatusMessage = $"Error while saving: {ex.Message}";
         }
     }
 
@@ -122,7 +120,7 @@ public partial class TextureLabViewModel : ViewModelBase
 
         var files = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Importovať náhradnú textúru (PNG)",
+            Title = "Import Replacement Texture (PNG)",
             FileTypeFilter = new[] { new FilePickerFileType("PNG") { Patterns = new[] { "*.png" } } }
         });
 
@@ -133,15 +131,15 @@ public partial class TextureLabViewModel : ViewModelBase
             var newTexture = await _converter.ImportReplacementAsync(
                 files[0].Path.LocalPath, SelectedTab.TextureName);
             SelectedTab.UpdateTexture(newTexture);
-            StatusMessage = $"Importovaná náhrada pre '{SelectedTab.TextureName}'.";
+            StatusMessage = $"Replacement imported for '{SelectedTab.TextureName}'.";
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Chyba pri importe: {ex.Message}";
+            StatusMessage = $"Error while importing: {ex.Message}";
         }
     }
 
-    // ─── Nastavenie cesty k RawToPsd nástroju ─────────────────────────────
+    // ─── RawToPsd tool path ───────────────────────────────────────────────
 
     [RelayCommand]
     private async Task BrowseForToolAsync(IStorageProvider? storageProvider)
@@ -150,8 +148,8 @@ public partial class TextureLabViewModel : ViewModelBase
 
         var files = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Vyber RawToPsd.exe",
-            FileTypeFilter = new[] { new FilePickerFileType("Spustiteľný súbor") { Patterns = new[] { "*.exe", "*" } } }
+            Title = "Select RawToPsd.exe",
+            FileTypeFilter = new[] { new FilePickerFileType("Executable") { Patterns = new[] { "*.exe", "*" } } }
         });
 
         if (files.Count > 0)
@@ -169,7 +167,7 @@ public partial class TextureTabViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private string _textureName = "";
     [ObservableProperty] private Bitmap? _previewImage;
     [ObservableProperty] private string _dimensions = "–";
-    [ObservableProperty] private string _status = "Načítavam...";
+    [ObservableProperty] private string _status = "Loading...";
     [ObservableProperty] private string _standardUsage = "–";
     [ObservableProperty] private bool _isLoading = true;
     [ObservableProperty] private string _errorMessage = "";
@@ -186,7 +184,7 @@ public partial class TextureTabViewModel : ViewModelBase, IDisposable
         catch (Exception ex)
         {
             ErrorMessage = ex.Message;
-            Status = "Chyba";
+            Status = "Error";
             IsLoading = false;
         }
     }
@@ -201,7 +199,7 @@ public partial class TextureTabViewModel : ViewModelBase, IDisposable
         catch (Exception ex)
         {
             ErrorMessage = ex.Message;
-            Status = "Chyba";
+            Status = "Error";
             IsLoading = false;
         }
     }

@@ -3,7 +3,7 @@
         xmlns:vm="using:DungeonSiegeLab.ViewModels"
         x:Class="DungeonSiegeLab.Views.SaveToProjectDialog"
         x:DataType="vm:SaveToProjectViewModel"
-        Title="Uložiť do projektu"
+        Title="Save to Project"
         Width="480" Height="280"
         CanResize="False"
         WindowStartupLocation="CenterOwner"
@@ -12,27 +12,24 @@
     <Border Padding="24" Background="#1e1e2e">
         <StackPanel Spacing="16">
 
-            <TextBlock Text="Uložiť textúru do projektu"
+            <TextBlock Text="Save Texture to Project"
                        FontSize="16" FontWeight="Bold"
                        Foreground="#cdd6f4"/>
 
-            <!-- Relatívna cesta -->
             <StackPanel Spacing="4">
-                <TextBlock Text="Relatívna cesta v /Bits:"
+                <TextBlock Text="Relative path in /Bits:"
                            Foreground="#a6adc8" FontSize="12"/>
                 <TextBox Text="{Binding RelativePath}"
                          FontFamily="Consolas,monospace"/>
             </StackPanel>
 
-            <!-- Meno súboru -->
             <StackPanel Spacing="4">
-                <TextBlock Text="Meno textúry (bez prípony):"
+                <TextBlock Text="Texture name (without extension):"
                            Foreground="#a6adc8" FontSize="12"/>
                 <TextBox Text="{Binding TextureName}"
                          FontFamily="Consolas,monospace"/>
             </StackPanel>
 
-            <!-- Status -->
             <Border Background="#181825" CornerRadius="4" Padding="10 6">
                 <TextBlock Text="{Binding StatusMessage}"
                            Foreground="{Binding IsStatusOk,
@@ -42,12 +39,11 @@
                            TextWrapping="Wrap"/>
             </Border>
 
-            <!-- Tlačidlá -->
             <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
-                <Button Content="Zrušiť"
+                <Button Content="Cancel"
                         Classes="secondary"
                         Command="{Binding CancelCommand}"/>
-                <Button Content="💾 Exportovať do projektu"
+                <Button Content="💾 Export to Project"
                         Classes="primary"
                         Command="{Binding ExportToProjectCommand}"
                         IsEnabled="{Binding !IsSaving}"/>

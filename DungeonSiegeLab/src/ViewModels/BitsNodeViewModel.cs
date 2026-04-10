@@ -4,10 +4,6 @@ using DungeonSiegeLab.Models;
 
 namespace DungeonSiegeLab.ViewModels;
 
-/// <summary>
-/// ViewModel wrapping BitsNode pre zobrazenie v TreeView.
-/// Rekurzívne obaľuje Children.
-/// </summary>
 public partial class BitsNodeViewModel : ViewModelBase
 {
     public BitsNode Node { get; }
@@ -34,6 +30,35 @@ public partial class BitsNodeViewModel : ViewModelBase
 
     public ObservableCollection<BitsNodeViewModel> Children { get; } = new();
 
+    /// <summary>Fired whenever any node's expansion state changes, so the browser can persist it.</summary>
+    public static event Action? AnyExpansionChanged;
+
+    partial void OnIsExpandedChanged(bool value)
+    {
+        if (!value)
+            ForceCollapseDescendants(Children);
+        AnyExpansionChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// Collapses all descendants by directly setting backing fields (no recursive events),
+    /// then notifies the UI via PropertyChanged so the TwoWay binding updates TreeViewItems.
+    /// Only one AnyExpansionChanged fires — from the node that was explicitly collapsed.
+    /// </summary>
+    private static void ForceCollapseDescendants(ObservableCollection<BitsNodeViewModel> nodes)
+    {
+        foreach (var child in nodes)
+        {
+            if (child._isExpanded)
+            {
+                child._isExpanded = false;
+                child.OnPropertyChanged(nameof(IsExpanded));
+            }
+            if (child.Children.Count > 0)
+                ForceCollapseDescendants(child.Children);
+        }
+    }
+
     public BitsNodeViewModel(BitsNode node)
     {
         Node = node;
@@ -51,7 +76,6 @@ public partial class BitsNodeViewModel : ViewModelBase
                 Children.Add(new BitsNodeViewModel(child));
         }
 
-        // Priečinky sú predvolene rozbalené
-        _isExpanded = node is BitsFolder;
+        _isExpanded = false;
     }
 }

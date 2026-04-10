@@ -35,7 +35,7 @@ public partial class SaveToProjectViewModel : ViewModelBase
     {
         if (string.IsNullOrWhiteSpace(TextureName))
         {
-            StatusMessage = "Zadajte meno textúry.";
+            StatusMessage = "Enter a texture name.";
             IsStatusOk = false;
             return;
         }
@@ -43,12 +43,12 @@ public partial class SaveToProjectViewModel : ViewModelBase
         var fullPath = Path.Combine(_bitsRootPath, RelativePath, TextureName + ".raw");
         if (File.Exists(fullPath))
         {
-            StatusMessage = $"⚠ Súbor '{TextureName}.raw' už existuje – bude prepísaný.";
+            StatusMessage = $"⚠ File '{TextureName}.raw' already exists – it will be overwritten.";
             IsStatusOk = false;
         }
         else
         {
-            StatusMessage = $"✓ Uloží sa ako: {RelativePath}{TextureName}.raw";
+            StatusMessage = $"✓ Will be saved as: {RelativePath}{TextureName}.raw";
             IsStatusOk = true;
         }
     }
@@ -58,20 +58,18 @@ public partial class SaveToProjectViewModel : ViewModelBase
     {
         if (string.IsNullOrWhiteSpace(TextureName)) return;
 
-        // Ak súbor existuje, vyžiadame potvrdenie (riešené vo View)
         IsSaving = true;
         try
         {
             await _converter.SaveToProjectAsync(_texture, _bitsRootPath, RelativePath, TextureName);
-            StatusMessage = $"✓ Uložené: {RelativePath}{TextureName}.raw";
+            StatusMessage = $"✓ Saved: {RelativePath}{TextureName}.raw";
             IsStatusOk = true;
-            // Počkaj chvíľu aby používateľ videl správu, potom zavri
             await Task.Delay(800);
             CloseRequested?.Invoke();
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Chyba: {ex.Message}";
+            StatusMessage = $"Error: {ex.Message}";
             IsStatusOk = false;
         }
         finally

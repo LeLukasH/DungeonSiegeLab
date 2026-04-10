@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,20 +12,47 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 {
     private readonly BitsLoader _bitsLoader = new();
     private readonly TextureFinder _textureFinder = new();
+    private readonly TreeStateService _treeState = new();
 
     [ObservableProperty] private ObservableCollection<BitsNodeViewModel> _rootNodes = new();
     [ObservableProperty] private BitsNodeViewModel? _selectedNode;
-    [ObservableProperty] private string _sourceCode = "Vyberte template zo stromu...";
-    [ObservableProperty] private string _statusMessage = "Načítajte /Bits priečinok.";
+    [ObservableProperty] private string _statusMessage = "Load a /Bits folder.";
     [ObservableProperty] private bool _isLoading;
     [ObservableProperty] private string _bitsPath = "";
 
-    private string _bitsRootPath = "";
+    [ObservableProperty] private ObservableCollection<CodeTabViewModel> _openCodeTabs = new();
+    [ObservableProperty] private CodeTabViewModel? _selectedCodeTab;
 
-    // Event: poslať textúry do Texture Lab
+    public bool HasOpenCodeTabs => OpenCodeTabs.Count > 0;
+    public bool HasNoOpenCodeTabs => OpenCodeTabs.Count == 0;
+
+    private string _bitsRootPath = "";
+    private CancellationTokenSource? _saveCts;
+
     public event Action<List<TextureReference>>? TexturesIdentified;
 
-    // ─── Načítanie priečinka ───────────────────────────────────────────────
+    public ProjectBrowserViewModel()
+    {
+        _treeState.Load();
+        BitsPath = _treeState.LastBitsPath ?? "";
+        BitsNodeViewModel.AnyExpansionChanged += SaveExpansionStateDebounced;
+        OpenCodeTabs.CollectionChanged += OnOpenCodeTabsChanged;
+
+        // Startup load: restore saved expansion state
+        if (!string.IsNullOrEmpty(BitsPath))
+            _ = LoadCoreAsync(BitsPath, restoreExpansion: true);
+    }
+
+    private void OnOpenCodeTabsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(HasOpenCodeTabs));
+        OnPropertyChanged(nameof(HasNoOpenCodeTabs));
+    }
+
+    // ─── Load folder ──────────────────────────────────────────────────────
+
+    [RelayCommand]
+    private Task LoadBitsFolderAsync(string path) => LoadCoreAsync(path, restoreExpansion: false);
 
     [RelayCommand]
     private async Task BrowseForBitsFolderAsync(IStorageProvider? storageProvider)
@@ -33,36 +61,50 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
         var folders = await storageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
-            Title = "Vyberte /Bits priečinok",
+            Title = "Select /Bits folder",
             AllowMultiple = false
         });
 
         if (folders.Count == 0) return;
 
         BitsPath = folders[0].Path.LocalPath;
-        await LoadBitsFolderAsync(BitsPath);
+        await LoadCoreAsync(BitsPath, restoreExpansion: false);
     }
 
-    [RelayCommand]
-    private async Task LoadBitsFolderAsync(string path)
+    private async Task LoadCoreAsync(string path, bool restoreExpansion)
     {
         if (string.IsNullOrWhiteSpace(path)) return;
 
         IsLoading = true;
-        StatusMessage = "Načítavam...";
+        StatusMessage = "Loading...";
         RootNodes.Clear();
-        SourceCode = "";
+        OpenCodeTabs.Clear();
+        SelectedCodeTab = null;
 
         try
         {
             _bitsRootPath = path;
             var root = await _bitsLoader.LoadAsync(path);
             RootNodes.Add(new BitsNodeViewModel(root));
-            StatusMessage = $"Načítané: {path}";
+
+            if (restoreExpansion)
+            {
+                var saved = _treeState.GetExpandedPaths(path);
+                if (saved.Count > 0)
+                {
+                    BitsNodeViewModel.AnyExpansionChanged -= SaveExpansionStateDebounced;
+                    RestoreExpansionState(RootNodes, saved);
+                    BitsNodeViewModel.AnyExpansionChanged += SaveExpansionStateDebounced;
+                }
+            }
+
+            // Always persist the path immediately after a successful load
+            _treeState.SaveExpansionState(_bitsRootPath, CollectExpandedPaths(RootNodes));
+            StatusMessage = $"Loaded: {path}";
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Chyba: {ex.Message}";
+            StatusMessage = $"Error: {ex.Message}";
         }
         finally
         {
@@ -70,24 +112,103 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         }
     }
 
-    // ─── Výber nodu v strome ──────────────────────────────────────────────
+    private static void RestoreExpansionState(IEnumerable<BitsNodeViewModel> nodes, HashSet<string> expandedPaths)
+    {
+        foreach (var node in nodes)
+        {
+            node.IsExpanded = expandedPaths.Contains(node.FullPath);
+            if (node.Children.Count > 0)
+                RestoreExpansionState(node.Children, expandedPaths);
+        }
+    }
+
+    private void SaveExpansionStateDebounced()
+    {
+        _saveCts?.Cancel();
+        _saveCts = new CancellationTokenSource();
+        DelayedSave(_saveCts.Token);
+    }
+
+    private async void DelayedSave(CancellationToken token)
+    {
+        try
+        {
+            await Task.Delay(300, token);
+            if (string.IsNullOrEmpty(_bitsRootPath)) return;
+            _treeState.SaveExpansionState(_bitsRootPath, CollectExpandedPaths(RootNodes));
+        }
+        catch (OperationCanceledException) { }
+    }
+
+    private static List<string> CollectExpandedPaths(IEnumerable<BitsNodeViewModel> nodes)
+    {
+        var result = new List<string>();
+        foreach (var node in nodes)
+        {
+            if (node.IsExpanded) result.Add(node.FullPath);
+            if (node.Children.Count > 0) result.AddRange(CollectExpandedPaths(node.Children));
+        }
+        return result;
+    }
+
+    // ─── Tree selection (single click → preview tab) ──────────────────────
 
     partial void OnSelectedNodeChanged(BitsNodeViewModel? value)
     {
         if (value?.Node is BitsTemplate template)
         {
-            SourceCode = template.SourceCode;
+            OpenPreviewTab(value);
             StatusMessage = $"Template: {template.TemplateName}";
         }
         else if (value?.Node is BitsFile file)
         {
-            SourceCode = $"// Súbor: {file.Name}\n// Vyberte template zo zoznamu.";
-            StatusMessage = $"Súbor: {file.Name}";
+            StatusMessage = $"File: {file.Name}";
         }
-        else
+    }
+
+    public void OpenPreviewTab(BitsNodeViewModel node)
+    {
+        var permanent = OpenCodeTabs.FirstOrDefault(t => !t.IsPreview && t.Node == node);
+        if (permanent != null) { SelectedCodeTab = permanent; return; }
+
+        var currentPreview = OpenCodeTabs.FirstOrDefault(t => t.IsPreview);
+        if (currentPreview?.Node == node) return;
+
+        if (currentPreview != null) OpenCodeTabs.Remove(currentPreview);
+
+        var tab = new CodeTabViewModel(node, isPreview: true);
+        OpenCodeTabs.Add(tab);
+        SelectedCodeTab = tab;
+    }
+
+    public void PromoteToPermanent(BitsNodeViewModel node)
+    {
+        if (node.Node is not BitsTemplate) return;
+
+        var existing = OpenCodeTabs.FirstOrDefault(t => t.Node == node);
+        if (existing != null)
         {
-            SourceCode = "";
+            existing.IsPreview = false;
+            SelectedCodeTab = existing;
+            return;
         }
+
+        var preview = OpenCodeTabs.FirstOrDefault(t => t.IsPreview);
+        if (preview != null) OpenCodeTabs.Remove(preview);
+
+        var tab = new CodeTabViewModel(node, isPreview: false);
+        OpenCodeTabs.Add(tab);
+        SelectedCodeTab = tab;
+    }
+
+    [RelayCommand]
+    private void CloseCodeTab(CodeTabViewModel? tab)
+    {
+        if (tab is null) return;
+        var idx = OpenCodeTabs.IndexOf(tab);
+        OpenCodeTabs.Remove(tab);
+        if (SelectedCodeTab == tab)
+            SelectedCodeTab = idx > 0 ? OpenCodeTabs[idx - 1] : OpenCodeTabs.FirstOrDefault();
     }
 
     // ─── Identify Textures ────────────────────────────────────────────────
@@ -97,43 +218,41 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     {
         if (SelectedNode?.Node is not BitsTemplate template)
         {
-            StatusMessage = "Najprv vyberte template.";
+            StatusMessage = "Select a template first.";
             return;
         }
 
         var textures = _textureFinder.FindInTemplate(template);
-
         if (!string.IsNullOrEmpty(_bitsRootPath))
             _textureFinder.ResolveTextureFiles(textures, _bitsRootPath);
 
-        StatusMessage = $"Nájdených {textures.Count} textúr v '{template.TemplateName}'.";
+        StatusMessage = $"Found {textures.Count} texture(s) in '{template.TemplateName}'.";
         TexturesIdentified?.Invoke(textures);
     }
 
-    // ─── Identify Template Dependencies ──────────────────────────────────
+    // ─── Identify Dependencies ────────────────────────────────────────────
 
     [RelayCommand]
     private void IdentifyDependencies()
     {
         if (SelectedNode?.Node is not BitsTemplate template)
         {
-            StatusMessage = "Najprv vyberte template.";
+            StatusMessage = "Select a template first.";
             return;
         }
 
-        // Hľadáme "specializes = meno;" — dedičnosť templates v DS
         var specializesRegex = new System.Text.RegularExpressions.Regex(
             @"\bspecializes\s*=\s*(\w+)\s*;", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
         var matches = specializesRegex.Matches(template.SourceCode);
         if (matches.Count == 0)
         {
-            StatusMessage = $"'{template.TemplateName}' nemá žiadne závislosti (specializes).";
+            StatusMessage = $"'{template.TemplateName}' has no dependencies (specializes).";
             return;
         }
 
         var deps = string.Join(", ", matches.Cast<System.Text.RegularExpressions.Match>()
             .Select(m => m.Groups[1].Value));
-        StatusMessage = $"Závislosti '{template.TemplateName}': {deps}";
+        StatusMessage = $"Dependencies of '{template.TemplateName}': {deps}";
     }
 }
