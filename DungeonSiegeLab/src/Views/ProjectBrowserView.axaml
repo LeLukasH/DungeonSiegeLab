@@ -55,16 +55,11 @@
                 <Separator Width="1" Height="24" Background="#45475a" Margin="0 0 16 0"/>
 
                 <StackPanel Orientation="Horizontal" Spacing="6">
-                    <Button Content="🔍 Identify Textures"
+                    <Button Content="🔍 Identify"
                             Classes="primary"
                             Height="30"
-                            Command="{Binding IdentifyTexturesCommand}"
-                            ToolTip.Tip="Finds all textures in the current template and opens them in Texture Lab"/>
-                    <Button Content="🔗 Identify Dependencies"
-                            Classes="secondary"
-                            Height="30"
-                            Command="{Binding IdentifyDependenciesCommand}"
-                            ToolTip.Tip="Finds 'specializes' dependencies of the current template"/>
+                            Command="{Binding IdentifyCommand}"
+                            ToolTip.Tip="Finds all dependencies (textures, templates, sounds, effects, scripts) of the selected template"/>
                 </StackPanel>
 
                 <ProgressBar IsIndeterminate="True"
