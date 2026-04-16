@@ -12,6 +12,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 {
     private readonly BitsLoader _bitsLoader = new();
     private readonly TextureFinder _textureFinder = new();
+    private readonly DependencyFinder _dependencyFinder = new();
     private readonly TreeStateService _treeState = new();
     private CancellationTokenSource? _searchCts;
 
@@ -275,10 +276,10 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             SelectedCodeTab = idx > 0 ? OpenCodeTabs[idx - 1] : OpenCodeTabs.FirstOrDefault();
     }
 
-    // ─── Identify Textures ────────────────────────────────────────────────
+    // ─── Identify ─────────────────────────────────────────────────────────
 
     [RelayCommand]
-    private void IdentifyTextures()
+    private void Identify()
     {
         if (SelectedNode?.Node is not BitsTemplate template)
         {
@@ -286,15 +287,64 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             return;
         }
 
-        var textures = _textureFinder.FindInTemplate(template);
+        var dependencies = _dependencyFinder.IdentifyDependencies(template, BuildTemplateIndex());
 
-        // User's Bits folder has priority; Untank fills in anything not found there
+        if (dependencies.Count == 0)
+        {
+            StatusMessage = $"'{template.TemplateName}' has no dependencies.";
+            return;
+        }
+
+        // pass the dependencies data to the currently selected code tab 
+        // if (SelectedCodeTab != null)
+        // {
+        //     SelectedCodeTab.Dependencies.Clear();
+
+        //     foreach (var dep in dependencies)
+        //         SelectedCodeTab.Dependencies.Add(dep);
+        // }
+
+        var textures = dependencies
+            .Where(d => d.Kind == DependencyKind.Texture)
+            .Select(d => new TextureReference
+            {
+                TextureName = d.Value,
+                Source = d.Rule switch
+                {
+                    "aspect:textures" => TextureSourceType.AspectTextures,
+                    "aspect:model:implicit" => TextureSourceType.AspectModel,
+                    "fixed:gui:inventory_icon" => TextureSourceType.InventoryIcon,
+                    _ => TextureSourceType.ComponentAttribute
+                },
+                AttributePath = d.SourcePath
+            })
+            .GroupBy(t => t.TextureName, StringComparer.OrdinalIgnoreCase)
+            .Select(g => g.First())
+            .ToList();
+
         if (!string.IsNullOrEmpty(_bitsRootPath))
             _textureFinder.ResolveTextureFiles(textures, _bitsRootPath);
         _textureFinder.ResolveTextureFiles(textures, UntankPath, overwriteExisting: false);
 
-        StatusMessage = $"Found {textures.Count} texture(s) in '{template.TemplateName}'.";
-        TexturesIdentified?.Invoke(textures);
+        // TODO: Product decision pending - keep Identify in Browser vs auto-open Texture Lab when textures exist.
+        if (textures.Count > 0)
+            TexturesIdentified?.Invoke(textures);
+
+        var localCount = dependencies.Count(d => !d.IsInherited);
+        var inheritedCount = dependencies.Count(d => d.IsInherited);
+
+        var byType = dependencies
+            .GroupBy(d => d.Kind)
+            .OrderBy(g => g.Key)
+            .Select(g =>
+            {
+                var local = g.Count(d => !d.IsInherited);
+                var inherited = g.Count(d => d.IsInherited);
+                return $"{g.Key}:{local}L/{inherited}I";
+            });
+
+        StatusMessage =
+            $"'{template.TemplateName}' → Local:{localCount} | Inherited:{inheritedCount} | {string.Join(" | ", byType)}";
     }
 
     // ─── Search ───────────────────────────────────────────────────────────
@@ -412,29 +462,24 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         return null;
     }
 
-    // ─── Identify Dependencies ────────────────────────────────────────────
 
-    [RelayCommand]
-    private void IdentifyDependencies()
+
+    private Dictionary<string, BitsTemplate> BuildTemplateIndex()
     {
-        if (SelectedNode?.Node is not BitsTemplate template)
-        {
-            StatusMessage = "Select a template first.";
-            return;
-        }
+        var dict = new Dictionary<string, BitsTemplate>(StringComparer.OrdinalIgnoreCase);
 
-        var specializesRegex = new System.Text.RegularExpressions.Regex(
-            @"\bspecializes\s*=\s*(\w+)\s*;", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        foreach (var root in RootNodes)
+            CollectTemplates(root, dict);
 
-        var matches = specializesRegex.Matches(template.SourceCode);
-        if (matches.Count == 0)
-        {
-            StatusMessage = $"'{template.TemplateName}' has no dependencies (specializes).";
-            return;
-        }
+        return dict;
+    }
 
-        var deps = string.Join(", ", matches.Cast<System.Text.RegularExpressions.Match>()
-            .Select(m => m.Groups[1].Value));
-        StatusMessage = $"Dependencies of '{template.TemplateName}': {deps}";
+    private static void CollectTemplates(BitsNodeViewModel node, Dictionary<string, BitsTemplate> index)
+    {
+        if (node.Node is BitsTemplate tpl)
+            index[tpl.TemplateName] = tpl;
+
+        foreach (var child in node.Children)
+            CollectTemplates(child, index);
     }
 }

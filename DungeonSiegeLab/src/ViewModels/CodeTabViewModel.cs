@@ -1,5 +1,7 @@
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 using DungeonSiegeLab.Models;
 
 namespace DungeonSiegeLab.ViewModels;
@@ -13,8 +15,13 @@ public partial class CodeTabViewModel : ViewModelBase
 {
     public BitsNodeViewModel Node { get; }
 
-    [ObservableProperty]
-    private bool _isPreview;
+    [ObservableProperty] private bool _isPreview;
+    // preparation for dependency implementation 
+    [ObservableProperty] private ObservableCollection<DependencyReference> _dependencies = new();
+    [ObservableProperty] private DependencyReference? _selectedDependency;
+    [ObservableProperty] private bool _isDependencyPopupOpen;
+
+    [ObservableProperty] private bool _isStatusExpanded;
 
     public string Name => Node.Name;
     public string SourceCode => Node.Node is BitsTemplate t ? t.SourceCode : $"// {Node.Name}";
@@ -28,5 +35,26 @@ public partial class CodeTabViewModel : ViewModelBase
     {
         Node = node;
         _isPreview = isPreview;
+    }
+
+    [RelayCommand]
+    private void ToggleStatus()
+    {
+        Console.WriteLine("Toggle clicked");
+        IsStatusExpanded = !IsStatusExpanded;
+    }
+
+    [RelayCommand]
+    private void OpenDependency(DependencyReference dep)
+    {
+        SelectedDependency = dep;
+        IsDependencyPopupOpen = true;
+    }
+
+    [RelayCommand]
+    private void CloseDependency()
+    {
+        IsDependencyPopupOpen = false;
+        SelectedDependency = null;
     }
 }

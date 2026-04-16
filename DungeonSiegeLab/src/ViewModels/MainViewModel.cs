@@ -14,6 +14,7 @@ public partial class MainViewModel : ViewModelBase
     public MainViewModel()
     {
         // Keď Browser identifikuje textúry, prepni na Lab a načítaj ich
+        // TODO: Revisit UX - this subscription makes Identify auto-switch to Texture Lab.
         ProjectBrowser.TexturesIdentified += OnTexturesIdentified;
 
         // Keď Lab požiada o návrat, prepni na Browser
