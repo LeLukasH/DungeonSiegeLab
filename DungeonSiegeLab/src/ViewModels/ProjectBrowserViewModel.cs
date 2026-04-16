@@ -295,6 +295,15 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             return;
         }
 
+        // pass the dependencies data to the currently selected code tab 
+        // if (SelectedCodeTab != null)
+        // {
+        //     SelectedCodeTab.Dependencies.Clear();
+
+        //     foreach (var dep in dependencies)
+        //         SelectedCodeTab.Dependencies.Add(dep);
+        // }
+
         var textures = dependencies
             .Where(d => d.Kind == DependencyKind.Texture)
             .Select(d => new TextureReference
