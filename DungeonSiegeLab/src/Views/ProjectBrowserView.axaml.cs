@@ -7,7 +7,31 @@ namespace DungeonSiegeLab.Views;
 
 public partial class ProjectBrowserView : UserControl
 {
-    public ProjectBrowserView() => InitializeComponent();
+    public ProjectBrowserView()
+    {
+        InitializeComponent();
+        // handledEventsToo: TreeViewItem marks PointerPressed as handled for selection,
+        // which would prevent it from bubbling. We intercept it anyway.
+        BitsTreeView.AddHandler(PointerPressedEvent, OnTreePointerPressed, Avalonia.Interactivity.RoutingStrategies.Bubble, handledEventsToo: true);
+        UntankTreeView.AddHandler(PointerPressedEvent, OnTreePointerPressed, Avalonia.Interactivity.RoutingStrategies.Bubble, handledEventsToo: true);
+    }
+
+    private void OnOpenRecentClicked(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || DataContext is not ProjectBrowserViewModel vm) return;
+
+        var menu = new ContextMenu();
+
+        foreach (var path in vm.RecentPaths.Where(p => !p.Equals(vm.BitsPath, StringComparison.OrdinalIgnoreCase)))
+        {
+            var item = new MenuItem { Header = path, Icon = new TextBlock { Text = "📁", FontSize = 13 } };
+            var captured = path;
+            item.Click += (_, _) => vm.OpenRecentCommand.Execute(captured);
+            menu.Items.Add(item);
+        }
+
+        menu.Open(button);
+    }
 
     private async void OnBrowseClicked(object? sender, RoutedEventArgs e)
     {
@@ -16,12 +40,31 @@ public partial class ProjectBrowserView : UserControl
         await vm.BrowseForBitsFolderCommand.ExecuteAsync(topLevel?.StorageProvider);
     }
 
-    // Tap on the full row Border → toggle expand/collapse for folders and files
-    private void OnTreeItemTapped(object? sender, Avalonia.Input.TappedEventArgs e)
+    // Any click on a tree row → toggle expand/collapse, except the built-in expander arrow
+    private void OnTreePointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
-        var node = (sender as Avalonia.Controls.Border)?.DataContext as BitsNodeViewModel;
-        if (node is not null && !node.IsTemplate)
-            node.IsExpanded = !node.IsExpanded;
+        if (!e.GetCurrentPoint(null).Properties.IsLeftButtonPressed) return;
+
+        // Skip if the click landed on (or inside) the expander ToggleButton
+        var source = e.Source as Avalonia.Controls.Control;
+        while (source != null)
+        {
+            if (source is Avalonia.Controls.Primitives.ToggleButton) return;
+            source = source.Parent as Avalonia.Controls.Control;
+        }
+
+        // Walk up to find the BitsNodeViewModel
+        var target = e.Source as Avalonia.Controls.Control;
+        while (target != null)
+        {
+            if (target.DataContext is BitsNodeViewModel node)
+            {
+                if (!node.IsTemplate)
+                    node.IsExpanded = !node.IsExpanded;
+                return;
+            }
+            target = target.Parent as Avalonia.Controls.Control;
+        }
     }
 
     // Double-tap on tree item → promote to permanent tab

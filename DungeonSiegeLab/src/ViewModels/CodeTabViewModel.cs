@@ -24,7 +24,8 @@ public partial class CodeTabViewModel : ViewModelBase
     [ObservableProperty] private bool _isStatusExpanded;
 
     public string Name => Node.Name;
-    public string SourceCode => Node.Node is BitsTemplate t ? t.SourceCode : $"// {Node.Name}";
+
+    [ObservableProperty] private string _sourceCode = "";
 
     /// <summary>Italic when preview, normal when permanent — bound directly in XAML.</summary>
     public FontStyle TabFontStyle => IsPreview ? FontStyle.Italic : FontStyle.Normal;
@@ -35,6 +36,43 @@ public partial class CodeTabViewModel : ViewModelBase
     {
         Node = node;
         _isPreview = isPreview;
+
+        if (node.Node is BitsTemplate t)
+            _sourceCode = t.SourceCode;
+        else if (node.IsRawFile || node.IsEmptyFile)
+            _ = LoadRawContentAsync();
+    }
+
+    private async Task LoadRawContentAsync()
+    {
+        try
+        {
+            var info = new FileInfo(Node.FullPath);
+            if (info.Length > 5 * 1024 * 1024)
+            {
+                SourceCode = $"// File too large to display ({info.Length / 1024:N0} KB)";
+                return;
+            }
+
+            var bytes = await File.ReadAllBytesAsync(Node.FullPath);
+
+            // Binary detection: null byte in first 8 KB
+            int check = Math.Min(bytes.Length, 8192);
+            for (int i = 0; i < check; i++)
+            {
+                if (bytes[i] == 0)
+                {
+                    SourceCode = "// Binary file — cannot display content";
+                    return;
+                }
+            }
+
+            SourceCode = System.Text.Encoding.UTF8.GetString(bytes);
+        }
+        catch (Exception ex)
+        {
+            SourceCode = $"// Could not read file: {ex.Message}";
+        }
     }
 
     [RelayCommand]

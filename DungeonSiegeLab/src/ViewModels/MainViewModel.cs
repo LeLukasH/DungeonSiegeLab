@@ -8,16 +8,24 @@ public partial class MainViewModel : ViewModelBase
 {
     public ProjectBrowserViewModel ProjectBrowser { get; } = new();
     public TextureLabViewModel TextureLab { get; } = new();
+    public SettingsViewModel Settings { get; } = new();
 
-    [ObservableProperty] private int _selectedTabIndex = 0; // 0 = Browser, 1 = Lab
+    [ObservableProperty] private int _selectedTabIndex = 0; // 0 = Browser, 1 = Lab, 2 = Settings
+
+    public bool IsProjectBrowserActive => SelectedTabIndex == 0;
+    public bool IsTextureLabActive     => SelectedTabIndex == 1;
+    public bool IsSettingsActive       => SelectedTabIndex == 2;
+
+    partial void OnSelectedTabIndexChanged(int value)
+    {
+        OnPropertyChanged(nameof(IsProjectBrowserActive));
+        OnPropertyChanged(nameof(IsTextureLabActive));
+        OnPropertyChanged(nameof(IsSettingsActive));
+    }
 
     public MainViewModel()
     {
-        // Keď Browser identifikuje textúry, prepni na Lab a načítaj ich
-        // TODO: Revisit UX - this subscription makes Identify auto-switch to Texture Lab.
         ProjectBrowser.TexturesIdentified += OnTexturesIdentified;
-
-        // Keď Lab požiada o návrat, prepni na Browser
         TextureLab.BackRequested += () => SelectedTabIndex = 0;
     }
 
@@ -27,10 +35,7 @@ public partial class MainViewModel : ViewModelBase
         await TextureLab.LoadTexturesAsync(textures);
     }
 
-    // Priamy príkaz na prepnutie tabu (pre tlačidlá v UI)
-    [RelayCommand]
-    private void SwitchToLab() => SelectedTabIndex = 1;
-
-    [RelayCommand]
-    private void SwitchToBrowser() => SelectedTabIndex = 0;
+    [RelayCommand] private void SwitchToLab()      => SelectedTabIndex = 1;
+    [RelayCommand] private void SwitchToBrowser()  => SelectedTabIndex = 0;
+    [RelayCommand] private void SwitchToSettings() => SelectedTabIndex = 2;
 }

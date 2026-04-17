@@ -40,3 +40,9 @@ public class BitsTemplate : BitsNode
     public string SourceCode { get; init; } = "";
     public override bool IsLeaf => true;
 }
+
+/// <summary>Non-.gas file (image, sound, script, mesh, etc.) — content loaded on demand.</summary>
+public class BitsRawFile : BitsNode
+{
+    public override bool IsLeaf => true;
+}
