@@ -20,11 +20,16 @@ public partial class ProjectBrowserView : UserControl
     {
         if (sender is not Button button || DataContext is not ProjectBrowserViewModel vm) return;
 
-        var menu = new ContextMenu();
+        var menu = new ContextMenu { MaxWidth = double.PositiveInfinity };
 
         foreach (var path in vm.RecentPaths.Where(p => !p.Equals(vm.BitsPath, StringComparison.OrdinalIgnoreCase)))
         {
-            var item = new MenuItem { Header = path, Icon = new TextBlock { Text = "📁", FontSize = 13 } };
+            var item = new MenuItem
+            {
+                Header = path,
+                MaxWidth = double.PositiveInfinity,
+                Icon = new TextBlock { Text = "📁", FontSize = 13 }
+            };
             var captured = path;
             item.Click += (_, _) => vm.OpenRecentCommand.Execute(captured);
             menu.Items.Add(item);

@@ -352,7 +352,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         var result = new List<string>();
         foreach (var node in roots)
         {
-            if (node.IsExpanded) result.Add(node.FullPath);
+            if (node.IsExpanded && !node.IsTemplate) result.Add(node.FullPath);
             if (node.Children.Count > 0) result.AddRange(CollectExpandedPaths(node.Children));
         }
         return result;
