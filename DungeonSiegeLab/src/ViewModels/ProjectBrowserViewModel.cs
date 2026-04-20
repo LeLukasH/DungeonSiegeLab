@@ -281,6 +281,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
     // ─── Identify ─────────────────────────────────────────────────────────
 
+    /// PATTERN: Command - Identify is triggered from UI via RelayCommand binding.
     [RelayCommand]
     private void Identify()
     {
@@ -305,6 +306,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         // 2) CodeTab.Dependencies = per-tab source list
         // 3) DependencyReference.SourcePath + Line = source navigation/highlight anchors
         // 4) DependencyReference.SourceTemplate + IsInherited = origin/inheritance badges
+        // PATTERN: Observer - event notifies external listeners that new dependencies are available.
         UpdateIdentifiedDependencies(dependencies);
         PushDependenciesToCodeTab(template, dependencies);
         DependenciesIdentified?.Invoke(dependencies);
@@ -356,6 +358,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
     private void UpdateIdentifiedDependencies(List<DependencyReference> dependencies)
     {
+        // PATTERN: Adapter - convert parser output into frontend-oriented observable state.
         // Global store for UI that is not tab-scoped (e.g. right panel with filters).
         IdentifiedDependencies.Clear();
         foreach (var dep in dependencies)
@@ -366,6 +369,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
     private void PushDependenciesToCodeTab(BitsTemplate template, List<DependencyReference> dependencies)
     {
+        // PATTERN: Adapter - project shared identify output into per-tab view model state.
         // Prefer exact tab for selected template; fallback keeps data visible if focus changed.
         var targetTab = OpenCodeTabs.FirstOrDefault(t => t.Node.Node == template) ?? SelectedCodeTab;
         if (targetTab is null) return;
@@ -490,6 +494,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
 
 
+    /// PATTERN: Composite - recursive traversal over tree nodes to collect templates.
     private Dictionary<string, BitsTemplate> BuildTemplateIndex()
     {
         var dict = new Dictionary<string, BitsTemplate>(StringComparer.OrdinalIgnoreCase);
@@ -500,6 +505,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         return dict;
     }
 
+    /// PATTERN: Composite + Iterator - depth-first walk over node children.
     private static void CollectTemplates(BitsNodeViewModel node, Dictionary<string, BitsTemplate> index)
     {
         if (node.Node is BitsTemplate tpl)

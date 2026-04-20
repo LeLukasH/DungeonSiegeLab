@@ -43,6 +43,7 @@ public class DependencyFinder
         RegexOptions.Compiled);
     private static readonly Regex ModelPosSuffixRegex = new(@"_pos(?:[_-]\d+)?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+    /// PATTERN: Strategy (config-driven behavior) - rules are loaded from external JSON.
     public DependencyFinder()
     {
         // Load user-editable rules once; use defaults if file is missing or invalid.
@@ -72,6 +73,7 @@ public class DependencyFinder
             .ToList();
     }
 
+    /// PATTERN: Recursion + Memoization - resolves inheritance graph with cache and cycle guard.
     private AnalyzeResult AnalyzeTemplateRecursive(
         BitsTemplate template,
         IReadOnlyDictionary<string, BitsTemplate> templateIndex,
@@ -128,6 +130,7 @@ public class DependencyFinder
         return combined;
     }
 
+    /// PATTERN: Interpreter - parses template text into structured assignment records.
     private ParseResult ParseTemplate(BitsTemplate template)
     {
         var result = new ParseResult();
@@ -233,6 +236,7 @@ public class DependencyFinder
         return result;
     }
 
+    /// PATTERN: Rule Engine (chain-like) - sequential rule checks emit dependencies.
     private List<DependencyReference> ExtractLocalDependencies(BitsTemplate template, ParseResult parsed)
     {
         var dependencies = new List<DependencyReference>();
@@ -431,6 +435,7 @@ public class DependencyFinder
         return _vanillaBlocks.Contains(name);
     }
 
+    /// PATTERN: Strategy/Configuration - load runtime rule set with safe fallback.
     private static DependencyRulesConfig LoadRulesConfig()
     {
         var defaults = DependencyRulesConfig.CreateDefault();
