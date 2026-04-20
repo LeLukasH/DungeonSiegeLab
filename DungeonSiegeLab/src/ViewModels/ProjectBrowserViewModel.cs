@@ -30,6 +30,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     [ObservableProperty] private CodeTabViewModel? _selectedCodeTab;
     [ObservableProperty] private ObservableCollection<DependencyReference> _identifiedDependencies = new();
     [ObservableProperty] private DependencyReference? _selectedIdentifiedDependency;
+    [ObservableProperty] private bool _isDependencyPanelOpen;
 
     public bool HasOpenCodeTabs => OpenCodeTabs.Count > 0;
     public bool HasNoOpenCodeTabs => OpenCodeTabs.Count == 0;
@@ -310,6 +311,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         UpdateIdentifiedDependencies(dependencies);
         PushDependenciesToCodeTab(template, dependencies);
         DependenciesIdentified?.Invoke(dependencies);
+        IsDependencyPanelOpen = true;
 
         // Texture Lab still uses TextureReference, so map texture dependencies to that model.
         var textures = dependencies

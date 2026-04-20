@@ -1,7 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:DungeonSiegeLab.ViewModels"
-             xmlns:conv="using:DungeonSiegeLab.Converters"
              x:Class="DungeonSiegeLab.Views.ProjectBrowserView"
              x:DataType="vm:ProjectBrowserViewModel">
 
@@ -25,10 +24,6 @@
             <Setter Property="BorderBrush" Value="#cba6f7"/>
         </Style>
     </UserControl.Styles>
-
-    <UserControl.Resources>
-        <conv:LineToYConverter x:Key="LineToYConverter"/>
-    </UserControl.Resources>
 
     <DockPanel>
 
@@ -92,6 +87,8 @@
                 <ColumnDefinition Width="280" MinWidth="150"/>
                 <ColumnDefinition Width="4"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="{Binding IsDependencyPanelOpen, Converter={StaticResource BoolToGridLengthConverter}, ConverterParameter=4}"/>
+                <ColumnDefinition Width="{Binding IsDependencyPanelOpen, Converter={StaticResource BoolToGridLengthConverter}, ConverterParameter=300}"/>
             </Grid.ColumnDefinitions>
 
             <!-- Left panel -->
@@ -299,7 +296,7 @@
                                             AcceptsReturn="True"/>
                                 </ScrollViewer>
 
-                                <!-- Dots --> 
+                                <!-- Dots - the next step, not functional --> 
                                 <!-- <ItemsControl   ItemsSource="{Binding Dependencies}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
@@ -382,6 +379,78 @@
 
                 </TabControl>
             </Grid>
+
+            <!-- Splitter -->
+            <GridSplitter Grid.Column="3"
+                          IsVisible="{Binding IsDependencyPanelOpen}"
+                          Background="#313244"
+                          ResizeDirection="Columns"/>
+
+            <Border Grid.Column="4"
+                    IsVisible="{Binding IsDependencyPanelOpen}"
+                    Background="#181825"
+                    BorderBrush="#313244"
+                    BorderThickness="1 0 0 0"
+                    Padding="8">
+
+                <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                <StackPanel>
+
+                    <!-- Header -->
+                    <TextBlock Text="Dependencies"
+                            FontWeight="Bold"
+                            Foreground="#cdd6f4"
+                            Margin="4"/>
+
+                    <!-- List -->
+                    <ListBox ItemsSource="{Binding IdentifiedDependencies}"
+                            SelectedItem="{Binding SelectedIdentifiedDependency}"
+                            Background="Transparent"
+                            BorderThickness="0">
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+
+                                <Border Padding="6" Margin="2"
+                                        Background="#1e1e2e"
+                                        CornerRadius="4">
+
+                                    <StackPanel Spacing="2">
+
+                                        <!-- Value -->
+                                        <TextBlock Text="{Binding Value, StringFormat='Value: {0}'}"
+                                                Foreground="#cba6f7"
+                                                FontWeight="SemiBold"/>
+
+                                        <!-- Kind + Origin -->
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+
+                                            <TextBlock Text="{Binding Kind, StringFormat='Kind: {0}'}"
+                                                    Foreground="#89b4fa"
+                                                    FontSize="11"/>
+
+                                            <TextBlock Text="{Binding Origin, StringFormat='Origin: {0}'}"
+                                                    FontSize="11"
+                                                    Foreground="#f38ba8"
+                                                    IsVisible="{Binding IsInherited}"/>
+                                        </StackPanel>
+
+                                        <!-- Source -->
+                                        <TextBlock Text="{Binding SourcePath, StringFormat='SourcePath: {0}'}"
+                                                FontSize="11"
+                                                Foreground="#6c7086"
+                                                TextTrimming="CharacterEllipsis"/>
+
+                                    </StackPanel>
+                                </Border>
+
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                </StackPanel>
+                </ScrollViewer>
+            </Border>
 
         </Grid>
     </DockPanel>
