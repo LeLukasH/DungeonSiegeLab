@@ -4,6 +4,8 @@ using DungeonSiegeLab.Models;
 
 namespace DungeonSiegeLab.Services;
 
+/// Unified dependency engine for template analysis.
+/// It resolves local dependencies, follows specializes recursively, and marks inherited items.
 public class DependencyFinder
 {
     private readonly HashSet<string> _vanillaBlocks;
@@ -43,6 +45,7 @@ public class DependencyFinder
 
     public DependencyFinder()
     {
+        // Load user-editable rules once; use defaults if file is missing or invalid.
         var rules = LoadRulesConfig();
 
         _vanillaBlocks = new HashSet<string>(rules.VanillaBlocks, StringComparer.OrdinalIgnoreCase);
@@ -55,7 +58,9 @@ public class DependencyFinder
         BitsTemplate template,
         IReadOnlyDictionary<string, BitsTemplate> templateIndex)
     {
+        // Cache prevents repeated work when multiple nodes share ancestors.
         var cache = new Dictionary<string, AnalyzeResult>(StringComparer.OrdinalIgnoreCase);
+        // Visiting set prevents infinite loops if template graph is malformed/cyclic.
         var visiting = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var result = AnalyzeTemplateRecursive(template, templateIndex, cache, visiting);
 
@@ -92,6 +97,7 @@ public class DependencyFinder
 
             foreach (var dep in parent.Dependencies)
             {
+                // Local assignment with same signature overrides inherited source.
                 if (!string.IsNullOrEmpty(dep.SourceSignature)
                     && parsed.LocalSignatures.Contains(dep.SourceSignature))
                 {
@@ -207,9 +213,11 @@ public class DependencyFinder
                 });
                 result.LocalSignatures.Add(signature);
 
+                // specializes is the parent link used for recursive inheritance.
                 if (key.Equals("specializes", StringComparison.OrdinalIgnoreCase))
                     result.Specializes = ExtractValueTokens(value).FirstOrDefault();
 
+                // aspect:model may imply texture when explicit aspect:textures is missing.
                 if (PathStartsWith(path, "aspect") && key.Equals("model", StringComparison.OrdinalIgnoreCase))
                     result.AspectModel = ExtractValueTokens(value).FirstOrDefault();
 
@@ -228,6 +236,7 @@ public class DependencyFinder
     private List<DependencyReference> ExtractLocalDependencies(BitsTemplate template, ParseResult parsed)
     {
         var dependencies = new List<DependencyReference>();
+        // Custom top-level components are dependencies by themselves.
         dependencies.AddRange(parsed.NonVanillaBlockDependencies);
 
         foreach (var a in parsed.Assignments)
@@ -236,6 +245,7 @@ public class DependencyFinder
             if (!string.IsNullOrEmpty(root)
                 && _fixedPropertyRules.TryGetValue($"{root}:{a.Key}", out var fixedKind))
             {
+                // Exact root:property mapping from dependency-rules.json.
                 AddTokens(dependencies, template.TemplateName, a, fixedKind, $"fixed:{root}:{a.Key}", a.Value);
             }
 
@@ -303,6 +313,7 @@ public class DependencyFinder
 
         if (!parsed.HasExplicitAspectTexture && !string.IsNullOrWhiteSpace(parsed.AspectModel))
         {
+            // Legacy game convention: model name implies texture prefix when no explicit texture exists.
             var inferred = InferTextureNameFromModel(parsed.AspectModel);
             if (!string.IsNullOrWhiteSpace(inferred))
             {
@@ -446,6 +457,7 @@ public class DependencyFinder
 
     private static DependencyRulesConfig MergeWithDefaults(DependencyRulesConfig defaults, DependencyRulesConfig loaded)
     {
+        // Merge is additive: user file can override only what it cares about.
         var merged = DependencyRulesConfig.CreateDefault();
 
         if (loaded.VanillaBlocks.Count > 0)
@@ -462,6 +474,7 @@ public class DependencyFinder
 
     private static DependencyKind ParseKindOrDefault(string value)
     {
+        // Unknown string kinds degrade safely into Other instead of throwing.
         if (Enum.TryParse<DependencyKind>(value, ignoreCase: true, out var parsed))
             return parsed;
         return DependencyKind.Other;
@@ -484,6 +497,7 @@ public class DependencyFinder
 
     private static List<string> ExtractValueTokens(string value)
     {
+        // Tokenization is intentionally permissive for legacy GAS value formats.
         var tokens = value
             .Split([',', ' ', '\t'], StringSplitOptions.RemoveEmptyEntries)
             .Select(NormalizeToken)
@@ -495,6 +509,7 @@ public class DependencyFinder
 
     private static string NormalizeToken(string token)
     {
+        // Filter out placeholders, booleans, and pure numerics that are not real dependencies.
         var t = token.Trim().Trim('"', '\'', ';');
         if (string.IsNullOrWhiteSpace(t)) return "";
         if (t.Equals("<ignore>", StringComparison.OrdinalIgnoreCase)) return "";
@@ -506,6 +521,7 @@ public class DependencyFinder
 
     private static string StripComments(string line, ref bool inBlockComment)
     {
+        // Strips // and /* */ comments before regex parsing to reduce false positives.
         if (string.IsNullOrEmpty(line))
             return line;
 
@@ -594,6 +610,7 @@ public class DependencyFinder
 
         foreach (var dep in dependencies)
         {
+            // Keep duplicates only when they differ by source (line/rule/path/template/inheritance).
             var key = string.Join("|",
                 dep.Kind,
                 dep.Value,
