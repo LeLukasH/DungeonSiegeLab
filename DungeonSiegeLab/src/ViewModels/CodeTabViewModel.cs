@@ -3,6 +3,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using DungeonSiegeLab.Models;
+using System.IO;
+using Avalonia.Threading;
+using DungeonSiegeLab.Services;
+using System.Timers;
 
 namespace DungeonSiegeLab.ViewModels;
 
@@ -27,6 +31,9 @@ public partial class CodeTabViewModel : ViewModelBase
 
     [ObservableProperty] private string _sourceCode = "";
 
+    private FileSystemWatcher? _watcher;
+    private System.Timers.Timer? _reloadTimer;
+
     /// <summary>Italic when preview, normal when permanent — bound directly in XAML.</summary>
     public FontStyle TabFontStyle => IsPreview ? FontStyle.Italic : FontStyle.Normal;
 
@@ -41,6 +48,73 @@ public partial class CodeTabViewModel : ViewModelBase
             _sourceCode = t.SourceCode;
         else if (node.IsRawFile || node.IsEmptyFile)
             _ = LoadRawContentAsync();
+
+        // Start watching the file for changes
+        string fileToWatch = Node.FullPath;
+        if (Node.Node is BitsTemplate template)
+            fileToWatch = template.Parent.FullPath;
+
+        if (File.Exists(fileToWatch))
+        {
+            var dir = Path.GetDirectoryName(fileToWatch);
+            var fileName = Path.GetFileName(fileToWatch);
+            _watcher = new FileSystemWatcher(dir, fileName);
+            _watcher.Changed += OnFileChanged;
+            _watcher.EnableRaisingEvents = true;
+
+            _reloadTimer = new System.Timers.Timer(500); // 500ms debounce
+            _reloadTimer.Elapsed += OnReloadTimerElapsed;
+            _reloadTimer.AutoReset = false;
+        }
+    }
+
+    private void OnFileChanged(object sender, FileSystemEventArgs e)
+    {
+        if (_reloadTimer != null)
+        {
+            _reloadTimer.Stop();
+            _reloadTimer.Start();
+        }
+    }
+
+    private void OnReloadTimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        Dispatcher.UIThread.Post(async () =>
+        {
+            try
+            {
+                await ReloadContentAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reloading content for {Node.FullPath}: {ex.Message}");
+            }
+        });
+    }
+
+    public async Task ReloadContentAsync()
+    {
+        try
+        {
+            if (Node.Node is BitsTemplate t)
+            {
+                var gasParser = new GasParser();
+                var templates = await gasParser.ParseFileAsync(t.Parent.FullPath);
+                var updatedTemplate = templates.FirstOrDefault(temp => temp.TemplateName == t.TemplateName);
+                if (updatedTemplate != null)
+                {
+                    SourceCode = updatedTemplate.SourceCode;
+                }
+            }
+            else if (Node.IsRawFile || Node.IsEmptyFile)
+            {
+                await LoadRawContentAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in ReloadContentAsync for {Node.FullPath}: {ex.Message}");
+        }
     }
 
     private async Task LoadRawContentAsync()
