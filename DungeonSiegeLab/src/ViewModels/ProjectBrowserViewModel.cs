@@ -391,10 +391,19 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     public void OpenPreviewTab(BitsNodeViewModel node)
     {
         var permanent = OpenCodeTabs.FirstOrDefault(t => !t.IsPreview && t.Node == node);
-        if (permanent != null) { SelectedCodeTab = permanent; return; }
+        if (permanent != null)
+        {
+            _ = permanent.ReloadIfChangedAsync();
+            SelectedCodeTab = permanent;
+            return;
+        }
 
         var currentPreview = OpenCodeTabs.FirstOrDefault(t => t.IsPreview);
-        if (currentPreview?.Node == node) return;
+        if (currentPreview?.Node == node)
+        {
+            _ = currentPreview.ReloadIfChangedAsync();
+            return;
+        }
 
         if (currentPreview != null) OpenCodeTabs.Remove(currentPreview);
 
@@ -410,6 +419,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         var existing = OpenCodeTabs.FirstOrDefault(t => t.Node == node);
         if (existing != null)
         {
+            _ = existing.ReloadIfChangedAsync();
             existing.IsPreview = false;
             SelectedCodeTab = existing;
             return;

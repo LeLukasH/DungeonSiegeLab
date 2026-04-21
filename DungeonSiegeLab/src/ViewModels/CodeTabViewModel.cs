@@ -33,6 +33,8 @@ public partial class CodeTabViewModel : ViewModelBase
 
     private FileSystemWatcher? _watcher;
     private System.Timers.Timer? _reloadTimer;
+    private string? _watchedPath;
+    private DateTime _lastKnownWriteTime = DateTime.MinValue;
 
     /// <summary>Italic when preview, normal when permanent — bound directly in XAML.</summary>
     public FontStyle TabFontStyle => IsPreview ? FontStyle.Italic : FontStyle.Normal;
@@ -45,9 +47,13 @@ public partial class CodeTabViewModel : ViewModelBase
         _isPreview = isPreview;
 
         if (node.Node is BitsTemplate t)
+        {
             _sourceCode = t.SourceCode;
+        }
         else if (node.IsRawFile || node.IsEmptyFile)
+        {
             _ = LoadRawContentAsync();
+        }
 
         // Start watching the file for changes
         string fileToWatch = Node.FullPath;
@@ -56,15 +62,26 @@ public partial class CodeTabViewModel : ViewModelBase
 
         if (File.Exists(fileToWatch))
         {
+            _watchedPath = fileToWatch;
+            UpdateLastWriteTime();
+
             var dir = Path.GetDirectoryName(fileToWatch);
             var fileName = Path.GetFileName(fileToWatch);
             _watcher = new FileSystemWatcher(dir, fileName);
             _watcher.Changed += OnFileChanged;
+            _watcher.Created += OnFileChanged;
+            _watcher.Renamed += OnFileChanged;
+            _watcher.Deleted += OnFileChanged;
             _watcher.EnableRaisingEvents = true;
 
             _reloadTimer = new System.Timers.Timer(500); // 500ms debounce
             _reloadTimer.Elapsed += OnReloadTimerElapsed;
             _reloadTimer.AutoReset = false;
+        }
+
+        if (node.Node is BitsTemplate templateNode)
+        {
+            _ = EnsureTemplateIsFreshAsync(templateNode);
         }
     }
 
@@ -104,6 +121,7 @@ public partial class CodeTabViewModel : ViewModelBase
                 if (updatedTemplate != null)
                 {
                     SourceCode = updatedTemplate.SourceCode;
+                    UpdateLastWriteTime();
                 }
             }
             else if (Node.IsRawFile || Node.IsEmptyFile)
@@ -115,6 +133,51 @@ public partial class CodeTabViewModel : ViewModelBase
         {
             Console.WriteLine($"Error in ReloadContentAsync for {Node.FullPath}: {ex.Message}");
         }
+    }
+
+    private async Task EnsureTemplateIsFreshAsync(BitsTemplate t)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(_watchedPath) || !File.Exists(_watchedPath))
+                return;
+
+            var templates = await new GasParser().ParseFileAsync(_watchedPath);
+            var updatedTemplate = templates.FirstOrDefault(temp => temp.TemplateName == t.TemplateName);
+            if (updatedTemplate != null && updatedTemplate.SourceCode != SourceCode)
+            {
+                SourceCode = updatedTemplate.SourceCode;
+                UpdateLastWriteTime();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error checking template freshness for {Node.FullPath}: {ex.Message}");
+        }
+    }
+
+    public bool HasExternalModifications()
+    {
+        if (string.IsNullOrEmpty(_watchedPath))
+            return false;
+        if (!File.Exists(_watchedPath))
+            return false;
+
+        return File.GetLastWriteTimeUtc(_watchedPath) > _lastKnownWriteTime;
+    }
+
+    public async Task ReloadIfChangedAsync()
+    {
+        if (HasExternalModifications())
+            await ReloadContentAsync();
+    }
+
+    private void UpdateLastWriteTime()
+    {
+        if (string.IsNullOrEmpty(_watchedPath) || !File.Exists(_watchedPath))
+            return;
+
+        _lastKnownWriteTime = File.GetLastWriteTimeUtc(_watchedPath);
     }
 
     private async Task LoadRawContentAsync()
@@ -142,6 +205,7 @@ public partial class CodeTabViewModel : ViewModelBase
             }
 
             SourceCode = System.Text.Encoding.UTF8.GetString(bytes);
+            UpdateLastWriteTime();
         }
         catch (Exception ex)
         {
