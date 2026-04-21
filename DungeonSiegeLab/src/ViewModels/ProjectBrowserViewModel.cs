@@ -66,6 +66,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     public bool HasRecentPaths => RecentPaths.Any(p => !p.Equals(BitsPath, StringComparison.OrdinalIgnoreCase));
 
     public event Action<List<TextureReference>>? TexturesIdentified;
+    public event Action<string>? BitsFolderLoaded;
 
     public ProjectBrowserViewModel()
     {
@@ -199,9 +200,11 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             _treeState.SaveExpansionState(BitsStateKey, ToRelativeBitsPaths(CollectExpandedPaths([_bitsRootVm])));
             _treeState.AddRecentPath(path);
             RefreshRecentPaths();
+            Console.WriteLine($"ProjectBrowserViewModel loaded Bits folder: {path}");
             // Post at Background priority so it runs after any remaining Progress<T> callbacks
             Dispatcher.UIThread.Post(() => { StatusMessage = "Loading Completed"; StatusDetail = path; },
                 DispatcherPriority.Background);
+            BitsFolderLoaded?.Invoke(path);
         }
         catch (Exception ex)
         {
