@@ -11,14 +11,76 @@ using Avalonia.Threading;
 
 namespace DungeonSiegeLab.Services;
 
-public class FileWatcherService : IDisposable
+public abstract class AbstractFileWatcher : IDisposable
 {
-    private readonly string _directoryPath;
+    protected readonly string _directoryPath;
+    protected CancellationTokenSource _cts;
+    protected bool _isWatching;
+    protected readonly Dictionary<string, DateTime> _lastNotificationTimes = new();
+
+    public event Action<string>? FileChanged;
+
+    protected AbstractFileWatcher(string directoryPath)
+    {
+        _directoryPath = directoryPath;
+        _cts = new CancellationTokenSource();
+    }
+
+    public void StartWatching()
+    {
+        if (_isWatching)
+        {
+            Console.WriteLine("File watcher already running.");
+            return;
+        }
+
+        Console.WriteLine($"Starting directory watch on: {_directoryPath}");
+        _isWatching = true;
+        WatchLoop();
+    }
+
+    protected abstract void WatchLoop();
+
+    public void StopWatching()
+    {
+        if (!_isWatching)
+        {
+            Console.WriteLine("File watcher is not running.");
+            return;
+        }
+
+        Console.WriteLine($"Stopping directory watch on: {_directoryPath}");
+        _isWatching = false;
+        _cts.Cancel();
+    }
+
+    protected void ProcessFileChange(string fullPath)
+    {
+        var now = DateTime.Now;
+        if (!_lastNotificationTimes.TryGetValue(fullPath, out var lastTime) || (now - lastTime).TotalSeconds > 1)
+        {
+            _lastNotificationTimes[fullPath] = now;
+            Console.WriteLine($"Raising FileChanged event for {fullPath}");
+            FileChanged?.Invoke(fullPath);
+        }
+        else
+        {
+            Console.WriteLine($"Skipping duplicate notification for {fullPath} (too soon)");
+        }
+    }
+
+    public void Dispose()
+    {
+        Console.WriteLine($"Disposing FileWatcher for: {_directoryPath}");
+        StopWatching();
+        _cts?.Dispose();
+    }
+}
+
+public class WindowsFileWatcher : AbstractFileWatcher
+{
     private IntPtr _directoryHandle;
     private Thread _watcherThread;
-    private CancellationTokenSource _cts;
-    private bool _isWatching;
-    private readonly Dictionary<string, DateTime> _lastNotificationTimes = new();
 
     // P/Invoke declarations
     [DllImport("kernel32.dll", SetLastError = true)]
@@ -78,23 +140,12 @@ public class FileWatcherService : IDisposable
     private const uint FILE_ACTION_RENAMED_OLD_NAME = 0x00000004;
     private const uint FILE_ACTION_RENAMED_NEW_NAME = 0x00000005;
 
-    public event Action<string>? FileChanged;
-
-    public FileWatcherService(string directoryPath)
+    public WindowsFileWatcher(string directoryPath) : base(directoryPath)
     {
-        _directoryPath = directoryPath;
-        _cts = new CancellationTokenSource();
     }
 
-    public void StartWatching()
+    protected override void WatchLoop()
     {
-        if (_isWatching)
-        {
-            Console.WriteLine("File watcher already running.");
-            return;
-        }
-
-        Console.WriteLine($"Starting directory watch on: {_directoryPath}");
         _directoryHandle = CreateFile(
             _directoryPath,
             FILE_LIST_DIRECTORY,
@@ -111,32 +162,9 @@ public class FileWatcherService : IDisposable
             throw new IOException("Failed to open directory handle.");
         }
 
-        _isWatching = true;
         _watcherThread = new Thread(WatchDirectory);
         _watcherThread.IsBackground = true;
         _watcherThread.Start();
-    }
-
-    public void StopWatching()
-    {
-        if (!_isWatching)
-        {
-            Console.WriteLine("File watcher is not running.");
-            return;
-        }
-
-        Console.WriteLine($"Stopping directory watch on: {_directoryPath}");
-        _isWatching = false;
-        _cts.Cancel();
-
-        if (_directoryHandle != IntPtr.Zero)
-        {
-            CloseHandle(_directoryHandle);
-            _directoryHandle = IntPtr.Zero;
-        }
-
-        _watcherThread?.Join();
-        Console.WriteLine($"Stopped directory watch on: {_directoryPath}");
     }
 
     private void WatchDirectory()
@@ -175,6 +203,11 @@ public class FileWatcherService : IDisposable
         finally
         {
             Marshal.FreeHGlobal(buffer);
+            if (_directoryHandle != IntPtr.Zero)
+            {
+                CloseHandle(_directoryHandle);
+                _directoryHandle = IntPtr.Zero;
+            }
         }
     }
 
@@ -196,17 +229,7 @@ public class FileWatcherService : IDisposable
             if ((info.Action == FILE_ACTION_MODIFIED || info.Action == FILE_ACTION_ADDED || info.Action == FILE_ACTION_REMOVED) &&
                 !string.IsNullOrEmpty(fileName))
             {
-                var now = DateTime.Now;
-                if (!_lastNotificationTimes.TryGetValue(fullPath, out var lastTime) || (now - lastTime).TotalSeconds > 1)
-                {
-                    _lastNotificationTimes[fullPath] = now;
-                    Console.WriteLine($"Raising FileChanged event for {fullPath}");
-                    FileChanged?.Invoke(fullPath);
-                }
-                else
-                {
-                    Console.WriteLine($"Skipping duplicate notification for {fullPath} (too soon)");
-                }
+                ProcessFileChange(fullPath);
             }
 
             if (info.NextEntryOffset == 0)
@@ -215,39 +238,114 @@ public class FileWatcherService : IDisposable
             offset += info.NextEntryOffset;
         }
     }
+}
 
-    private async void ShowFileChangeNotification(string fileName)
+public class LinuxFileWatcher : AbstractFileWatcher
+{
+    private readonly Dictionary<string, DateTime> _fileTimestamps = new();
+    private Thread _pollingThread;
+
+    public LinuxFileWatcher(string directoryPath) : base(directoryPath)
     {
-        Console.WriteLine($"Showing notification for {fileName}");
-        var message = $"File '{fileName}' has been changed.";
-        var mainWindow = (Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.MainWindow;
-        Console.WriteLine($"MainWindow: {mainWindow}");
-        if (mainWindow == null) return;
+    }
 
-        var okButton = new Button { Content = "OK", HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center, Margin = new Avalonia.Thickness(0, 10, 0, 0) };
-        var stackPanel = new StackPanel();
-        stackPanel.Children.Add(new TextBlock { Text = message, Margin = new Avalonia.Thickness(20) });
-        stackPanel.Children.Add(okButton);
+    protected override void WatchLoop()
+    {
+        // Initial scan
+        ScanDirectory();
 
-        var dialog = new Window
+        _pollingThread = new Thread(PollForChanges);
+        _pollingThread.IsBackground = true;
+        _pollingThread.Start();
+    }
+
+    private void ScanDirectory()
+    {
+        try
         {
-            Title = "File Change Notification",
-            Content = stackPanel,
-            SizeToContent = SizeToContent.WidthAndHeight,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            Topmost = true,
-            CanResize = false
-        };
-
-        okButton.Click += (_, _) => dialog.Close();
-
-        await dialog.ShowDialog(mainWindow);
+            foreach (var file in Directory.EnumerateFiles(_directoryPath, "*", SearchOption.AllDirectories))
+            {
+                _fileTimestamps[file] = File.GetLastWriteTimeUtc(file);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error scanning directory {_directoryPath}: {ex.Message}");
+        }
     }
 
-    public void Dispose()
+    private void PollForChanges()
     {
-        Console.WriteLine($"Disposing FileWatcherService for: {_directoryPath}");
-        StopWatching();
-        _cts?.Dispose();
+        while (_isWatching && !_cts.Token.IsCancellationRequested)
+        {
+            try
+            {
+                Thread.Sleep(1000); // Poll every second
+
+                var currentFiles = new HashSet<string>(Directory.EnumerateFiles(_directoryPath, "*", SearchOption.AllDirectories));
+
+                // Check for added or modified files
+                foreach (var file in currentFiles)
+                {
+                    if (_fileTimestamps.TryGetValue(file, out var lastTime))
+                    {
+                        var currentTime = File.GetLastWriteTimeUtc(file);
+                        if (currentTime > lastTime)
+                        {
+                            _fileTimestamps[file] = currentTime;
+                            ProcessFileChange(file);
+                        }
+                    }
+                    else
+                    {
+                        _fileTimestamps[file] = File.GetLastWriteTimeUtc(file);
+                        ProcessFileChange(file);
+                    }
+                }
+
+                // Check for removed files
+                var removedFiles = _fileTimestamps.Keys.Where(f => !currentFiles.Contains(f)).ToList();
+                foreach (var file in removedFiles)
+                {
+                    _fileTimestamps.Remove(file);
+                    ProcessFileChange(file);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error polling for changes in {_directoryPath}: {ex.Message}");
+            }
+        }
     }
+}
+
+public class FileWatcherService : IDisposable
+{
+    private readonly AbstractFileWatcher _watcher;
+
+    public event Action<string>? FileChanged
+    {
+        add => _watcher.FileChanged += value;
+        remove => _watcher.FileChanged -= value;
+    }
+
+    public FileWatcherService(string directoryPath)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            _watcher = new WindowsFileWatcher(directoryPath);
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            _watcher = new LinuxFileWatcher(directoryPath);
+        }
+        else
+        {
+            throw new PlatformNotSupportedException("Unsupported platform for file watching.");
+        }
+    }
+
+    public void StartWatching() => _watcher.StartWatching();
+    public void StopWatching() => _watcher.StopWatching();
+    public void Dispose() => _watcher.Dispose();
 }
