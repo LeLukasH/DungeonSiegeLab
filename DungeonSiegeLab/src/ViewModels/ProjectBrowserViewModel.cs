@@ -148,35 +148,12 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         try
         {
             _bitsRootPath = path;
-            BitsFolder root;
-            if (restoreExpansion)
+            var progress = new Progress<(int percent, string folder)>(p =>
             {
-                var cached = await _treeCache.TryLoadAsync(path);
-                if (cached is not null)
-                {
-                    root = cached;
-                }
-                else
-                {
-                    var progress = new Progress<(int percent, string folder)>(p =>
-                    {
-                        StatusMessage = $"Loading… {p.percent}%";
-                        StatusDetail  = p.folder;
-                    });
-                    root = await _bitsLoader.LoadAsync(path, progress);
-                    _ = _treeCache.SaveAsync(root); // fire-and-forget
-                }
-            }
-            else
-            {
-                var progress = new Progress<(int percent, string folder)>(p =>
-                {
-                    StatusMessage = $"Loading… {p.percent}%";
-                    StatusDetail  = p.folder;
-                });
-                root = await _bitsLoader.LoadAsync(path, progress);
-                _ = _treeCache.SaveAsync(root); // fire-and-forget
-            }
+                StatusMessage = $"Loading… {p.percent}%";
+                StatusDetail  = p.folder;
+            });
+            BitsFolder root = await _bitsLoader.LoadAsync(path, progress);
             _bitsRootVm = new BitsNodeViewModel(root);
 
             // Bits goes first — insert before Untank
@@ -235,7 +212,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             StatusMessage = "Loading Untank…";
             StatusDetail  = UntankPath;
 
-            var cached = await _treeCache.TryLoadAsync(UntankPath, "untank");
+            var cached = await _treeCache.TryLoadUntankAsync(UntankPath);
             BitsFolder root;
             if (cached is not null)
             {
@@ -249,7 +226,6 @@ public partial class ProjectBrowserViewModel : ViewModelBase
                     StatusDetail  = p.folder;
                 });
                 root = await _bitsLoader.LoadAsync(UntankPath, progress);
-                _ = _treeCache.SaveAsync(root, "untank"); // fire-and-forget, non-critical
             }
             _untankRootVm = new BitsNodeViewModel(root);
 
