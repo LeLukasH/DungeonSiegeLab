@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -61,6 +63,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     private BitsNodeViewModel? _bitsRootVm;
     private BitsNodeViewModel? _untankRootVm;
     private CancellationTokenSource? _saveCts;
+    private readonly ExplorerFolderWatcherService _explorerFolderWatcher;
 
     public ObservableCollection<string> RecentPaths { get; } = new();
     public bool HasRecentPaths => RecentPaths.Any(p => !p.Equals(BitsPath, StringComparison.OrdinalIgnoreCase));
@@ -79,6 +82,11 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
         BitsNodeViewModel.AnyExpansionChanged += SaveExpansionStateDebounced;
         OpenCodeTabs.CollectionChanged += OnOpenCodeTabsChanged;
+
+        _explorerFolderWatcher = new ExplorerFolderWatcherService();
+        _explorerFolderWatcher.FileCreated += OnExplorerFileCreated;
+        _explorerFolderWatcher.FileRenamed += OnExplorerFileRenamed;
+        _explorerFolderWatcher.FileDeleted += OnExplorerFileDeleted;
 
         _ = InitializeAsync();
     }
@@ -205,6 +213,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             Dispatcher.UIThread.Post(() => { StatusMessage = "Loading Completed"; StatusDetail = path; },
                 DispatcherPriority.Background);
             BitsFolderLoaded?.Invoke(path);
+            UpdateExplorerWatchedFolders();
         }
         catch (Exception ex)
         {
@@ -275,6 +284,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             OnPropertyChanged(nameof(HasUntankSection));
             Dispatcher.UIThread.Post(() => { StatusMessage = "Loading Completed"; StatusDetail = UntankPath; },
                 DispatcherPriority.Background);
+            UpdateExplorerWatchedFolders();
         }
         catch { /* Untank load failure is non-critical */ }
     }
@@ -309,6 +319,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
             if (_untankRootVm != null)
                 _treeState.SaveExpansionOnly(UntankStateKey, ToRelativeUntankPaths(CollectExpandedPaths([_untankRootVm])));
+            UpdateExplorerWatchedFolders();
         }
         catch (OperationCanceledException) { }
     }
@@ -359,6 +370,167 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             if (node.Children.Count > 0) result.AddRange(CollectExpandedPaths(node.Children));
         }
         return result;
+    }
+
+    private void UpdateExplorerWatchedFolders()
+    {
+        var folders = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        if (_bitsRootVm != null) folders.Add(_bitsRootVm.FullPath);
+        if (_untankRootVm != null) folders.Add(_untankRootVm.FullPath);
+        folders.UnionWith(CollectExpandedPaths(RootNodes));
+        _explorerFolderWatcher.UpdateWatchedFolders(folders);
+    }
+
+    private async void OnExplorerFileCreated(string fullPath)
+    {
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            try
+            {
+                await AddExplorerTreeNodeAsync(fullPath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Explorer watch create handler failed for {fullPath}: {ex.Message}");
+            }
+        });
+    }
+
+    private async void OnExplorerFileRenamed(string oldFullPath, string newFullPath)
+    {
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            try
+            {
+                RemoveExplorerTreeNode(oldFullPath);
+                await AddExplorerTreeNodeAsync(newFullPath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Explorer watch rename handler failed from {oldFullPath} to {newFullPath}: {ex.Message}");
+            }
+        });
+    }
+
+    private void OnExplorerFileDeleted(string fullPath)
+    {
+        Dispatcher.UIThread.Post(() => RemoveExplorerTreeNode(fullPath));
+    }
+
+    private async Task AddExplorerTreeNodeAsync(string fullPath)
+    {
+        var parentDir = Path.GetDirectoryName(fullPath);
+        if (string.IsNullOrEmpty(parentDir))
+            return;
+
+        var parentNode = FindNodeByPath(RootNodes, parentDir);
+        if (parentNode == null)
+            return;
+
+        if (FindNodeByPath(RootNodes, fullPath) != null)
+            return;
+
+        BitsNode newNode;
+        if (Directory.Exists(fullPath))
+        {
+            newNode = new BitsFolder
+            {
+                Name = Path.GetFileName(fullPath),
+                FullPath = fullPath,
+                Parent = parentNode.Node
+            };
+        }
+        else if (fullPath.EndsWith(".gas", StringComparison.OrdinalIgnoreCase))
+        {
+            var fileNode = new BitsFile
+            {
+                Name = Path.GetFileName(fullPath),
+                FullPath = fullPath,
+                Parent = parentNode.Node
+            };
+            try
+            {
+                var templates = await new GasParser().ParseFileAsync(fullPath);
+                foreach (var template in templates)
+                {
+                    template.Parent = fileNode;
+                    fileNode.Children.Add(template);
+                }
+            }
+            catch
+            {
+                // If parsing fails, still show the file node.
+            }
+            newNode = fileNode;
+        }
+        else
+        {
+            newNode = new BitsRawFile
+            {
+                Name = Path.GetFileName(fullPath),
+                FullPath = fullPath,
+                Parent = parentNode.Node
+            };
+        }
+
+        switch (parentNode.Node)
+        {
+            case BitsFolder folder:
+                folder.Children.Add(newNode);
+                break;
+            case BitsFile file:
+                file.Children.Add(newNode);
+                break;
+            default:
+                Console.WriteLine($"Cannot add explorer node under parent type {parentNode.Node.GetType().Name}");
+                return;
+        }
+
+        var newNodeVm = new BitsNodeViewModel(newNode);
+        var insertIndex = parentNode.Children.TakeWhile(child =>
+            string.Compare(child.Name, newNodeVm.Name, StringComparison.OrdinalIgnoreCase) < 0).Count();
+        parentNode.Children.Insert(insertIndex, newNodeVm);
+    }
+
+    private void RemoveExplorerTreeNode(string fullPath)
+    {
+        var node = FindNodeByPath(RootNodes, fullPath);
+        if (node == null)
+            return;
+
+        if (node.Node.Parent == null)
+        {
+            RootNodes.Remove(node);
+            return;
+        }
+
+        var parentVm = FindNodeByPath(RootNodes, node.Node.Parent.FullPath);
+        if (parentVm != null)
+        {
+            parentVm.Children.Remove(node);
+            switch (parentVm.Node)
+            {
+                case BitsFolder folder:
+                    folder.Children.Remove(node.Node);
+                    break;
+                case BitsFile file:
+                    file.Children.Remove(node.Node);
+                    break;
+            }
+        }
+    }
+
+    private BitsNodeViewModel? FindNodeByPath(IEnumerable<BitsNodeViewModel> nodes, string path)
+    {
+        foreach (var node in nodes)
+        {
+            if (string.Equals(node.FullPath, path, StringComparison.OrdinalIgnoreCase))
+                return node;
+            var child = FindNodeByPath(node.Children, path);
+            if (child != null)
+                return child;
+        }
+        return null;
     }
 
     // ─── Tree selection (single click → preview tab) ──────────────────────
