@@ -2,7 +2,7 @@ namespace DungeonSiegeLab.Services;
 
 public partial class DependencyFinder
 {
-    private interface IAssignmentExpression
+    private interface IExpression
     {
         void Interpret(DependencyInterpretContext context);
     }

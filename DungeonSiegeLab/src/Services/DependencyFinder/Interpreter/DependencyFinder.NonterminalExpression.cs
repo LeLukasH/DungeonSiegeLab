@@ -2,11 +2,11 @@ namespace DungeonSiegeLab.Services;
 
 public partial class DependencyFinder
 {
-    private sealed class NonterminalAssignmentExpression : IAssignmentExpression
+    private sealed class NonterminalExpression : IExpression
     {
-        private readonly IReadOnlyList<IAssignmentExpression> _children;
+        private readonly IReadOnlyList<IExpression> _children;
 
-        public NonterminalAssignmentExpression(params IAssignmentExpression[] children)
+        public NonterminalExpression(params IExpression[] children)
         {
             _children = children;
         }

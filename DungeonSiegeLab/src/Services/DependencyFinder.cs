@@ -12,7 +12,7 @@ public partial class DependencyFinder
     private readonly HashSet<string> _vanillaBlocks;
     private readonly HashSet<string> _inventoryDependencySlots;
     private readonly Dictionary<string, DependencyKind> _fixedPropertyRules;
-    private readonly IAssignmentExpression _assignmentInterpreter;
+    private readonly IExpression _assignmentInterpreter;
 
     private static readonly Regex BlockHeaderRegex = new(@"\[(?<name>[^\]]+)\]", RegexOptions.Compiled);
     private static readonly Regex AssignmentRegex = new(
@@ -75,7 +75,7 @@ public partial class DependencyFinder
         {
             var parent = AnalyzeTemplateRecursive(parentTemplate, templateIndex, cache, visiting);
 
-            EnumerateDependencies(parent.Dependencies, dep =>
+            EnumerationUtility.Enumerate(parent.Dependencies, dep =>
             {
                 // Local assignment with same signature overrides inherited source.
                 if (!string.IsNullOrEmpty(dep.SourceSignature)
@@ -221,11 +221,10 @@ public partial class DependencyFinder
         // Custom top-level components are dependencies by themselves.
         dependencies.AddRange(parsed.NonVanillaBlockDependencies);
 
-        EnumerateAssignments(parsed, a =>
+        EnumerationUtility.Enumerate(parsed.Assignments, a =>
         {
             _assignmentInterpreter.Interpret(new DependencyInterpretContext
             {
-                Finder = this,
                 TemplateName = template.TemplateName,
                 Dependencies = dependencies,
                 Assignment = a
@@ -254,169 +253,8 @@ public partial class DependencyFinder
         return Deduplicate(dependencies);
     }
 
-    private IAssignmentExpression BuildAssignmentInterpreter()
-    {
-        return new NonterminalAssignmentExpression(
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                var root = GetRootComponent(a.Path);
-                if (!string.IsNullOrEmpty(root)
-                    && _fixedPropertyRules.TryGetValue($"{root}:{a.Key}", out var fixedKind))
-                {
-                    // Exact root:property mapping from dependency-rules.json.
-                    AddTokens(context.Dependencies, context.TemplateName, a, fixedKind, $"fixed:{root}:{a.Key}", a.Value);
-                }
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (a.Key.Equals("specializes", StringComparison.OrdinalIgnoreCase))
-                    AddTokens(context.Dependencies, context.TemplateName, a, DependencyKind.Template, "specializes", a.Value);
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (PathStartsWith(a.Path, "aspect") && a.Key.StartsWith("textures:", StringComparison.OrdinalIgnoreCase))
-                    AddTokens(context.Dependencies, context.TemplateName, a, DependencyKind.Texture, "aspect:textures", a.Value);
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (PathStartsWith(a.Path, "aspect:voice") && a.Key.Equals("*", StringComparison.OrdinalIgnoreCase))
-                    AddTokens(context.Dependencies, context.TemplateName, a, DependencyKind.Sound, "aspect:voice:*", a.Value);
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (PathStartsWith(a.Path, "aspect:vo_voice") && a.Key.Equals("*", StringComparison.OrdinalIgnoreCase))
-                    AddTokens(context.Dependencies, context.TemplateName, a, DependencyKind.Sound, "aspect:vo_voice:*", a.Value);
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (PathStartsWith(a.Path, "conversation:conversations") && a.Key.Equals("*", StringComparison.OrdinalIgnoreCase))
-                    AddTokens(context.Dependencies, context.TemplateName, a, DependencyKind.Template, "conversation:conversations:*", a.Value);
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (PathStartsWith(a.Path, "common:instance_triggers") || PathStartsWith(a.Path, "common:template_triggers"))
-                    ApplyCommonTriggerRules(context.Dependencies, context.TemplateName, a);
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (PathStartsWith(a.Path, "inventory"))
-                    context.Finder.ApplyInventoryRules(context.Dependencies, context.TemplateName, a);
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (PathStartsWith(a.Path, "gold:ranges"))
-                    AddTokens(context.Dependencies, context.TemplateName, a, DependencyKind.Template, "gold:ranges:*", a.Value);
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (PathStartsWith(a.Path, "magic:enchantments")
-                    && (a.Key.Equals("effect_script", StringComparison.OrdinalIgnoreCase)
-                        || a.Key.Equals("effect_script_equip", StringComparison.OrdinalIgnoreCase)
-                        || a.Key.Equals("effect_script_hit", StringComparison.OrdinalIgnoreCase)))
-                {
-                    AddTokens(context.Dependencies, context.TemplateName, a, DependencyKind.Script, "magic:enchantments:effect_script", a.Value);
-                }
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (PathStartsWith(a.Path, "mind") && a.Key.StartsWith("jat_", StringComparison.OrdinalIgnoreCase))
-                    AddTokens(context.Dependencies, context.TemplateName, a, DependencyKind.Script, "mind:jat_*", a.Value);
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (PathContains(a.Path, "pcontent")
-                    && (a.Key.Equals("inventory_icon", StringComparison.OrdinalIgnoreCase)
-                        || a.Key.Equals("model", StringComparison.OrdinalIgnoreCase)
-                        || a.Key.Equals("texture", StringComparison.OrdinalIgnoreCase)))
-                {
-                    var kind = a.Key.Equals("model", StringComparison.OrdinalIgnoreCase)
-                        ? DependencyKind.Template
-                        : DependencyKind.Texture;
-                    AddTokens(context.Dependencies, context.TemplateName, a, kind, "pcontent:*:[inventory_icon|model|texture]", a.Value);
-                }
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (PathStartsWith(a.Path, "physics:break_particulate"))
-                {
-                    AddToken(context.Dependencies, context.TemplateName, a, DependencyKind.Effect,
-                        "physics:break_particulate:left_side", a.Key);
-                }
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (PathStartsWith(a.Path, "potion:ranges"))
-                    AddTokens(context.Dependencies, context.TemplateName, a, DependencyKind.Template, "potion:ranges:*", a.Value);
-            }),
-            new TerminalAssignmentExpression(context =>
-            {
-                var a = context.Assignment;
-                if (PathStartsWith(a.Path, "store:item_restock"))
-                {
-                    AddToken(context.Dependencies, context.TemplateName, a, DependencyKind.Template,
-                        "store:item_restock:left_side", a.Key);
-                }
-            }));
-    }
-
-    private static void ApplyCommonTriggerRules(
-        List<DependencyReference> deps,
-        string templateName,
-        AssignmentRecord assignment)
-    {
-        if (assignment.Key.StartsWith("action", StringComparison.OrdinalIgnoreCase)
-            && assignment.Value.Contains("call_sfx_script", StringComparison.OrdinalIgnoreCase))
-        {
-            var scriptArg = ExtractFunctionArgument(assignment.Value, 0);
-            if (!string.IsNullOrWhiteSpace(scriptArg))
-                AddToken(deps, templateName, assignment, DependencyKind.Script, "common:trigger:action:call_sfx_script", scriptArg);
-        }
-
-        if (!assignment.Key.StartsWith("condition", StringComparison.OrdinalIgnoreCase))
-            return;
-
-        if (assignment.Value.Contains("has_go_in_inventory", StringComparison.OrdinalIgnoreCase)
-            || assignment.Value.Contains("go_within_range", StringComparison.OrdinalIgnoreCase)
-            || assignment.Value.Contains("go_within_bounding_box", StringComparison.OrdinalIgnoreCase)
-            || assignment.Value.Contains("go_within_sphere", StringComparison.OrdinalIgnoreCase))
-        {
-            var second = ExtractFunctionArgument(assignment.Value, 1);
-            var third = ExtractFunctionArgument(assignment.Value, 2);
-            if (!string.IsNullOrWhiteSpace(second))
-                AddToken(deps, templateName, assignment, InferKind(second), "common:trigger:condition:arg2", second);
-            if (!string.IsNullOrWhiteSpace(third))
-                AddToken(deps, templateName, assignment, InferKind(third), "common:trigger:condition:arg3", third);
-        }
-    }
-
-    private void ApplyInventoryRules(
-        List<DependencyReference> deps,
-        string templateName,
-        AssignmentRecord assignment)
-    {
-        if (_inventoryDependencySlots.Contains(assignment.Key)
-            && !assignment.Value.TrimStart().StartsWith("#", StringComparison.Ordinal))
-        {
-            AddTokens(deps, templateName, assignment, DependencyKind.Template, "inventory:slot", assignment.Value);
-        }
-
-        if (PathStartsWith(assignment.Path, "inventory:ranges"))
-            AddTokens(deps, templateName, assignment, DependencyKind.Template, "inventory:ranges:*", assignment.Value);
-    }
+    private IExpression BuildAssignmentInterpreter()
+        => AssignmentInterpreterFactory.Create(_fixedPropertyRules, _inventoryDependencySlots);
 
     private static void AddTokens(
         List<DependencyReference> deps,
@@ -430,13 +268,6 @@ public partial class DependencyFinder
             AddToken(deps, templateName, assignment, kind, rule, token);
     }
 
-    /// PATTERN: Enumeration Method (Internal Iterator) - aggregate controls traversal, caller provides action.
-    private static void EnumerateAssignments(ParseResult parsed, Action<AssignmentRecord> action, Action? before = null, Action? after = null)
-    => EnumerationUtility.Enumerate(parsed.Assignments, action, before, after);
-
-    /// PATTERN: Enumeration Method (Internal Iterator) - hides dependency collection traversal details.
-    private static void EnumerateDependencies(IEnumerable<DependencyReference> dependencies, Action<DependencyReference> action, Action? before = null, Action? after = null)
-    => EnumerationUtility.Enumerate(dependencies, action, before, after);
 
     private static void AddToken(
         List<DependencyReference> deps,
