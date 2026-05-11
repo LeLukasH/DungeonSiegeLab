@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using DungeonSiegeLab.Models;
+using DungeonSiegeLab.Patterns;
 
 namespace DungeonSiegeLab.Services;
 
@@ -430,38 +431,12 @@ public partial class DependencyFinder
     }
 
     /// PATTERN: Enumeration Method (Internal Iterator) - aggregate controls traversal, caller provides action.
-    private static void EnumerateAssignments(
-        ParseResult parsed,
-        Action<AssignmentRecord> action,
-        Action? before = null,
-        Action? after = null)
-    {
-        ArgumentNullException.ThrowIfNull(action);
-
-        before?.Invoke();
-
-        foreach (var assignment in parsed.Assignments)
-            action(assignment);
-
-        after?.Invoke();
-    }
+    private static void EnumerateAssignments(ParseResult parsed, Action<AssignmentRecord> action, Action? before = null, Action? after = null)
+    => EnumerationUtility.Enumerate(parsed.Assignments, action, before, after);
 
     /// PATTERN: Enumeration Method (Internal Iterator) - hides dependency collection traversal details.
-    private static void EnumerateDependencies(
-        IEnumerable<DependencyReference> dependencies,
-        Action<DependencyReference> action,
-        Action? before = null,
-        Action? after = null)
-    {
-        ArgumentNullException.ThrowIfNull(action);
-
-        before?.Invoke();
-
-        foreach (var dependency in dependencies)
-            action(dependency);
-
-        after?.Invoke();
-    }
+    private static void EnumerateDependencies(IEnumerable<DependencyReference> dependencies, Action<DependencyReference> action, Action? before = null, Action? after = null)
+    => EnumerationUtility.Enumerate(dependencies, action, before, after);
 
     private static void AddToken(
         List<DependencyReference> deps,
