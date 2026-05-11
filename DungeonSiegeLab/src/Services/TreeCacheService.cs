@@ -1,70 +1,38 @@
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 using DungeonSiegeLab.Models;
 
 namespace DungeonSiegeLab.Services;
 
 /// <summary>
-/// Caches a fully-parsed BitsFolder tree as JSON next to the executable.
-/// Paths are stored relative to the root folder, so cache files are portable
-/// across machines (e.g. a pre-built Untank cache can ship with the app).
-///
-/// Cache filename:
-///   - If cacheKey is provided: dslab-cache-{cacheKey}.json  (fixed, predictable)
-///   - Otherwise:               dslab-cache-{folderName}-{MD5[..12]}.json
+/// Loads the pre-built Untank cache that ships with the app in Assets.
+/// No cache is read or written for user-opened Bits folders.
 /// </summary>
 public class TreeCacheService
 {
-    private static readonly JsonSerializerOptions JsonOpts = new() { WriteIndented = false };
-
     /// <summary>
-    /// When set, the "untank" cache is read from and written to this directory instead of
-    /// AppContext.BaseDirectory. Set to the source Assets folder in dev so the cache lives
-    /// in the repo. Leave null in production — cache goes next to the exe.
+    /// When set, the untank cache is read from this directory instead of
+    /// AppContext.BaseDirectory. Set to the source Assets folder in dev so the
+    /// cache lives in the repo. Leave null in production — reads from next to the exe.
     /// </summary>
     public string? UntankCacheDirectory { get; set; }
 
-    private string CacheFileFor(string folderPath, string? cacheKey = null)
+    private string UntankCachePath() =>
+        Path.Combine(UntankCacheDirectory ?? AppContext.BaseDirectory, "dslab-cache-untank.json");
+
+    public async Task<BitsFolder?> TryLoadUntankAsync(string untankFolderPath)
     {
-        if (cacheKey == "untank" && UntankCacheDirectory is not null)
-            return Path.Combine(UntankCacheDirectory, $"dslab-cache-{cacheKey}.json");
-
-        if (cacheKey is not null)
-            return Path.Combine(AppContext.BaseDirectory, $"dslab-cache-{cacheKey}.json");
-
-        var normalized = folderPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-        var hash       = Convert.ToHexString(MD5.HashData(Encoding.UTF8.GetBytes(normalized)))[..12];
-        var name       = Path.GetFileName(normalized);
-        return Path.Combine(AppContext.BaseDirectory, $"dslab-cache-{name}-{hash}.json");
-    }
-
-    public async Task<BitsFolder?> TryLoadAsync(string folderPath, string? cacheKey = null)
-    {
-        var cachePath = CacheFileFor(folderPath, cacheKey);
+        var cachePath = UntankCachePath();
         if (!File.Exists(cachePath)) return null;
         try
         {
             var json = await File.ReadAllTextAsync(cachePath);
             var dto  = JsonSerializer.Deserialize<FolderDto>(json);
-            return dto?.ToModel(parent: null, basePath: folderPath);
+            return dto?.ToModel(parent: null, basePath: untankFolderPath);
         }
         catch
         {
             return null;
         }
-    }
-
-    public async Task SaveAsync(BitsFolder root, string? cacheKey = null)
-    {
-        var cachePath = CacheFileFor(root.FullPath, cacheKey);
-        try
-        {
-            var dto  = FolderDto.From(root, root.FullPath);
-            var json = JsonSerializer.Serialize(dto, JsonOpts);
-            await File.WriteAllTextAsync(cachePath, json);
-        }
-        catch { /* non-critical — next start will re-parse */ }
     }
 
     // ── Relative-path helpers ─────────────────────────────────────────────
