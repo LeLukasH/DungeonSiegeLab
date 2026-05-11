@@ -1,24 +1,26 @@
-using CommunityToolkit.Mvvm.ComponentModel;
 using DungeonSiegeLab.Services;
 
 namespace DungeonSiegeLab.ViewModels;
 
 public partial class SettingsViewModel : ViewModelBase
 {
-    [ObservableProperty]
-    private bool _collapseSubfoldersRecursively;
-
     public SettingsViewModel()
     {
-        // TreeStateService.Load() is called by ProjectBrowserViewModel first,
-        // so the state is already loaded when this runs.
-        _collapseSubfoldersRecursively = TreeStateService.Instance.CollapseSubfoldersRecursively;
-        AppSettings.Instance.CollapseSubfoldersRecursively = _collapseSubfoldersRecursively;
+        TreeStateService.Instance.Load();
+        AppSettings.Instance.CollapseSubfoldersRecursively = TreeStateService.Instance.CollapseSubfoldersRecursively;
     }
 
-    partial void OnCollapseSubfoldersRecursivelyChanged(bool value)
+    public bool CollapseSubfoldersRecursively
     {
-        AppSettings.Instance.CollapseSubfoldersRecursively = value;
-        TreeStateService.Instance.CollapseSubfoldersRecursively = value;
+        get => TreeStateService.Instance.CollapseSubfoldersRecursively;
+        set
+        {
+            if (TreeStateService.Instance.CollapseSubfoldersRecursively == value)
+                return;
+
+            TreeStateService.Instance.CollapseSubfoldersRecursively = value;
+            AppSettings.Instance.CollapseSubfoldersRecursively = value;
+            OnPropertyChanged();
+        }
     }
 }

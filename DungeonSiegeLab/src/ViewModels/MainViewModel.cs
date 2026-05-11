@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DungeonSiegeLab.Models;
+using DungeonSiegeLab.Services;
 
 namespace DungeonSiegeLab.ViewModels;
 
@@ -25,6 +26,9 @@ public partial class MainViewModel : ViewModelBase
 
     public MainViewModel()
     {
+        TreeStateService.Instance.Load();
+        AppSettings.Instance.CollapseSubfoldersRecursively = TreeStateService.Instance.CollapseSubfoldersRecursively;
+
         ProjectBrowser.TexturesIdentified += OnTexturesIdentified;
         TextureLab.BackRequested += () => SelectedTabIndex = 0;
     }

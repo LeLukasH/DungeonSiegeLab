@@ -37,4 +37,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Tools\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

@@ -6,7 +6,6 @@
 
     <DockPanel>
 
-        <!-- Toolbar -->
         <Border DockPanel.Dock="Top"
                 Background="#181825"
                 Padding="10 8"
@@ -22,31 +21,15 @@
 
                 <Separator Width="1" Height="24" Background="#45475a" Margin="0 0 10 0"/>
 
-                <Button Content="📂 Open Texture..."
+                <Button Content="Open Texture..."
                         Classes="secondary"
                         Height="30"
                         Margin="0 0 6 0"
                         Click="OnOpenTextureClicked"/>
 
-                <Separator Width="1" Height="24" Background="#45475a" Margin="0 0 10 0"/>
-
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                    <TextBlock Text="RawToPsd:" VerticalAlignment="Center"
-                               Foreground="#6c7086" FontSize="12"/>
-                    <TextBox Text="{Binding RawToPsdToolPath}"
-                             Width="200" Height="28"
-                             Watermark="path to RawToPsd.exe"
-                             VerticalContentAlignment="Center"
-                             FontSize="12"/>
-                    <Button Content="..." Height="28" Width="32"
-                            Classes="secondary"
-                            Click="OnBrowseToolClicked"/>
-                </StackPanel>
-
             </WrapPanel>
         </Border>
 
-        <!-- Status bar -->
         <Border DockPanel.Dock="Bottom"
                 Background="#11111b"
                 Padding="12 4"
@@ -56,9 +39,8 @@
                        Foreground="#a6adc8" FontSize="12"/>
         </Border>
 
-        <!-- Empty state -->
-        <Panel IsVisible="{Binding OpenTabs.Count, Converter={x:Static ObjectConverters.IsNull}}">
-            <TextBlock Text="Click 'Identify Textures' in the Project Browser,&#x0a;or open a texture manually."
+        <Panel IsVisible="{Binding !HasOpenTabs}">
+            <TextBlock Text="Open a texture to view it in Texture Lab."
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Foreground="#6c7086"
@@ -66,10 +48,9 @@
                        FontSize="15"/>
         </Panel>
 
-        <!-- Texture tabs -->
         <TabControl ItemsSource="{Binding OpenTabs}"
                     SelectedItem="{Binding SelectedTab}"
-                    IsVisible="{Binding OpenTabs.Count}">
+                    IsVisible="{Binding HasOpenTabs}">
 
             <TabControl.ItemTemplate>
                 <DataTemplate DataType="vm:TextureTabViewModel">
@@ -97,23 +78,20 @@
                             <ColumnDefinition Width="220"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Texture preview -->
                         <Border Grid.Column="0"
                                 Background="#11111b"
                                 Margin="0">
                             <Panel>
-                                <!-- Loading -->
                                 <StackPanel IsVisible="{Binding IsLoading}"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Spacing="10">
                                     <ProgressBar IsIndeterminate="True" Width="200"/>
-                                    <TextBlock Text="Converting texture..."
+                                    <TextBlock Text="Preparing texture preview..."
                                                HorizontalAlignment="Center"
                                                Foreground="#6c7086"/>
                                 </StackPanel>
 
-                                <!-- Error -->
                                 <TextBlock IsVisible="{Binding ErrorMessage.Length}"
                                            Text="{Binding ErrorMessage}"
                                            Foreground="#f38ba8"
@@ -122,7 +100,6 @@
                                            TextWrapping="Wrap"
                                            Margin="20"/>
 
-                                <!-- Image -->
                                 <ScrollViewer IsVisible="{Binding !IsLoading}"
                                               HorizontalScrollBarVisibility="Auto"
                                               VerticalScrollBarVisibility="Auto">
@@ -133,10 +110,8 @@
                             </Panel>
                         </Border>
 
-                        <!-- Splitter -->
                         <GridSplitter Grid.Column="1" Background="#313244" ResizeDirection="Columns"/>
 
-                        <!-- Info panel -->
                         <Border Grid.Column="2"
                                 Background="#1e1e2e"
                                 Padding="14"
@@ -148,6 +123,13 @@
                                            FontWeight="Bold"
                                            Foreground="#cdd6f4"
                                            FontSize="13"/>
+
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Format" Foreground="#6c7086" FontSize="11"/>
+                                    <TextBlock Text="{Binding FormatLabel}"
+                                               FontFamily="Consolas,monospace"
+                                               Foreground="#cdd6f4"/>
+                                </StackPanel>
 
                                 <StackPanel Spacing="6">
                                     <TextBlock Text="Dimensions" Foreground="#6c7086" FontSize="11"/>
@@ -175,17 +157,17 @@
 
                                 <TextBlock Text="Actions" Foreground="#6c7086" FontSize="11"/>
 
-                                <Button Content="💾 Save to project as..."
+                                <Button Content="Save to Project..."
                                         Classes="primary"
                                         HorizontalAlignment="Stretch"
                                         Click="OnSaveToProjectClicked"/>
 
-                                <Button Content="📤 Save to disk as..."
+                                <Button Content="Save As..."
                                         Classes="secondary"
                                         HorizontalAlignment="Stretch"
-                                        Click="OnSaveToDiskClicked"/>
+                                        Click="OnSaveAsClicked"/>
 
-                                <Button Content="📥 Import replacement"
+                                <Button Content="Import Replacement..."
                                         Classes="secondary"
                                         HorizontalAlignment="Stretch"
                                         Click="OnImportReplacementClicked"/>
