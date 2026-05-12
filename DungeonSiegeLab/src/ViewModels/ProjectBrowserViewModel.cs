@@ -76,10 +76,9 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
     private async Task InitializeAsync()
     {
-        // Load user's Bits folder first (with expansion restored), then Untank
+        await LoadUntankAsync(restoreExpansion: true);
         if (!string.IsNullOrEmpty(BitsPath))
             await LoadCoreAsync(BitsPath, restoreExpansion: true);
-        await LoadUntankAsync(restoreExpansion: true);
     }
 
     private void OnOpenCodeTabsChanged(object? sender, NotifyCollectionChangedEventArgs e)
