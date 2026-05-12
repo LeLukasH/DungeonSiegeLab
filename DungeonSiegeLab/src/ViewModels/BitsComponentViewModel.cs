@@ -25,6 +25,11 @@ public abstract partial class BitsComponentViewModel : ViewModelBase
     public virtual bool CanOpenPreview => false;
     public virtual bool CanIdentify    => false;
 
+    public virtual void LoadInto(CodeTabViewModel tab)
+    {
+        if (CanOpenPreview) _ = tab.LoadRawContentAsync();
+    }
+
     public abstract string StatusText { get; }
     public abstract string Icon       { get; }
     public abstract void   ApplyColor();
@@ -167,6 +172,9 @@ public class BitsTemplateViewModel : BitsLeafViewModel
     public override string StatusText     => $"Template: {((BitsTemplate)Node).TemplateName}";
     public override string Icon           => "📜";
     public override void   ApplyColor()   => NodeColor = _color;
+
+    public override void LoadInto(CodeTabViewModel tab)
+        => tab.SourceCode = ((BitsTemplate)Node).SourceCode;
 }
 
 public class BitsRawFileViewModel : BitsLeafViewModel

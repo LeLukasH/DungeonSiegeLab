@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using DungeonSiegeLab.Services;
 
 namespace DungeonSiegeLab.Models;
 
@@ -10,6 +11,9 @@ public abstract class BitsComponent
 
     public abstract void ForEach(Action<BitsComponent> action);
     public abstract IEnumerable<T> FindAll<T>() where T : BitsComponent;
+
+    internal virtual void AddToFolderDto(FolderDto dto, string basePath) { }
+    internal virtual void AddToFileDto(FileDto dto) { }
 
     public override string ToString() => Name;
 }
@@ -36,10 +40,18 @@ public abstract class BitsComposite : BitsComponent
 }
 
 /// <summary>Priečinok v /Bits - môže obsahovať ďalšie priečinky a súbory.</summary>
-public class BitsFolder : BitsComposite { }
+public class BitsFolder : BitsComposite
+{
+    internal override void AddToFolderDto(FolderDto dto, string basePath)
+        => dto.SubFolders.Add(FolderDto.From(this, basePath));
+}
 
 /// <summary>.gas súbor - môže obsahovať viacero templates.</summary>
-public class BitsFile : BitsComposite { }
+public class BitsFile : BitsComposite
+{
+    internal override void AddToFolderDto(FolderDto dto, string basePath)
+        => dto.Files.Add(FileDto.From(this, basePath));
+}
 
 /// <summary>Base for nodes that have no children (template, raw file).</summary>
 public abstract class BitsLeaf : BitsComponent
@@ -57,7 +69,14 @@ public class BitsTemplate : BitsLeaf
 {
     public string TemplateName { get; init; } = "";
     public string SourceCode   { get; init; } = "";
+
+    internal override void AddToFileDto(FileDto dto)
+        => dto.Templates.Add(TemplateDto.From(this));
 }
 
 /// <summary>Non-.gas file (image, sound, script, mesh, etc.) — content loaded on demand.</summary>
-public class BitsRawFile : BitsLeaf { }
+public class BitsRawFile : BitsLeaf
+{
+    internal override void AddToFolderDto(FolderDto dto, string basePath)
+        => dto.RawFiles.Add(RawFileDto.From(this, basePath));
+}

@@ -37,13 +37,10 @@ public partial class CodeTabViewModel : ViewModelBase
         Node = node;
         _isPreview = isPreview;
 
-        if (node.Node is BitsTemplate t)
-            _sourceCode = t.SourceCode;
-        else if (node.CanOpenPreview)
-            _ = LoadRawContentAsync();
+        node.LoadInto(this);
     }
 
-    private async Task LoadRawContentAsync()
+    internal async Task LoadRawContentAsync()
     {
         try
         {
