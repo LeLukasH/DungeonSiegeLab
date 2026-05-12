@@ -4,18 +4,15 @@ namespace DungeonSiegeLab.Services;
 
 public class RawTextureExportStrategy : ITextureExportStrategy
 {
-    private readonly Func<string, string, Task> _exportRawAsync;
+    public static readonly RawTextureExportStrategy Instance = new();
 
-    public RawTextureExportStrategy(Func<string, string, Task> exportRawAsync)
-    {
-        _exportRawAsync = exportRawAsync;
-    }
+    private RawTextureExportStrategy() { }
 
     public TextureFormat TargetFormat => TextureFormat.Raw;
 
-    public async Task ExportAsync(LoadedTexture texture, string targetPath, Func<LoadedTexture, Task<string>> ensureWorkingPsdAsync)
+    public async Task ExportAsync(LoadedTexture texture, string targetPath, TextureExportDependencies dependencies)
     {
-        var workingPsdPath = await ensureWorkingPsdAsync(texture);
-        await _exportRawAsync(workingPsdPath, targetPath);
+        var workingPsdPath = await dependencies.EnsureWorkingPsdAsync(texture);
+        await dependencies.ExportRawAsync(workingPsdPath, targetPath);
     }
 }

@@ -7,14 +7,21 @@ public class RawTextureConverter
 {
     private readonly ExternalTextureToolService _toolService = new();
     private readonly TextureExportStrategyFactory _exportStrategyFactory;
+    private readonly TextureExportDependencies _exportDependencies;
 
     public RawTextureConverter()
     {
+        _exportDependencies = new TextureExportDependencies
+        {
+            EnsureWorkingPsdAsync = EnsureWorkingPsdAsync,
+            ExportRawAsync = ExportRawAsync
+        };
+
         _exportStrategyFactory = new TextureExportStrategyFactory(
         [
             PngTextureExportStrategy.Instance,
             PsdTextureExportStrategy.Instance,
-            new RawTextureExportStrategy(ExportRawAsync)
+            RawTextureExportStrategy.Instance
         ]);
     }
 
@@ -50,7 +57,7 @@ public class RawTextureConverter
         var normalizedTargetPath = Path.ChangeExtension(targetPath, targetFormat.ToExtension());
         Directory.CreateDirectory(Path.GetDirectoryName(normalizedTargetPath)!);
         var strategy = _exportStrategyFactory.GetStrategy(targetFormat);
-        await strategy.ExportAsync(texture, normalizedTargetPath, EnsureWorkingPsdAsync);
+        await strategy.ExportAsync(texture, normalizedTargetPath, _exportDependencies);
     }
 
     public async Task SaveToProjectAsync(LoadedTexture texture, string bitsRootPath, string relativePath, string textureName)

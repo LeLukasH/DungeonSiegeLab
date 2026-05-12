@@ -10,7 +10,7 @@ public class PngTextureExportStrategy : ITextureExportStrategy
 
     public TextureFormat TargetFormat => TextureFormat.Png;
 
-    public async Task ExportAsync(LoadedTexture texture, string targetPath, Func<LoadedTexture, Task<string>> ensureWorkingPsdAsync)
+    public async Task ExportAsync(LoadedTexture texture, string targetPath, TextureExportDependencies dependencies)
     {
         if (texture.PngCachePath is null)
             throw new InvalidOperationException("Texture preview is not available.");

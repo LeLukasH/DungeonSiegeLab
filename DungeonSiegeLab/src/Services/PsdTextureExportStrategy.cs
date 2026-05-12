@@ -10,9 +10,9 @@ public class PsdTextureExportStrategy : ITextureExportStrategy
 
     public TextureFormat TargetFormat => TextureFormat.Psd;
 
-    public async Task ExportAsync(LoadedTexture texture, string targetPath, Func<LoadedTexture, Task<string>> ensureWorkingPsdAsync)
+    public async Task ExportAsync(LoadedTexture texture, string targetPath, TextureExportDependencies dependencies)
     {
-        var psdPath = await ensureWorkingPsdAsync(texture);
+        var psdPath = await dependencies.EnsureWorkingPsdAsync(texture);
         await Task.Run(() => File.Copy(psdPath, targetPath, overwrite: true));
     }
 }
