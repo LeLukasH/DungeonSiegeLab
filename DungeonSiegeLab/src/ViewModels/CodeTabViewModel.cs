@@ -13,7 +13,7 @@ namespace DungeonSiegeLab.ViewModels;
 /// </summary>
 public partial class CodeTabViewModel : ViewModelBase
 {
-    public BitsNodeViewModel Node { get; }
+    public BitsComponentViewModel Node { get; }
 
     [ObservableProperty] private bool _isPreview;
     // preparation for dependency implementation 
@@ -32,14 +32,14 @@ public partial class CodeTabViewModel : ViewModelBase
 
     partial void OnIsPreviewChanged(bool value) => OnPropertyChanged(nameof(TabFontStyle));
 
-    public CodeTabViewModel(BitsNodeViewModel node, bool isPreview)
+    public CodeTabViewModel(BitsComponentViewModel node, bool isPreview)
     {
         Node = node;
         _isPreview = isPreview;
 
         if (node.Node is BitsTemplate t)
             _sourceCode = t.SourceCode;
-        else if (node.IsRawFile || node.IsEmptyFile)
+        else if (node.CanOpenPreview)
             _ = LoadRawContentAsync();
     }
 

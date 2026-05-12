@@ -84,7 +84,7 @@ public class TreeCacheService
             return dto;
         }
 
-        public BitsFolder ToModel(BitsNode? parent, string basePath)
+        public BitsFolder ToModel(BitsComponent? parent, string basePath)
         {
             var folder = new BitsFolder
             {
@@ -119,7 +119,7 @@ public class TreeCacheService
             return dto;
         }
 
-        public BitsFile ToModel(BitsNode parent, string basePath)
+        public BitsFile ToModel(BitsComponent parent, string basePath)
         {
             var absPath = MakeAbsolute(RelPath, basePath);
             var file = new BitsFile { Name = Name, FullPath = absPath, Parent = parent };
@@ -142,7 +142,7 @@ public class TreeCacheService
         };
 
         // fileFullPath: already-resolved absolute path of the parent .gas file
-        public BitsTemplate ToModel(BitsNode parent, string fileFullPath) => new()
+        public BitsTemplate ToModel(BitsComponent parent, string fileFullPath) => new()
         {
             Name         = Name,
             FullPath     = fileFullPath,

@@ -164,7 +164,7 @@
                                     </Style>
                                 </TreeView.Styles>
                                 <TreeView.ItemTemplate>
-                                    <TreeDataTemplate DataType="vm:BitsNodeViewModel"
+                                    <TreeDataTemplate DataType="vm:BitsComponentViewModel"
                                                       ItemsSource="{Binding Children}">
                                         <Border HorizontalAlignment="Stretch" Background="Transparent">
                                             <StackPanel Orientation="Horizontal" Spacing="5" Margin="0 2">
@@ -204,7 +204,7 @@
                                     </Style>
                                 </TreeView.Styles>
                                 <TreeView.ItemTemplate>
-                                    <TreeDataTemplate DataType="vm:BitsNodeViewModel"
+                                    <TreeDataTemplate DataType="vm:BitsComponentViewModel"
                                                       ItemsSource="{Binding Children}">
                                         <Border HorizontalAlignment="Stretch" Background="Transparent">
                                             <StackPanel Orientation="Horizontal" Spacing="5" Margin="0 2">

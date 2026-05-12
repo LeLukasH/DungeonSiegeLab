@@ -37,7 +37,7 @@ public class SnippetSpan
 
 public class SearchResultViewModel
 {
-    public BitsNodeViewModel Node { get; }
+    public BitsComponentViewModel Node { get; }
     public string Name => Node.Name;
     public string RelativePath { get; }
     public string Query { get; }
@@ -48,7 +48,7 @@ public class SearchResultViewModel
     public bool IsUntankSource { get; init; }
     public bool IsFirstUntankResult { get; init; }
 
-    public SearchResultViewModel(BitsNodeViewModel node, string relativePath, IReadOnlyList<string> matchSnippets, string query)
+    public SearchResultViewModel(BitsComponentViewModel node, string relativePath, IReadOnlyList<string> matchSnippets, string query)
     {
         Node = node;
         RelativePath = relativePath;
