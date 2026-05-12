@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DungeonSiegeLab.Models;
-using DungeonSiegeLab.Services;
 
 namespace DungeonSiegeLab.ViewModels;
 
@@ -58,8 +57,8 @@ public abstract partial class BitsComponentViewModel : ViewModelBase
 
     partial void OnIsExpandedChanged(bool value)
     {
-        if (!value && AppSettings.Instance.CollapseSubfoldersRecursively)
-            CollapseAll();
+        if (!value)
+            AppSettings.Instance.CollapseState.Collapse(this);
         AnyExpansionChanged?.Invoke();
     }
 
