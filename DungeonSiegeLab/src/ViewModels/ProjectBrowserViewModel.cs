@@ -11,22 +11,15 @@ namespace DungeonSiegeLab.ViewModels;
 
 public partial class ProjectBrowserViewModel : ViewModelBase
 {
-    private readonly BitsLoader _bitsLoader = new();
+    private readonly IBitsLoader _loader = new BitsLoader();
     private readonly TextureFinder _textureFinder = new();
     private readonly DependencyFinder _dependencyFinder = new();
-    private readonly TreeCacheService _treeCache;
 
-    private static string? GetUntankAssetsDir()
-    {
-        var path = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets"));
-        return Directory.Exists(path) ? path : null;
-    }
     private readonly TreeStateService _treeState = TreeStateService.Instance;
     private CancellationTokenSource? _searchCts;
 
     /// <summary>Bundled base-game data folder, placed next to the executable.</summary>
-    public static readonly string UntankPath =
-        Path.Combine(AppContext.BaseDirectory, "Untank");
+    public static string UntankPath => BitsLoader.UntankPath;
 
     /// <summary>Fixed key used in state file for Untank — machine-independent.</summary>
     private const string UntankStateKey = "Untank";
@@ -69,7 +62,6 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
     public ProjectBrowserViewModel()
     {
-        _treeCache = new TreeCacheService { UntankCacheDirectory = GetUntankAssetsDir() };
         _treeState.Load();
         BitsPath = _treeState.LastBitsPath ?? "";
 
@@ -153,7 +145,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
                 StatusMessage = $"Loading… {p.percent}%";
                 StatusDetail  = p.folder;
             });
-            BitsFolder root = await _bitsLoader.LoadAsync(path, progress);
+            BitsFolder root = await _loader.LoadAsync(path, progress);
             _bitsRootVm = BitsComponentViewModel.Create(root);
 
             // Bits goes first — insert before Untank
@@ -212,21 +204,12 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             StatusMessage = "Loading Untank…";
             StatusDetail  = UntankPath;
 
-            var cached = await _treeCache.TryLoadUntankAsync(UntankPath);
-            BitsFolder root;
-            if (cached is not null)
+            var progress = new Progress<(int percent, string folder)>(p =>
             {
-                root = cached;
-            }
-            else
-            {
-                var progress = new Progress<(int percent, string folder)>(p =>
-                {
-                    StatusMessage = $"Loading Untank… {p.percent}%";
-                    StatusDetail  = p.folder;
-                });
-                root = await _bitsLoader.LoadAsync(UntankPath, progress);
-            }
+                StatusMessage = $"Loading Untank… {p.percent}%";
+                StatusDetail  = p.folder;
+            });
+            BitsFolder root = await _loader.LoadAsync(UntankPath, progress);
             _untankRootVm = BitsComponentViewModel.Create(root);
 
             if (restoreExpansion)
