@@ -58,7 +58,7 @@ public abstract partial class BitsComponentViewModel : ViewModelBase
     partial void OnIsExpandedChanged(bool value)
     {
         if (!value)
-            AppSettings.Instance.CollapseState.Collapse(this);
+            AppSettings.Instance.Collapse(this);
         AnyExpansionChanged?.Invoke();
     }
 

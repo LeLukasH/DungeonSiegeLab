@@ -13,4 +13,9 @@ public class AppSettings
         get => CollapseState is RecursiveCollapseState;
         set => CollapseState = value ? RecursiveCollapseState.Instance : DefaultCollapseState.Instance;
     }
+
+    public void Collapse(BitsComponentViewModel node)
+    {
+        CollapseState.Collapse(node);
+    }
 }
