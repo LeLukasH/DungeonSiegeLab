@@ -1,0 +1,86 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DungeonSiegeLab.ViewModels"
+             x:Class="DungeonSiegeLab.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+
+    <DockPanel Background="#1e1e2e">
+
+        <Border DockPanel.Dock="Top"
+                Background="#181825"
+                Padding="10 8"
+                BorderBrush="#313244"
+                BorderThickness="0 0 0 1">
+            <TextBlock Text="Settings"
+                       FontSize="13"
+                       FontWeight="SemiBold"
+                       Foreground="#cdd6f4"
+                       VerticalAlignment="Center"/>
+        </Border>
+
+        <ScrollViewer>
+            <StackPanel Margin="24 20" Spacing="24" MaxWidth="560" HorizontalAlignment="Left">
+
+                <StackPanel Spacing="12">
+                    <TextBlock Text="EXPLORER"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="#45475a"
+                               LetterSpacing="1.5"/>
+
+                    <Border Background="#181825"
+                            BorderBrush="#313244"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="16 12">
+                        <Grid ColumnDefinitions="* Auto">
+                            <StackPanel Grid.Column="0" Spacing="2">
+                                <TextBlock Text="Collapse subfolders recursively"
+                                           FontSize="13"
+                                           Foreground="#cdd6f4"/>
+                                <TextBlock Text="When closing a folder, all nested subfolders collapse too."
+                                           FontSize="11"
+                                           Foreground="#6c7086"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="1"
+                                          IsChecked="{Binding CollapseSubfoldersRecursively}"
+                                          OffContent=""
+                                          OnContent=""
+                                          VerticalAlignment="Center"
+                                          Margin="16 0 0 0"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Spacing="12">
+                    <TextBlock Text="TOOLS"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="#45475a"
+                               LetterSpacing="1.5"/>
+
+                    <Border Background="#181825"
+                            BorderBrush="#313244"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="16 12">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Bundled texture tools are loaded automatically from the project."
+                                       FontSize="13"
+                                       Foreground="#cdd6f4"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="Place RawToPsd.exe in Tools/RawToPsd and PsdToRaw.exe in Tools/PsdToRaw. PNG to PSD uses the built-in Magick.NET library."
+                                       FontSize="11"
+                                       Foreground="#6c7086"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+
+    </DockPanel>
+
+</UserControl>

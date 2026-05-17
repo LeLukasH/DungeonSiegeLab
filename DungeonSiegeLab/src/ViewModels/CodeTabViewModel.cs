@@ -13,7 +13,7 @@ namespace DungeonSiegeLab.ViewModels;
 /// </summary>
 public partial class CodeTabViewModel : ViewModelBase
 {
-    public BitsNodeViewModel Node { get; }
+    public BitsComponentViewModel Node { get; }
 
     [ObservableProperty] private bool _isPreview;
     // Adam integration point: bind list/dots/cards to this collection.
@@ -39,10 +39,44 @@ public partial class CodeTabViewModel : ViewModelBase
 
     partial void OnIsPreviewChanged(bool value) => OnPropertyChanged(nameof(TabFontStyle));
 
-    public CodeTabViewModel(BitsNodeViewModel node, bool isPreview)
+    public CodeTabViewModel(BitsComponentViewModel node, bool isPreview)
     {
         Node = node;
         _isPreview = isPreview;
+
+        node.LoadInto(this);
+    }
+
+    internal async Task LoadRawContentAsync()
+    {
+        try
+        {
+            var info = new FileInfo(Node.FullPath);
+            if (info.Length > 5 * 1024 * 1024)
+            {
+                SourceCode = $"// File too large to display ({info.Length / 1024:N0} KB)";
+                return;
+            }
+
+            var bytes = await File.ReadAllBytesAsync(Node.FullPath);
+
+            // Binary detection: null byte in first 8 KB
+            int check = Math.Min(bytes.Length, 8192);
+            for (int i = 0; i < check; i++)
+            {
+                if (bytes[i] == 0)
+                {
+                    SourceCode = "// Binary file — cannot display content";
+                    return;
+                }
+            }
+
+            SourceCode = System.Text.Encoding.UTF8.GetString(bytes);
+        }
+        catch (Exception ex)
+        {
+            SourceCode = $"// Could not read file: {ex.Message}";
+        }
     }
 
     public void SetDependencies(IEnumerable<DependencyReference> dependencies)

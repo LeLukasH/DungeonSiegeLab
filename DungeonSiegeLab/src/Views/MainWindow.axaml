@@ -9,10 +9,6 @@
         MinWidth="900" MinHeight="600">
 
     <Window.Styles>
-        <Style Selector="TabItem">
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="16 8"/>
-        </Style>
         <Style Selector="Button.primary">
             <Setter Property="Background" Value="#2a7adb"/>
             <Setter Property="Foreground" Value="White"/>
@@ -23,40 +19,83 @@
             <Setter Property="Padding" Value="12 6"/>
             <Setter Property="CornerRadius" Value="4"/>
         </Style>
+        <!-- Main tab bar buttons -->
+        <Style Selector="Button.mainTab">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0 0 0 2"/>
+            <Setter Property="CornerRadius" Value="0"/>
+            <Setter Property="Padding" Value="16 10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#585b70"/>
+        </Style>
+        <Style Selector="Button.mainTab:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#252537"/>
+        </Style>
+        <Style Selector="Button.mainTab.active">
+            <Setter Property="Foreground" Value="#cdd6f4"/>
+            <Setter Property="BorderBrush" Value="#cba6f7"/>
+        </Style>
+        <Style Selector="Button.settingsBtn">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="10 8"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="#585b70"/>
+        </Style>
+        <Style Selector="Button.settingsBtn:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#252537"/>
+        </Style>
+        <Style Selector="Button.settingsBtn.active">
+            <Setter Property="Foreground" Value="#cba6f7"/>
+        </Style>
     </Window.Styles>
 
     <DockPanel>
 
-        <!-- Header -->
+        <!-- Custom tab bar -->
         <Border DockPanel.Dock="Top"
                 Background="#1e1e2e"
-                Padding="16 10">
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <TextBlock Text="⚔" FontSize="22" VerticalAlignment="Center"/>
-                <TextBlock Text="DungeonSiegeLab"
-                           FontSize="18" FontWeight="Bold"
-                           Foreground="#cdd6f4"
-                           VerticalAlignment="Center"/>
-                <TextBlock Text="— Dungeon Siege Modding Tool"
-                           FontSize="13" Foreground="#6c7086"
-                           VerticalAlignment="Center"/>
-            </StackPanel>
+                BorderBrush="#313244"
+                BorderThickness="0 0 0 1">
+            <Grid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Classes="mainTab"
+                            Classes.active="{Binding IsProjectBrowserActive}"
+                            Command="{Binding SwitchToBrowserCommand}">
+                        📁  Project Browser
+                    </Button>
+                    <Button Classes="mainTab"
+                            Classes.active="{Binding IsTextureLabActive}"
+                            Command="{Binding SwitchToLabCommand}">
+                        🎨  Texture Lab
+                    </Button>
+                </StackPanel>
+                <Button Classes="settingsBtn"
+                        Classes.active="{Binding IsSettingsActive}"
+                        Command="{Binding SwitchToSettingsCommand}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0 0 8 0"
+                        ToolTip.Tip="Settings">
+                    ⚙
+                </Button>
+            </Grid>
         </Border>
 
-        <!-- Main tabs -->
-        <TabControl SelectedIndex="{Binding SelectedTabIndex}">
-
-            <!-- Tab 1: Project Browser -->
-            <TabItem Header="📁  Project Browser">
+        <!-- Content panels -->
+        <Grid>
+            <ContentControl IsVisible="{Binding IsProjectBrowserActive}">
                 <views:ProjectBrowserView DataContext="{Binding ProjectBrowser}"/>
-            </TabItem>
-
-            <!-- Tab 2: Texture Lab -->
-            <TabItem Header="🎨  Texture Lab">
+            </ContentControl>
+            <ContentControl IsVisible="{Binding IsTextureLabActive}">
                 <views:TextureLabView DataContext="{Binding TextureLab}"/>
-            </TabItem>
-
-        </TabControl>
+            </ContentControl>
+            <ContentControl IsVisible="{Binding IsSettingsActive}">
+                <views:SettingsView DataContext="{Binding Settings}"/>
+            </ContentControl>
+        </Grid>
 
     </DockPanel>
 

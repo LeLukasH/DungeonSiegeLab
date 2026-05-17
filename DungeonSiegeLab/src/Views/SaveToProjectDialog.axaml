@@ -13,19 +13,22 @@
         <StackPanel Spacing="16">
 
             <TextBlock Text="Save Texture to Project"
-                       FontSize="16" FontWeight="Bold"
+                       FontSize="16"
+                       FontWeight="Bold"
                        Foreground="#cdd6f4"/>
 
             <StackPanel Spacing="4">
                 <TextBlock Text="Relative path in /Bits:"
-                           Foreground="#a6adc8" FontSize="12"/>
+                           Foreground="#a6adc8"
+                           FontSize="12"/>
                 <TextBox Text="{Binding RelativePath}"
                          FontFamily="Consolas,monospace"/>
             </StackPanel>
 
             <StackPanel Spacing="4">
                 <TextBlock Text="Texture name (without extension):"
-                           Foreground="#a6adc8" FontSize="12"/>
+                           Foreground="#a6adc8"
+                           FontSize="12"/>
                 <TextBox Text="{Binding TextureName}"
                          FontFamily="Consolas,monospace"/>
             </StackPanel>
@@ -43,7 +46,7 @@
                 <Button Content="Cancel"
                         Classes="secondary"
                         Command="{Binding CancelCommand}"/>
-                <Button Content="💾 Export to Project"
+                <Button Content="Save to Project"
                         Classes="primary"
                         Command="{Binding ExportToProjectCommand}"
                         IsEnabled="{Binding !IsSaving}"/>

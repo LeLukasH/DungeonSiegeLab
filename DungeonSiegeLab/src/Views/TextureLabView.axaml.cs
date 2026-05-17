@@ -15,18 +15,11 @@ public partial class TextureLabView : UserControl
         await vm.OpenTextureManuallyCommand.ExecuteAsync(topLevel?.StorageProvider);
     }
 
-    private async void OnBrowseToolClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private async void OnSaveAsClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (DataContext is not TextureLabViewModel vm) return;
         var topLevel = TopLevel.GetTopLevel(this);
-        await vm.BrowseForToolCommand.ExecuteAsync(topLevel?.StorageProvider);
-    }
-
-    private async void OnSaveToDiskClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        if (DataContext is not TextureLabViewModel vm) return;
-        var topLevel = TopLevel.GetTopLevel(this);
-        await vm.SaveToDiskCommand.ExecuteAsync(topLevel?.StorageProvider);
+        await vm.SaveAsCommand.ExecuteAsync(topLevel?.StorageProvider);
     }
 
     private async void OnImportReplacementClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

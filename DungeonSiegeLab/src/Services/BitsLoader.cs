@@ -2,70 +2,30 @@ using DungeonSiegeLab.Models;
 
 namespace DungeonSiegeLab.Services;
 
-/// <summary>
-/// Načíta /Bits priečinok a vytvorí hierarchickú stromovú štruktúru
-/// BitsNode objektov (Composite pattern).
-/// </summary>
-public class BitsLoader
+public class BitsLoader : IBitsLoader
 {
-    private readonly GasParser _gasParser = new();
+    public static readonly string UntankPath =
+        Path.Combine(AppContext.BaseDirectory, "Untank");
 
-    public async Task<BitsFolder> LoadAsync(string bitsPath)
+    private readonly TreeCacheService _cache = new() { UntankCacheDirectory = GetUntankAssetsDir() };
+    private DiskBitsLoader? _disk;
+
+    public async Task<BitsFolder> LoadAsync(string path, IProgress<(int percent, string folder)>? progress = null)
     {
-        if (!Directory.Exists(bitsPath))
-            throw new DirectoryNotFoundException($"Priečinok neexistuje: {bitsPath}");
-
-        var root = new BitsFolder
+        if (path.Equals(UntankPath, StringComparison.OrdinalIgnoreCase))
         {
-            Name = Path.GetFileName(bitsPath.TrimEnd(Path.DirectorySeparatorChar)),
-            FullPath = bitsPath
-        };
+            var cached = await _cache.TryLoadUntankAsync(path);
+            if (cached is not null)
+                return cached;
+        }
 
-        await PopulateFolderAsync(root, bitsPath);
-        return root;
+        _disk ??= new DiskBitsLoader();
+        return await _disk.LoadAsync(path, progress);
     }
 
-    private async Task PopulateFolderAsync(BitsFolder folder, string path)
+    private static string? GetUntankAssetsDir()
     {
-        // Podpriečinky
-        foreach (var dir in Directory.GetDirectories(path).OrderBy(d => d))
-        {
-            var subFolder = new BitsFolder
-            {
-                Name = Path.GetFileName(dir),
-                FullPath = dir,
-                Parent = folder
-            };
-
-            await PopulateFolderAsync(subFolder, dir);
-            folder.Children.Add(subFolder);
-        }
-
-        // .gas súbory
-        foreach (var gasFile in Directory.GetFiles(path, "*.gas").OrderBy(f => f))
-        {
-            var fileNode = new BitsFile
-            {
-                Name = Path.GetFileName(gasFile),
-                FullPath = gasFile,
-                Parent = folder
-            };
-
-            try
-            {
-                var templates = await _gasParser.ParseFileAsync(gasFile);
-                foreach (var template in templates)
-                {
-                    template.Parent = fileNode;
-                    fileNode.Children.Add(template);
-                }
-            }
-            catch
-            {
-                // Ak sa súbor nedá parsovať, pridaj ho prázdny
-            }
-
-            folder.Children.Add(fileNode);
-        }
+        var path = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets"));
+        return Directory.Exists(path) ? path : null;
     }
 }
