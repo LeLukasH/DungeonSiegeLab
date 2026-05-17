@@ -612,7 +612,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     }
 
     /// PATTERN: Composite + Iterator - depth-first walk over node children.
-    private static void CollectTemplates(BitsNodeViewModel node, Dictionary<string, BitsTemplate> index)
+    private static void CollectTemplates(BitsComponentViewModel node, Dictionary<string, BitsTemplate> index)
     {
         if (node.Node is BitsTemplate tpl)
             index[tpl.TemplateName] = tpl;

@@ -26,7 +26,12 @@ public partial class CodeTabViewModel : ViewModelBase
     [ObservableProperty] private bool _isStatusExpanded;
 
     public string Name => Node.Name;
-    public string SourceCode => Node.Node is BitsTemplate t ? t.SourceCode : $"// {Node.Name}";
+    private string? _sourceCode;
+    public string SourceCode
+    {
+        get => _sourceCode ?? (Node.Node is BitsTemplate t ? t.SourceCode : $"// {Node.Name}");
+        set => SetProperty(ref _sourceCode, value);
+    }
     // Frontend summary helpers (chips/counters in tab overlay).
     public bool HasDependencies => Dependencies.Count > 0;
     public int LocalDependencyCount => Dependencies.Count(d => !d.IsInherited);
