@@ -36,6 +36,9 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
     [ObservableProperty] private ObservableCollection<CodeTabViewModel> _openCodeTabs = new();
     [ObservableProperty] private CodeTabViewModel? _selectedCodeTab;
+    [ObservableProperty] private ObservableCollection<DependencyReference> _identifiedDependencies = new();
+    [ObservableProperty] private DependencyReference? _selectedIdentifiedDependency;
+    [ObservableProperty] private bool _isDependencyPanelOpen;
 
     public bool HasOpenCodeTabs => OpenCodeTabs.Count > 0;
     public bool HasNoOpenCodeTabs => OpenCodeTabs.Count == 0;
@@ -59,6 +62,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     public bool HasRecentPaths => RecentPaths.Any(p => !p.Equals(BitsPath, StringComparison.OrdinalIgnoreCase));
 
     public event Action<List<TextureReference>>? TexturesIdentified;
+    public event Action<List<DependencyReference>>? DependenciesIdentified;
 
     public ProjectBrowserViewModel()
     {
@@ -367,6 +371,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
     // ─── Identify ─────────────────────────────────────────────────────────
 
+    /// PATTERN: Command - Identify is triggered from UI via RelayCommand binding.
     [RelayCommand]
     private void Identify()
     {
@@ -376,23 +381,28 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             return;
         }
 
+        // Run unified dependency analysis (local + inherited) for selected template.
         var dependencies = _dependencyFinder.IdentifyDependencies(template, BuildTemplateIndex());
 
         if (dependencies.Count == 0)
         {
+            IdentifiedDependencies.Clear();
             StatusMessage = $"'{template.TemplateName}' has no dependencies.";
             return;
         }
 
-        // pass the dependencies data to the currently selected code tab 
-        // if (SelectedCodeTab != null)
-        // {
-        //     SelectedCodeTab.Dependencies.Clear();
+        // Adam integration point:
+        // 1) IdentifiedDependencies = latest whole result set (global panel / sidebar source)
+        // 2) CodeTab.Dependencies = per-tab source list
+        // 3) DependencyReference.SourcePath + Line = source navigation/highlight anchors
+        // 4) DependencyReference.SourceTemplate + IsInherited = origin/inheritance badges
+        // PATTERN: Observer - event notifies external listeners that new dependencies are available.
+        UpdateIdentifiedDependencies(dependencies);
+        PushDependenciesToCodeTab(template, dependencies);
+        DependenciesIdentified?.Invoke(dependencies);
+        IsDependencyPanelOpen = true;
 
-        //     foreach (var dep in dependencies)
-        //         SelectedCodeTab.Dependencies.Add(dep);
-        // }
-
+        // Texture Lab still uses TextureReference, so map texture dependencies to that model.
         var textures = dependencies
             .Where(d => d.Kind == DependencyKind.Texture)
             .Select(d => new TextureReference
@@ -415,13 +425,14 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             _textureFinder.ResolveTextureFiles(textures, _bitsRootPath);
         _textureFinder.ResolveTextureFiles(textures, UntankPath, overwriteExisting: false);
 
-        // TODO: Product decision pending - keep Identify in Browser vs auto-open Texture Lab when textures exist.
+        // Keeps backward compatibility: event emits resolved textures for consumers that need them.
         if (textures.Count > 0)
             TexturesIdentified?.Invoke(textures);
 
         var localCount = dependencies.Count(d => !d.IsInherited);
         var inheritedCount = dependencies.Count(d => d.IsInherited);
 
+        // Build compact diagnostics for quick parser validation in the status bar.
         var byType = dependencies
             .GroupBy(d => d.Kind)
             .OrderBy(g => g.Key)
@@ -434,6 +445,27 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
         StatusMessage =
             $"'{template.TemplateName}' → Local:{localCount} | Inherited:{inheritedCount} | {string.Join(" | ", byType)}";
+    }
+
+    private void UpdateIdentifiedDependencies(List<DependencyReference> dependencies)
+    {
+        // PATTERN: Adapter - convert parser output into frontend-oriented observable state.
+        // Global store for UI that is not tab-scoped (e.g. right panel with filters).
+        IdentifiedDependencies.Clear();
+        foreach (var dep in dependencies)
+            IdentifiedDependencies.Add(dep);
+        // Default selection enables details panel without extra click.
+        SelectedIdentifiedDependency = IdentifiedDependencies.FirstOrDefault();
+    }
+
+    private void PushDependenciesToCodeTab(BitsTemplate template, List<DependencyReference> dependencies)
+    {
+        // PATTERN: Adapter - project shared identify output into per-tab view model state.
+        // Prefer exact tab for selected template; fallback keeps data visible if focus changed.
+        var targetTab = OpenCodeTabs.FirstOrDefault(t => t.Node.Node == template) ?? SelectedCodeTab;
+        if (targetTab is null) return;
+        // Tab-level dependency collection is intended for line dots / per-tab popups.
+        targetTab.SetDependencies(dependencies);
     }
 
     // ─── Search ───────────────────────────────────────────────────────────
@@ -569,6 +601,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
 
 
+    /// PATTERN: Composite - recursive traversal over tree nodes to collect templates.
     private Dictionary<string, BitsTemplate> BuildTemplateIndex()
     {
         var dict = new Dictionary<string, BitsTemplate>(StringComparer.OrdinalIgnoreCase);
@@ -576,5 +609,15 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             foreach (var tpl in root.Node.FindAll<BitsTemplate>())
                 dict[tpl.TemplateName] = tpl;
         return dict;
+    }
+
+    /// PATTERN: Composite + Iterator - depth-first walk over node children.
+    private static void CollectTemplates(BitsNodeViewModel node, Dictionary<string, BitsTemplate> index)
+    {
+        if (node.Node is BitsTemplate tpl)
+            index[tpl.TemplateName] = tpl;
+
+        foreach (var child in node.Children)
+            CollectTemplates(child, index);
     }
 }

@@ -1,4 +1,5 @@
 using System.Globalization;
+using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 
@@ -54,4 +55,43 @@ public class StatusToBrushConverter : IValueConverter
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotSupportedException();
+}
+/// <summary>
+/// Konvertuje bool na GridLength: true = Length, false = 0
+/// </summary>
+public class BoolToGridLengthConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        bool isVisible = value is true;
+
+        if (!isVisible)
+            return new GridLength(0);
+
+        if (parameter == null)
+            return new GridLength(1, GridUnitType.Star);
+
+        if (double.TryParse(parameter.ToString(), out var width))
+            return new GridLength(width);
+
+        return new GridLength(0);
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
+
+/// <summary>
+/// Konvertuje cislo riadku na y-ovu suradnicu
+/// </summary>
+public class LineToYConverter : IMultiValueConverter
+{
+    public object Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (values.Count == 0 || values[0] is not int line)
+            return 0;
+
+        const double lineHeight = 18;
+        return (line - 1) * lineHeight + 4;
+    }
 }
