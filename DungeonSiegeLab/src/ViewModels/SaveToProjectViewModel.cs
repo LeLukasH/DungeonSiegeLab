@@ -43,12 +43,12 @@ public partial class SaveToProjectViewModel : ViewModelBase
         var fullPath = Path.Combine(_bitsRootPath, RelativePath, TextureName + ".raw");
         if (File.Exists(fullPath))
         {
-            StatusMessage = $"⚠ File '{TextureName}.raw' already exists – it will be overwritten.";
+            StatusMessage = $"Warning: '{TextureName}.raw' already exists and will be overwritten.";
             IsStatusOk = false;
         }
         else
         {
-            StatusMessage = $"✓ Will be saved as: {RelativePath}{TextureName}.raw";
+            StatusMessage = $"Will be saved as: {RelativePath}{TextureName}.raw";
             IsStatusOk = true;
         }
     }
@@ -62,7 +62,7 @@ public partial class SaveToProjectViewModel : ViewModelBase
         try
         {
             await _converter.SaveToProjectAsync(_texture, _bitsRootPath, RelativePath, TextureName);
-            StatusMessage = $"✓ Saved: {RelativePath}{TextureName}.raw";
+            StatusMessage = $"Saved: {RelativePath}{TextureName}.raw";
             IsStatusOk = true;
             await Task.Delay(800);
             CloseRequested?.Invoke();

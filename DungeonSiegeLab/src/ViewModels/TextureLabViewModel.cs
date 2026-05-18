@@ -15,16 +15,13 @@ public partial class TextureLabViewModel : ViewModelBase
     [ObservableProperty] private ObservableCollection<TextureTabViewModel> _openTabs = new();
     [ObservableProperty] private TextureTabViewModel? _selectedTab;
     [ObservableProperty] private string _statusMessage = "No texture is open.";
-    [ObservableProperty] private string _rawToPsdToolPath = "";
+
+    public bool HasOpenTabs => OpenTabs.Count > 0;
 
     public event Action? BackRequested;
 
-    // ─── Load textures from Project Browser ──────────────────────────────
-
     public async Task LoadTexturesAsync(List<TextureReference> textures)
     {
-        _converter.SetToolPath(RawToPsdToolPath);
-
         foreach (var tex in textures.Where(t => t.ResolvedPath != null))
         {
             if (OpenTabs.Any(t => t.TextureName == tex.TextureName))
@@ -40,9 +37,8 @@ public partial class TextureLabViewModel : ViewModelBase
         StatusMessage = OpenTabs.Count > 0
             ? $"{OpenTabs.Count} texture(s) open."
             : "No textures could be loaded (files not found in /Bits).";
+        OnPropertyChanged(nameof(HasOpenTabs));
     }
-
-    // ─── Open texture manually ────────────────────────────────────────────
 
     [RelayCommand]
     private async Task OpenTextureManuallyAsync(IStorageProvider? storageProvider)
@@ -55,7 +51,7 @@ public partial class TextureLabViewModel : ViewModelBase
             AllowMultiple = false,
             FileTypeFilter = new[]
             {
-                new FilePickerFileType("Dungeon Siege Textures") { Patterns = new[] { "*.raw", "*.psd" } },
+                new FilePickerFileType("Supported Textures") { Patterns = new[] { "*.png", "*.psd", "*.raw" } },
                 new FilePickerFileType("All Files") { Patterns = new[] { "*.*" } }
             }
         });
@@ -68,11 +64,10 @@ public partial class TextureLabViewModel : ViewModelBase
         OpenTabs.Add(tab);
         SelectedTab = tab;
 
-        _converter.SetToolPath(RawToPsdToolPath);
         await tab.LoadFromPathAsync(_converter, filePath);
+        StatusMessage = $"Opened: {Path.GetFileName(filePath)}";
+        OnPropertyChanged(nameof(HasOpenTabs));
     }
-
-    // ─── Close tab ────────────────────────────────────────────────────────
 
     [RelayCommand]
     private void CloseTab(TextureTabViewModel? tab)
@@ -82,27 +77,33 @@ public partial class TextureLabViewModel : ViewModelBase
         OpenTabs.Remove(tab);
         SelectedTab = OpenTabs.LastOrDefault();
         StatusMessage = OpenTabs.Count == 0 ? "No texture is open." : "";
+        OnPropertyChanged(nameof(HasOpenTabs));
     }
 
-    // ─── Save to disk ─────────────────────────────────────────────────────
-
     [RelayCommand]
-    private async Task SaveToDiskAsync(IStorageProvider? storageProvider)
+    private async Task SaveAsAsync(IStorageProvider? storageProvider)
     {
         if (SelectedTab?.Texture is null || storageProvider is null) return;
 
+        var currentExtension = SelectedTab.Texture.OriginalFormat.ToExtension();
         var file = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
-            Title = "Save Texture as PNG",
-            SuggestedFileName = SelectedTab.TextureName + ".png",
-            FileTypeChoices = new[] { new FilePickerFileType("PNG") { Patterns = new[] { "*.png" } } }
+            Title = "Save Texture As",
+            SuggestedFileName = SelectedTab.TextureName + currentExtension,
+            DefaultExtension = currentExtension,
+            FileTypeChoices = new[]
+            {
+                new FilePickerFileType("PNG") { Patterns = new[] { "*.png" } },
+                new FilePickerFileType("PSD") { Patterns = new[] { "*.psd" } },
+                new FilePickerFileType("RAW") { Patterns = new[] { "*.raw" } }
+            }
         });
 
         if (file is null) return;
 
         try
         {
-            await _converter.ExportToDiskAsync(SelectedTab.Texture, file.Path.LocalPath);
+            await _converter.SaveAsAsync(SelectedTab.Texture, file.Path.LocalPath);
             StatusMessage = $"Saved: {file.Path.LocalPath}";
         }
         catch (Exception ex)
@@ -111,8 +112,6 @@ public partial class TextureLabViewModel : ViewModelBase
         }
     }
 
-    // ─── Import replacement ───────────────────────────────────────────────
-
     [RelayCommand]
     private async Task ImportReplacementAsync(IStorageProvider? storageProvider)
     {
@@ -120,8 +119,11 @@ public partial class TextureLabViewModel : ViewModelBase
 
         var files = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Import Replacement Texture (PNG)",
-            FileTypeFilter = new[] { new FilePickerFileType("PNG") { Patterns = new[] { "*.png" } } }
+            Title = "Import Replacement Texture",
+            FileTypeFilter = new[]
+            {
+                new FilePickerFileType("Supported Textures") { Patterns = new[] { "*.png", "*.psd", "*.raw" } }
+            }
         });
 
         if (files.Count == 0) return;
@@ -139,36 +141,18 @@ public partial class TextureLabViewModel : ViewModelBase
         }
     }
 
-    // ─── RawToPsd tool path ───────────────────────────────────────────────
-
-    [RelayCommand]
-    private async Task BrowseForToolAsync(IStorageProvider? storageProvider)
-    {
-        if (storageProvider is null) return;
-
-        var files = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-        {
-            Title = "Select RawToPsd.exe",
-            FileTypeFilter = new[] { new FilePickerFileType("Executable") { Patterns = new[] { "*.exe", "*" } } }
-        });
-
-        if (files.Count > 0)
-            RawToPsdToolPath = files[0].Path.LocalPath;
-    }
-
     [RelayCommand]
     private void GoBack() => BackRequested?.Invoke();
 }
-
-// ─── TextureTabViewModel ──────────────────────────────────────────────────────
 
 public partial class TextureTabViewModel : ViewModelBase, IDisposable
 {
     [ObservableProperty] private string _textureName = "";
     [ObservableProperty] private Bitmap? _previewImage;
-    [ObservableProperty] private string _dimensions = "–";
+    [ObservableProperty] private string _dimensions = "-";
     [ObservableProperty] private string _status = "Loading...";
-    [ObservableProperty] private string _standardUsage = "–";
+    [ObservableProperty] private string _standardUsage = "-";
+    [ObservableProperty] private string _formatLabel = "-";
     [ObservableProperty] private bool _isLoading = true;
     [ObservableProperty] private string _errorMessage = "";
 
@@ -206,6 +190,7 @@ public partial class TextureTabViewModel : ViewModelBase, IDisposable
 
     public void UpdateTexture(LoadedTexture newTexture)
     {
+        DisposeTextureResources();
         Texture = newTexture;
         ApplyTexture();
     }
@@ -214,10 +199,12 @@ public partial class TextureTabViewModel : ViewModelBase, IDisposable
     {
         if (Texture is null) return;
 
-        Dimensions = $"{Texture.Width}×{Texture.Height}";
+        Dimensions = $"{Texture.Width}x{Texture.Height}";
         Status = Texture.StatusText;
         StandardUsage = Texture.StandardUsage;
+        FormatLabel = Texture.OriginalFormat.ToString().ToUpperInvariant();
         IsLoading = false;
+        ErrorMessage = "";
 
         if (Texture.PngCachePath != null && File.Exists(Texture.PngCachePath))
         {
@@ -228,8 +215,31 @@ public partial class TextureTabViewModel : ViewModelBase, IDisposable
 
     public void Dispose()
     {
+        DisposeTextureResources();
+    }
+
+    private void DisposeTextureResources()
+    {
         PreviewImage?.Dispose();
-        if (Texture?.PngCachePath != null && File.Exists(Texture.PngCachePath))
-            File.Delete(Texture.PngCachePath);
+        PreviewImage = null;
+
+        SafeDelete(Texture?.PngCachePath);
+
+        if (Texture?.WorkingPsdPath != null &&
+            !string.Equals(Texture.WorkingPsdPath, Texture.OriginalPath, StringComparison.OrdinalIgnoreCase))
+            SafeDelete(Texture.WorkingPsdPath);
+    }
+
+    private static void SafeDelete(string? path)
+    {
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(path) && File.Exists(path))
+                File.Delete(path);
+        }
+        catch
+        {
+            // Ignore cleanup errors for temp files.
+        }
     }
 }

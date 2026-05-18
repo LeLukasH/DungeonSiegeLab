@@ -1,39 +1,18 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using DungeonSiegeLab.Models;
+using DungeonSiegeLab.Patterns;
 
 namespace DungeonSiegeLab.Services;
 
-public class DependencyFinder
+/// Unified dependency engine for template analysis.
+/// It resolves local dependencies, follows specializes recursively, and marks inherited items.
+public partial class DependencyFinder
 {
     private readonly HashSet<string> _vanillaBlocks;
     private readonly HashSet<string> _inventoryDependencySlots;
     private readonly Dictionary<string, DependencyKind> _fixedPropertyRules;
-
-    private sealed class AssignmentRecord
-    {
-        public string Path { get; init; } = "";
-        public string Key { get; init; } = "";
-        public string Value { get; init; } = "";
-        public int Line { get; init; }
-        public string Signature { get; init; } = "";
-    }
-
-    private sealed class ParseResult
-    {
-        public List<AssignmentRecord> Assignments { get; } = new();
-        public List<DependencyReference> NonVanillaBlockDependencies { get; } = new();
-        public HashSet<string> LocalSignatures { get; } = new(StringComparer.OrdinalIgnoreCase);
-        public string? Specializes { get; set; }
-        public string? AspectModel { get; set; }
-        public bool HasExplicitAspectTexture { get; set; }
-    }
-
-    private sealed class AnalyzeResult
-    {
-        public List<DependencyReference> Dependencies { get; } = new();
-        public HashSet<string> LocalSignatures { get; } = new(StringComparer.OrdinalIgnoreCase);
-    }
+    private readonly IExpression _assignmentInterpreter;
 
     private static readonly Regex BlockHeaderRegex = new(@"\[(?<name>[^\]]+)\]", RegexOptions.Compiled);
     private static readonly Regex AssignmentRegex = new(
@@ -41,21 +20,26 @@ public class DependencyFinder
         RegexOptions.Compiled);
     private static readonly Regex ModelPosSuffixRegex = new(@"_pos(?:[_-]\d+)?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+    /// PATTERN
     public DependencyFinder()
     {
+        // Load user-editable rules once; use defaults if file is missing or invalid.
         var rules = LoadRulesConfig();
 
         _vanillaBlocks = new HashSet<string>(rules.VanillaBlocks, StringComparer.OrdinalIgnoreCase);
         _inventoryDependencySlots = new HashSet<string>(rules.InventoryDependencySlots, StringComparer.OrdinalIgnoreCase);
         _fixedPropertyRules = rules.FixedPropertyKinds
             .ToDictionary(kvp => kvp.Key, kvp => ParseKindOrDefault(kvp.Value), StringComparer.OrdinalIgnoreCase);
+        _assignmentInterpreter = BuildAssignmentInterpreter();
     }
 
     public List<DependencyReference> IdentifyDependencies(
         BitsTemplate template,
         IReadOnlyDictionary<string, BitsTemplate> templateIndex)
     {
+        // Cache prevents repeated work when multiple nodes share ancestors.
         var cache = new Dictionary<string, AnalyzeResult>(StringComparer.OrdinalIgnoreCase);
+        // Visiting set prevents infinite loops if template graph is malformed/cyclic.
         var visiting = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var result = AnalyzeTemplateRecursive(template, templateIndex, cache, visiting);
 
@@ -67,6 +51,7 @@ public class DependencyFinder
             .ToList();
     }
 
+    /// PATTERN: Recursion + Memoization - resolves inheritance graph with cache and cycle guard.
     private AnalyzeResult AnalyzeTemplateRecursive(
         BitsTemplate template,
         IReadOnlyDictionary<string, BitsTemplate> templateIndex,
@@ -90,12 +75,13 @@ public class DependencyFinder
         {
             var parent = AnalyzeTemplateRecursive(parentTemplate, templateIndex, cache, visiting);
 
-            foreach (var dep in parent.Dependencies)
+            EnumerationUtility.Enumerate(parent.Dependencies, dep =>
             {
+                // Local assignment with same signature overrides inherited source.
                 if (!string.IsNullOrEmpty(dep.SourceSignature)
                     && parsed.LocalSignatures.Contains(dep.SourceSignature))
                 {
-                    continue;
+                    return;
                 }
 
                 combined.Dependencies.Add(new DependencyReference
@@ -109,7 +95,7 @@ public class DependencyFinder
                     SourceTemplate = dep.SourceTemplate,
                     SourceSignature = dep.SourceSignature
                 });
-            }
+            });
         }
 
         visiting.Remove(template.TemplateName);
@@ -122,6 +108,7 @@ public class DependencyFinder
         return combined;
     }
 
+    /// PATTERN: Interpreter - parses template text into structured assignment records.
     private ParseResult ParseTemplate(BitsTemplate template)
     {
         var result = new ParseResult();
@@ -207,9 +194,11 @@ public class DependencyFinder
                 });
                 result.LocalSignatures.Add(signature);
 
+                // specializes is the parent link used for recursive inheritance.
                 if (key.Equals("specializes", StringComparison.OrdinalIgnoreCase))
                     result.Specializes = ExtractValueTokens(value).FirstOrDefault();
 
+                // aspect:model may imply texture when explicit aspect:textures is missing.
                 if (PathStartsWith(path, "aspect") && key.Equals("model", StringComparison.OrdinalIgnoreCase))
                     result.AspectModel = ExtractValueTokens(value).FirstOrDefault();
 
@@ -225,84 +214,26 @@ public class DependencyFinder
         return result;
     }
 
+    /// PATTERN: Interpreter - terminal/nonterminal expressions evaluate assignment grammar rules.
     private List<DependencyReference> ExtractLocalDependencies(BitsTemplate template, ParseResult parsed)
     {
         var dependencies = new List<DependencyReference>();
+        // Custom top-level components are dependencies by themselves.
         dependencies.AddRange(parsed.NonVanillaBlockDependencies);
 
-        foreach (var a in parsed.Assignments)
+        EnumerationUtility.Enumerate(parsed.Assignments, a =>
         {
-            var root = GetRootComponent(a.Path);
-            if (!string.IsNullOrEmpty(root)
-                && _fixedPropertyRules.TryGetValue($"{root}:{a.Key}", out var fixedKind))
+            _assignmentInterpreter.Interpret(new DependencyInterpretContext
             {
-                AddTokens(dependencies, template.TemplateName, a, fixedKind, $"fixed:{root}:{a.Key}", a.Value);
-            }
-
-            if (a.Key.Equals("specializes", StringComparison.OrdinalIgnoreCase))
-                AddTokens(dependencies, template.TemplateName, a, DependencyKind.Template, "specializes", a.Value);
-
-            if (PathStartsWith(a.Path, "aspect") && a.Key.StartsWith("textures:", StringComparison.OrdinalIgnoreCase))
-                AddTokens(dependencies, template.TemplateName, a, DependencyKind.Texture, "aspect:textures", a.Value);
-
-            if (PathStartsWith(a.Path, "aspect:voice") && a.Key.Equals("*", StringComparison.OrdinalIgnoreCase))
-                AddTokens(dependencies, template.TemplateName, a, DependencyKind.Sound, "aspect:voice:*", a.Value);
-
-            if (PathStartsWith(a.Path, "aspect:vo_voice") && a.Key.Equals("*", StringComparison.OrdinalIgnoreCase))
-                AddTokens(dependencies, template.TemplateName, a, DependencyKind.Sound, "aspect:vo_voice:*", a.Value);
-
-            if (PathStartsWith(a.Path, "conversation:conversations") && a.Key.Equals("*", StringComparison.OrdinalIgnoreCase))
-                AddTokens(dependencies, template.TemplateName, a, DependencyKind.Template, "conversation:conversations:*", a.Value);
-
-            if (PathStartsWith(a.Path, "common:instance_triggers") || PathStartsWith(a.Path, "common:template_triggers"))
-                ApplyCommonTriggerRules(dependencies, template.TemplateName, a);
-
-            if (PathStartsWith(a.Path, "inventory"))
-                ApplyInventoryRules(dependencies, template.TemplateName, a);
-
-            if (PathStartsWith(a.Path, "gold:ranges"))
-                AddTokens(dependencies, template.TemplateName, a, DependencyKind.Template, "gold:ranges:*", a.Value);
-
-            if (PathStartsWith(a.Path, "magic:enchantments")
-                && (a.Key.Equals("effect_script", StringComparison.OrdinalIgnoreCase)
-                    || a.Key.Equals("effect_script_equip", StringComparison.OrdinalIgnoreCase)
-                    || a.Key.Equals("effect_script_hit", StringComparison.OrdinalIgnoreCase)))
-            {
-                AddTokens(dependencies, template.TemplateName, a, DependencyKind.Script, "magic:enchantments:effect_script", a.Value);
-            }
-
-            if (PathStartsWith(a.Path, "mind") && a.Key.StartsWith("jat_", StringComparison.OrdinalIgnoreCase))
-                AddTokens(dependencies, template.TemplateName, a, DependencyKind.Script, "mind:jat_*", a.Value);
-
-            if (PathContains(a.Path, "pcontent")
-                && (a.Key.Equals("inventory_icon", StringComparison.OrdinalIgnoreCase)
-                    || a.Key.Equals("model", StringComparison.OrdinalIgnoreCase)
-                    || a.Key.Equals("texture", StringComparison.OrdinalIgnoreCase)))
-            {
-                var kind = a.Key.Equals("model", StringComparison.OrdinalIgnoreCase)
-                    ? DependencyKind.Template
-                    : DependencyKind.Texture;
-                AddTokens(dependencies, template.TemplateName, a, kind, "pcontent:*:[inventory_icon|model|texture]", a.Value);
-            }
-
-            if (PathStartsWith(a.Path, "physics:break_particulate"))
-            {
-                AddToken(dependencies, template.TemplateName, a, DependencyKind.Effect,
-                    "physics:break_particulate:left_side", a.Key);
-            }
-
-            if (PathStartsWith(a.Path, "potion:ranges"))
-                AddTokens(dependencies, template.TemplateName, a, DependencyKind.Template, "potion:ranges:*", a.Value);
-
-            if (PathStartsWith(a.Path, "store:item_restock"))
-            {
-                AddToken(dependencies, template.TemplateName, a, DependencyKind.Template,
-                    "store:item_restock:left_side", a.Key);
-            }
-        }
+                TemplateName = template.TemplateName,
+                Dependencies = dependencies,
+                Assignment = a
+            });
+        });
 
         if (!parsed.HasExplicitAspectTexture && !string.IsNullOrWhiteSpace(parsed.AspectModel))
         {
+            // Legacy game convention: model name implies texture prefix when no explicit texture exists.
             var inferred = InferTextureNameFromModel(parsed.AspectModel);
             if (!string.IsNullOrWhiteSpace(inferred))
             {
@@ -322,50 +253,8 @@ public class DependencyFinder
         return Deduplicate(dependencies);
     }
 
-    private static void ApplyCommonTriggerRules(
-        List<DependencyReference> deps,
-        string templateName,
-        AssignmentRecord assignment)
-    {
-        if (assignment.Key.StartsWith("action", StringComparison.OrdinalIgnoreCase)
-            && assignment.Value.Contains("call_sfx_script", StringComparison.OrdinalIgnoreCase))
-        {
-            var scriptArg = ExtractFunctionArgument(assignment.Value, 0);
-            if (!string.IsNullOrWhiteSpace(scriptArg))
-                AddToken(deps, templateName, assignment, DependencyKind.Script, "common:trigger:action:call_sfx_script", scriptArg);
-        }
-
-        if (!assignment.Key.StartsWith("condition", StringComparison.OrdinalIgnoreCase))
-            return;
-
-        if (assignment.Value.Contains("has_go_in_inventory", StringComparison.OrdinalIgnoreCase)
-            || assignment.Value.Contains("go_within_range", StringComparison.OrdinalIgnoreCase)
-            || assignment.Value.Contains("go_within_bounding_box", StringComparison.OrdinalIgnoreCase)
-            || assignment.Value.Contains("go_within_sphere", StringComparison.OrdinalIgnoreCase))
-        {
-            var second = ExtractFunctionArgument(assignment.Value, 1);
-            var third = ExtractFunctionArgument(assignment.Value, 2);
-            if (!string.IsNullOrWhiteSpace(second))
-                AddToken(deps, templateName, assignment, InferKind(second), "common:trigger:condition:arg2", second);
-            if (!string.IsNullOrWhiteSpace(third))
-                AddToken(deps, templateName, assignment, InferKind(third), "common:trigger:condition:arg3", third);
-        }
-    }
-
-    private void ApplyInventoryRules(
-        List<DependencyReference> deps,
-        string templateName,
-        AssignmentRecord assignment)
-    {
-        if (_inventoryDependencySlots.Contains(assignment.Key)
-            && !assignment.Value.TrimStart().StartsWith("#", StringComparison.Ordinal))
-        {
-            AddTokens(deps, templateName, assignment, DependencyKind.Template, "inventory:slot", assignment.Value);
-        }
-
-        if (PathStartsWith(assignment.Path, "inventory:ranges"))
-            AddTokens(deps, templateName, assignment, DependencyKind.Template, "inventory:ranges:*", assignment.Value);
-    }
+    private IExpression BuildAssignmentInterpreter()
+        => AssignmentInterpreterFactory.Create(_fixedPropertyRules, _inventoryDependencySlots);
 
     private static void AddTokens(
         List<DependencyReference> deps,
@@ -378,6 +267,7 @@ public class DependencyFinder
         foreach (var token in ExtractValueTokens(value))
             AddToken(deps, templateName, assignment, kind, rule, token);
     }
+
 
     private static void AddToken(
         List<DependencyReference> deps,
@@ -420,6 +310,7 @@ public class DependencyFinder
         return _vanillaBlocks.Contains(name);
     }
 
+    /// PATTERN: Strategy/Configuration - load runtime rule set with safe fallback.
     private static DependencyRulesConfig LoadRulesConfig()
     {
         var defaults = DependencyRulesConfig.CreateDefault();
@@ -446,6 +337,7 @@ public class DependencyFinder
 
     private static DependencyRulesConfig MergeWithDefaults(DependencyRulesConfig defaults, DependencyRulesConfig loaded)
     {
+        // Merge is additive: user file can override only what it cares about.
         var merged = DependencyRulesConfig.CreateDefault();
 
         if (loaded.VanillaBlocks.Count > 0)
@@ -462,6 +354,7 @@ public class DependencyFinder
 
     private static DependencyKind ParseKindOrDefault(string value)
     {
+        // Unknown string kinds degrade safely into Other instead of throwing.
         if (Enum.TryParse<DependencyKind>(value, ignoreCase: true, out var parsed))
             return parsed;
         return DependencyKind.Other;
@@ -484,6 +377,7 @@ public class DependencyFinder
 
     private static List<string> ExtractValueTokens(string value)
     {
+        // Tokenization is intentionally permissive for legacy GAS value formats.
         var tokens = value
             .Split([',', ' ', '\t'], StringSplitOptions.RemoveEmptyEntries)
             .Select(NormalizeToken)
@@ -495,6 +389,7 @@ public class DependencyFinder
 
     private static string NormalizeToken(string token)
     {
+        // Filter out placeholders, booleans, and pure numerics that are not real dependencies.
         var t = token.Trim().Trim('"', '\'', ';');
         if (string.IsNullOrWhiteSpace(t)) return "";
         if (t.Equals("<ignore>", StringComparison.OrdinalIgnoreCase)) return "";
@@ -506,6 +401,7 @@ public class DependencyFinder
 
     private static string StripComments(string line, ref bool inBlockComment)
     {
+        // Strips // and /* */ comments before regex parsing to reduce false positives.
         if (string.IsNullOrEmpty(line))
             return line;
 
@@ -590,23 +486,17 @@ public class DependencyFinder
     private static List<DependencyReference> Deduplicate(IEnumerable<DependencyReference> dependencies)
     {
         var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        var result = new List<DependencyReference>();
 
-        foreach (var dep in dependencies)
-        {
-            var key = string.Join("|",
+        // Enumeration-method style: filter stream by first-seen identity key.
+        return dependencies
+            .Where(dep => seen.Add(string.Join("|",
                 dep.Kind,
                 dep.Value,
                 dep.Rule,
                 dep.SourcePath,
                 dep.Line,
                 dep.IsInherited,
-                dep.SourceTemplate);
-
-            if (seen.Add(key))
-                result.Add(dep);
-        }
-
-        return result;
+                dep.SourceTemplate)))
+            .ToList();
     }
 }

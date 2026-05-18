@@ -1,11 +1,21 @@
 namespace DungeonSiegeLab.Services;
 
+/// Editable rule set loaded from dependency-rules.json.
+/// Any missing values are filled from CreateDefault().
 public class DependencyRulesConfig
 {
+    /// Top-level component blocks considered vanilla, not custom dependencies.
     public List<string> VanillaBlocks { get; set; } = new();
+
+    /// Inventory slot properties that should be interpreted as template dependencies.
     public List<string> InventoryDependencySlots { get; set; } = new();
+
+    /// Exact property map in root:property format, e.g. "gui:inventory_icon" -> "Texture".
+    /// Stored as string in JSON and parsed into DependencyKind at runtime.
     public Dictionary<string, string> FixedPropertyKinds { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
+    /// Baseline rules that match current known behavior.
+    /// Used both as fallback and as merge source for partially specified JSON files.
     public static DependencyRulesConfig CreateDefault()
     {
         return new DependencyRulesConfig

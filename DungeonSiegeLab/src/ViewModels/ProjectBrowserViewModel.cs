@@ -13,31 +13,24 @@ namespace DungeonSiegeLab.ViewModels;
 
 public partial class ProjectBrowserViewModel : ViewModelBase
 {
-    private readonly BitsLoader _bitsLoader = new();
+    private readonly IBitsLoader _loader = new BitsLoader();
     private readonly TextureFinder _textureFinder = new();
     private readonly DependencyFinder _dependencyFinder = new();
-    private readonly TreeCacheService _treeCache;
 
-    private static string? GetUntankAssetsDir()
-    {
-        var path = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets"));
-        return Directory.Exists(path) ? path : null;
-    }
     private readonly TreeStateService _treeState = TreeStateService.Instance;
     private CancellationTokenSource? _searchCts;
 
     /// <summary>Bundled base-game data folder, placed next to the executable.</summary>
-    public static readonly string UntankPath =
-        Path.Combine(AppContext.BaseDirectory, "Untank");
+    public static string UntankPath => BitsLoader.UntankPath;
 
     /// <summary>Fixed key used in state file for Untank — machine-independent.</summary>
     private const string UntankStateKey = "Untank";
 
-    [ObservableProperty] private ObservableCollection<BitsNodeViewModel> _rootNodes = new();
-    public ObservableCollection<BitsNodeViewModel> BitsRootNodes { get; } = new();
-    public ObservableCollection<BitsNodeViewModel> UntankRootNodes { get; } = new();
+    [ObservableProperty] private ObservableCollection<BitsComponentViewModel> _rootNodes = new();
+    public ObservableCollection<BitsComponentViewModel> BitsRootNodes { get; } = new();
+    public ObservableCollection<BitsComponentViewModel> UntankRootNodes { get; } = new();
     public bool HasUntankSection => UntankRootNodes.Count > 0;
-    [ObservableProperty] private BitsNodeViewModel? _selectedNode;
+    [ObservableProperty] private BitsComponentViewModel? _selectedNode;
     [ObservableProperty] private string _statusMessage = "Open a /Bits folder.";
     [ObservableProperty] private string _statusDetail  = "";
     [ObservableProperty] private bool _isLoading;
@@ -45,6 +38,9 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
     [ObservableProperty] private ObservableCollection<CodeTabViewModel> _openCodeTabs = new();
     [ObservableProperty] private CodeTabViewModel? _selectedCodeTab;
+    [ObservableProperty] private ObservableCollection<DependencyReference> _identifiedDependencies = new();
+    [ObservableProperty] private DependencyReference? _selectedIdentifiedDependency;
+    [ObservableProperty] private bool _isDependencyPanelOpen;
 
     public bool HasOpenCodeTabs => OpenCodeTabs.Count > 0;
     public bool HasNoOpenCodeTabs => OpenCodeTabs.Count == 0;
@@ -60,8 +56,8 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     [ObservableProperty] private SearchResultViewModel? _selectedSearchResult;
 
     private string _bitsRootPath = "";
-    private BitsNodeViewModel? _bitsRootVm;
-    private BitsNodeViewModel? _untankRootVm;
+    private BitsComponentViewModel? _bitsRootVm;
+    private BitsComponentViewModel? _untankRootVm;
     private CancellationTokenSource? _saveCts;
     private readonly ExplorerFolderWatcherService _explorerFolderWatcher;
 
@@ -69,18 +65,21 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     public bool HasRecentPaths => RecentPaths.Any(p => !p.Equals(BitsPath, StringComparison.OrdinalIgnoreCase));
 
     public event Action<List<TextureReference>>? TexturesIdentified;
+<<<<<<< HEAD
     public event Action<string>? BitsFolderLoaded;
+=======
+    public event Action<List<DependencyReference>>? DependenciesIdentified;
+>>>>>>> bd25586769c769fdf11afd06ad97eb070932104f
 
     public ProjectBrowserViewModel()
     {
-        _treeCache = new TreeCacheService { UntankCacheDirectory = GetUntankAssetsDir() };
         _treeState.Load();
         BitsPath = _treeState.LastBitsPath ?? "";
 
         foreach (var p in _treeState.RecentPaths)
             RecentPaths.Add(p);
 
-        BitsNodeViewModel.AnyExpansionChanged += SaveExpansionStateDebounced;
+        BitsComponentViewModel.AnyExpansionChanged += SaveExpansionStateDebounced;
         OpenCodeTabs.CollectionChanged += OnOpenCodeTabsChanged;
 
         _explorerFolderWatcher = new ExplorerFolderWatcherService();
@@ -93,10 +92,9 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
     private async Task InitializeAsync()
     {
-        // Load user's Bits folder first (with expansion restored), then Untank
+        await LoadUntankAsync(restoreExpansion: true);
         if (!string.IsNullOrEmpty(BitsPath))
             await LoadCoreAsync(BitsPath, restoreExpansion: true);
-        await LoadUntankAsync(restoreExpansion: true);
     }
 
     private void OnOpenCodeTabsChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -157,36 +155,13 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         try
         {
             _bitsRootPath = path;
-            BitsFolder root;
-            if (restoreExpansion)
+            var progress = new Progress<(int percent, string folder)>(p =>
             {
-                var cached = await _treeCache.TryLoadAsync(path);
-                if (cached is not null)
-                {
-                    root = cached;
-                }
-                else
-                {
-                    var progress = new Progress<(int percent, string folder)>(p =>
-                    {
-                        StatusMessage = $"Loading… {p.percent}%";
-                        StatusDetail  = p.folder;
-                    });
-                    root = await _bitsLoader.LoadAsync(path, progress);
-                    _ = _treeCache.SaveAsync(root); // fire-and-forget
-                }
-            }
-            else
-            {
-                var progress = new Progress<(int percent, string folder)>(p =>
-                {
-                    StatusMessage = $"Loading… {p.percent}%";
-                    StatusDetail  = p.folder;
-                });
-                root = await _bitsLoader.LoadAsync(path, progress);
-                _ = _treeCache.SaveAsync(root); // fire-and-forget
-            }
-            _bitsRootVm = new BitsNodeViewModel(root);
+                StatusMessage = $"Loading… {p.percent}%";
+                StatusDetail  = p.folder;
+            });
+            BitsFolder root = await _loader.LoadAsync(path, progress);
+            _bitsRootVm = BitsComponentViewModel.Create(root);
 
             // Bits goes first — insert before Untank
             RootNodes.Insert(0, _bitsRootVm);
@@ -199,9 +174,9 @@ public partial class ProjectBrowserViewModel : ViewModelBase
                 if (savedRelative.Count > 0)
                 {
                     var saved = ToAbsoluteBitsPaths(savedRelative);
-                    BitsNodeViewModel.AnyExpansionChanged -= SaveExpansionStateDebounced;
+                    BitsComponentViewModel.AnyExpansionChanged -= SaveExpansionStateDebounced;
                     RestoreExpansionState(new[] { _bitsRootVm }, saved);
-                    BitsNodeViewModel.AnyExpansionChanged += SaveExpansionStateDebounced;
+                    BitsComponentViewModel.AnyExpansionChanged += SaveExpansionStateDebounced;
                 }
             }
 
@@ -247,23 +222,13 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             StatusMessage = "Loading Untank…";
             StatusDetail  = UntankPath;
 
-            var cached = await _treeCache.TryLoadAsync(UntankPath, "untank");
-            BitsFolder root;
-            if (cached is not null)
+            var progress = new Progress<(int percent, string folder)>(p =>
             {
-                root = cached;
-            }
-            else
-            {
-                var progress = new Progress<(int percent, string folder)>(p =>
-                {
-                    StatusMessage = $"Loading Untank… {p.percent}%";
-                    StatusDetail  = p.folder;
-                });
-                root = await _bitsLoader.LoadAsync(UntankPath, progress);
-                _ = _treeCache.SaveAsync(root, "untank"); // fire-and-forget, non-critical
-            }
-            _untankRootVm = new BitsNodeViewModel(root);
+                StatusMessage = $"Loading Untank… {p.percent}%";
+                StatusDetail  = p.folder;
+            });
+            BitsFolder root = await _loader.LoadAsync(UntankPath, progress);
+            _untankRootVm = BitsComponentViewModel.Create(root);
 
             if (restoreExpansion)
             {
@@ -271,9 +236,9 @@ public partial class ProjectBrowserViewModel : ViewModelBase
                 if (savedRelative.Count > 0)
                 {
                     var saved = ToAbsoluteUntankPaths(savedRelative);
-                    BitsNodeViewModel.AnyExpansionChanged -= SaveExpansionStateDebounced;
+                    BitsComponentViewModel.AnyExpansionChanged -= SaveExpansionStateDebounced;
                     RestoreExpansionState(new[] { _untankRootVm }, saved);
-                    BitsNodeViewModel.AnyExpansionChanged += SaveExpansionStateDebounced;
+                    BitsComponentViewModel.AnyExpansionChanged += SaveExpansionStateDebounced;
                 }
             }
 
@@ -291,14 +256,10 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
     // ─── Expansion state ──────────────────────────────────────────────────
 
-    private static void RestoreExpansionState(IEnumerable<BitsNodeViewModel> roots, HashSet<string> expandedPaths)
+    private static void RestoreExpansionState(IEnumerable<BitsComponentViewModel> roots, HashSet<string> expandedPaths)
     {
-        foreach (var node in roots)
-        {
-            node.IsExpanded = expandedPaths.Contains(node.FullPath);
-            if (node.Children.Count > 0)
-                RestoreExpansionState(node.Children, expandedPaths);
-        }
+        foreach (var root in roots)
+            root.RestoreExpansion(expandedPaths);
     }
 
     private void SaveExpansionStateDebounced()
@@ -361,15 +322,9 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     private IEnumerable<string> ToRelativeUntankPaths(IEnumerable<string> a)  => ToRelativePaths(a, UntankPath);
     private HashSet<string>     ToAbsoluteUntankPaths(HashSet<string> r)      => ToAbsolutePaths(r, UntankPath);
 
-    private static List<string> CollectExpandedPaths(IEnumerable<BitsNodeViewModel> roots)
+    private static List<string> CollectExpandedPaths(IEnumerable<BitsComponentViewModel> roots)
     {
-        var result = new List<string>();
-        foreach (var node in roots)
-        {
-            if (node.IsExpanded && !node.IsTemplate) result.Add(node.FullPath);
-            if (node.Children.Count > 0) result.AddRange(CollectExpandedPaths(node.Children));
-        }
-        return result;
+        return [..roots.SelectMany(root => root.ExpandedPaths())];
     }
 
     private void UpdateExplorerWatchedFolders()
@@ -535,32 +490,19 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
     // ─── Tree selection (single click → preview tab) ──────────────────────
 
-    public bool CanIdentify => SelectedNode?.IsTemplate == true;
+    public bool CanIdentify => SelectedNode?.CanIdentify == true;
 
-    partial void OnSelectedNodeChanged(BitsNodeViewModel? value)
+    partial void OnSelectedNodeChanged(BitsComponentViewModel? value)
     {
         OnPropertyChanged(nameof(CanIdentify));
 
-        if (value?.Node is BitsTemplate template)
-        {
+        if (value is null) return;
+        StatusMessage = value.StatusText;
+        if (value.CanOpenPreview)
             OpenPreviewTab(value);
-            StatusMessage = $"Template: {template.TemplateName}";
-        }
-        else if (value?.Node is BitsRawFile)
-        {
-            if (!value.IsBinaryRawFile)
-                OpenPreviewTab(value);
-            StatusMessage = $"File: {value.Name}";
-        }
-        else if (value?.Node is BitsFile file)
-        {
-            if (value.IsEmptyFile)
-                OpenPreviewTab(value);
-            StatusMessage = $"File: {file.Name}";
-        }
     }
 
-    public void OpenPreviewTab(BitsNodeViewModel node)
+    public void OpenPreviewTab(BitsComponentViewModel node)
     {
         var permanent = OpenCodeTabs.FirstOrDefault(t => !t.IsPreview && t.Node == node);
         if (permanent != null)
@@ -584,9 +526,9 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         SelectedCodeTab = tab;
     }
 
-    public void PromoteToPermanent(BitsNodeViewModel node)
+    public void PromoteToPermanent(BitsComponentViewModel node)
     {
-        if (node.Node is not BitsTemplate && !(node.IsRawFile && !node.IsBinaryRawFile) && !node.IsEmptyFile) return;
+        if (!node.CanOpenPreview) return;
 
         var existing = OpenCodeTabs.FirstOrDefault(t => t.Node == node);
         if (existing != null)
@@ -617,6 +559,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
     // ─── Identify ─────────────────────────────────────────────────────────
 
+    /// PATTERN: Command - Identify is triggered from UI via RelayCommand binding.
     [RelayCommand]
     private void Identify()
     {
@@ -626,23 +569,28 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             return;
         }
 
+        // Run unified dependency analysis (local + inherited) for selected template.
         var dependencies = _dependencyFinder.IdentifyDependencies(template, BuildTemplateIndex());
 
         if (dependencies.Count == 0)
         {
+            IdentifiedDependencies.Clear();
             StatusMessage = $"'{template.TemplateName}' has no dependencies.";
             return;
         }
 
-        // pass the dependencies data to the currently selected code tab 
-        // if (SelectedCodeTab != null)
-        // {
-        //     SelectedCodeTab.Dependencies.Clear();
+        // Adam integration point:
+        // 1) IdentifiedDependencies = latest whole result set (global panel / sidebar source)
+        // 2) CodeTab.Dependencies = per-tab source list
+        // 3) DependencyReference.SourcePath + Line = source navigation/highlight anchors
+        // 4) DependencyReference.SourceTemplate + IsInherited = origin/inheritance badges
+        // PATTERN: Observer - event notifies external listeners that new dependencies are available.
+        UpdateIdentifiedDependencies(dependencies);
+        PushDependenciesToCodeTab(template, dependencies);
+        DependenciesIdentified?.Invoke(dependencies);
+        IsDependencyPanelOpen = true;
 
-        //     foreach (var dep in dependencies)
-        //         SelectedCodeTab.Dependencies.Add(dep);
-        // }
-
+        // Texture Lab still uses TextureReference, so map texture dependencies to that model.
         var textures = dependencies
             .Where(d => d.Kind == DependencyKind.Texture)
             .Select(d => new TextureReference
@@ -665,13 +613,14 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             _textureFinder.ResolveTextureFiles(textures, _bitsRootPath);
         _textureFinder.ResolveTextureFiles(textures, UntankPath, overwriteExisting: false);
 
-        // TODO: Product decision pending - keep Identify in Browser vs auto-open Texture Lab when textures exist.
+        // Keeps backward compatibility: event emits resolved textures for consumers that need them.
         if (textures.Count > 0)
             TexturesIdentified?.Invoke(textures);
 
         var localCount = dependencies.Count(d => !d.IsInherited);
         var inheritedCount = dependencies.Count(d => d.IsInherited);
 
+        // Build compact diagnostics for quick parser validation in the status bar.
         var byType = dependencies
             .GroupBy(d => d.Kind)
             .OrderBy(g => g.Key)
@@ -684,6 +633,27 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
         StatusMessage =
             $"'{template.TemplateName}' → Local:{localCount} | Inherited:{inheritedCount} | {string.Join(" | ", byType)}";
+    }
+
+    private void UpdateIdentifiedDependencies(List<DependencyReference> dependencies)
+    {
+        // PATTERN: Adapter - convert parser output into frontend-oriented observable state.
+        // Global store for UI that is not tab-scoped (e.g. right panel with filters).
+        IdentifiedDependencies.Clear();
+        foreach (var dep in dependencies)
+            IdentifiedDependencies.Add(dep);
+        // Default selection enables details panel without extra click.
+        SelectedIdentifiedDependency = IdentifiedDependencies.FirstOrDefault();
+    }
+
+    private void PushDependenciesToCodeTab(BitsTemplate template, List<DependencyReference> dependencies)
+    {
+        // PATTERN: Adapter - project shared identify output into per-tab view model state.
+        // Prefer exact tab for selected template; fallback keeps data visible if focus changed.
+        var targetTab = OpenCodeTabs.FirstOrDefault(t => t.Node.Node == template) ?? SelectedCodeTab;
+        if (targetTab is null) return;
+        // Tab-level dependency collection is intended for line dots / per-tab popups.
+        targetTab.SetDependencies(dependencies);
     }
 
     // ─── Search ───────────────────────────────────────────────────────────
@@ -750,7 +720,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     }
 
     private static List<SearchResultViewModel> DoSearch(
-        List<BitsNodeViewModel> roots, string untankPath, string query, bool inNames, bool inContent)
+        List<BitsComponentViewModel> roots, string untankPath, string query, bool inNames, bool inContent)
     {
         var bitsResults   = new List<SearchResultViewModel>();
         var untankResults = new List<SearchResultViewModel>();
@@ -760,7 +730,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         {
             bool isUntank = root.FullPath.Equals(untankPath, StringComparison.OrdinalIgnoreCase);
             var bucket = isUntank ? untankResults : bitsResults;
-            SearchNode(root, root.FullPath, query, inNames, inContent, bucket, seen, isUntank);
+            root.ForEach(vm => TryAddSearchResult(vm, root.FullPath, query, inNames, inContent, bucket, seen, isUntank));
         }
 
         // Re-stamp IsFirstUntankResult on the first Untank hit (needs a divider above it)
@@ -779,35 +749,30 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         return bitsResults;
     }
 
-    private static void SearchNode(
-        BitsNodeViewModel node, string rootPath,
+    private static void TryAddSearchResult(
+        BitsComponentViewModel node, string rootPath,
         string query, bool inNames, bool inContent,
         List<SearchResultViewModel> results, HashSet<string> seen, bool isUntank)
     {
-        if (node.IsTemplate && node.Node is Models.BitsTemplate template)
+        if (node.Node is not BitsTemplate template) return;
+
+        bool nameMatch = inNames && node.Name.Contains(query, StringComparison.OrdinalIgnoreCase);
+
+        List<string> snippets = [];
+        bool contentMatch = false;
+        if (inContent)
         {
-            bool nameMatch = inNames &&
-                node.Name.Contains(query, StringComparison.OrdinalIgnoreCase);
-
-            List<string> snippets = [];
-            bool contentMatch = false;
-            if (inContent)
-            {
-                snippets = FindMatchingLines(template.SourceCode, query);
-                contentMatch = snippets.Count > 0;
-            }
-
-            if ((nameMatch || contentMatch) && seen.Add(node.FullPath))
-            {
-                var rel = node.FullPath.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase)
-                    ? node.FullPath[rootPath.Length..].TrimStart('/', '\\')
-                    : node.FullPath;
-                results.Add(new SearchResultViewModel(node, rel, snippets, query) { IsUntankSource = isUntank });
-            }
+            snippets = FindMatchingLines(template.SourceCode, query);
+            contentMatch = snippets.Count > 0;
         }
 
-        foreach (var child in node.Children)
-            SearchNode(child, rootPath, query, inNames, inContent, results, seen, isUntank);
+        if ((nameMatch || contentMatch) && seen.Add(node.FullPath))
+        {
+            var rel = node.FullPath.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase)
+                ? node.FullPath[rootPath.Length..].TrimStart('/', '\\')
+                : node.FullPath;
+            results.Add(new SearchResultViewModel(node, rel, snippets, query) { IsUntankSource = isUntank });
+        }
     }
 
     private static List<string> FindMatchingLines(string sourceCode, string query)
@@ -824,17 +789,18 @@ public partial class ProjectBrowserViewModel : ViewModelBase
 
 
 
+    /// PATTERN: Composite - recursive traversal over tree nodes to collect templates.
     private Dictionary<string, BitsTemplate> BuildTemplateIndex()
     {
         var dict = new Dictionary<string, BitsTemplate>(StringComparer.OrdinalIgnoreCase);
-
         foreach (var root in RootNodes)
-            CollectTemplates(root, dict);
-
+            foreach (var tpl in root.Node.FindAll<BitsTemplate>())
+                dict[tpl.TemplateName] = tpl;
         return dict;
     }
 
-    private static void CollectTemplates(BitsNodeViewModel node, Dictionary<string, BitsTemplate> index)
+    /// PATTERN: Composite + Iterator - depth-first walk over node children.
+    private static void CollectTemplates(BitsComponentViewModel node, Dictionary<string, BitsTemplate> index)
     {
         if (node.Node is BitsTemplate tpl)
             index[tpl.TemplateName] = tpl;

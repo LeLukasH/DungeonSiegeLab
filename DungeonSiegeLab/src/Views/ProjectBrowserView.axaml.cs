@@ -58,13 +58,13 @@ public partial class ProjectBrowserView : UserControl
             source = source.Parent as Avalonia.Controls.Control;
         }
 
-        // Walk up to find the BitsNodeViewModel
+        // Walk up to find the BitsComponentViewModel
         var target = e.Source as Avalonia.Controls.Control;
         while (target != null)
         {
-            if (target.DataContext is BitsNodeViewModel node)
+            if (target.DataContext is BitsComponentViewModel node)
             {
-                if (!node.IsTemplate)
+                if (node.CanExpand)
                     node.IsExpanded = !node.IsExpanded;
                 return;
             }
@@ -76,7 +76,7 @@ public partial class ProjectBrowserView : UserControl
     private void OnTreeDoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
     {
         if (DataContext is not ProjectBrowserViewModel vm) return;
-        var node = (e.Source as Avalonia.StyledElement)?.DataContext as BitsNodeViewModel;
+        var node = (e.Source as Avalonia.StyledElement)?.DataContext as BitsComponentViewModel;
         if (node is not null)
             vm.PromoteToPermanent(node);
     }

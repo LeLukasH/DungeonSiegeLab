@@ -1,7 +1,0 @@
-[t:tsd,n:Gemini_Generated_Image_ryrp2cryrp2cryrp]
-{
-  b dither = true;
-  b hasalpha = true;
-    layer1texture1 = Gemini_Generated_Image_ryrp2cryrp2cryrp;
-  i texturedetail = 0;
-}

@@ -1,7 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:DungeonSiegeLab.ViewModels"
-             xmlns:conv="using:DungeonSiegeLab.Converters"
              x:Class="DungeonSiegeLab.Views.ProjectBrowserView"
              x:DataType="vm:ProjectBrowserViewModel">
 
@@ -25,10 +24,6 @@
             <Setter Property="BorderBrush" Value="#cba6f7"/>
         </Style>
     </UserControl.Styles>
-
-    <UserControl.Resources>
-        <conv:LineToYConverter x:Key="LineToYConverter"/>
-    </UserControl.Resources>
 
     <DockPanel>
 
@@ -110,6 +105,8 @@
                 <ColumnDefinition Width="280" MinWidth="150"/>
                 <ColumnDefinition Width="4"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="{Binding IsDependencyPanelOpen, Converter={StaticResource BoolToGridLengthConverter}, ConverterParameter=4}"/>
+                <ColumnDefinition Width="{Binding IsDependencyPanelOpen, Converter={StaticResource BoolToGridLengthConverter}, ConverterParameter=300}"/>
             </Grid.ColumnDefinitions>
 
             <!-- Left panel -->
@@ -164,7 +161,7 @@
                                     </Style>
                                 </TreeView.Styles>
                                 <TreeView.ItemTemplate>
-                                    <TreeDataTemplate DataType="vm:BitsNodeViewModel"
+                                    <TreeDataTemplate DataType="vm:BitsComponentViewModel"
                                                       ItemsSource="{Binding Children}">
                                         <Border HorizontalAlignment="Stretch" Background="Transparent">
                                             <StackPanel Orientation="Horizontal" Spacing="5" Margin="0 2">
@@ -204,7 +201,7 @@
                                     </Style>
                                 </TreeView.Styles>
                                 <TreeView.ItemTemplate>
-                                    <TreeDataTemplate DataType="vm:BitsNodeViewModel"
+                                    <TreeDataTemplate DataType="vm:BitsComponentViewModel"
                                                       ItemsSource="{Binding Children}">
                                         <Border HorizontalAlignment="Stretch" Background="Transparent">
                                             <StackPanel Orientation="Horizontal" Spacing="5" Margin="0 2">
@@ -401,105 +398,102 @@
                     </TabControl.ItemTemplate>
 
                     <TabControl.ContentTemplate>
-                        <DataTemplate DataType="vm:CodeTabViewModel">
-                            <Grid>
-                            
-                                <!-- Code -->
-                                <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                                    <TextBox Text="{Binding SourceCode}"
-                                            IsReadOnly="True"
-                                            FontFamily="Cascadia Code,Consolas,monospace"
-                                            FontSize="13"
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            Padding="16"
-                                            TextWrapping="NoWrap"
-                                            AcceptsReturn="True"/>
-                                </ScrollViewer>
-
-                                <!-- Dots --> 
-                                <!-- <ItemsControl   ItemsSource="{Binding Dependencies}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <Canvas/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Button Width="10"
-                                                    Height="10"
-                                                    Background="#89b4fa"
-                                                    BorderThickness="0"
-                                                    ToolTip.Tip="{Binding DisplayText}"
-                                                    Command="{Binding DataContext.OpenDependencyCommand,
-                                                            RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                    CommandParameter="{Binding}">
-
-                                                <Canvas.Left>4</Canvas.Left>
-
-                                                <Canvas.Top>
-                                                    <Binding Path="Line" Converter="{StaticResource LineToYConverter}"/>
-                                                </Canvas.Top>
-
-                                            </Button>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl> -->
-                                
-
-                                <!-- DOT (collapsed state) -->
-                                
-                                <Button Width="12"
-                                        Height="12"
-                                        CornerRadius="6"
-                                        Background="#ffffff"
+                        <DataTemplate DataType="vm:CodeTabViewModel">     
+                            <!-- Code -->
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                                <TextBox Text="{Binding SourceCode}"
+                                        IsReadOnly="True"
+                                        FontFamily="Cascadia Code,Consolas,monospace"
+                                        FontSize="13"
+                                        Background="Transparent"
                                         BorderThickness="0"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Top"
-                                        Margin="0,8,8,0"
-                                        ToolTip.Tip="Show status"
-                                        IsVisible="{Binding !IsStatusExpanded}"
-                                        Command="{Binding ToggleStatusCommand}"/>
-                                
-                                <!-- PANEL (expanded state) -->
-                                <Border IsVisible="{Binding IsStatusExpanded}"
-                                        Background="#181825"
-                                        BorderBrush="#313244"
-                                        BorderThickness="1"
-                                        Width="260"
-                                        Padding="10"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Top"
-                                        Margin="0,8,8,0"
-                                        ZIndex="10">
-
-                                    <StackPanel Spacing="8">
-
-                                        <TextBlock Text="Status"
-                                                FontWeight="Bold"
-                                                Foreground="#cdd6f4"
-                                                FontSize="12"/>
-
-                                        <ScrollViewer MaxHeight="200">
-                                            <TextBlock Text="{Binding DataContext.StatusMessage,
-                                                            RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                    TextWrapping="Wrap"
-                                                    Foreground="#a6adc8"
-                                                    FontSize="12"/>
-                                        </ScrollViewer>
-
-                                        <Button Content="Close"
-                                                Classes="secondary"
-                                                Command="{Binding ToggleStatusCommand}"/>
-                                    </StackPanel>
-                                </Border>
-                            </Grid>
+                                        Padding="16"
+                                        TextWrapping="NoWrap"
+                                        AcceptsReturn="True"/>
+                            </ScrollViewer>    
                         </DataTemplate>
                     </TabControl.ContentTemplate>
 
                 </TabControl>
             </Grid>
+
+            <!-- Splitter -->
+            <GridSplitter Grid.Column="3"
+                          IsVisible="{Binding IsDependencyPanelOpen}"
+                          Background="#313244"
+                          ResizeDirection="Columns"/>
+
+            <Border Grid.Column="4"
+                    IsVisible="{Binding IsDependencyPanelOpen}"
+                    Background="#181825"
+                    BorderBrush="#313244"
+                    BorderThickness="1 0 0 0"
+                    Padding="8">
+
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+
+                    <!-- Header -->
+                    <TextBlock Text="Dependencies"
+                            FontWeight="Bold"
+                            Foreground="#cdd6f4"
+                            Margin="4"/>
+
+                    <!-- List -->
+                    <ListBox ItemsSource="{Binding IdentifiedDependencies}"
+                            SelectedItem="{Binding SelectedIdentifiedDependency}"
+                            Background="Transparent"
+                            BorderThickness="0">
+
+                        <ListBox.Styles>
+                            <Style Selector="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListBox.Styles>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+
+                                <Border Padding="6" Margin="2"
+                                        Background="#1e1e2e"
+                                        CornerRadius="4">
+
+                                    <StackPanel Spacing="2">
+
+                                        <!-- Value -->
+                                        <TextBlock Text="{Binding Value, StringFormat='Value: {0}'}"
+                                                Foreground="#cba6f7"
+                                                FontWeight="SemiBold"/>
+
+                                        <!-- Kind + Origin -->
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+
+                                            <TextBlock Text="{Binding Kind, StringFormat='Kind: {0}'}"
+                                                    Foreground="#89b4fa"
+                                                    FontSize="11"/>
+
+                                            <TextBlock Text="{Binding Origin, StringFormat='Origin: {0}'}"
+                                                    FontSize="11"
+                                                    Foreground="#f38ba8"
+                                                    IsVisible="{Binding IsInherited}"/>
+                                        </StackPanel>
+
+                                        <!-- Source -->
+                                        <TextBlock Text="{Binding SourcePath, StringFormat='SourcePath: {0}'}"
+                                                FontSize="11"
+                                                Foreground="#6c7086"
+                                                TextTrimming="CharacterEllipsis"/>
+
+                                    </StackPanel>
+                                </Border>
+
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                </StackPanel>
+                </ScrollViewer>
+            </Border>
 
         </Grid>
     </DockPanel>

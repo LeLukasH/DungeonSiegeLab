@@ -12,6 +12,8 @@
         <conv:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
         <conv:BoolToFontStyleConverter x:Key="BoolToFontStyleConverter"/>
         <conv:StatusToBrushConverter x:Key="StatusToBrushConverter"/>
+        <conv:BoolToGridLengthConverter x:Key="BoolToGridLengthConverter"/>
+        <conv:LineToYConverter x:Key="LineToYConverter"/>
     </Application.Resources>
 
 </Application>
