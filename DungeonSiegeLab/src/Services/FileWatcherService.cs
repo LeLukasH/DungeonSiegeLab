@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -331,12 +332,17 @@ public class FileWatcherService : IDisposable
 
     public FileWatcherService(string directoryPath)
     {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        if (OperatingSystem.IsWindows())
         {
             _watcher = new WindowsFileWatcher(directoryPath);
         }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        else if (OperatingSystem.IsLinux())
         {
+            _watcher = new LinuxFileWatcher(directoryPath);
+        }
+        else if (OperatingSystem.IsMacOS())
+        {
+            // macOS: use the polling watcher as a reasonable fallback
             _watcher = new LinuxFileWatcher(directoryPath);
         }
         else

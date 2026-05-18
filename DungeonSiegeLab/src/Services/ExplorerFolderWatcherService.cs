@@ -22,7 +22,7 @@ public abstract class AbstractExplorerFolderWatcher : IDisposable
         _cts = new CancellationTokenSource();
     }
 
-    public void UpdateWatchedFolders(IEnumerable<string> folderPaths)
+    public virtual void UpdateWatchedFolders(IEnumerable<string> folderPaths)
     {
         lock (_lock)
         {
