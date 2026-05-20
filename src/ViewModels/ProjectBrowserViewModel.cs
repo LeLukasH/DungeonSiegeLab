@@ -77,6 +77,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
             RecentPaths.Add(p);
 
         BitsComponentViewModel.AnyExpansionChanged += SaveExpansionStateDebounced;
+        BitsComponentViewModel.AnyExpanded += OnExplorerNodeExpanded;
         OpenCodeTabs.CollectionChanged += OnOpenCodeTabsChanged;
 
         _explorerFolderWatcher = new ExplorerFolderWatcherService();
@@ -331,6 +332,93 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         if (_untankRootVm != null) folders.Add(_untankRootVm.FullPath);
         folders.UnionWith(CollectExpandedPaths(RootNodes));
         _explorerFolderWatcher.UpdateWatchedFolders(folders);
+    }
+
+    private async void OnExplorerNodeExpanded(BitsComponentViewModel node)
+    {
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            try
+            {
+                await RefreshExpandedNodeAsync(node);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to refresh expanded node {node.FullPath}: {ex.Message}");
+            }
+        });
+    }
+
+    private async Task RefreshExpandedNodeAsync(BitsComponentViewModel node)
+    {
+        if (node is BitsFolderViewModel folderNode)
+        {
+            if (!Directory.Exists(folderNode.FullPath))
+            {
+                RemoveExplorerTreeNode(folderNode.FullPath);
+                return;
+            }
+
+            var actualEntries = Directory.EnumerateFileSystemEntries(folderNode.FullPath)
+                .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+            var existingPaths = folderNode.Children
+                .Select(child => child.FullPath)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var child in folderNode.Children.ToList())
+            {
+                if (!actualEntries.Contains(child.FullPath, StringComparer.OrdinalIgnoreCase))
+                    RemoveExplorerTreeNode(child.FullPath);
+            }
+
+            foreach (var path in actualEntries)
+            {
+                if (!existingPaths.Contains(path))
+                    await AddExplorerTreeNodeAsync(path);
+            }
+        }
+        else if (node is BitsFileViewModel fileNode)
+        {
+            if (!File.Exists(fileNode.FullPath))
+            {
+                RemoveExplorerTreeNode(fileNode.FullPath);
+                return;
+            }
+
+            try
+            {
+                var templates = await new GasParser().ParseFileAsync(fileNode.FullPath);
+                var existingTemplateNames = fileNode.Children
+                    .OfType<BitsTemplateViewModel>()
+                    .Select(vm => ((BitsTemplate)vm.Node).TemplateName)
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                var fileParent = fileNode.Node;
+                foreach (var template in templates)
+                {
+                    if (!existingTemplateNames.Contains(template.TemplateName))
+                    {
+                        template.Parent = fileParent;
+                        var newTemplateVm = BitsComponentViewModel.Create(template);
+                        var insertIndex = fileNode.Children.TakeWhile(child =>
+                            string.Compare(child.Name, newTemplateVm.Name, StringComparison.OrdinalIgnoreCase) < 0).Count();
+                        fileNode.Children.Insert(insertIndex, newTemplateVm);
+                    }
+                }
+
+                foreach (var child in fileNode.Children.OfType<BitsTemplateViewModel>().ToList())
+                {
+                    var templateName = ((BitsTemplate)child.Node).TemplateName;
+                    if (!templates.Any(t => string.Equals(t.TemplateName, templateName, StringComparison.OrdinalIgnoreCase)))
+                        RemoveExplorerTreeNode(child.FullPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to refresh file node {fileNode.FullPath}: {ex.Message}");
+            }
+        }
     }
 
     private async void OnExplorerFileCreated(string fullPath)
