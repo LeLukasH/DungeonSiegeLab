@@ -3,6 +3,11 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using DungeonSiegeLab.Models;
+using System.IO;
+using Avalonia.Threading;
+using DungeonSiegeLab.Services;
+using System.Timers;
+
 namespace DungeonSiegeLab.ViewModels;
 
 /// <summary>
@@ -38,6 +43,10 @@ public partial class CodeTabViewModel : ViewModelBase
     public string DependencySummary =>
         $"Local:{LocalDependencyCount} | Inherited:{InheritedDependencyCount} | Total:{Dependencies.Count}";
 
+    private FileSystemWatcher? _watcher;
+    private System.Timers.Timer? _reloadTimer;
+    private string? _watchedPath;
+
     private DateTime _lastKnownWriteTime = DateTime.MinValue;
 
     /// <summary>Italic when preview, normal when permanent — bound directly in XAML.</summary>
@@ -49,8 +58,142 @@ public partial class CodeTabViewModel : ViewModelBase
     {
         Node = node;
         _isPreview = isPreview;
-
         node.LoadInto(this);
+
+        if (node.Node is BitsTemplate t)
+        {
+            _sourceCode = t.SourceCode;
+        }
+        // Použitie pattern matchingu pre kontrolu typu:
+        else if (node is BitsRawFileViewModel || (node is BitsFileViewModel file && file.IsEmptyFile))
+        {
+            _ = LoadRawContentAsync();
+        }
+
+        // Start watching the file for changes
+        string fileToWatch = Node.FullPath;
+        if (Node.Node is BitsTemplate template)
+            fileToWatch = template.Parent.FullPath;
+
+        if (File.Exists(fileToWatch))
+        {
+            _watchedPath = fileToWatch;
+            UpdateLastWriteTime();
+
+            var dir = Path.GetDirectoryName(fileToWatch);
+            var fileName = Path.GetFileName(fileToWatch);
+            _watcher = new FileSystemWatcher(dir, fileName);
+            _watcher.Changed += OnFileChanged;
+            _watcher.Created += OnFileChanged;
+            _watcher.Renamed += OnFileChanged;
+            _watcher.Deleted += OnFileChanged;
+            _watcher.EnableRaisingEvents = true;
+
+            _reloadTimer = new System.Timers.Timer(500); // 500ms debounce
+            _reloadTimer.Elapsed += OnReloadTimerElapsed;
+            _reloadTimer.AutoReset = false;
+        }
+
+        if (node.Node is BitsTemplate templateNode)
+        {
+            _ = EnsureTemplateIsFreshAsync(templateNode);
+        }
+    }
+
+    private void OnFileChanged(object sender, FileSystemEventArgs e)
+    {
+        if (_reloadTimer != null)
+        {
+            _reloadTimer.Stop();
+            _reloadTimer.Start();
+        }
+    }
+
+    private void OnReloadTimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        Dispatcher.UIThread.Post(async () =>
+        {
+            try
+            {
+                await ReloadContentAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reloading content for {Node.FullPath}: {ex.Message}");
+            }
+        });
+    }
+
+    public async Task ReloadContentAsync()
+    {
+        try
+        {
+            if (Node.Node is BitsTemplate t)
+            {
+                var gasParser = new GasParser();
+                var templates = await gasParser.ParseFileAsync(t.Parent.FullPath);
+                var updatedTemplate = templates.FirstOrDefault(temp => temp.TemplateName == t.TemplateName);
+                if (updatedTemplate != null)
+                {
+                    SourceCode = updatedTemplate.SourceCode;
+                    UpdateLastWriteTime();
+                }
+            }
+            // Úprava podľa možnosti 2 (Pattern matching pre konkrétne ViewModely):
+            else if (Node is BitsRawFileViewModel || (Node is BitsFileViewModel file && file.IsEmptyFile))
+            {
+                await LoadRawContentAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in ReloadContentAsync for {Node.FullPath}: {ex.Message}");
+        }
+    }
+
+    private async Task EnsureTemplateIsFreshAsync(BitsTemplate t)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(_watchedPath) || !File.Exists(_watchedPath))
+                return;
+
+            var templates = await new GasParser().ParseFileAsync(_watchedPath);
+            var updatedTemplate = templates.FirstOrDefault(temp => temp.TemplateName == t.TemplateName);
+            if (updatedTemplate != null && updatedTemplate.SourceCode != SourceCode)
+            {
+                SourceCode = updatedTemplate.SourceCode;
+                UpdateLastWriteTime();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error checking template freshness for {Node.FullPath}: {ex.Message}");
+        }
+    }
+
+    public bool HasExternalModifications()
+    {
+        if (string.IsNullOrEmpty(_watchedPath))
+            return false;
+        if (!File.Exists(_watchedPath))
+            return false;
+
+        return File.GetLastWriteTimeUtc(_watchedPath) > _lastKnownWriteTime;
+    }
+
+    public async Task ReloadIfChangedAsync()
+    {
+        if (HasExternalModifications())
+            await ReloadContentAsync();
+    }
+
+    private void UpdateLastWriteTime()
+    {
+        if (string.IsNullOrEmpty(_watchedPath) || !File.Exists(_watchedPath))
+            return;
+
+        _lastKnownWriteTime = File.GetLastWriteTimeUtc(_watchedPath);
     }
 
     internal async Task LoadRawContentAsync()
@@ -96,22 +239,6 @@ public partial class CodeTabViewModel : ViewModelBase
         OnPropertyChanged(nameof(DependencySummary));
     }
 
-    private void UpdateLastWriteTime()
-    {
-        try { _lastKnownWriteTime = File.GetLastWriteTimeUtc(Node.FullPath); }
-        catch { }
-    }
-
-    internal async Task ReloadIfChangedAsync()
-    {
-        try
-        {
-            var current = File.GetLastWriteTimeUtc(Node.FullPath);
-            if (current > _lastKnownWriteTime)
-                await LoadRawContentAsync();
-        }
-        catch { }
-    }
 
     [RelayCommand]
     private void ToggleStatus()
