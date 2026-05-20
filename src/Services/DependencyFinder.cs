@@ -51,7 +51,7 @@ public partial class DependencyFinder
             .ToList();
     }
 
-    /// PATTERN: Recursion + Memoization - resolves inheritance graph with cache and cycle guard.
+    /// PATTERN
     private AnalyzeResult AnalyzeTemplateRecursive(
         BitsTemplate template,
         IReadOnlyDictionary<string, BitsTemplate> templateIndex,

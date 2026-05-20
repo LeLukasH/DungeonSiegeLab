@@ -1,105 +1,77 @@
-# DependencyFinder Patterns Guide
+# Príručka DependencyFinder — Interpreter vzor
 
-This guide describes the patterns used by the current `DependencyFinder` implementation.
+Táto príručka opisuje Interpreter vzor, ktorý sa používa v implementácii `DependencyFinder`.
 
-It focuses on two patterns:
+Hlavný účel: Analyzovať GAS šablóny a identifikovať všetky ich závislosti (textúry, zvuky, efekty, scripty, komponenty) bez veľkého `switch` bloku. Namiesto toho používame stromovú štruktúru výrazov, kde každé pravidlo je samostatná trieda. 
 
-1. **Interpreter pattern**
-2. **Enumeration Method pattern**
-
-The current implementation uses the Interpreter pattern for assignment-rule evaluation and uses `EnumerationUtility.Enumerate(...)` directly for traversal. 
 
 ---
 
-## Where These Patterns Live
+## Kde sú komponenty Interpreter
 
-### Core orchestrator
+### Hlavný orchestrátor
 
-- `src/Services/DependencyFinder.cs`
+- `src/Services/DependencyFinder.cs` — verejné API a orchestrácia
 
-`DependencyFinder` is responsible for orchestration:
+`DependencyFinder` je zodpovedný za:
 
-- loading dependency rules
-- parsing template source text
-- building the assignment interpreter
-- extracting local dependencies
-- recursively resolving inherited dependencies through `specializes`
-- deduplicating the final result
+- Načítanie konfigurácie pravidiel
+- Parsovanie zdrojového kódu šablóny
+- Vytvorenie stromu interpretátora
+- Extrakciu lokálnych závislostí
+- Rekurzívne riešenie dedičnosti cez `specializes`
+- Deduplikáciu finálneho výsledku
 
-The concrete assignment-rule logic lives in terminal expression classes.
+### Interpreter typy
 
-### Interpreter support types
+Všetky sú v priečinku `src/Services/DependencyFinder/Interpreter/`:
 
-- `src/Services/DependencyFinder/Interpreter/DependencyFinder.IExpression.cs`
-- `src/Services/DependencyFinder/Interpreter/DependencyFinder.TerminalExpression.cs`
-- `src/Services/DependencyFinder/Interpreter/DependencyFinder.NonterminalExpression.cs`
-- `src/Services/DependencyFinder/Interpreter/DependencyFinder.DependencyInterpretContext.cs`
-- `src/Services/DependencyFinder/Interpreter/DependencyFinder.AssignmentInterpreterFactory.cs`
-- `src/Services/DependencyFinder/Interpreter/DependencyFinder.ConcreteExpressions.cs`
+- `DependencyFinder.IExpression.cs` — rozhranie všetkých výrazov
+- `DependencyFinder.TerminalExpression.cs` — abstraktná trieda listových pravidiel
+- `DependencyFinder.NonterminalExpression.cs` — zložený výraz s deťmi
+- `DependencyFinder.DependencyInterpretContext.cs` — kontext na interpretovanie jedného priradenia
+- `DependencyFinder.AssignmentInterpreterFactory.cs` — fabrika, ktorá zloží strom
+- `DependencyFinder.ConcreteExpressions.cs` — všetky konkrétne pravidlá (14 tried)
 
-### Parsed language model types
+### Modely pre parsované priradenia
 
-- `src/Services/DependencyFinder/Interpreter/DependencyFinder.AssignmentRecord.cs`
-- `src/Services/DependencyFinder/Interpreter/DependencyFinder.ParseResult.cs`
-- `src/Services/DependencyFinder/Interpreter/DependencyFinder.AnalyzeResult.cs`
+- `DependencyFinder.AssignmentRecord.cs` — jedno priradenie `path:key = value`
+- `DependencyFinder.ParseResult.cs` — výsledok parsování šablóny
+- `DependencyFinder.AnalyzeResult.cs` — výsledok analýzy s dedičnosťou
 
 ---
 
-## What The Interpreter Is Interpreting
+## Čo Interpreter vyhodnocuje
 
-The interpreted input is assignment-level template syntax parsed from `BitsTemplate.SourceCode`.
+Vstup sú priradenia v GAS syntaxi, ktoré boli parsované zo `BitsTemplate.SourceCode`.
 
-Examples of parsed assignments:
+Príklady priradení:
 
 ```gas
 specializes = base_template;
 textures:0 = b_c_gah_helmet_01;
 effect_script = enchant_fire;
 item_1 = some_template;
+common:instance_triggers { action_0 = "call_sfx_script(my_sound)"; }
 ```
 
-Each parsed assignment becomes an `AssignmentRecord` with:
+Každé priradenie sa stane `AssignmentRecord` s:
 
-- `Path` — current block path, for example `aspect`, `inventory`, or `magic:enchantments`
-- `Key` — normalized assignment key
-- `Value` — raw assignment value
-- `Line` — source line number
-- `Signature` — full local override signature, usually `path:key`
+- `Path` — momentálna cesta bloku, napríklad `aspect`, `inventory`, alebo `magic:enchantments`
+- `Key` — normalizovaný kľúč priradenia
+- `Value` — hodnota priradenia
+- `Line` — číslo riadku v zdroji
+- `Signature` — úplný podpis pre override kontrolu, zvyčajne `path:key`
 
-The interpreter decides whether an assignment implies one or more `DependencyReference` objects.
-
-Examples of dependency meanings:
-
-- template dependency
-- texture dependency
-- sound dependency
-- script dependency
-- effect dependency
-- component dependency
+Interpreter rozhoduje, či priradenie predstavuje jednu alebo viac `DependencyReference` objektov.
 
 ---
 
-## Interpreter Pattern In This Code
+## Interpreter vzor v kóde
 
-The Interpreter pattern is implemented as assignment-rule evaluation.
+### Klúčové role
 
-### Roles
-
-#### Context
-
-`DependencyInterpretContext`
-
-Contains the state needed to interpret one assignment:
-
-- `TemplateName`
-- `Dependencies`
-- `Assignment`
-
-Concrete expressions receive all per-assignment state through the context and use shared static helper methods on the partial `DependencyFinder` class.
-
-#### Abstract expression
-
-`IExpression`
+#### Rozhranie výrazu (`IExpression`)
 
 ```csharp
 private interface IExpression
@@ -108,11 +80,9 @@ private interface IExpression
 }
 ```
 
-Every interpreter expression implements this contract.
+Všetky výrazy (terminálne aj neterminálne) implementujú toto rozhranie.
 
-#### Terminal expression base
-
-`TerminalExpression`
+#### Terminálne výrazy (`TerminalExpression`)
 
 ```csharp
 private abstract class TerminalExpression : IExpression
@@ -121,55 +91,25 @@ private abstract class TerminalExpression : IExpression
 }
 ```
 
-This is the abstract base class for concrete leaf rules. It is no longer a wrapper around an inline function.
+Abstraktná trieda pre konkrétne listové pravidlá. Každá podtrida predstavuje jedno alebo súvisiace pravidlá.
 
-#### Concrete terminal expressions / leaf expressions
+#### Konkrétne pravidlá (v `ConcreteExpressions.cs`)
 
-Concrete leaf expressions live in `DependencyFinder.ConcreteExpressions.cs`.
+Príklady:
 
-Current concrete terminal expressions:
+- `SpecializesExpression` — detekuje `specializes = ...`
+- `AspectTexturesExpression` — textúry v komponente `aspect`
+- `InventoryExpression` — sloty a rozsahy inventára
+- `CommonTriggerExpression` — funkcie triggerov (`call_sfx_script`, `has_go_in_inventory`, atď.)
 
-- `FixedPropertyExpression`
-- `SpecializesExpression`
-- `AspectTexturesExpression`
-- `AspectVoiceExpression`
-- `AspectVoVoiceExpression`
-- `ConversationExpression`
-- `CommonTriggerExpression`
-- `InventoryExpression`
-- `GoldRangeExpression`
-- `MagicEnchantmentExpression`
-- `MindJatExpression`
-- `PContentExpression`
-- `PhysicsBreakParticulateExpression`
-- `PotionRangeExpression`
-- `StoreItemRestockExpression`
+Celkovo je 14 konkrétnych terminálov.
 
-Each class owns one dependency rule or one closely related rule group.
-
-For example:
-
-- `SpecializesExpression` handles `specializes = ...`
-- `AspectTexturesExpression` handles `aspect` texture assignments
-- `InventoryExpression` handles inventory slot dependencies and inventory range dependencies
-- `CommonTriggerExpression` handles trigger action and condition function arguments
-- `MagicEnchantmentExpression` handles enchantment effect scripts
-
-This keeps rule logic out of `DependencyFinder` and makes the leaf expressions closer to concrete Interpreter-pattern classes.
-
-#### Nonterminal expression
-
-`NonterminalExpression`
+#### Neterminálny výraz (`NonterminalExpression`)
 
 ```csharp
 private sealed class NonterminalExpression : IExpression
 {
     private readonly IReadOnlyList<IExpression> _children;
-
-    public NonterminalExpression(params IExpression[] children)
-    {
-        _children = children;
-    }
 
     public void Interpret(DependencyInterpretContext context)
     {
@@ -179,142 +119,157 @@ private sealed class NonterminalExpression : IExpression
 }
 ```
 
-`NonterminalExpression` composes the leaf expressions and executes them in sequence for the current assignment.
+Zloží všetky listové výrazy a vykoná ich postupne pre dané priradenie.
 
-#### Interpreter factory
-
-`AssignmentInterpreterFactory`
-
-The factory builds the concrete expression tree:
+#### Kontext (`DependencyInterpretContext`)
 
 ```csharp
-AssignmentInterpreterFactory.Create(_fixedPropertyRules, _inventoryDependencySlots)
+private sealed class DependencyInterpretContext
+{
+    public required string TemplateName { get; init; }
+    public required List<DependencyReference> Dependencies { get; init; }
+    public required AssignmentRecord Assignment { get; init; }
+}
 ```
 
-It returns a `NonterminalExpression` that contains all concrete terminal expressions.
+Nosí stav potrebný pre interpretovanie jedného priradenia. Každé pravidlo dostane kontext a rozhodne, či sa vzťahuje na priradenie.
 
-`DependencyFinder` only calls the factory through:
+#### Fabrika (`AssignmentInterpreterFactory`)
 
 ```csharp
-private IExpression BuildAssignmentInterpreter()
-    => AssignmentInterpreterFactory.Create(_fixedPropertyRules, _inventoryDependencySlots);
+private static class AssignmentInterpreterFactory
+{
+    public static IExpression Create(
+        IReadOnlyDictionary<string, DependencyKind> fixedPropertyRules,
+        ISet<string> inventoryDependencySlots)
+        => new NonterminalExpression(
+            new FixedPropertyExpression(fixedPropertyRules),
+            new SpecializesExpression(),
+            new AspectTexturesExpression(),
+            // ... ďalšie pravidlá ...
+        );
+}
+```
+
+Fabrika vytvorí neterminálny koreň so všetkými listovými výrazmi. Používa sa raz v konštruktore `DependencyFinder`:
+
+```csharp
+_assignmentInterpreter = BuildAssignmentInterpreter();
 ```
 
 ---
 
-## Execution Pipeline
+## Ako sa Identify vykonáva
 
-1. `DependencyFinder` is constructed.
-2. It loads dependency rules.
-3. It creates `_assignmentInterpreter` by calling `BuildAssignmentInterpreter()`.
-4. `IdentifyDependencies(...)` starts dependency analysis.
-5. `AnalyzeTemplateRecursive(...)` parses the current template and resolves inherited dependencies.
-6. `ParseTemplate(...)` converts source text into `ParseResult` and `AssignmentRecord` objects.
-7. `ExtractLocalDependencies(...)` adds non-vanilla block dependencies.
-8. `ExtractLocalDependencies(...)` directly calls `EnumerationUtility.Enumerate(parsed.Assignments, ...)`.
-9. For each assignment, it creates a `DependencyInterpretContext`.
-10. `_assignmentInterpreter.Interpret(context)` is called.
-11. `NonterminalExpression` forwards the context to every concrete terminal expression.
-12. Matching terminal expressions append `DependencyReference` objects.
-13. If no explicit `aspect:textures` assignment exists, `aspect:model` may produce an inferred texture dependency.
-14. Dependencies are deduplicated and returned.
-15. During inheritance resolution, `AnalyzeTemplateRecursive(...)` directly calls `EnumerationUtility.Enumerate(parent.Dependencies, ...)` to copy inherited dependencies unless overridden by local signatures.
-
----
-
-## Enumeration Method Pattern In This Code
-
-Enumeration Method means traversal is centralized and caller behavior is passed in as an action.
-
-The current code uses this pattern by calling `EnumerationUtility.Enumerate(...)` directly.
-
-### Current direct usages
-
-#### Assignment traversal
-
-Inside `ExtractLocalDependencies(...)`:
+### Príklad: Pravidlo `SpecializesExpression`
 
 ```csharp
-EnumerationUtility.Enumerate(parsed.Assignments, a =>
+private sealed class SpecializesExpression : TerminalExpression
 {
-    _assignmentInterpreter.Interpret(new DependencyInterpretContext
+    public override void Interpret(DependencyInterpretContext context)
     {
-        TemplateName = template.TemplateName,
-        Dependencies = dependencies,
-        Assignment = a
-    });
-});
-```
-
-This walks parsed assignments and lets the interpreter decide what each assignment means.
-
-#### Inherited dependency traversal
-
-Inside `AnalyzeTemplateRecursive(...)`:
-
-```csharp
-EnumerationUtility.Enumerate(parent.Dependencies, dep =>
-{
-    if (!string.IsNullOrEmpty(dep.SourceSignature)
-        && parsed.LocalSignatures.Contains(dep.SourceSignature))
-    {
-        return;
+        var a = context.Assignment;
+        if (a.Key.Equals("specializes", StringComparison.OrdinalIgnoreCase))
+            AddTokens(context.Dependencies, context.TemplateName, a, 
+                DependencyKind.Template, "specializes", a.Value);
     }
-
-    combined.Dependencies.Add(new DependencyReference
-    {
-        Value = dep.Value,
-        Kind = dep.Kind,
-        Rule = dep.Rule,
-        SourcePath = dep.SourcePath,
-        Line = dep.Line,
-        IsInherited = true,
-        SourceTemplate = dep.SourceTemplate,
-        SourceSignature = dep.SourceSignature
-    });
-});
+}
 ```
 
-This walks parent dependencies and copies only dependencies that are not locally overridden.
+Toto pravidlo:
+
+1. Skontroluje, či kľúč je `"specializes"`
+2. Ak áno, získa hodnotu (názov rodičovskej šablóny)
+3. Pridá `DependencyReference` do výsledku
+
+### Pipeline vykonávania
+
+1. UI volá `ProjectBrowserViewModel.Identify()`
+2. To volá `DependencyFinder.IdentifyDependencies(template, templateIndex)`
+3. `IdentifyDependencies` spustí `AnalyzeTemplateRecursive`:
+   - Parsuje šablónu → `ParseResult`
+   - Extrahuje lokálne závislosti
+   - Rekurzívne spracuje `specializes` rodičov
+   - Deduplikuje výsledok
+4. `ExtractLocalDependencies` pre každé priradenie:
+   - Vytvorí `DependencyInterpretContext`
+   - Spustí `_assignmentInterpreter.Interpret(context)`
+   - `NonterminalExpression` iteruje cez potomkov
+   - Každé pravidlo sa rozhodne, či pridá `DependencyReference`
+5. Vrátia sa závislosti, UI aktualizuje panel a emituje event
+
+### Príklad toku pre konkrétne priradenie
+
+Ak v šablóne máme:
+
+```gas
+[aspect]
+{
+  textures:0 = b_my_texture_01;
+  model = m_my_model;
+}
+```
+
+Potom:
+
+1. Parsovanie: Dve priradenia — `aspect:textures:0` a `aspect:model`
+2. Pre `aspect:textures:0`:
+   - `AspectTexturesExpression.Interpret()` detekuje pravidlo
+   - Pridá `DependencyReference { Value = "b_my_texture_01", Kind = Texture, ... }`
+3. Pre `aspect:model`:
+   - Ak niet explicitného `aspect:textures`, inferencie sa aplikuje neskôr
+   - Ale priamo sa nekonvertuje na textúru v Interpret
 
 ---
 
-## How Both Patterns Work Together
+## Dedičnosť a preobraty
 
-The design has two layers:
+Ak šablóna má `specializes = parent_template`, analyzer:
 
-1. **Enumeration layer**
-   - `EnumerationUtility.Enumerate(...)` controls traversal.
-   - It is called directly from `DependencyFinder`.
+1. Rekurzívne spracuje rodiča
+2. Preberie jeho závislosti
+3. Ale neberie závislosti, ktoré lokálne prekonali svoj podpis (override)
 
-2. **Interpreter layer**
-   - `IExpression` defines the interpreter contract.
-   - `NonterminalExpression` composes the grammar/rule list.
-   - Concrete `TerminalExpression` classes interpret individual assignment rules.
+Príklad:
 
-Together:
+```gas
+// parent_template
+specializes = grandparent;
+textures:0 = parent_texture;
 
-- traversal remains centralized and reusable
-- assignment meaning is isolated in concrete leaf classes
-- `DependencyFinder` remains an orchestrator
-- adding a new dependency rule usually means adding a new terminal expression and registering it in `AssignmentInterpreterFactory`
+// child_template  
+specializes = parent_template;
+textures:0 = child_texture;  // lokálny override
+```
 
----
+Keď analyzuješ `child_template`:
 
-## Current Design Summary
-
-`DependencyFinder` should do orchestration, not rule interpretation.
-
-Concrete terminal expressions should do rule interpretation.
-
-`AssignmentInterpreterFactory` should assemble the expression tree.
-
-`NonterminalExpression` should run the leaf expressions.
-
-`EnumerationUtility.Enumerate(...)` should be called directly where traversal is needed.
+- `child_texture` je lokálna
+- `parent_texture` z rodiča bude filtrovaná (pretože `child` má rovnaký podpis)
+- Dedia sa iba nezneplatnené závislosti
 
 ---
 
-## Class Diagram
+## Konfigurácia pravidiel
 
-![DependencyFinder class diagram](dependency_class_diagram.svg)
+Pravidlá sa načítavajú z `dependency-rules.json` v koreňovom adresári aplikácie. Ak súbor chýba alebo je neplatný, používajú sa defaults z `DependencyRulesConfig.CreateDefault()`.
+
+Konfigurácia obsahuje:
+
+- `VanillaBlocks` — komponenty, ktoré sa ignorujú ako custom
+- `InventoryDependencySlots` — sloty inventára, ktoré referencujú šablóny
+- `FixedPropertyKinds` — mapovanie `root:property` → `DependencyKind`
+
+Príklad:
+
+```json
+{
+  "VanillaBlocks": ["actor", "aspect", "attack", "body", ...],
+  "InventoryDependencySlots": ["il_main", "es_head", ...],
+  "FixedPropertyKinds": {
+    "actor:portrait_icon": "Texture",
+    "gui:inventory_icon": "Texture",
+    "common:membership": "Template"
+  }
+}
+```

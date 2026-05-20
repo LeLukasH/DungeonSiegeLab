@@ -205,3 +205,139 @@ Konkrétne:
 
 To podporuje najmä Facade diagram, pretože `RawTextureConverter` tieto detaily skrýva pred zvyškom aplikácie.
 
+## 4. Interpreter
+
+### Prečo používame Interpreter pattern
+
+Funkcia Identify analyzuje GAS súbory a identifikuje všetky závislosti šablóny (textúry, zvuky, efekty, scripty, komponenty). Namiesto veľkého `switch` bloku s pravidlami pre všetky druhy vlastností, používame Interpreter pattern na vyhodnocovanie gramatiky priradení.
+
+Jednotlivé pravidlá sú reprezentované ako výrazy stromovej štruktúry:
+
+- abstraktné rozhranie: `IExpression`
+- terminálne výrazy (listové uzly): `TerminalExpression` — konkrétne pravidlá
+- neterminálne výrazy (zložené uzly): `NonterminalExpression` — sekvenčné vykonávanie
+
+Tento prístup umožňuje:
+
+- ľahké pridávanie nových pravidiel bez modifikácie orchestrátora
+- čitateľnosť a údržbu — každé pravidlo je v samostatnej triede
+- kompozíciu komplexných logík z jednoduchých kusov
+
+### Kde sú Interpreter komponenty
+
+Jadro orchestrácie:
+
+- [`DependencyFinder`](C:/Users/elisk/Documents/GitHub/DungeonSiegeLab/src/Services/DependencyFinder.cs) — hlavný vstupný bod pre analýzu závislostí
+
+Interpreter podpora — typy v priečinku `DependencyFinder/Interpreter/`:
+
+- [`DependencyFinder.IExpression.cs`](C:/Users/elisk/Documents/GitHub/DungeonSiegeLab/src/Services/DependencyFinder/Interpreter/DependencyFinder.IExpression.cs) — rozhranie všetkých výrazov
+- [`DependencyFinder.TerminalExpression.cs`](C:/Users/elisk/Documents/GitHub/DungeonSiegeLab/src/Services/DependencyFinder/Interpreter/DependencyFinder.TerminalExpression.cs) — abstraktná trieda listových pravidiel
+- [`DependencyFinder.NonterminalExpression.cs`](C:/Users/elisk/Documents/GitHub/DungeonSiegeLab/src/Services/DependencyFinder/Interpreter/DependencyFinder.NonterminalExpression.cs) — zložený výraz s deťmi
+- [`DependencyFinder.DependencyInterpretContext.cs`](C:/Users/elisk/Documents/GitHub/DungeonSiegeLab/src/Services/DependencyFinder/Interpreter/DependencyFinder.DependencyInterpretContext.cs) — kontext obsahujúci stav na interpretovanie jedného priradenia
+- [`DependencyFinder.AssignmentInterpreterFactory.cs`](C:/Users/elisk/Documents/GitHub/DungeonSiegeLab/src/Services/DependencyFinder/Interpreter/DependencyFinder.AssignmentInterpreterFactory.cs) — fabrika, ktorá zloží strom výrazov
+
+Konkrétne terminálne výrazy — pravidlá v jednom súbore:
+
+- [`DependencyFinder.ConcreteExpressions.cs`](C:/Users/elisk/Documents/GitHub/DungeonSiegeLab/src/Services/DependencyFinder/Interpreter/DependencyFinder.ConcreteExpressions.cs)
+
+Aktuálne konkrétne terminálne výrazy:
+
+- `FixedPropertyExpression` — pravidlá z konfigurácie
+- `SpecializesExpression` — odkaz na rodičovskú šablónu
+- `AspectTexturesExpression` — textúry v komponente `aspect`
+- `AspectVoiceExpression` — zvuky hlasu
+- `AspectVoVoiceExpression` — VO zvuky
+- `ConversationExpression` — templates v dialógoch
+- `CommonTriggerExpression` — funkcie triggerov (`call_sfx_script`, `has_go_in_inventory`, atď.)
+- `InventoryExpression` — sloty a rozsahy inventára
+- `GoldRangeExpression` — rozsahy zlata
+- `MagicEnchantmentExpression` — scriptu čarov
+- `MindJatExpression` — AI scriptu (`jat_*`)
+- `PContentExpression` — ikony a textúry v obsahu hráča
+- `PhysicsBreakParticulateExpression` — efekty rozbitia
+- `PotionRangeExpression` — rozsahy elixírov
+- `StoreItemRestockExpression` — doplňovanie obchodov
+
+### Ako sa Interpreter stromuje
+
+Fabrika `AssignmentInterpreterFactory` vytvorí `NonterminalExpression` s detskými uzlami pre všetky konkrétne pravidlá:
+
+```csharp
+public static IExpression Create(
+    IReadOnlyDictionary<string, DependencyKind> fixedPropertyRules,
+    ISet<string> inventoryDependencySlots)
+    => new NonterminalExpression(
+        new FixedPropertyExpression(fixedPropertyRules),
+        new SpecializesExpression(),
+        new AspectTexturesExpression(),
+        // ... ďalšie pravidlá ...
+    );
+```
+
+`DependencyFinder` ju volá raz v konštruktore:
+
+```csharp
+_assignmentInterpreter = BuildAssignmentInterpreter();
+```
+
+### Ako sa vykoná interpretovanie
+
+V metóde [`ExtractLocalDependencies`](C:/Users/elisk/Documents/GitHub/DungeonSiegeLab/src/Services/DependencyFinder.cs), sa pre každé priradenie vytvorí [`DependencyInterpretContext`](C:/Users/elisk/Documents/GitHub/DungeonSiegeLab/src/Services/DependencyFinder/Interpreter/DependencyFinder.DependencyInterpretContext.cs) a pošle sa stromom:
+
+```csharp
+EnumerationUtility.Enumerate(parsed.Assignments, a =>
+{
+    _assignmentInterpreter.Interpret(new DependencyInterpretContext
+    {
+        TemplateName = template.TemplateName,
+        Dependencies = dependencies,
+        Assignment = a
+    });
+});
+```
+
+`NonterminalExpression.Interpret(...)` iteruje cez svojich potomkov a volá ich `Interpret(...)`:
+
+```csharp
+public void Interpret(DependencyInterpretContext context)
+{
+    foreach (var child in _children)
+        child.Interpret(context);
+}
+```
+
+Každé pravidlo (`TerminalExpression`) skontroluje, či sa jeho podmienka vzťahuje na priradenie, a ak áno, pripraví `DependencyReference` objekty.
+
+Príklad — `SpecializesExpression`:
+
+```csharp
+private sealed class SpecializesExpression : TerminalExpression
+{
+    public override void Interpret(DependencyInterpretContext context)
+    {
+        var a = context.Assignment;
+        if (a.Key.Equals("specializes", StringComparison.OrdinalIgnoreCase))
+            AddTokens(context.Dependencies, context.TemplateName, a, 
+                DependencyKind.Template, "specializes", a.Value);
+    }
+}
+```
+
+### Ako sedí Interpreter so zvyškom Identify
+
+Orchestrácia v [`DependencyFinder`](C:/Users/elisk/Documents/GitHub/DungeonSiegeLab/src/Services/DependencyFinder.cs):
+
+1. **Verejné API** (`IdentifyDependencies`) — vstupný bod z UI
+2. **Rekurzívne dedenie** (`AnalyzeTemplateRecursive`) — nasleduje `specializes` a zlučuje rodičovské závislosti
+3. **Parsovanie** (`ParseTemplate`) — prevedie text na `AssignmentRecord` a `ParseResult`
+4. **Lokálne závislosti** (`ExtractLocalDependencies`) — spustí Interpreter na priradeniach
+5. **Deduplikácia** (`Deduplicate`) — unikátne závislosti podľa identity kľúča
+
+UI volá identifikáciu z [`ProjectBrowserViewModel.Identify()`](C:/Users/elisk/Documents/GitHub/DungeonSiegeLab/src/ViewModels/ProjectBrowserViewModel.cs), ktorá:
+
+- volá `IdentifyDependencies(...)`
+- aktualizuje observovateľný stav `IdentifiedDependencies`
+- otvára panel závislostí
+- emituje event `DependenciesIdentified` pre poslucháčov
+
