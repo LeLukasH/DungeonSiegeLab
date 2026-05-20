@@ -65,11 +65,8 @@ public partial class ProjectBrowserViewModel : ViewModelBase
     public bool HasRecentPaths => RecentPaths.Any(p => !p.Equals(BitsPath, StringComparison.OrdinalIgnoreCase));
 
     public event Action<List<TextureReference>>? TexturesIdentified;
-<<<<<<< HEAD
     public event Action<string>? BitsFolderLoaded;
-=======
     public event Action<List<DependencyReference>>? DependenciesIdentified;
->>>>>>> bd25586769c769fdf11afd06ad97eb070932104f
 
     public ProjectBrowserViewModel()
     {
@@ -385,7 +382,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         if (FindNodeByPath(RootNodes, fullPath) != null)
             return;
 
-        BitsNode newNode;
+        BitsComponent newNode;
         if (Directory.Exists(fullPath))
         {
             newNode = new BitsFolder
@@ -441,7 +438,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
                 return;
         }
 
-        var newNodeVm = new BitsNodeViewModel(newNode);
+        var newNodeVm = BitsComponentViewModel.Create(newNode);
         var insertIndex = parentNode.Children.TakeWhile(child =>
             string.Compare(child.Name, newNodeVm.Name, StringComparison.OrdinalIgnoreCase) < 0).Count();
         parentNode.Children.Insert(insertIndex, newNodeVm);
@@ -475,7 +472,7 @@ public partial class ProjectBrowserViewModel : ViewModelBase
         }
     }
 
-    private BitsNodeViewModel? FindNodeByPath(IEnumerable<BitsNodeViewModel> nodes, string path)
+    private BitsComponentViewModel? FindNodeByPath(IEnumerable<BitsComponentViewModel> nodes, string path)
     {
         foreach (var node in nodes)
         {

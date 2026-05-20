@@ -1,14 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DungeonSiegeLab.Models;
-<<<<<<< HEAD
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Threading;
-=======
 using DungeonSiegeLab.Services;
->>>>>>> bd25586769c769fdf11afd06ad97eb070932104f
 
 namespace DungeonSiegeLab.ViewModels;
 
@@ -33,13 +26,9 @@ public partial class MainViewModel : ViewModelBase
 
     public MainViewModel()
     {
-<<<<<<< HEAD
-        Console.WriteLine("MainViewModel initialized and waiting for Bits folder load.");
-=======
         TreeStateService.Instance.Load();
         AppSettings.Instance.CollapseSubfoldersRecursively = TreeStateService.Instance.CollapseSubfoldersRecursively;
 
->>>>>>> bd25586769c769fdf11afd06ad97eb070932104f
         ProjectBrowser.TexturesIdentified += OnTexturesIdentified;
         ProjectBrowser.BitsFolderLoaded += OnBitsFolderLoaded;
         TextureLab.BackRequested += () => SelectedTabIndex = 0;
