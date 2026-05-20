@@ -1,5 +1,0 @@
-[t:tsd,n:b_gui_cmn_button_dblup_dwn]
-{
-	layer1texture1 = b_gui_cmn_button_dblup_dwn;
-  i texturedetail = 0;
-}

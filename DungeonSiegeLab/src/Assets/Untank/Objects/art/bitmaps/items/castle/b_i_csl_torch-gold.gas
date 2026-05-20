@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_csl_torch-gold]
-{
-  b hasalpha = true;
-	layer1texture1 = b_i_csl_torch-gold;
-  i texturedetail = 1;
-}

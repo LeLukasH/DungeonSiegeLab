@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_des_firepit-dragon]
-{
-  b hasalpha = true;
-	layer1texture1 = b_i_des_firepit-dragon;
-  i texturedetail = 2;
-}

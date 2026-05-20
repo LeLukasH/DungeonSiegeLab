@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_grs_fern]
-{
-  b hasalpha = true;
-	layer1texture1 = b_i_grs_fern;
-  i texturedetail = 2;
-}

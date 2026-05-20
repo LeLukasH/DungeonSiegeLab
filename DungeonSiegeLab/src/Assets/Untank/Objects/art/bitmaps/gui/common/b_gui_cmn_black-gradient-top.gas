@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_cmn_black-gradient-top.psd]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_cmn_black-gradient-top.psd;
-  i texturedetail = 0;
-}

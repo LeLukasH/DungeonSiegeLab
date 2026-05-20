@@ -1,5 +1,0 @@
-[t:tsd,n:b_i_ice_gate-door]
-{
-	layer1texture1 = b_i_ice_gate-door;
-  i texturedetail = 2;
-}

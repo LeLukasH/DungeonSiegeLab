@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_cmn_checkbox]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_cmn_checkbox;
-  i texturedetail = 0;
-}

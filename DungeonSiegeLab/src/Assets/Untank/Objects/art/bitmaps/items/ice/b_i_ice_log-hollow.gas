@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_ice_log-hollow]
-{
-  b hasalpha = true;
-	layer1texture1 = b_i_ice_log-hollow;
-  i texturedetail = 2;
-}

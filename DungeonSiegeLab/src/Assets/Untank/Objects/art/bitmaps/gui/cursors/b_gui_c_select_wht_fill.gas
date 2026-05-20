@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_c_select_wht_fill]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_c_select_wht_fill;
-  i texturedetail = 0;
-}

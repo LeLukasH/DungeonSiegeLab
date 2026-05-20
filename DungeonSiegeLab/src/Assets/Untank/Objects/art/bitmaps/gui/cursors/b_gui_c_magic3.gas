@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_c_magic3]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_c_magic3;
-  i texturedetail = 0;
-}

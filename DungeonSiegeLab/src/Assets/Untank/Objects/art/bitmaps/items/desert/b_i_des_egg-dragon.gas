@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_des_egg-dragon]
-{
-  b hasalpha = true;
-	layer1texture1 = b_i_des_egg-dragon;
-  i texturedetail = 2;
-}

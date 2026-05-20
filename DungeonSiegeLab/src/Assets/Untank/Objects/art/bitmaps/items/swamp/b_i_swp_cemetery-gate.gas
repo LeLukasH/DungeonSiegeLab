@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_swp_cemetery-gate]
-{
-  b hasalpha = true;
-	layer1texture1 = b_i_swp_cemetery-gate;
-  i texturedetail = 2;
-}

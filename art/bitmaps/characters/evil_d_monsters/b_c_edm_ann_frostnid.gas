@@ -1,7 +1,0 @@
-[t:tsd,n:b_c_edm_ann_frostnid]
-{
-  b dither = true;
-  b hasalpha = true;
-    layer1texture1 = b_c_edm_ann_frostnid;
-  i texturedetail = 0;
-}

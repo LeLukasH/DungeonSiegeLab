@@ -1,5 +1,0 @@
-[t:tsd,n:b_gui_cmn_button_up_template]
-{
-	layer1texture1 = b_gui_cmn_button_up_template;
-  i texturedetail = 0;
-}

@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_grs_tree-pine-sequoia]
-{
-  b hasalpha = true;
-	layer1texture1 = b_i_grs_tree-pine-sequoia;
-  i texturedetail = 2;
-}

@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_ig_mnu_cp_mid_01]
-{
-  b dither = false;
-  b hasalpha = true;
-	layer1texture1 = b_gui_ig_mnu_cp_mid_01;
-  i texturedetail = 0;
-}

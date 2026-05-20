@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_swp_water-weed]
-{
-  b hasalpha = true;
-	layer1texture1 = b_i_swp_water-weed;
-  i texturedetail = 2;
-}

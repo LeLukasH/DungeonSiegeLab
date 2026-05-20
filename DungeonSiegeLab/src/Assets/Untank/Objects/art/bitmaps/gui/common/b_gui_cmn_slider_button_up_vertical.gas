@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_cmn_slider_button_up_vertical]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_cmn_slider_button_up_vertical;
-  i texturedetail = 0;
-}

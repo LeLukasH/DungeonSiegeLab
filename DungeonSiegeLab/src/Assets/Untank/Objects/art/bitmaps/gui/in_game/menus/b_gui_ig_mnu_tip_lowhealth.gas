@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_ig_mnu_tip_lowhealth]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_ig_mnu_tip_lowhealth;
-  i texturedetail = 0;
-}

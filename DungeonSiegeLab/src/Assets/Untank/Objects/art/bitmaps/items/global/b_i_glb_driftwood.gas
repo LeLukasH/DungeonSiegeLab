@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_glb_driftwood]
-{
-  b hasalpha = true;
-	layer1texture1 = b_i_glb_driftwood;
-  i texturedetail = 2;
-}

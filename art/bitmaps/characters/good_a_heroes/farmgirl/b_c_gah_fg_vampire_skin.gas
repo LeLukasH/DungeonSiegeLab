@@ -1,7 +1,0 @@
-[t:tsd,n:b_c_gah_fg_vampire_skin]
-{
-  b dither = true;
-  b hasalpha = true;
-    layer1texture1 = b_c_gah_fg_vampire_skin;
-  i texturedetail = 0;
-}

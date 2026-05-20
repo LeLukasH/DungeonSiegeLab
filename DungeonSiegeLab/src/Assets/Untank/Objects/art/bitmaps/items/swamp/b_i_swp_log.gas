@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_swp_log]
-{
-  b hasalpha = true;
-	layer1texture1 = b_i_swp_log;
-  i texturedetail = 2;
-}

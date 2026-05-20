@@ -1,5 +1,0 @@
-[t:tsd,n:b_sfx_armor_freeze]
-{
-	layer1texture1 = b_sfx_armor_freeze;
-  i texturedetail = 1;
-}

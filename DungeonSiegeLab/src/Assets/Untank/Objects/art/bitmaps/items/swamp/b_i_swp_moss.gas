@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_swp_moss]
-{
-  b hasalpha = true;
-	layer1texture1 = b_i_swp_moss;
-  i texturedetail = 2;
-}

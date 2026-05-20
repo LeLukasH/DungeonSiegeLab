@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_des_tree-desert]
-{
-  b hasalpha = true;
-	layer1texture1 = b_i_des_tree-desert;
-  i texturedetail = 2;
-}

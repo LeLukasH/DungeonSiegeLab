@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_cmn_track_rt_side]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_cmn_track_rt_side;
-  i texturedetail = 0;
-}

@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_ice_log-chopped]
-{
-  b hasalpha = true;
-	layer1texture1 = b_i_ice_log-chopped;
-  i texturedetail = 2;
-}

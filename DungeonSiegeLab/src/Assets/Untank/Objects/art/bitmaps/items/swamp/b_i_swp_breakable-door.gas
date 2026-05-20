@@ -1,5 +1,0 @@
-[t:tsd,n:b_i_swp_breakable-door]
-{
-	layer1texture1 = b_i_swp_breakable-door;
-  i texturedetail = 1;
-}

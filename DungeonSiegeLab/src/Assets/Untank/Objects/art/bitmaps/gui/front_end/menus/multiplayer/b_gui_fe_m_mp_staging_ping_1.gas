@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_fe_m_mp_staging_ping_1]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_fe_m_mp_staging_ping_1;
-  i texturedetail = 0;
-}

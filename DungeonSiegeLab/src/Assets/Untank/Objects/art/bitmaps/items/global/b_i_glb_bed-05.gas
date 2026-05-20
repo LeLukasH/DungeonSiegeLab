@@ -1,6 +1,0 @@
-[t:tsd,n:b_i_glb_bed-05]
-{
-	layer1texture1 = b_i_glb_bed-05;
-  b hasalpha = true;
-  i texturedetail = 2;
-}

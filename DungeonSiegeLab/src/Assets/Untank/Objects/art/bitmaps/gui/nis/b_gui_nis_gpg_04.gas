@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_nis_gpg_04]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_nis_gpg_04;
-  i texturedetail = 0;
-}

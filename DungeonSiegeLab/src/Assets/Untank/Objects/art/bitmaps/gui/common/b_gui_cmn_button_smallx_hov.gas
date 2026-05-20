@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_cmn_button_smallx_hov]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_cmn_button_smallx_hov;
-  i texturedetail = 0;
-}

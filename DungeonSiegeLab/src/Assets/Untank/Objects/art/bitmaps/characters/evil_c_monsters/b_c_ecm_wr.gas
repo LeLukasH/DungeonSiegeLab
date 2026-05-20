@@ -1,6 +1,0 @@
-[t:tsd,n:b_c_ecm_wr]
-{
-  b hasalpha = true;
-	layer1texture1 = b_c_ecm_wr;
-  i texturedetail = 3;
-}

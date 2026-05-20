@@ -1,9 +1,0 @@
-[t:tsd,n:b_c_ebb_dg-head]
-{
-  b hasalpha = true;
-  i layer1numframes = 1;
-	layer1texture1 = b_c_ebb_dg-head;
-  i numlayers = 1;
-  i texturedetail = 3;
-  b timesyncanimation = true;
-}

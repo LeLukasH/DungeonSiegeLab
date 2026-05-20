@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_ig_mnu_form4_up]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_ig_mnu_form4_up;
-  i texturedetail = 0;
-}

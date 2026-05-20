@@ -1,7 +1,0 @@
-[t:tsd,n:b_c_edm_ann_bortusk_fleshy]
-{
-  b dither = true;
-  b hasalpha = true;
-    layer1texture1 = b_c_edm_ann_bortusk_fleshy;
-  i texturedetail = 0;
-}

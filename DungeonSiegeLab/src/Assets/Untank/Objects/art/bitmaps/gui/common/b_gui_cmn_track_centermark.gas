@@ -1,5 +1,0 @@
-[t:tsd,n:b_gui_cmn_track_centermark]
-{
-	layer1texture1 = b_gui_cmn_track_centermark;
-  i texturedetail = 0;
-}

@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_ig_mnu_compass_spinner-dwn]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_ig_mnu_compass_spinner-dwn;
-  i texturedetail = 0;
-}

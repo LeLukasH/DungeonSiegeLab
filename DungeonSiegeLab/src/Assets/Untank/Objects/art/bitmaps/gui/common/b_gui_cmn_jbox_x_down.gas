@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_cmn_jbox_x_down]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_cmn_jbox_x_down;
-  i texturedetail = 0;
-}

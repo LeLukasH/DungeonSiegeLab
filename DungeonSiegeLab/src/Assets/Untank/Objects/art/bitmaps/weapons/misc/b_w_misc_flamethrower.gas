@@ -1,5 +1,0 @@
-[t:tsd,n:b_w_misc_flamethrower]
-{
-	layer1texture1 = b_w_misc_flamethrower;
-  i texturedetail = 2;
-}

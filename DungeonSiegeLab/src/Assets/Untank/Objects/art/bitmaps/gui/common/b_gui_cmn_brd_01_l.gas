@@ -1,7 +1,0 @@
-[t:tsd,n:b_gui_cmn_brd_01_l]
-{
-  b dither = true;
-  b hasalpha = true;
-	layer1texture1 = b_gui_cmn_brd_01_l;
-  i texturedetail = 0;
-}

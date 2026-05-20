@@ -1,5 +1,0 @@
-[t:tsd,n:b_gui_cmn_chatbox_bg]
-{
-	layer1texture1 = b_gui_cmn_chatbox_bg;
-  i texturedetail = 0;
-}
