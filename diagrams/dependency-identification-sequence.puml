@@ -1,0 +1,29 @@
+@startuml
+autonumber
+actor "Používateľ" as User
+participant "DungeonSiegeLab" as System
+participant "DependencyFinder" as Engine
+participant "TextureFinder" as TextureFinder
+
+User -> System: Otvorí aplikáciu
+System -> User: Automaticky načíta Untank,\nzobrazí strom
+
+User -> System: Vyberie priečinok Bits
+System -> User: Načíta súbory, zobrazí projekt tree
+
+User -> System: Rozbalí adresár,\nvyberie .gas súbor
+System -> User: Zobrazí šablóny vnútri súboru
+
+User -> System: Vyberie šablónu
+System -> User: Otvorí kartu so zdrojovým kódom
+
+User -> System: Klikne na Identify
+System -> Engine: IdentifyDependencies(template, index)
+Engine -> Engine: Parsuje šablónu,\naplikuje pravidlá interpretátora
+Engine -> Engine: Rekurzívne prechádza specializes,\nfiltruje prepísané závislosti
+Engine -> System: Vráti zoradený List<DependencyReference>
+System -> TextureFinder: Vyrieši textúrové závislosti\nv Bits + Untank
+TextureFinder -> System: Vráti resolved TextureReferences
+System -> User: Zobrazí panel závislostí\ns výsledkami a stavovým súhrnom
+
+@enduml
