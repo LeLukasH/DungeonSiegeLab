@@ -234,12 +234,8 @@ public class LinuxExplorerFolderWatcher : AbstractExplorerFolderWatcher
     {
         try
         {
-            var contents = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            foreach (var item in Directory.EnumerateFileSystemEntries(folder))
-            {
-                contents.Add(item);
-            }
-            _folderContents[folder] = contents;
+            var contents = WatcherInfoProxy.Instance.GetFolderContents(folder);
+            _folderContents[folder] = new HashSet<string>(contents, StringComparer.OrdinalIgnoreCase);
         }
         catch (Exception ex)
         {
@@ -305,6 +301,7 @@ public class LinuxExplorerFolderWatcher : AbstractExplorerFolderWatcher
                         // This is a limitation of polling approach
 
                         _folderContents[folder] = currentContents;
+                        WatcherInfoProxy.Instance.UpdateFolderContents(folder, currentContents);
                     }
                 }
             }

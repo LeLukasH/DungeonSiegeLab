@@ -264,9 +264,10 @@ public class LinuxFileWatcher : AbstractFileWatcher
     {
         try
         {
-            foreach (var file in Directory.EnumerateFiles(_directoryPath, "*", SearchOption.AllDirectories))
+            var timestamps = WatcherInfoProxy.Instance.GetDirectoryTimestamps(_directoryPath);
+            foreach (var kvp in timestamps)
             {
-                _fileTimestamps[file] = File.GetLastWriteTimeUtc(file);
+                _fileTimestamps[kvp.Key] = kvp.Value;
             }
         }
         catch (Exception ex)
@@ -311,6 +312,8 @@ public class LinuxFileWatcher : AbstractFileWatcher
                     _fileTimestamps.Remove(file);
                     ProcessFileChange(file);
                 }
+
+                WatcherInfoProxy.Instance.UpdateDirectoryTimestamps(_directoryPath, _fileTimestamps);
             }
             catch (Exception ex)
             {

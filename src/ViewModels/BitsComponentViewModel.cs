@@ -41,6 +41,7 @@ public abstract partial class BitsComponentViewModel : ViewModelBase
     public abstract void ForEach(Action<BitsComponentViewModel> action);
 
     public static event Action? AnyExpansionChanged;
+    public static event Action<BitsComponentViewModel>? AnyExpanded;
 
     protected static readonly IBrush DefaultColor = new SolidColorBrush(Color.Parse("#cdd6f4"));
 
@@ -59,6 +60,9 @@ public abstract partial class BitsComponentViewModel : ViewModelBase
     {
         if (!value)
             AppSettings.Instance.Collapse(this);
+        else
+            AnyExpanded?.Invoke(this);
+
         AnyExpansionChanged?.Invoke();
     }
 
